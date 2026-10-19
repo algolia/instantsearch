@@ -181,6 +181,10 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           configurationId: 'prompt-suggestions',
         });
       }
+      case 'compareBar': {
+        const compareBar = widget as Widgets['compareBar'];
+        return compareBar({ container, configurationId: 'compare' });
+      }
       case 'resultCard': {
         const resultCard = widget as Widgets['resultCard'];
         return resultCard({ container, agentId: 'test-agent-id' });
