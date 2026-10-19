@@ -24,8 +24,8 @@
  *   updated() { this.hooksStore.flushEffects(); },
  *   beforeDestroy() { this.hooksStore.cleanup(); }
  *
- * PROOF-OF-CONCEPT: this validates whether Vue can drive React-style hooks.
- * It intentionally does not (yet) cover `useLayoutEffect` or `memo`.
+ * Only the hooks the shared factories currently use are implemented;
+ * `useLayoutEffect` and `memo` can be added when a shared component needs them.
  */
 export function createHooksStore(scheduleRender) {
   // One cell per hook call site, keyed by call order within a render pass.

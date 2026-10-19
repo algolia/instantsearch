@@ -32,7 +32,7 @@ function makeHookedComponent(useBody) {
   };
 }
 
-describe('Vue hooks runtime (PoC)', () => {
+describe('Vue hooks runtime', () => {
   it('useState re-renders on update and persists across renders', async () => {
     const Counter = makeHookedComponent((hooks, h) => {
       const [count, setCount] = hooks.useState(0);
