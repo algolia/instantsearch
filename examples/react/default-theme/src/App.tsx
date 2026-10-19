@@ -24,7 +24,7 @@ import {
   Chat,
   ChatTrigger,
   CompareBar,
-  useCompare,
+  useInstantSearch,
 } from 'react-instantsearch';
 
 import {
@@ -52,16 +52,13 @@ type HitProps = {
   }>;
 };
 
-const COMPARISON_CONFIGURATION_ID =
-  'algolia_comparison_7c38cb21-cf8d-4039-a9bd-730d5b751516';
-
 function Hit({ hit }: HitProps) {
-  // Every `useCompare` call shares one selection with the `<CompareBar>`, so
-  // this toggle and the bar stay in sync.
-  const { isSelected, toggleItem, canAddItems } = useCompare({
-    configurationId: COMPARISON_CONFIGURATION_ID,
-  });
-  const selected = isSelected(hit.objectID);
+  // Read the selection from the `<CompareBar>`'s render state rather than
+  // calling `useCompare` here, which would mount one `compare` widget per hit.
+  const { indexRenderState } = useInstantSearch();
+  const { isSelected, toggleItem, canAddItems } =
+    indexRenderState.compare ?? {};
+  const selected = isSelected?.(hit.objectID) ?? false;
 
   return (
     <>
@@ -72,8 +69,8 @@ function Hit({ hit }: HitProps) {
           type="checkbox"
           aria-label={`Compare ${hit.name}`}
           checked={selected}
-          disabled={!selected && !canAddItems}
-          onChange={() => toggleItem(hit)}
+          disabled={!toggleItem || (!selected && !canAddItems)}
+          onChange={() => toggleItem?.(hit)}
         />
         Compare
       </label>
@@ -227,7 +224,7 @@ export function App() {
         itemComponent={ItemComponent}
       />
       <ChatTrigger />
-      <CompareBar configurationId={COMPARISON_CONFIGURATION_ID} />
+      <CompareBar configurationId="algolia_comparison_7c38cb21-cf8d-4039-a9bd-730d5b751516" />
     </InstantSearch>
   );
 }
