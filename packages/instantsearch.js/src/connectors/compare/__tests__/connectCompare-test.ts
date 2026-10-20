@@ -33,7 +33,7 @@ function createChatRenderState(
  * sibling `chat` widget from.
  */
 function setup({
-  widgetParams = {},
+  widgetParams = { configurationId: 'algolia_comparison_abc' },
   chatRenderState,
   initOptions = createInitOptions(),
 }: {
@@ -64,24 +64,40 @@ describe('connectCompare', () => {
     it('throws without render function', () => {
       expect(() => {
         // @ts-expect-error
-        connectCompare()({});
+        connectCompare()({ configurationId: 'algolia_comparison_abc' });
       }).toThrow(/The render function is not valid/);
+    });
+
+    it('throws without `configurationId`', () => {
+      expect(() => {
+        // @ts-expect-error
+        connectCompare(() => {})({});
+      }).toThrow(/The `configurationId` option is required/);
     });
 
     it('throws when `minItems` is lower than 2', () => {
       expect(() => {
-        connectCompare(() => {})({ minItems: 1 });
+        connectCompare(() => {})({
+          configurationId: 'algolia_comparison_abc',
+          minItems: 1,
+        });
       }).toThrow(/The `minItems` option must be at least 2/);
     });
 
     it('throws when `maxItems` is lower than `minItems`', () => {
       expect(() => {
-        connectCompare(() => {})({ minItems: 3, maxItems: 2 });
+        connectCompare(() => {})({
+          configurationId: 'algolia_comparison_abc',
+          minItems: 3,
+          maxItems: 2,
+        });
       }).toThrow(/The `maxItems` option must be greater than `minItems`/);
     });
 
     it('is a widget', () => {
-      const widget = connectCompare(() => {})({});
+      const widget = connectCompare(() => {})({
+        configurationId: 'algolia_comparison_abc',
+      });
 
       expect(widget).toEqual(
         expect.objectContaining({
@@ -133,7 +149,12 @@ describe('connectCompare', () => {
     });
 
     it('ignores duplicates and additions beyond `maxItems`', () => {
-      const { getRenderState } = setup({ widgetParams: { maxItems: 2 } });
+      const { getRenderState } = setup({
+        widgetParams: {
+          configurationId: 'algolia_comparison_abc',
+          maxItems: 2,
+        },
+      });
 
       getRenderState().addItem({ objectID: 'A' });
       getRenderState().addItem({ objectID: 'A' });
@@ -268,48 +289,6 @@ describe('connectCompare', () => {
 
       expect(getRenderState().compare()).toBe(true);
       expect(getRenderState().items).toEqual([]);
-    });
-
-    it('uses the `configurationId` another widget of the same instance set, so per-hit toggles can omit it', () => {
-      const chatRenderState = createChatRenderState();
-      const initOptions = createInitOptions();
-      // The bar carries the configuration...
-      setup({
-        initOptions,
-        chatRenderState,
-        widgetParams: { configurationId: CONFIGURATION_ID },
-      });
-      // ...and a toggle without one still starts the comparison.
-      const toggle = setup({
-        initOptions: createInitOptions({
-          instantSearchInstance: initOptions.instantSearchInstance,
-        }),
-      });
-
-      toggle.getRenderState().addItem({ objectID: 'A' });
-      toggle.getRenderState().addItem({ objectID: 'B' });
-
-      expect(toggle.getRenderState().compare()).toBe(true);
-      expect(chatRenderState.sendMessage).toHaveBeenCalledWith(
-        expect.objectContaining({ text: SENTINEL }),
-        { headers: { 'x-algolia-referer': 'compare' } }
-      );
-    });
-
-    it('throws a usage error when no widget of the instance set a `configurationId`', () => {
-      const chatRenderState = createChatRenderState();
-      const { getRenderState } = setup({ chatRenderState });
-
-      getRenderState().addItem({ objectID: 'A' });
-      getRenderState().addItem({ objectID: 'B' });
-
-      expect(() => getRenderState().compare())
-        .toThrowErrorMatchingInlineSnapshot(`
-        "The \`configurationId\` option is required to start a comparison. Set it on the \`compareBar\` widget to the ID of a comparison configuration created in the Agent Studio dashboard (Components > Comparison).
-
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/compare/js/#connector"
-      `);
-      expect(chatRenderState.sendMessage).not.toHaveBeenCalled();
     });
 
     it('strips `_`-prefixed internal metadata from `selected_products`', () => {

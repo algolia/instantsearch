@@ -19,7 +19,7 @@ function CompareController({
 }: {
   onRenderState: (renderState: CompareRenderState) => void;
 }) {
-  const renderState = useCompare();
+  const renderState = useCompare({ configurationId: 'algolia_comparison_abc' });
   onRenderState(renderState);
   return null;
 }

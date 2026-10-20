@@ -47,12 +47,9 @@ export type CompareConnectorParams = {
    * with the configuration's instructions for the agent; the chat shows no
    * user message for it, so the shopper goes straight to the comparison.
    *
-   * Required to start a comparison. Set it on the widget that triggers the
-   * hand-off (the `compareBar` widget); the other `compare` widgets of the
-   * same InstantSearch instance (per-hit toggles) share it through the
-   * selection and can leave it out.
+   * Required.
    */
-  configurationId?: string;
+  configurationId: string;
 };
 
 export type CompareRenderState = {
@@ -101,7 +98,6 @@ export type CompareRenderState = {
    * Opens the sibling `chat` widget and sends the comparison placeholder for
    * the current selection, then clears the selection (which dismisses the
    * compare bar). Returns `true` when the message was submitted (`false` when the selection is too small, the chat is missing or busy).
-   * Throws when no `compare` widget of the instance set a `configurationId`.
    */
   compare: () => boolean;
   widgetParams: CompareConnectorParams;
@@ -161,9 +157,6 @@ function buildComparisonTurnContext(
 type CompareStore = {
   items: CompareItem[];
   listeners: Set<() => void>;
-  // Provided by the widget that triggers the hand-off, read by `compare()` on
-  // every widget of the instance.
-  configurationId?: string;
 };
 
 // The selection is shared by every `compare` widget of the same InstantSearch
@@ -212,6 +205,14 @@ const connectCompare: CompareConnector = function connectCompare(
 
   return (widgetParams) => {
     const { minItems = 2, maxItems = 3, configurationId } = widgetParams || {};
+
+    if (!configurationId) {
+      throw new Error(
+        withUsage(
+          'The `configurationId` option is required. Set it to the ID of a comparison configuration created in the Agent Studio dashboard (Components > Comparison).'
+        )
+      );
+    }
 
     if (minItems < 2) {
       throw new Error(withUsage('The `minItems` option must be at least 2.'));
@@ -284,21 +285,10 @@ const connectCompare: CompareConnector = function connectCompare(
         return false;
       }
 
-      if (!store.configurationId) {
-        throw new Error(
-          withUsage(
-            'The `configurationId` option is required to start a comparison. Set it on the `compareBar` widget to the ID of a comparison configuration created in the Agent Studio dashboard (Components > Comparison).'
-          )
-        );
-      }
-
       const submitted = openChat(getChatRenderState(lastOptions), {
-        message: getComparisonPlaceholderMessage(store.configurationId),
+        message: getComparisonPlaceholderMessage(configurationId),
         referer: 'compare',
-        turnContext: buildComparisonTurnContext(
-          store.items,
-          store.configurationId
-        ),
+        turnContext: buildComparisonTurnContext(store.items, configurationId),
       });
 
       if (submitted) {
@@ -316,9 +306,6 @@ const connectCompare: CompareConnector = function connectCompare(
         lastOptions = initOptions;
 
         const store = getCompareStore(initOptions.instantSearchInstance);
-        if (configurationId) {
-          store.configurationId = configurationId;
-        }
         const listener = () => {
           if (!lastOptions) return;
           renderFn(

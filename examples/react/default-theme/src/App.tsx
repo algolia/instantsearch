@@ -24,7 +24,7 @@ import {
   Chat,
   ChatTrigger,
   CompareBar,
-  useCompare,
+  useInstantSearch,
 } from 'react-instantsearch';
 
 import {
@@ -53,10 +53,10 @@ type HitProps = {
 };
 
 function Hit({ hit }: HitProps) {
-  // Every `useCompare` call shares one selection with the `<CompareBar>`, so
-  // this toggle and the bar stay in sync.
-  const { isSelected, toggleItem, canAddItems } = useCompare();
-  const selected = isSelected(hit.objectID);
+  const { indexRenderState } = useInstantSearch();
+  const { isSelected, toggleItem, canAddItems } =
+    indexRenderState.compare ?? {};
+  const selected = isSelected?.(hit.objectID) ?? false;
 
   return (
     <>
@@ -67,8 +67,8 @@ function Hit({ hit }: HitProps) {
           type="checkbox"
           aria-label={`Compare ${hit.name}`}
           checked={selected}
-          disabled={!selected && !canAddItems}
-          onChange={() => toggleItem(hit)}
+          disabled={!toggleItem || (!selected && !canAddItems)}
+          onChange={() => toggleItem?.(hit)}
         />
         Compare
       </label>
