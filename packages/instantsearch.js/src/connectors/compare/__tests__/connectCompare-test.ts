@@ -92,7 +92,9 @@ describe('connectCompare', () => {
           minItems: 3,
           maxItems: 2,
         });
-      }).toThrow(/The `maxItems` option must be greater than `minItems`/);
+      }).toThrow(
+        /The `maxItems` option must be greater than or equal to `minItems`/
+      );
     });
 
     it('is a widget', () => {
