@@ -207,11 +207,7 @@ const connectCompare: CompareConnector = function connectCompare(
     const { minItems = 2, maxItems = 3, configurationId } = widgetParams || {};
 
     if (!configurationId) {
-      throw new Error(
-        withUsage(
-          'The `configurationId` option is required. Set it to the ID of a comparison configuration created in the Agent Studio dashboard (Components > Comparison).'
-        )
-      );
+      throw new Error(withUsage('The `configurationId` option is required.'));
     }
 
     if (minItems < 2) {
