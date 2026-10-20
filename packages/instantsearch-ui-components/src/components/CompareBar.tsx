@@ -147,9 +147,9 @@ export function createCompareBarComponent({ createElement }: Renderer) {
         aria-label={translations.title}
       >
         <div className={cx('ais-CompareBar-header', classNames.header)}>
-          <span className={cx('ais-CompareBar-title', classNames.title)}>
+          <h3 className={cx('ais-CompareBar-title', classNames.title)}>
             {translations.title}
-          </span>
+          </h3>
           <span
             className={cx('ais-CompareBar-count', classNames.count)}
             aria-live="polite"
