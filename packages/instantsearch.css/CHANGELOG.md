@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.25.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.24.1...instantsearch.css@8.25.0) (2026-10-20)
+
+
+### Features
+
+* **chat:** announce replies once and make the history keyboard-scrollable ([#7295](https://github.com/algolia/instantsearch/issues/7295)) ([952455e](https://github.com/algolia/instantsearch/commit/952455e5cb2b16c5da126e8f4b054cbc8a3c6b30))
+
+
+
+
+
 ## [8.24.1](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.24.0...instantsearch.css@8.24.1) (2026-10-12)
 
 

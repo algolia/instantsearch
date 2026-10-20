@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.0.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.52.0...react-instantsearch-core@8.0.0) (2026-10-20)
+
+
+### Features
+
+* **compare:** require a comparison configuration for the hand-off ([#7294](https://github.com/algolia/instantsearch/issues/7294)) ([aa9944b](https://github.com/algolia/instantsearch/commit/aa9944b114cff9d1590cb01b3b428dd8bc018084))
+
+
+### BREAKING CHANGES
+
+* **compare:** compareBar and <CompareBar> require configurationId;
+the getComparisonMessage option and getDefaultComparisonMessage are
+removed.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+* chore(examples): use the demo comparison configuration
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+
+
+
+
 ## [7.52.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.51.1...react-instantsearch-core@7.52.0) (2026-10-12)
 
 **Note:** Version bump only for package react-instantsearch-core

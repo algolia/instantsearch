@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.120.0...instantsearch.js@5.0.0) (2026-10-20)
+
+
+### Bug Fixes
+
+* **chat:** keep chatInstance getter on the widget ([#7296](https://github.com/algolia/instantsearch/issues/7296)) ([7555a5f](https://github.com/algolia/instantsearch/commit/7555a5fd360e38e4f5266f561fa5a792a08e19b5))
+* **chat:** persist conversation id ([#7297](https://github.com/algolia/instantsearch/issues/7297)) ([d0cee64](https://github.com/algolia/instantsearch/commit/d0cee64dad0897a33d16e91b7cc0353510cf0efb))
+* **compare:** clear the selection after the hand-off to the chat ([#7299](https://github.com/algolia/instantsearch/issues/7299)) ([64b820e](https://github.com/algolia/instantsearch/commit/64b820e58b9b0d6c9a219dd8f4406c3dec8670f2))
+
+
+### Features
+
+* **chat:** announce replies once and make the history keyboard-scrollable ([#7295](https://github.com/algolia/instantsearch/issues/7295)) ([952455e](https://github.com/algolia/instantsearch/commit/952455e5cb2b16c5da126e8f4b054cbc8a3c6b30))
+* **compare:** require a comparison configuration for the hand-off ([#7294](https://github.com/algolia/instantsearch/issues/7294)) ([aa9944b](https://github.com/algolia/instantsearch/commit/aa9944b114cff9d1590cb01b3b428dd8bc018084))
+
+
+### BREAKING CHANGES
+
+* **compare:** compareBar and <CompareBar> require configurationId;
+the getComparisonMessage option and getDefaultComparisonMessage are
+removed.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+* chore(examples): use the demo comparison configuration
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+
+
+
+
 # [4.120.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.119.0...instantsearch.js@4.120.0) (2026-10-12)
 
 
