@@ -235,7 +235,8 @@ export const set = undefined;
 export const shallowReactive = undefined;
 export const shallowReadonly = undefined;
 export const shallowRef = undefined;
-export const toRaw = undefined;
+// Vue 2 observes objects in place, so a reactive value is the original one.
+export const toRaw = (value) => value;
 export const toRef = undefined;
 export const toRefs = undefined;
 export const triggerRef = undefined;

@@ -14,16 +14,38 @@ export default {
     ),
     createSuitMixin({ name: 'ChatToggleButton' }),
   ],
+  // Declared so Vue 3 doesn't also bind a `@click` listener natively on the
+  // root button (it would fire twice).
+  emits: ['click'],
   props: {
+    /**
+     * Whether the button is positioned as a floating action button at the
+     * bottom-right of the viewport. Set to `false` to render an inline button
+     * that flows with surrounding content.
+     */
     floating: {
       type: Boolean,
       required: false,
       default: true,
     },
+    /**
+     * Custom icon component to replace the default sparkles/chevron icons.
+     */
+    toggleIconComponent: {
+      type: [Function, Object],
+      required: false,
+      default: undefined,
+    },
   },
   computed: {
     widgetParams() {
       return {};
+    },
+  },
+  methods: {
+    handleClick() {
+      this.state.toggleOpen();
+      this.$emit('click');
     },
   },
   render: renderReactCompat(function (h) {
@@ -45,9 +67,9 @@ export default {
 
     return h(ChatToggleButton, {
       open: this.state.open,
-      // `toggleOpen` is already bound by the connector; pass it directly.
-      onClick: this.state.toggleOpen,
+      onClick: this.handleClick,
       classNames: rootClassName ? { root: rootClassName } : undefined,
+      toggleIconComponent: this.toggleIconComponent,
     });
   }),
 };
