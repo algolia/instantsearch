@@ -3,15 +3,15 @@ import {
   generateCarouselId,
 } from 'instantsearch-ui-components';
 
-import { createHooksStore } from '../util/hooks';
-import { Fragment, isVue3, renderReactCompat } from '../util/vue-compat';
+import { createHooksMixin } from '../mixins/hooks';
+import { Fragment, renderReactCompat } from '../util/vue-compat';
 
 /**
  * Vue wrapper around the shared `instantsearch-ui-components` Carousel.
  *
  * The shared Carousel is a hook-driven component (`useState` for scroll
  * affordances, `useRef` for the list/buttons). Vue can't supply React hooks
- * natively, so this component owns a `hooksStore` (see `util/hooks.js`) and
+ * natively, so this component owns a `hooksStore` (see `mixins/hooks.js`) and
  * drives it through its own render cycle — mirroring how React's
  * `components/Carousel.tsx` uses `useState` / `useRef`.
  *
@@ -21,6 +21,7 @@ import { Fragment, isVue3, renderReactCompat } from '../util/vue-compat';
  */
 export default {
   name: 'AisCarousel',
+  mixins: [createHooksMixin()],
   props: {
     items: {
       type: Array,
@@ -69,30 +70,20 @@ export default {
       default: undefined,
     },
   },
-  created() {
-    this.hooksStore = createHooksStore(() => this.$forceUpdate());
-  },
-  mounted() {
-    this.hooksStore.flushEffects();
-  },
-  updated() {
-    this.hooksStore.flushEffects();
-  },
-  [isVue3 ? 'beforeUnmount' : 'beforeDestroy']() {
-    this.hooksStore.cleanup();
-  },
   render: renderReactCompat(function (h) {
     const { useState, useRef, useEffect } = this.hooksStore.hooks;
 
     // The shared Carousel calls `useRef`/`useEffect` itself (to re-check the
     // navigation when the item count changes), so hand it this component's
     // hooks store.
-    const CarouselUiComponent = createCarouselComponent({
-      createElement: h,
-      Fragment,
-      useEffect,
-      useRef,
-    });
+    const CarouselUiComponent = this.getUiComponent('carousel', () =>
+      createCarouselComponent({
+        createElement: h,
+        Fragment,
+        useEffect,
+        useRef,
+      })
+    );
 
     this.hooksStore.beginRender();
 
