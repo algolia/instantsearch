@@ -1,151 +1,62 @@
-import {
-  ArrowRightIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  createButtonComponent,
-  getFacetFiltersFromToolInput,
-} from 'instantsearch-ui-components';
-import { addAbsolutePosition, addQueryID } from 'instantsearch.js/es/lib/utils';
+import { createCarouselToolComponent } from 'instantsearch-ui-components';
 
-import { renderReactCompat } from '../../../util/vue-compat';
-import AisCarousel from '../../Carousel';
+import { createHooksMixin } from '../../../mixins/hooks';
+import { Fragment, renderReactCompat } from '../../../util/vue-compat';
 
 /**
- * Vue equivalent of react-instantsearch's chat SearchIndexTool: a tool
- * `layoutComponent` that renders the search/recommend results in the shared
- * Carousel (reusing `AisCarousel`) with a custom header (result count, an
- * optional "View all" button, and scroll buttons).
+ * Vue equivalent of react-instantsearch's chat `SearchIndexTool`: a tool
+ * `layoutComponent` rendering the search/recommend results in the shared
+ * `CarouselTool` (carousel + header with result count, optional "View all"
+ * and scroll buttons).
+ *
+ * The layout is a Vue component so the shared component's hooks (scroll
+ * state, refs, the "items shown" insights effect) get their own store, one
+ * per tool call in the conversation.
+ *
+ * `getItemComponent` resolves the item renderer at render time (`item` slot,
+ * `itemComponent` prop, or `undefined` for the shared default), so the tools
+ * — and with them the widget — don't have to be re-created when it changes.
  */
 export function createCarouselTool(
   showViewAll,
-  itemComponent,
+  getItemComponent,
   getSearchPageURL
 ) {
   const layoutComponent = {
     name: 'AisChatSearchIndexTool',
+    mixins: [createHooksMixin()],
+    inheritAttrs: false,
     props: {
-      message: { type: Object, default: undefined },
-      applyFilters: { type: Function, default: undefined },
-      onClose: { type: Function, default: () => {} },
-      sendEvent: { type: Function, default: () => {} },
+      context: { type: Object, required: true },
     },
     render: renderReactCompat(function (h) {
-      const Button = createButtonComponent({ createElement: h });
+      const { useEffect, useMemo, useRef, useState } = this.hooksStore.hooks;
 
-      const input = this.message && this.message.input;
-      const output = (this.message && this.message.output) || {};
-      const hits = output.hits || [];
-
-      const hitsWithAbsolutePosition = addAbsolutePosition(
-        hits,
-        0,
-        (input && input.number_of_results) || hits.length || 5
+      const CarouselToolUiComponent = this.getUiComponent('carouselTool', () =>
+        createCarouselToolComponent({
+          createElement: h,
+          Fragment,
+          useEffect,
+          useMemo,
+          useRef,
+          useState,
+        })
       );
-      const items = addQueryID(hitsWithAbsolutePosition, output.queryID);
 
-      const { applyFilters, onClose, sendEvent } = this;
+      this.hooksStore.beginRender();
 
-      const headerComponent = ({
-        canScrollLeft,
-        canScrollRight,
-        scrollLeft,
-        scrollRight,
-      }) => {
-        const hitsPerPage = items.length;
-        if (hitsPerPage < 1) {
-          return null;
-        }
-
-        return h(
-          'div',
-          { className: 'ais-ChatToolSearchIndexCarouselHeader' },
-          h(
-            'div',
-            { className: 'ais-ChatToolSearchIndexCarouselHeaderResults' },
-            output.nbHits &&
-              h(
-                'div',
-                { className: 'ais-ChatToolSearchIndexCarouselHeaderCount' },
-                `${hitsPerPage} of ${output.nbHits.toLocaleString()} result${
-                  output.nbHits > 1 ? 's' : ''
-                }`
-              ),
-            showViewAll &&
-              h(
-                Button,
-                {
-                  variant: 'ghost',
-                  size: 'sm',
-                  className: 'ais-ChatToolSearchIndexCarouselHeaderViewAll',
-                  onClick: () => {
-                    if (!input || !applyFilters) {
-                      return;
-                    }
-                    const params = applyFilters({
-                      query: input.query,
-                      facetFilters: getFacetFiltersFromToolInput(input),
-                    });
-
-                    const searchPageURL =
-                      getSearchPageURL && getSearchPageURL(params);
-                    if (
-                      searchPageURL &&
-                      new URL(searchPageURL).pathname !==
-                        window.location.pathname
-                    ) {
-                      window.location.href = searchPageURL;
-                    }
-
-                    onClose();
-                  },
-                },
-                'View all',
-                h(ArrowRightIcon, { createElement: h })
-              )
-          ),
-          hitsPerPage > 2 &&
-            h(
-              'div',
-              {
-                className: 'ais-ChatToolSearchIndexCarouselHeaderScrollButtons',
-              },
-              h(
-                Button,
-                {
-                  variant: 'outline',
-                  size: 'sm',
-                  iconOnly: true,
-                  onClick: scrollLeft,
-                  disabled: !canScrollLeft,
-                  className:
-                    'ais-ChatToolSearchIndexCarouselHeaderScrollButton',
-                },
-                h(ChevronLeftIcon, { createElement: h })
-              ),
-              h(
-                Button,
-                {
-                  variant: 'outline',
-                  size: 'sm',
-                  iconOnly: true,
-                  onClick: scrollRight,
-                  disabled: !canScrollRight,
-                  className:
-                    'ais-ChatToolSearchIndexCarouselHeaderScrollButton',
-                },
-                h(ChevronRightIcon, { createElement: h })
-              )
-            )
-        );
-      };
-
-      return h(AisCarousel, {
-        items,
-        itemComponent,
-        sendEvent,
-        showNavigation: false,
-        headerComponent,
+      const tree = h(CarouselToolUiComponent, {
+        getSearchPageURL,
+        headerProps: { showViewAll },
+        itemComponent: getItemComponent(),
+        // The shared chat passes the (deprecated) root props alongside
+        // `context`; forward them untouched for tools that still read them.
+        toolProps: Object.assign({}, this.$attrs, { context: this.context }),
       });
+
+      this.hooksStore.endRender();
+
+      return tree;
     }),
   };
 
