@@ -2,10 +2,23 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { Chat } from 'instantsearch.js/es/lib/chat';
 import React from 'react';
 
-import { createDefaultWidgetParams, openChat } from './utils';
+import {
+  createDefaultWidgetParams,
+  createVueElement,
+  openChat,
+  vueH,
+} from './utils';
 
 import type { ChatWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
+
+type VueTextComponentProps = {
+  part: { text: string };
+  message: { id: string };
+  messages?: Array<{ id: string }>;
+  status: string;
+  partIndex: number;
+};
 
 export function createTemplatesTests(
   setup: ChatWidgetSetup,
@@ -36,7 +49,11 @@ export function createTemplatesTests(
                 <div className="custom-header">Custom header</div>
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(),
+              headerComponent: () =>
+                vueH('div', { class: 'custom-header' }, 'Custom header'),
+            },
           },
         });
 
@@ -90,7 +107,33 @@ export function createTemplatesTests(
                 </span>
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(),
+              headerTitleIconComponent: () =>
+                vueH(
+                  'span',
+                  { class: 'custom-title-icon' },
+                  'Custom title icon'
+                ),
+              headerCloseIconComponent: () =>
+                vueH(
+                  'span',
+                  { class: 'custom-close-icon' },
+                  'Custom close icon'
+                ),
+              headerMinimizeIconComponent: () =>
+                vueH(
+                  'span',
+                  { class: 'custom-minimize-icon' },
+                  'Custom minimize icon'
+                ),
+              headerMaximizeIconComponent: () =>
+                vueH(
+                  'span',
+                  { class: 'custom-maximize-icon' },
+                  'Custom maximize icon'
+                ),
+            },
           },
         });
 
@@ -132,7 +175,11 @@ export function createTemplatesTests(
                 <div className="custom-prompt">Custom prompt</div>
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(),
+              promptComponent: () =>
+                vueH('div', { class: 'custom-prompt' }, 'Custom prompt'),
+            },
           },
         });
 
@@ -170,7 +217,13 @@ export function createTemplatesTests(
                 <div className="custom-footer">Custom footer</div>
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(),
+              promptHeaderComponent: () =>
+                vueH('div', { class: 'custom-header' }, 'Custom header'),
+              promptFooterComponent: () =>
+                vueH('div', { class: 'custom-footer' }, 'Custom footer'),
+            },
           },
         });
 
@@ -212,7 +265,11 @@ export function createTemplatesTests(
                 <div className="custom-loader">Custom loader</div>
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              loaderComponent: () =>
+                vueH('div', { class: 'custom-loader' }, 'Custom loader'),
+            },
           },
         });
 
@@ -251,7 +308,11 @@ export function createTemplatesTests(
                 <div className="custom-error">Custom error</div>
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              messagesErrorComponent: () =>
+                vueH('div', { class: 'custom-error' }, 'Custom error'),
+            },
           },
         });
 
@@ -285,7 +346,11 @@ export function createTemplatesTests(
                 <div className="custom-empty">Custom empty</div>
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              emptyComponent: () =>
+                vueH('div', { class: 'custom-empty' }, 'Custom empty'),
+            },
           },
         });
 
@@ -327,7 +392,11 @@ export function createTemplatesTests(
                 <div className="custom-empty">Custom empty</div>
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              emptyComponent: () =>
+                vueH('div', { class: 'custom-empty' }, 'Custom empty'),
+            },
           },
         });
 
@@ -362,7 +431,11 @@ export function createTemplatesTests(
                 <div className="custom-empty">Custom empty</div>
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              emptyComponent: () =>
+                vueH('div', { class: 'custom-empty' }, 'Custom empty'),
+            },
           },
         });
 
@@ -441,7 +514,21 @@ export function createTemplatesTests(
               userMessageLeadingComponent: () => <div>User Leading</div>,
               userMessageFooterComponent: () => <div>User Footer</div>,
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              classNames: {
+                message: {
+                  leading: 'MESSAGE-LEADING',
+                  footer: 'MESSAGE-FOOTER',
+                },
+              },
+              assistantMessageLeadingComponent: () =>
+                vueH('div', 'Assistant Leading'),
+              assistantMessageFooterComponent: () =>
+                vueH('div', 'Assistant Footer'),
+              userMessageLeadingComponent: () => vueH('div', 'User Leading'),
+              userMessageFooterComponent: () => vueH('div', 'User Footer'),
+            },
           },
         });
 
@@ -582,7 +669,55 @@ export function createTemplatesTests(
                 },
               },
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              messagesProps: {
+                assistantMessageProps: {
+                  textComponent: ({
+                    part,
+                    message,
+                    messages,
+                    status,
+                    partIndex,
+                  }: VueTextComponentProps) =>
+                    createVueElement(
+                      'span',
+                      {
+                        class: 'custom-text-part',
+                        'data-message-id': message.id,
+                        'data-conversation': messages
+                          ?.map(({ id }) => id)
+                          .join(','),
+                        'data-status': status,
+                        'data-part-index': partIndex,
+                      },
+                      part.text
+                    ),
+                },
+                userMessageProps: {
+                  textComponent: ({
+                    part,
+                    message,
+                    messages,
+                    status,
+                    partIndex,
+                  }: VueTextComponentProps) =>
+                    createVueElement(
+                      'span',
+                      {
+                        class: 'custom-text-part',
+                        'data-message-id': message.id,
+                        'data-conversation': messages
+                          ?.map(({ id }) => id)
+                          .join(','),
+                        'data-status': status,
+                        'data-part-index': partIndex,
+                      },
+                      part.text
+                    ),
+                },
+              },
+            },
           },
         });
 
@@ -692,7 +827,17 @@ export function createTemplatesTests(
               );
             },
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(chat),
+            actionsComponent: ({ message }: { message: { role: string } }) =>
+              vueH(
+                'button',
+                { class: 'custom-action' },
+                message.role === 'assistant'
+                  ? 'Custom assistant action'
+                  : 'Custom user action'
+              ),
+          },
         },
       });
 

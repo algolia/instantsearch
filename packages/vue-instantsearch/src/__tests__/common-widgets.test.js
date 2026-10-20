@@ -710,14 +710,13 @@ const testOptions = {
   },
   createPoweredByWidgetTests: undefined,
   createDynamicWidgetsWidgetTests: undefined,
-  // The AisChat/AisChatTrigger widgets are implemented and covered by
-  // component tests. The shared common suite stays skipped until its `vue`
-  // widgetParams variant is extended to carry a `chat` instance + options
-  // (it's currently `Record<string, never>`, and the tests drive a
-  // test-owned `chat` that only reaches the JS/React widgets). Tracked as a
-  // follow-up.
   createChatWidgetTests: {
-    skippedTests: { 'Chat widget common tests': true },
+    // Vue batches DOM updates, so flush them after each step the shared tests
+    // wrap in `act`.
+    act: async (callback) => {
+      await callback();
+      await nextTick();
+    },
   },
   createAutocompleteWidgetTests: {
     skippedTests: { 'Autocomplete widget common tests': true },

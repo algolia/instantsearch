@@ -20,7 +20,7 @@ import { createElement as createPreactElement } from 'preact';
 import React from 'react';
 import { ChatInlineLayout, ChatSidePanelLayout } from 'react-instantsearch';
 
-import { createDefaultWidgetParams, openChat } from './utils';
+import { createDefaultWidgetParams, createVueElement, openChat } from './utils';
 
 import type { ChatWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
@@ -41,7 +41,7 @@ export function createOptionsTests(
         widgetParams: {
           javascript: createDefaultWidgetParams(),
           react: createDefaultWidgetParams(),
-          vue: {},
+          vue: createDefaultWidgetParams(),
         },
       });
 
@@ -65,7 +65,7 @@ export function createOptionsTests(
         widgetParams: {
           javascript: createDefaultWidgetParams(),
           react: createDefaultWidgetParams(),
-          vue: {},
+          vue: createDefaultWidgetParams(),
         },
       });
 
@@ -93,7 +93,10 @@ export function createOptionsTests(
             ...createDefaultWidgetParams(),
             requiresSearch: false,
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(),
+            requiresSearch: false,
+          },
         },
       });
 
@@ -121,7 +124,10 @@ export function createOptionsTests(
             ...createDefaultWidgetParams(),
             renderChat: false,
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(),
+            renderChat: false,
+          },
         },
       });
 
@@ -151,7 +157,11 @@ export function createOptionsTests(
             renderRefinements: true,
             requiresSearch: false,
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(),
+            renderRefinements: true,
+            requiresSearch: false,
+          },
         },
       });
 
@@ -184,7 +194,10 @@ export function createOptionsTests(
             ...createDefaultWidgetParams(chat),
             initialUserMessage: 'Hello, AI!',
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(chat),
+            initialUserMessage: 'Hello, AI!',
+          },
         },
       });
 
@@ -225,7 +238,10 @@ export function createOptionsTests(
             ...createDefaultWidgetParams(chat),
             initialUserMessage: 'Hello, AI!',
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(chat),
+            initialUserMessage: 'Hello, AI!',
+          },
         },
       });
 
@@ -268,7 +284,16 @@ export function createOptionsTests(
               },
             ],
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(chat),
+            initialMessages: [
+              {
+                id: '1',
+                role: 'assistant',
+                parts: [{ type: 'text', text: 'Welcome! How can I help?' }],
+              },
+            ],
+          },
         },
       });
 
@@ -324,7 +349,16 @@ export function createOptionsTests(
               },
             ],
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(chat),
+            initialMessages: [
+              {
+                id: '2',
+                role: 'assistant',
+                parts: [{ type: 'text', text: 'Welcome! How can I help?' }],
+              },
+            ],
+          },
         },
       });
 
@@ -357,7 +391,7 @@ export function createOptionsTests(
         widgetParams: {
           javascript: createDefaultWidgetParams(chat),
           react: createDefaultWidgetParams(chat),
-          vue: {},
+          vue: createDefaultWidgetParams(chat),
         },
       });
 
@@ -367,6 +401,11 @@ export function createOptionsTests(
         document.querySelector('.ais-ChatPrompt-textarea')!,
         'Hello, world!'
       );
+
+      await act(async () => {
+        await wait(0);
+      });
+
       userEvent.click(document.querySelector('.ais-ChatPrompt-submit')!);
 
       await act(async () => {
@@ -397,7 +436,7 @@ export function createOptionsTests(
             context: contextValue,
           },
           react: { ...createDefaultWidgetParams(chat), context: contextValue },
-          vue: {},
+          vue: { ...createDefaultWidgetParams(chat), context: contextValue },
         },
       });
 
@@ -407,6 +446,11 @@ export function createOptionsTests(
         document.querySelector('.ais-ChatPrompt-textarea')!,
         'Hello, world!'
       );
+
+      await act(async () => {
+        await wait(0);
+      });
+
       userEvent.click(document.querySelector('.ais-ChatPrompt-submit')!);
 
       await act(async () => {
@@ -443,7 +487,7 @@ export function createOptionsTests(
             context: contextFn,
           },
           react: { ...createDefaultWidgetParams(chat), context: contextFn },
-          vue: {},
+          vue: { ...createDefaultWidgetParams(chat), context: contextFn },
         },
       });
 
@@ -453,6 +497,11 @@ export function createOptionsTests(
         document.querySelector('.ais-ChatPrompt-textarea')!,
         'Hello!'
       );
+
+      await act(async () => {
+        await wait(0);
+      });
+
       userEvent.click(document.querySelector('.ais-ChatPrompt-submit')!);
 
       await act(async () => {
@@ -511,7 +560,7 @@ export function createOptionsTests(
             context: contextValue,
           },
           react: { ...createDefaultWidgetParams(chat), context: contextValue },
-          vue: {},
+          vue: { ...createDefaultWidgetParams(chat), context: contextValue },
         },
       });
 
@@ -521,6 +570,11 @@ export function createOptionsTests(
         document.querySelector('.ais-ChatPrompt-textarea')!,
         'Hello!'
       );
+
+      await act(async () => {
+        await wait(0);
+      });
+
       userEvent.click(document.querySelector('.ais-ChatPrompt-submit')!);
 
       await act(async () => {
@@ -545,13 +599,17 @@ export function createOptionsTests(
         widgetParams: {
           javascript: createDefaultWidgetParams(),
           react: createDefaultWidgetParams(),
-          vue: {},
+          vue: createDefaultWidgetParams(),
         },
       });
 
       await openChat(act);
 
       userEvent.click(document.querySelector('.ais-ChatHeader-close')!);
+
+      await act(async () => {
+        await wait(0);
+      });
 
       expect(document.querySelector('.ais-Chat-container')).not.toHaveClass(
         'ais-Chat-container--open'
@@ -569,13 +627,17 @@ export function createOptionsTests(
         widgetParams: {
           javascript: createDefaultWidgetParams(),
           react: createDefaultWidgetParams(),
-          vue: {},
+          vue: createDefaultWidgetParams(),
         },
       });
 
       await openChat(act);
 
       userEvent.click(document.querySelector('.ais-ChatHeader-maximize')!);
+
+      await act(async () => {
+        await wait(0);
+      });
 
       expect(document.querySelector('.ais-Chat')).toHaveClass(
         'ais-ChatOverlayLayout--maximized'
@@ -585,6 +647,10 @@ export function createOptionsTests(
       );
 
       userEvent.click(document.querySelector('.ais-ChatHeader-maximize')!);
+
+      await act(async () => {
+        await wait(0);
+      });
 
       expect(document.querySelector('.ais-Chat')).not.toHaveClass(
         'ais-ChatOverlayLayout--maximized'
@@ -606,7 +672,7 @@ export function createOptionsTests(
         widgetParams: {
           javascript: createDefaultWidgetParams(chat),
           react: createDefaultWidgetParams(chat),
-          vue: {},
+          vue: createDefaultWidgetParams(chat),
         },
       });
 
@@ -678,7 +744,13 @@ export function createOptionsTests(
                 container: 'CONTAINER',
               },
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(),
+              classNames: {
+                root: 'ROOT',
+                container: 'CONTAINER',
+              },
+            },
           },
         });
 
@@ -748,7 +820,18 @@ export function createOptionsTests(
                 },
               },
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              classNames: {
+                message: {
+                  root: 'MESSAGE-ROOT',
+                  container: 'MESSAGE-CONTAINER',
+                  content: 'MESSAGE-CONTENT',
+                  message: 'MESSAGE-MESSAGE',
+                  actions: 'MESSAGE-ACTIONS',
+                },
+              },
+            },
           },
         });
 
@@ -799,7 +882,7 @@ export function createOptionsTests(
           widgetParams: {
             javascript: createDefaultWidgetParams(chat),
             react: createDefaultWidgetParams(chat),
-            vue: {},
+            vue: createDefaultWidgetParams(chat),
           },
         });
 
@@ -827,7 +910,7 @@ export function createOptionsTests(
           widgetParams: {
             javascript: createDefaultWidgetParams(chat),
             react: createDefaultWidgetParams(chat),
-            vue: {},
+            vue: createDefaultWidgetParams(chat),
           },
         });
 
@@ -867,7 +950,7 @@ export function createOptionsTests(
           widgetParams: {
             javascript: createDefaultWidgetParams(chat),
             react: createDefaultWidgetParams(chat),
-            vue: {},
+            vue: createDefaultWidgetParams(chat),
           },
         });
 
@@ -912,7 +995,7 @@ export function createOptionsTests(
           widgetParams: {
             javascript: createDefaultWidgetParams(chat),
             react: createDefaultWidgetParams(chat),
-            vue: {},
+            vue: createDefaultWidgetParams(chat),
           },
         });
 
@@ -959,7 +1042,7 @@ export function createOptionsTests(
           widgetParams: {
             javascript: createDefaultWidgetParams(chat),
             react: createDefaultWidgetParams(chat),
-            vue: {},
+            vue: createDefaultWidgetParams(chat),
           },
         });
 
@@ -1006,7 +1089,7 @@ export function createOptionsTests(
           widgetParams: {
             javascript: createDefaultWidgetParams(chat),
             react: createDefaultWidgetParams(chat),
-            vue: {},
+            vue: createDefaultWidgetParams(chat),
           },
         });
 
@@ -1078,7 +1161,20 @@ export function createOptionsTests(
                 },
               },
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                [SearchIndexToolType]: {
+                  streamInput: true,
+                  layoutComponent: () =>
+                    createVueElement(
+                      'div',
+                      { id: 'tool-content' },
+                      'streaming...'
+                    ),
+                },
+              },
+            },
           },
         });
 
@@ -1125,7 +1221,7 @@ export function createOptionsTests(
           widgetParams: {
             javascript: createDefaultWidgetParams(chat),
             react: createDefaultWidgetParams(chat),
-            vue: {},
+            vue: createDefaultWidgetParams(chat),
           },
         });
 
@@ -1174,7 +1270,7 @@ export function createOptionsTests(
           widgetParams: {
             javascript: createDefaultWidgetParams(chat),
             react: createDefaultWidgetParams(chat),
-            vue: {},
+            vue: createDefaultWidgetParams(chat),
           },
         });
 
@@ -1197,7 +1293,7 @@ export function createOptionsTests(
           widgetParams: {
             javascript: createDefaultWidgetParams(chat),
             react: createDefaultWidgetParams(chat),
-            vue: {},
+            vue: createDefaultWidgetParams(chat),
           },
         });
 
@@ -1250,7 +1346,10 @@ export function createOptionsTests(
               ...createDefaultWidgetParams(chat),
               loaderPosition: 'message-inline',
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              loaderPosition: 'message-inline',
+            },
           },
         });
 
@@ -1301,7 +1400,10 @@ export function createOptionsTests(
               ...createDefaultWidgetParams(chat),
               shouldShowLoader,
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              shouldShowLoader,
+            },
           },
         });
 
@@ -1334,7 +1436,7 @@ export function createOptionsTests(
           widgetParams: {
             javascript: createDefaultWidgetParams(chat),
             react: createDefaultWidgetParams(chat),
-            vue: {},
+            vue: createDefaultWidgetParams(chat),
           },
         });
 
@@ -1426,7 +1528,7 @@ export function createOptionsTests(
           widgetParams: {
             javascript: createDefaultWidgetParams(chat),
             react: createDefaultWidgetParams(chat),
-            vue: {},
+            vue: createDefaultWidgetParams(chat),
           },
         });
 
@@ -1484,7 +1586,19 @@ export function createOptionsTests(
                 },
               },
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                hello: {
+                  layoutComponent: () =>
+                    createVueElement(
+                      'div',
+                      { id: 'tool-content' },
+                      'The message said hello!'
+                    ),
+                },
+              },
+            },
           },
         });
 
@@ -1551,7 +1665,20 @@ export function createOptionsTests(
                 },
               },
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                hello: {
+                  shouldRender,
+                  layoutComponent: () =>
+                    createVueElement(
+                      'div',
+                      { id: 'tool-content' },
+                      'The message said hello!'
+                    ),
+                },
+              },
+            },
           },
         });
 
@@ -1644,7 +1771,24 @@ export function createOptionsTests(
                 },
               },
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                hello: {
+                  matchesToolName,
+                  layoutComponent: () =>
+                    createVueElement('div', { id: 'tool-content' }, 'Hello!'),
+                },
+                goodbye: {
+                  layoutComponent: () =>
+                    createVueElement(
+                      'div',
+                      { id: 'other-tool-content' },
+                      'Goodbye!'
+                    ),
+                },
+              },
+            },
           },
         });
 
@@ -1717,7 +1861,20 @@ export function createOptionsTests(
                 },
               },
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                hello: {
+                  shouldRender,
+                  layoutComponent: () =>
+                    createVueElement(
+                      'div',
+                      { id: 'tool-content' },
+                      'The message said hello!'
+                    ),
+                },
+              },
+            },
           },
         });
 
@@ -1779,7 +1936,20 @@ export function createOptionsTests(
                 },
               },
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                hello: {
+                  ...tool,
+                  layoutComponent: () =>
+                    createVueElement(
+                      'div',
+                      { id: 'tool-content' },
+                      'streaming...'
+                    ),
+                },
+              },
+            },
           },
         });
 
@@ -1864,7 +2034,19 @@ export function createOptionsTests(
                 },
               },
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                [SearchIndexToolType]: {
+                  layoutComponent: () =>
+                    createVueElement(
+                      'div',
+                      { id: 'tool-content' },
+                      'The message said hello!'
+                    ),
+                },
+              },
+            },
           },
         });
 
@@ -1928,7 +2110,10 @@ export function createOptionsTests(
               ...createDefaultWidgetParams(chat),
               renderRefinements: true,
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              renderRefinements: true,
+            },
           },
         });
 
@@ -2012,7 +2197,10 @@ export function createOptionsTests(
               ...createDefaultWidgetParams(chat),
               renderRefinements: true,
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              renderRefinements: true,
+            },
           },
         });
 
@@ -2106,7 +2294,10 @@ export function createOptionsTests(
               ...createDefaultWidgetParams(chat),
               renderRefinements: true,
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              renderRefinements: true,
+            },
           },
         });
 
@@ -2200,7 +2391,10 @@ export function createOptionsTests(
               ...createDefaultWidgetParams(chat),
               renderRefinements: true,
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              renderRefinements: true,
+            },
           },
         });
 
@@ -2328,7 +2522,42 @@ export function createOptionsTests(
               },
               renderRefinements: true,
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                hello: {
+                  layoutComponent: ({
+                    context: { applyFilters },
+                  }: {
+                    context: {
+                      applyFilters: (params: {
+                        query: string;
+                        facetFilters: string[][];
+                      }) => void;
+                    };
+                  }) =>
+                    createVueElement(
+                      'button',
+                      {
+                        class: 'ais-ChatToolHelloViewAll',
+                        on: {
+                          click: () => {
+                            applyFilters({
+                              query: 'test',
+                              facetFilters: [
+                                ['brand:Apple'],
+                                ['category:Laptops'],
+                              ],
+                            });
+                          },
+                        },
+                      },
+                      'View All'
+                    ),
+                },
+              },
+              renderRefinements: true,
+            },
           },
         });
 
@@ -2399,7 +2628,7 @@ export function createOptionsTests(
           widgetParams: {
             javascript: createDefaultWidgetParams(chat),
             react: createDefaultWidgetParams(chat),
-            vue: {},
+            vue: createDefaultWidgetParams(chat),
           },
         });
 
@@ -2449,7 +2678,7 @@ export function createOptionsTests(
           widgetParams: {
             javascript: createDefaultWidgetParams(chat),
             react: createDefaultWidgetParams(chat),
-            vue: {},
+            vue: createDefaultWidgetParams(chat),
           },
         });
 
@@ -2472,7 +2701,7 @@ export function createOptionsTests(
           widgetParams: {
             javascript: createDefaultWidgetParams(chat),
             react: createDefaultWidgetParams(chat),
-            vue: {},
+            vue: createDefaultWidgetParams(chat),
           },
         });
 
@@ -2548,7 +2777,7 @@ export function createOptionsTests(
           widgetParams: {
             javascript: createDefaultWidgetParams(chat),
             react: createDefaultWidgetParams(chat),
-            vue: {},
+            vue: createDefaultWidgetParams(chat),
           },
         });
 
@@ -2655,7 +2884,7 @@ export function createOptionsTests(
             widgetParams: {
               javascript: createDefaultWidgetParams(chat),
               react: createDefaultWidgetParams(chat),
-              vue: {},
+              vue: createDefaultWidgetParams(chat),
             },
           });
 
@@ -2760,7 +2989,15 @@ export function createOptionsTests(
                   />
                 ),
               },
-              vue: {},
+              vue: {
+                ...createDefaultWidgetParams(chat),
+                itemComponent: ({
+                  item,
+                }: {
+                  item: { thumbnail_url: string };
+                }) =>
+                  createVueElement('img', { src: item.thumbnail_url, alt: '' }),
+              },
             },
           });
 
@@ -2797,7 +3034,7 @@ export function createOptionsTests(
             widgetParams: {
               javascript: createDefaultWidgetParams(chat),
               react: createDefaultWidgetParams(chat),
-              vue: {},
+              vue: createDefaultWidgetParams(chat),
             },
           });
 
@@ -2879,7 +3116,7 @@ export function createOptionsTests(
             widgetParams: {
               javascript: createDefaultWidgetParams(chat),
               react: createDefaultWidgetParams(chat),
-              vue: {},
+              vue: createDefaultWidgetParams(chat),
             },
           });
 
@@ -2932,7 +3169,7 @@ export function createOptionsTests(
             widgetParams: {
               javascript: createDefaultWidgetParams(chat),
               react: createDefaultWidgetParams(chat),
-              vue: {},
+              vue: createDefaultWidgetParams(chat),
             },
           });
 
@@ -3008,7 +3245,19 @@ export function createOptionsTests(
                   },
                 },
               },
-              vue: {},
+              vue: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [SearchIndexToolType]: {
+                    layoutComponent: () =>
+                      createVueElement(
+                        'div',
+                        { id: 'tool-content' },
+                        'custom search'
+                      ),
+                  },
+                },
+              },
             },
           });
 
@@ -3064,7 +3313,7 @@ export function createOptionsTests(
             widgetParams: {
               javascript: createDefaultWidgetParams(chat),
               react: createDefaultWidgetParams(chat),
-              vue: {},
+              vue: createDefaultWidgetParams(chat),
             },
           });
 
@@ -3121,7 +3370,19 @@ export function createOptionsTests(
                   },
                 },
               },
-              vue: {},
+              vue: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [toolType]: {
+                    layoutComponent: () =>
+                      createVueElement(
+                        'div',
+                        { id: 'custom-display' },
+                        'custom display'
+                      ),
+                  },
+                },
+              },
             },
           });
 
@@ -3147,7 +3408,7 @@ export function createOptionsTests(
             widgetParams: {
               javascript: createDefaultWidgetParams(chat),
               react: createDefaultWidgetParams(chat),
-              vue: {},
+              vue: createDefaultWidgetParams(chat),
             },
           });
 
@@ -3214,7 +3475,14 @@ export function createOptionsTests(
                   },
                 },
               },
-              vue: {},
+              vue: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [toolType]: {
+                    onToolCall: jest.fn(),
+                  },
+                },
+              },
             },
           });
 
@@ -3284,7 +3552,20 @@ export function createOptionsTests(
                   },
                 },
               },
-              vue: {},
+              vue: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [toolType]: {
+                    streamInput: false,
+                    layoutComponent: () =>
+                      createVueElement(
+                        'div',
+                        { id: 'custom-display' },
+                        'custom display'
+                      ),
+                  },
+                },
+              },
             },
           });
 
@@ -3357,7 +3638,7 @@ export function createOptionsTests(
             widgetParams: {
               javascript: createDefaultWidgetParams(chat),
               react: createDefaultWidgetParams(chat),
-              vue: {},
+              vue: createDefaultWidgetParams(chat),
             },
           });
 
@@ -3411,7 +3692,7 @@ export function createOptionsTests(
             widgetParams: {
               javascript: createDefaultWidgetParams(chat),
               react: createDefaultWidgetParams(chat),
-              vue: {},
+              vue: createDefaultWidgetParams(chat),
             },
           });
 
@@ -3519,7 +3800,7 @@ export function createOptionsTests(
           widgetParams: {
             javascript: createDefaultWidgetParams(chat),
             react: createDefaultWidgetParams(chat),
-            vue: {},
+            vue: createDefaultWidgetParams(chat),
           },
         });
 
@@ -3595,7 +3876,7 @@ export function createOptionsTests(
           widgetParams: {
             javascript: createDefaultWidgetParams(chat),
             react: createDefaultWidgetParams(chat),
-            vue: {},
+            vue: createDefaultWidgetParams(chat),
           },
         });
 
@@ -3660,7 +3941,7 @@ export function createOptionsTests(
             widgetParams: {
               javascript: createDefaultWidgetParams(chat),
               react: createDefaultWidgetParams(chat),
-              vue: {},
+              vue: createDefaultWidgetParams(chat),
             },
           });
 
@@ -3764,7 +4045,7 @@ export function createOptionsTests(
           widgetParams: {
             javascript: createDefaultWidgetParams(chat),
             react: createDefaultWidgetParams(chat),
-            vue: {},
+            vue: createDefaultWidgetParams(chat),
           },
         });
 
@@ -3854,7 +4135,7 @@ export function createOptionsTests(
           widgetParams: {
             javascript: createDefaultWidgetParams(chat),
             react: createDefaultWidgetParams(chat),
-            vue: {},
+            vue: createDefaultWidgetParams(chat),
           },
         });
 
@@ -3906,7 +4187,7 @@ export function createOptionsTests(
           widgetParams: {
             javascript: createDefaultWidgetParams(chat),
             react: createDefaultWidgetParams(chat),
-            vue: {},
+            vue: createDefaultWidgetParams(chat),
           },
         });
 
@@ -3994,7 +4275,18 @@ export function createOptionsTests(
                 </div>
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(),
+              layoutComponent: (props: { promptComponent: unknown }) =>
+                createVueElement('div', { class: 'custom-layout' }, [
+                  createVueElement(
+                    'span',
+                    { class: 'custom-layout-title' },
+                    'My Custom Chat'
+                  ),
+                  props.promptComponent,
+                ]),
+            },
           },
         });
 
@@ -4063,7 +4355,27 @@ export function createOptionsTests(
                 </div>
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              layoutComponent: (props: {
+                promptComponent: unknown;
+                sendMessage: (message: { text: string }) => void;
+              }) =>
+                createVueElement('div', { class: 'custom-layout' }, [
+                  props.promptComponent,
+                  createVueElement(
+                    'button',
+                    {
+                      class: 'custom-send',
+                      on: {
+                        click: () =>
+                          props.sendMessage({ text: 'hello from layout' }),
+                      },
+                    },
+                    'Send'
+                  ),
+                ]),
+            },
           },
         });
 
@@ -4110,7 +4422,21 @@ export function createOptionsTests(
                 </div>
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              layoutComponent: (props: {
+                promptComponent: unknown;
+                status: string;
+              }) =>
+                createVueElement('div', { class: 'custom-layout' }, [
+                  props.promptComponent,
+                  createVueElement(
+                    'span',
+                    { class: 'custom-status' },
+                    props.status
+                  ),
+                ]),
+            },
           },
         });
 
@@ -4149,7 +4475,10 @@ export function createOptionsTests(
               ...createDefaultWidgetParams(),
               layoutComponent: ChatInlineLayout,
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(),
+              layout: 'inline',
+            },
           },
         });
 
@@ -4187,7 +4516,10 @@ export function createOptionsTests(
               ...createDefaultWidgetParams(),
               layoutComponent: ChatSidePanelLayout,
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(),
+              layout: 'sidePanel',
+            },
           },
         });
 
@@ -4236,7 +4568,11 @@ export function createOptionsTests(
                 />
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(),
+              layout: 'sidePanel',
+              layoutProps: { parentElement: '#sidepanel-parent' },
+            },
           },
         });
 

@@ -105,7 +105,16 @@ export function createToolRetryTests(
               },
             },
           },
-          vue: {},
+          vue: {
+            transport,
+            persistence: false,
+            tools: {
+              save: {
+                retryOnError: true,
+                onToolCall,
+              },
+            },
+          },
         },
       });
 
@@ -115,6 +124,11 @@ export function createToolRetryTests(
         document.querySelector('.ais-ChatPrompt-textarea')!,
         'Save this'
       );
+
+      await act(async () => {
+        await wait(0);
+      });
+
       userEvent.click(document.querySelector('.ais-ChatPrompt-submit')!);
 
       await waitFor(() => {
