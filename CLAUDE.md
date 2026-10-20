@@ -1,6 +1,6 @@
 # InstantSearch monorepo
 
-Search UI libraries for Algolia across three flavors (vanilla JS, React, Vue), sharing one connector + UI-component core. Yarn 1 workspaces + Lerna (independent versioning).
+Search UI libraries for Algolia across three flavors (vanilla JS, React, Vue), sharing one connector + UI-component core. Yarn 4 workspaces + Lerna (independent versioning).
 
 ## Repo map
 
@@ -35,7 +35,7 @@ For a **cross-flavor change**, settle the contract in the connector first, then 
 
 ## Commands
 
-Node `20.19.0` (`.nvmrc`). Use Yarn (v1).
+Node `20.19.0` (`.nvmrc`). Use Yarn (v4, pinned by `packageManager`).
 
 ```bash
 # Build
