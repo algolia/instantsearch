@@ -67,7 +67,7 @@ export function createGuardrailsTests(
         widgetParams: {
           javascript: createDefaultWidgetParams(chat),
           react: createDefaultWidgetParams(chat),
-          vue: {},
+          vue: createDefaultWidgetParams(chat),
         },
       });
 
@@ -77,6 +77,11 @@ export function createGuardrailsTests(
         document.querySelector('.ais-ChatPrompt-textarea')!,
         'blocked request'
       );
+
+      await act(async () => {
+        await wait(0);
+      });
+
       userEvent.click(document.querySelector('.ais-ChatPrompt-submit')!);
 
       await act(async () => {

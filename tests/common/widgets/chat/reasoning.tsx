@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { Chat } from 'instantsearch.js/es/lib/chat';
 import React from 'react';
 
-import { createDefaultWidgetParams, openChat } from './utils';
+import { createDefaultWidgetParams, createVueElement, openChat } from './utils';
 
 import type { ChatWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
@@ -51,7 +51,7 @@ export function createReasoningTests(
         widgetParams: {
           javascript: createDefaultWidgetParams(createChatWithReasoning()),
           react: createDefaultWidgetParams(createChatWithReasoning()),
-          vue: {},
+          vue: createDefaultWidgetParams(createChatWithReasoning()),
         },
       });
 
@@ -81,7 +81,10 @@ export function createReasoningTests(
             ...createDefaultWidgetParams(createChatWithReasoning()),
             showReasoning: false,
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(createChatWithReasoning()),
+            showReasoning: false,
+          },
         },
       });
 
@@ -115,7 +118,10 @@ export function createReasoningTests(
             ...createDefaultWidgetParams(createChatWithReasoning()),
             showReasoning: false,
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(createChatWithReasoning()),
+            showReasoning: false,
+          },
         },
       });
 
@@ -162,7 +168,10 @@ export function createReasoningTests(
             ...createDefaultWidgetParams(chat),
             showReasoning: false,
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(chat),
+            showReasoning: false,
+          },
         },
       });
 
@@ -197,7 +206,15 @@ export function createReasoningTests(
               },
             },
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(createChatWithReasoning()),
+            showReasoning: true,
+            messagesProps: {
+              assistantMessageProps: {
+                autoHideActions: true,
+              },
+            },
+          },
         },
       });
 
@@ -258,7 +275,10 @@ export function createReasoningTests(
             ...createDefaultWidgetParams(chat),
             showReasoning: true,
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(chat),
+            showReasoning: true,
+          },
         },
       });
 
@@ -317,7 +337,10 @@ export function createReasoningTests(
             ...createDefaultWidgetParams(chat),
             showReasoning: true,
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(chat),
+            showReasoning: true,
+          },
         },
       });
 
@@ -393,7 +416,10 @@ export function createReasoningTests(
             ...createDefaultWidgetParams(chat),
             showReasoning: true,
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(chat),
+            showReasoning: true,
+          },
         },
       });
 
@@ -431,7 +457,15 @@ export function createReasoningTests(
               },
             },
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(createChatWithReasoning()),
+            showReasoning: true,
+            translations: {
+              message: {
+                reasoningLabel: 'Raisonnement',
+              },
+            },
+          },
         },
       });
 
@@ -500,7 +534,29 @@ export function createReasoningTests(
               },
             },
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(chat),
+            showReasoning: true,
+            messagesProps: {
+              assistantMessageProps: {
+                reasoningComponent: ({
+                  part,
+                  partIndex,
+                }: {
+                  part: { text: string };
+                  partIndex: number;
+                }) =>
+                  createVueElement(
+                    'span',
+                    {
+                      class: 'custom-reasoning-part',
+                      'data-part-index': partIndex,
+                    },
+                    part.text
+                  ),
+              },
+            },
+          },
         },
       });
 
@@ -583,7 +639,29 @@ export function createReasoningTests(
               },
             },
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(chat),
+            showReasoning: true,
+            messagesProps: {
+              assistantMessageProps: {
+                reasoningComponent: ({
+                  part,
+                  partIndex,
+                }: {
+                  part: { text: string };
+                  partIndex: number;
+                }) =>
+                  createVueElement(
+                    'details',
+                    {
+                      class: 'custom-reasoning-disclosure',
+                      'data-part-index': partIndex,
+                    },
+                    [createVueElement('summary', {}, 'Step'), part.text]
+                  ),
+              },
+            },
+          },
         },
       });
 

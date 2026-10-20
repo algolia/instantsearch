@@ -3,7 +3,7 @@ import { wait } from '@instantsearch/testutils';
 import { Chat } from 'instantsearch.js/es/lib/chat';
 import React from 'react';
 
-import { createDefaultWidgetParams, openChat } from './utils';
+import { createDefaultWidgetParams, openChat, vueH } from './utils';
 
 import type { ChatWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
@@ -73,7 +73,7 @@ export function createStreamingTests(
         widgetParams: {
           javascript: createDefaultWidgetParams(chat),
           react: createDefaultWidgetParams(chat),
-          vue: {},
+          vue: createDefaultWidgetParams(chat),
         },
       });
 
@@ -134,7 +134,13 @@ export function createStreamingTests(
               return <div>{(item as { name?: string }).name}</div>;
             },
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(chat),
+            itemComponent: ({ item }: { item: { name?: string } }) => {
+              itemRenders++;
+              return vueH('div', item.name);
+            },
+          },
         },
       });
 
