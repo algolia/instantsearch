@@ -62,6 +62,19 @@
             </ais-trending-items>
           </div>
         </div>
+
+        <ais-chat
+          agent-id="eedef238-5468-470d-bc37-f99fa741bd25"
+          :feedback="true"
+        >
+          <template #item="{ item }">
+            <article class="chat-item">
+              <img :src="item.image" :alt="item.name" />
+              <h2 class="chat-item-title">{{ item.name }}</h2>
+            </article>
+          </template>
+        </ais-chat>
+        <ais-chat-trigger />
       </ais-instant-search>
     </div>
   </div>
@@ -168,6 +181,18 @@ em {
 
 .trending-item-title {
   font-size: 0.875rem;
+  font-weight: normal;
+  text-align: center;
+}
+
+.chat-item img {
+  width: 100%;
+  height: 6rem;
+  object-fit: contain;
+}
+
+.chat-item-title {
+  font-size: 0.75rem;
   font-weight: normal;
   text-align: center;
 }
