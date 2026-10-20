@@ -89,6 +89,10 @@ export function augmentReactCreateElement(baseH) {
 
       if (name === 'className') {
         data.class = value;
+      } else if (name === 'class') {
+        // Shared components may spread their remaining props (which include
+        // the `class` this adapter hands them) after `className`.
+        data.class = data.class || value;
       } else if (name === 'children') {
         // handled via the children argument
       } else if (name === 'ref') {
