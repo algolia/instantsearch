@@ -1,3 +1,4 @@
+/* oxlint-disable typescript-eslint/no-deprecated -- tests intentionally exercise the deprecated helper this file covers */
 import snippet from '../snippet';
 
 const NONE = 'none' as const;
