@@ -27,10 +27,17 @@
  * Only the hooks the shared factories currently use are implemented;
  * `useLayoutEffect` and `memo` can be added when a shared component needs them.
  */
+// Each store gets its own namespace so `useId` values never collide across
+// component instances. Like the shared Carousel's `generateCarouselId`, the
+// counter runs in creation order, so server and client produce the same ids
+// as long as they create the same components in the same order.
+let lastStoreId = 0;
+
 export function createHooksStore(scheduleRender) {
   // One cell per hook call site, keyed by call order within a render pass.
   const cells = [];
   let cursor = 0;
+  const storeId = (lastStoreId++).toString(36);
   let idCounter = 0;
   // Effects whose deps changed during the current render, flushed post-commit.
   let pendingEffects = [];
@@ -106,7 +113,9 @@ export function createHooksStore(scheduleRender) {
   const useId = () => {
     const index = cursor++;
     if (cells[index] === undefined) {
-      cells[index] = { value: `aisVueHook${(idCounter++).toString(36)}` };
+      cells[index] = {
+        value: `aisVueHook${storeId}-${(idCounter++).toString(36)}`,
+      };
     }
     return cells[index].value;
   };

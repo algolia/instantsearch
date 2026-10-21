@@ -149,4 +149,46 @@ describe('Vue hooks runtime', () => {
     wrapper.destroy();
     expect(cleanupSpy).toHaveBeenCalledTimes(1);
   });
+
+  it('useId is unique across instances and stable across renders', async () => {
+    const Component = makeHookedComponent((hooks, h) => {
+      const [count, setCount] = hooks.useState(0);
+      const inputId = hooks.useId();
+      const panelId = hooks.useId();
+
+      return h('div', {}, [
+        h('input', { attrs: { id: inputId, 'aria-controls': panelId } }),
+        h('div', {
+          class: 'panel',
+          attrs: { id: panelId, 'data-count': count },
+        }),
+        h('button', { on: { click: () => setCount((p) => p + 1) } }),
+      ]);
+    });
+
+    const first = mount(Component);
+    const second = mount(Component);
+
+    const idsOf = (wrapper) => ({
+      input: wrapper.find('input').attributes('id'),
+      panel: wrapper.find('.panel').attributes('id'),
+    });
+    const firstIds = idsOf(first);
+    const secondIds = idsOf(second);
+
+    // Two call sites in one instance get two ids…
+    expect(firstIds.input).not.toBe(firstIds.panel);
+    // …and two instances never share one (each would otherwise start at 0,
+    // making `aria-controls` point at the other widget's panel).
+    expect(secondIds.input).not.toBe(firstIds.input);
+    expect(secondIds.panel).not.toBe(firstIds.panel);
+    expect(first.find('input').attributes('aria-controls')).toBe(
+      firstIds.panel
+    );
+
+    // Ids are allocated once per call site and survive re-renders.
+    await first.find('button').trigger('click');
+    expect(first.find('.panel').attributes('data-count')).toBe('1');
+    expect(idsOf(first)).toEqual(firstIds);
+  });
 });
