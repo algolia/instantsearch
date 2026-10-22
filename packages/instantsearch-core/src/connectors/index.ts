@@ -1,5 +1,8 @@
+export { default as connectAnswers } from './answers/connectAnswers';
+export type * from './answers/connectAnswers';
 export { default as connectAutocomplete } from './autocomplete/connectAutocomplete';
 export type * from './autocomplete/connectAutocomplete';
+export { default as Paginator } from './pagination/Paginator';
 export { default as connectBreadcrumb } from './breadcrumb/connectBreadcrumb';
 export type * from './breadcrumb/connectBreadcrumb';
 export { default as connectChat } from './chat/connectChat';
