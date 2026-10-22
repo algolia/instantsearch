@@ -2,7 +2,7 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
-import { act, render, screen } from '@testing-library/preact';
+import { act, fireEvent, render, screen } from '@testing-library/preact';
 import userEvent from '@testing-library/user-event';
 import { Fragment, createElement, render as renderWithoutAct } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
@@ -535,6 +535,32 @@ describe('ResultCard', () => {
         'aria-controls',
         body.id
       );
+    });
+
+    test('keeps offering to expand when the answer finishes mid-collapse', async () => {
+      const clientHeight = jest.spyOn(
+        HTMLElement.prototype,
+        'clientHeight',
+        'get'
+      );
+      const { container, rerender } = render(
+        <ResultCard {...createProps({ status: 'streaming', expanded: true })} />
+      );
+      const body = container.querySelector('.ais-ResultCard-body')!;
+
+      // "Show less": the height is still at its expanded value, so nothing
+      // looks clipped when the final status arrives.
+      clientHeight.mockReturnValue(400);
+      rerender(
+        <ResultCard {...createProps({ status: 'complete', expanded: false })} />
+      );
+
+      // The transition ends at the clipped height.
+      clientHeight.mockReturnValue(200);
+      fireEvent.transitionEnd(body);
+      expect(
+        screen.getByRole('button', { name: 'Show more' })
+      ).toBeInTheDocument();
     });
 
     test('expands once when the answer first outgrows the clipped height', async () => {

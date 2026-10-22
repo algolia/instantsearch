@@ -204,7 +204,8 @@ export function createResultCardComponent({
     // only shows when there is something to reveal, and the expanded height is
     // set in pixels so `max-height` can transition. Toggling `expanded` does
     // not re-measure: an unclipped body never overflows, and right after a
-    // collapse the height is still mid-transition.
+    // collapse the height is still mid-transition, so the end of that
+    // transition measures again.
     const [body, setBody] = useState<HTMLDivElement | null>(null);
     const [overflowing, setOverflowing] = useState(false);
     const [contentHeight, setContentHeight] = useState<number | undefined>(
@@ -216,6 +217,7 @@ export function createResultCardComponent({
       hasVisibleAnswer: boolean;
       autoExpanded: boolean;
       autoExpandTimer?: ReturnType<typeof setTimeout>;
+      measure?: () => void;
       bodyId: string;
     }>({
       expanded,
@@ -250,9 +252,11 @@ export function createResultCardComponent({
           }, 0);
         }
       };
+      latest.measure = measure;
       measure();
       window.addEventListener('resize', measure);
       return () => {
+        latest.measure = undefined;
         window.removeEventListener('resize', measure);
         // A cancelled expansion is scheduled again by the next measurement.
         if (latest.autoExpandTimer !== undefined) {
@@ -389,6 +393,9 @@ export function createResultCardComponent({
               classNames.body
             )}
             aria-busy={isBusy ? 'true' : undefined}
+            onTransitionEnd={(event) => {
+              if (event.target === event.currentTarget) latest.measure?.();
+            }}
             // The expanded answer scrolls past its cap: focusable so keyboard
             // users can scroll it without a link inside.
             {...(expanded
