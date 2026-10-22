@@ -563,6 +563,42 @@ describe('ResultCard', () => {
       ).toBeInTheDocument();
     });
 
+    test('stays collapsed after "Show less" on a retried answer', async () => {
+      const onExpandedChange = jest.fn();
+      const { container, rerender } = render(
+        <ResultCard {...createProps({ expanded: true, onExpandedChange })} />
+      );
+      const body = container.querySelector('.ais-ResultCard-body')!;
+
+      // Retry keeps the card expanded while the new answer streams in.
+      rerender(
+        <ResultCard
+          {...createProps({
+            expanded: true,
+            onExpandedChange,
+            status: 'loading',
+            messages: [userMessage],
+          })}
+        />
+      );
+      rerender(
+        <ResultCard
+          {...createProps({
+            expanded: true,
+            onExpandedChange,
+            status: 'streaming',
+          })}
+        />
+      );
+      await flushExpansion();
+
+      rerender(<ResultCard {...createProps({ onExpandedChange })} />);
+      fireEvent.transitionEnd(body);
+      await flushExpansion();
+
+      expect(onExpandedChange).not.toHaveBeenCalled();
+    });
+
     test('expands once when the answer first outgrows the clipped height', async () => {
       const onExpandedChange = jest.fn();
       const longer: ChatMessageBase = {

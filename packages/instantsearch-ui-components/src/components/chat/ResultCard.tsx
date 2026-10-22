@@ -236,7 +236,12 @@ export function createResultCardComponent({
       if (!body) return undefined;
       const measure = () => {
         setContentHeight(body.scrollHeight);
-        if (latest.expanded) return;
+        if (latest.expanded) {
+          // Already open, e.g. kept open by a retry: nothing left to open on
+          // its own, so "Show less" is not undone.
+          if (latest.hasVisibleAnswer) latest.autoExpanded = true;
+          return;
+        }
         const isOverflowing = body.scrollHeight > body.clientHeight;
         setOverflowing(isOverflowing);
         // Both sizes look the same until the answer outgrows the clipped
