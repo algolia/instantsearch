@@ -18,6 +18,14 @@ import type {
 import type { ChatMessageErrorProps } from '../ChatMessageError';
 import type { ChatComponentPropsWithContext, ChatMessageBase } from '../types';
 
+jest.mock('../../../lib/chat', () => {
+  const actual = jest.requireActual('../../../lib/chat');
+  return {
+    ...actual,
+    isReasoningPartActive: jest.fn(actual.isReasoningPartActive),
+  };
+});
+
 const ChatMessages = createChatMessagesComponent({
   createElement,
   Fragment,
@@ -878,10 +886,8 @@ describe('ChatMessages', () => {
   });
 
   test('does not scan for active reasoning once the disclosure is off', () => {
-    const isReasoningPartActive = jest.spyOn(
-      chatUtils,
-      'isReasoningPartActive'
-    );
+    const isReasoningPartActive = chatUtils.isReasoningPartActive as jest.Mock;
+    isReasoningPartActive.mockClear();
     const message = {
       role: 'assistant' as const,
       id: '1',

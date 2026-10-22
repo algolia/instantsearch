@@ -4,7 +4,7 @@ import {
   isGroupedResultsEnabled,
   isSilentUserMessage,
   shouldSearchToolRenderResults,
-} from '../chat';
+} from '../helpers';
 
 describe('getApplyFiltersParamsFromToolInput', () => {
   test('returns nothing to refine when input is undefined', () => {
