@@ -28,6 +28,7 @@ const NON_WIDGETS = [
   'PonderToolType',
   'DisplayResultsToolType',
   'CompareProductsToolType',
+  'compareProductsToolDefinition',
   'GroupedResultsToolType',
 ] as const;
 type RegularWidgets = Omit<typeof widgets, (typeof NON_WIDGETS)[number]>;
@@ -42,6 +43,7 @@ const NON_COMPONENTS = [
   'PonderToolType',
   'DisplayResultsToolType',
   'CompareProductsToolType',
+  'compareProductsToolDefinition',
   'GroupedResultsToolType',
   // `ChatTrigger`'s permissive `ComponentProps<'button'>` base widens the
   // `SingleWidget` union enough that TS can't narrow `widget.Component` in

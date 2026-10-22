@@ -18,6 +18,7 @@ import {
   PonderToolType,
   DisplayResultsToolType,
   CompareProductsToolType,
+  compareProductsToolDefinition,
   GroupedResultsToolType,
 } from '../../lib/chat';
 import {
@@ -96,6 +97,7 @@ export {
   // eslint-disable-next-line typescript/no-deprecated
   DisplayResultsToolType,
   CompareProductsToolType,
+  compareProductsToolDefinition,
   GroupedResultsToolType,
 };
 

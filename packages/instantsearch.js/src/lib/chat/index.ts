@@ -8,13 +8,17 @@ export { openChat, isChatBusy } from './openChat';
 export type { OpenChatOptions, ChatReferer } from './openChat';
 export { applyAgentFilters, getAgentFilters } from './filters';
 export { stripInternalHitMetadata } from './pageContext';
+export {
+  CompareProductsToolType,
+  compareProductsToolDefinition,
+} from './compareProductsTool';
+export type { CompareProductsToolDefinition } from './compareProductsTool';
 
 export const SearchIndexToolType = 'algolia_search_index';
 export const RecommendToolType = 'algolia_recommend';
 export const MemorizeToolType = 'algolia_memorize';
 export const MemorySearchToolType = 'algolia_memory_search';
 export const PonderToolType = 'algolia_ponder';
-export const CompareProductsToolType = 'algolia_compare_products';
 export const GroupedResultsToolType = 'algolia_grouped_results';
 /**
  * @deprecated The tool is now `algolia_grouped_results`

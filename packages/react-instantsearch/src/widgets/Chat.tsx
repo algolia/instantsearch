@@ -10,6 +10,7 @@ import {
   PonderToolType,
   DisplayResultsToolType,
   CompareProductsToolType,
+  compareProductsToolDefinition,
   GroupedResultsToolType,
 } from 'instantsearch.js/es/lib/chat';
 import {
@@ -45,6 +46,7 @@ export {
   // eslint-disable-next-line typescript/no-deprecated
   DisplayResultsToolType,
   CompareProductsToolType,
+  compareProductsToolDefinition,
   GroupedResultsToolType,
 };
 
