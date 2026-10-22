@@ -21460,6 +21460,7 @@ __metadata:
     "@types/dom-speech-recognition": "npm:^0.0.1"
     "@types/qs": "npm:^6.5.3"
     algoliasearch-helper: "npm:3.30.0"
+    preact: "npm:^10.10.0"
     qs: "npm:^6.5.1"
     search-insights: "npm:^2.17.2"
   languageName: unknown

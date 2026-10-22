@@ -48,5 +48,8 @@
     "algoliasearch-helper": "3.30.0",
     "qs": "^6.5.1",
     "search-insights": "^2.17.2"
+  },
+  "devDependencies": {
+    "preact": "^10.10.0"
   }
 }
