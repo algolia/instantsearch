@@ -1,4 +1,7 @@
-import { InstantSearch, INSTANTSEARCH_FUTURE_DEFAULTS } from 'instantsearch-core';
+import {
+  InstantSearch,
+  INSTANTSEARCH_FUTURE_DEFAULTS,
+} from 'instantsearch-core';
 import { useCallback, useRef, version as ReactVersion } from 'react';
 import { useSyncExternalStore } from 'use-sync-external-store/shim';
 
@@ -29,12 +32,12 @@ const nextUserAgent = (nextVersion?: string) =>
 
 export type UseInstantSearchApiProps<
   TUiState extends UiState,
-  TRouteState
+  TRouteState,
 > = InstantSearchOptions<TUiState, TRouteState>;
 
 export type InternalInstantSearch<
   TUiState extends UiState,
-  TRouteState = TUiState
+  TRouteState = TUiState,
 > = InstantSearch<TUiState, TRouteState> & {
   /**
    * Schedule a function to be called on the next timer tick
@@ -204,6 +207,10 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
 
       // Scenario 1: the component mounts.
       if (cleanupTimerRef.current === null) {
+        // The instance can be mounted again after it was disposed, for example
+        // when React Activity reveals a hidden tree. Widgets must be able to
+        // clean up again from that point on.
+        search._preventWidgetCleanup = false;
         // On SSR, the instance is already started so we don't start it again.
         if (!search.started) {
           search.start();
@@ -225,6 +232,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
 
         function cleanup() {
           search.dispose();
+          cleanupTimerRef.current = null;
         }
         clearTimeout(search._schedule.timer);
         // We clean up only when the component that uses this subscription unmounts,

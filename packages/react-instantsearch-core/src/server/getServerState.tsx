@@ -1,12 +1,5 @@
-import {
-  getInitialResults,
-  waitForResults,
-} from 'instantsearch-core';
-import {
-  isTwoPassWidget,
-  walkIndex,
-  resetWidgetId,
-} from 'instantsearch-core';
+import { getInitialResults, waitForResults } from 'instantsearch-core';
+import { isTwoPassWidget, walkIndex, resetWidgetId } from 'instantsearch-core';
 import React from 'react';
 
 import { InstantSearchServerContext } from '../components/InstantSearchServerContext';
@@ -67,8 +60,15 @@ export function getServerState(
 
     // Two-pass widgets require another query to discover and mount child widgets.
     walkIndex(searchRef.current!.mainIndex, (index) => {
-      shouldRefetch =
-        shouldRefetch || index.getWidgets().some(isTwoPassWidget);
+      let current: typeof index | null = index;
+      while (current) {
+        if (current._isolated) {
+          return;
+        }
+        current = current.getParent();
+      }
+
+      shouldRefetch = shouldRefetch || index.getWidgets().some(isTwoPassWidget);
     });
 
     if (shouldRefetch) {

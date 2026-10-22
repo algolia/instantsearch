@@ -1,6 +1,4 @@
-import type { AlgoliaHit } from '../../types';
-
-export function addAbsolutePosition<THit extends AlgoliaHit>(
+export function addAbsolutePosition<THit extends Record<string, any>>(
   hits: THit[],
   page: number,
   hitsPerPage: number

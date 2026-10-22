@@ -79,9 +79,8 @@ export function createStreamingTests(
 
       await openChat(act);
 
-      const listBefore = document.querySelector<HTMLOListElement>(
-        '.ais-Carousel-list'
-      );
+      const listBefore =
+        document.querySelector<HTMLOListElement>('.ais-Carousel-list');
       expect(listBefore).not.toBeNull();
 
       // Simulate the user having scrolled the carousel horizontally.
@@ -97,9 +96,8 @@ export function createStreamingTests(
         });
       }
 
-      const listAfter = document.querySelector<HTMLOListElement>(
-        '.ais-Carousel-list'
-      );
+      const listAfter =
+        document.querySelector<HTMLOListElement>('.ais-Carousel-list');
 
       // Same DOM node across re-renders → native scroll position survives.
       expect(listAfter).toBe(listBefore);

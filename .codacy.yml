@@ -3,9 +3,14 @@
 # These files are build-time scripts that use Rollup's internal module resolution,
 # not web-facing code that processes untrusted user input.
 engines:
-  semgrep:
+  opengrep:
     exclude_paths:
       - '**/rollup.config.mjs'
+      # Vendored `markdown-to-jsx` (see its README). The flagged `RegExp`
+      # constructions use module constants, `href` values go through its URL
+      # sanitizer and `get()` only reads. This also hides the genuine ReDoS
+      # findings in its emphasis and HTML regexes, which are tracked separately.
+      - 'packages/instantsearch-ui-components/src/lib/markdown-to-jsx/**'
 
 # CLI detector tests walk fixture directories colocated with the test file,
 # never any external input.

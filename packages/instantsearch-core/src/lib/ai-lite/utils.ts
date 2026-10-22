@@ -33,7 +33,21 @@ export function lastAssistantMessageIsCompleteWithToolCalls({
 
   if (!lastMessage.parts || lastMessage.parts.length === 0) return false;
 
-  const toolParts = lastMessage.parts.filter(isToolOrDynamicToolUIPart);
+  // Only the last step of the message counts: earlier steps were answered
+  // before the model was called again, so their resolved tool calls must not
+  // continue the turn a second time.
+  const lastStepStartIndex = lastMessage.parts.reduce(
+    (lastIndex, part, index) =>
+      part.type === 'step-start' ? index : lastIndex,
+    -1
+  );
+
+  const toolParts = lastMessage.parts
+    .slice(lastStepStartIndex + 1)
+    .filter(isToolOrDynamicToolUIPart)
+    // A provider-executed tool call is the provider's to answer, so a turn
+    // made of them is already complete — continuing would resend it.
+    .filter((part) => !part.providerExecuted);
 
   if (toolParts.length === 0) return false;
 
@@ -91,23 +105,6 @@ export function resolveValue<T>(
     return Promise.resolve((value as () => T | Promise<T>)());
   }
   return Promise.resolve(value);
-}
-
-/**
- * Error raised when the upstream stream emits a `data-guardrail-violation`
- * chunk. The `message` carries the service-provided `fallbackResponse`, which
- * is intentionally surfaced verbatim through the chat error UI (unlike
- * generic cost-control / 4xx errors, where the raw API message is hidden
- * behind a friendly default).
- *
- * Detection across package boundaries should rely on `error.name` rather than
- * `instanceof` to avoid issues with mixed module copies in bundled apps.
- */
-export class GuardrailViolationError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'GuardrailViolationError';
-  }
 }
 
 /**

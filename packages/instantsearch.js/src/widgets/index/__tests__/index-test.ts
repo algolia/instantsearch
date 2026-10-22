@@ -158,7 +158,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
   it('does not throw without `indexName` option when `isolated` is true', () => {
     expect(() => {
-      index({ EXPERIMENTAL_isolated: true });
+      index({ isolated: true });
     }).not.toThrow();
   });
 
@@ -498,6 +498,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       instance.removeWidgets([pagination]);
 
       expect(instance.getWidgets()).toEqual([searchBox]);
+    });
+
+    it('clears the parent only on removed widgets', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchBox = virtualSearchBox({});
+      const pagination = virtualPagination({});
+
+      instance.addWidgets([searchBox, pagination]);
+      instance.removeWidgets([pagination]);
+
+      expect(searchBox.parent).toBe(instance);
+      expect(pagination.parent).toBeUndefined();
     });
 
     it('removes given widgets from the instance', () => {
@@ -945,6 +957,194 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         instance.removeWidgets([searchBox]);
 
         expect(instantSearchInstance.scheduleSearch).toHaveBeenCalledTimes(0);
+      });
+    });
+  });
+
+  describe('updateWidget', () => {
+    it('throws an error with a widget that does not implement `dispose`', () => {
+      const instance = index({ indexName: 'indexName' });
+      const widget = createWidget();
+      delete (widget as any).dispose;
+
+      expect(() => {
+        instance.updateWidget(widget, virtualSearchBox({}));
+      }).toThrowErrorMatchingInlineSnapshot(`
+        "The widget definition expects a \`dispose\` method.
+
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widget/js/"
+      `);
+    });
+
+    it('throws an error with a widget that implements neither `init` nor `render`', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchBox = virtualSearchBox({});
+
+      instance.addWidgets([searchBox]);
+
+      expect(() => {
+        instance.updateWidget(searchBox, { dispose() {} } as any);
+      }).toThrowErrorMatchingInlineSnapshot(`
+        "The widget definition expects a \`render\` and/or an \`init\` method.
+
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widget/js/"
+      `);
+    });
+
+    it('replaces the widget in place, keeping its position', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchBox = virtualSearchBox({});
+      const pagination = virtualPagination({});
+      const nextPagination = virtualPagination({ padding: 4 });
+      const refinementList = virtualRefinementList({ attribute: 'brand' });
+
+      instance.addWidgets([searchBox, pagination, refinementList]);
+      instance.updateWidget(pagination, nextPagination);
+
+      expect(instance.getWidgets()).toEqual([
+        searchBox,
+        nextPagination,
+        refinementList,
+      ]);
+    });
+
+    it('appends the next widget when the previous one is not mounted', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchBox = virtualSearchBox({});
+      const pagination = virtualPagination({});
+
+      instance.addWidgets([searchBox]);
+      instance.updateWidget(pagination, virtualPagination({ padding: 4 }));
+
+      expect(instance.getWidgets()).toHaveLength(2);
+    });
+
+    it('moves the parent over to the next widget', () => {
+      const instance = index({ indexName: 'indexName' });
+      const pagination = virtualPagination({});
+      const nextPagination = virtualPagination({ padding: 4 });
+
+      instance.addWidgets([pagination]);
+      instance.updateWidget(pagination, nextPagination);
+
+      expect(pagination.parent).toBeUndefined();
+      expect(nextPagination.parent).toBe(instance);
+    });
+
+    it('returns the instance to be able to chain the calls', () => {
+      const instance = index({ indexName: 'indexName' });
+      const pagination = virtualPagination({});
+
+      expect(
+        instance
+          .addWidgets([pagination])
+          .updateWidget(pagination, virtualPagination({ padding: 4 }))
+      ).toBe(instance);
+    });
+
+    it('does not throw an error without the `init` step', () => {
+      const instance = index({ indexName: 'indexName' });
+      const pagination = virtualPagination({});
+
+      instance.addWidgets([pagination]);
+
+      expect(() => {
+        instance.updateWidget(pagination, virtualPagination({ padding: 4 }));
+      }).not.toThrow();
+    });
+
+    describe('with a started instance', () => {
+      it('keeps the `uiState` the next widget still claims', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch();
+        const pagination = virtualPagination({});
+
+        instance.addWidgets([virtualSearchBox({}), pagination]);
+        instance.init(
+          createIndexInitOptions({
+            instantSearchInstance,
+            parent: null,
+            uiState: { indexName: { page: 4 } },
+          })
+        );
+
+        expect(instance.getHelper()!.state.page).toEqual(3);
+
+        instance.updateWidget(pagination, virtualPagination({ padding: 4 }));
+
+        expect(instance.getHelper()!.state.page).toEqual(3);
+        expect(instance.getWidgetUiState({})).toEqual({
+          indexName: { page: 4 },
+        });
+      });
+
+      it('forgets the `uiState` the next widget no longer claims', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch();
+        const refinementList = virtualRefinementList({ attribute: 'brand' });
+
+        instance.addWidgets([virtualSearchBox({}), refinementList]);
+        instance.init(
+          createIndexInitOptions({
+            instantSearchInstance,
+            parent: null,
+            uiState: { indexName: { refinementList: { brand: ['Apple'] } } },
+          })
+        );
+
+        expect(
+          instance.getHelper()!.state.disjunctiveFacetsRefinements
+        ).toEqual({ brand: ['Apple'] });
+
+        instance.updateWidget(
+          refinementList,
+          virtualRefinementList({ attribute: 'categories' })
+        );
+
+        expect(
+          instance.getHelper()!.state.disjunctiveFacetsRefinements
+        ).toEqual({ categories: [] });
+        expect(instance.getWidgetUiState({})).toEqual({ indexName: {} });
+      });
+
+      it('disposes the previous widget and inits the next one', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch();
+        const previousWidget = createWidget();
+        const nextWidget = createWidget();
+
+        instance.addWidgets([previousWidget]);
+        instance.init(
+          createIndexInitOptions({ instantSearchInstance, parent: null })
+        );
+
+        instance.updateWidget(previousWidget, nextWidget);
+
+        expect(previousWidget.dispose).toHaveBeenCalledTimes(1);
+        expect(nextWidget.init).toHaveBeenCalledTimes(1);
+        // The previous widget was only initialized by the `init` step above.
+        expect(previousWidget.init).toHaveBeenCalledTimes(1);
+      });
+
+      it('notifies the instance of the `uiState` change only once', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch();
+        const pagination = virtualPagination({});
+
+        instance.addWidgets([virtualSearchBox({}), pagination]);
+        instance.init(
+          createIndexInitOptions({ instantSearchInstance, parent: null })
+        );
+
+        castToJestMock(instantSearchInstance.onInternalStateChange).mockClear();
+
+        // A `removeWidgets` + `addWidgets` pair writes to the helper twice, and
+        // therefore notifies twice.
+        instance.updateWidget(pagination, virtualPagination({ padding: 4 }));
+
+        expect(
+          instantSearchInstance.onInternalStateChange
+        ).toHaveBeenCalledTimes(1);
       });
     });
   });
@@ -2693,7 +2893,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           state: expect.anything(),
           parent: expect.anything(),
           instantSearchInstance,
-          renderState: {},
+          renderState: expect.anything(),
           templatesConfig: instantSearchInstance.templatesConfig,
           createURL: expect.any(Function),
           scopedResults: [],
@@ -3487,7 +3687,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           virtualSearchBox({}),
           index({
             indexName: 'childInstance',
-            EXPERIMENTAL_isolated: true,
+            isolated: true,
           }).addWidgets([virtualPagination({})]),
         ]),
       ]);
@@ -3897,9 +4097,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
   describe('isolated', () => {
     it('sets _isolated to true when isolated option is true', () => {
-      const instance = index({ EXPERIMENTAL_isolated: true });
+      const instance = index({ isolated: true });
       expect(instance._isolated).toBe(true);
       expect(instance.getParent()).toBeNull();
+    });
+
+    it('supports the deprecated `EXPERIMENTAL_isolated` alias with a warning', () => {
+      warning.cache = {};
+      expect(() => {
+        const instance = index({ EXPERIMENTAL_isolated: true });
+        expect(instance._isolated).toBe(true);
+        expect(instance.getParent()).toBeNull();
+      }).toWarnDev(
+        '[InstantSearch.js]: The `EXPERIMENTAL_isolated` option is no longer experimental and has been renamed. Please use `isolated` instead.'
+      );
     });
 
     it('sets _isolated to false when isolated option is false or omitted', () => {
@@ -3917,7 +4128,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
     it('returns null parent for isolated indices', () => {
       const parent = index({ indexName: 'parentIndex' });
-      const child = index({ EXPERIMENTAL_isolated: true });
+      const child = index({ isolated: true });
       parent.addWidgets([child]);
       child.init(createIndexInitOptions({ parent }));
       expect(child.getParent()).toBeNull();
@@ -3927,13 +4138,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const search = instantsearch({
         searchClient: createSearchClient(),
       }).addWidgets([
-        index({ EXPERIMENTAL_isolated: true }).addWidgets([
-          virtualSearchBox({}),
-        ]),
+        index({ isolated: true }).addWidgets([virtualSearchBox({})]),
       ]);
       search.start();
 
       await wait(0);
+      expect(search._hasSearchWidget).toBe(false);
+      expect(search.status).toBe('idle');
       expect(search.client.search).toHaveBeenCalledTimes(0);
     });
 
@@ -3941,7 +4152,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const search = instantsearch({
         searchClient: createSearchClient(),
       }).addWidgets([
-        index({ EXPERIMENTAL_isolated: false, indexName: 'a' }).addWidgets([
+        index({ isolated: false, indexName: 'a' }).addWidgets([
           virtualSearchBox({}),
         ]),
       ]);
@@ -3966,7 +4177,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const search = instantsearch({
         searchClient: createSearchClient(),
       }).addWidgets([
-        index({ EXPERIMENTAL_isolated: true, indexName: 'a' }).addWidgets([
+        index({ isolated: true, indexName: 'a' }).addWidgets([
           virtualSearchBox({}),
         ]),
       ]);
@@ -3995,7 +4206,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const search = instantsearch({
         searchClient: createSearchClient(),
       }).addWidgets([
-        index({ EXPERIMENTAL_isolated: true }).addWidgets([
+        index({ isolated: true }).addWidgets([
           index({ indexName: 'a' }),
           virtualSearchBox({}),
         ]),
@@ -4010,25 +4221,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       expect(search.client.search).toHaveBeenCalledTimes(1);
     });
 
-    it('triggers composition when root has a compositionId', async () => {
+    it('does not trigger the root composition for an isolated index', async () => {
       const search = instantsearch({
         searchClient: createCompositionClient(),
         compositionID: 'composition-id',
       }).addWidgets([
-        index({ EXPERIMENTAL_isolated: true, indexName: 'a' }).addWidgets([
+        index({ isolated: true, indexName: 'a' }).addWidgets([
           virtualSearchBox({}),
         ]),
       ]);
       search.start();
 
       await wait(0);
-      // Now called for the root, as a compositionId is set
-      expect(search.client.search).toHaveBeenCalledTimes(1);
+      expect(search.client.search).not.toHaveBeenCalled();
 
       search.renderState.a.searchBox?.refine('please search now');
 
-      expect(search.client.search).toHaveBeenCalledTimes(2);
-      expect(castToJestMock(search.client.search).mock.calls[1][0])
+      expect(search.client.search).toHaveBeenCalledTimes(1);
+      expect(castToJestMock(search.client.search).mock.calls[0][0])
         .toMatchInlineSnapshot(`
         {
           "compositionID": "a",
@@ -4039,6 +4249,39 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           },
         }
       `);
+    });
+
+    it('does not trigger composition for an empty isolated index', async () => {
+      const search = instantsearch({
+        searchClient: createCompositionClient(),
+        compositionID: 'composition-id',
+      }).addWidgets([index({ EXPERIMENTAL_isolated: true })]);
+      search.start();
+
+      await wait(0);
+      expect(search._hasSearchWidget).toBe(false);
+      expect(search.status).toBe('idle');
+      expect(search.client.search).not.toHaveBeenCalled();
+    });
+
+    it('does not trigger composition when a root widget requires no request', async () => {
+      const search = instantsearch({
+        searchClient: createCompositionClient(),
+        compositionID: 'composition-id',
+      }).addWidgets([
+        createWidget({ dependsOn: 'none' }),
+        index({ EXPERIMENTAL_isolated: true, indexName: 'a' }).addWidgets([
+          virtualSearchBox({}),
+        ]),
+      ]);
+      search.start();
+
+      await wait(0);
+      expect(search.client.search).not.toHaveBeenCalled();
+
+      search.renderState.a.searchBox?.refine('please search now');
+
+      expect(search.client.search).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -4080,6 +4323,39 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       // wait for the search to be done
       await wait(0);
       // state has reverted
+      expect(search.getUiState()).toEqual({ indexName: { query: 'iphone' } });
+    });
+
+    it('resets the state again when a second search fails', async () => {
+      const searchClient = createSearchClient();
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      }).addWidgets([virtualSearchBox({})]);
+
+      search.start();
+      // suppress global error
+      search.on('error', () => {});
+
+      search.setUiState({ indexName: { query: 'iphone' } });
+      await wait(0);
+
+      expect(search.getUiState()).toEqual({ indexName: { query: 'iphone' } });
+
+      castToJestMock(searchClient.search).mockRejectedValue(
+        new Error('search error')
+      );
+
+      search.setUiState({ indexName: { query: 'iphone 2' } });
+      await wait(0);
+
+      expect(search.getUiState()).toEqual({ indexName: { query: 'iphone' } });
+
+      // The roll-back runs once per failed search, not once per error state, so
+      // the next failure reverts too.
+      search.setUiState({ indexName: { query: 'iphone 3' } });
+      await wait(0);
+
       expect(search.getUiState()).toEqual({ indexName: { query: 'iphone' } });
     });
   });

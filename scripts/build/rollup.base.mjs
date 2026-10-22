@@ -23,6 +23,7 @@
 import { readdirSync } from 'node:fs';
 import { extname, join } from 'node:path';
 
+import { extensionResolver } from './rollup-plugin-extension-resolver.mjs';
 import {
   createSwcPlugin,
   createCommonjsPlugin,
@@ -30,11 +31,11 @@ import {
   createReplacePlugin,
   createResolvePlugin,
   createStripJsxPragmaPlugin,
+  createAnnotatePureCallsPlugin,
   createWrapWarningsWithDevCheckPlugin,
   createTerserPlugin,
   onWarn,
 } from './rollup.plugins.mjs';
-import { extensionResolver } from './rollup-plugin-extension-resolver.mjs';
 
 /**
  * Creates an ESM (ES Modules) configuration.
@@ -76,6 +77,7 @@ export function createESMConfig({
       ...preSwcPlugins,
       createSwcPlugin(swc),
       createWrapWarningsWithDevCheckPlugin(),
+      createAnnotatePureCallsPlugin(),
       createReplacePlugin({ mode: 'production' }),
       createStripJsxPragmaPlugin(),
       extensionResolver({
@@ -142,6 +144,7 @@ export function createCJSConfig({
         ...swc,
       }),
       createWrapWarningsWithDevCheckPlugin(),
+      createAnnotatePureCallsPlugin(),
       createReplacePlugin({ mode: 'production', additional: replaceImports }),
       createStripJsxPragmaPlugin(),
       createPackageJsonPlugin({ type: 'commonjs', sideEffects: false }),
@@ -168,7 +171,8 @@ export function createCJSConfig({
  */
 export function createUMDConfig({
   input,
-  pkg,
+  // Accepted for symmetry with the ESM/CJS factories, which emit a package.json from it.
+  pkg: _pkg,
   name,
   banner,
   outputDir = 'dist/umd',
@@ -200,6 +204,7 @@ export function createUMDConfig({
     ...preSwcPlugins,
     createSwcPlugin(swc),
     createWrapWarningsWithDevCheckPlugin(),
+    createAnnotatePureCallsPlugin(),
   ];
 
   // Development build (unminified)

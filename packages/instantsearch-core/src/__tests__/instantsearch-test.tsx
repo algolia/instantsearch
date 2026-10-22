@@ -15,7 +15,11 @@ import originalHelper from 'algoliasearch-helper';
 import { h, render, createRef } from 'preact';
 
 import { createRenderOptions, createWidget } from '../../test/createWidget';
-import { connectSearchBox, connectPagination } from '../connectors';
+import {
+  connectAutocomplete,
+  connectSearchBox,
+  connectPagination,
+} from '../connectors';
 import InstantSearch from '../instantsearch';
 import { noop, warning } from '../lib/utils';
 import { createInsightsMiddleware } from '../middlewares';
@@ -69,6 +73,7 @@ jest.mock('algoliasearch-helper', () => {
 });
 
 const virtualSearchBox = connectSearchBox(() => {});
+const virtualAutocomplete = connectAutocomplete(() => {});
 
 beforeEach(() => {
   algoliasearchHelper.mockClear();
@@ -138,6 +143,20 @@ describe('Usage', () => {
           searchClient: createSearchClient(),
         });
 
+        search.start();
+        await wait(0);
+      }).not.toWarnDev(
+        '[InstantSearch.js]: No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
+      );
+    });
+
+    it('does not warn if no widget requires a search or recommend request', async () => {
+      await expect(async () => {
+        const search = new InstantSearch({
+          searchClient: createSearchClient(),
+        });
+
+        search.addWidgets([virtualAutocomplete({ requiresSearch: false })]);
         search.start();
         await wait(0);
       }).not.toWarnDev(
@@ -267,6 +286,21 @@ describe('Usage', () => {
     `);
   });
 
+  it('recomputes search widget flags when widgets are removed before start', () => {
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+    });
+    const searchBox = virtualSearchBox({});
+
+    search.addWidgets([searchBox]);
+    search.removeWidgets([searchBox]);
+    search.start();
+
+    expect(search.mainIndex.getWidgets()).toHaveLength(0);
+    expect(search._hasSearchWidget).toBe(false);
+  });
+
   it('throws if createURL is called before start', () => {
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -374,7 +408,6 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
 });
 
 describe('InstantSearch', () => {
-
   it('does not call algoliasearchHelper', () => {
     // eslint-disable-next-line no-new
     new InstantSearch({
@@ -505,6 +538,47 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       await wait(0);
 
       expect(mapMiddlewares(search.middleware)).toEqual([]);
+    });
+
+    test('does not add automatic insights when no widget requires a search', async () => {
+      const searchClient = createSearchClientWithAutomaticInsightsOptedIn();
+      const search = new InstantSearch({
+        indexName: 'indexNameWithAutomaticInsights',
+        searchClient,
+      });
+
+      search.addWidgets([virtualAutocomplete({ requiresSearch: false })]);
+      search.start();
+
+      await wait(0);
+
+      expect(searchClient.search).not.toHaveBeenCalled();
+      expect(mapMiddlewares(search.middleware)).toEqual([]);
+    });
+
+    test('keeps automatic insights when another widget requires a search', async () => {
+      const searchClient = createSearchClientWithAutomaticInsightsOptedIn();
+      const search = new InstantSearch({
+        indexName: 'indexNameWithAutomaticInsights',
+        searchClient,
+      });
+
+      search.addWidgets([
+        virtualAutocomplete({ requiresSearch: false }),
+        virtualSearchBox({}),
+      ]);
+      search.start();
+
+      await wait(0);
+
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      expect(mapMiddlewares(search.middleware)).toEqual([
+        {
+          $$type: 'ais.insights',
+          $$internal: true,
+          $$automatic: true,
+        },
+      ]);
     });
 
     test('insights: undefined adds the insights middleware if `_automaticInsights: true` is found in at least one index in initial response', async () => {
@@ -1185,6 +1259,67 @@ describe('start', () => {
     });
   });
 
+  it('clears a search error when the final search widget is removed', async () => {
+    const { searches, searchClient } = createControlledSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const searchBox = virtualSearchBox({});
+    const errorEvent = new Promise<void>((resolve) => {
+      search.on('error', () => resolve());
+    });
+
+    search.addWidgets([
+      virtualAutocomplete({ requiresSearch: false }),
+      searchBox,
+    ]);
+    search.start();
+    await wait(0);
+
+    searches[0].rejecter(new Error('SERVER_ERROR'));
+    await errorEvent;
+
+    expect(search.status).toBe('error');
+    expect(search.error).toEqual(new Error('SERVER_ERROR'));
+
+    search.removeWidgets([searchBox]);
+    await wait(0);
+
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+    expect(search.status).toBe('idle');
+    expect(search.error).toBeUndefined();
+  });
+
+  it('clears a late search error after the final search widget is removed', async () => {
+    const { searches, searchClient } = createControlledSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const searchBox = virtualSearchBox({});
+    const errorEvent = new Promise<void>((resolve) => {
+      search.on('error', () => resolve());
+    });
+
+    search.addWidgets([
+      virtualAutocomplete({ requiresSearch: false }),
+      searchBox,
+    ]);
+    search.start();
+    await wait(0);
+
+    search.removeWidgets([searchBox]);
+    await wait(0);
+    searches[0].rejecter(new Error('SERVER_ERROR'));
+    await errorEvent;
+    await wait(0);
+
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+    expect(search.status).toBe('idle');
+    expect(search.error).toBeUndefined();
+  });
+
   it('does not trigger a search with initial results', async () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
@@ -1615,6 +1750,147 @@ describe('scheduleRender', () => {
     expect(renderSpy).toHaveBeenCalledTimes(2);
     expect(renderSpy).toHaveBeenNthCalledWith(1, { widgetRenderTimes: 0 });
     expect(renderSpy).toHaveBeenNthCalledWith(2, { widgetRenderTimes: 1 });
+  });
+
+  it('keeps the status and the error when the render is not search-driven', async () => {
+    const { searches, searchClient } = createControlledSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const errorEvent = new Promise<void>((resolve) => {
+      search.on('error', () => resolve());
+    });
+
+    search.addWidgets([virtualSearchBox({})]);
+    search.start();
+    await wait(0);
+
+    searches[0].rejecter(new Error('SERVER_ERROR'));
+    await errorEvent;
+    await wait(0);
+
+    expect(search.status).toBe('error');
+    expect(search.error).toEqual(new Error('SERVER_ERROR'));
+
+    search.scheduleRender(false);
+    await wait(0);
+
+    expect(search.status).toBe('error');
+    expect(search.error).toEqual(new Error('SERVER_ERROR'));
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+  });
+
+  it('clears the stalled timer even when the render is not search-driven', async () => {
+    const { searches, searchClient } = createControlledSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    search.addWidgets([virtualSearchBox({})]);
+    search.start();
+    await wait(0);
+
+    searches[0].resolver();
+    await wait(0);
+
+    search.scheduleStalledRender();
+    expect(search._searchStalledTimer).not.toBeNull();
+
+    search.scheduleRender(false);
+    await wait(0);
+
+    expect(search._searchStalledTimer).toBeNull();
+    expect(search.status).toBe('idle');
+  });
+
+  it('resets the status when a search-driven render shares the deferred window', async () => {
+    const { searches, searchClient } = createControlledSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const errorEvent = new Promise<void>((resolve) => {
+      search.on('error', () => resolve());
+    });
+
+    search.addWidgets([virtualSearchBox({})]);
+    search.start();
+    await wait(0);
+
+    searches[0].rejecter(new Error('SERVER_ERROR'));
+    await errorEvent;
+    await wait(0);
+
+    expect(search.status).toBe('error');
+
+    // Both renders collapse into one run, and the caller opting out of the
+    // reset must not decide for the search-driven one next to it.
+    search.scheduleRender(false);
+    search.scheduleRender();
+    await wait(0);
+
+    expect(search.status).toBe('idle');
+    expect(search.error).toBeUndefined();
+  });
+
+  it('resets the status whichever render fills the deferred window first', async () => {
+    const { searches, searchClient } = createControlledSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const errorEvent = new Promise<void>((resolve) => {
+      search.on('error', () => resolve());
+    });
+
+    search.addWidgets([virtualSearchBox({})]);
+    search.start();
+    await wait(0);
+
+    searches[0].rejecter(new Error('SERVER_ERROR'));
+    await errorEvent;
+    await wait(0);
+
+    expect(search.status).toBe('error');
+
+    search.scheduleRender();
+    search.scheduleRender(false);
+    await wait(0);
+
+    expect(search.status).toBe('idle');
+    expect(search.error).toBeUndefined();
+  });
+
+  it('clears a previous error once new results arrive', async () => {
+    const { searches, searchClient } = createControlledSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const errorEvent = new Promise<void>((resolve) => {
+      search.on('error', () => resolve());
+    });
+
+    search.addWidgets([virtualSearchBox({})]);
+    search.start();
+    await wait(0);
+
+    searches[0].rejecter(new Error('SERVER_ERROR'));
+    await errorEvent;
+    await wait(0);
+
+    expect(search.status).toBe('error');
+
+    search.mainHelper!.search();
+    expect(search.status).toBe('loading');
+
+    searches[1].resolver();
+    await wait(0);
+
+    expect(search.status).toBe('idle');
+    expect(search.error).toBeUndefined();
   });
 });
 
@@ -2255,6 +2531,162 @@ describe('setUiState', () => {
       uiState: {
         indexName: {},
       },
+    });
+  });
+
+  test('does not notify middlewares when applying the UI state throws', async () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const onMiddlewareStateChange = jest.fn();
+    const middleware = () => {
+      return {
+        subscribe() {},
+        unsubscribe() {},
+        onStateChange: onMiddlewareStateChange,
+      };
+    };
+    const throwingWidget = {
+      $$type: 'ais.throwing',
+      init() {},
+      render() {},
+      getWidgetUiState(uiState) {
+        return uiState;
+      },
+      getWidgetSearchParameters(state, { uiState }) {
+        if (uiState.query === 'throw') {
+          throw new Error('Cannot apply the UI state');
+        }
+
+        return state;
+      },
+    } as Widget;
+
+    search.use(middleware);
+    search.addWidgets([throwingWidget]);
+    search.start();
+
+    expect(() => {
+      search.setUiState({
+        indexName: { query: 'throw' },
+      });
+    }).toThrow('Cannot apply the UI state');
+
+    await wait(0);
+
+    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(0);
+  });
+
+  test('notifies middlewares of the applied part of the UI state when a child index throws', async () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const onMiddlewareStateChange = jest.fn();
+    const middleware = () => {
+      return {
+        subscribe() {},
+        unsubscribe() {},
+        onStateChange: onMiddlewareStateChange,
+      };
+    };
+    const throwingWidget = {
+      $$type: 'ais.throwing',
+      init() {},
+      render() {},
+      getWidgetUiState(uiState) {
+        return uiState;
+      },
+      getWidgetSearchParameters(state, { uiState }) {
+        if (uiState.query === 'throw') {
+          throw new Error('Cannot apply the UI state');
+        }
+
+        return state;
+      },
+    } as Widget;
+
+    search.use(middleware);
+    search.addWidgets([
+      virtualSearchBox({}),
+      index({ indexName: 'childIndexName' }).addWidgets([throwingWidget]),
+    ]);
+    search.start();
+
+    expect(() => {
+      search.setUiState({
+        indexName: { query: 'applied' },
+        childIndexName: { query: 'throw' },
+      });
+    }).toThrow('Cannot apply the UI state');
+
+    await wait(0);
+
+    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(1);
+    expect(onMiddlewareStateChange).toHaveBeenCalledWith({
+      uiState: expect.objectContaining({
+        indexName: { query: 'applied' },
+      }),
+    });
+  });
+
+  test('notifies middlewares of the applied part of the UI state when a child index throws with a controlled state', async () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+      onStateChange({ uiState, setUiState }) {
+        setUiState(uiState);
+      },
+    });
+    const onMiddlewareStateChange = jest.fn();
+    const middleware = () => {
+      return {
+        subscribe() {},
+        unsubscribe() {},
+        onStateChange: onMiddlewareStateChange,
+      };
+    };
+    const throwingWidget = {
+      $$type: 'ais.throwing',
+      init() {},
+      render() {},
+      getWidgetUiState(uiState) {
+        return uiState;
+      },
+      getWidgetSearchParameters(state, { uiState }) {
+        if (uiState.query === 'throw') {
+          throw new Error('Cannot apply the UI state');
+        }
+
+        return state;
+      },
+    } as Widget;
+
+    search.use(middleware);
+    search.addWidgets([
+      virtualSearchBox({}),
+      index({ indexName: 'childIndexName' }).addWidgets([throwingWidget]),
+    ]);
+    search.start();
+
+    expect(() => {
+      search.setUiState({
+        indexName: { query: 'applied' },
+        childIndexName: { query: 'throw' },
+      });
+    }).toThrow('Cannot apply the UI state');
+
+    await wait(0);
+
+    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(1);
+    expect(onMiddlewareStateChange).toHaveBeenCalledWith({
+      uiState: expect.objectContaining({
+        indexName: { query: 'applied' },
+      }),
     });
   });
 

@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.30.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.29.4...algoliasearch-helper@3.30.0) (2026-10-01)
+
+
+### Features
+
+* **result-card:** activate from `renderingContent` ([#7266](https://github.com/algolia/instantsearch/issues/7266)) ([d8069fa](https://github.com/algolia/instantsearch/commit/d8069fa2ee978211abbf33ed613f0cc05e82d192))
+
+
+
+
+
+## [3.29.4](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.29.3...algoliasearch-helper@3.29.4) (2026-09-29)
+
+
+### Bug Fixes
+
+* **search:** deduplicate identical queries ([#7255](https://github.com/algolia/instantsearch/issues/7255)) ([79427b5](https://github.com/algolia/instantsearch/commit/79427b559d803364599958a8729130141ca9c65e)), closes [#6795](https://github.com/algolia/instantsearch/issues/6795)
+
+
+
+
+
+## [3.29.3](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.29.2...algoliasearch-helper@3.29.3) (2026-08-06)
+
+**Note:** Version bump only for package algoliasearch-helper
+
+
+
+
+
+## [3.29.2](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.29.1...algoliasearch-helper@3.29.2) (2026-07-07)
+
+**Note:** Version bump only for package algoliasearch-helper
+
+
+
+
+
 # [3.29.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.28.2...algoliasearch-helper@3.29.0) (2026-05-05)
 
 

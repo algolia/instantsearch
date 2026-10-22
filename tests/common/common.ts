@@ -60,7 +60,7 @@ export type AnyTestSuite = (setup: AnyTestSetup, options: TestOptions) => any;
 type ResolveSetupType<
   TFunc extends AnyTestSuite,
   TFlavor extends SupportedFlavor,
-  TFunctionName extends string = string
+  TFunctionName extends string = string,
 > = TFunctionName extends keyof FlavoredWidgetParams
   ? keyof FlavoredWidgetParams[TFunctionName] extends SupportedFlavor
     ? (
@@ -75,7 +75,7 @@ type ResolveSetupType<
 
 export type TestSetupsMap<
   TTestSuites extends Record<string, AnyTestSuite>,
-  TFlavor extends SupportedFlavor = SupportedFlavor
+  TFlavor extends SupportedFlavor = SupportedFlavor,
 > = {
   [K in keyof TTestSuites]: ResolveSetupType<
     TTestSuites[K],
@@ -89,7 +89,7 @@ export type TestOptionsMap<TTestSuites extends Record<string, AnyTestSuite>> = {
 export type TestSuite<
   TTestSuites extends Record<string, AnyTestSuite>,
   TKey extends keyof TTestSuites,
-  TFlavor extends SupportedFlavor = SupportedFlavor
+  TFlavor extends SupportedFlavor = SupportedFlavor,
 > = {
   [key in keyof TTestSuites]: (
     setup: TestSetupsMap<TTestSuites, TFlavor>[key],
@@ -102,7 +102,7 @@ export type TestSuite<
  */
 export function runTestSuites<
   TFlavor extends SupportedFlavor,
-  TTestSuites extends Record<string, AnyTestSuite>
+  TTestSuites extends Record<string, AnyTestSuite>,
 >({
   flavor,
   testSuites,

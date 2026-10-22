@@ -15,7 +15,7 @@ export type SearchStateApi<TUiState extends UiState> = {
 };
 
 export function useSearchState<
-  TUiState extends UiState
+  TUiState extends UiState,
 >(): SearchStateApi<TUiState> {
   const search = useInstantSearchContext<TUiState>();
   const searchIndex = useIndexContext<TUiState>();

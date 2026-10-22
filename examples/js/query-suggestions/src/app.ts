@@ -3,7 +3,7 @@ import instantsearch from 'instantsearch.js';
 import {
   clearRefinements,
   configure,
-  EXPERIMENTAL_autocomplete,
+  autocomplete,
   chat,
   chatTrigger,
   hits,
@@ -43,7 +43,7 @@ function closeFilters() {
 }
 
 search.addWidgets([
-  EXPERIMENTAL_autocomplete({
+  autocomplete({
     container: '#autocomplete',
     detachedMediaQuery: '(max-width: 1024px)',
     placeholder: 'Search for products',

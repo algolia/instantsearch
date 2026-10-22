@@ -3,8 +3,8 @@ import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 
 import { index } from '../src/widgets';
 
-import type { IndexWidget } from '../src/types';
 import type { createInstantSearch } from './createInstantSearch';
+import type { IndexWidget } from '../src/types';
 
 export function createResultsWithFeeds(
   feedIDs: string[],

@@ -41,7 +41,7 @@ const stageConfig = {
       'Write',
       'Bash(git status *)',
       'Bash(git diff *)',
-      'Bash(yarn install --frozen-lockfile)',
+      'Bash(yarn install --immutable)',
       'Bash(yarn lint:changed)',
       'Bash(yarn type-check)',
       'Bash(yarn jest --findRelatedTests *)',
@@ -83,8 +83,8 @@ function parseArgs(argv) {
       inlineValue !== undefined
         ? inlineValue
         : next && !next.startsWith('--')
-        ? (index++, next)
-        : true;
+          ? (index++, next)
+          : true;
 
     options[name] = value;
   }
@@ -117,12 +117,6 @@ function envValue(name) {
 }
 
 function ensureActorCanRun() {
-  const eventName = envValue('EVENT_NAME');
-
-  if (eventName === 'schedule') {
-    return;
-  }
-
   const repo = envValue('REPO');
   const actor = envValue('ACTOR');
 
@@ -172,13 +166,6 @@ function resolveRequest() {
   let issueNumber = envValue('INPUT_ISSUE_NUMBER');
   let candidateId = envValue('INPUT_CANDIDATE_ID');
   let maxTurns = envValue('INPUT_MAX_TURNS');
-
-  if (eventName === 'schedule') {
-    stage = 'scout';
-    issueNumber = '';
-    candidateId = '';
-    maxTurns = '';
-  }
 
   if (eventName === 'issue_comment') {
     stage = 'implement';

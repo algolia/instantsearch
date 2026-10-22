@@ -10,10 +10,7 @@ import {
 
 import type { Templates, HoganHelpers, TemplateParams } from '../../types';
 import type { HoganOptions, Template } from 'hogan.js';
-import type {
-  BindEventForHits,
-  SendEventForHits,
-} from 'instantsearch-core';
+import type { BindEventForHits, SendEventForHits } from 'instantsearch-core';
 
 type TransformedHoganHelpers = {
   [helper: string]: () => (text: string) => string;

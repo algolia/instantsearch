@@ -8,19 +8,28 @@
 // Classes
 export { AbstractChat } from './abstract-chat';
 export { DefaultChatTransport, HttpChatTransport } from './transport';
-export { GuardrailViolationError } from './utils';
 
 // Utilities
 export {
   generateId,
   lastAssistantMessageIsCompleteWithToolCalls,
   SerialJobExecutor,
+  resolveValue,
+  tryParseErrorMessage,
 } from './utils';
 
 // Stream parsing
 export { parseJsonEventStream, processStream } from './stream-parser';
 
+export {
+  parsePartialJson,
+  repairPartialJson,
+  tryParseJson,
+} from './parse-partial-json';
+
 // Types
+export type { ToolResultSubmissionOptions } from './types';
+
 export type {
   // Status
   ChatStatus,
@@ -68,6 +77,7 @@ export type {
   ChatInit,
   IdGenerator,
   ChatOnErrorCallback,
+  ToolResultSubmission,
   ChatOnToolCallCallback,
   ChatOnFinishCallback,
   ChatOnDataCallback,

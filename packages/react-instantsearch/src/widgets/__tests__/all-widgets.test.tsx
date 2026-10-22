@@ -4,10 +4,10 @@ describe('widgets', () => {
   const widgets = getAllInstantSearchWidgets();
 
   const customExpectedLength: Partial<
-    Record<typeof widgets[0]['name'], number>
+    Record<(typeof widgets)[0]['name'], number>
   > = {
     // searchbox only (the isolated index attaches lazily on first focus)
-    EXPERIMENTAL_Autocomplete: 1,
+    Autocomplete: 1,
   };
 
   test('renders one widget', () => {
@@ -66,7 +66,7 @@ describe('widgets', () => {
         {
           "$$type": "ais.autocomplete",
           "$$widgetType": "ais.autocomplete",
-          "name": "EXPERIMENTAL_Autocomplete",
+          "name": "Autocomplete",
         },
         {
           "$$type": "ais.breadcrumb",
@@ -74,9 +74,24 @@ describe('widgets', () => {
           "name": "Breadcrumb",
         },
         {
+          "$$type": "ais.promptSuggestions",
+          "$$widgetType": "ais.promptSuggestions",
+          "name": "PromptSuggestions",
+        },
+        {
+          "$$type": "ais.resultCard",
+          "$$widgetType": "ais.resultCard",
+          "name": "ResultCard",
+        },
+        {
           "$$type": "ais.chatTrigger",
           "$$widgetType": "ais.chatTrigger",
           "name": "ChatTrigger",
+        },
+        {
+          "$$type": "ais.compare",
+          "$$widgetType": "ais.compareBar",
+          "name": "CompareBar",
         },
         {
           "$$type": "ais.clearRefinements",

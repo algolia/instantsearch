@@ -54,7 +54,6 @@ PACKAGES=(
   "algoliasearch-helper:packages/algoliasearch-helper:yes"
   "instantsearch.css:packages/instantsearch.css:no"
   "instantsearch-ui-components:packages/instantsearch-ui-components:yes"
-  "algolia-experiences:packages/algolia-experiences:yes"
   "instantsearch-codemods:packages/instantsearch-codemods:yes"
   "create-instantsearch-app:packages/create-instantsearch-app:no"
 )

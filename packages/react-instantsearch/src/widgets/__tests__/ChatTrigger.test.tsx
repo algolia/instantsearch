@@ -37,8 +37,8 @@ describe('ChatTrigger rendering', () => {
       <ChatTrigger classNames={{ root: 'BASECLASS' }} title="test title" />
     );
 
-    expect(container.querySelector<HTMLButtonElement>('.BASECLASS')!.title).toBe(
-      'test title'
-    );
+    expect(
+      container.querySelector<HTMLButtonElement>('.BASECLASS')!.title
+    ).toBe('test title');
   });
 });

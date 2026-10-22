@@ -1,0 +1,20 @@
+export { indexWidgetTypes } from 'instantsearch-core';
+export type {
+  BuiltinTypes,
+  BuiltinWidgetTypes,
+  CreateURL,
+  DisposeOptions,
+  IndexWidget,
+  IndexWidgetType,
+  InitOptions,
+  RenderOptions,
+  ScopedResult,
+  ShouldRenderOptions,
+  SortBy,
+  TransformItems,
+  TransformItemsMetadata,
+  UnknownWidgetParams,
+  Widget,
+  WidgetDescription,
+  WidgetParams,
+} from 'instantsearch-core';

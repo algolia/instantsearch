@@ -10,7 +10,7 @@ import { mount, nextTick } from '../../../test/utils';
 import Feeds from '../Feeds';
 import InstantSearch from '../InstantSearch';
 
-const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 describe('AisFeeds (integration)', () => {
   it('registers feed containers and scopes slot descendants', async () => {
@@ -57,9 +57,9 @@ describe('AisFeeds (integration)', () => {
     const widgets = wrapper
       .findComponent(InstantSearch)
       .vm.instantSearchInstance.mainIndex.getWidgets();
-    expect(widgets.some(widget => widget.$$type === 'ais.feeds')).toBe(true);
-    expect(widgets.some(widget => widget.$$type === 'ais.feedContainer')).toBe(
-      true
-    );
+    expect(widgets.some((widget) => widget.$$type === 'ais.feeds')).toBe(true);
+    expect(
+      widgets.some((widget) => widget.$$type === 'ais.feedContainer')
+    ).toBe(true);
   });
 });

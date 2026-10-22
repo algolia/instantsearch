@@ -7,8 +7,27 @@ export type {
   InstantSearchStatus,
 } from './instantsearch';
 export * from './connectors';
+export {
+  insights,
+  getUsageSessionId,
+  readDataAttributes,
+  writeDataAttributes,
+} from './helpers';
 export { AbstractChat } from './lib/ai-lite';
-export { parseJsonEventStream, processStream } from './lib/ai-lite';
+export {
+  DefaultChatTransport,
+  HttpChatTransport,
+  generateId,
+  lastAssistantMessageIsCompleteWithToolCalls,
+  SerialJobExecutor,
+  resolveValue,
+  tryParseErrorMessage,
+  parseJsonEventStream,
+  parsePartialJson,
+  processStream,
+  repairPartialJson,
+  tryParseJson,
+} from './lib/ai-lite';
 export type {
   ChatStatus,
   UIDataTypes,
@@ -41,29 +60,53 @@ export type {
   ChatOnFinishCallback,
   ChatOnDataCallback,
   CreateUIMessage,
+  HttpChatTransportInitOptions,
+  PrepareSendMessagesRequest,
+  PrepareReconnectToStreamRequest,
+  Resolvable,
+  FetchFunction,
+  ToolResultSubmission,
+  ToolResultSubmissionOptions,
 } from './lib/ai-lite';
 export {
   Chat,
   ChatState,
   CACHE_KEY,
+  CONVERSATION_ID_CACHE_KEY,
   SearchIndexToolType,
   RecommendToolType,
   MemorizeToolType,
   MemorySearchToolType,
   PonderToolType,
   DisplayResultsToolType,
+  CompareProductsToolType,
+  GroupedResultsToolType,
+  matchesSearchIndexToolName,
+  applyAgentFilters,
+  getAgentFilters,
+  stripInternalHitMetadata,
+  focusAfterReveal,
+  getActiveContainerAnimations,
+  holdContainerInertUntilReveal,
+  restoreContainerInertUntilReveal,
   openChat,
   isChatBusy,
 } from './lib/chat';
-export type { OpenChatOptions } from './lib/chat';
+export type {
+  OpenChatOptions,
+  ChatReferer,
+  ContainerAnimationSnapshot,
+} from './lib/chat';
 export { default as createVoiceSearchHelper } from './lib/voiceSearchHelper';
 export type {
   CreateVoiceSearchHelper,
   VoiceSearchHelper,
   VoiceSearchHelperParams,
+  Status as VoiceSearchStatus,
   VoiceListeningState,
 } from './lib/voiceSearchHelper/types';
 export * from './lib/infiniteHitsCache';
+export * from './lib/tasks';
 export * from './lib/utils';
 export * from './lib/routers';
 export * from './lib/server';

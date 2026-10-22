@@ -41,6 +41,9 @@ export function createInstantSearchSpy() {
                       indexContextValue!.removeWidgets = jest.fn(
                         indexContextValue!.removeWidgets.bind(indexContextValue)
                       );
+                      indexContextValue!.updateWidget = jest.fn(
+                        indexContextValue!.updateWidget.bind(indexContextValue)
+                      );
                     }
 
                     // @ts-ignore `React.RefObject` is typed as immutable

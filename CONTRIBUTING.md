@@ -68,7 +68,7 @@ Then:
 
 After you create a pull request, a bot will comment with a link to a development version of the website.
 
-You will find a playground for the widgets, for example: <https://deploy-preview-6609--instantsearchjs.netlify.app/stories/js/>
+You will find a playground for the widgets, for example: <https://deploy-preview-7244--instantsearchjs.netlify.app/examples/js/showcase/?view=reference>
 
 ## Commit conventions
 
@@ -115,6 +115,8 @@ To run this project, you will need:
 - Node.js ≥ 20 (current stable version) – [nvm](https://github.com/creationix/nvm#install-script) is recommended
 - [Yarn](https://yarnpkg.com)
 
+Install with a plain `yarn` and keep install scripts enabled. The root `postinstall` runs package preparation and applies patches. The v3, v4, and v5 `algoliasearch` dependencies are declared in the root `package.json` and resolved through the root `yarn.lock`; they no longer need separate dependency containers.
+
 ## Launch the dev environment
 
 Each flavor has a **getting-started** example which can be used for development purposes.
@@ -133,15 +135,15 @@ yarn --cwd examples/js/getting-started start
 
 Finally, go to the URL displayed on the terminal (generally http://localhost:3000) to view the example in a browser.
 
-We also use [Storybook](https://github.com/storybooks/storybook) to create stories for widgets:
+We also use [Playground](https://instantsearchjs.netlify.app/examples/js/showcase/?view=reference) to create stories for widgets:
 
 ```sh
 yarn
-cd packages/instantsearch.js
-yarn storybook
+cd examples/js/showcase
+yarn dev
 ```
 
-Go to <http://localhost:6006> for the widget playground.
+Go to <http://localhost:5173/?view=reference> for the widget playground.
 
 ## Folders of the project
 
@@ -400,11 +402,14 @@ If your editor support them, then you will see the errors directly there. You ca
 yarn lint
 ```
 
-JavaScript and TypeScript files are formatted with [Prettier](https://github.com/prettier/prettier) and linted with [Oxlint](https://oxc.rs/docs/guide/usage/linter/).
+Files are formatted with [oxfmt](https://oxc.rs/) and linted with [Oxlint](https://oxc.rs/docs/guide/usage/linter/). oxfmt covers JavaScript, TypeScript, JSON, CSS, SCSS, Markdown, and YAML. Formatting settings live in `.oxfmtrc.json`; lint rules live in `.oxlintrc.json`, and the paths Oxlint skips on top of `.gitignore` live in `.oxlintignore`. Both tools read `.gitignore`, so `ignorePatterns` in `.oxfmtrc.json` only needs the paths that are tracked but shouldn't be formatted.
+
+Stylesheets in `instantsearch.css` are formatted by oxfmt as well; Stylelint only lints them, with its formatting rules turned off through `stylelint-config-prettier-scss`.
 
 Useful lint commands:
 
-- `yarn lint` runs the full repo lint flow.
+- `yarn lint` runs Oxlint across the repo and workspace examples.
+- `yarn format` rewrites files with oxfmt; `yarn format:check` only reports violations. CI runs it separately from `yarn lint`.
 - `yarn lint:ox <paths...>` lints only the paths you pass.
 - `yarn lint:changed` lints files changed since the branch point with `origin/master`.
 - `yarn lint:staged` lints staged JavaScript, TypeScript, and Vue files.

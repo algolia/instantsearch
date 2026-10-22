@@ -154,6 +154,44 @@ describe('life cycle', () => {
       expect(pushState).toHaveBeenCalledTimes(2);
     });
 
+    test('skips history push when writing the route read on back/forward actions', () => {
+      const pushState = jest.spyOn(window.history, 'pushState');
+      const router = historyRouter<UiState>({ cleanUrlOnDispose: true });
+      router.onUpdate((routeState) => {
+        router.write(routeState);
+      });
+
+      // A URL that `createURL` writes differently (it encodes the brackets).
+      window.history.replaceState({}, '', '?indexName[page]=2');
+      pushState.mockClear();
+
+      window.dispatchEvent(new PopStateEvent('popstate'));
+      jest.runAllTimers();
+
+      expect(pushState).toHaveBeenCalledTimes(0);
+    });
+
+    test('pushes later writes of the route read on back/forward actions', () => {
+      const pushState = jest.spyOn(window.history, 'pushState');
+      const router = historyRouter<UiState>({ cleanUrlOnDispose: true });
+      let routeState: UiState = {};
+      router.onUpdate((nextRouteState) => {
+        routeState = nextRouteState;
+        router.write(routeState);
+      });
+
+      window.dispatchEvent(new PopStateEvent('popstate'));
+      jest.runAllTimers();
+      pushState.mockClear();
+
+      // The same object, changed after the write the popstate caused.
+      routeState.indexName = { page: 3 };
+      router.write(routeState);
+      jest.runAllTimers();
+
+      expect(pushState).toHaveBeenCalledTimes(1);
+    });
+
     test("doesn't throw if an index history state is null", () => {
       const router = historyRouter<UiState>({ cleanUrlOnDispose: true });
       const stateMapping = simple();

@@ -32,9 +32,9 @@ function getHttpErrorMessage(response: Response): Promise<string> {
 /**
  * Abstract base class for HTTP-based chat transports.
  */
-export abstract class HttpChatTransport<TUIMessage extends UIMessage>
-  implements ChatTransport<TUIMessage>
-{
+export abstract class HttpChatTransport<
+  TUIMessage extends UIMessage,
+> implements ChatTransport<TUIMessage> {
   protected api: string;
   protected credentials: Resolvable<RequestCredentials> | undefined;
   protected headers: Resolvable<Record<string, string> | Headers> | undefined;
@@ -251,7 +251,7 @@ export abstract class HttpChatTransport<TUIMessage extends UIMessage>
  * Default chat transport implementation using NDJSON streaming.
  */
 export class DefaultChatTransport<
-  TUIMessage extends UIMessage
+  TUIMessage extends UIMessage,
 > extends HttpChatTransport<TUIMessage> {
   constructor(options: HttpChatTransportInitOptions<TUIMessage> = {}) {
     super(options);

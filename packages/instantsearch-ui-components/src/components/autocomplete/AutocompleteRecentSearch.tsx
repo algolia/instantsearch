@@ -7,7 +7,7 @@ import { ApplyIcon, ClockIcon, TrashIcon } from './icons';
 import type { ComponentChildren, Renderer } from '../../types';
 
 export type AutocompleteRecentSearchProps<
-  T = { query: string } & Record<string, unknown>
+  T = { query: string } & Record<string, unknown>,
 > = {
   item: T;
   children?: ComponentChildren;

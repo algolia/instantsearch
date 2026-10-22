@@ -11,7 +11,14 @@ import {
 } from '../../lib/utils';
 
 import type { SendEventForHits } from '../../lib/utils';
-import type { Hit, Connector, WidgetRenderState } from '../../types';
+import type {
+  Hit,
+  Connector,
+  IndexRenderState,
+  InitOptions,
+  RenderOptions,
+  WidgetRenderState,
+} from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -39,6 +46,13 @@ export type AutocompleteConnectorParams = {
   transformItems?: (
     indices: TransformItemsIndicesConfig[]
   ) => TransformItemsIndicesConfig[];
+  /**
+   * Whether this widget should make InstantSearch require a main search request.
+   * If this is the only widget, and you mark `requiresSearch: false`, no search request will happen.
+   *
+   * @default true
+   */
+  requiresSearch?: boolean;
   /**
    * Enable usage of future Autocomplete behavior.
    */
@@ -128,6 +142,7 @@ const connectAutocomplete: AutocompleteConnector = function connectAutocomplete(
       transformItems = ((indices) => indices) as NonNullable<
         AutocompleteConnectorParams['transformItems']
       >,
+      requiresSearch = true,
       future: { undefinedEmptyQuery = false } = {},
     } = widgetParams || {};
 
@@ -164,6 +179,8 @@ search.addWidgets([
 
     return {
       $$type: 'ais.autocomplete',
+      dependsOn: requiresSearch ? ('search' as const) : ('none' as const),
+      shouldRender: requiresSearch ? undefined : () => true,
 
       init(initOptions) {
         const { instantSearchInstance } = initOptions;
@@ -195,7 +212,10 @@ search.addWidgets([
         );
       },
 
-      getRenderState(renderState, renderOptions) {
+      getRenderState(
+        renderState: IndexRenderState,
+        renderOptions: InitOptions | RenderOptions
+      ): IndexRenderState & AutocompleteWidgetDescription['indexRenderState'] {
         return {
           ...renderState,
           autocomplete: this.getWidgetRenderState(renderOptions),
@@ -207,7 +227,7 @@ search.addWidgets([
         state,
         scopedResults,
         instantSearchInstance,
-      }) {
+      }: InitOptions | RenderOptions) {
         if (!connectorState.refine) {
           connectorState.refine = (query: string) => {
             helper.setQuery(query).search();

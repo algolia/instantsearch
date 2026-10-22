@@ -1,8 +1,8 @@
 /** @jsx createElement */
 import { cx } from '../../lib';
 
-import type { Renderer } from '../../types';
 import type { ChatLayoutOwnProps } from './types';
+import type { Renderer } from '../../types';
 
 export function createChatInlineLayoutComponent({ createElement }: Renderer) {
   return function ChatInlineLayout(userProps: ChatLayoutOwnProps) {
@@ -32,14 +32,14 @@ export function createChatInlineLayoutComponent({ createElement }: Renderer) {
     return (
       <div
         {...rest}
-        className={cx('ais-Chat', 'ais-ChatInlineLayout', classNames.root, className)}
+        className={cx(
+          'ais-Chat',
+          'ais-ChatInlineLayout',
+          classNames.root,
+          className
+        )}
       >
-        <div
-          className={cx(
-            'ais-Chat-container',
-            classNames.container
-          )}
-        >
+        <div className={cx('ais-Chat-container', classNames.container)}>
           {headerComponent}
           {messagesComponent}
           {promptComponent}

@@ -5,7 +5,7 @@ import { createOptionsTests } from './options';
 import { createTemplatesTests } from './templates';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { AutocompleteConnectorParams } from 'instantsearch.js/es/connectors/autocomplete/connectAutocomplete';
+import type { AutocompleteConnectorParams } from 'instantsearch-core';
 import type { AutocompleteWidget } from 'instantsearch.js/src/widgets/autocomplete/autocomplete';
 import type { AutocompleteProps } from 'react-instantsearch';
 
@@ -17,7 +17,7 @@ export type ReactAutocompleteWidgetParams = AutocompleteProps<any>;
 type AutocompleteWidgetParams = {
   javascript: JSAutocompleteWidgetParams;
   react: ReactAutocompleteWidgetParams;
-  vue: Record<string, never>;
+  vue: { requiresSearch?: boolean };
 };
 
 declare module '../../common' {

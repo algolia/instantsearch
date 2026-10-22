@@ -46,7 +46,7 @@ function getAllComponents() {
 
     try {
       suitClass = mixins
-        .find(mixin => mixin.methods && mixin.methods.suit)
+        .find((mixin) => mixin.methods && mixin.methods.suit)
         .methods.suit();
     } catch (e) {
       /* no suit class, so will fail the assertions */
@@ -85,7 +85,7 @@ function getAllComponents() {
       }
 
       const Component = {
-        render: renderCompat(h =>
+        render: renderCompat((h) =>
           h(
             AisInstantSearch,
             {

@@ -126,6 +126,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
+                aria-current="page"
                 aria-label="Page 2"
                 class="ais-Pagination-link"
                 href="/?page=2"
@@ -212,6 +213,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
+                aria-current="page"
                 aria-label="Page number 1 of 2"
                 class="ais-Pagination-link"
                 href="/?page=1"
@@ -441,6 +443,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
+                aria-current="page"
                 aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="/?page=1"
@@ -519,6 +522,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
+                aria-current="page"
                 aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="/?page=1"
@@ -605,6 +609,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
+                aria-current="page"
                 aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="/?page=1"
@@ -680,6 +685,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
+                aria-current="page"
                 aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="/?page=1"
@@ -767,6 +773,7 @@ describe('Pagination', () => {
               class="ais-Pagination-item ITEM ais-Pagination-item--page PAGEITEM ais-Pagination-item--selected SELECTEDITEM"
             >
               <a
+                aria-current="page"
                 aria-label="Page 1"
                 class="ais-Pagination-link LINK"
                 href="/?page=1"

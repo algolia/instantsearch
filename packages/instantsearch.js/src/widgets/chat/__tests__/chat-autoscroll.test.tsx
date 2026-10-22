@@ -4,6 +4,7 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import { waitFor } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
 
 import instantsearch from '../../../index.es';
 import chat from '../chat';
@@ -49,7 +50,7 @@ describe('chat auto-scroll while streaming', () => {
     scrollToBottomSpy.mockClear();
   });
 
-  test('re-pins to the bottom on message updates during streaming', async () => {
+  test('scrolls to a submitted message, then preserves position while streaming', async () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
@@ -76,18 +77,11 @@ describe('chat auto-scroll while streaming', () => {
     search.start();
     await wait(0);
 
-    const chatRenderState = (
-      search.renderState.indexName as {
-        chat: { sendMessage: (message: { text: string }) => void };
-      }
-    ).chat;
+    const prompt = container.querySelector('textarea')!;
+    userEvent.type(prompt, 'hi{enter}');
 
-    chatRenderState.sendMessage({ text: 'hi' });
-
-    // While streaming, message/status updates must re-pin to the bottom, using
-    // the "only if already at the bottom" gate so it can't fight a user who
-    // scrolled up.
     await waitFor(() => {
+      expect(scrollToBottomSpy).toHaveBeenCalledWith();
       expect(scrollToBottomSpy).toHaveBeenCalledWith({
         preserveScrollPosition: true,
       });

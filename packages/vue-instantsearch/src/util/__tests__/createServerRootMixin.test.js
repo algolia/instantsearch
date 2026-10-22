@@ -15,6 +15,7 @@ import Vuex from 'vuex';
 import { createStore } from 'vuex4';
 
 import { mount, createSSRApp } from '../../../test/utils';
+import Autocomplete from '../../components/Autocomplete.vue';
 import Configure from '../../components/Configure';
 import Index from '../../components/Index';
 import InstantSearchSsr from '../../components/InstantSearchSsr';
@@ -195,6 +196,47 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       await renderToString(wrapper);
     });
 
+    it('returns empty results when no widget requires a search', async () => {
+      const searchClient = createFakeClient();
+      let resultsState;
+
+      const app = {
+        mixins: [
+          forceIsServerMixin,
+          createServerRootMixin({
+            searchClient,
+            indexName: 'hello',
+          }),
+        ],
+        render: renderCompat((h) =>
+          h(InstantSearchSsr, {}, [
+            h(Autocomplete, {
+              attrs: {
+                requiresSearch: false,
+              },
+            }),
+          ])
+        ),
+        async serverPrefetch() {
+          resultsState = await this.instantsearch.findResultsState({
+            component: this,
+            renderToString,
+          });
+        },
+      };
+
+      const wrapper = createSSRApp({
+        mixins: [forceIsServerMixin],
+        render: renderCompat((h) => h(app)),
+      });
+
+      const html = await renderToString(wrapper);
+
+      expect(resultsState).toEqual({});
+      expect(searchClient.search).not.toHaveBeenCalled();
+      expect(html).toContain('ais-Autocomplete');
+    });
+
     it('detects child widgets', async () => {
       const searchClient = createFakeClient();
       let mainIndex;
@@ -294,7 +336,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
                 Index,
                 {
                   attrs: {
-                    indexName: 'hello',
+                    indexName: 'hello2',
                     indexId: 'nestedIndex',
                   },
                 },
@@ -363,7 +405,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
                   facetsRefinements: {},
                   hierarchicalFacets: [],
                   hierarchicalFacetsRefinements: {},
-                  index: 'hello',
+                  index: 'hello2',
                   numericRefinements: {},
                   tagRefinements: [],
                 },

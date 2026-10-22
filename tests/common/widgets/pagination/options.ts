@@ -54,6 +54,16 @@ export function createOptionsTests(
         document.querySelectorAll('.ais-Pagination-item--page')[0]
       ).toHaveClass('ais-Pagination-item--selected');
       expect(
+        document
+          .querySelectorAll('.ais-Pagination-item--page')[0]
+          .querySelector('.ais-Pagination-link')
+      ).toHaveAttribute('aria-current', 'page');
+      expect(
+        document
+          .querySelectorAll('.ais-Pagination-item--page')[1]
+          .querySelector('.ais-Pagination-link')
+      ).not.toHaveAttribute('aria-current');
+      expect(
         document.querySelector('.ais-Pagination-item--firstPage')
       ).toHaveClass('ais-Pagination-item--disabled');
       expect(
@@ -101,6 +111,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
+                aria-current="page"
                 aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
@@ -258,6 +269,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
+                aria-current="page"
                 aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
@@ -655,6 +667,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
+                aria-current="page"
                 aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
@@ -832,6 +845,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
+                aria-current="page"
                 aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
@@ -1034,6 +1048,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
+                aria-current="page"
                 aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
@@ -1146,6 +1161,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
+                aria-current="page"
                 aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
@@ -1223,6 +1239,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
+                aria-current="page"
                 aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
@@ -1310,6 +1327,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
+                aria-current="page"
                 aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"
@@ -1387,6 +1405,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
             >
               <a
+                aria-current="page"
                 aria-label="Page 1"
                 class="ais-Pagination-link"
                 href="#"

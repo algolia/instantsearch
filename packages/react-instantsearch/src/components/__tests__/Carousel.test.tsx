@@ -2,8 +2,8 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { render } from '@testing-library/react';
-import React from 'react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
+import React, { useState } from 'react';
 
 import { Carousel } from '../Carousel';
 
@@ -299,5 +299,153 @@ describe('Carousel', () => {
         </div>
       </div>
     `);
+  });
+
+  test('preserves duplicate item state when another item is prepended', () => {
+    function StatefulItem({
+      item,
+    }: {
+      item: { objectID: string; __position: number; name: string };
+    }) {
+      const [selected, setSelected] = useState(false);
+
+      return (
+        <button
+          aria-label={`Toggle ${item.name}`}
+          onClick={() => setSelected((value) => !value)}
+        >
+          {item.name}: {selected ? 'selected' : 'idle'}
+        </button>
+      );
+    }
+
+    const items = [
+      { objectID: '1', __position: 1, name: 'shoe' },
+      { objectID: '1', __position: 2, name: 'sock' },
+      { objectID: '2', __position: 3, name: 'hat' },
+    ];
+    const { getByRole, getAllByRole, rerender } = render(
+      <Carousel
+        sendEvent={jest.fn()}
+        items={items}
+        itemComponent={StatefulItem}
+      />
+    );
+
+    fireEvent.click(getByRole('button', { name: 'Toggle sock' }));
+    expect(getByRole('button', { name: 'Toggle sock' })).toHaveTextContent(
+      'sock: selected'
+    );
+
+    rerender(
+      <Carousel
+        sendEvent={jest.fn()}
+        items={[
+          { objectID: '9', __position: 1, name: 'new' },
+          ...items.map((item, index) => ({
+            ...item,
+            __position: index + 2,
+          })),
+        ]}
+        itemComponent={StatefulItem}
+      />
+    );
+
+    expect(getAllByRole('listitem')).toHaveLength(4);
+    expect(getByRole('button', { name: 'Toggle shoe' })).toHaveTextContent(
+      'shoe: idle'
+    );
+    expect(getByRole('button', { name: 'Toggle sock' })).toHaveTextContent(
+      'sock: selected'
+    );
+  });
+
+  test('updates navigation when items are appended', async () => {
+    function Header({ canScrollRight }: { canScrollRight: boolean }) {
+      return (
+        <button aria-label="Next results" disabled={!canScrollRight}>
+          Next
+        </button>
+      );
+    }
+
+    const items = [
+      { objectID: '1', __position: 1 },
+      { objectID: '2', __position: 2 },
+    ];
+    const { container, getByRole, rerender } = render(
+      <Carousel
+        sendEvent={jest.fn()}
+        items={items}
+        itemComponent={({ item }) => <p>{item.objectID}</p>}
+        headerComponent={Header}
+      />
+    );
+    const list = container.querySelector('.ais-Carousel-list')!;
+    let scrollWidth = 200;
+
+    Object.defineProperties(list, {
+      clientWidth: { configurable: true, value: 100 },
+      scrollWidth: {
+        configurable: true,
+        get: () => scrollWidth,
+      },
+    });
+    list.scrollLeft = 100;
+    fireEvent.scroll(list);
+
+    await waitFor(() =>
+      expect(getByRole('button', { name: 'Next results' })).toBeDisabled()
+    );
+
+    scrollWidth = 300;
+    rerender(
+      <Carousel
+        sendEvent={jest.fn()}
+        items={[...items, { objectID: '3', __position: 3 }]}
+        itemComponent={({ item }) => <p>{item.objectID}</p>}
+        headerComponent={Header}
+      />
+    );
+
+    await waitFor(() =>
+      expect(getByRole('button', { name: 'Next results' })).toBeEnabled()
+    );
+  });
+
+  test('wires the navigation measurement when items arrive after mount', async () => {
+    type Item = { objectID: string; __position: number };
+    const items: Array<Item> = [
+      { objectID: '1', __position: 1 },
+      { objectID: '2', __position: 2 },
+    ];
+    const noItems: Array<Item> = [];
+    const { container, rerender } = render(
+      <Carousel
+        sendEvent={jest.fn()}
+        items={noItems}
+        itemComponent={({ item }) => <p>{item.objectID}</p>}
+      />
+    );
+
+    expect(container.querySelector('.ais-Carousel')).toBeNull();
+
+    rerender(
+      <Carousel
+        sendEvent={jest.fn()}
+        items={items}
+        itemComponent={({ item }) => <p>{item.objectID}</p>}
+      />
+    );
+
+    // Wiring only: jsdom has no geometry here, so the fitting and overflowing
+    // decisions live in the shared Carousel suite.
+    await waitFor(() =>
+      expect(
+        container.querySelector<HTMLButtonElement>(
+          '.ais-Carousel-navigation--next'
+        )
+      ).not.toBeVisible()
+    );
   });
 });

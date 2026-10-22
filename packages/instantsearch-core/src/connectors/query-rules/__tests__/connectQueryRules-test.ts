@@ -945,6 +945,7 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
         );
 
         helper.setState({
+          ...helper.state,
           disjunctiveFacetsRefinements: {
             brand: ['Samsung', 'Apple'],
           },
@@ -980,6 +981,74 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
 
         expect((nextState as SearchParameters).ruleContexts).toEqual([
           'initial-rule',
+        ]);
+      });
+
+      test('preserves rule contexts added by other widgets after init', () => {
+        const helper = createFakeHelper({
+          disjunctiveFacets: ['brand'],
+        });
+        const { makeWidget } = createWidget();
+        const widget = makeWidget({
+          trackedFilters: {
+            brand: (values) => values,
+          },
+        });
+
+        widget.init!(
+          createInitOptions({
+            helper,
+            state: helper.state,
+          })
+        );
+
+        // Another widget (e.g. `resultCard`) mounts later and adds its context.
+        helper.setState(
+          helper.state.setQueryParameter('ruleContexts', ['other-widget'])
+        );
+        helper.setState({
+          ...helper.state,
+          disjunctiveFacetsRefinements: {
+            brand: ['Samsung'],
+          },
+        });
+
+        widget.render!(
+          createRenderOptions({
+            helper,
+            state: helper.state,
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse(),
+              createSingleSearchResponse({
+                facets: {
+                  brand: {
+                    Samsung: 100,
+                  },
+                },
+              }),
+            ]),
+          })
+        );
+
+        expect(helper.state.ruleContexts).toEqual([
+          'other-widget',
+          'ais-brand-Samsung',
+        ]);
+
+        // Clearing the refinement only removes this widget's own context.
+        helper.setState({
+          ...helper.state,
+          disjunctiveFacetsRefinements: {},
+        });
+
+        expect(helper.state.ruleContexts).toEqual(['other-widget']);
+
+        const nextState = widget.dispose!(
+          createDisposeOptions({ helper, state: helper.state })
+        );
+
+        expect((nextState as SearchParameters).ruleContexts).toEqual([
+          'other-widget',
         ]);
       });
 

@@ -296,9 +296,16 @@ function main() {
 
   const { execSync } = require('child_process');
   try {
-    execSync(`npx prettier --write ${INDEX_FILE}`, { stdio: 'inherit' });
+    const oxfmtBin = path.resolve(
+      __dirname,
+      '../../..',
+      'node_modules',
+      '.bin',
+      process.platform === 'win32' ? 'oxfmt.cmd' : 'oxfmt'
+    );
+    execSync(`"${oxfmtBin}" "${INDEX_FILE}"`, { stdio: 'inherit' });
   } catch (error) {
-    console.warn('Warning: Failed to run prettier');
+    console.warn('Warning: Failed to run oxfmt');
   }
 
   console.log('Updated config in:', INDEX_FILE);

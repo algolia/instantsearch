@@ -5,7 +5,14 @@ import type { ChatRenderState } from '../../connectors/chat/connectChat';
  * Forwarded to the agent backend as the `x-algolia-referer` header and used
  * as a correlation tag for attribution.
  */
-export type ChatReferer = 'prompt-suggestions' | 'ai-mode';
+export type ChatReferer =
+  | 'ai-mode'
+  | 'compare'
+  | 'prompt-suggestions-widget'
+  | 'prompt-suggestions-autocomplete'
+  | 'result-card'
+  // Custom entry points tag themselves; the built-in values still autocomplete.
+  | (string & {});
 
 export type OpenChatOptions = {
   /**
@@ -19,7 +26,24 @@ export type OpenChatOptions = {
    * the backend can attribute the traffic to the originating entry point.
    */
   referer?: ChatReferer;
+  /**
+   * Ambient page context attached to the outgoing user message as
+   * `metadata.turnContext` — the same Agent Studio grounding channel the chat
+   * widget's own `context` uses. Lets an entry point ground the agent's answer
+   * in the page it was triggered from. Flat `Record<string, string>` per the
+   * backend contract. Merged with the chat widget's own `context` when it has
+   * one; on a key both provide, this value wins for the turn.
+   */
+  turnContext?: Record<string, string>;
 };
+
+// A prompt-shortcut sentinel (`__ALGOLIA_<KIND>_<id>__`, e.g. the `compare`
+// widget's configured comparison) stands for a prompt the server holds; the
+// server also decides what the transcript shows for it. Mirrors the backend's
+// matching: SCREAMING_SNAKE kind, then an id that starts with a letter and
+// runs 3-64 word characters/hyphens (`SHORTCUT_ID_PATTERN` on the backend).
+const PROMPT_SHORTCUT_SENTINEL =
+  /^__ALGOLIA_[A-Z][A-Z_]*_[A-Za-z][\w-]{2,63}__$/;
 
 // Centralizes the "open the chat from an entry point" behavior shared by the
 // SearchBox AI button, the Autocomplete AI button, prompt suggestions, and any
@@ -28,26 +52,43 @@ export type OpenChatOptions = {
 // Returns true when a message was submitted, so callers can clear their input.
 export function openChat(
   chatRenderState: Partial<ChatRenderState> | undefined,
-  { message, referer }: OpenChatOptions = {}
+  { message, referer, turnContext }: OpenChatOptions = {}
 ): boolean {
   if (!chatRenderState) {
     return false;
   }
 
-  chatRenderState.setOpen?.(true);
-
   const trimmed = message?.trim() ?? '';
   if (!trimmed) {
-    chatRenderState.focusInput?.();
+    if (chatRenderState.focusInput) {
+      chatRenderState.focusInput();
+    } else {
+      chatRenderState.setOpen?.(true);
+    }
     return false;
   }
+
+  chatRenderState.setOpen?.(true);
 
   if (isChatBusy(chatRenderState) || !chatRenderState.sendMessage) {
     return false;
   }
 
+  // Marking a sentinel as a pending prompt shortcut keeps its bubble hidden
+  // until the server echoes the text to show (see `applyPromptShortcutEcho`
+  // in `connectChat`) — or for good, when the shortcut is silent.
+  const metadata = {
+    ...(turnContext ? { turnContext } : {}),
+    ...(PROMPT_SHORTCUT_SENTINEL.test(trimmed)
+      ? { promptShortcut: { sentinel: trimmed } }
+      : {}),
+  };
+
   chatRenderState.sendMessage(
-    { text: trimmed },
+    {
+      text: trimmed,
+      ...(Object.keys(metadata).length > 0 ? { metadata } : {}),
+    } as Parameters<NonNullable<typeof chatRenderState.sendMessage>>[0],
     referer ? { headers: { 'x-algolia-referer': referer } } : undefined
   );
   return true;

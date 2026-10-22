@@ -204,6 +204,7 @@ export function Pagination({
                 currentPage: page + 1,
                 nbPages,
               })}
+              aria-current={page === currentPage ? 'page' : undefined}
               href={createURL(page)}
               onClick={() => onNavigate(page)}
             >

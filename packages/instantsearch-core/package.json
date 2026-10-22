@@ -45,7 +45,7 @@
     "@swc/helpers": "0.5.18",
     "@types/dom-speech-recognition": "^0.0.1",
     "@types/qs": "^6.5.3",
-    "algoliasearch-helper": "3.29.1",
+    "algoliasearch-helper": "3.30.0",
     "qs": "^6.5.1",
     "search-insights": "^2.17.2"
   }

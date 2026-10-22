@@ -11,7 +11,7 @@ function getIndexStateWithoutConfigure<TIndexUiState extends IndexUiState>(
 // which is why the input to this function is UiState, not something
 // which excludes "configure" as this function does.
 export default function simpleStateMapping<
-  TUiState extends UiState = UiState
+  TUiState extends UiState = UiState,
 >(): StateMapping<TUiState, TUiState> {
   return {
     $$type: 'ais.simple',
@@ -27,19 +27,16 @@ export default function simpleStateMapping<
     },
 
     routeToState(routeState = {} as TUiState) {
-      return Object.keys(routeState).reduce(
-        (state, indexId) => {
-          const indexState = routeState[indexId];
-          if (typeof indexState !== 'object' || indexState === null) {
-            return state;
-          }
-          return {
-            ...state,
-            [indexId]: getIndexStateWithoutConfigure(indexState),
-          };
-        },
-        {} as TUiState
-      );
+      return Object.keys(routeState).reduce((state, indexId) => {
+        const indexState = routeState[indexId];
+        if (typeof indexState !== 'object' || indexState === null) {
+          return state;
+        }
+        return {
+          ...state,
+          [indexId]: getIndexStateWithoutConfigure(indexState),
+        };
+      }, {} as TUiState);
     },
   };
 }

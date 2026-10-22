@@ -3,10 +3,7 @@
  */
 import { runTestSuites } from '@instantsearch/tests/common';
 import * as testSuites from '@instantsearch/tests/shared';
-import {
-  connectMenu,
-  connectPagination,
-} from 'instantsearch-core';
+import { connectMenu, connectPagination } from 'instantsearch-core';
 
 import { nextTick, mountApp } from '../../test/utils';
 import {

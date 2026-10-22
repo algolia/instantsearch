@@ -17,7 +17,7 @@ export type { InstantSearchOptions, InstantSearchStatus };
 
 class InstantSearch<
   TUiState extends UiState = UiState,
-  TRouteState = TUiState
+  TRouteState = TUiState,
 > extends CoreInstantSearch<TUiState, TRouteState> {
   constructor(options: InstantSearchOptions<TUiState, TRouteState>) {
     super({
@@ -28,8 +28,8 @@ class InstantSearch<
     const { searchClient } = options;
     if (
       searchClient &&
-      typeof (searchClient as { addAlgoliaAgent?: unknown })
-        .addAlgoliaAgent === 'function'
+      typeof (searchClient as { addAlgoliaAgent?: unknown }).addAlgoliaAgent ===
+        'function'
     ) {
       (
         searchClient as { addAlgoliaAgent: (agent: string) => void }

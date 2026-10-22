@@ -24,7 +24,7 @@ function createTrendingFacetsSearchClient() {
         createRecommendResponse(
           requests.map((request: any) =>
             createSingleSearchResponse({
-              // @ts-expect-error trending facet items aren't Hit objects
+              // @ts-ignore trending facet items aren't Hit objects
               hits: fixture.slice(
                 0,
                 typeof request.maxRecommendations === 'number'
@@ -96,9 +96,9 @@ describe('trendingFacets', () => {
       expect(container.querySelector('.ais-TrendingFacets')).toHaveClass(
         'ROOT'
       );
-      expect(
-        container.querySelector('.ais-TrendingFacets-title')
-      ).toHaveClass('TITLE');
+      expect(container.querySelector('.ais-TrendingFacets-title')).toHaveClass(
+        'TITLE'
+      );
       expect(
         container.querySelector('.ais-TrendingFacets-container')
       ).toHaveClass('CONTAINER');

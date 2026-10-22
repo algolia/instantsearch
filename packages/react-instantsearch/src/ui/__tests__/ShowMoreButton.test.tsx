@@ -25,7 +25,9 @@ describe('ShowMoreButton', () => {
 
     expect(container).toMatchInlineSnapshot(`
       <div>
-        <button>
+        <button
+          aria-expanded="false"
+        >
           Show more
         </button>
       </div>
@@ -39,7 +41,9 @@ describe('ShowMoreButton', () => {
 
     expect(container).toMatchInlineSnapshot(`
       <div>
-        <button>
+        <button
+          aria-expanded="true"
+        >
           Show less
         </button>
       </div>
@@ -75,6 +79,7 @@ describe('ShowMoreButton', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <button
+          aria-expanded="false"
           disabled=""
         >
           Show more

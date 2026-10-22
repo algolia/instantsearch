@@ -86,19 +86,18 @@ function createRenderer({
         : undefined
     ) as TrendingFacetsUiProps['headerComponent'];
 
-    const itemComponent: TrendingFacetsUiProps['itemComponent'] =
-      templates.item
-        ? ({ item }) => {
-            return (
-              <TemplateComponent
-                {...renderState.templateProps}
-                templateKey="item"
-                rootTagName="fragment"
-                data={item}
-              />
-            );
-          }
-        : undefined;
+    const itemComponent: TrendingFacetsUiProps['itemComponent'] = templates.item
+      ? ({ item }) => {
+          return (
+            <TemplateComponent
+              {...renderState.templateProps}
+              templateKey="item"
+              rootTagName="fragment"
+              data={item}
+            />
+          );
+        }
+      : undefined;
 
     const emptyComponent = (
       templates.empty
@@ -140,9 +139,7 @@ export type TrendingFacetsTemplates = Partial<{
    */
   header: Template<
     Pick<
-      Parameters<
-        NonNullable<TrendingFacetsUiProps['headerComponent']>
-      >[0],
+      Parameters<NonNullable<TrendingFacetsUiProps['headerComponent']>>[0],
       'items'
     > & { cssClasses: TrendingFacetsClassNames }
   >;

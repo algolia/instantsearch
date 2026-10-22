@@ -1,11 +1,67 @@
 import type { ComponentProps } from '../../types';
 import type {
   AbstractChat,
+  ChatComponentContext,
+  ChatState,
+  ClientSideToolComponentProps,
+  ClientSideTool as CoreClientSideTool,
+  UIMessage,
+} from 'instantsearch-core';
+
+// The chat message and tool types live in `instantsearch-core`. They are
+// re-exported so this package's public API keeps exposing them.
+export type {
+  AbstractChat,
+  AddToolResult,
+  AddToolResultForToolCall,
+  AddToolResultWithOutput,
+  ApplyFiltersParams,
+  ChatComponentContext,
+  ChatComponentPropsWithContext,
+  ChatInit,
+  ChatInsightsEventContext,
+  ChatLoaderContext,
+  ChatLoaderPhase,
+  ChatLoaderPosition,
+  ChatMessageBase,
+  ChatOnDataCallback,
+  ChatOnErrorCallback,
+  ChatOnFinishCallback,
+  ChatOnToolCallCallback,
+  ChatRole,
   ChatState,
   ChatStatus,
-  ClientSideTool as CoreClientSideTool,
+  ChatToolMessage,
+  ChatToolType,
+  ChatTransport,
   ClientSideToolComponentProps,
+  ClientSideToolContext,
+  ClientSideToolShouldRenderContext,
+  DataUIPart,
+  DynamicToolUIPart,
+  FileUIPart,
+  IdGenerator,
+  InferUIMessageData,
+  InferUIMessageMetadata,
+  InferUIMessageToolCall,
+  InferUIMessageTools,
+  ProviderMetadata,
+  ReasoningUIPart,
+  ResolvedSearchParams,
+  SearchToolInput,
+  SearchToolQuery,
+  SourceDocumentUIPart,
+  SourceUrlUIPart,
+  StepStartUIPart,
+  TextUIPart,
+  ToolUIPart,
+  UIDataTypes,
   UIMessage,
+  UIMessagePart,
+  UITool,
+  UITools,
+  UserClientSideTool,
+  UserClientSideTools,
 } from 'instantsearch-core';
 
 export type ClientSideToolComponent = (
@@ -18,9 +74,7 @@ export type ClientSideTool = Omit<CoreClientSideTool, 'layoutComponent'> & {
 
 export type ClientSideTools = Record<string, ClientSideTool>;
 
-export type ChatLayoutOwnProps<
-  TMessage extends UIMessage = UIMessage
-> = {
+export type ChatLayoutOwnProps<TMessage extends UIMessage = UIMessage> = {
   open: boolean;
   maximized: boolean;
   headerComponent: JSX.Element;
@@ -40,21 +94,10 @@ export type ChatLayoutOwnProps<
   > &
   ComponentProps<'div'>;
 
-export type ChatEmptyProps = {
-  /**
-   * Function to send a message to the chat
-   */
-  sendMessage?: ChatLayoutOwnProps['sendMessage'];
-  /**
-   * Current chat status
-   */
-  status?: ChatStatus;
-  /**
-   * Callback to close the chat
-   */
-  onClose?: () => void;
-  /**
-   * Function to set the prompt input value
-   */
-  setInput?: (input: string) => void;
-};
+/**
+ * @deprecated Use `ChatComponentPropsWithContext` instead — an empty/greeting
+ * component now reads shared chat state from its `context` prop.
+ */
+export type ChatEmptyProps = Partial<
+  Pick<ChatComponentContext, 'sendMessage' | 'status' | 'onClose' | 'setInput'>
+>;

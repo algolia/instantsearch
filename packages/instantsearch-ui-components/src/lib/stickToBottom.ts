@@ -440,6 +440,7 @@ export function createStickToBottom({
 
         const { scrollTop, ignoreScrollToTop } = state;
         let { lastScrollTop = scrollTop } = state;
+        const isNearBottom = state.isNearBottom;
 
         state.lastScrollTop = scrollTop;
         state.ignoreScrollToTop = undefined;
@@ -453,7 +454,7 @@ export function createStickToBottom({
           lastScrollTop = ignoreScrollToTop;
         }
 
-        setIsNearBottom(state.isNearBottom);
+        setIsNearBottom(isNearBottom);
 
         /**
          * Scroll events may come before a ResizeObserver event,
@@ -493,7 +494,7 @@ export function createStickToBottom({
             setEscapedFromLock(false);
           }
 
-          if (!state.escapedFromLock && state.isNearBottom) {
+          if (!state.escapedFromLock && isNearBottom) {
             setIsAtBottom(true);
           }
         }, 1);

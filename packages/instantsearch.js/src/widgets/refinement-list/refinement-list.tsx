@@ -204,6 +204,10 @@ export type RefinementListWidgetParams = {
    */
   searchableSelectOnSubmit?: boolean;
   /**
+   * Accessible name (aria-label) for the "Show more"/"Show less" toggle button.
+   */
+  showMoreButtonLabel?: string;
+  /**
    * Templates to use for the widget.
    */
   templates?: RefinementListTemplates;
@@ -221,6 +225,7 @@ const renderer =
     searchBoxTemplates,
     renderState,
     showMore,
+    showMoreButtonLabel,
     searchable,
     searchablePlaceholder,
     searchableIsAlwaysActive,
@@ -235,6 +240,7 @@ const renderer =
     templates: RefinementListOwnTemplates;
     searchBoxTemplates: SearchBoxTemplates;
     showMore?: boolean;
+    showMoreButtonLabel?: string;
     searchable?: boolean;
     searchablePlaceholder?: string;
     searchableIsAlwaysActive?: boolean;
@@ -282,6 +288,7 @@ const renderer =
         searchIsAlwaysActive={searchableIsAlwaysActive}
         isFromSearch={isFromSearch}
         showMore={showMore && !isFromSearch && items.length > 0}
+        showMoreButtonLabel={showMoreButtonLabel}
         toggleShowMore={toggleShowMore}
         isShowingMore={isShowingMore}
         hasExhaustiveItems={hasExhaustiveItems}
@@ -328,6 +335,7 @@ const refinementList: RefinementListWidget = function refinementList(
     limit,
     showMore,
     showMoreLimit,
+    showMoreButtonLabel,
     searchable = false,
     searchablePlaceholder = 'Search...',
     searchableEscapeFacetValues = true,
@@ -431,6 +439,7 @@ const refinementList: RefinementListWidget = function refinementList(
     searchableIsAlwaysActive,
     searchableSelectOnSubmit,
     showMore,
+    showMoreButtonLabel,
   });
 
   const makeWidget = connectRefinementList(specializedRenderer, () =>

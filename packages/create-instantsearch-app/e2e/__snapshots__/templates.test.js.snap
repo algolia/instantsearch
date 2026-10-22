@@ -4255,13 +4255,6 @@ Array [
 ]
 `;
 
-exports[`Templates React InstantSearch Native File content: .expo-shared/assets.json 1`] = `
-"{
-  \\"12bb71342c6255bbf50437ec8f4441c083f47cdb74bd89160c15e4f43e52a1cb\\": true,
-  \\"40b842e832070c58deac6aa9e08fa459302ee3f9da492c7e77d93d2fbf4a56fd\\": true
-}"
-`;
-
 exports[`Templates React InstantSearch Native File content: .gitignore 1`] = `
 "node_modules/
 .expo/
@@ -4280,11 +4273,12 @@ web-build/
 `;
 
 exports[`Templates React InstantSearch Native File content: App.tsx 1`] = `
-"import React, { useRef } from 'react';
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+"import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import { StatusBar } from 'expo-status-bar';
-import algoliasearch from 'algoliasearch/lite';
+import React, { useRef } from 'react';
 import { InstantSearch } from 'react-instantsearch-core';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import { InfiniteHits } from './src/InfiniteHits';
 import { SearchBox } from './src/SearchBox';
@@ -4296,23 +4290,31 @@ const searchClient = algoliasearch(
   'apiKey'
 );
 
+const future = { preserveSharedStateOnUnmount: true };
+
 export default function App() {
-  const listRef = useRef<FlatList>(null);
+  const listRef = useRef<FlatList<ProductHit>>(null);
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <StatusBar style=\\"light\\" />
-      <View style={styles.container}>
-        <InstantSearch searchClient={searchClient} indexName=\\"indexName\\">
-          <SearchBox
-            onChange={() =>
-              listRef.current?.scrollToOffset({ animated: false, offset: 0 })
-            }
-          />
-          <InfiniteHits ref={listRef} hitComponent={Hit} />
-        </InstantSearch>
-      </View>
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.safe}>
+        <StatusBar style=\\"light\\" />
+        <View style={styles.container}>
+          <InstantSearch
+            searchClient={searchClient}
+            indexName=\\"indexName\\"
+            future={future}
+          >
+            <SearchBox
+              onChange={() =>
+                listRef.current?.scrollToOffset({ animated: false, offset: 0 })
+              }
+            />
+            <InfiniteHits ref={listRef} hitComponent={Hit} />
+          </InstantSearch>
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
@@ -4410,18 +4412,25 @@ exports[`Templates React InstantSearch Native File content: babel.config.js 1`] 
 };"
 `;
 
+exports[`Templates React InstantSearch Native File content: index.ts 1`] = `
+"import { registerRootComponent } from 'expo';
+
+import App from './App';
+
+registerRootComponent(App);"
+`;
+
 exports[`Templates React InstantSearch Native File content: package.json 1`] = `
 "{
   \\"name\\": \\"react-instantsearch-native-app\\",
   \\"version\\": \\"1.0.0\\",
   \\"private\\": true,
-  \\"main\\": \\"node_modules/expo/AppEntry.js\\",
+  \\"main\\": \\"index.ts\\",
   \\"scripts\\": {
     \\"start\\": \\"expo start\\",
     \\"android\\": \\"expo start --android\\",
     \\"ios\\": \\"expo start --ios\\",
-    \\"web\\": \\"expo start --web\\",
-    \\"eject\\": \\"expo eject\\"
+    \\"web\\": \\"expo start --web\\"
   },
   \\"partialDependencies\\": {
     \\"react-instantsearch-core\\": \\"7.0.0\\"
@@ -4430,13 +4439,13 @@ exports[`Templates React InstantSearch Native File content: package.json 1`] = `
 `;
 
 exports[`Templates React InstantSearch Native File content: src/Highlight.tsx 1`] = `
-"import React, { Fragment } from 'react';
-import { StyleSheet, Text } from 'react-native';
-import { Hit as AlgoliaHit } from '@algolia/client-search';
+"import { Hit as AlgoliaHit } from 'instantsearch.js';
 import {
   getHighlightedParts,
   getPropertyByPath,
 } from 'instantsearch.js/es/lib/utils';
+import React, { Fragment } from 'react';
+import { StyleSheet, Text } from 'react-native';
 
 type HighlightPartProps = {
   children: React.ReactNode;
@@ -4458,7 +4467,7 @@ type HighlightProps<THit> = {
   separator?: string;
 };
 
-export function Highlight<THit extends AlgoliaHit<Record<string, unknown>>>({
+export function Highlight<THit extends AlgoliaHit>({
   hit,
   attribute,
   separator = ', ',
@@ -4514,45 +4523,46 @@ const styles = StyleSheet.create({
 `;
 
 exports[`Templates React InstantSearch Native File content: src/InfiniteHits.tsx 1`] = `
-"import React, { forwardRef } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
-import { Hit as AlgoliaHit } from '@algolia/client-search';
+"import { Hit as AlgoliaHit } from 'instantsearch.js';
+import React from 'react';
 import {
   useInfiniteHits,
   UseInfiniteHitsProps,
 } from 'react-instantsearch-core';
+import { StyleSheet, View, FlatList } from 'react-native';
 
 type InfiniteHitsProps<THit> = UseInfiniteHitsProps & {
-  hitComponent: (props: { hit: THit }) => JSX.Element;
+  hitComponent: (props: { hit: THit }) => React.JSX.Element;
+  // With React 19, \`ref\` is a regular prop on function components.
+  ref?: React.Ref<FlatList<THit>>;
 };
 
-export const InfiniteHits = forwardRef(
-  <THit extends AlgoliaHit<Record<string, unknown>>>(
-    { hitComponent: Hit, ...props }: InfiniteHitsProps<THit>,
-    ref: React.ForwardedRef<FlatList<THit>>
-  ) => {
-    const { hits, isLastPage, showMore } = useInfiniteHits(props);
+export function InfiniteHits<THit extends AlgoliaHit<Record<string, unknown>>>({
+  ref,
+  hitComponent: Hit,
+  ...props
+}: InfiniteHitsProps<THit>) {
+  const { hits, isLastPage, showMore } = useInfiniteHits(props);
 
-    return (
-      <FlatList
-        ref={ref}
-        data={hits as unknown as THit[]}
-        keyExtractor={(item) => item.objectID}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-        onEndReached={() => {
-          if (!isLastPage) {
-            showMore();
-          }
-        }}
-        renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Hit hit={item as unknown as THit} />
-          </View>
-        )}
-      />
-    );
-  }
-);
+  return (
+    <FlatList
+      ref={ref}
+      data={hits as unknown as THit[]}
+      keyExtractor={(item) => item.objectID}
+      ItemSeparatorComponent={() => <View style={styles.separator} />}
+      onEndReached={() => {
+        if (!isLastPage) {
+          showMore();
+        }
+      }}
+      renderItem={({ item }) => (
+        <View style={styles.item}>
+          <Hit hit={item as unknown as THit} />
+        </View>
+      )}
+    />
+  );
+}
 
 const styles = StyleSheet.create({
   separator: {
@@ -4562,20 +4572,13 @@ const styles = StyleSheet.create({
   item: {
     padding: 18,
   },
-});
-
-declare module 'react' {
-  // eslint-disable-next-line no-shadow
-  function forwardRef<TRef, TProps = unknown>(
-    render: (props: TProps, ref: React.Ref<TRef>) => React.ReactElement | null
-  ): (props: TProps & React.RefAttributes<TRef>) => React.ReactElement | null;
-}"
+});"
 `;
 
 exports[`Templates React InstantSearch Native File content: src/SearchBox.tsx 1`] = `
 "import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, TextInput } from 'react-native';
 import { useSearchBox, UseSearchBoxProps } from 'react-instantsearch-core';
+import { StyleSheet, View, TextInput } from 'react-native';
 
 type SearchBoxProps = UseSearchBoxProps & {
   onChange: (newValue: string) => void;
@@ -4622,7 +4625,7 @@ export function SearchBox({ onChange, ...props }: SearchBoxProps) {
         autoCapitalize=\\"none\\"
         autoCorrect={false}
         spellCheck={false}
-        autoCompleteType=\\"off\\"
+        autoComplete=\\"off\\"
         placeholder=\\"Search placeholder\\"
       />
     </View>
@@ -4688,7 +4691,6 @@ export type ProductHit = AlgoliaHit<{
 
 exports[`Templates React InstantSearch Native Folder structure: contains the right files 1`] = `
 Array [
-  ".expo-shared/assets.json",
   ".gitignore",
   "App.tsx",
   "README.md",
@@ -4698,6 +4700,7 @@ Array [
   "assets/icon.png",
   "assets/splash.png",
   "babel.config.js",
+  "index.ts",
   "package.json",
   "src/Highlight.tsx",
   "src/InfiniteHits.tsx",

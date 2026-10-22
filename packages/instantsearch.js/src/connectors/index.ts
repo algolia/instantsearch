@@ -28,6 +28,7 @@ export { connectBreadcrumb } from 'instantsearch-core';
 export { connectChat } from 'instantsearch-core';
 export { connectChatTrigger } from 'instantsearch-core';
 export { connectClearRefinements } from 'instantsearch-core';
+export { connectCompare } from 'instantsearch-core';
 export { connectConfigure } from 'instantsearch-core';
 export { connectCurrentRefinements } from 'instantsearch-core';
 export { connectDynamicWidgets } from 'instantsearch-core';
@@ -46,15 +47,18 @@ export { connectMenu } from 'instantsearch-core';
 export { connectNumericMenu } from 'instantsearch-core';
 export { connectPagination } from 'instantsearch-core';
 export { connectPoweredBy } from 'instantsearch-core';
+export { connectPromptSuggestions } from 'instantsearch-core';
 export { connectQueryRules } from 'instantsearch-core';
 export { connectRange } from 'instantsearch-core';
 export { connectRatingMenu } from 'instantsearch-core';
 export { connectRefinementList } from 'instantsearch-core';
 export { connectRelatedProducts } from 'instantsearch-core';
 export { connectRelevantSort } from 'instantsearch-core';
+export { connectResultCard } from 'instantsearch-core';
 export { connectSearchBox } from 'instantsearch-core';
 export { connectSortBy } from 'instantsearch-core';
 export { connectStats } from 'instantsearch-core';
+export { connectTasks } from 'instantsearch-core';
 export { connectToggleRefinement } from 'instantsearch-core';
 export { connectTrendingFacets } from 'instantsearch-core';
 export { connectTrendingItems } from 'instantsearch-core';
@@ -68,7 +72,7 @@ export type {
   AutocompleteWidgetDescription,
   BreadcrumbConnector,
   BreadcrumbConnectorParams,
-  BreadcrumbConnectorParamsItem
+  BreadcrumbConnectorParamsItem,
 } from 'instantsearch-core';
 export type {
   BreadcrumbRenderState,
@@ -78,13 +82,13 @@ export type {
   ChatInit,
   ChatInitWithoutTransport,
   ChatRenderState,
-  ChatTransport
+  ChatTransport,
 } from 'instantsearch-core';
 export type {
   ChatTriggerConnector,
   ChatTriggerConnectorParams,
   ChatTriggerRenderState,
-  ChatTriggerWidgetDescription
+  ChatTriggerWidgetDescription,
 } from 'instantsearch-core';
 export type {
   ChatWidgetDescription,
@@ -94,7 +98,7 @@ export type {
   ClearRefinementsWidgetDescription,
   ConfigureConnector,
   ConfigureConnectorParams,
-  ConfigureRenderState
+  ConfigureRenderState,
 } from 'instantsearch-core';
 export type {
   ConfigureWidgetDescription,
@@ -104,7 +108,7 @@ export type {
   CurrentRefinementsConnectorParamsRefinement,
   CurrentRefinementsRenderState,
   CurrentRefinementsWidgetDescription,
-  DynamicWidgetsConnector
+  DynamicWidgetsConnector,
 } from 'instantsearch-core';
 export type {
   DynamicWidgetsConnectorParams,
@@ -114,7 +118,7 @@ export type {
   FeedsConnectorParams,
   FeedsRenderState,
   FeedsWidgetDescription,
-  FilterSuggestionsConnector
+  FilterSuggestionsConnector,
 } from 'instantsearch-core';
 export type {
   FilterSuggestionsConnectorParams,
@@ -124,7 +128,7 @@ export type {
   FrequentlyBoughtTogetherConnector,
   FrequentlyBoughtTogetherConnectorParams,
   FrequentlyBoughtTogetherRenderState,
-  FrequentlyBoughtTogetherWidgetDescription
+  FrequentlyBoughtTogetherWidgetDescription,
 } from 'instantsearch-core';
 export type {
   GeoHit,
@@ -134,7 +138,7 @@ export type {
   GeoSearchWidgetDescription,
   HierarchicalMenuConnector,
   HierarchicalMenuConnectorParams,
-  HierarchicalMenuItem
+  HierarchicalMenuItem,
 } from 'instantsearch-core';
 export type {
   HierarchicalMenuRenderState,
@@ -144,7 +148,7 @@ export type {
   HitsPerPageConnector,
   HitsPerPageConnectorParams,
   HitsPerPageConnectorParamsItem,
-  HitsPerPageRenderState
+  HitsPerPageRenderState,
 } from 'instantsearch-core';
 export type {
   HitsPerPageRenderStateItem,
@@ -154,7 +158,7 @@ export type {
   InfiniteHitsCache,
   InfiniteHitsCachedHits,
   InfiniteHitsConnector,
-  InfiniteHitsConnectorParams
+  InfiniteHitsConnectorParams,
 } from 'instantsearch-core';
 export type {
   InfiniteHitsRenderState,
@@ -164,7 +168,7 @@ export type {
   LookingSimilarRenderState,
   LookingSimilarWidgetDescription,
   MenuConnector,
-  MenuConnectorParams
+  MenuConnectorParams,
 } from 'instantsearch-core';
 export type {
   MenuItem,
@@ -174,7 +178,7 @@ export type {
   NumericMenuConnectorParams,
   NumericMenuConnectorParamsItem,
   NumericMenuRenderState,
-  NumericMenuRenderStateItem
+  NumericMenuRenderStateItem,
 } from 'instantsearch-core';
 export type {
   NumericMenuWidgetDescription,
@@ -184,7 +188,7 @@ export type {
   PaginationWidgetDescription,
   ParamTrackedFilters,
   ParamTransformRuleContexts,
-  PoweredByConnector
+  PoweredByConnector,
 } from 'instantsearch-core';
 export type {
   PoweredByConnectorParams,
@@ -194,7 +198,7 @@ export type {
   QueryRulesConnectorParams,
   QueryRulesRenderState,
   QueryRulesWidgetDescription,
-  Range
+  Range,
 } from 'instantsearch-core';
 export type {
   RangeBoundaries,
@@ -204,7 +208,7 @@ export type {
   RangeMin,
   RangeRenderState,
   RangeWidgetDescription,
-  RatingMenuConnector
+  RatingMenuConnector,
 } from 'instantsearch-core';
 export type {
   RatingMenuConnectorParams,
@@ -214,7 +218,7 @@ export type {
   RefinementListConnectorParams,
   RefinementListItem,
   RefinementListRenderState,
-  RefinementListWidgetDescription
+  RefinementListWidgetDescription,
 } from 'instantsearch-core';
 export type {
   RelatedProductsConnector,
@@ -224,7 +228,7 @@ export type {
   RelevantSortConnector,
   RelevantSortConnectorParams,
   RelevantSortRenderState,
-  RelevantSortWidgetDescription
+  RelevantSortWidgetDescription,
 } from 'instantsearch-core';
 export type {
   SearchBoxConnector,
@@ -234,7 +238,7 @@ export type {
   SendEventForToggle,
   SortByConnector,
   SortByConnectorParams,
-  SortByIndexItem
+  SortByIndexItem,
 } from 'instantsearch-core';
 export type {
   SortByItem,
@@ -244,7 +248,7 @@ export type {
   StatsConnector,
   StatsConnectorParams,
   StatsRenderState,
-  StatsWidgetDescription
+  StatsWidgetDescription,
 } from 'instantsearch-core';
 export type {
   Suggestion,
@@ -254,7 +258,7 @@ export type {
   ToggleRefinementValue,
   ToggleRefinementWidgetDescription,
   TransformItemsIndicesConfig,
-  TrendingFacetsConnector
+  TrendingFacetsConnector,
 } from 'instantsearch-core';
 export type {
   TrendingFacetsConnectorParams,
@@ -264,10 +268,10 @@ export type {
   TrendingItemsConnectorParams,
   TrendingItemsRenderState,
   TrendingItemsWidgetDescription,
-  VoiceSearchConnector
+  VoiceSearchConnector,
 } from 'instantsearch-core';
 export type {
   VoiceSearchConnectorParams,
   VoiceSearchRenderState,
-  VoiceSearchWidgetDescription
+  VoiceSearchWidgetDescription,
 } from 'instantsearch-core';

@@ -1,9 +1,10 @@
-import { Fragment } from "preact";
-import { useState } from "preact/hooks";
+import { Fragment } from 'preact';
+import { useState } from 'preact/hooks';
 
-import { DocsLinks } from "./DocsLink";
+import { DocsLinks } from './DocsLink';
+import { MinimizeToggle, useMinimized } from './MinimizeToggle';
 
-import type { ComponentType } from "preact";
+import type { ComponentType } from 'preact';
 
 export interface Widget {
   title: string;
@@ -12,33 +13,54 @@ export interface Widget {
 }
 
 interface Props {
+  title?: string;
   widgets: Widget[];
   destroy?: boolean;
   class?: string;
 }
 
-export function WidgetSwitcher({ widgets, destroy = false, class: className }: Props) {
+export function WidgetSwitcher({
+  title,
+  widgets,
+  destroy = false,
+  class: className,
+}: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
+  const { minimized, toggle } = useMinimized(
+    title ?? widgets.map((widget) => widget.title).join('|')
+  );
   const hasMultiple = widgets.length > 1;
 
   return (
     <div
-      class={`rounded-lg border border-dashed border-neutral-300 p-4 text-neutral-700 transition-colors hover:border-neutral-400 hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-300 dark:hover:border-neutral-600 dark:hover:bg-neutral-900 ${className ?? ""}`}
+      class={`rounded-lg border border-dashed border-neutral-300 p-4 text-neutral-700 transition-colors hover:border-neutral-400 hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-300 dark:hover:border-neutral-600 dark:hover:bg-neutral-900 ${className ?? ''}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <header class="-mx-1 -mt-1 mb-3 flex items-start gap-1 text-xs">
+      <header
+        class={`-mx-1 -mt-1 flex items-start gap-1 text-xs ${minimized ? '' : 'mb-3'}`}
+      >
         <span class="flex flex-wrap items-center">
+          {title && (
+            <>
+              <span class="mx-1 cursor-default font-mono leading-relaxed text-neutral-400 dark:text-neutral-500">
+                {title}
+              </span>
+              <span class="text-neutral-300 dark:text-neutral-600">·</span>
+            </>
+          )}
           {widgets.map((widget, index) => (
             <Fragment key={index}>
-              {index > 0 && <span class="text-neutral-300 dark:text-neutral-600">•</span>}
+              {index > 0 && (
+                <span class="text-neutral-300 dark:text-neutral-600">•</span>
+              )}
               <button
                 type="button"
-                class={`mx-1 font-mono leading-relaxed transition-colors ${hasMultiple ? "cursor-pointer" : "cursor-default"} ${
+                class={`mx-1 font-mono leading-relaxed transition-colors ${hasMultiple ? 'cursor-pointer' : 'cursor-default'} ${
                   index === currentIndex && hasMultiple
-                    ? "font-semibold text-blue-600 dark:text-blue-400"
-                    : `text-neutral-400 dark:text-neutral-500${hasMultiple ? " hover:text-neutral-600 dark:hover:text-neutral-300" : ""}`
+                    ? 'font-semibold text-blue-600 dark:text-blue-400'
+                    : `text-neutral-400 dark:text-neutral-500${hasMultiple ? ' hover:text-neutral-600 dark:hover:text-neutral-300' : ''}`
                 }`}
                 onClick={() => setCurrentIndex(index)}
               >
@@ -51,17 +73,25 @@ export function WidgetSwitcher({ widgets, destroy = false, class: className }: P
           names={widgets[currentIndex].docs ?? [widgets[currentIndex].title]}
           visible={hovered}
         />
+        <MinimizeToggle
+          minimized={minimized}
+          visible={hovered}
+          onToggle={toggle}
+        />
       </header>
 
-      {destroy ? (
-        <CurrentBody key={currentIndex} Body={widgets[currentIndex].body} />
-      ) : (
-        widgets.map((widget, index) => (
-          <div key={index} class={index !== currentIndex ? "hidden" : ""}>
-            <widget.body />
-          </div>
-        ))
-      )}
+      {/* Hidden rather than unmounted: the widgets keep their state. */}
+      <div class={minimized ? 'hidden' : ''}>
+        {destroy ? (
+          <CurrentBody key={currentIndex} Body={widgets[currentIndex].body} />
+        ) : (
+          widgets.map((widget, index) => (
+            <div key={index} class={index !== currentIndex ? 'hidden' : ''}>
+              <widget.body />
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 }

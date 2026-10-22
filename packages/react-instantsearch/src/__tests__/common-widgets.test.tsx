@@ -34,7 +34,9 @@ import {
   DynamicWidgets,
   Chat,
   ChatTrigger,
-  EXPERIMENTAL_Autocomplete,
+  PromptSuggestions,
+  ResultCard,
+  Autocomplete,
   FilterSuggestions,
 } from '..';
 
@@ -409,7 +411,11 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
     );
   },
   createChatWidgetTests({ instantSearchOptions, widgetParams }) {
-    const { renderRefinements, ...chatWidgetParams } = widgetParams;
+    const {
+      renderChat = true,
+      renderRefinements,
+      ...chatWidgetParams
+    } = widgetParams;
     render(
       <InstantSearch {...instantSearchOptions}>
         {renderRefinements && (
@@ -427,7 +433,7 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
           </>
         )}
         <ChatTrigger />
-        <Chat {...chatWidgetParams} />
+        {renderChat && <Chat {...chatWidgetParams} />}
         <GlobalErrorSwallower />
       </InstantSearch>
     );
@@ -435,7 +441,7 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
   createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
     render(
       <InstantSearch {...instantSearchOptions}>
-        <EXPERIMENTAL_Autocomplete {...widgetParams} />
+        <Autocomplete {...widgetParams} />
         <GlobalErrorSwallower />
       </InstantSearch>
     );
@@ -444,6 +450,39 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
     render(
       <InstantSearch {...instantSearchOptions}>
         <FilterSuggestions {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
+  createPromptSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
+    // The widget hands clicked suggestions to a <Chat> on the same index, and
+    // errors without one, so the default setup renders both. `renderChat: false`
+    // is how a test asks for the unconfigured page.
+    const { renderChat = true, ...promptSuggestionsWidgetParams } =
+      widgetParams;
+
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <PromptSuggestions {...promptSuggestionsWidgetParams} />
+        {/*
+          A dedicated id: the `agentId` the chat suites use keys persisted
+          messages in `sessionStorage` that leak across tests in this file.
+        */}
+        {renderChat && <Chat agentId="promptSuggestionsChatAgentId" />}
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
+  createResultCardWidgetTests({ instantSearchOptions, widgetParams }) {
+    // "Continue in chat" needs a <Chat> with the card's `agentId` on the same
+    // index, so the default setup renders both. `renderChat: false` is how a
+    // test asks for the unconfigured page.
+    const { renderChat = true, ...resultCardWidgetParams } = widgetParams;
+
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <ResultCard {...resultCardWidgetParams} />
+        {renderChat && <Chat agentId={resultCardWidgetParams.agentId} />}
         <GlobalErrorSwallower />
       </InstantSearch>
     );
@@ -502,6 +541,8 @@ const testOptions: TestOptionsMap<TestSuites> = {
   },
   createAutocompleteWidgetTests: { act },
   createFilterSuggestionsWidgetTests: { act },
+  createPromptSuggestionsWidgetTests: { act },
+  createResultCardWidgetTests: { act },
 };
 
 /**

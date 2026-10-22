@@ -1,6 +1,6 @@
-import type InstantSearch from '../instantsearch';
 import type { UiState } from './ui-state';
 import type { AtLeastOne } from './utils';
+import type InstantSearch from '../instantsearch';
 
 export type MiddlewareDefinition<TUiState extends UiState = UiState> = {
   /**

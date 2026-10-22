@@ -20,6 +20,9 @@ export type AnalyticsWidgetDescription = {
   $$widgetType: 'ais.analytics';
   renderState: Record<string, unknown>;
   indexRenderState: {
-    analytics: WidgetRenderState<Record<string, unknown>, AnalyticsWidgetParams>;
+    analytics: WidgetRenderState<
+      Record<string, unknown>,
+      AnalyticsWidgetParams
+    >;
   };
 };

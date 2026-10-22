@@ -1,0 +1,25 @@
+export {
+  AbstractChat,
+  Chat,
+  ChatState,
+  CompareProductsToolType,
+  DisplayResultsToolType,
+  GroupedResultsToolType,
+  MemorizeToolType,
+  MemorySearchToolType,
+  PonderToolType,
+  RecommendToolType,
+  SearchIndexToolType,
+  applyAgentFilters,
+  getAgentFilters,
+  isChatBusy,
+  matchesSearchIndexToolName,
+  openChat,
+  stripInternalHitMetadata,
+} from 'instantsearch-core';
+export type {
+  ChatInit,
+  ChatReferer,
+  OpenChatOptions,
+  UIMessage,
+} from 'instantsearch-core';

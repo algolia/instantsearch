@@ -1,6 +1,6 @@
 {
   "name": "instantsearch-ui-components",
-  "version": "0.32.0",
+  "version": "0.43.0",
   "description": "Common UI components for InstantSearch.",
   "types": "dist/es/index.d.ts",
   "main": "dist/cjs/index.js",
@@ -44,8 +44,7 @@
     "watch:es": "rollup -c rollup.config.mjs --watch"
   },
   "dependencies": {
-    "instantsearch-core": "0.1.0",
     "@swc/helpers": "0.5.18",
-    "markdown-to-jsx": "^7.7.15"
+    "instantsearch-core": "0.1.0"
   }
 }

@@ -1,6 +1,6 @@
 import { Hit as AlgoliaHit } from 'instantsearch.js';
 
-export type ProductHit = AlgoliaHit<{
+export type ProductRecord = {
   brand: string;
   categories: string[];
   comments: number;
@@ -25,4 +25,6 @@ export type ProductHit = AlgoliaHit<{
   sale_price: string;
   type: string;
   url: string;
-}>;
+};
+
+export type ProductHit = AlgoliaHit<ProductRecord>;

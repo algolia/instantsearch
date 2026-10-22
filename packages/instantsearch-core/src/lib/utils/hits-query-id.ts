@@ -1,6 +1,4 @@
-import type { AlgoliaHit } from '../../types';
-
-export function addQueryID<THit extends AlgoliaHit>(
+export function addQueryID<THit extends Record<string, any>>(
   hits: THit[],
   queryID?: string
 ): Array<THit & { __queryID?: string }> {

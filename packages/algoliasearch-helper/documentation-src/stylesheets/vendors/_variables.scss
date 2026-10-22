@@ -45,7 +45,9 @@ $chocolate: #7d4704;
 
 // Fonts
 $font-name: 'Open Sans';
-$font-fallback: Helvetica Neue, helvetica;
+$font-fallback:
+  Helvetica Neue,
+  helvetica;
 $font-settings: $font-name, $font-fallback;
 
 /* Icons
@@ -84,7 +86,9 @@ $white-75: rgba(white, 0.75);
 
 // Fonts
 $font-name: 'Open Sans';
-$font-fallback: Helvetica Neue, helvetica;
+$font-fallback:
+  Helvetica Neue,
+  helvetica;
 $font-settings: $font-name, $font-fallback;
 
 $font-code: 'inconsolata', monospace;

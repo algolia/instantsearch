@@ -66,6 +66,7 @@ export type RefinementListProps<TTemplates extends Templates> = {
   templateProps: PreparedTemplateProps<TTemplates>;
   toggleRefinement: (value: string) => void;
   showMore?: boolean;
+  showMoreButtonLabel?: string;
   toggleShowMore?: () => void;
   isShowingMore?: boolean;
   hasExhaustiveItems?: boolean;
@@ -177,8 +178,8 @@ class RefinementList<TTemplates extends Templates> extends Component<
       !facetValue.count && this.props.cssClasses.disabledItem,
       Boolean(
         isHierarchicalMenuItem(facetValue) &&
-          Array.isArray(facetValue.data) &&
-          facetValue.data.length > 0
+        Array.isArray(facetValue.data) &&
+        facetValue.data.length > 0
       ) && this.props.cssClasses.parentItem!
     );
 
@@ -319,6 +320,8 @@ class RefinementList<TTemplates extends Templates> extends Component<
           className: showMoreButtonClassName,
           disabled: !this.props.canToggleShowMore,
           onClick: this.props.toggleShowMore,
+          'aria-expanded': Boolean(this.props.isShowingMore),
+          'aria-label': this.props.showMoreButtonLabel,
         }}
         data={{
           isShowingMore: this.props.isShowingMore,

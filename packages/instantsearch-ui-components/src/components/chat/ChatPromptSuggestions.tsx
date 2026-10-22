@@ -35,13 +35,17 @@ export function createChatPromptSuggestionsComponent({
   ) {
     const { suggestions = [], onSuggestionClick, classNames = {} } = userProps;
 
-    if (suggestions.length === 0) {
+    const visibleSuggestions = suggestions.filter(
+      (suggestion) => suggestion.trim() !== ''
+    );
+
+    if (visibleSuggestions.length === 0) {
       return null;
     }
 
     return (
       <div className={cx('ais-ChatPromptSuggestions', classNames.root)}>
-        {suggestions.map((suggestion, index) => (
+        {visibleSuggestions.map((suggestion, index) => (
           <Button
             key={index}
             size="sm"

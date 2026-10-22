@@ -2,29 +2,45 @@ import {
   DefaultChatTransport,
   lastAssistantMessageIsCompleteWithToolCalls,
 } from '../../lib/ai-lite';
-import { Chat, SearchIndexToolType } from '../../lib/chat';
+import {
+  applyAgentFilters,
+  Chat,
+  matchesSearchIndexToolName,
+  SearchIndexToolType,
+} from '../../lib/chat';
 import {
   checkRendering,
-  clearRefinements,
   createDocumentationMessageGenerator,
   createSendEventForHits,
   getAlgoliaAgent,
   getAppIdAndApiKey,
-  getRefinements,
+  collectChatRecords,
+  createChatRecordsStore,
+  findTool,
   noop,
+  safelyRunOnBrowser,
   sendChatMessageFeedback,
-  uniq,
   walkIndex,
   warning,
 } from '../../lib/utils';
-import { flat } from '../../lib/utils/flat';
+import { defer } from '../../lib/utils/defer';
 
+import type {
+  AddToolResultForToolCall,
+  ApplyFiltersParams,
+  ChatInsightsEventContext,
+  ClientSideTool,
+  ClientSideTools,
+  UserClientSideTool,
+} from './types';
+import type { ChatOnToolCallCallback } from '../../lib/ai-lite';
 import type {
   AbstractChat,
   ChatInit as ChatInitAi,
   UIMessage,
 } from '../../lib/chat';
 import type { SendEventForHits } from '../../lib/utils';
+import type { ChatRecordsStore } from '../../lib/utils/chatRecords';
 import type {
   Connector,
   Renderer,
@@ -33,18 +49,11 @@ import type {
   InstantSearch,
   IndexUiState,
   IndexWidget,
+  InitOptions,
+  RenderOptions,
   WidgetRenderState,
   IndexRenderState,
 } from '../../types';
-import type {
-  AddToolResultWithOutput,
-  ApplyFiltersParams,
-  ClientSideTool,
-  ClientSideTools,
-  UserClientSideTool,
-} from './types';
-import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
-
 
 export type * from './types';
 
@@ -52,6 +61,12 @@ const withUsage = createDocumentationMessageGenerator({
   name: 'chat',
   connector: true,
 });
+
+const DEFAULT_TOOL_TIMEOUT = 20_000;
+const TOOL_TIMEOUT_ERROR_TEXT =
+  'The tool call timed out before a result was received. The operation may have completed.';
+const TOOL_ABORTED_ERROR_TEXT =
+  'The tool call was cancelled before a result was received.';
 
 export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
   indexUiState: IndexUiState;
@@ -68,6 +83,10 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
    * Opens the chat (if needed) and focuses the prompt input.
    */
   focusInput: () => void;
+  /** @internal */
+  '~consumeInputFocus'?: () => boolean;
+  /** @internal */
+  '~isOpenStatePersistenceEnabled'?: boolean;
   /**
    * Updates the `messages` state locally. This is useful when you want to
    * edit the messages on the client, and then trigger the `reload` method
@@ -82,9 +101,28 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
    */
   clearMessages: () => void;
   /**
+   * Takes over a conversation started by another widget (e.g. `resultCard`).
+   * An empty chat continues it under its `id`; a chat with messages appends
+   * the exchange to its own conversation. The adopted messages are tagged
+   * with `metadata.source` for attribution. Returns `false` when the chat is
+   * mid-generation, in which case nothing is adopted.
+   */
+  adoptConversation: (conversation: {
+    id: string;
+    messages: TUiMessage[];
+    source: string;
+  }) => boolean;
+  /**
    * Tools configuration with addToolResult bound, ready to be used by the UI.
    */
   tools: ClientSideTools;
+  /**
+   * The records the conversation holds, keyed by `objectID`: every tool call
+   * that returned `hits` contributes them, as does the selection a `compare`
+   * widget attaches to its message, last write winning. Attached to every tool
+   * too, which is how a `layoutComponent` reads it.
+   */
+  records: ChatRecordsStore;
   /**
    * Suggestions received from the AI model.
    */
@@ -114,10 +152,26 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
   | 'stop'
 >;
 
+export type ChatPersistence =
+  | boolean
+  | {
+      messages?: boolean;
+      open?: boolean;
+    };
+
 export type ChatInitWithoutTransport<TUiMessage extends UIMessage> = Omit<
   ChatInitAi<TUiMessage>,
-  'transport'
->;
+  'persistence' | 'transport'
+> & {
+  chat?: never;
+  /**
+   * Whether to persist messages and open state in sessionStorage.
+   * An object configures each policy independently.
+   *
+   * @default true
+   */
+  persistence?: ChatPersistence;
+};
 
 export type ChatAgentRequestOptions = {
   /**
@@ -162,6 +216,17 @@ export type ChatCustomInstance<TUiMessage extends UIMessage> = {
   transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
   feedback?: never;
   requestOptions?: never;
+  /**
+   * Whether to persist open state in sessionStorage. Message persistence is
+   * configured when constructing the Chat instance.
+   *
+   * @default { open: true }
+   */
+  persistence?: {
+    open?: boolean;
+    messages?: never;
+  };
+  sendAutomaticallyWhen?: never;
 };
 
 export type ChatInit<TUiMessage extends UIMessage> =
@@ -177,8 +242,16 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
   disableTriggerValidation?: boolean;
   /**
    * Whether to resume an ongoing chat generation stream.
+   * This option has no effect during server rendering.
    */
   resume?: boolean;
+  /**
+   * Whether this widget should make InstantSearch require a main search request.
+   * If this is the only widget, and you mark `requiresSearch: false`, no search request will happen.
+   *
+   * @default true
+   */
+  requiresSearch?: boolean;
   /**
    * Configuration for client-side tools.
    */
@@ -198,10 +271,15 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    * length and shape) and rejects malformed contexts. Pass a function when the
    * values change per-turn — it is invoked once per send. If the source is
    * async, resolve it upstream and close over the value.
+   *
+   * Merged with any turn context an entry point attaches to the message it
+   * sends (the compare bar's selected products, `openChat`'s `turnContext`);
+   * on a key both provide, the entry point's value wins for that turn.
    */
   context?: Record<string, string> | (() => Record<string, string>);
   /**
    * A message to send automatically when the chat is initialized.
+   * This message is sent only in the browser.
    *
    * This message is only sent when the chat has no existing messages yet. If
    * messages were restored or otherwise already exist when the widget starts,
@@ -212,6 +290,7 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
   initialUserMessage?: string;
   /**
    * Messages to pre-populate the chat with when it is initialized.
+   * These messages are applied only in the browser.
    *
    * These messages are set without triggering an AI response. They are only
    * applied when the chat has no existing messages yet. If messages were
@@ -243,71 +322,63 @@ export type ChatConnector<TUiMessage extends UIMessage = UIMessage> = Connector<
   ChatConnectorParams<TUiMessage>
 >;
 
-function getAttributesToClear({
-  results,
-  helper,
-}: {
-  results: SearchResults;
-  helper: AlgoliaSearchHelper;
-}) {
-  return uniq(
-    getRefinements(results, helper.state, true).map(
-      (refinement) => refinement.attribute
-    )
-  );
+const OPEN_STATE_CACHE_KEY = 'instantsearch-chat-open-state';
+
+function normalizePersistence(
+  persistence: ChatPersistence | undefined,
+  hasCustomChat: boolean
+) {
+  if (hasCustomChat) {
+    return {
+      messages: false,
+      open:
+        persistence === undefined ||
+        (typeof persistence === 'object' && persistence.open === true),
+    };
+  }
+
+  if (persistence === undefined || persistence === true) {
+    return { messages: true, open: true };
+  }
+
+  if (persistence === false) {
+    return { messages: false, open: false };
+  }
+
+  return {
+    messages: persistence.messages === true,
+    open: persistence.open === true,
+  };
 }
 
-function updateStateFromSearchToolInput(
-  params: ApplyFiltersParams,
-  helper: AlgoliaSearchHelper
-) {
-  // clear all filters first
-  const attributesToClear = getAttributesToClear({
-    results: helper.lastResults!,
-    helper,
-  });
+function getOpenStateCacheKey(type: string) {
+  return `${OPEN_STATE_CACHE_KEY}-${type}`;
+}
 
-  helper.setState(
-    clearRefinements({
-      helper,
-      attributesToClear,
-    })
-  );
-
-  if (params.facetFilters) {
-    const attributes = flat(params.facetFilters).map((filter) => {
-      const [attribute, value] = filter.split(':');
-
-      return { attribute, value };
-    });
-
-    attributes.forEach(({ attribute, value }) => {
-      if (
-        !helper.state.isConjunctiveFacet(attribute) &&
-        !helper.state.isHierarchicalFacet(attribute) &&
-        !helper.state.isDisjunctiveFacet(attribute)
-      ) {
-        const s = helper.state.addDisjunctiveFacet(attribute);
-        helper.setState(s);
-        helper.toggleFacetRefinement(attribute, value);
-      } else {
-        const attr =
-          helper.state.hierarchicalFacets.find(
-            (facet) => facet.name === attribute
-          )?.name || attribute;
-
-        helper.toggleFacetRefinement(attr, value);
-      }
-    });
+function readPersistedOpen(type: string) {
+  try {
+    return safelyRunOnBrowser(
+      ({ window: browserWindow }) =>
+        browserWindow.sessionStorage.getItem(getOpenStateCacheKey(type)) ===
+        'true',
+      { fallback: () => false }
+    );
+  } catch {
+    return false;
   }
+}
 
-  if (params.query) {
-    helper.setQuery(params.query);
+function writePersistedOpen(type: string, open: boolean) {
+  try {
+    safelyRunOnBrowser(({ window: browserWindow }) => {
+      browserWindow.sessionStorage.setItem(
+        getOpenStateCacheKey(type),
+        String(open)
+      );
+    });
+  } catch {
+    // Storage availability must not block the visible state change.
   }
-
-  helper.search();
-
-  return helper.state;
 }
 
 export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
@@ -319,18 +390,38 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
   return <TUiMessage extends UIMessage = UIMessage>(
     widgetParams: TWidgetParams & ChatConnectorParams<TUiMessage>
   ) => {
-    warning(false, 'Chat is not yet stable and will change in the future.');
-
     const {
       resume = false,
-      tools = {},
+      tools: tools_ = {},
       type = 'chat',
+      persistence,
       context,
       initialUserMessage,
       initialMessages,
       disableTriggerValidation = false,
+      sendAutomaticallyWhen = lastAssistantMessageIsCompleteWithToolCalls,
+      requiresSearch = true,
       ...options
     } = widgetParams || {};
+    const normalizedPersistence = normalizePersistence(
+      persistence,
+      'chat' in options
+    );
+
+    // The Algolia MCP Server exposes the search tool once per index and names
+    // it after the index (`algolia_search_index_products`). A `matchesToolName`
+    // set by the user wins, as does a tool registered under the derived name.
+    const tools =
+      tools_[SearchIndexToolType] &&
+      tools_[SearchIndexToolType].matchesToolName === undefined
+        ? {
+            ...tools_,
+            [SearchIndexToolType]: {
+              ...tools_[SearchIndexToolType],
+              matchesToolName: matchesSearchIndexToolName,
+            },
+          }
+        : tools_;
 
     let _chatInstance: Chat<TUiMessage>;
     let input = '';
@@ -339,27 +430,30 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let setInput: ChatRenderState<TUiMessage>['setInput'];
     let setOpen: ChatRenderState<TUiMessage>['setOpen'];
     let focusInput: ChatRenderState<TUiMessage>['focusInput'];
+    let inputFocusRequested = false;
     let setFeedbackState: (messageId: string, state: 'sending' | 0 | 1) => void;
     let hasValidatedEntryPoints = false;
 
     const agentId = 'agentId' in options ? options.agentId : undefined;
+    // Collected here rather than by the tool that searched: that tool renders
+    // nothing while Grouped Results presents its records, and a record has to
+    // outlive the render that produced it.
+    const records = createChatRecordsStore();
+    const collectRecords = () =>
+      collectChatRecords(_chatInstance.messages, records);
     let feedbackState: ChatRenderState<TUiMessage>['feedbackState'] = {};
     let _sendChatMessageFeedback: ChatRenderState<TUiMessage>['sendChatMessageFeedback'];
     let feedbackAbortController: AbortController | undefined;
+    let chatSubscriptionUnsubscribers: Array<() => void> = [];
 
-    // Extract suggestions from the last assistant message's data-suggestions part
-    const getSuggestionsFromMessages = (messages: TUiMessage[]) => {
-      // Find the last assistant message (iterate from end)
-      const lastAssistantMessage = [...messages]
-        .reverse()
-        .find((message) => message.role === 'assistant' && message.parts);
+    const unsubscribeChatCallbacks = () => {
+      chatSubscriptionUnsubscribers
+        .splice(0)
+        .forEach((unsubscribe) => unsubscribe());
+    };
 
-      if (!lastAssistantMessage?.parts) {
-        return undefined;
-      }
-
-      // Find the data-suggestions part
-      const suggestionsPart = lastAssistantMessage.parts.find(
+    const findSuggestionsPart = (message: TUiMessage | undefined) =>
+      message?.parts?.find(
         (
           part
         ): part is {
@@ -374,7 +468,15 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           )
       );
 
-      return suggestionsPart?.data.suggestions;
+    const findLastAssistantMessage = (messages: TUiMessage[]) =>
+      [...messages]
+        .reverse()
+        .find((message) => message.role === 'assistant' && message.parts);
+
+    // Extract suggestions from the last assistant message's data-suggestions part
+    const getSuggestionsFromMessages = (messages: TUiMessage[]) => {
+      return findSuggestionsPart(findLastAssistantMessage(messages))?.data
+        .suggestions;
     };
 
     const setMessages = (
@@ -395,10 +497,45 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       // ChatState callbacks that synchronously re-render, so they must run last
       // for that render to see the cleared feedback and rotated conversation id.
       feedbackState = {};
+      records.clear();
       _chatInstance.resetConversationId();
       setMessages([]);
       _chatInstance.clearError();
     };
+
+    const adoptConversation: ChatRenderState<TUiMessage>['adoptConversation'] =
+      ({ id, messages, source }) => {
+        const status = _chatInstance.status;
+        if (status === 'submitted' || status === 'streaming') {
+          return false;
+        }
+        const tagged = messages.map(
+          (message) =>
+            ({
+              ...message,
+              metadata: {
+                ...(message.metadata as Record<string, unknown> | undefined),
+                source,
+              },
+            }) as TUiMessage
+        );
+        if (_chatInstance.messages.length === 0) {
+          _chatInstance.setConversationId(id);
+          setMessages(tagged);
+        } else {
+          // The handing-off widget may still be mounted and hand off again
+          // (e.g. a second follow-up suggestion): only new turns are appended.
+          const existingIds = new Set(
+            _chatInstance.messages.map((message) => message.id)
+          );
+          setMessages([
+            ..._chatInstance.messages,
+            ...tagged.filter((message) => !existingIds.has(message.id)),
+          ]);
+        }
+        _chatInstance.clearError();
+        return true;
+      };
 
     const validateEntryPoints = (instantSearchInstance: InstantSearch) => {
       if (disableTriggerValidation || hasValidatedEntryPoints) {
@@ -428,19 +565,57 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       hasValidatedEntryPoints = true;
     };
 
+    // Deferred because entry points can be registered after the chat itself:
+    // React adds widgets in mount order, so a trigger further down the tree
+    // only lands after this widget's `init` has run.
+    const deferredValidateEntryPoints = defer(validateEntryPoints);
+
     const makeChatInstance = (instantSearchInstance: InstantSearch) => {
+      // A caller supplied `chat` already owns its transport, so it bypasses the
+      // connector's transport construction and validation below.
+      if ('chat' in options) {
+        return options.chat!;
+      }
+
       let transport;
       const { client } = instantSearchInstance;
       const [appId, apiKey] = getAppIdAndApiKey(client);
 
-      // Filter out custom data parts (like data-suggestions) that the backend doesn't accept
-      const filterDataParts = (messages: UIMessage[]): UIMessage[] =>
-        messages.map((message) => ({
-          ...message,
-          parts: message.parts?.filter(
-            (part) => !('type' in part && part.type.startsWith('data-'))
-          ),
-        }));
+      // Shapes the local transcript into what the backend accepts: drops the
+      // custom data parts (like data-suggestions) it does not take, and puts a
+      // prompt-shortcut sentinel back on the user message that displays its
+      // resolved text (see `applyPromptShortcutEcho`). The wire always carries
+      // the sentinel, so a regenerate or a follow-up turn still resolves the
+      // configured prompt exactly like the first send did.
+      const prepareOutgoingMessages = (messages: UIMessage[]): UIMessage[] =>
+        messages.map((message) => {
+          const { promptShortcut, ...metadata } =
+            (message.metadata as
+              | { promptShortcut?: { sentinel?: unknown } }
+              | undefined) ?? {};
+          const sentinel =
+            typeof promptShortcut?.sentinel === 'string'
+              ? promptShortcut.sentinel
+              : undefined;
+
+          return {
+            ...message,
+            ...(sentinel
+              ? {
+                  metadata: Object.keys(metadata).length ? metadata : undefined,
+                }
+              : {}),
+            parts: message.parts
+              ?.filter(
+                (part) => !('type' in part && part.type.startsWith('data-'))
+              )
+              .map((part) =>
+                sentinel && part.type === 'text'
+                  ? { ...part, text: sentinel }
+                  : part
+              ),
+          };
+        });
 
       if ('transport' in options && options.transport) {
         const originalPrepare = options.transport.prepareSendMessagesRequest;
@@ -462,12 +637,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
                     ...params.body,
                   },
                 };
-            // Then filter out data-* parts
+            // Then shape the messages for the wire
             const applyFilter = (prepared: { body: object }) => ({
               ...prepared,
               body: {
                 ...prepared.body,
-                messages: filterDataParts(
+                messages: prepareOutgoingMessages(
                   (prepared.body as { messages: UIMessage[] }).messages
                 ),
               },
@@ -481,7 +656,9 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           },
         });
       }
-      if ('agentId' in options && options.agentId) {
+      // A custom `transport` wins: `agentId` alongside it only serves feedback
+      // (and, for the result card, the Rule context).
+      if (!transport && 'agentId' in options && options.agentId) {
         if (!appId || !apiKey) {
           throw new Error(
             withUsage(
@@ -509,7 +686,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         transport = new DefaultChatTransport({
           api: baseApi,
           headers: {
-            ...(options.requestOptions?.headers instanceof Headers
+            // `Headers` is absent on runtimes without fetch globals, and a
+            // server render reaches this while building the transport.
+            ...(typeof Headers !== 'undefined' &&
+            options.requestOptions?.headers instanceof Headers
               ? Object.fromEntries(options.requestOptions.headers.entries())
               : options.requestOptions?.headers),
             // Preserve the required Algolia identity headers and chat agent
@@ -530,7 +710,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
               body: {
                 id,
                 messageId,
-                messages: filterDataParts(messages),
+                messages: prepareOutgoingMessages(messages),
               },
             };
           },
@@ -542,32 +722,102 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         );
       }
 
-      if ('chat' in options) {
-        return options.chat;
-      }
+      // A prompt-shortcut turn (the `compare` widget's
+      // `__ALGOLIA_COMPARISON_<id>__`) sends a sentinel as the user message,
+      // which Agent Studio resolves into the natural-language text it
+      // persists on that row. The local transcript still holds the sentinel,
+      // so the server echoes the persisted text as a transient
+      // `data-prompt-shortcut` part right after `start`. Swapping it into the
+      // message that sent it keeps the live bubble, the session-restored
+      // transcript and a history reload in agreement, without the client
+      // knowing how shortcuts are configured or rendered. The sentinel moves
+      // to the message metadata so `prepareOutgoingMessages` can put it back
+      // on the wire: the backend resolves the shortcut from the token, not
+      // from its display text.
+      const applyPromptShortcutEcho = (dataPart: {
+        type: string;
+        data?: unknown;
+      }) => {
+        if (dataPart.type !== 'data-prompt-shortcut') return;
+        const data = dataPart.data as
+          | { sentinel?: unknown; displayText?: unknown }
+          | undefined;
+        const sentinel = data?.sentinel;
+        const displayText = data?.displayText;
+        if (typeof sentinel !== 'string' || typeof displayText !== 'string') {
+          return;
+        }
 
-      return new Chat({
-        ...options,
-        transport,
-        sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
-        shouldRepairToolInput(toolName) {
-          let tool = tools[toolName];
-          if (!tool && toolName.startsWith(`${SearchIndexToolType}_`)) {
-            tool = tools[SearchIndexToolType];
+        setMessages((messages) => {
+          // Only the message being answered sent this sentinel: earlier turns
+          // were rewritten by their own echo, and the same shortcut resolves
+          // to a different text per selection.
+          for (let index = messages.length - 1; index >= 0; index--) {
+            const message = messages[index];
+            if (message.role !== 'user' || message.parts?.length !== 1) {
+              continue;
+            }
+            const part = message.parts[0];
+            if (part.type !== 'text' || part.text.trim() !== sentinel) {
+              continue;
+            }
+
+            const updated = [...messages];
+            updated[index] = {
+              ...message,
+              parts: [{ ...part, text: displayText }],
+              metadata: {
+                ...(message.metadata as Record<string, unknown> | undefined),
+                promptShortcut: { sentinel },
+              },
+            } as TUiMessage;
+            return updated;
           }
+          return messages;
+        });
+      };
+
+      let canRepairRestoredPendingToolParts = !resume;
+      const chat = new Chat({
+        ...options,
+        onData: (dataPart) => {
+          applyPromptShortcutEcho(dataPart);
+          options.onData?.(dataPart);
+        },
+        persistence: normalizedPersistence.messages,
+        sendAutomaticallyWhen,
+        transport,
+        shouldRepairToolInput(toolName) {
+          const tool = findTool(toolName, tools);
           if (!tool) return true;
           return Boolean(tool.streamInput);
         },
-        onToolCall({ toolCall }) {
-          let tool = tools[toolCall.toolName];
+        shouldRepairRestoredPendingToolPart({ toolName }) {
+          const tool = findTool(toolName, tools);
+          return Boolean(
+            canRepairRestoredPendingToolParts &&
+            tool?.onToolCall &&
+            tool.timeout !== false
+          );
+        },
+        resolveCancelledToolOutput({ toolName, toolCallId, input }) {
+          const cancelOutput = findTool(toolName, tools)?.cancelOutput;
+          if (!cancelOutput) return undefined;
 
-          // Compatibility shim with Algolia MCP Server search tool
-          if (
-            !tool &&
-            toolCall.toolName.startsWith(`${SearchIndexToolType}_`)
-          ) {
-            tool = tools[SearchIndexToolType];
+          try {
+            const output = cancelOutput({ toolCallId, input });
+            // `undefined` means the tool declined to provide an output.
+            return output === undefined ? undefined : { output };
+          } catch {
+            warning(
+              false,
+              `The \`cancelOutput\` of the "${toolName}" tool threw an error. The tool call is reported as failed instead.`
+            );
+            return undefined;
           }
+        },
+        onToolCall: (({ toolCall, signal }, submitToolResult) => {
+          const tool = findTool(toolCall.toolName, tools);
 
           if (!tool) {
             if (__DEV__) {
@@ -576,7 +826,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
               );
             }
 
-            return _chatInstance.addToolResult({
+            return submitToolResult({
               output: `No tool implemented for "${toolCall.toolName}".`,
               tool: toolCall.toolName,
               toolCallId: toolCall.toolCallId,
@@ -584,32 +834,117 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           }
 
           if (tool.onToolCall) {
-            const addToolResult: AddToolResultWithOutput = ({ output }) =>
-              _chatInstance.addToolResult({
-                output,
+            const toolAbortController = new AbortController();
+            let timeoutId: ReturnType<typeof setTimeout> | undefined;
+            let settled = false;
+            let resolveExecution!: () => void;
+            let rejectExecution!: (error: unknown) => void;
+            const execution = new Promise<void>((resolve, reject) => {
+              resolveExecution = resolve;
+              rejectExecution = reject;
+            });
+            const cleanup = () => {
+              if (timeoutId !== undefined) {
+                clearTimeout(timeoutId);
+              }
+              signal.removeEventListener('abort', abortToolCall);
+            };
+            const addToolResult: AddToolResultForToolCall = (options) => {
+              if (settled) return Promise.resolve();
+
+              settled = true;
+              cleanup();
+              const submission = submitToolResult({
+                ...options,
                 tool: toolCall.toolName,
                 toolCallId: toolCall.toolCallId,
               });
+              submission.then(resolveExecution, rejectExecution);
+              return submission;
+            };
+            const addToolError = (error: unknown) => {
+              const errorText =
+                error instanceof Error ? error.message : String(error ?? '');
 
-            return tool.onToolCall({
-              ...toolCall,
-              addToolResult,
-            });
+              return addToolResult({
+                state: 'output-error',
+                errorText: errorText || 'Tool call failed.',
+              });
+            };
+            function abortToolCall() {
+              const submission = addToolResult({
+                state: 'output-error',
+                errorText: TOOL_ABORTED_ERROR_TEXT,
+              });
+              toolAbortController.abort();
+              void submission.catch(() => undefined);
+            }
+
+            if (signal.aborted) {
+              abortToolCall();
+              return execution;
+            }
+
+            signal.addEventListener('abort', abortToolCall, { once: true });
+            if (tool.timeout !== false) {
+              timeoutId = setTimeout(() => {
+                const submission = addToolResult({
+                  state: 'output-error',
+                  errorText: TOOL_TIMEOUT_ERROR_TEXT,
+                });
+                toolAbortController.abort();
+                void submission.catch(() => undefined);
+              }, tool.timeout ?? DEFAULT_TOOL_TIMEOUT);
+            }
+
+            let toolExecution: void | PromiseLike<void>;
+            try {
+              toolExecution = tool.onToolCall({
+                ...toolCall,
+                addToolResult,
+                signal: toolAbortController.signal,
+              });
+            } catch (error) {
+              return addToolError(error);
+            }
+
+            const returnedExecution =
+              Promise.resolve(toolExecution).catch(addToolError);
+            if (tool.timeout === false) {
+              return Promise.race([returnedExecution.then(cleanup), execution]);
+            }
+
+            void returnedExecution.catch(() => undefined);
+            return execution;
           }
 
           return Promise.resolve();
-        },
+        }) satisfies ChatOnToolCallCallback<TUiMessage>,
       } as ChatInitAi<TUiMessage> & { agentId?: string });
+
+      if (resume) {
+        const resumeStream = chat.resumeStream;
+        chat.resumeStream = (requestOptions) =>
+          resumeStream(requestOptions).finally(() => {
+            canRepairRestoredPendingToolParts = true;
+            chat['~repairRestoredPendingToolParts']();
+          });
+      }
+
+      return chat;
     };
 
     return {
       $$type: 'ais.chat',
+      dependsOn: requiresSearch ? ('search' as const) : ('none' as const),
 
       init(initOptions) {
         const { instantSearchInstance } = initOptions;
 
-        validateEntryPoints(instantSearchInstance);
+        deferredValidateEntryPoints(instantSearchInstance);
 
+        open = normalizedPersistence.open ? readPersistedOpen(type) : false;
+        records.clear();
         _chatInstance = makeChatInstance(instantSearchInstance);
 
         const render = () => {
@@ -622,17 +957,27 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           );
         };
 
-        setOpen = (o) => {
-          open = o;
+        const updateOpen = (nextOpen: boolean, requestFocus: boolean) => {
+          open = nextOpen;
+          inputFocusRequested =
+            nextOpen && (inputFocusRequested || requestFocus);
+          if (normalizedPersistence.open) {
+            writePersistedOpen(type, open);
+          }
           render();
           // `open` is read by sibling widgets (e.g. `chatTrigger`) via the
           // shared `renderState`. Schedule a full re-render so they pick up
           // the new value instead of staying frozen on their initial state.
-          initOptions.instantSearchInstance.scheduleRender();
+          // No search runs here, so it must not settle the main search.
+          initOptions.instantSearchInstance.scheduleRender(false);
+        };
+
+        setOpen = (nextOpen) => {
+          updateOpen(nextOpen, nextOpen && !open);
         };
 
         focusInput = () => {
-          setOpen(true);
+          updateOpen(true, true);
         };
 
         setInput = (i) => {
@@ -679,23 +1024,56 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
         const hasExistingMessages = _chatInstance.messages.length > 0;
 
-        // Set initialMessages before registering callbacks to avoid
-        // triggering re-renders during init
-        if (initialMessages?.length && !resume && !hasExistingMessages) {
-          _chatInstance.messages = initialMessages;
-        }
+        // Unsubscribe previous callbacks before setting initialMessages, then
+        // register the current callbacks after to avoid re-renders during init.
+        // A server render owns no conversation, so it leaves the instance empty.
+        safelyRunOnBrowser(() => {
+          unsubscribeChatCallbacks();
+          if (initialMessages?.length && !resume && !hasExistingMessages) {
+            _chatInstance.messages = initialMessages;
+          }
+        });
 
-        _chatInstance['~registerErrorCallback'](render);
-        _chatInstance['~registerMessagesCallback'](render);
-        _chatInstance['~registerStatusCallback'](render);
+        // Sibling entry points read `status` through the shared `renderState` to
+        // disable themselves, so a transition has to escape this widget's own
+        // render. Message deltas deliberately don't: they stay local to keep
+        // streaming cheap. The `status` setter notifies on every write, hence
+        // the comparison. A chat turn is not a search, so the render it
+        // schedules must not settle the main search.
+        let lastStatus = _chatInstance.status;
+        const renderOnStatusChange = () => {
+          const statusChanged = _chatInstance.status !== lastStatus;
+          lastStatus = _chatInstance.status;
+          render();
+          if (statusChanged) {
+            initOptions.instantSearchInstance.scheduleRender(false);
+          }
+        };
 
-        if (resume) {
-          _chatInstance.resumeStream();
-        }
+        safelyRunOnBrowser(() => {
+          chatSubscriptionUnsubscribers = [
+            _chatInstance['~registerErrorCallback'](render),
+            // Before `render`, so a delta's records are collected by the time
+            // the tools of that delta render.
+            _chatInstance['~registerMessagesCallback'](collectRecords),
+            _chatInstance['~registerMessagesCallback'](render),
+            _chatInstance['~registerStatusCallback'](renderOnStatusChange),
+          ];
+        });
 
-        if (initialUserMessage && !resume && !hasExistingMessages) {
-          _chatInstance.sendMessage({ text: initialUserMessage });
-        }
+        // Resuming and sending reach the network, which a server render must
+        // not: the HTML pass repeats what `getServerState` already rendered, so
+        // each send happens at least twice, and each failure resolves into chat
+        // state well after the render that started it has finished.
+        safelyRunOnBrowser(() => {
+          if (resume) {
+            _chatInstance.resumeStream();
+          }
+
+          if (initialUserMessage && !resume && !hasExistingMessages) {
+            _chatInstance.sendMessage({ text: initialUserMessage });
+          }
+        });
 
         renderFn(
           {
@@ -704,6 +1082,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           },
           true
         );
+
+        // A restored open panel is new to the sibling entry points, but it is
+        // not a search result.
+        if (open) {
+          instantSearchInstance.scheduleRender(false);
+        }
       },
 
       render(renderOptions) {
@@ -719,8 +1103,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       },
 
       getRenderState(
-        renderState,
-        renderOptions
+        renderState: IndexRenderState,
+        renderOptions: InitOptions | RenderOptions
         // Type is explicitly redefined, to avoid having the TWidgetParams type in the definition
       ): IndexRenderState & ChatWidgetDescription['indexRenderState'] {
         return {
@@ -730,7 +1114,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         };
       },
 
-      getWidgetRenderState(renderOptions) {
+      getWidgetRenderState(
+        renderOptions: InitOptions | RenderOptions
+      ): WidgetRenderState<
+        ChatRenderState<TUiMessage>,
+        TWidgetParams & ChatConnectorParams<TUiMessage>
+      > {
         const { instantSearchInstance, parent, helper } = renderOptions;
         if (!_chatInstance) {
           this.init!({ ...renderOptions, uiState: {}, results: undefined });
@@ -745,16 +1134,30 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         }
 
         function applyFilters(params: ApplyFiltersParams) {
-          return updateStateFromSearchToolInput(params, helper);
+          return applyAgentFilters(params, helper);
         }
 
+        // A restored or server-rendered conversation never emitted the messages
+        // callback above; collecting is idempotent, so covering it here is free.
+        collectRecords();
+
+        const insightsEventContext: ChatInsightsEventContext = {
+          agentId,
+          instantSearchStatus: instantSearchInstance.status,
+        };
         const toolsWithAddToolResult: ClientSideTools = {};
         Object.entries(tools).forEach(([key, tool]) => {
-          const toolWithAddToolResult: ClientSideTool = {
+          const toolWithAddToolResult = {
             ...tool,
             addToolResult: _chatInstance.addToolResult,
+            '~addToolResultForMessage':
+              _chatInstance['~addToolResultForMessage'],
             applyFilters,
             sendEvent,
+            insightsEventContext,
+            records,
+          } satisfies ClientSideTool & {
+            '~addToolResultForMessage': (typeof _chatInstance)['~addToolResultForMessage'];
           };
           toolsWithAddToolResult[key] = toolWithAddToolResult;
         });
@@ -769,22 +1172,36 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
           // Resolve once per send; let the server validate the payload and
           // surface any contract violations.
-          const turnContext =
+          const widgetContext =
             typeof context === 'function' ? context() : context;
+          const metadata = message.metadata as
+            | Record<string, unknown>
+            | undefined;
+          // An entry point (compare bar, prompt suggestions, `openChat`) may
+          // have attached its own turn context to the message — e.g. the
+          // selected products of a comparison. Add the ambient widget context
+          // to it rather than replacing it; on a key both provide, the entry
+          // point knows the turn better.
+          const messageTurnContext =
+            metadata?.turnContext &&
+            typeof metadata.turnContext === 'object' &&
+            !Array.isArray(metadata.turnContext)
+              ? (metadata.turnContext as Record<string, string>)
+              : undefined;
 
           return _chatInstance.sendMessage(
             {
               ...message,
               metadata: {
-                ...(message.metadata as Record<string, unknown> | undefined),
-                turnContext,
+                ...metadata,
+                turnContext: { ...widgetContext, ...messageTurnContext },
               },
             } as Parameters<typeof _chatInstance.sendMessage>[0],
             ...rest
           );
         };
 
-        return {
+        const renderState = {
           indexUiState: instantSearchInstance.getUiState()[parent.getIndexId()],
           input,
           open,
@@ -793,10 +1210,18 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           setInput,
           setOpen,
           focusInput,
+          '~consumeInputFocus'() {
+            const shouldFocus = inputFocusRequested;
+            inputFocusRequested = false;
+            return shouldFocus;
+          },
+          '~isOpenStatePersistenceEnabled': normalizedPersistence.open,
           setMessages,
           suggestions: getSuggestionsFromMessages(_chatInstance.messages),
           clearMessages,
+          adoptConversation,
           tools: toolsWithAddToolResult,
+          records,
           sendChatMessageFeedback: _sendChatMessageFeedback,
           feedbackState,
           widgetParams,
@@ -813,10 +1238,14 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           status: _chatInstance.status,
           stop: _chatInstance.stop,
         };
+
+        return renderState;
       },
 
       dispose() {
+        deferredValidateEntryPoints.cancel();
         feedbackAbortController?.abort();
+        unsubscribeChatCallbacks();
         unmountFn();
       },
 

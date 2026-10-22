@@ -417,11 +417,21 @@ describe('RoutingManager', () => {
       await wait(0);
 
       expect(router.write).toHaveBeenCalledTimes(3);
-      expect(router.write).toHaveBeenLastCalledWith({
-        indexName: {
-          query: 'Apple',
+      expect(router.write).toHaveBeenLastCalledWith(
+        {
+          indexName: {
+            query: 'Apple',
+          },
         },
-      });
+        // The write applies the route the router read on update.
+        {
+          source: {
+            indexName: {
+              query: 'Apple',
+            },
+          },
+        }
+      );
     });
 
     test('skips duplicate route state entries', async () => {

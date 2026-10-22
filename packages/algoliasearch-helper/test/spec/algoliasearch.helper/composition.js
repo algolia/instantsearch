@@ -368,7 +368,9 @@ describe('composition multifeed dispatch', function () {
       // Second response replaces first: only 'videos', no 'products'/'articles'
       expect(derivedHelper.lastResults.feeds).toHaveLength(1);
       expect(derivedHelper.lastResults.feeds[0].feedID).toBe('videos');
-      expect(derivedHelper.lastResults.feeds[0].hits).toEqual([{ objectID: '3' }]);
+      expect(derivedHelper.lastResults.feeds[0].hits).toEqual([
+        { objectID: '3' },
+      ]);
 
       derivedHelper.detach();
     });

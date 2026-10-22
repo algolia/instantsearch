@@ -1,30 +1,75 @@
 import { AbstractChat } from '../ai-lite';
+import { safelyRunOnBrowser } from '../utils/safelyRunOnBrowser';
 
 import type {
   UIMessage,
   ChatState as BaseChatState,
   ChatStatus,
-  ChatInit,
+  ChatInit as BaseChatInit,
 } from '../ai-lite';
 
 export type { UIMessage };
 export { AbstractChat };
-export { ChatInit };
+
+export type ChatInit<TUiMessage extends UIMessage> =
+  BaseChatInit<TUiMessage> & {
+    agentId?: string;
+    /**
+     * Whether to persist and restore messages from sessionStorage.
+     *
+     * @default true
+     */
+    persistence?: boolean;
+  };
 
 export const CACHE_KEY = 'instantsearch-chat-initial-messages';
+export const CONVERSATION_ID_CACHE_KEY = 'instantsearch-chat-conversation-id';
+
+// Message history is a browser concern, and a server render constructs a Chat
+// too. Reading storage there throws during rendering; the write below only
+// throws into its own `catch`, so gating it just stops a pointless attempt.
+function readFromSessionStorage(key: string): string | null {
+  return safelyRunOnBrowser<string | null>(
+    () => {
+      try {
+        // `sessionStorage` is not available in every environment with a
+        // `window` (e.g. React Native), and some browsers throw on access
+        // when storage is disabled.
+        return sessionStorage.getItem(key);
+      } catch (e) {
+        return null;
+      }
+    },
+    { fallback: () => null }
+  );
+}
+
+function writeToSessionStorage(key: string, value: string): void {
+  safelyRunOnBrowser(() => {
+    try {
+      sessionStorage.setItem(key, value);
+    } catch (e) {
+      // Do nothing if sessionStorage is not available or full
+    }
+  });
+}
 
 function getDefaultInitialMessages<TUIMessage extends UIMessage>(
   id?: string
 ): TUIMessage[] {
-  const initialMessages = sessionStorage.getItem(
-    CACHE_KEY + (id ? `-${id}` : '')
-  );
-  return initialMessages ? JSON.parse(initialMessages) : [];
+  try {
+    const initialMessages = readFromSessionStorage(
+      CACHE_KEY + (id ? `-${id}` : '')
+    );
+    return initialMessages ? JSON.parse(initialMessages) : [];
+  } catch (e) {
+    return [];
+  }
 }
 
-export class ChatState<TUiMessage extends UIMessage>
-  implements BaseChatState<TUiMessage>
-{
+export class ChatState<
+  TUiMessage extends UIMessage,
+> implements BaseChatState<TUiMessage> {
   _messages: TUiMessage[];
   _status: ChatStatus = 'ready';
   _error: Error | undefined = undefined;
@@ -32,26 +77,41 @@ export class ChatState<TUiMessage extends UIMessage>
   _messagesCallbacks = new Set<() => void>();
   _statusCallbacks = new Set<() => void>();
   _errorCallbacks = new Set<() => void>();
+  private persistenceKey: string | undefined;
+  private conversationIdKey: string | undefined;
+  restoredConversationId: string | undefined;
 
   constructor(
     id: string | undefined = undefined,
-    initialMessages: TUiMessage[] = getDefaultInitialMessages<TUiMessage>(id)
+    initialMessages: TUiMessage[] | undefined = undefined,
+    persistence = true
   ) {
-    this._messages = initialMessages;
-    const saveMessagesInLocalStorage = () => {
+    if (initialMessages !== undefined) {
+      this._messages = initialMessages;
+    } else if (persistence) {
+      this._messages = getDefaultInitialMessages<TUiMessage>(id);
+    } else {
+      this._messages = [];
+    }
+
+    if (!persistence) {
+      return;
+    }
+
+    const suffix = id ? `-${id}` : '';
+    this.persistenceKey = CACHE_KEY + suffix;
+    this.conversationIdKey = CONVERSATION_ID_CACHE_KEY + suffix;
+    if (initialMessages === undefined) {
+      this.restoredConversationId =
+        readFromSessionStorage(this.conversationIdKey) || undefined;
+    }
+    const saveMessagesInSessionStorage = () => {
       if (this.status === 'ready') {
-        try {
-          sessionStorage.setItem(
-            CACHE_KEY + (id ? `-${id}` : ''),
-            JSON.stringify(this.messages)
-          );
-        } catch (e) {
-          // Do nothing if sessionStorage is not available or full
-        }
+        this['~persistMessages']();
       }
     };
-    this['~registerMessagesCallback'](saveMessagesInLocalStorage);
-    this['~registerStatusCallback'](saveMessagesInLocalStorage);
+    this['~registerMessagesCallback'](saveMessagesInSessionStorage);
+    this['~registerStatusCallback'](saveMessagesInSessionStorage);
   }
 
   get status(): ChatStatus {
@@ -105,6 +165,19 @@ export class ChatState<TUiMessage extends UIMessage>
     return JSON.parse(JSON.stringify(thing)) as T;
   };
 
+  '~persistMessages' = (): void => {
+    const persistenceKey = this.persistenceKey;
+    if (!persistenceKey) return;
+
+    writeToSessionStorage(persistenceKey, JSON.stringify(this.messages));
+  };
+
+  '~persistConversationId' = (conversationId: string): void => {
+    if (!this.conversationIdKey) return;
+
+    writeToSessionStorage(this.conversationIdKey, conversationId);
+  };
+
   '~registerMessagesCallback' = (onChange: () => void): (() => void) => {
     const callback = onChange;
     this._messagesCallbacks.add(callback);
@@ -141,19 +214,48 @@ export class ChatState<TUiMessage extends UIMessage>
 }
 
 export class Chat<
-  TUiMessage extends UIMessage
+  TUiMessage extends UIMessage,
 > extends AbstractChat<TUiMessage> {
   _state: ChatState<TUiMessage>;
+  private hasRestoredMessages = false;
 
   constructor({
     messages,
     agentId,
+    persistence = true,
     ...init
-  }: ChatInit<TUiMessage> & { agentId?: string }) {
-    const state = new ChatState(agentId, messages);
-    super({ ...init, state });
+  }: ChatInit<TUiMessage>) {
+    const state = new ChatState(agentId, messages, persistence);
+    super({ ...init, id: init.id ?? state.restoredConversationId, state });
     this._state = state;
+    if (init.id === undefined && messages === undefined) {
+      state['~persistConversationId'](this.id);
+    }
+    if (messages === undefined && persistence) {
+      this.hasRestoredMessages = true;
+      this.captureRestoredToolCalls();
+      this.repairRestoredPendingToolParts();
+    }
   }
+
+  resetConversationId(): void {
+    super.resetConversationId();
+    this._state['~persistConversationId'](this.id);
+  }
+
+  setConversationId(id: string): void {
+    super.setConversationId(id);
+    this._state['~persistConversationId'](this.id);
+  }
+
+  '~repairRestoredPendingToolParts' = (): void => {
+    if (!this.hasRestoredMessages) return;
+
+    this.hasRestoredMessages = false;
+    this.repairRestoredPendingToolParts();
+    this.clearRestoredToolCalls();
+    this._state['~persistMessages']();
+  };
 
   '~registerMessagesCallback' = (onChange: () => void): (() => void) =>
     this._state['~registerMessagesCallback'](onChange);

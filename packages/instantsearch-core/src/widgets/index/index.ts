@@ -1,6 +1,7 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 
 import {
+  addInsightsToRecommendParameters,
   checkIndexUiState,
   createDocumentationMessageGenerator,
   resolveSearchParameters,
@@ -55,6 +56,10 @@ export type IndexWidgetParams =
        *
        * @default false
        */
+      isolated?: false;
+      /**
+       * @deprecated Use `isolated` instead.
+       */
       EXPERIMENTAL_isolated?: false;
     }
   | {
@@ -62,16 +67,40 @@ export type IndexWidgetParams =
        * If `true`, the index will not be merged with the main helper's state.
        * This means that the index will not be part of the main search request.
        *
-       * This option is EXPERIMENTAL, and implementation details may change in the future.
-       * Things that could change are:
-       * - which widgets get rendered when a change happens
-       * - whether the index searches automatically
-       * - whether the index is included in the URL / UiState
-       * - whether the index is included in server-side rendering
+       * When `isolated` is `true`:
+       * - the index searches on its own instead of within the main search request;
+       * - the index is not included in the URL / UiState;
+       * - the index is not included in server-side rendering.
        *
        * @default false
        */
+      isolated: true;
+      /**
+       * @deprecated Use `isolated` instead.
+       */
+      EXPERIMENTAL_isolated?: boolean;
+      /**
+       * The index or composition id to target.
+       */
+      indexName?: string;
+      /**
+       * Id to use for the index if there are multiple indices with the same name.
+       * This will be used to create the URL and the render state.
+       */
+      indexId?: string;
+    }
+  | {
+      /**
+       * @deprecated Use `isolated` instead.
+       */
       EXPERIMENTAL_isolated: true;
+      /**
+       * If `true`, the index will not be merged with the main helper's state.
+       * This means that the index will not be part of the main search request.
+       *
+       * @default false
+       */
+      isolated?: boolean;
       /**
        * The index or composition id to target.
        */
@@ -132,6 +161,20 @@ export type IndexWidget<TUiState extends UiState = UiState> = Omit<
   ) => IndexWidget;
   removeWidgets: (
     widgets: Array<Widget | IndexWidget | Widget[]>
+  ) => IndexWidget;
+  /**
+   * Replaces a widget by another one, in place.
+   *
+   * Unlike a `removeWidgets` + `addWidgets` pair, the previous widget's `uiState`
+   * is handed over to the next one, so that state owned by a widget whose
+   * parameters changed is preserved, as long as the replacing widget still claims
+   * the same `uiState` keys. State that no mounted widget claims anymore is
+   * dropped, like on a regular unmount. The widget also keeps its position among
+   * the index' widgets, which a remove/add pair doesn't.
+   */
+  updateWidget: (
+    previousWidget: Widget | IndexWidget,
+    nextWidget: Widget | IndexWidget
   ) => IndexWidget;
 
   init: (options: IndexInitOptions) => void;
@@ -315,13 +358,76 @@ function resolveScopedResultsFromWidgets(
   }, []);
 }
 
+function getWidgetsRequestDependencies(widgets: Array<Widget | IndexWidget>): {
+  hasSearchWidget: boolean;
+  hasRecommendWidget: boolean;
+} {
+  return widgets.reduce<{
+    hasSearchWidget: boolean;
+    hasRecommendWidget: boolean;
+  }>(
+    (dependencies, widget) => {
+      if (isIndexWidget(widget)) {
+        if (widget._isolated) {
+          return dependencies;
+        }
+
+        const childDependencies = getWidgetsRequestDependencies(
+          widget.getWidgets()
+        );
+
+        return {
+          hasSearchWidget:
+            dependencies.hasSearchWidget || childDependencies.hasSearchWidget,
+          hasRecommendWidget:
+            dependencies.hasRecommendWidget ||
+            childDependencies.hasRecommendWidget,
+        };
+      }
+
+      if (widget.dependsOn === 'recommend') {
+        return { ...dependencies, hasRecommendWidget: true };
+      }
+
+      if (widget.dependsOn === 'none') {
+        return dependencies;
+      }
+
+      return { ...dependencies, hasSearchWidget: true };
+    },
+    {
+      hasSearchWidget: false,
+      hasRecommendWidget: false,
+    }
+  );
+}
+
+function recomputeInstantSearchRequestDependencies(
+  instantSearchInstance: InstantSearch
+) {
+  const { hasSearchWidget, hasRecommendWidget } = getWidgetsRequestDependencies(
+    instantSearchInstance.mainIndex.getWidgets()
+  );
+
+  instantSearchInstance._hasSearchWidget = hasSearchWidget;
+  instantSearchInstance._hasRecommendWidget = hasRecommendWidget;
+}
+
 const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   if (
     widgetParams === undefined ||
     (widgetParams.indexName === undefined &&
+      !widgetParams.isolated &&
       !widgetParams.EXPERIMENTAL_isolated)
   ) {
     throw new Error(withUsage('The `indexName` option is required.'));
+  }
+
+  if (__DEV__ && widgetParams.EXPERIMENTAL_isolated !== undefined) {
+    warning(
+      false,
+      'The `EXPERIMENTAL_isolated` option is no longer experimental and has been renamed. Please use `isolated` instead.'
+    );
   }
 
   // When isolated=true, we use an empty string as the default indexName.
@@ -329,7 +435,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   const {
     indexName = '',
     indexId = indexName,
-    EXPERIMENTAL_isolated: isolated = false,
+    isolated = widgetParams.EXPERIMENTAL_isolated ?? false,
   } = widgetParams;
 
   let localWidgets: Array<Widget | IndexWidget> = [];
@@ -339,8 +445,17 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   let helper: Helper | null = null;
   let derivedHelper: DerivedHelper | null = null;
   let lastValidSearchParameters: SearchParameters | null = null;
-  let hasRecommendWidget: boolean = false;
-  let hasSearchWidget: boolean = false;
+  // The error this index has already rolled back for. Renders also happen for
+  // reasons unrelated to a search (a chat panel opening, a recommend result,
+  // the stalled timer), and rolling back on every one of them would discard
+  // state written after the failed search.
+  let restoredForError: Error | undefined;
+
+  const recomputeLocalRequestDependencies = () => {
+    if (localInstantSearchInstance) {
+      recomputeInstantSearchRequestDependencies(localInstantSearchInstance);
+    }
+  };
 
   return {
     $$type: 'ais.index',
@@ -469,24 +584,14 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
       flatWidgets.forEach((widget) => {
         widget.parent = this;
-        if (isIndexWidget(widget)) {
-          return;
+        if (!isIndexWidget(widget)) {
+          addWidgetId(widget);
         }
-
-        if (localInstantSearchInstance && widget.dependsOn === 'recommend') {
-          localInstantSearchInstance._hasRecommendWidget = true;
-        } else if (localInstantSearchInstance) {
-          localInstantSearchInstance._hasSearchWidget = true;
-        } else if (widget.dependsOn === 'recommend') {
-          hasRecommendWidget = true;
-        } else {
-          hasSearchWidget = true;
-        }
-
-        addWidgetId(widget);
       });
 
       localWidgets = localWidgets.concat(flatWidgets);
+      recomputeLocalRequestDependencies();
+
       if (localInstantSearchInstance && Boolean(flatWidgets.length)) {
         privateHelperSetState(helper!, {
           state: getLocalWidgetsSearchParameters(localWidgets, {
@@ -544,6 +649,141 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       return this;
     },
 
+    updateWidget(previousWidget, nextWidget) {
+      if (typeof previousWidget.dispose !== 'function') {
+        throw new Error(
+          withUsage('The widget definition expects a `dispose` method.')
+        );
+      }
+
+      if (
+        typeof nextWidget.init !== 'function' &&
+        typeof nextWidget.render !== 'function'
+      ) {
+        throw new Error(
+          withUsage(
+            'The widget definition expects a `render` and/or an `init` method.'
+          )
+        );
+      }
+
+      // The `uiState` as it is before the previous widget is detached, so that
+      // the state it owns can be handed over to the next widget.
+      const previousUiState = localUiState;
+
+      previousWidget.parent = undefined;
+      nextWidget.parent = this;
+      if (!isIndexWidget(nextWidget)) {
+        addWidgetId(nextWidget);
+      }
+
+      // The next widget takes the place of the previous one, so that the order
+      // in which widgets contribute to the search parameters is unchanged.
+      const nextWidgets = localWidgets.slice();
+      const position = nextWidgets.indexOf(previousWidget);
+      if (position === -1) {
+        nextWidgets.push(nextWidget);
+      } else {
+        nextWidgets[position] = nextWidget;
+      }
+      localWidgets = nextWidgets;
+
+      recomputeLocalRequestDependencies();
+
+      if (!localInstantSearchInstance) {
+        return this;
+      }
+
+      // We still dispose the previous widget, for its side effects. The search
+      // state it returns is only used as a base when shared state isn't preserved
+      // on unmount, like in `removeWidgets`.
+      const disposedState = previousWidget.dispose({
+        helper: helper!,
+        state: helper!.state,
+        recommendState: helper!.recommendState,
+        parent: this,
+      });
+      const cleanedRecommendState =
+        disposedState instanceof algoliasearchHelper.RecommendParameters
+          ? disposedState
+          : helper!.recommendState;
+      const cleanedSearchState =
+        disposedState &&
+        !(disposedState instanceof algoliasearchHelper.RecommendParameters)
+          ? disposedState
+          : helper!.state;
+
+      const initialSearchParameters = localInstantSearchInstance.future
+        .preserveSharedStateOnUnmount
+        ? new algoliasearchHelper.SearchParameters({
+            index: this.getIndexName(),
+          })
+        : cleanedSearchState;
+
+      // We hand the previous `uiState` over to the next widgets, then read the
+      // `uiState` back from them. Widgets only pick up the state they claim, so
+      // this drops state that no mounted widget owns anymore (an attribute that
+      // changed, for instance) instead of seeding it with `previousUiState`.
+      localUiState = getLocalWidgetsUiState(localWidgets, {
+        searchParameters: getLocalWidgetsSearchParameters(localWidgets, {
+          uiState: previousUiState,
+          initialSearchParameters,
+        }),
+        helper: helper!,
+      });
+
+      // The search parameters are then computed again from that narrowed
+      // `uiState`, so that they can't hold state the `uiState` doesn't describe.
+      const newState = getLocalWidgetsSearchParameters(localWidgets, {
+        uiState: localUiState,
+        initialSearchParameters,
+      });
+
+      privateHelperSetState(helper!, {
+        state: newState,
+        recommendState: getLocalWidgetsRecommendParameters(localWidgets, {
+          uiState: localUiState,
+          initialRecommendParameters: cleanedRecommendState,
+        }),
+        _uiState: localUiState,
+      });
+
+      if (nextWidget.getRenderState) {
+        const renderState = nextWidget.getRenderState(
+          localInstantSearchInstance.renderState[this.getIndexId()] || {},
+          createInitArgs(
+            localInstantSearchInstance,
+            this,
+            localInstantSearchInstance._initialUiState
+          )
+        );
+
+        storeRenderState({
+          renderState,
+          instantSearchInstance: localInstantSearchInstance,
+          parent: this,
+        });
+      }
+
+      if (nextWidget.init) {
+        nextWidget.init(
+          createInitArgs(
+            localInstantSearchInstance,
+            this,
+            localInstantSearchInstance._initialUiState
+          )
+        );
+      }
+
+      if (isolated) {
+        this.scheduleLocalSearch();
+      } else {
+        localInstantSearchInstance.scheduleSearch();
+      }
+
+      return this;
+    },
+
     removeWidgets(widgets) {
       if (!Array.isArray(widgets)) {
         throw new Error(
@@ -565,22 +805,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         (widget) => flatWidgets.indexOf(widget) === -1
       );
 
-      localWidgets.forEach((widget) => {
+      flatWidgets.forEach((widget) => {
         widget.parent = undefined;
-        if (isIndexWidget(widget)) {
-          return;
-        }
-
-        if (localInstantSearchInstance && widget.dependsOn === 'recommend') {
-          localInstantSearchInstance._hasRecommendWidget = true;
-        } else if (localInstantSearchInstance) {
-          localInstantSearchInstance._hasSearchWidget = true;
-        } else if (widget.dependsOn === 'recommend') {
-          hasRecommendWidget = true;
-        } else {
-          hasSearchWidget = true;
-        }
       });
+      recomputeLocalRequestDependencies();
 
       if (localInstantSearchInstance && Boolean(flatWidgets.length)) {
         const { cleanedSearchState, cleanedRecommendState } =
@@ -750,7 +978,11 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
             mainHelper.state,
             ...resolveSearchParameters(this)
           ),
-        () => this.getHelper()!.recommendState
+        () =>
+          addInsightsToRecommendParameters(
+            this.getHelper()!.recommendState,
+            mainHelper.state
+          )
       );
 
       const indexInitialResults =
@@ -880,10 +1112,15 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           _uiState || {}
         );
 
-        // We don't trigger an internal change when controlled because it
-        // becomes the responsibility of `setUiState`.
-        if (!instantSearchInstance.onStateChange) {
-          instantSearchInstance.onInternalStateChange();
+        // While `setUiState` applies a state, the change is part of it, also
+        // when controlled: a state partially applied before a widget throws is
+        // still notified. Otherwise, we don't trigger an internal change when
+        // controlled because it becomes the responsibility of `setUiState`.
+        const applyingUiState = instantSearchInstance._applyingUiState;
+        if (!instantSearchInstance.onStateChange || applyingUiState) {
+          instantSearchInstance.onInternalStateChange(
+            applyingUiState && applyingUiState.onApply
+          );
         }
       });
 
@@ -894,22 +1131,20 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         instantSearchInstance.scheduleRender();
       }
 
-      if (hasRecommendWidget) {
-        instantSearchInstance._hasRecommendWidget = true;
-      }
-      if (hasSearchWidget) {
-        instantSearchInstance._hasSearchWidget = true;
-      }
+      recomputeLocalRequestDependencies();
     },
 
     render({ instantSearchInstance }: IndexRenderOptions) {
       // we can't attach a listener to the error event of search, as the error
       // then would no longer be thrown for global handlers.
-      if (
-        instantSearchInstance.status === 'error' &&
+      if (instantSearchInstance.status !== 'error') {
+        restoredForError = undefined;
+      } else if (
+        instantSearchInstance.error !== restoredForError &&
         !instantSearchInstance.mainHelper!.hasPendingRequests() &&
         lastValidSearchParameters
       ) {
+        restoredForError = instantSearchInstance.error;
         helper!.setState(lastValidSearchParameters);
       }
 

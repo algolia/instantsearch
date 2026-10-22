@@ -331,6 +331,53 @@ export function createTranslationsTests(
         );
       });
 
+      test('renders with custom announcement translations', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({
+          messages: [
+            {
+              id: '0',
+              role: 'assistant',
+              parts: [{ type: 'text', text: 'hello' }],
+            },
+          ],
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              templates: {
+                messages: {
+                  conversationLabelText: 'Custom conversation',
+                },
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              translations: {
+                messages: {
+                  conversationLabel: 'Custom conversation',
+                },
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(
+          document
+            .querySelector('.ais-ChatMessages-scroll')!
+            .getAttribute('aria-label')
+        ).toBe('Custom conversation');
+      });
+
       test('renders with custom message translations', async () => {
         const searchClient = createSearchClient();
 

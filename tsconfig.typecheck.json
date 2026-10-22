@@ -1,0 +1,11 @@
+{
+  // Type-checks the sources of the workspace packages instead of their built
+  // output, so a package and the tests that import its sources agree on types.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "instantsearch-core": ["./packages/instantsearch-core/src"],
+      "instantsearch-core/dist/es/*": ["./packages/instantsearch-core/src/*"]
+    }
+  }
+}

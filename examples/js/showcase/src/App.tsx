@@ -1,27 +1,21 @@
-import { MapPin, Search, Sparkles, Wand2 } from "lucide-preact";
-import { useState } from "preact/hooks";
+import { Blocks, MapPin, Search, Sparkles, Wand2 } from 'lucide-preact';
+import { useState } from 'preact/hooks';
 
-import { ColorModeSwitcher } from "./components/ColorModeSwitcher";
-import { FlavorContext, type Flavor } from "./context/flavor";
-import { AgenticView } from "./views/AgenticView";
-import { GeoSearchView } from "./views/GeoSearchView";
-import { InstantSearchView } from "./views/InstantSearchView";
-import { RecommendView } from "./views/RecommendView";
+import { ColorModeSwitcher } from './components/ColorModeSwitcher';
+import { FlavorContext } from './context/flavor';
+import { ViewContext } from './context/view';
+import { getFlavorFromURL, getIndexFromURL, setParams } from './utils/url';
+import { AgenticView } from './views/AgenticView';
+import { GeoSearchView } from './views/GeoSearchView';
+import { InstantSearchView } from './views/InstantSearchView';
+import { RecommendView } from './views/RecommendView';
+import { ReferenceView } from './views/ReferenceView';
 
-import type { LucideIcon } from "lucide-preact";
-import type { ComponentType } from "preact";
-
-const VALID_FLAVORS: Flavor[] = ["js", "react", "vue"];
-
-function getFlavorFromURL(): Flavor {
-  const param = new URLSearchParams(window.location.search).get("flavor");
-  if (param && VALID_FLAVORS.includes(param as Flavor)) {
-    return param as Flavor;
-  }
-  return "js";
-}
+import type { LucideIcon } from 'lucide-preact';
+import type { ComponentType } from 'preact';
 
 interface Experience {
+  slug: string;
   title: string;
   description: string;
   icon: LucideIcon;
@@ -30,33 +24,48 @@ interface Experience {
 
 const experiences: Experience[] = [
   {
-    title: "InstantSearch",
-    description: "Full search interface",
+    slug: 'instantsearch',
+    title: 'InstantSearch',
+    description: 'Full search interface',
     icon: Search,
     view: InstantSearchView,
   },
   {
-    title: "Agentic",
-    description: "AI-powered search and chat",
+    slug: 'agentic',
+    title: 'Agentic',
+    description: 'AI-powered search and chat',
     icon: Sparkles,
     view: AgenticView,
   },
   {
-    title: "GeoSearch",
-    description: "Search through locations",
+    slug: 'geosearch',
+    title: 'GeoSearch',
+    description: 'Search through locations',
     icon: MapPin,
     view: GeoSearchView,
   },
   {
-    title: "Recommend",
-    description: "Personalized recommendations",
+    slug: 'recommend',
+    title: 'Recommend',
+    description: 'Personalized recommendations',
     icon: Wand2,
     view: RecommendView,
   },
+  {
+    slug: 'reference',
+    title: 'Reference',
+    description: 'Options for all widgets',
+    icon: Blocks,
+    view: ReferenceView,
+  },
 ];
 
+const viewSlugs = experiences.map((experience) => experience.slug);
+
 export function App() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(() =>
+    getIndexFromURL('view', viewSlugs)
+  );
   const flavor = getFlavorFromURL();
 
   return (
@@ -70,25 +79,28 @@ export function App() {
                 type="button"
                 class={`group flex cursor-pointer flex-col items-center gap-1.5 rounded-xl border px-5 py-4 text-center transition-all ${
                   currentIndex === index
-                    ? "border-neutral-200 bg-white shadow-xs dark:border-neutral-700 dark:bg-neutral-800"
-                    : "border-transparent bg-neutral-50 hover:border-neutral-200 hover:bg-white hover:shadow-xs dark:bg-neutral-800/40 dark:hover:border-neutral-700 dark:hover:bg-neutral-800"
+                    ? 'border-neutral-200 bg-white shadow-xs dark:border-neutral-700 dark:bg-neutral-800'
+                    : 'border-transparent bg-neutral-50 hover:border-neutral-200 hover:bg-white hover:shadow-xs dark:bg-neutral-800/40 dark:hover:border-neutral-700 dark:hover:bg-neutral-800'
                 }`}
-                onClick={() => setCurrentIndex(index)}
+                onClick={() => {
+                  setCurrentIndex(index);
+                  setParams({ view: experience.slug });
+                }}
               >
                 <experience.icon
                   size={20}
                   class={`transition-[color] ${
                     currentIndex === index
-                      ? "text-blue-500 dark:text-blue-400"
-                      : "text-neutral-400 group-hover:text-neutral-500 dark:text-neutral-500 dark:group-hover:text-neutral-400"
+                      ? 'text-blue-500 dark:text-blue-400'
+                      : 'text-neutral-400 group-hover:text-neutral-500 dark:text-neutral-500 dark:group-hover:text-neutral-400'
                   }`}
                 />
                 <div class="flex flex-col gap-0.5">
                   <span
                     class={`text-sm font-semibold transition-colors ${
                       currentIndex === index
-                        ? "text-neutral-900 dark:text-neutral-100"
-                        : "text-neutral-500 group-hover:text-neutral-700 dark:text-neutral-400 dark:group-hover:text-neutral-200"
+                        ? 'text-neutral-900 dark:text-neutral-100'
+                        : 'text-neutral-500 group-hover:text-neutral-700 dark:text-neutral-400 dark:group-hover:text-neutral-200'
                     }`}
                   >
                     {experience.title}
@@ -96,8 +108,8 @@ export function App() {
                   <span
                     class={`text-xs transition-colors ${
                       currentIndex === index
-                        ? "text-neutral-500 dark:text-neutral-400"
-                        : "text-neutral-400 group-hover:text-neutral-500 dark:text-neutral-500 dark:group-hover:text-neutral-400"
+                        ? 'text-neutral-500 dark:text-neutral-400'
+                        : 'text-neutral-400 group-hover:text-neutral-500 dark:text-neutral-500 dark:group-hover:text-neutral-400'
                     }`}
                   >
                     {experience.description}
@@ -110,7 +122,11 @@ export function App() {
         </div>
 
         {experiences.map((experience, index) =>
-          currentIndex === index ? <experience.view key={index} /> : null
+          currentIndex === index ? (
+            <ViewContext.Provider key={index} value={experience.slug}>
+              <experience.view />
+            </ViewContext.Provider>
+          ) : null
         )}
       </div>
     </FlavorContext.Provider>

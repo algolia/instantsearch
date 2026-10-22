@@ -2,7 +2,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import algoliasearchHelper from 'algoliasearch-helper';
 
 import { INSTANTSEARCH_FUTURE_DEFAULTS } from '../src/instantsearch';
-import { defer } from '../src/lib/utils';
+import { defer, now } from '../src/lib/utils';
 import { index } from '../src/widgets';
 
 import type InstantSearch from '../src/instantsearch';
@@ -41,12 +41,15 @@ export const createInstantSearch = (
     _stalledSearchDelay: 200,
     _searchStalledTimer: null,
     _initialUiState: {},
+    _initialOptions: { indexName, searchClient: client },
     _initialResults: null,
     _createURL: jest.fn(() => '#'),
     _insights: undefined,
     _hasRecommendWidget: false,
     _hasSearchWidget: false,
     _manuallyResetScheduleSearch: false,
+    _applyingUiState: undefined,
+    _applyUiState: jest.fn(),
     onStateChange: null,
     setUiState: jest.fn(),
     getUiState: jest.fn(() => ({})),
@@ -74,6 +77,7 @@ export const createInstantSearch = (
     emit: jest.fn(),
     listenerCount: jest.fn(),
     sendEventToInsights: jest.fn(),
+    _createdAt: now(),
     future: {
       ...INSTANTSEARCH_FUTURE_DEFAULTS,
       ...(args.future || {}),
