@@ -5,7 +5,7 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 
-import instantsearch from '../../..';
+import { instantsearch } from '../../../instantsearch';
 import { noop } from '../../../lib/utils';
 import connectConfigureRelatedItems from '../connectConfigureRelatedItems';
 
