@@ -95,6 +95,8 @@ export function augmentReactCreateElement(baseH) {
         data.class = data.class || value;
       } else if (name === 'children') {
         // handled via the children argument
+      } else if (name === 'htmlFor') {
+        data.for = value;
       } else if (name === 'ref') {
         const vueRef = toVueRef(value);
         if (vueRef) {

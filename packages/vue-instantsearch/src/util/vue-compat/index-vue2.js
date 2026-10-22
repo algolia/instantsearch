@@ -96,6 +96,9 @@ export function augmentReactCreateElement(createElement) {
         data.key = value;
       } else if (name === 'children') {
         // handled via the children argument
+      } else if (name === 'htmlFor') {
+        // React's `htmlFor` is the `for` attribute (label -> control association).
+        data.attrs.for = value;
       } else if (name === 'ref') {
         bindMutableRef(data, value);
       } else if (isEventProp(name, value)) {
@@ -176,6 +179,19 @@ function bindMutableRef(data, ref) {
     assign(null);
     if (previousDestroy) previousDestroy(vnode);
   };
+
+  if (isCallbackRef) {
+    // React re-invokes a callback ref on every render whose closure changed
+    // (Vue 3 does too), and callers rely on it to see the latest values, e.g.
+    // `ref={(el) => sync(el, isStalled)}`. Vue 2 patches the element in place
+    // without re-running `insert`, so re-run it after each patch. MutableRefs
+    // keep insert/destroy semantics only.
+    const previousPostpatch = data.hook.postpatch;
+    data.hook.postpatch = (oldVnode, vnode) => {
+      assign(vnode.elm);
+      if (previousPostpatch) previousPostpatch(oldVnode, vnode);
+    };
+  }
 }
 
 function flattenChildren(nodes) {
