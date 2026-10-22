@@ -1,3 +1,11 @@
+export { default as highlight } from './highlight';
+export type * from './highlight';
+export { default as snippet } from './snippet';
+export type * from './snippet';
+export { default as reverseHighlight } from './reverseHighlight';
+export type * from './reverseHighlight';
+export { default as reverseSnippet } from './reverseSnippet';
+export type * from './reverseSnippet';
 export {
   default as getInsightsAnonymousUserToken,
   getInsightsAnonymousUserTokenInternal,
