@@ -20,8 +20,10 @@ Most shared factories are stateless markup and consume via `renderCompat` (above
 - Use the plain-function `Fragment` from `vue-compat` (never Vue 3's native `Fragment` symbol — it adds whitespace/anchor nodes that break shared snapshots).
 - Testing gotcha: boolean attrs serialize differently across versions (`hidden="hidden"` in Vue 2, `hidden=""` in Vue 3) — assert on the DOM `.hidden` property, not the attribute string. Focus/`ref.focus()` are no-ops on detached nodes, so mount with `attachTo: document.body`.
 - Shared-suite gotcha (`tests/common`): the `vue` params of a flavored suite can't `import … from 'vue'` — Vue 2's types augment the global `JSX` namespace and break every React `<div />` in those `.tsx` files under `tsc`. Load Vue with `require` inside a function instead (see `tests/common/widgets/chat/utils.ts`: `vueH`, `createVueElement`). Vue re-renders asynchronously, so between a user interaction and the step that depends on it the shared test needs `await act(…)` (a no-op for JS/React).
+- `onX` **function props are turned into listeners** by the React-compat `createElement` (`onRender` becomes a `render` event, not a prop). A Vue child component rendered through it can't take callback props named `on*`: name them `handleX` (see `AisExperimentalAutocompleteIsolatedIndex`'s `handleRender` / `handleMount`).
+- A Vue child that needs Vue-style data (`props`, `attrs`, `scopedSlots`: `AisIndex`, `AisConfigure`, …) doesn't belong in a `renderReactCompat` render. Put it in an internal child component with a `renderCompat` render, and render that component from the React-style tree; give it a `key` if the parent's layout can change around it, so it isn't remounted.
 
-See `src/components/Carousel.js` (+ `RelatedProducts.js` which uses it as an opt-in layout) and `src/components/Chat.js` (+ `chat/tools/`) for worked examples.
+See `src/components/Carousel.js` (+ `RelatedProducts.js` which uses it as an opt-in layout), `src/components/Chat.js` (+ `chat/tools/`) and `src/components/ExperimentalAutocomplete.js` (hook-driven prop getters and storage, plus an isolated `<ais-index>` subtree that hands off to `<ais-chat>`) for worked examples.
 
 ## Working here
 
