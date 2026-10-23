@@ -4,7 +4,7 @@ import { wait } from '@instantsearch/testutils';
 import { Chat } from 'instantsearch.js/es/lib/chat';
 import React from 'react';
 
-import { createDefaultWidgetParams, openChat } from './utils';
+import { createDefaultWidgetParams, createVueElement, openChat } from './utils';
 
 import type { ChatWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
@@ -83,7 +83,19 @@ export function createToolResultTests(
               },
             },
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(chat),
+            tools: {
+              review: {
+                layoutComponent(data: Parameters<typeof captureSubmission>[0]) {
+                  captureSubmission(data);
+                  return createVueElement('span', {
+                    'data-tool-call-id': data.context.message.toolCallId,
+                  });
+                },
+              },
+            },
+          },
         },
       });
 

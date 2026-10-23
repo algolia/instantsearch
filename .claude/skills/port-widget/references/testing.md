@@ -78,7 +78,9 @@ Tests that click then immediately assert DOM changes (without `act`) will still 
 
 For `flavored` test suites (like Chat), `runTestSuites` extracts the flavor-specific params via `widgetParams[flavor]`. The Vue setup function receives only the Vue portion. Ensure the Vue params include all required connector params (e.g. `agentId`, `chat`) — empty `{}` will cause connector errors.
 
-When Vue params need component functions (tools with `layoutComponent`, custom `headerComponent`), use `import { h as vueH } from 'vue'` in the `.tsx` test file and return VNodes: `() => vueH('div', { class: 'foo' }, 'text')`.
+When Vue params need component functions (tools with `layoutComponent`, custom `headerComponent`), return VNodes built with the suite's helpers (`vueH`, `createVueElement` in `tests/common/widgets/chat/utils.ts`): `() => vueH('div', { class: 'foo' }, 'text')`. Don't `import … from 'vue'` in a shared `.tsx` test: Vue 2's types augment the global `JSX` namespace and every React `<div />` in `tests/common` stops type-checking — the helpers `require('vue')` inside a function for that reason. `createVueElement` also papers over the Vue 2/3 data-object differences (`attrs`/`on` vs flat props).
+
+Vue re-renders asynchronously, so a shared test that types then submits, or clicks then asserts, needs an `await act(async () => { await wait(0); })` in between — a no-op for the synchronous JS/React flavors.
 
 ### skippedTests granularity
 

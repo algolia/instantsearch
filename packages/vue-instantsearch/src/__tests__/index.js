@@ -88,7 +88,12 @@ function getAllComponents() {
         props.objectIDs = ['1'];
       } else if (name === 'AisTrendingFacets') {
         props.facetName = 'brand';
-      } else if (name === 'AisTrendingItems') {
+      } else if (name === 'AisChat') {
+        // A transport avoids the agentId appId/apiKey requirement; the trigger
+        // validation is disabled since no ChatTrigger is mounted here.
+        props.transport = {};
+        props.disableTriggerValidation = true;
+      } else if (name === 'AisTrendingItems' || name === 'AisChatTrigger') {
         // no required props
       } else {
         props.attribute = 'attr';
@@ -157,6 +162,9 @@ describe('DOM component', () => {
         expect(suitClass).toBe(`ais-InstantSearch`);
       } else if (name === 'AisExperimentalDynamicWidgets') {
         expect(suitClass).toBe(`ais-DynamicWidgets`);
+      } else if (name === 'AisChatTrigger') {
+        // Renders the shared ChatToggleButton markup.
+        expect(suitClass).toBe(`ais-ChatToggleButton`);
       } else {
         expect(suitClass).toBe(`ais-${name.substr(3)}`);
       }

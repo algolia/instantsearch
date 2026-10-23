@@ -46,6 +46,11 @@ async function submitPrompt(
   act: Required<TestOptions>['act']
 ): Promise<void> {
   userEvent.type(document.querySelector('.ais-ChatPrompt-textarea')!, text);
+
+  await act(async () => {
+    await wait(0);
+  });
+
   userEvent.click(document.querySelector('.ais-ChatPrompt-submit')!);
 
   await act(async () => {
@@ -82,7 +87,7 @@ export function createToolCancellationTests(
         widgetParams: {
           javascript: createDefaultWidgetParams(chat),
           react: createDefaultWidgetParams(chat),
-          vue: {},
+          vue: createDefaultWidgetParams(chat),
         },
       });
 

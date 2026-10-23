@@ -1,4 +1,5 @@
 import { createSearchClient } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
 import { Chat } from 'instantsearch.js/es/lib/chat';
 
@@ -46,7 +47,18 @@ export function createTranslationsTests(
                 },
               },
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(),
+              translations: {
+                header: {
+                  title: 'Custom title',
+                  closeLabel: 'Custom close button label',
+                  clearLabel: 'Custom clear button label',
+                  maximizeLabel: 'Custom maximize button label',
+                  minimizeLabel: 'Custom minimize button label',
+                },
+              },
+            },
           },
         });
 
@@ -70,6 +82,11 @@ export function createTranslationsTests(
         ).toBe('Custom maximize button label');
 
         userEvent.click(document.querySelector('.ais-ChatHeader-maximize')!);
+
+        await act(async () => {
+          await wait(0);
+        });
+
         expect(
           document
             .querySelector('.ais-ChatHeader-maximize')!
@@ -110,7 +127,16 @@ export function createTranslationsTests(
                 },
               },
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              translations: {
+                prompt: {
+                  textareaLabel: 'Custom message input',
+                  textareaPlaceholder: 'Custom placeholder',
+                  disclaimer: 'Custom disclaimer',
+                },
+              },
+            },
           },
         });
 
@@ -158,7 +184,14 @@ export function createTranslationsTests(
                 },
               },
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              translations: {
+                prompt: {
+                  emptyMessageTooltip: 'Custom empty message',
+                },
+              },
+            },
           },
         });
 
@@ -196,7 +229,14 @@ export function createTranslationsTests(
                 },
               },
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(),
+              translations: {
+                prompt: {
+                  sendMessageTooltip: 'Custom send message',
+                },
+              },
+            },
           },
         });
 
@@ -206,6 +246,10 @@ export function createTranslationsTests(
           document.querySelector('.ais-ChatPrompt-textarea')!,
           'Hello, world!'
         );
+
+        await act(async () => {
+          await wait(0);
+        });
 
         expect(
           document
@@ -244,7 +288,14 @@ export function createTranslationsTests(
                 },
               },
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              translations: {
+                prompt: {
+                  stopResponseTooltip: 'Custom stop response',
+                },
+              },
+            },
           },
         });
 
@@ -316,7 +367,30 @@ export function createTranslationsTests(
                 },
               },
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(
+                new Chat({
+                  messages: [
+                    {
+                      id: '0',
+                      role: 'assistant',
+                      parts: [
+                        {
+                          type: 'text',
+                          text: 'hello',
+                        },
+                      ],
+                    },
+                  ],
+                })
+              ),
+              translations: {
+                messages: {
+                  copyToClipboardLabel: 'Custom copy action',
+                  regenerateLabel: 'Custom regenerate action',
+                },
+              },
+            },
           },
         });
 
@@ -365,7 +439,14 @@ export function createTranslationsTests(
                 },
               },
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              translations: {
+                messages: {
+                  conversationLabel: 'Custom conversation',
+                },
+              },
+            },
           },
         });
 
@@ -430,7 +511,15 @@ export function createTranslationsTests(
                 },
               },
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              translations: {
+                message: {
+                  messageLabel: 'Custom message',
+                  actionsLabel: 'Custom actions',
+                },
+              },
+            },
           },
         });
 

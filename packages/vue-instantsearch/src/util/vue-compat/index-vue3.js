@@ -4,7 +4,7 @@ const isVue2 = false;
 const isVue3 = true;
 const Vue2 = undefined;
 
-export { createApp, createSSRApp, h, version, nextTick } from 'vue';
+export { createApp, createSSRApp, h, version, nextTick, toRaw } from 'vue';
 export { Vue, Vue2, isVue2, isVue3 };
 
 /**
@@ -89,12 +89,16 @@ export function augmentReactCreateElement(baseH) {
 
       if (name === 'className') {
         data.class = value;
+      } else if (name === 'class') {
+        // Shared components may spread their remaining props (which include
+        // the `class` this adapter hands them) after `className`.
+        data.class = data.class || value;
       } else if (name === 'children') {
         // handled via the children argument
       } else if (name === 'ref') {
-        const functionRef = makeFunctionRef(value);
-        if (functionRef) {
-          data.ref = functionRef;
+        const vueRef = toVueRef(value);
+        if (vueRef) {
+          data.ref = vueRef;
         }
       } else if (isEventProp(name, value)) {
         // React `onKeyDown` -> Vue 3 `onKeydown` (compiler-style handler key)
@@ -132,13 +136,19 @@ function isEventProp(name, value) {
   );
 }
 
-function makeFunctionRef(ref) {
-  if (!ref || typeof ref !== 'object' || !('current' in ref)) {
-    return undefined;
+function toVueRef(ref) {
+  // Callback refs pass through as Vue 3 function refs.
+  if (typeof ref === 'function') {
+    return ref;
   }
-  return (element) => {
-    ref.current = element;
-  };
+  // MutableRef objects (`{ current }`) become a function ref that writes
+  // through to `.current`.
+  if (ref && typeof ref === 'object' && 'current' in ref) {
+    return (element) => {
+      ref.current = element;
+    };
+  }
+  return undefined;
 }
 
 function flattenChildren(nodes) {
