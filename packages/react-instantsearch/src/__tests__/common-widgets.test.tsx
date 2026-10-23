@@ -4,9 +4,11 @@
 import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/widgets';
 import { act, render } from '@testing-library/react';
-import React from 'react';
+import { createInsightsMiddleware } from 'instantsearch.js/es/middlewares';
+import React, { useEffect } from 'react';
 
 import {
+  InstantSearchBase,
   InstantSearch,
   RefinementList,
   HierarchicalMenu,
@@ -41,7 +43,7 @@ import {
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
-import type { Hit } from 'instantsearch.js';
+import type { Hit, SearchClient } from 'instantsearch.js';
 import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
 
 type TestSuites = typeof suites;
@@ -438,6 +440,20 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
       </InstantSearch>
     );
   },
+  createInstantSearchBaseWidgetTests({ instantSearchOptions, widgetParams }) {
+    const { chat: chatWidgetParams, insights } = widgetParams;
+
+    render(
+      <InstantSearchBase
+        searchClient={instantSearchOptions.searchClient as SearchClient}
+        indexName={instantSearchOptions.indexName}
+      >
+        {insights && <InsightsMiddleware />}
+        <ChatTrigger />
+        <Chat {...chatWidgetParams} />
+      </InstantSearchBase>
+    );
+  },
   createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
     render(
       <InstantSearch {...instantSearchOptions}>
@@ -539,11 +555,26 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createChatWidgetTests: {
     act,
   },
+  createInstantSearchBaseWidgetTests: { act },
   createAutocompleteWidgetTests: { act },
   createFilterSuggestionsWidgetTests: { act },
   createPromptSuggestionsWidgetTests: { act },
   createResultCardWidgetTests: { act },
 };
+
+/**
+ * Adds the Insights middleware the way a React app does with `<InstantSearchBase>`.
+ */
+function InsightsMiddleware() {
+  const { addMiddlewares } = useInstantSearch();
+
+  useEffect(
+    () => addMiddlewares(createInsightsMiddleware({})),
+    [addMiddlewares]
+  );
+
+  return null;
+}
 
 /**
  * prevent rethrowing InstantSearch errors, so tests can be asserted.

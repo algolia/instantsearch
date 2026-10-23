@@ -117,7 +117,7 @@ export function useConnector<
         widget.getWidgetSearchParameters?.(helper.state, { uiState }) ||
         helper.state;
       const { results, scopedResults, recommendResults } =
-        getIndexSearchResults(parentIndex);
+        getIndexSearchResults(parentIndex, search._createSearchResults);
 
       // We get the widget render state by providing the same parameters as
       // InstantSearch provides to the widget's `render` method.
