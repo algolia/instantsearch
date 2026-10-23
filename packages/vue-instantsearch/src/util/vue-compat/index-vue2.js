@@ -118,6 +118,8 @@ export function augmentReactCreateElement(createElement) {
       }
     });
 
+    bindCallbackRefPatch(data, props.ref);
+
     return createElement(tag, data, childArg);
   };
 }
@@ -179,19 +181,34 @@ function bindMutableRef(data, ref) {
     assign(null);
     if (previousDestroy) previousDestroy(vnode);
   };
+}
 
-  if (isCallbackRef) {
-    // React re-invokes a callback ref on every render whose closure changed
-    // (Vue 3 does too), and callers rely on it to see the latest values, e.g.
-    // `ref={(el) => sync(el, isStalled)}`. Vue 2 patches the element in place
-    // without re-running `insert`, so re-run it after each patch. MutableRefs
-    // keep insert/destroy semantics only.
-    const previousPostpatch = data.hook.postpatch;
-    data.hook.postpatch = (oldVnode, vnode) => {
-      assign(vnode.elm);
-      if (previousPostpatch) previousPostpatch(oldVnode, vnode);
-    };
-  }
+/**
+ * Mirrors React's callback-ref semantics on patch. Vue 2 patches elements in
+ * place without re-running `insert`, so `postpatch` re-runs the callback with
+ * the latest closure (callers rely on that, e.g.
+ * `ref={(el) => sync(el, isStalled)}`). When the callback changed or was
+ * removed, the previous one is first called with `null`, like React and Vue 3.
+ * It is installed on every element because the old ref can only be cleared from
+ * the new vnode's hook. MutableRefs keep insert/destroy semantics only.
+ */
+function bindCallbackRefPatch(data, ref) {
+  const callbackRef = typeof ref === 'function' ? ref : undefined;
+  // eslint-disable-next-line no-param-reassign
+  data.callbackRef = callbackRef;
+
+  data.hook = data.hook || {};
+  const previousPostpatch = data.hook.postpatch;
+  data.hook.postpatch = (oldVnode, vnode) => {
+    const previousRef = oldVnode.data && oldVnode.data.callbackRef;
+    if (previousRef && previousRef !== callbackRef) {
+      previousRef(null);
+    }
+    if (callbackRef) {
+      callbackRef(vnode.elm);
+    }
+    if (previousPostpatch) previousPostpatch(oldVnode, vnode);
+  };
 }
 
 function flattenChildren(nodes) {
