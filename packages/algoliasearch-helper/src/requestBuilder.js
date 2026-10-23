@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-var merge = require("./functions/merge");
+var merge = require('./functions/merge');
 
 function sortObject(obj) {
   return Object.keys(obj)
@@ -76,7 +76,7 @@ var requestBuilder = {
           // Keep facet filters unrelated to current hierarchical attributes
           function hasHierarchicalFacetFilter(value) {
             return hierarchicalFacet.attributes.some(function (attribute) {
-              return attribute === value.split(":")[0];
+              return attribute === value.split(':')[0];
             });
           }
 
@@ -93,7 +93,7 @@ var requestBuilder = {
               }
 
               if (
-                typeof facetFilter === "string" &&
+                typeof facetFilter === 'string' &&
                 !hasHierarchicalFacetFilter(facetFilter)
               ) {
                 acc.push(facetFilter);
@@ -107,7 +107,7 @@ var requestBuilder = {
           var parent = filtersMap[level - 1];
           if (level > 0) {
             params.facetFilters = filteredFacetFilters.concat(
-              parent.attribute + ":" + parent.value
+              parent.attribute + ':' + parent.value
             );
           } else if (filteredFacetFilters.length > 0) {
             params.facetFilters = filteredFacetFilters;
@@ -159,7 +159,7 @@ var requestBuilder = {
     var additionalParams = {};
 
     if (facets.length > 0) {
-      additionalParams.facets = facets.indexOf("*") > -1 ? ["*"] : facets;
+      additionalParams.facets = facets.indexOf('*') > -1 ? ['*'] : facets;
     }
 
     if (tagFilters.length > 0) {
@@ -194,7 +194,7 @@ var requestBuilder = {
           ) {
             // only tag a disjunctiveFacet as disjunctive if it has a value selected
             // this helps avoid hitting the limit of 20 disjunctive facets in the Composition API
-            return "disjunctive(" + value + ")";
+            return 'disjunctive(' + value + ')';
           }
           return value;
         })
@@ -209,12 +209,12 @@ var requestBuilder = {
 
     if (facets.length > 0) {
       additionalParams.facets =
-        facets.indexOf("*") > -1
+        facets.indexOf('*') > -1
           ? facets.filter(function (f) {
-              if (f === "*") {
+              if (f === '*') {
                 return true;
               }
-              if (f.indexOf("disjunctive(") === 0) {
+              if (f.indexOf('disjunctive(') === 0) {
                 return true;
               }
               return false;
@@ -346,7 +346,7 @@ var requestBuilder = {
       return state.tagFilters;
     }
 
-    return state.tagRefinements.join(",");
+    return state.tagRefinements.join(',');
   },
 
   /**
@@ -370,7 +370,7 @@ var requestBuilder = {
           .slice()
           .sort()
           .forEach(function (facetValue) {
-            facetFilters.push(facetName + ":" + facetValue);
+            facetFilters.push(facetName + ':' + facetValue);
           });
       });
 
@@ -380,7 +380,7 @@ var requestBuilder = {
       .forEach(function (facetName) {
         var facetValues = facetsExcludes[facetName] || [];
         facetValues.sort().forEach(function (facetValue) {
-          facetFilters.push(facetName + ":-" + facetValue);
+          facetFilters.push(facetName + ':-' + facetValue);
         });
       });
 
@@ -398,7 +398,7 @@ var requestBuilder = {
           .slice()
           .sort()
           .forEach(function (facetValue) {
-            orFilters.push(facetName + ":" + facetValue);
+            orFilters.push(facetName + ':' + facetValue);
           });
 
         facetFilters.push(orFilters);
@@ -452,7 +452,7 @@ var requestBuilder = {
         }
 
         if (attributeToRefine) {
-          facetFilters.push([attributeToRefine + ":" + facetValue]);
+          facetFilters.push([attributeToRefine + ':' + facetValue]);
         }
       });
 
@@ -505,7 +505,7 @@ var requestBuilder = {
     }
 
     var hierarchicalRefinement =
-      state.getHierarchicalRefinement(hierarchicalFacet.name)[0] || "";
+      state.getHierarchicalRefinement(hierarchicalFacet.name)[0] || '';
     // if refinement is 'beers > IPA > Flying dog',
     // then we want `facets: ['beers > IPA']` as disjunctive facet (parent level values)
 
@@ -521,7 +521,7 @@ var requestBuilder = {
       facetQuery: query,
       facetName: facetName,
     };
-    if (typeof maxFacetHits === "number") {
+    if (typeof maxFacetHits === 'number') {
       searchForFacetSearchParameters.maxFacetHits = maxFacetHits;
     }
     return sortObject(
