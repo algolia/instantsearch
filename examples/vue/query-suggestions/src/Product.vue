@@ -25,7 +25,7 @@
         <ais-hits :class-names="{ 'ais-Hits': 'ais-Hits--single' }">
           <template #item="{ item }">
             <article>
-              <img :src="item.image" />
+              <img :src="item.image" :alt="item.name" />
               <div>
                 <h1>{{ item.name }}</h1>
                 <p>{{ item.description }}</p>
