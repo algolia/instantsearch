@@ -5,7 +5,10 @@ import { createOptionsTests } from './options';
 import { createTemplatesTests } from './templates';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { AutocompleteConnectorParams } from 'instantsearch.js/es/connectors/autocomplete/connectAutocomplete';
+import type {
+  AutocompleteConnectorParams,
+  TransformItemsIndicesConfig,
+} from 'instantsearch.js/es/connectors/autocomplete/connectAutocomplete';
 import type { AutocompleteWidget } from 'instantsearch.js/src/widgets/autocomplete/autocomplete';
 import type { AutocompleteProps } from 'react-instantsearch';
 
@@ -17,7 +20,30 @@ export type ReactAutocompleteWidgetParams = AutocompleteProps<any>;
 type AutocompleteWidgetParams = {
   javascript: JSAutocompleteWidgetParams;
   react: ReactAutocompleteWidgetParams;
-  vue: { requiresSearch?: boolean };
+  vue: {
+    requiresSearch?: boolean;
+    indices?: Array<Record<string, unknown>>;
+    feeds?: Array<Record<string, unknown>>;
+    showQuerySuggestions?: Record<string, unknown>;
+    showPromptSuggestions?: Record<string, unknown>;
+    showRecent?: boolean | Record<string, unknown>;
+    searchParameters?: Record<string, unknown>;
+    getSearchPageUrl?: (uiState: any) => string;
+    onSelect?: (params: any) => void;
+    transformItems?: (
+      indices: TransformItemsIndicesConfig[]
+    ) => TransformItemsIndicesConfig[];
+    placeholder?: string;
+    autofocus?: boolean;
+    detachedMediaQuery?: string;
+    translations?: Record<string, string>;
+    aiMode?: boolean;
+    /**
+     * Scoped slots (`item`, `header`, `noResults`, `querySuggestionItem`,
+     * `promptSuggestionItem`, `recentItem`, `panel`, ...).
+     */
+    slots?: Record<string, (scope: any) => any>;
+  };
 };
 
 declare module '../../common' {
