@@ -64,7 +64,10 @@ describe('resultCard', () => {
 
     const root = container.querySelector('.ais-ResultCard');
     expect(root).toHaveAttribute('data-status', 'loading');
-    expect(root).toHaveAttribute('aria-busy', 'true');
+    expect(container.querySelector('.ais-ResultCard-body')).toHaveAttribute(
+      'aria-busy',
+      'true'
+    );
     expect(
       container.querySelector('.ais-ResultCard-headerTitle')
     ).toHaveTextContent('AI Overview');
