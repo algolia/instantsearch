@@ -3,7 +3,7 @@
 import { createCompareProductsToolComponent } from 'instantsearch-ui-components';
 import { Fragment, h } from 'preact';
 
-import TemplateComponent from '../../components/Template/Template';
+import TemplateComponent from '../../components/Template/FunctionTemplate';
 
 import type {
   ChatTemplates,

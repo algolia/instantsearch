@@ -21,14 +21,13 @@ import {
 import { Fragment, h, render } from 'preact';
 import { useEffect, useId, useMemo, useRef, useState } from 'preact/hooks';
 
-import TemplateComponent from '../../components/Template/Template';
+import TemplateComponent from '../../components/Template/FunctionTemplate';
 import connectFeeds from '../../connectors/feeds/connectFeeds';
 import { createFeedContainer } from '../../connectors/feeds/FeedContainer';
 import { connectAutocomplete, connectSearchBox } from '../../connectors/index';
 import { Highlight, ReverseHighlight } from '../../helpers/components';
 import { isChatBusy, openChat } from '../../lib/chat';
 import { component } from '../../lib/suit';
-import { prepareTemplateProps } from '../../lib/templating';
 import {
   createDocumentationMessageGenerator,
   find,
@@ -47,7 +46,6 @@ import type {
   TransformItemsIndicesConfig,
 } from '../../connectors/autocomplete/connectAutocomplete';
 import type { ChatRenderState } from '../../connectors/chat/connectChat';
-import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   BaseHit,
   Hit,
@@ -205,14 +203,8 @@ type RendererParams<TItem extends BaseHit> = {
   activate: () => void;
   indicesConfig: Array<IndexConfig<TItem>>;
   renderState: {
-    indexTemplateProps: Array<
-      PreparedTemplateProps<NonNullable<IndexConfig<TItem>['templates']>>
-    >;
     isolatedIndex: IndexWidget | undefined;
     targetIndex: IndexWidget | undefined;
-    templateProps:
-      | PreparedTemplateProps<NonNullable<AutocompleteTemplates>>
-      | undefined;
     RecentSearchComponent: typeof AutocompleteRecentSearch;
     recentSearchHeaderComponent:
       | (typeof AutocompleteIndex)['prototype']['props']['HeaderComponent']
@@ -279,14 +271,7 @@ const createRenderer = <TItem extends BaseHit>(
         undefined;
 
       if (showRecentObj && showRecentObj.templates) {
-        const recentTemplateProps = prepareTemplateProps({
-          defaultTemplates: {} as unknown as NonNullable<
-            typeof showRecentObj.templates
-          >,
-          templatesConfig:
-            connectorParams.instantSearchInstance.templatesConfig,
-          templates: showRecentObj.templates,
-        });
+        const recentTemplates = showRecentObj.templates;
 
         if (showRecentObj.templates.item) {
           RecentSearchComponent = ({
@@ -295,7 +280,7 @@ const createRenderer = <TItem extends BaseHit>(
             onRemoveRecentSearch,
           }) => (
             <TemplateComponent
-              {...recentTemplateProps}
+              templates={recentTemplates}
               templateKey="item"
               rootTagName="fragment"
               data={{ item, onSelect, onRemoveRecentSearch }}
@@ -310,7 +295,7 @@ const createRenderer = <TItem extends BaseHit>(
             items: Array<{ query: string }>;
           }) => (
             <TemplateComponent
-              {...recentTemplateProps}
+              templates={recentTemplates}
               templateKey="header"
               rootTagName="fragment"
               data={{ items }}
@@ -319,17 +304,8 @@ const createRenderer = <TItem extends BaseHit>(
         }
       }
       rendererParams.renderState = {
-        indexTemplateProps: [],
         isolatedIndex,
         targetIndex,
-        templateProps: prepareTemplateProps({
-          defaultTemplates: {} as unknown as NonNullable<
-            typeof rendererParams.templates
-          >,
-          templatesConfig:
-            connectorParams.instantSearchInstance.templatesConfig,
-          templates: rendererParams.templates,
-        }),
         RecentSearchComponent,
         recentSearchHeaderComponent,
         hasWarnedMissingPromptSuggestionsChat: false,
@@ -729,7 +705,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     );
   }
 
-  indicesForPanel.forEach(({ indexId, indexName, hits }, i) => {
+  indicesForPanel.forEach(({ indexId, indexName, hits }) => {
     const currentIndexConfig = find(
       indicesConfig,
       (config) => config.indexName === indexName
@@ -737,16 +713,6 @@ function AutocompleteWrapper<TItem extends BaseHit>({
 
     if (!currentIndexConfig) {
       return;
-    }
-
-    if (!renderState.indexTemplateProps[i]) {
-      renderState.indexTemplateProps[i] = prepareTemplateProps({
-        defaultTemplates: {} as unknown as NonNullable<
-          IndexConfig<TItem>['templates']
-        >,
-        templatesConfig: instantSearchInstance.templatesConfig,
-        templates: currentIndexConfig.templates,
-      });
     }
 
     const headerComponent = currentIndexConfig.templates?.header
@@ -757,7 +723,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         >[0]) => {
           return (
             <TemplateComponent
-              {...renderState.indexTemplateProps[i]}
+              templates={currentIndexConfig.templates}
               templateKey="header"
               rootTagName="fragment"
               data={{ items }}
@@ -772,7 +738,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     }: Parameters<AutocompleteIndexProps['ItemComponent']>[0]) => {
       return (
         <TemplateComponent
-          {...renderState.indexTemplateProps[i]}
+          templates={currentIndexConfig.templates}
           templateKey="item"
           rootTagName="fragment"
           data={{ item, onSelect, onApply }}
@@ -783,7 +749,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     const noResultsComponent = currentIndexConfig.templates?.noResults
       ? () => (
           <TemplateComponent
-            {...renderState.indexTemplateProps[i]}
+            templates={currentIndexConfig.templates}
             templateKey="noResults"
             rootTagName="fragment"
             data={{}}
@@ -892,7 +858,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     >
       {templates.panel ? (
         <TemplateComponent
-          {...renderState.templateProps}
+          templates={templates}
           templateKey="panel"
           rootTagName="fragment"
           data={{ elements, indices: indicesForPanel }}
@@ -1459,10 +1425,8 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
     detachedMediaQuery,
     translations,
     renderState: {
-      indexTemplateProps: [],
       isolatedIndex: undefined,
       targetIndex: undefined,
-      templateProps: undefined,
       RecentSearchComponent: AutocompleteRecentSearch,
       recentSearchHeaderComponent: undefined,
       hasWarnedMissingPromptSuggestionsChat: false,
