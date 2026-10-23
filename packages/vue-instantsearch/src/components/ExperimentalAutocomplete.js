@@ -430,7 +430,7 @@ export default {
       instanceId: ++autocompleteInstanceId,
       mounted: false,
       // Whether the isolated index subtree is rendered.
-      activated: false,
+      activated: this.autofocus,
       // The isolated index, once its connector is mounted.
       isolatedIndex: null,
       // A query typed between activation and the connector's first render.
@@ -461,6 +461,10 @@ export default {
             currentRefinement: '',
             widgetParams: {},
           });
+        } else if (!this.$_ais.isolatedIndex) {
+          // Until the isolated index is mounted, the input follows the parent
+          // query (routing, `setUiState`, another search box): refresh it.
+          this.requestRender();
         }
       })({}),
       $$widgetType: 'ais.autocomplete',
@@ -510,7 +514,7 @@ export default {
           ? state.pendingQuery
           : this.getParentIndex().getHelper()?.state.query;
       state.pendingQuery = undefined;
-      if (query) {
+      if (query !== undefined) {
         isolatedIndex.getHelper()?.setQuery(query);
       }
       isolatedIndex.scheduleLocalSearch();

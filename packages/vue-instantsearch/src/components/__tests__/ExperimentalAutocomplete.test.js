@@ -171,6 +171,56 @@ describe('AisExperimentalAutocomplete', () => {
     ]);
   });
 
+  test('keeps a query cleared before the isolated index is mounted', async () => {
+    const { searchClient } = await mountAutocomplete({
+      props: { indices: [{ indexName: 'indexName' }], requiresSearch: false },
+      instantSearchProps: {
+        indexName: 'indexName',
+        initialUiState: { indexName: { query: 'apple' } },
+      },
+    });
+
+    const input = document.querySelector('input');
+    expect(input.value).toBe('apple');
+
+    input.dispatchEvent(new Event('focus'));
+    input.value = '';
+    input.dispatchEvent(new Event('input'));
+    await nextTick();
+    await wait(0);
+    await nextTick();
+
+    expect(input.value).toBe('');
+    expect(searchClient.search).toHaveBeenLastCalledWith([
+      expect.objectContaining({
+        params: expect.not.objectContaining({ query: 'apple' }),
+      }),
+    ]);
+  });
+
+  test('follows the parent query before the first focus', async () => {
+    const { instantSearchInstance } = await mountAutocomplete({
+      props: { indices: [{ indexName: 'indexName' }] },
+    });
+
+    expect(document.querySelector('input').value).toBe('');
+
+    instantSearchInstance.setUiState({ indexName: { query: 'banana' } });
+    await nextTick();
+    await wait(0);
+    await nextTick();
+
+    expect(document.querySelector('input').value).toBe('banana');
+  });
+
+  test('mounts the isolated index right away with `autofocus`', async () => {
+    const { instantSearchInstance } = await mountAutocomplete({
+      props: { indices: [{ indexName: 'indexName' }], autofocus: true },
+    });
+
+    expect(findIsolatedIndex(instantSearchInstance)).toBeDefined();
+  });
+
   test('registers the feeds in the isolated composition index', async () => {
     const { instantSearchInstance } = await mountAutocomplete({
       props: { feeds: [{ feedID: 'products' }] },
