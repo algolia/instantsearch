@@ -212,7 +212,7 @@ var requestBuilder = {
         if (f === '*') {
           return true;
         }
-        if (f.startsWith('disjunctive(')) {
+        if (f.indexOf('disjunctive(') === 0) {
           return true;
         }
         return false;
