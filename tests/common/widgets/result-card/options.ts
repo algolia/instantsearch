@@ -127,11 +127,23 @@ export function createOptionsTests(
       // Activated but still within the debounce: skeleton, no request yet.
       const root = document.querySelector('.ais-ResultCard');
       expect(root).toHaveAttribute('data-status', 'loading');
-      expect(root).toHaveAttribute('aria-busy', 'true');
-      expect(root).toHaveAttribute('aria-live', 'polite');
+      expect(root).not.toHaveAttribute('aria-live');
+      expect(document.querySelector('.ais-ResultCard-body')).toHaveAttribute(
+        'aria-busy',
+        'true'
+      );
       expect(
         document.querySelector('.ais-ResultCard-loader')
       ).toBeInTheDocument();
+      expect(fetchMock).not.toHaveBeenCalled();
+
+      // The status fills after paint, still within the debounce.
+      await act(async () => {
+        await wait(150);
+      });
+      expect(
+        document.querySelector('.ais-ResultCard-status')
+      ).toHaveTextContent('Generating answer');
       expect(fetchMock).not.toHaveBeenCalled();
 
       await act(async () => {
@@ -159,15 +171,73 @@ export function createOptionsTests(
         'data-status',
         'complete'
       );
-      expect(document.querySelector('.ais-ResultCard')).not.toHaveAttribute(
-        'aria-busy'
-      );
+      expect(document.querySelector('[aria-busy]')).toBeNull();
+      expect(
+        document.querySelector('.ais-ResultCard-status')
+      ).toHaveTextContent('Answer ready');
       expect(document.querySelector('.ais-ResultCard-body')).toHaveTextContent(
         ANSWER
       );
       expect(
         document.querySelector('.ais-ResultCard-body')
       ).not.toHaveTextContent('running shoes');
+    });
+
+    describe('long answer', () => {
+      // jsdom has no layout: fake a body taller than its clipped height.
+      beforeEach(() => {
+        jest
+          .spyOn(HTMLElement.prototype, 'scrollHeight', 'get')
+          .mockReturnValue(400);
+        jest
+          .spyOn(HTMLElement.prototype, 'clientHeight', 'get')
+          .mockReturnValue(200);
+      });
+      afterEach(() => {
+        jest.restoreAllMocks();
+      });
+
+      test('expands as it streams, and stays clipped after "Show less"', async () => {
+        const searchClient = createResultsClient();
+        mockAgentFetch();
+
+        await setup({
+          instantSearchOptions: { indexName: 'indexName', searchClient },
+          widgetParams: {
+            javascript: { agentId: AGENT_ID },
+            react: { agentId: AGENT_ID },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(DEBOUNCE_MS + 100);
+        });
+        // The card expands on the tick after it measures the answer.
+        await act(async () => {
+          await wait(0);
+        });
+
+        const toggle = () =>
+          document.querySelector<HTMLButtonElement>(
+            '.ais-ResultCard-expandButton'
+          )!;
+        const body = () => document.querySelector('.ais-ResultCard-body')!;
+        expect(toggle()).toHaveTextContent('Show less');
+        expect(toggle()).toHaveAttribute('aria-expanded', 'true');
+        expect(toggle()).toHaveAttribute('aria-controls', body().id);
+        expect(body()).toHaveClass('ais-ResultCard-body--expanded');
+
+        expect(document.querySelectorAll('.ais-ResultCard')).toHaveLength(1);
+
+        await act(async () => {
+          await userEvent.click(toggle());
+          await wait(0);
+        });
+
+        expect(toggle()).toHaveTextContent('Show more');
+        expect(body()).toHaveClass('ais-ResultCard-body--clipped');
+      });
     });
 
     test('still requests the answer while minimized and shows it on restore', async () => {

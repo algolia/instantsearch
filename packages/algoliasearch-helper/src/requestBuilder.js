@@ -208,7 +208,18 @@ var requestBuilder = {
     var additionalParams = {};
 
     if (facets.length > 0) {
-      additionalParams.facets = facets.indexOf('*') > -1 ? ['*'] : facets;
+      additionalParams.facets =
+        facets.indexOf('*') > -1
+          ? facets.filter(function (f) {
+              if (f === '*') {
+                return true;
+              }
+              if (f.indexOf('disjunctive(') === 0) {
+                return true;
+              }
+              return false;
+            })
+          : facets;
     }
 
     if (tagFilters.length > 0) {

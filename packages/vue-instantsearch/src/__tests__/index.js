@@ -80,14 +80,20 @@ function getAllComponents() {
         props.indexName = 'indexName';
       } else if (name === 'AisFeeds') {
         props.isolated = false;
-      } else if (name === 'AisRelatedProducts') {
+      } else if (
+        name === 'AisRelatedProducts' ||
+        name === 'AisFrequentlyBoughtTogether' ||
+        name === 'AisLookingSimilar'
+      ) {
         props.objectIDs = ['1'];
+      } else if (name === 'AisTrendingFacets') {
+        props.facetName = 'brand';
       } else if (name === 'AisChat') {
         // A transport avoids the agentId appId/apiKey requirement; the trigger
         // validation is disabled since no ChatTrigger is mounted here.
         props.transport = {};
         props.disableTriggerValidation = true;
-      } else if (name === 'AisChatTrigger') {
+      } else if (name === 'AisChatTrigger' || name === 'AisTrendingItems') {
         // no required props
       } else {
         props.attribute = 'attr';

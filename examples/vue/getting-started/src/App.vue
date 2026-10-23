@@ -49,6 +49,17 @@
             <div class="pagination">
               <ais-pagination />
             </div>
+
+            <ais-trending-items :limit="6" layout="carousel">
+              <template #item="{ item }">
+                <article class="trending-item">
+                  <div class="trending-item-image">
+                    <img :src="item.image" :alt="item.name" />
+                  </div>
+                  <h2 class="trending-item-title">{{ item.name }}</h2>
+                </article>
+              </template>
+            </ais-trending-items>
           </div>
         </div>
 
@@ -166,6 +177,18 @@ em {
 
 .chat-item-title {
   font-size: 0.75rem;
+.ais-Carousel-list {
+  grid-auto-columns: calc(25% - 0.5rem);
+}
+
+.trending-item-image img {
+  width: 100%;
+  height: 8rem;
+  object-fit: contain;
+}
+
+.trending-item-title {
+  font-size: 0.875rem;
   font-weight: normal;
   text-align: center;
 }

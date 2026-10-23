@@ -2,9 +2,9 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
-import { render, screen } from '@testing-library/preact';
+import { act, fireEvent, render, screen } from '@testing-library/preact';
 import userEvent from '@testing-library/user-event';
-import { Fragment, createElement } from 'preact';
+import { Fragment, createElement, render as renderWithoutAct } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
 import { createResultCardComponent } from '../ResultCard';
@@ -18,6 +18,10 @@ const ResultCard = createResultCardComponent({
   useState,
   useEffect,
 });
+
+// Lets the deferred expansion on the first overflow run.
+const flushExpansion = () =>
+  act(() => new Promise<void>((resolve) => setTimeout(resolve, 0)));
 
 const userMessage: ChatMessageBase = {
   id: 'u1',
@@ -58,13 +62,11 @@ describe('ResultCard', () => {
   test('renders the answer with the header and handoff action', () => {
     const { container } = render(<ResultCard {...createProps()} />);
 
-    expect(container.querySelector('.ais-ResultCard')).toHaveAttribute(
-      'aria-live',
-      'polite'
-    );
     expect(container.querySelector('.ais-ResultCard')).not.toHaveAttribute(
-      'aria-busy'
+      'aria-live'
     );
+    expect(container.querySelector('[aria-busy]')).not.toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('Answer ready');
     expect(screen.getByText('AI Overview')).toBeInTheDocument();
     expect(
       screen.getByText('Pick the Pegasus for daily runs.')
@@ -75,12 +77,12 @@ describe('ResultCard', () => {
     ).toBeInTheDocument();
   });
 
-  test('shows a loader while busy and marks the region busy', () => {
+  test('shows a loader while busy and marks the answer busy', () => {
     const { container } = render(
       <ResultCard {...createProps({ status: 'loading', messages: [] })} />
     );
 
-    expect(container.querySelector('.ais-ResultCard')).toHaveAttribute(
+    expect(container.querySelector('.ais-ResultCard-body')).toHaveAttribute(
       'aria-busy',
       'true'
     );
@@ -92,20 +94,132 @@ describe('ResultCard', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('hides reasoning and keeps the loader until the answer text starts', () => {
-    const reasoning: ChatMessageBase = {
+  test('announces progress once in a status region, not each streamed chunk', () => {
+    const { container, rerender } = render(
+      <ResultCard {...createProps({ status: 'streaming' })} />
+    );
+
+    const status = screen.getByRole('status');
+    expect(status).toHaveTextContent('Generating answer');
+    // A busy ancestor would defer the announcement until the answer is done.
+    expect(status.closest('[aria-busy]')).toBeNull();
+    expect(container.querySelector('.ais-ResultCard-body')).toHaveAttribute(
+      'aria-busy',
+      'true'
+    );
+    expect(container.querySelector('[aria-live="polite"]')).toBe(status);
+
+    rerender(<ResultCard {...createProps({ status: 'complete' })} />);
+    expect(screen.getByRole('status')).toHaveTextContent('Answer ready');
+  });
+
+  test('fills the status region after it mounts', async () => {
+    // Without `act`, so effects stay pending right after the render.
+    const container = document.createElement('div');
+    renderWithoutAct(
+      <ResultCard {...createProps({ status: 'hidden', messages: [] })} />,
+      container
+    );
+    renderWithoutAct(
+      <ResultCard {...createProps({ status: 'loading', messages: [] })} />,
+      container
+    );
+    const status = container.querySelector('[role="status"]')!;
+    expect(status.textContent).toBe('');
+
+    await act(() => new Promise<void>((resolve) => setTimeout(resolve, 0)));
+    expect(status.textContent).toBe('Generating answer');
+  });
+
+  test('shows a loader while a tool runs, then the streamed text', () => {
+    const toolCall: ChatMessageBase = {
       id: 'a1',
       role: 'assistant',
       parts: [
-        { type: 'reasoning', text: 'Comparing the top hits.' },
         {
           type: 'tool-algolia_search_index_products',
           toolCallId: 'call-1',
-          state: 'output-available',
+          state: 'input-available',
           input: {},
-          output: {},
         },
       ],
+    };
+    const { container, rerender } = render(
+      <ResultCard
+        {...createProps({
+          status: 'streaming',
+          messages: [userMessage, toolCall],
+        })}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-ChatMessageLoader--inline')
+    ).toBeInTheDocument();
+    expect(
+      container.querySelector('.ais-ChatMessageLoader-text')
+    ).not.toBeInTheDocument();
+    expect(
+      container.querySelector('.ais-ResultCard-loader')
+    ).not.toBeInTheDocument();
+
+    rerender(
+      <ResultCard
+        {...createProps({
+          status: 'streaming',
+          messages: [
+            userMessage,
+            {
+              ...toolCall,
+              parts: [...toolCall.parts, ...assistantMessage.parts],
+            },
+          ],
+        })}
+      />
+    );
+
+    expect(
+      screen.getByText('Pick the Pegasus for daily runs.')
+    ).toBeInTheDocument();
+    expect(
+      container.querySelector('.ais-ChatMessageLoader')
+    ).not.toBeInTheDocument();
+  });
+
+  test('keeps a failed tool call hidden while streaming', () => {
+    const failedTool: ChatMessageBase = {
+      id: 'a1',
+      role: 'assistant',
+      parts: [
+        {
+          type: 'tool-algolia_search_index_products',
+          toolCallId: 'call-1',
+          state: 'output-error',
+          input: {},
+          errorText: 'Search failed.',
+        },
+      ],
+    };
+    const { container } = render(
+      <ResultCard
+        {...createProps({
+          status: 'streaming',
+          messages: [userMessage, failedTool],
+        })}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-ChatMessageLoader--inline')
+    ).toBeInTheDocument();
+    expect(screen.queryByText('Search failed.')).not.toBeInTheDocument();
+  });
+
+  test('hides reasoning and keeps the skeleton until the answer text starts', () => {
+    const reasoning: ChatMessageBase = {
+      id: 'a1',
+      role: 'assistant',
+      parts: [{ type: 'reasoning', text: 'Comparing the top hits.' }],
     };
     const { container, rerender } = render(
       <ResultCard
@@ -225,7 +339,9 @@ describe('ResultCard', () => {
       />
     );
 
-    await userEvent.click(screen.getByRole('button', { name: 'Retry' }));
+    const retry = screen.getByRole('button', { name: 'Retry' });
+    expect(screen.getByRole('alert')).toContainElement(retry);
+    await userEvent.click(retry);
     expect(onRetry).toHaveBeenCalledTimes(1);
   });
 
@@ -275,10 +391,12 @@ describe('ResultCard', () => {
       <ResultCard {...createProps({ status: 'streaming', minimized: true })} />
     );
 
+    // The theme pulses the header icon from `data-status`.
     expect(container.querySelector('.ais-ResultCard')).toHaveAttribute(
-      'aria-busy',
-      'true'
+      'data-status',
+      'streaming'
     );
+    expect(screen.getByRole('status')).toHaveTextContent('Generating answer');
     expect(
       container.querySelector('.ais-ResultCard-body')
     ).not.toBeInTheDocument();
@@ -362,6 +480,9 @@ describe('ResultCard', () => {
       const body = container.querySelector('.ais-ResultCard-body')!;
       expect(body).toHaveClass('ais-ResultCard-body--clipped');
 
+      // Ignore the expansion on the first overflow.
+      await flushExpansion();
+      onExpandedChange.mockClear();
       await userEvent.click(screen.getByRole('button', { name: 'Show more' }));
       expect(onExpandedChange).toHaveBeenCalledWith(true);
 
@@ -374,10 +495,158 @@ describe('ResultCard', () => {
       );
       // The measured height lets `max-height` transition instead of jumping.
       expect(body).not.toHaveClass('ais-ResultCard-body--clipped');
-      expect(body).toHaveStyle({ maxHeight: '400px' });
+      expect(body.getAttribute('style')).toContain(
+        'min(400px, var(--ais-result-card-expanded-max-height))'
+      );
     });
 
-    test('expands when focus reaches its content', () => {
+    test('offers to expand while streaming', () => {
+      render(<ResultCard {...createProps({ status: 'streaming' })} />);
+
+      expect(
+        screen.getByRole('button', { name: 'Show more' })
+      ).toBeInTheDocument();
+    });
+
+    test('lets the keyboard scroll the expanded answer', () => {
+      const { container, rerender } = render(<ResultCard {...createProps()} />);
+      const body = container.querySelector('.ais-ResultCard-body')!;
+      expect(body).not.toHaveAttribute('tabindex');
+
+      rerender(<ResultCard {...createProps({ expanded: true })} />);
+      expect(screen.getByRole('region', { name: 'AI Overview' })).toBe(body);
+      expect(body).toHaveAttribute('tabindex', '0');
+    });
+
+    test('scrolls the answer back to the top on "Show less"', async () => {
+      const setScrollTop = jest.spyOn(Element.prototype, 'scrollTop', 'set');
+      render(<ResultCard {...createProps({ expanded: true })} />);
+
+      await userEvent.click(screen.getByRole('button', { name: 'Show less' }));
+      expect(setScrollTop).toHaveBeenCalledWith(0);
+    });
+
+    test('names the answer it expands', () => {
+      const { container } = render(<ResultCard {...createProps()} />);
+
+      const body = container.querySelector('.ais-ResultCard-body')!;
+      expect(body.id).not.toBe('');
+      expect(screen.getByRole('button', { name: 'Show more' })).toHaveAttribute(
+        'aria-controls',
+        body.id
+      );
+    });
+
+    test('keeps offering to expand when the answer finishes mid-collapse', async () => {
+      const clientHeight = jest.spyOn(
+        HTMLElement.prototype,
+        'clientHeight',
+        'get'
+      );
+      const { container, rerender } = render(
+        <ResultCard {...createProps({ status: 'streaming', expanded: true })} />
+      );
+      const body = container.querySelector('.ais-ResultCard-body')!;
+
+      // "Show less": the height is still at its expanded value, so nothing
+      // looks clipped when the final status arrives.
+      clientHeight.mockReturnValue(400);
+      rerender(
+        <ResultCard {...createProps({ status: 'complete', expanded: false })} />
+      );
+
+      // The transition ends at the clipped height.
+      clientHeight.mockReturnValue(200);
+      fireEvent.transitionEnd(body);
+      expect(
+        screen.getByRole('button', { name: 'Show more' })
+      ).toBeInTheDocument();
+    });
+
+    test('stays collapsed after "Show less" on a retried answer', async () => {
+      const onExpandedChange = jest.fn();
+      const { container, rerender } = render(
+        <ResultCard {...createProps({ expanded: true, onExpandedChange })} />
+      );
+      const body = container.querySelector('.ais-ResultCard-body')!;
+
+      // Retry keeps the card expanded while the new answer streams in.
+      rerender(
+        <ResultCard
+          {...createProps({
+            expanded: true,
+            onExpandedChange,
+            status: 'loading',
+            messages: [userMessage],
+          })}
+        />
+      );
+      rerender(
+        <ResultCard
+          {...createProps({
+            expanded: true,
+            onExpandedChange,
+            status: 'streaming',
+          })}
+        />
+      );
+      await flushExpansion();
+
+      rerender(<ResultCard {...createProps({ onExpandedChange })} />);
+      fireEvent.transitionEnd(body);
+      await flushExpansion();
+
+      expect(onExpandedChange).not.toHaveBeenCalled();
+    });
+
+    test('expands once when the answer first outgrows the clipped height', async () => {
+      const onExpandedChange = jest.fn();
+      const longer: ChatMessageBase = {
+        ...assistantMessage,
+        parts: [{ type: 'text', text: 'Pick the Pegasus. It is light.' }],
+      };
+      const { rerender } = render(
+        <ResultCard
+          {...createProps({ status: 'streaming', onExpandedChange })}
+        />
+      );
+      await flushExpansion();
+      expect(onExpandedChange).toHaveBeenCalledTimes(1);
+      expect(onExpandedChange).toHaveBeenCalledWith(true);
+
+      // Still clipped, as after "Show less": more text does not expand it again.
+      rerender(
+        <ResultCard
+          {...createProps({
+            status: 'streaming',
+            onExpandedChange,
+            messages: [userMessage, longer],
+          })}
+        />
+      );
+      await flushExpansion();
+      expect(onExpandedChange).toHaveBeenCalledTimes(1);
+
+      // A new answer starts over.
+      rerender(
+        <ResultCard
+          {...createProps({
+            status: 'loading',
+            onExpandedChange,
+            messages: [],
+          })}
+        />
+      );
+      rerender(
+        <ResultCard
+          {...createProps({ status: 'streaming', onExpandedChange })}
+        />
+      );
+      await flushExpansion();
+      expect(onExpandedChange).toHaveBeenCalledTimes(2);
+    });
+
+    test('expands when focus reaches its content', async () => {
       const onExpandedChange = jest.fn();
       render(
         <ResultCard
@@ -399,6 +668,9 @@ describe('ResultCard', () => {
         />
       );
 
+      // Ignore the expansion on the first overflow.
+      await flushExpansion();
+      onExpandedChange.mockClear();
       screen.getByRole('link', { name: 'sizing guide' }).focus();
       expect(onExpandedChange).toHaveBeenCalledWith(true);
     });
@@ -415,6 +687,27 @@ describe('ResultCard', () => {
       expect(container.querySelector('.ais-ResultCard-body')).toHaveClass(
         'ais-ResultCard-body--clipped'
       );
+      expect(
+        screen.getByRole('button', { name: 'Show more' })
+      ).toBeInTheDocument();
+    });
+
+    test('keeps a restored card at its previous size', async () => {
+      const onExpandedChange = jest.fn();
+      const { rerender } = render(
+        <ResultCard {...createProps({ onExpandedChange })} />
+      );
+      await flushExpansion();
+      // Expanded on the first overflow, then "Show less" (`expanded` stays
+      // false): minimizing and restoring keeps it clipped.
+      onExpandedChange.mockClear();
+      rerender(
+        <ResultCard {...createProps({ onExpandedChange, minimized: true })} />
+      );
+      rerender(<ResultCard {...createProps({ onExpandedChange })} />);
+      await flushExpansion();
+
+      expect(onExpandedChange).not.toHaveBeenCalled();
       expect(
         screen.getByRole('button', { name: 'Show more' })
       ).toBeInTheDocument();
@@ -459,12 +752,19 @@ describe('ResultCard', () => {
     });
   });
 
-  test('does not offer to expand a short answer', () => {
-    render(<ResultCard {...createProps()} />);
+  test('neither expands nor offers to expand a short answer', async () => {
+    const onExpandedChange = jest.fn();
+    render(
+      <ResultCard {...createProps({ status: 'streaming', onExpandedChange })} />
+    );
+    await flushExpansion();
 
     expect(
       screen.queryByRole('button', { name: 'Show more' })
     ).not.toBeInTheDocument();
+    expect(onExpandedChange).not.toHaveBeenCalled();
+    // Server renders never show the toggle, so they carry no ids to mismatch.
+    expect(document.querySelector('.ais-ResultCard [id]')).toBeNull();
   });
 
   test('applies translations and class names', () => {
