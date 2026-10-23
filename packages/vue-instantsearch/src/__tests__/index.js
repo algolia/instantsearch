@@ -82,9 +82,14 @@ function getAllComponents() {
         props.isolated = false;
       } else if (
         name === 'AisRelatedProducts' ||
-        name === 'AisFrequentlyBoughtTogether'
+        name === 'AisFrequentlyBoughtTogether' ||
+        name === 'AisLookingSimilar'
       ) {
         props.objectIDs = ['1'];
+      } else if (name === 'AisTrendingFacets') {
+        props.facetName = 'brand';
+      } else if (name === 'AisTrendingItems') {
+        // no required props
       } else {
         props.attribute = 'attr';
       }
