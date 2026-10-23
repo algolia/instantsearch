@@ -431,6 +431,8 @@ export default {
       mounted: false,
       // Whether the isolated index subtree is rendered.
       activated: this.autofocus,
+      // Whether the subtree was activated after the initial render (on focus).
+      activatedLazily: false,
       // The isolated index, once its connector is mounted.
       isolatedIndex: null,
       // A query typed between activation and the connector's first render.
@@ -499,16 +501,20 @@ export default {
       }
 
       this.$_ais.activated = true;
+      this.$_ais.activatedLazily = true;
       // Renders the isolated index subtree.
       this.requestRender();
     },
     handleConnectorMount(isolatedIndex) {
       const state = this.$_ais;
       state.isolatedIndex = isolatedIndex;
-      // Adding the isolated index schedules the parent's search even though
-      // the parent's own state hasn't changed; cancel it so only the isolated
-      // index searches.
-      this.instantSearchInstance.scheduleSearch.cancel();
+      // Adding the isolated index on focus schedules the parent's search even
+      // though the parent's own state hasn't changed; cancel it so only the
+      // isolated index searches. With `autofocus` the subtree mounts eagerly and
+      // the parent's initial search shares that slot: it must not be cancelled.
+      if (state.activatedLazily) {
+        this.instantSearchInstance.scheduleSearch.cancel();
+      }
       const query =
         state.pendingQuery !== undefined
           ? state.pendingQuery
@@ -804,17 +810,16 @@ export default {
       const onRefine = (query) => {
         setLocalQuery(query);
         refineAutocomplete(query);
-        // Before activation there is no isolated index to mirror the query to.
-        if (!state.isolatedIndex) {
-          return;
-        }
         instantSearchInstance.setUiState((uiState) => ({
           ...uiState,
           [targetIndex.getIndexId()]: {
             ...uiState[targetIndex.getIndexId()],
             query,
           },
-          [isolatedIndex.getIndexId()]: { query },
+          // Before activation there is no isolated index to mirror the query to.
+          ...(state.isolatedIndex
+            ? { [isolatedIndex.getIndexId()]: { query } }
+            : {}),
         }));
         if (query.length > 0) {
           storage.onAdd(query);
