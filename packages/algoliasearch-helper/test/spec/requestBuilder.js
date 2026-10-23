@@ -386,3 +386,78 @@ describe('request ordering', function () {
     ]);
   });
 });
+
+test('omits empty facets and filters', function () {
+  var searchParams = new SearchParameters();
+
+  expect(getQueries(searchParams.index, searchParams)).toEqual([
+    { params: {} },
+  ]);
+});
+
+test('includes tag and numeric refinements', function () {
+  var searchParams = new SearchParameters({
+    tagRefinements: ['sale', 'featured'],
+    numericRefinements: {
+      price: { '>=': [10], '<=': [100] },
+      rating: { '=': [[4, 5]] },
+    },
+  });
+
+  expect(getQueries(searchParams.index, searchParams)).toEqual([
+    {
+      params: {
+        tagFilters: 'sale,featured',
+        numericFilters: ['price>=10', 'price<=100', ['rating=4', 'rating=5']],
+      },
+    },
+  ]);
+});
+
+test('preserves raw filters and query parameters', function () {
+  var searchParams = new SearchParameters({
+    query: 'phone',
+    page: 2,
+    hitsPerPage: 12,
+    filters: 'inStock:true',
+    facetFilters: [['brand:Apple', 'brand:Samsung']],
+    numericFilters: ['price>=10'],
+    tagFilters: 'sale,featured',
+  });
+
+  expect(getQueries(searchParams.index, searchParams)).toEqual([
+    {
+      params: {
+        query: 'phone',
+        page: 2,
+        hitsPerPage: 12,
+        filters: 'inStock:true',
+        facetFilters: [['brand:Apple', 'brand:Samsung']],
+        numericFilters: ['price>=10'],
+        tagFilters: 'sale,featured',
+      },
+    },
+  ]);
+});
+
+test('handles index and highlighting parameters without mutating state', function () {
+  var searchParams = new SearchParameters({
+    index: 'products',
+    query: 'phone',
+    highlightPreTag: '<em>',
+    highlightPostTag: '</em>',
+  });
+  var originalParams = searchParams.getQueryParams();
+
+  expect(getQueries(searchParams.index, searchParams)).toEqual([
+    {
+      indexName: 'products',
+      params: {
+        query: 'phone',
+        highlightPreTag: '<em>',
+        highlightPostTag: '</em>',
+      },
+    },
+  ]);
+  expect(searchParams.getQueryParams()).toEqual(originalParams);
+});
