@@ -37,6 +37,7 @@
               :indices="indices"
               :show-recent="true"
               :show-query-suggestions="showQuerySuggestions"
+              :show-prompt-suggestions="showPromptSuggestions"
             >
               <template #header="{ indexName }">
                 <span class="ais-AutocompleteIndexHeaderTitle">
@@ -57,6 +58,10 @@
                 <span class="ais-AutocompleteIndexHeaderTitle">
                   Suggestions
                 </span>
+                <span class="ais-AutocompleteIndexHeaderLine" />
+              </template>
+              <template #promptSuggestionHeader>
+                <span class="ais-AutocompleteIndexHeaderTitle">Ask AI</span>
                 <span class="ais-AutocompleteIndexHeaderLine" />
               </template>
             </ais-experimental-autocomplete>
@@ -84,6 +89,12 @@
             </div>
           </div>
         </div>
+
+        <ais-chat
+          agent-id="eedef238-5468-470d-bc37-f99fa741bd25"
+          :feedback="true"
+        />
+        <ais-chat-trigger />
       </ais-instant-search>
     </div>
   </div>
@@ -112,6 +123,10 @@ export default {
       ],
       showQuerySuggestions: {
         indexName: 'instant_search_demo_query_suggestions',
+        searchParameters: { hitsPerPage: 2 },
+      },
+      showPromptSuggestions: {
+        indexName: 'instant_search_prompt_suggestions',
         searchParameters: { hitsPerPage: 2 },
       },
     };

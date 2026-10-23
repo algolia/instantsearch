@@ -13,4 +13,4 @@ yarn
 yarn dev
 ```
 
-The autocomplete uses `<ais-experimental-autocomplete>`. Prompt suggestions and the AI mode button hand off to a Chat widget, which Vue InstantSearch doesn't have yet, so they are left out.
+The autocomplete uses `<ais-experimental-autocomplete>`. Selecting a prompt suggestion hands the query off to `<ais-chat>`, opened with `<ais-chat-trigger>`.
