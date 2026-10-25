@@ -30,11 +30,17 @@ export type ReactChatWidgetParams = ChatProps<unknown> & {
   renderChat?: boolean;
   renderRefinements?: boolean;
 };
+// `AisChat` is plain JavaScript (no published prop types); its params mirror
+// the React ones, with Vue render functions (`h` from `vue`) for components.
+export type VueChatWidgetParams = Record<string, unknown> & {
+  renderChat?: boolean;
+  renderRefinements?: boolean;
+};
 
 type ChatWidgetParams = {
   javascript: JSChatWidgetParams;
   react: ReactChatWidgetParams;
-  vue: Record<string, never>;
+  vue: VueChatWidgetParams;
 };
 
 declare module '../../common' {

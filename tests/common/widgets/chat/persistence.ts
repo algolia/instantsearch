@@ -49,7 +49,7 @@ export function createPersistenceTests(
           widgetParams: {
             javascript: { agentId: 'agentId', persistence },
             react: { agentId: 'agentId', persistence },
-            vue: {},
+            vue: { agentId: 'agentId', persistence },
           },
         });
 
@@ -82,7 +82,10 @@ export function createPersistenceTests(
             agentId: 'agentId',
             persistence: { messages: false, open: true },
           },
-          vue: {},
+          vue: {
+            agentId: 'agentId',
+            persistence: { messages: false, open: true },
+          },
         },
       });
 
@@ -134,7 +137,10 @@ export function createPersistenceTests(
             agentId: 'agentId',
             persistence: { messages: true, open: false },
           },
-          vue: {},
+          vue: {
+            agentId: 'agentId',
+            persistence: { messages: true, open: false },
+          },
         },
       });
 
@@ -174,7 +180,7 @@ export function createPersistenceTests(
         widgetParams: {
           javascript: { chat: customChat, persistence: { open: true } },
           react: { chat: customChat, persistence: { open: true } },
-          vue: {},
+          vue: { chat: customChat, persistence: { open: true } },
         },
       });
 
@@ -230,7 +236,11 @@ export function createPersistenceTests(
             persistence: false,
             initialMessages,
           },
-          vue: {},
+          vue: {
+            agentId: 'agentId',
+            persistence: false,
+            initialMessages,
+          },
         },
       });
 
@@ -288,7 +298,10 @@ export function createPersistenceTests(
             agentId: 'agentId',
             showReasoning: true,
           },
-          vue: {},
+          vue: {
+            agentId: 'agentId',
+            showReasoning: true,
+          },
         },
       });
 
