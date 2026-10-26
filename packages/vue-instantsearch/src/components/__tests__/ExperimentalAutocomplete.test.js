@@ -14,6 +14,7 @@ import { createApp, mountApp, nextTick } from '../../../test/utils';
 import {
   AisChat,
   AisExperimentalAutocomplete,
+  AisHits,
   AisInstantSearch,
 } from '../../instantsearch';
 import { isVue3, renderCompat } from '../../util/vue-compat';
@@ -39,6 +40,7 @@ async function mountAutocomplete({
   instantSearchProps = { indexName: 'indexName' },
   chat,
   validateChatEntryPoints = false,
+  withHits = false,
 } = {}) {
   const container = document.body.appendChild(document.createElement('div'));
   const instance = {};
@@ -58,6 +60,7 @@ async function mountAutocomplete({
       h(AisInstantSearch, { props: { ...instantSearchProps, searchClient } }, [
         h(InstanceSpy),
         h(AisExperimentalAutocomplete, { props, scopedSlots: slots }),
+        withHits && h(AisHits),
         chat &&
           h(AisChat, {
             props: {
@@ -169,6 +172,177 @@ describe('AisExperimentalAutocomplete', () => {
         params: expect.objectContaining({ query: 'apple' }),
       }),
     ]);
+  });
+
+  test('keeps a query cleared before the isolated index is mounted', async () => {
+    const { searchClient } = await mountAutocomplete({
+      props: { indices: [{ indexName: 'indexName' }], requiresSearch: false },
+      instantSearchProps: {
+        indexName: 'indexName',
+        initialUiState: { indexName: { query: 'apple' } },
+      },
+    });
+
+    const input = document.querySelector('input');
+    expect(input.value).toBe('apple');
+
+    input.dispatchEvent(new Event('focus'));
+    input.value = '';
+    input.dispatchEvent(new Event('input'));
+    await nextTick();
+    await wait(0);
+    await nextTick();
+
+    expect(input.value).toBe('');
+    expect(searchClient.search).toHaveBeenLastCalledWith([
+      expect.objectContaining({
+        params: expect.not.objectContaining({ query: 'apple' }),
+      }),
+    ]);
+  });
+
+  test('follows the parent query before the first focus', async () => {
+    const { instantSearchInstance } = await mountAutocomplete({
+      props: { indices: [{ indexName: 'indexName' }] },
+    });
+
+    expect(document.querySelector('input').value).toBe('');
+
+    instantSearchInstance.setUiState({ indexName: { query: 'banana' } });
+    await nextTick();
+    await wait(0);
+    await nextTick();
+
+    expect(document.querySelector('input').value).toBe('banana');
+  });
+
+  test('follows the parent query before the first focus without a search', async () => {
+    const { instantSearchInstance } = await mountAutocomplete({
+      props: { indices: [{ indexName: 'indexName' }], requiresSearch: false },
+    });
+
+    instantSearchInstance.setUiState({ indexName: { query: 'banana' } });
+    await nextTick();
+    await wait(0);
+    await nextTick();
+
+    expect(document.querySelector('input').value).toBe('banana');
+  });
+
+  test('resets the parent page when the query changes', async () => {
+    window.matchMedia.mockImplementation((query) => ({
+      matches: query === '(max-width: 680px)',
+      media: query,
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+    }));
+    const { instantSearchInstance } = await mountAutocomplete({
+      props: {
+        indices: [{ indexName: 'indexName' }],
+        detachedMediaQuery: '(max-width: 680px)',
+      },
+      instantSearchProps: {
+        indexName: 'indexName',
+        initialUiState: { indexName: { query: 'apple' } },
+      },
+    });
+    const setUiState = jest.spyOn(instantSearchInstance, 'setUiState');
+
+    document
+      .querySelector('.ais-AutocompleteDetachedSearchButtonClear')
+      .click();
+    await nextTick();
+
+    const updater = setUiState.mock.calls[0][0];
+    expect(
+      updater({ indexName: { query: 'apple', page: 5 } }).indexName
+    ).toEqual({ query: '' });
+  });
+
+  test('mounts the isolated index right away with `autofocus`', async () => {
+    const { instantSearchInstance } = await mountAutocomplete({
+      props: { indices: [{ indexName: 'indexName' }], autofocus: true },
+    });
+
+    expect(findIsolatedIndex(instantSearchInstance)).toBeDefined();
+  });
+
+  test('keeps the parent initial search with `autofocus`', async () => {
+    const searchClient = createMockedSearchClient(
+      createMultiSearchResponse(
+        createSingleSearchResponse({
+          hits: [{ objectID: '1', name: 'sibling hit' }],
+        })
+      )
+    );
+    await mountAutocomplete({
+      props: { indices: [{ indexName: 'indexName' }], autofocus: true },
+      searchClient,
+      withHits: true,
+    });
+    await wait(0);
+
+    expect(searchClient.search).toHaveBeenCalled();
+    expect(document.querySelector('.ais-Hits')).not.toBeNull();
+    expect(document.querySelector('.ais-Hits-item')).not.toBeNull();
+  });
+
+  test('clears the parent query in detached mode before the first focus', async () => {
+    window.matchMedia.mockImplementation((query) => ({
+      matches: query === '(max-width: 680px)',
+      media: query,
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+    }));
+    const { instantSearchInstance } = await mountAutocomplete({
+      props: {
+        indices: [{ indexName: 'indexName' }],
+        detachedMediaQuery: '(max-width: 680px)',
+      },
+      instantSearchProps: {
+        indexName: 'indexName',
+        initialUiState: { indexName: { query: 'apple' } },
+      },
+    });
+
+    document
+      .querySelector('.ais-AutocompleteDetachedSearchButtonClear')
+      .click();
+    await nextTick();
+    await wait(0);
+
+    expect(instantSearchInstance.mainIndex.getHelper().state.query).toBe('');
+  });
+
+  test('does not expose the composition root as a feed in `transformItems`', async () => {
+    const transformItems = jest.fn((items) => items);
+    await mountAutocomplete({
+      props: { feeds: [{ feedID: 'products' }], transformItems },
+      searchClient: createCompositionClient({
+        search: jest.fn(() =>
+          Promise.resolve({
+            results: [
+              createSingleSearchResponse({
+                feedID: 'products',
+                hits: [{ objectID: 'p1' }],
+              }),
+            ],
+          })
+        ),
+      }),
+      instantSearchProps: { compositionID: 'my-composition' },
+    });
+
+    document.querySelector('input').dispatchEvent(new Event('focus'));
+    await nextTick();
+    await wait(0);
+    await nextTick();
+
+    const seen = transformItems.mock.calls.flatMap(([items]) =>
+      items.map((item) => item.indexName)
+    );
+    expect(seen.length).toBeGreaterThan(0);
+    expect(seen.every((name) => name === 'products')).toBe(true);
   });
 
   test('registers the feeds in the isolated composition index', async () => {

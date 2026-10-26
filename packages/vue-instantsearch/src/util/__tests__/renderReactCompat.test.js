@@ -3,7 +3,7 @@
  */
 
 import { mount } from '../../../test/utils';
-import { renderReactCompat } from '../vue-compat';
+import { isVue2, renderReactCompat } from '../vue-compat';
 
 function mountReact(renderFn, data = {}) {
   return mount({
@@ -13,6 +13,10 @@ function mountReact(renderFn, data = {}) {
     }),
   });
 }
+
+// Vue 3 itself never calls a replaced or removed function ref with `null`
+// (only on unmount), so these React semantics are Vue 2 adapter behaviour.
+const itVue2 = isVue2 ? it : it.skip;
 
 describe('renderReactCompat', () => {
   describe('htmlFor', () => {
@@ -75,6 +79,46 @@ describe('renderReactCompat', () => {
 
       await wrapper.setData({ stalled: false });
       expect(seen[seen.length - 1]).toBe(false);
+    });
+
+    itVue2(
+      'clears the previous callback ref when the callback changes',
+      async () => {
+        const events = [];
+        const wrapper = mountReact(
+          function (h) {
+            const { id } = this;
+            return h('div', {
+              ref: (element) => events.push([id, element ? 'el' : null]),
+            });
+          },
+          { id: 'a' }
+        );
+
+        events.length = 0;
+        await wrapper.setData({ id: 'b' });
+
+        expect(events).toEqual([
+          ['a', null],
+          ['b', 'el'],
+        ]);
+      }
+    );
+
+    itVue2('clears the callback ref when the ref is removed', async () => {
+      const calls = [];
+      const ref = (element) => calls.push(element ? 'el' : null);
+      const wrapper = mountReact(
+        function (h) {
+          return h('div', this.withRef ? { ref } : {});
+        },
+        { withRef: true }
+      );
+
+      calls.length = 0;
+      await wrapper.setData({ withRef: false });
+
+      expect(calls).toEqual([null]);
     });
 
     it('populates MutableRefs on mount and clears them on unmount', async () => {

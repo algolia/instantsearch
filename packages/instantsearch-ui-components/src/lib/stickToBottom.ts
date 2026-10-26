@@ -560,7 +560,18 @@ export function createStickToBottom({
       let previousHeight: number | undefined;
 
       const resizeObserver = new ResizeObserver(([entry]) => {
-        const { height } = entry.contentRect;
+        const { width, height } = entry.contentRect;
+
+        /**
+         * Hiding the content (`display: none` on it or an ancestor) reports a
+         * 0×0 box. That isn't a resize: handling it as a shrink re-pins a
+         * reader who scrolled up, and scrolls them back down once it's shown
+         * again. The browser keeps the scroll position in the meantime.
+         */
+        if (width === 0 && height === 0) {
+          return;
+        }
+
         const difference = height - (previousHeight ?? height);
 
         state.resizeDifference = difference;

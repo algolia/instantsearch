@@ -148,6 +148,11 @@ function renderConditionalHighlight(
   });
 }
 
+function omitPage(indexUiState) {
+  const { page, ...rest } = indexUiState || {};
+  return rest;
+}
+
 function isFeedsMode(vm) {
   return Boolean(vm.feeds);
 }
@@ -430,7 +435,9 @@ export default {
       instanceId: ++autocompleteInstanceId,
       mounted: false,
       // Whether the isolated index subtree is rendered.
-      activated: false,
+      activated: this.autofocus,
+      // Whether the subtree was activated after the initial render (on focus).
+      activatedLazily: false,
       // The isolated index, once its connector is mounted.
       isolatedIndex: null,
       // A query typed between activation and the connector's first render.
@@ -461,10 +468,17 @@ export default {
             currentRefinement: '',
             widgetParams: {},
           });
+        } else if (!this.$_ais.isolatedIndex) {
+          // Until the isolated index is mounted, the input follows the parent
+          // query (routing, `setUiState`, another search box): refresh it.
+          this.requestRender();
         }
       })({}),
       $$widgetType: 'ais.autocomplete',
       dependsOn: this.requiresSearch ? 'search' : 'none',
+      // Without a search the parent has no results: render anyway, as
+      // `connectAutocomplete` does, so the input follows the parent query.
+      shouldRender: this.requiresSearch ? undefined : () => true,
       // On the always-mounted companion (like React), so the chat's entry point
       // check passes before the isolated index is first rendered.
       ...(this.aiMode ? { opensChat: true } : {}),
@@ -495,22 +509,26 @@ export default {
       }
 
       this.$_ais.activated = true;
+      this.$_ais.activatedLazily = true;
       // Renders the isolated index subtree.
       this.requestRender();
     },
     handleConnectorMount(isolatedIndex) {
       const state = this.$_ais;
       state.isolatedIndex = isolatedIndex;
-      // Adding the isolated index schedules the parent's search even though
-      // the parent's own state hasn't changed; cancel it so only the isolated
-      // index searches.
-      this.instantSearchInstance.scheduleSearch.cancel();
+      // Adding the isolated index on focus schedules the parent's search even
+      // though the parent's own state hasn't changed; cancel it so only the
+      // isolated index searches. With `autofocus` the subtree mounts eagerly and
+      // the parent's initial search shares that slot: it must not be cancelled.
+      if (state.activatedLazily) {
+        this.instantSearchInstance.scheduleSearch.cancel();
+      }
       const query =
         state.pendingQuery !== undefined
           ? state.pendingQuery
           : this.getParentIndex().getHelper()?.state.query;
       state.pendingQuery = undefined;
-      if (query) {
+      if (query !== undefined) {
         isolatedIndex.getHelper()?.setQuery(query);
       }
       isolatedIndex.scheduleLocalSearch();
@@ -529,12 +547,16 @@ export default {
 
       // In feeds-mode `connectAutocomplete` sets `indexName` from the result
       // index, which is not the feedID: remap it before the user's transform.
+      // The scoped results also include the isolated composition root, whose
+      // hits duplicate the first feed and match no feed configuration: drop it.
       const transformItems = feedsMode
         ? (items) => {
-            const remapped = items.map((item) => ({
-              ...item,
-              indexName: item.indexId,
-            }));
+            const remapped = items
+              .filter((item) => item.indexId !== indexId)
+              .map((item) => ({
+                ...item,
+                indexName: item.indexId,
+              }));
             return this.transformItems
               ? this.transformItems(remapped)
               : remapped;
@@ -800,17 +822,17 @@ export default {
       const onRefine = (query) => {
         setLocalQuery(query);
         refineAutocomplete(query);
-        // Before activation there is no isolated index to mirror the query to.
-        if (!state.isolatedIndex) {
-          return;
-        }
         instantSearchInstance.setUiState((uiState) => ({
           ...uiState,
+          // A new query starts from the first page, like `setQuery` does.
           [targetIndex.getIndexId()]: {
-            ...uiState[targetIndex.getIndexId()],
+            ...omitPage(uiState[targetIndex.getIndexId()]),
             query,
           },
-          [isolatedIndex.getIndexId()]: { query },
+          // Before activation there is no isolated index to mirror the query to.
+          ...(state.isolatedIndex
+            ? { [isolatedIndex.getIndexId()]: { query } }
+            : {}),
         }));
         if (query.length > 0) {
           storage.onAdd(query);

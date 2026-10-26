@@ -6,6 +6,8 @@
   // (`.ais-ResultCard-loader`) so the card keeps its height from the skeleton
   // to a clipped answer.
   --ais-result-card-max-height: calc(var(--ais-spacing) * 4.5);
+  // Height of the expanded body; a longer answer scrolls inside it.
+  --ais-result-card-expanded-max-height: 60vh;
 
   display: flex;
   flex-direction: column;
@@ -59,6 +61,10 @@
   transition: max-height var(--ais-transition-duration)
     var(--ais-transition-timing-function);
 
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+
   .ais-ChatMessage-container {
     width: 100%;
   }
@@ -91,7 +97,8 @@
 
 // The header icon pulses from the skeleton through streaming, so the answer
 // reads as in progress without anything in the body.
-.ais-ResultCard[aria-busy='true'] .ais-ResultCard-headerTitle svg {
+.ais-ResultCard[data-status='loading'] .ais-ResultCard-headerTitle svg,
+.ais-ResultCard[data-status='streaming'] .ais-ResultCard-headerTitle svg {
   animation: ais-chat-loader-skeleton 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
@@ -101,9 +108,28 @@
   margin-top: calc(var(--ais-spacing) * -0.75);
 }
 
-// Fallback before the first measurement.
+// Also the height before the first measurement.
 .ais-ResultCard-body--expanded {
-  max-height: none;
+  max-height: var(--ais-result-card-expanded-max-height);
+  overflow-y: auto;
+}
+
+.ais-ResultCard-body:focus-visible {
+  outline: 2px solid
+    rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+  outline-offset: 2px;
+}
+
+// Screen-reader-only progress announcements.
+.ais-ResultCard-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 // Each line matches a line of answer text. The three lines, gaps and padding
