@@ -105,14 +105,11 @@ describe('insideBoundingBoxToBoundingBox', () => {
     ['10,12,12'],
     ['10.  15,12,12'],
     ['10,12,a,14'],
-  ])(
-    'expect to throw an error with: %j',
-    (input) => {
-      expect(() => insideBoundingBoxToBoundingBox(input)).toThrow(
-        `Invalid value for "insideBoundingBox" parameter: "${input}"`
-      );
-    }
-  );
+  ])('expect to throw an error with: %j', (input) => {
+    expect(() => insideBoundingBoxToBoundingBox(input)).toThrow(
+      `Invalid value for "insideBoundingBox" parameter: "${input}"`
+    );
+  });
 
   it.each([[[]], [[[]]]])('expect to throw an error with: %j', (input) => {
     // @ts-expect-error
