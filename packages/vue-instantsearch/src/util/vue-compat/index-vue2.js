@@ -96,6 +96,9 @@ export function augmentReactCreateElement(createElement) {
         data.key = value;
       } else if (name === 'children') {
         // handled via the children argument
+      } else if (name === 'htmlFor') {
+        // React's `htmlFor` is the `for` attribute (label -> control association).
+        data.attrs.for = value;
       } else if (name === 'ref') {
         bindMutableRef(data, value);
       } else if (isEventProp(name, value)) {
@@ -114,6 +117,8 @@ export function augmentReactCreateElement(createElement) {
         data.attrs[name] = value;
       }
     });
+
+    bindCallbackRefPatch(data, props.ref);
 
     return createElement(tag, data, childArg);
   };
@@ -175,6 +180,34 @@ function bindMutableRef(data, ref) {
   data.hook.destroy = (vnode) => {
     assign(null);
     if (previousDestroy) previousDestroy(vnode);
+  };
+}
+
+/**
+ * Mirrors React's callback-ref semantics on patch. Vue 2 patches elements in
+ * place without re-running `insert`, so `postpatch` re-runs the callback with
+ * the latest closure (callers rely on that, e.g.
+ * `ref={(el) => sync(el, isStalled)}`). When the callback changed or was
+ * removed, the previous one is first called with `null`, like React and Vue 3.
+ * It is installed on every element because the old ref can only be cleared from
+ * the new vnode's hook. MutableRefs keep insert/destroy semantics only.
+ */
+function bindCallbackRefPatch(data, ref) {
+  const callbackRef = typeof ref === 'function' ? ref : undefined;
+  // eslint-disable-next-line no-param-reassign
+  data.callbackRef = callbackRef;
+
+  data.hook = data.hook || {};
+  const previousPostpatch = data.hook.postpatch;
+  data.hook.postpatch = (oldVnode, vnode) => {
+    const previousRef = oldVnode.data && oldVnode.data.callbackRef;
+    if (previousRef && previousRef !== callbackRef) {
+      previousRef(null);
+    }
+    if (callbackRef) {
+      callbackRef(vnode.elm);
+    }
+    if (previousPostpatch) previousPostpatch(oldVnode, vnode);
   };
 }
 
