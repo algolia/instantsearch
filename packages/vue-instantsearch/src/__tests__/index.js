@@ -93,7 +93,7 @@ function getAllComponents() {
         // validation is disabled since no ChatTrigger is mounted here.
         props.transport = {};
         props.disableTriggerValidation = true;
-      } else if (name === 'AisChatTrigger' || name === 'AisTrendingItems') {
+      } else if (name === 'AisTrendingItems' || name === 'AisChatTrigger') {
         // no required props
       } else {
         props.attribute = 'attr';

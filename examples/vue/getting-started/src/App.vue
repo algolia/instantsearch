@@ -192,4 +192,16 @@ em {
   font-weight: normal;
   text-align: center;
 }
+
+.chat-item img {
+  width: 100%;
+  height: 6rem;
+  object-fit: contain;
+}
+
+.chat-item-title {
+  font-size: 0.75rem;
+  font-weight: normal;
+  text-align: center;
+}
 </style>
