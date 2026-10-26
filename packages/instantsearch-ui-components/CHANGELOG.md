@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.44.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.43.0...instantsearch-ui-components@0.44.0) (2026-10-26)
+
+
+### Bug Fixes
+
+* **chat:** keep the scroll position when the chat is hidden and shown again [FX-4058] ([#7322](https://github.com/algolia/instantsearch/issues/7322)) ([a3484e1](https://github.com/algolia/instantsearch/commit/a3484e1b32f663be6ab36bdccbd47d7a3109e9bf))
+* **compareBar:** keep focus in the bar after removing an item ([#7303](https://github.com/algolia/instantsearch/issues/7303)) ([ac71f2e](https://github.com/algolia/instantsearch/commit/ac71f2e0dd28e5b9275432be5433d7b00f606122))
+* **compareBar:** render the title as a heading ([#7301](https://github.com/algolia/instantsearch/issues/7301)) ([0d5c338](https://github.com/algolia/instantsearch/commit/0d5c338cc0ae48b3b0d323835ca64b71bfd7ced6))
+
+
+### Features
+
+* **chat:** announce replies once and make the history keyboard-scrollable ([#7295](https://github.com/algolia/instantsearch/issues/7295)) ([1a72e31](https://github.com/algolia/instantsearch/commit/1a72e31b6304e9d829c237003e7f6320c900716b))
+* **result-card:** stream the answer and cap the expanded card ([#7316](https://github.com/algolia/instantsearch/issues/7316)) ([845e01c](https://github.com/algolia/instantsearch/commit/845e01c40ef223e785de97f66847b146ff6b44c2))
+
+
+
+
+
 # [0.43.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.42.0...instantsearch-ui-components@0.43.0) (2026-10-12)
 
 

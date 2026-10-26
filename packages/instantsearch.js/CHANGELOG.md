@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.121.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.120.0...instantsearch.js@4.121.0) (2026-10-26)
+
+
+### Bug Fixes
+
+* **chat:** keep chatInstance getter on the widget ([#7296](https://github.com/algolia/instantsearch/issues/7296)) ([7555a5f](https://github.com/algolia/instantsearch/commit/7555a5fd360e38e4f5266f561fa5a792a08e19b5))
+* **chat:** persist conversation id ([#7297](https://github.com/algolia/instantsearch/issues/7297)) ([d0cee64](https://github.com/algolia/instantsearch/commit/d0cee64dad0897a33d16e91b7cc0353510cf0efb))
+* **compare:** clarify option validation messages ([#7300](https://github.com/algolia/instantsearch/issues/7300)) ([0d342f9](https://github.com/algolia/instantsearch/commit/0d342f96696b231e9cfc8610db793ca7f94ed5ee)), closes [#7306](https://github.com/algolia/instantsearch/issues/7306)
+* **compare:** clear the selection after the hand-off to the chat ([#7299](https://github.com/algolia/instantsearch/issues/7299)) ([f6bf496](https://github.com/algolia/instantsearch/commit/f6bf496f7ae1b5a25f9bbe1b15519bcc75091bc0))
+* **compare:** require configurationId in the connector ([#7306](https://github.com/algolia/instantsearch/issues/7306)) ([d680621](https://github.com/algolia/instantsearch/commit/d68062114469f1231b0dd374244a4f9f47ab4032))
+* **geo-search:** accept 0 as a bounding box coordinate ([#7323](https://github.com/algolia/instantsearch/issues/7323)) ([9b7b017](https://github.com/algolia/instantsearch/commit/9b7b0170ba50d11a8a1196fbf0e4f094081e2344))
+
+
+### Features
+
+* **chat:** announce replies once and make the history keyboard-scrollable ([#7295](https://github.com/algolia/instantsearch/issues/7295)) ([1a72e31](https://github.com/algolia/instantsearch/commit/1a72e31b6304e9d829c237003e7f6320c900716b))
+* **compare:** add transformItems ([#7309](https://github.com/algolia/instantsearch/issues/7309)) ([8be0dd8](https://github.com/algolia/instantsearch/commit/8be0dd871b36aee780fea86fad42aede3af2a3cc))
+* **compare:** require a comparison configuration for the hand-off ([#7294](https://github.com/algolia/instantsearch/issues/7294)) ([365f35a](https://github.com/algolia/instantsearch/commit/365f35adcb5d8f50e82c5dd11c1896f185bd51bc))
+* **result-card:** stream the answer and cap the expanded card ([#7316](https://github.com/algolia/instantsearch/issues/7316)) ([845e01c](https://github.com/algolia/instantsearch/commit/845e01c40ef223e785de97f66847b146ff6b44c2))
+
+
+
+
+
 # [4.120.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.119.0...instantsearch.js@4.120.0) (2026-10-12)
 
 
