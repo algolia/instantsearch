@@ -169,14 +169,6 @@ em {
   text-align: center;
 }
 
-.chat-item img {
-  width: 100%;
-  height: 6rem;
-  object-fit: contain;
-}
-
-.chat-item-title {
-  font-size: 0.75rem;
 .ais-Carousel-list {
   grid-auto-columns: calc(25% - 0.5rem);
 }
