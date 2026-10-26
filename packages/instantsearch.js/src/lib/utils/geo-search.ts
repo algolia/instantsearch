@@ -19,12 +19,13 @@ export function aroundLatLngToPosition(value: string) {
 
 export type LatLng = Array<[number, number, number, number]>;
 
-// 0 is a valid latitude/longitude (equator, prime meridian), so only reject
-// values that are missing or not a number.
 function isValidBoundingBox(
   coordinates: Array<number | undefined>
 ): coordinates is [number, number, number, number] {
-  return coordinates.every((coordinate) => isFiniteNumber(coordinate));
+  return (
+    coordinates.length === 4 &&
+    coordinates.every((coordinate) => isFiniteNumber(coordinate))
+  );
 }
 
 function insideBoundingBoxArrayToBoundingBox(value: LatLng) {
