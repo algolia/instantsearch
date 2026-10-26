@@ -48,6 +48,20 @@ describe('insideBoundingBoxToBoundingBox', () => {
         southWest: { lat: 12.15, lng: 14.15 },
       },
     ],
+    [
+      '10,10,0,0',
+      {
+        northEast: { lat: 10, lng: 10 },
+        southWest: { lat: 0, lng: 0 },
+      },
+    ],
+    [
+      '51.6,0,51.3,-0.5',
+      {
+        northEast: { lat: 51.6, lng: 0 },
+        southWest: { lat: 51.3, lng: -0.5 },
+      },
+    ],
   ])(
     'expect to return a BoundingBox from a string: %j',
     (input, expectation) => {
@@ -70,6 +84,13 @@ describe('insideBoundingBoxToBoundingBox', () => {
         southWest: { lat: 12.15, lng: 14.15 },
       },
     ],
+    [
+      [[10, 10, 0, 0]] as LatLng,
+      {
+        northEast: { lat: 10, lng: 10 },
+        southWest: { lat: 0, lng: 0 },
+      },
+    ],
   ])(
     'expect to return a BoundingBox from an array: %j',
     (input, expectation) => {
@@ -77,14 +98,18 @@ describe('insideBoundingBoxToBoundingBox', () => {
     }
   );
 
-  it.each([[''], ['10'], ['10,12'], ['10,12,12'], ['10.  15,12,12']])(
-    'expect to throw an error with: %j',
-    (input) => {
-      expect(() => insideBoundingBoxToBoundingBox(input)).toThrow(
-        `Invalid value for "insideBoundingBox" parameter: "${input}"`
-      );
-    }
-  );
+  it.each([
+    [''],
+    ['10'],
+    ['10,12'],
+    ['10,12,12'],
+    ['10.  15,12,12'],
+    ['10,12,a,14'],
+  ])('expect to throw an error with: %j', (input) => {
+    expect(() => insideBoundingBoxToBoundingBox(input)).toThrow(
+      `Invalid value for "insideBoundingBox" parameter: "${input}"`
+    );
+  });
 
   it.each([[[]], [[[]]]])('expect to throw an error with: %j', (input) => {
     // @ts-expect-error
