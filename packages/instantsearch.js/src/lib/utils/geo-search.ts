@@ -1,3 +1,5 @@
+import { isFiniteNumber } from './isFiniteNumber';
+
 const latLngRegExp = /^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)$/;
 
 export function aroundLatLngToPosition(value: string) {
@@ -17,6 +19,12 @@ export function aroundLatLngToPosition(value: string) {
 
 export type LatLng = Array<[number, number, number, number]>;
 
+// 0 is a valid latitude/longitude (equator, prime meridian), so only reject
+// values that are missing or not a number.
+function isValidBoundingBox(coordinates: Array<number | undefined>) {
+  return coordinates.every((coordinate) => isFiniteNumber(coordinate));
+}
+
 function insideBoundingBoxArrayToBoundingBox(value: LatLng) {
   const [
     [neLat, neLng, swLat, swLng] = [undefined, undefined, undefined, undefined],
@@ -24,7 +32,7 @@ function insideBoundingBoxArrayToBoundingBox(value: LatLng) {
 
   // Since the value provided is the one send with the request, the API should
   // throw an error due to the wrong format. So throw an error should be safe.
-  if (!neLat || !neLng || !swLat || !swLng) {
+  if (!isValidBoundingBox([neLat, neLng, swLat, swLng])) {
     throw new Error(
       `Invalid value for "insideBoundingBox" parameter: [${value}]`
     );
@@ -47,7 +55,7 @@ function insideBoundingBoxStringToBoundingBox(value: string) {
 
   // Since the value provided is the one send with the request, the API should
   // throw an error due to the wrong format. So throw an error should be safe.
-  if (!neLat || !neLng || !swLat || !swLng) {
+  if (!isValidBoundingBox([neLat, neLng, swLat, swLng])) {
     throw new Error(
       `Invalid value for "insideBoundingBox" parameter: "${value}"`
     );
