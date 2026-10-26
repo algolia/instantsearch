@@ -17,6 +17,7 @@ const changedPackages = packages
   }))
   .filter(({ isPublished }) => !isPublished);
 let updatedPackages = [];
+let previousVersions = new Map();
 
 export default {
   shouldPrepare: () => {
@@ -34,7 +35,7 @@ export default {
         silent: true,
       })
     );
-    const previousVersions = new Map(
+    previousVersions = new Map(
       packages.map(({ name, version }) => [name, version])
     );
     updatedPackages = packageVersionsAfterUpdate.filter(
@@ -65,10 +66,11 @@ export default {
     const publishCommandsTable = `\`\`\`${publishCommands}\`\`\``;
     const updatedPackagesSummary = updatedPackages.length
       ? [
-          '| Package | Version |',
+          '| Package | Current Version | Next Version',
           '|---|---|',
           ...updatedPackages.map(
-            ({ name, version }) => `| \`${name}\` | \`${version}\` |`
+            ({ name, version }) =>
+              `| \`${name}\` | \`${previousVersions.get(name)}\` | \`${version}\` |`
           ),
         ].join('\n')
       : 'No package versions changed.';
