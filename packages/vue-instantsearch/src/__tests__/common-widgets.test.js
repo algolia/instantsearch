@@ -30,12 +30,12 @@ import {
   AisMenuSelect,
   AisDynamicWidgets,
   AisRelatedProducts,
-  AisChat,
-  AisChatTrigger,
   AisFrequentlyBoughtTogether,
   AisLookingSimilar,
   AisTrendingItems,
   AisTrendingFacets,
+  AisChat,
+  AisChatTrigger,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
