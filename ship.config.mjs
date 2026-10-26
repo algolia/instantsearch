@@ -66,8 +66,8 @@ export default {
     const publishCommandsTable = `\`\`\`${publishCommands}\`\`\``;
     const updatedPackagesSummary = updatedPackages.length
       ? [
-          '| Package | Current Version | Next Version',
-          '|---|---|',
+          '| Package | Current Version | Next Version |',
+          '|---|---|---|',
           ...updatedPackages.map(
             ({ name, version }) =>
               `| \`${name}\` | \`${previousVersions.get(name)}\` | \`${version}\` |`
