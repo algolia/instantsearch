@@ -148,6 +148,11 @@ function renderConditionalHighlight(
   });
 }
 
+function omitPage(indexUiState) {
+  const { page, ...rest } = indexUiState || {};
+  return rest;
+}
+
 function isFeedsMode(vm) {
   return Boolean(vm.feeds);
 }
@@ -471,6 +476,9 @@ export default {
       })({}),
       $$widgetType: 'ais.autocomplete',
       dependsOn: this.requiresSearch ? 'search' : 'none',
+      // Without a search the parent has no results: render anyway, as
+      // `connectAutocomplete` does, so the input follows the parent query.
+      shouldRender: this.requiresSearch ? undefined : () => true,
       // On the always-mounted companion (like React), so the chat's entry point
       // check passes before the isolated index is first rendered.
       ...(this.aiMode ? { opensChat: true } : {}),
@@ -816,8 +824,9 @@ export default {
         refineAutocomplete(query);
         instantSearchInstance.setUiState((uiState) => ({
           ...uiState,
+          // A new query starts from the first page, like `setQuery` does.
           [targetIndex.getIndexId()]: {
-            ...uiState[targetIndex.getIndexId()],
+            ...omitPage(uiState[targetIndex.getIndexId()]),
             query,
           },
           // Before activation there is no isolated index to mirror the query to.

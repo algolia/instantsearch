@@ -216,6 +216,49 @@ describe('AisExperimentalAutocomplete', () => {
     expect(document.querySelector('input').value).toBe('banana');
   });
 
+  test('follows the parent query before the first focus without a search', async () => {
+    const { instantSearchInstance } = await mountAutocomplete({
+      props: { indices: [{ indexName: 'indexName' }], requiresSearch: false },
+    });
+
+    instantSearchInstance.setUiState({ indexName: { query: 'banana' } });
+    await nextTick();
+    await wait(0);
+    await nextTick();
+
+    expect(document.querySelector('input').value).toBe('banana');
+  });
+
+  test('resets the parent page when the query changes', async () => {
+    window.matchMedia.mockImplementation((query) => ({
+      matches: query === '(max-width: 680px)',
+      media: query,
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+    }));
+    const { instantSearchInstance } = await mountAutocomplete({
+      props: {
+        indices: [{ indexName: 'indexName' }],
+        detachedMediaQuery: '(max-width: 680px)',
+      },
+      instantSearchProps: {
+        indexName: 'indexName',
+        initialUiState: { indexName: { query: 'apple' } },
+      },
+    });
+    const setUiState = jest.spyOn(instantSearchInstance, 'setUiState');
+
+    document
+      .querySelector('.ais-AutocompleteDetachedSearchButtonClear')
+      .click();
+    await nextTick();
+
+    const updater = setUiState.mock.calls[0][0];
+    expect(
+      updater({ indexName: { query: 'apple', page: 5 } }).indexName
+    ).toEqual({ query: '' });
+  });
+
   test('mounts the isolated index right away with `autofocus`', async () => {
     const { instantSearchInstance } = await mountAutocomplete({
       props: { indices: [{ indexName: 'indexName' }], autofocus: true },
