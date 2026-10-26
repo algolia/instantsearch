@@ -21,22 +21,24 @@ export type LatLng = Array<[number, number, number, number]>;
 
 // 0 is a valid latitude/longitude (equator, prime meridian), so only reject
 // values that are missing or not a number.
-function isValidBoundingBox(coordinates: Array<number | undefined>) {
+function isValidBoundingBox(
+  coordinates: Array<number | undefined>
+): coordinates is [number, number, number, number] {
   return coordinates.every((coordinate) => isFiniteNumber(coordinate));
 }
 
 function insideBoundingBoxArrayToBoundingBox(value: LatLng) {
-  const [
-    [neLat, neLng, swLat, swLng] = [undefined, undefined, undefined, undefined],
-  ] = value;
+  const coordinates = value[0] || [];
 
   // Since the value provided is the one send with the request, the API should
   // throw an error due to the wrong format. So throw an error should be safe.
-  if (!isValidBoundingBox([neLat, neLng, swLat, swLng])) {
+  if (!isValidBoundingBox(coordinates)) {
     throw new Error(
       `Invalid value for "insideBoundingBox" parameter: [${value}]`
     );
   }
+
+  const [neLat, neLng, swLat, swLng] = coordinates;
 
   return {
     northEast: {
@@ -51,15 +53,17 @@ function insideBoundingBoxArrayToBoundingBox(value: LatLng) {
 }
 
 function insideBoundingBoxStringToBoundingBox(value: string) {
-  const [neLat, neLng, swLat, swLng] = value.split(',').map(parseFloat);
+  const coordinates = value.split(',').map(parseFloat);
 
   // Since the value provided is the one send with the request, the API should
   // throw an error due to the wrong format. So throw an error should be safe.
-  if (!isValidBoundingBox([neLat, neLng, swLat, swLng])) {
+  if (!isValidBoundingBox(coordinates)) {
     throw new Error(
       `Invalid value for "insideBoundingBox" parameter: "${value}"`
     );
   }
+
+  const [neLat, neLng, swLat, swLng] = coordinates;
 
   return {
     northEast: {
