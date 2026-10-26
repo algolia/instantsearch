@@ -271,6 +271,37 @@ describe('AisExperimentalAutocomplete', () => {
     expect(instantSearchInstance.mainIndex.getHelper().state.query).toBe('');
   });
 
+  test('does not expose the composition root as a feed in `transformItems`', async () => {
+    const transformItems = jest.fn((items) => items);
+    await mountAutocomplete({
+      props: { feeds: [{ feedID: 'products' }], transformItems },
+      searchClient: createCompositionClient({
+        search: jest.fn(() =>
+          Promise.resolve({
+            results: [
+              createSingleSearchResponse({
+                feedID: 'products',
+                hits: [{ objectID: 'p1' }],
+              }),
+            ],
+          })
+        ),
+      }),
+      instantSearchProps: { compositionID: 'my-composition' },
+    });
+
+    document.querySelector('input').dispatchEvent(new Event('focus'));
+    await nextTick();
+    await wait(0);
+    await nextTick();
+
+    const seen = transformItems.mock.calls.flatMap(([items]) =>
+      items.map((item) => item.indexName)
+    );
+    expect(seen.length).toBeGreaterThan(0);
+    expect(seen.every((name) => name === 'products')).toBe(true);
+  });
+
   test('registers the feeds in the isolated composition index', async () => {
     const { instantSearchInstance } = await mountAutocomplete({
       props: { feeds: [{ feedID: 'products' }] },

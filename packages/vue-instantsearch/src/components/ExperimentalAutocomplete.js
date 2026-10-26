@@ -539,12 +539,16 @@ export default {
 
       // In feeds-mode `connectAutocomplete` sets `indexName` from the result
       // index, which is not the feedID: remap it before the user's transform.
+      // The scoped results also include the isolated composition root, whose
+      // hits duplicate the first feed and match no feed configuration: drop it.
       const transformItems = feedsMode
         ? (items) => {
-            const remapped = items.map((item) => ({
-              ...item,
-              indexName: item.indexId,
-            }));
+            const remapped = items
+              .filter((item) => item.indexId !== indexId)
+              .map((item) => ({
+                ...item,
+                indexName: item.indexId,
+              }));
             return this.transformItems
               ? this.transformItems(remapped)
               : remapped;
