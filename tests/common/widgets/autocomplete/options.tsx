@@ -8,6 +8,8 @@ import { screen, waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
+import { getVueH } from './vue';
+
 import type { AutocompleteWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 
@@ -74,7 +76,13 @@ export function createOptionsTests(
               },
             ],
           },
-          vue: {},
+          vue: {
+            indices: [{ indexName: 'indexName' }, { indexName: 'indexName2' }],
+            slots: {
+              item: ({ item, indexName }) =>
+                indexName === 'indexName' ? item.name : item.query,
+            },
+          },
         },
       });
 
@@ -188,7 +196,13 @@ export function createOptionsTests(
               },
             ],
           },
-          vue: {},
+          vue: {
+            requiresSearch: false,
+            indices: [{ indexName: 'suggestions' }],
+            slots: {
+              item: ({ item }) => item.name,
+            },
+          },
         },
       });
 
@@ -248,7 +262,11 @@ export function createOptionsTests(
               indexName: 'query_suggestions',
             },
           },
-          vue: {},
+          vue: {
+            showQuerySuggestions: {
+              indexName: 'query_suggestions',
+            },
+          },
         },
       });
 
@@ -331,7 +349,12 @@ export function createOptionsTests(
             },
             showRecent: true,
           },
-          vue: {},
+          vue: {
+            showQuerySuggestions: {
+              indexName: 'query_suggestions',
+            },
+            showRecent: true,
+          },
         },
       });
 
@@ -437,7 +460,15 @@ export function createOptionsTests(
               ),
             },
           },
-          vue: {},
+          vue: {
+            showQuerySuggestions: {
+              indexName: 'query_suggestions',
+            },
+            showRecent: {},
+            slots: {
+              recentHeader: () => 'Recent Searches',
+            },
+          },
         },
       });
 
@@ -528,7 +559,19 @@ export function createOptionsTests(
               },
             ],
           },
-          vue: {},
+          vue: {
+            indices: [
+              { indexName: 'indexName', searchParameters: { hitsPerPage: 10 } },
+              {
+                indexName: 'indexName2',
+                searchParameters: { hitsPerPage: 20 },
+              },
+            ],
+            slots: {
+              item: ({ item, indexName }) =>
+                indexName === 'indexName' ? item.name : item.query,
+            },
+          },
         },
       });
 
@@ -624,7 +667,21 @@ export function createOptionsTests(
               hitsPerPage: 10,
             },
           },
-          vue: {},
+          vue: {
+            indices: [
+              { indexName: 'indexName', searchParameters: { hitsPerPage: 20 } },
+              { indexName: 'indexName2' },
+            ],
+            searchParameters: {
+              userToken: 'user-123',
+              enableRules: false,
+              hitsPerPage: 10,
+            },
+            slots: {
+              item: ({ item, indexName }) =>
+                indexName === 'indexName' ? item.name : item.query,
+            },
+          },
         },
       });
 
@@ -716,7 +773,16 @@ export function createOptionsTests(
               },
             ],
           },
-          vue: {},
+          vue: {
+            indices: [
+              { indexName: 'indexName' },
+              { indexName: 'indexName2', onSelect: mockOnSelect },
+            ],
+            slots: {
+              item: ({ item, indexName }) =>
+                indexName === 'indexName' ? item.name : item.query,
+            },
+          },
         },
       });
 
@@ -834,7 +900,12 @@ export function createOptionsTests(
               },
             ],
           },
-          vue: {},
+          vue: {
+            indices: [{ indexName: 'indexName' }],
+            slots: {
+              item: ({ item }) => item.name,
+            },
+          },
         },
       });
 
@@ -906,7 +977,12 @@ export function createOptionsTests(
               },
             ],
           },
-          vue: {},
+          vue: {
+            indices: [{ indexName: 'indexName' }],
+            slots: {
+              item: ({ item }) => item.name,
+            },
+          },
         },
       });
 
@@ -978,7 +1054,12 @@ export function createOptionsTests(
               },
             ],
           },
-          vue: {},
+          vue: {
+            indices: [{ indexName: 'indexName' }],
+            slots: {
+              item: ({ item }) => item.name,
+            },
+          },
         },
       });
 
@@ -1043,7 +1124,12 @@ export function createOptionsTests(
               },
             ],
           },
-          vue: {},
+          vue: {
+            indices: [{ indexName: 'indexName' }],
+            slots: {
+              item: ({ item }) => item.name,
+            },
+          },
         },
       });
 
@@ -1126,7 +1212,12 @@ export function createOptionsTests(
               },
             ],
           },
-          vue: {},
+          vue: {
+            indices: [{ indexName: 'indexName' }],
+            slots: {
+              item: ({ item }) => item.name,
+            },
+          },
         },
       });
 
@@ -1216,7 +1307,12 @@ export function createOptionsTests(
               },
             ],
           },
-          vue: {},
+          vue: {
+            indices: [{ indexName: 'indexName' }],
+            slots: {
+              item: ({ item }) => item.name,
+            },
+          },
         },
       });
 
@@ -1297,7 +1393,12 @@ export function createOptionsTests(
               },
             ],
           },
-          vue: {},
+          vue: {
+            indices: [{ indexName: 'indexName' }],
+            slots: {
+              item: ({ item }) => item.name,
+            },
+          },
         },
       });
 
@@ -1368,7 +1469,12 @@ export function createOptionsTests(
               },
             ],
           },
-          vue: {},
+          vue: {
+            indices: [{ indexName: 'indexName' }],
+            slots: {
+              item: ({ item }) => item.name,
+            },
+          },
         },
       });
 
@@ -1444,7 +1550,12 @@ export function createOptionsTests(
               },
             ],
           },
-          vue: {},
+          vue: {
+            indices: [{ indexName: 'indexName' }],
+            slots: {
+              item: ({ item }) => item.name,
+            },
+          },
         },
       });
 
@@ -1530,7 +1641,11 @@ export function createOptionsTests(
               indexName: 'query_suggestions',
             },
           },
-          vue: {},
+          vue: {
+            showQuerySuggestions: {
+              indexName: 'query_suggestions',
+            },
+          },
         },
       });
 
@@ -1591,7 +1706,12 @@ export function createOptionsTests(
               },
             ],
           },
-          vue: {},
+          vue: {
+            indices: [{ indexName: 'indexName' }],
+            slots: {
+              item: ({ item }) => item.name,
+            },
+          },
         },
       });
 
@@ -1656,7 +1776,13 @@ export function createOptionsTests(
               },
             ],
           },
-          vue: {},
+          vue: {
+            autofocus: true,
+            indices: [{ indexName: 'indexName' }],
+            slots: {
+              item: ({ item }) => item.name,
+            },
+          },
         },
       });
 
@@ -1709,7 +1835,11 @@ export function createOptionsTests(
               indexName: 'query_suggestions',
             },
           },
-          vue: {},
+          vue: {
+            showQuerySuggestions: {
+              indexName: 'query_suggestions',
+            },
+          },
         },
       });
 
@@ -1883,7 +2013,13 @@ export function createOptionsTests(
                 },
               ],
             },
-            vue: {},
+            vue: {
+              detachedMediaQuery,
+              indices: [{ indexName: 'indexName' }],
+              slots: {
+                item: ({ item }) => item.name,
+              },
+            },
           },
         });
 
@@ -1976,7 +2112,13 @@ export function createOptionsTests(
                 },
               ],
             },
-            vue: {},
+            vue: {
+              detachedMediaQuery,
+              indices: [{ indexName: 'indexName' }],
+              slots: {
+                item: ({ item }) => item.name,
+              },
+            },
           },
         });
 
@@ -2036,7 +2178,17 @@ export function createOptionsTests(
                 },
               ],
             },
-            vue: {},
+            vue: {
+              detachedMediaQuery,
+              translations: {
+                detachedCancelButtonText: 'Annuler',
+                detachedSearchButtonTitle: 'Rechercher',
+              },
+              indices: [{ indexName: 'indexName' }],
+              slots: {
+                item: ({ item }) => item.name,
+              },
+            },
           },
         });
 
@@ -2116,7 +2268,13 @@ export function createOptionsTests(
                 },
               ],
             },
-            vue: {},
+            vue: {
+              detachedMediaQuery: '',
+              indices: [{ indexName: 'indexName' }],
+              slots: {
+                item: ({ item }) => item.name,
+              },
+            },
           },
         });
 
@@ -2176,7 +2334,13 @@ export function createOptionsTests(
                 },
               ],
             },
-            vue: {},
+            vue: {
+              detachedMediaQuery,
+              indices: [{ indexName: 'indexName' }],
+              slots: {
+                item: ({ item }) => item.name,
+              },
+            },
           },
         });
 
@@ -2271,7 +2435,20 @@ export function createOptionsTests(
                   })),
                 })),
             },
-            vue: {},
+            vue: {
+              indices: [{ indexName: 'indexName' }],
+              slots: {
+                item: ({ item }) => item.name,
+              },
+              transformItems: (indices) =>
+                indices.map((index) => ({
+                  ...index,
+                  hits: index.hits.map((item) => ({
+                    ...item,
+                    name: item.name.toUpperCase(),
+                  })),
+                })),
+            },
           },
         });
 
@@ -2371,7 +2548,29 @@ export function createOptionsTests(
                 ];
               },
             },
-            vue: {},
+            vue: {
+              showQuerySuggestions: {
+                indexName: 'query_suggestions',
+              },
+              indices: [{ indexName: 'indexName' }],
+              slots: {
+                item: ({ item }) => item.name,
+              },
+              // reverse the order of appearance of suggestions and indices
+              transformItems: (indices) => {
+                const querySuggestions = indices.find(
+                  (index) => index.indexName === 'query_suggestions'
+                );
+                const otherIndices = indices.filter(
+                  (index) => index.indexName !== 'query_suggestions'
+                );
+
+                return [
+                  ...otherIndices,
+                  ...(querySuggestions ? [querySuggestions] : []),
+                ];
+              },
+            },
           },
         });
 
@@ -2445,7 +2644,16 @@ export function createOptionsTests(
               ],
               transformItems: (indices) => indices.slice().reverse(),
             },
-            vue: {},
+            vue: {
+              indices: [
+                { indexName: 'indexName1' },
+                { indexName: 'indexName2' },
+              ],
+              slots: {
+                item: ({ item }) => item.name,
+              },
+              transformItems: (indices) => indices.slice().reverse(),
+            },
           },
         });
 
@@ -2540,7 +2748,22 @@ export function createOptionsTests(
                 }));
               },
             },
-            vue: {},
+            vue: {
+              indices: [
+                { indexName: 'indexName1' },
+                { indexName: 'indexName2' },
+              ],
+              slots: {
+                item: ({ item }) => item.name,
+              },
+              transformItems: (indices) => {
+                const reversed = indices.slice().reverse();
+                return reversed.map((index) => ({
+                  ...index,
+                  hits: index.hits.filter((_, idx) => idx % 2 === 0),
+                }));
+              },
+            },
           },
         });
 
@@ -2609,7 +2832,11 @@ export function createOptionsTests(
                 indexName: 'prompt_suggestions',
               },
             },
-            vue: {},
+            vue: {
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+              },
+            },
           },
         });
 
@@ -2667,7 +2894,14 @@ export function createOptionsTests(
                 },
               },
             },
-            vue: {},
+            vue: {
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+                searchParameters: {
+                  hitsPerPage: 5,
+                },
+              },
+            },
           },
         });
 
@@ -2736,7 +2970,14 @@ export function createOptionsTests(
                 indexName: 'prompt_suggestions',
               },
             },
-            vue: {},
+            vue: {
+              showQuerySuggestions: {
+                indexName: 'query_suggestions',
+              },
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+              },
+            },
           },
         });
 
@@ -2799,7 +3040,16 @@ export function createOptionsTests(
                 },
               },
             },
-            vue: {},
+            vue: {
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+                classNames: {
+                  root: 'custom-root',
+                  list: 'custom-list',
+                  item: 'custom-item',
+                },
+              },
+            },
           },
         });
 
@@ -2881,7 +3131,23 @@ export function createOptionsTests(
                 </div>
               ),
             },
-            vue: {},
+            vue: {
+              showQuerySuggestions: {
+                indexName: 'query_suggestions',
+              },
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+              },
+              slots: {
+                panel: ({ elements }) => {
+                  const h = getVueH(elements);
+                  return h('div', {}, [
+                    h('div', { class: 'left' }, [elements.suggestions]),
+                    h('div', { class: 'right' }, [elements.promptSuggestions]),
+                  ]);
+                },
+              },
+            },
           },
         });
 
@@ -2951,7 +3217,13 @@ export function createOptionsTests(
                 },
               ],
             },
-            vue: {},
+            vue: {
+              aiMode: true,
+              indices: [{ indexName: 'indexName' }],
+              slots: {
+                item: ({ item }) => item.name,
+              },
+            },
           },
         });
 
@@ -3022,7 +3294,13 @@ export function createOptionsTests(
                 },
               ],
             },
-            vue: {},
+            vue: {
+              indices: [{ indexName: 'indexName' }],
+              slots: {
+                item: ({ item }) => item.name,
+                noResults: () => 'No results found',
+              },
+            },
           },
         });
 
@@ -3083,7 +3361,13 @@ export function createOptionsTests(
                 },
               ],
             },
-            vue: {},
+            vue: {
+              indices: [{ indexName: 'indexName' }],
+              slots: {
+                item: ({ item }) => item.name,
+                noResults: () => 'No results found',
+              },
+            },
           },
         });
 
@@ -3139,7 +3423,12 @@ export function createOptionsTests(
                 },
               ],
             },
-            vue: {},
+            vue: {
+              indices: [{ indexName: 'indexName' }],
+              slots: {
+                item: ({ item }) => item.name,
+              },
+            },
           },
         });
 
@@ -3195,7 +3484,13 @@ export function createOptionsTests(
                 },
               ],
             },
-            vue: {},
+            vue: {
+              indices: [{ indexName: 'indexName' }],
+              slots: {
+                item: ({ item }) => item.name,
+                noResults: () => 'No results found',
+              },
+            },
           },
         });
 

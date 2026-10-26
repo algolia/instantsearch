@@ -78,7 +78,12 @@ export function createInsightsTests(
               },
             ],
           },
-          vue: {},
+          vue: {
+            indices: [{ indexName: 'indexName' }],
+            slots: {
+              item: ({ item }) => item.name,
+            },
+          },
         },
       });
 
@@ -153,7 +158,12 @@ export function createInsightsTests(
               },
             ],
           },
-          vue: {},
+          vue: {
+            indices: [{ indexName: 'indexName' }],
+            slots: {
+              item: ({ item }) => item.name,
+            },
+          },
         },
       });
 
@@ -245,7 +255,12 @@ export function createInsightsTests(
               },
             ],
           },
-          vue: {},
+          vue: {
+            indices: [{ indexName: 'indexName' }, { indexName: 'indexName2' }],
+            slots: {
+              item: ({ item }) => item.name,
+            },
+          },
         },
       });
 

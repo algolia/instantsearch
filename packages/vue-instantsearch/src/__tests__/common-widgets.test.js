@@ -30,6 +30,7 @@ import {
   AisMenuSelect,
   AisDynamicWidgets,
   AisRelatedProducts,
+  AisExperimentalAutocomplete,
   AisFrequentlyBoughtTogether,
   AisLookingSimilar,
   AisTrendingItems,
@@ -708,8 +709,25 @@ const testSetups = {
 
     await nextTick();
   },
-  createAutocompleteWidgetTests() {
-    throw new Error('Autocomplete is not supported in Vue InstantSearch');
+  async createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
+    const { slots = {}, ...props } = widgetParams;
+
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisExperimentalAutocomplete, {
+              props,
+              scopedSlots: slots,
+            }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
   },
   createFilterSuggestionsWidgetTests() {
     throw new Error('FilterSuggestions is not supported in Vue InstantSearch');
@@ -769,9 +787,7 @@ const testOptions = {
       await nextTick();
     },
   },
-  createAutocompleteWidgetTests: {
-    skippedTests: { 'Autocomplete widget common tests': true },
-  },
+  createAutocompleteWidgetTests: undefined,
   createFilterSuggestionsWidgetTests: {
     skippedTests: { 'FilterSuggestions widget common tests': true },
   },
