@@ -211,6 +211,48 @@ describe('ChatPrompt', () => {
       expect(onSubmit).not.toHaveBeenCalled();
     });
 
+    test('does not submit on Enter while an IME composition is active', () => {
+      const onSubmit = jest.fn();
+      const { container } = render(
+        <ChatPrompt value="Hello" onSubmit={onSubmit} />
+      );
+
+      fireEvent.keyDown(container.querySelector('textarea')!, {
+        key: 'Enter',
+        isComposing: true,
+      });
+
+      expect(onSubmit).not.toHaveBeenCalled();
+    });
+
+    test('does not submit on Enter that confirms a composition (keyCode 229)', () => {
+      const onSubmit = jest.fn();
+      const { container } = render(
+        <ChatPrompt value="Hello" onSubmit={onSubmit} />
+      );
+
+      fireEvent.keyDown(container.querySelector('textarea')!, {
+        key: 'Enter',
+        keyCode: 229,
+      });
+
+      expect(onSubmit).not.toHaveBeenCalled();
+    });
+
+    test('does not stop the response on Enter while composing', () => {
+      const onStop = jest.fn();
+      const { container } = render(
+        <ChatPrompt status="streaming" onStop={onStop} />
+      );
+
+      fireEvent.keyDown(container.querySelector('textarea')!, {
+        key: 'Enter',
+        isComposing: true,
+      });
+
+      expect(onStop).not.toHaveBeenCalled();
+    });
+
     test('does not stop the response on Enter when `onKeyDown` prevented it', () => {
       const onStop = jest.fn();
       const { container } = render(
