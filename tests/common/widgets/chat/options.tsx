@@ -415,6 +415,91 @@ export function createOptionsTests(
       expect(sendMessageSpy).toHaveBeenCalledWith({ text: 'Hello, world!' });
     });
 
+    test('sends messages when Enter is pressed in the prompt', async () => {
+      const searchClient = createSearchClient();
+
+      const chat = new Chat({});
+      const sendMessageSpy = jest
+        .spyOn(chat, 'sendMessage')
+        .mockResolvedValue(undefined);
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: createDefaultWidgetParams(chat),
+          react: createDefaultWidgetParams(chat),
+          vue: createDefaultWidgetParams(chat),
+        },
+      });
+
+      await openChat(act);
+
+      const textarea = document.querySelector('.ais-ChatPrompt-textarea')!;
+      userEvent.type(textarea, 'Hello, world!');
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      userEvent.type(textarea, '{enter}');
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(sendMessageSpy).toHaveBeenCalledWith({ text: 'Hello, world!' });
+    });
+
+    test('does not send on Enter when the page already handled the key', async () => {
+      const searchClient = createSearchClient();
+
+      const chat = new Chat({});
+      const sendMessageSpy = jest
+        .spyOn(chat, 'sendMessage')
+        .mockResolvedValue(undefined);
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: createDefaultWidgetParams(chat),
+          react: createDefaultWidgetParams(chat),
+          vue: createDefaultWidgetParams(chat),
+        },
+      });
+
+      await openChat(act);
+
+      const textarea = document.querySelector('.ais-ChatPrompt-textarea')!;
+      userEvent.type(textarea, 'Hello, world!');
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const preventEnter = (event: KeyboardEvent) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+        }
+      };
+      document.addEventListener('keydown', preventEnter, true);
+
+      userEvent.type(textarea, '{enter}');
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      document.removeEventListener('keydown', preventEnter, true);
+
+      expect(sendMessageSpy).not.toHaveBeenCalled();
+    });
+
     test('sends messages with context attached as metadata.turnContext', async () => {
       const searchClient = createSearchClient();
 

@@ -2,7 +2,7 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
-import { render } from '@testing-library/preact';
+import { fireEvent, render } from '@testing-library/preact';
 import userEvent from '@testing-library/user-event';
 import { Fragment, createElement } from 'preact';
 
@@ -182,5 +182,70 @@ describe('ChatPrompt', () => {
     userEvent.click(button);
     expect(onSubmit).toHaveBeenCalledTimes(1);
     expect(onStop).toHaveBeenCalledTimes(0);
+  });
+
+  describe('keyboard', () => {
+    test('submits on Enter', () => {
+      const onSubmit = jest.fn();
+      const { container } = render(
+        <ChatPrompt value="Hello" onSubmit={onSubmit} />
+      );
+
+      fireEvent.keyDown(container.querySelector('textarea')!, { key: 'Enter' });
+
+      expect(onSubmit).toHaveBeenCalledTimes(1);
+    });
+
+    test('does not submit on Enter when `onKeyDown` prevented it', () => {
+      const onSubmit = jest.fn();
+      const { container } = render(
+        <ChatPrompt
+          value="Hello"
+          onSubmit={onSubmit}
+          onKeyDown={(event) => event.preventDefault()}
+        />
+      );
+
+      fireEvent.keyDown(container.querySelector('textarea')!, { key: 'Enter' });
+
+      expect(onSubmit).not.toHaveBeenCalled();
+    });
+
+    test('does not stop the response on Enter when `onKeyDown` prevented it', () => {
+      const onStop = jest.fn();
+      const { container } = render(
+        <ChatPrompt
+          status="streaming"
+          onStop={onStop}
+          onKeyDown={(event) => event.preventDefault()}
+        />
+      );
+
+      fireEvent.keyDown(container.querySelector('textarea')!, { key: 'Enter' });
+
+      expect(onStop).not.toHaveBeenCalled();
+    });
+
+    test('blurs on Escape', () => {
+      const { container } = render(<ChatPrompt />);
+      const textarea = container.querySelector('textarea')!;
+      textarea.focus();
+
+      fireEvent.keyDown(textarea, { key: 'Escape' });
+
+      expect(textarea).not.toHaveFocus();
+    });
+
+    test('keeps the focus on Escape when `onKeyDown` prevented it', () => {
+      const { container } = render(
+        <ChatPrompt onKeyDown={(event) => event.preventDefault()} />
+      );
+      const textarea = container.querySelector('textarea')!;
+      textarea.focus();
+
+      fireEvent.keyDown(textarea, { key: 'Escape' });
+
+      expect(textarea).toHaveFocus();
+    });
   });
 });
