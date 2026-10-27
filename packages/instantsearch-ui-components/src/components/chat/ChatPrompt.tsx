@@ -287,6 +287,11 @@ export function createChatPromptComponent({ createElement }: Renderer) {
             }}
             onKeyDown={(event) => {
               onKeyDown?.(event);
+              // Leave keys the page already handled (`preventDefault()` in
+              // `onKeyDown` or an earlier listener) alone.
+              if (event.defaultPrevented) {
+                return;
+              }
               if (event.key === 'Enter' && !event.shiftKey) {
                 event.preventDefault();
                 if (canStop) {
