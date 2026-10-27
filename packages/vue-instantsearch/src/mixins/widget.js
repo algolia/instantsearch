@@ -3,7 +3,7 @@ import { isVue3 } from '../util/vue-compat';
 import { warn } from '../util/warn';
 
 export const createWidgetMixin = (
-  { connector } = {},
+  { connector, isEqualWidgetParams } = {},
   additionalProperties = {}
 ) => ({
   inject: {
@@ -70,7 +70,18 @@ Read more on using connectors: https://alg.li/vue-custom`
   },
   watch: {
     widgetParams: {
-      handler(nextWidgetParams) {
+      handler(nextWidgetParams, previousWidgetParams) {
+        // A deep watcher fires whenever `widgetParams` recomputes, even when a
+        // parent re-render only passed new but equal references. Widgets that
+        // can't afford to be replaced for nothing (`AisChat` would lose its
+        // conversation) opt into skipping those updates.
+        if (
+          isEqualWidgetParams &&
+          isEqualWidgetParams(previousWidgetParams, nextWidgetParams)
+        ) {
+          return;
+        }
+
         this.state = null;
         const previousWidget = this.widget;
         this.widget = _objectSpread(

@@ -87,10 +87,54 @@ function resolveComponent(vm, slotName, propName) {
   return vm.slotAdapters[slotName];
 }
 
+// Callback props forwarded through stable wrappers, so an inline handler
+// (`:on-error="(error) => …"`) doesn't re-create the widget on every render.
+const callbackProps = ['onToolCall', 'onFinish', 'onError', 'onData'];
+
+function isPlainObject(value) {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+  const proto = Object.getPrototypeOf(value);
+  return proto === Object.prototype || proto === null;
+}
+
+/**
+ * Structural equality for the widget params, like React's `useStableValue`:
+ * plain objects and arrays are compared by content, everything else
+ * (functions, `Chat` instances, transports' class instances) by reference.
+ */
+function isEqualWidgetParams(first, second) {
+  if (first === second) {
+    return true;
+  }
+  if (Array.isArray(first) && Array.isArray(second)) {
+    return (
+      first.length === second.length &&
+      first.every((item, index) => isEqualWidgetParams(item, second[index]))
+    );
+  }
+  if (isPlainObject(first) && isPlainObject(second)) {
+    const keys = Object.keys(first);
+    return (
+      keys.length === Object.keys(second).length &&
+      keys.every(
+        (key) =>
+          Object.prototype.hasOwnProperty.call(second, key) &&
+          isEqualWidgetParams(first[key], second[key])
+      )
+    );
+  }
+  return false;
+}
+
 export default {
   name: 'AisChat',
   mixins: [
-    createWidgetMixin({ connector: connectChat }, { $$widgetType: 'ais.chat' }),
+    createWidgetMixin(
+      { connector: connectChat, isEqualWidgetParams },
+      { $$widgetType: 'ais.chat' }
+    ),
     createSuitMixin({ name: 'Chat' }),
     createHooksMixin(),
   ],
@@ -163,6 +207,12 @@ export default {
     },
     createComponentProps()
   ),
+  beforeCreate() {
+    // Read by `widgetParams`, which the widget mixin's `created` evaluates
+    // before this component's own `created` runs.
+    this.defaultTools = {};
+    this.callbackForwarders = {};
+  },
   created() {
     this.useStickToBottom = createStickToBottom(this.hooksStore.hooks);
     this.slotAdapters = {};
@@ -200,10 +250,7 @@ export default {
     },
     widgetParams() {
       const tools = mergeToolOptions(
-        // `getItemComponent` is a stable method the tools call at render
-        // time, so the tools (and with them the widget) aren't re-created
-        // when the `item` slot content changes.
-        createDefaultTools(this.getItemComponent, this.getSearchPageURL),
+        this.getDefaultTools(Boolean(this.getSearchPageURL)),
         this.tools
       );
 
@@ -222,10 +269,6 @@ export default {
         feedback: this.feedback,
         requestOptions: this.requestOptions,
         id: this.id,
-        onToolCall: this.onToolCall,
-        onFinish: this.onFinish,
-        onError: this.onError,
-        onData: this.onData,
         initialMessages: this.initialMessages,
         initialUserMessage: this.initialUserMessage,
         context: this.context,
@@ -239,6 +282,11 @@ export default {
           params[key] = optional[key];
         }
       });
+      callbackProps.forEach((key) => {
+        if (this[key] !== undefined) {
+          params[key] = this.getCallbackForwarder(key);
+        }
+      });
       return params;
     },
   },
@@ -250,6 +298,30 @@ export default {
      */
     getItemComponent() {
       return resolveComponent(this, 'item', 'itemComponent');
+    },
+    /**
+     * The default tools, created once per `getSearchPageURL` presence (it
+     * toggles the "View all" link). They only hold stable getters, read at
+     * render time, so `item` slot or `getSearchPageURL` changes don't
+     * re-create the tools (and with them the widget).
+     */
+    getDefaultTools(hasSearchPageURL) {
+      const key = String(hasSearchPageURL);
+      if (!this.defaultTools[key]) {
+        this.defaultTools[key] = createDefaultTools(
+          this.getItemComponent,
+          hasSearchPageURL
+            ? (...args) => this.getSearchPageURL(...args)
+            : undefined
+        );
+      }
+      return this.defaultTools[key];
+    },
+    getCallbackForwarder(key) {
+      if (!this.callbackForwarders[key]) {
+        this.callbackForwarders[key] = (...args) => this[key](...args);
+      }
+      return this.callbackForwarders[key];
     },
     // Imperative API, the counterpart of React's `ChatHandle`.
     setOpen(open) {
