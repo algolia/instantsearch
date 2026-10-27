@@ -549,6 +549,19 @@ export function createOptionsTests(
       });
 
       expect(sendMessageSpy).not.toHaveBeenCalled();
+
+      await act(async () => {
+        textarea.dispatchEvent(
+          new KeyboardEvent('keydown', {
+            key: 'Enter',
+            bubbles: true,
+            cancelable: true,
+          })
+        );
+        await wait(0);
+      });
+
+      expect(sendMessageSpy).toHaveBeenCalledTimes(1);
     });
 
     test('sends messages with context attached as metadata.turnContext', async () => {
