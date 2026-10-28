@@ -1,8 +1,8 @@
 /** @jsx h */
 
+import { noop } from 'instantsearch-core';
 import { h, createRef, Component } from 'preact';
 
-import { noop } from '../../lib/utils';
 import Template from '../Template/Template';
 
 import type { ComponentCSSClasses } from '../../types';

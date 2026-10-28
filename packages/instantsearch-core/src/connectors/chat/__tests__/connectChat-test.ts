@@ -16,7 +16,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../instantsearch';
 import { Chat } from '../../../lib/chat';
 import connectSearchBox from '../../search-box/connectSearchBox';
 import connectChat from '../connectChat';
@@ -28,11 +28,13 @@ import type {
 } from '../../../lib/ai-lite';
 import type { InstantSearch, IndexWidget, Widget } from '../../../types';
 import type { ChatConnectorParams } from '../connectChat';
-import type { AddToolResultForToolCall } from 'instantsearch-ui-components';
+import type { AddToolResultForToolCall } from '../types';
 
-jest.mock('../../../lib/utils/sendChatMessageFeedback', () => ({
-  sendChatMessageFeedback: jest.fn(() => Promise.resolve(new Response('{}'))),
-}));
+const fetchMock = jest.fn(() => Promise.resolve(new Response('{}')));
+Object.defineProperty(globalThis, 'fetch', {
+  value: fetchMock,
+  writable: true,
+});
 
 describe('connectChat', () => {
   const getInitializedWidget = (
@@ -1230,10 +1232,7 @@ describe('connectChat', () => {
     });
 
     it('prevents double voting on the same message', () => {
-      const { sendChatMessageFeedback: mockedFn } = jest.requireMock(
-        '../../../lib/utils/sendChatMessageFeedback'
-      );
-      mockedFn.mockClear();
+      fetchMock.mockClear();
 
       const { getRenderState } = getInitializedWidget({
         agentId: 'agentId',
@@ -1244,7 +1243,7 @@ describe('connectChat', () => {
       renderState.sendChatMessageFeedback!('msg-1', 1);
       renderState.sendChatMessageFeedback!('msg-1', 0);
 
-      expect(mockedFn).toHaveBeenCalledTimes(1);
+      expect(fetchMock).toHaveBeenCalledTimes(1);
     });
   });
 

@@ -1,68 +1,67 @@
 /** @jsx h */
 
 import {
-  createChatComponent,
+  CompareProductsToolType,
+  connectChat,
+  DisplayResultsToolType,
   findTool,
+  focusAfterReveal,
+  getActiveContainerAnimations,
+  GroupedResultsToolType,
+  holdContainerInertUntilReveal,
+  MemorizeToolType,
+  MemorySearchToolType,
+  PonderToolType,
+  RecommendToolType,
+  restoreContainerInertUntilReveal,
+  SearchIndexToolType,
+} from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core';
+import {
+  createChatComponent,
   shouldSearchToolRenderResults,
 } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 import { useCallback, useEffect, useMemo, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectChat from '../../connectors/chat/connectChat';
-import {
-  SearchIndexToolType,
-  RecommendToolType,
-  MemorizeToolType,
-  MemorySearchToolType,
-  PonderToolType,
-  DisplayResultsToolType,
-  CompareProductsToolType,
-  GroupedResultsToolType,
-} from '../../lib/chat';
-import {
-  focusAfterReveal,
-  getActiveContainerAnimations,
-  holdContainerInertUntilReveal,
-  restoreContainerInertUntilReveal,
-} from '../../lib/chat/focusAfterReveal';
 import { prepareTemplateProps } from '../../lib/templating';
 import { useStickToBottom } from '../../lib/useStickToBottom';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import { createCompareProductsTool } from './compare-products-tool';
 import { createGroupedResultsTool } from './grouped-results-tool';
 import { createCarouselTool } from './search-index-tool';
 
 import type { TemplateProps } from '../../components/Template/Template';
-import type {
-  ChatRenderState,
-  ChatConnectorParams,
-  ChatWidgetDescription,
-} from '../../connectors/chat/connectChat';
 import type { PreparedTemplateProps } from '../../lib/templating';
+import type { TemplateWithBindEvent, Template } from '../../types';
 import type {
   WidgetFactory,
   Renderer,
   Hit,
-  TemplateWithBindEvent,
   BaseHit,
-  Template,
   IndexUiState,
   IndexWidget,
-} from '../../types';
+} from 'instantsearch-core';
+import type {
+  ChatConnectorParams,
+  ChatRenderState,
+  ChatStatus,
+  ChatWidgetDescription,
+  ClientSideToolComponentProps,
+  ClientSideTools,
+  UIMessage,
+  UserClientSideTool,
+} from 'instantsearch-core';
+import type { ChatComponentPropsWithContext } from 'instantsearch-core';
 import type {
   ChatClassNames,
-  ChatComponentPropsWithContext,
   ChatEmptyProps,
   ChatHeaderProps,
   ChatHeaderTranslations,
   ChatLayoutOwnProps,
   ChatMessageActionProps,
-  ChatMessageBase,
   ChatMessageErrorProps,
   ChatMessageLoaderPropsWithContext,
   ChatMessageProps,
@@ -72,11 +71,7 @@ import type {
   ChatMessagesTranslations,
   ChatPromptProps,
   ChatPromptTranslations,
-  ChatStatus,
-  ClientSideToolComponentProps,
-  ClientSideTools,
   RecordWithObjectID,
-  UserClientSideTool,
 } from 'instantsearch-ui-components';
 import type { ComponentProps } from 'preact';
 
@@ -186,7 +181,7 @@ type ChatWrapperProps = {
   cssClasses: ChatCSSClasses;
   chatOpen: boolean;
   setChatOpen: (open: boolean) => void;
-  chatMessages: ChatMessageBase[];
+  chatMessages: UIMessage[];
   indexUiState: IndexUiState;
   setIndexUiState: IndexWidget['setIndexUiState'];
   chatStatus: ChatStatus;
@@ -1090,9 +1085,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Announced to screen readers once a reply is complete. Receives the
        * reply, so it can announce its text or a summary of it.
        */
-      responseCompleteStatusText?: (context: {
-        message: ChatMessageBase;
-      }) => string;
+      responseCompleteStatusText?: (context: { message: UIMessage }) => string;
       /**
        * Announced to screen readers when the chat ends in an error
        */
@@ -1211,7 +1204,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     actions: Template<
       ChatComponentPropsWithContext<{
         actions: ChatMessageActionProps[];
-        message: ChatMessageBase;
+        message: UIMessage;
       }>
     >;
 

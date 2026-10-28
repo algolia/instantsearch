@@ -1,14 +1,14 @@
 /** @jsx h */
-import { h } from 'preact';
-
-import { Highlight as HighlightUiComponent } from '../../components/Highlight/Highlight';
 import {
   getPropertyByPath,
   unescape,
   toArray,
   warning,
   getHighlightedParts,
-} from '../../lib/utils';
+} from 'instantsearch-core';
+import { h } from 'preact';
+
+import { Highlight as HighlightUiComponent } from '../../components/Highlight/Highlight';
 
 import type { HighlightProps as HighlightUiComponentProps } from '../../components/Highlight/Highlight';
 import type {
@@ -16,7 +16,7 @@ import type {
   Hit,
   HitAttributeHighlightResult,
   PartialKeys,
-} from '../../types';
+} from 'instantsearch-core';
 
 export type HighlightProps<THit extends Hit<BaseHit>> = {
   hit: THit;

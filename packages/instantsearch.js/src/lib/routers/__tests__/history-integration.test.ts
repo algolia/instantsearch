@@ -4,14 +4,14 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
+import { simple as simpleStateMapping } from 'instantsearch-core';
+import { historyRouter } from 'instantsearch-core';
 
 import { connectPagination, connectSearchBox } from '../../../connectors';
 import instantsearch from '../../../index.es';
 import { index } from '../../../widgets';
-import simpleStateMapping from '../../stateMappings/simple';
-import historyRouter from '../history';
 
-import type { Widget } from '../../../types';
+import type { Widget } from 'instantsearch-core';
 
 beforeEach(() => {
   window.history.pushState({}, '', '/');

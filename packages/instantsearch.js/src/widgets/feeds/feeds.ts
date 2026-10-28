@@ -1,21 +1,20 @@
-import connectFeeds from '../../connectors/feeds/connectFeeds';
-import { createFeedContainer } from '../../connectors/feeds/FeedContainer';
+import { createFeedContainer } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core';
+
+import { connectFeeds } from '../../connectors';
 import { component } from '../../lib/suit';
-import {
-  createDocumentationMessageGenerator,
-  getContainerNode,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import type {
   FeedsConnectorParams,
   FeedsWidgetDescription,
-} from '../../connectors/feeds/connectFeeds';
+} from '../../connectors';
 import type {
   IndexWidget,
   RenderOptions,
   Widget,
   WidgetFactory,
-} from '../../types';
+} from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'feeds',

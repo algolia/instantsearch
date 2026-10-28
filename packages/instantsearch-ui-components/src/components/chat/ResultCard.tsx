@@ -1,12 +1,9 @@
 /** @jsx createElement */
 /** @jsxFrag Fragment */
+import { isPartText, isPartTool } from 'instantsearch-core';
+
 import { cx } from '../../lib';
-import {
-  findLastProgressPart,
-  isPartText,
-  isPartTextEmpty,
-  isPartTool,
-} from '../../lib/utils/chat';
+import { findLastProgressPart, isPartTextEmpty } from '../../lib/chat';
 import { createButtonComponent } from '../Button';
 
 import { createChatMessageComponent } from './ChatMessage';
@@ -21,12 +18,12 @@ import {
   SparklesIcon,
 } from './icons';
 
+import type { ComponentProps, Hooks, Renderer } from '../../types';
 import type {
   ChatComponentContext,
   ChatMessageBase,
   ChatStatus,
-} from './types';
-import type { ComponentProps, Hooks, Renderer } from '../../types';
+} from 'instantsearch-core';
 
 export type ResultCardStatus =
   | 'hidden'

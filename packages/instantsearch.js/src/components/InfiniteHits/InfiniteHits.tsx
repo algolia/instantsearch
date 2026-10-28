@@ -1,19 +1,20 @@
 /** @jsx h */
 
+import { warning } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h } from 'preact';
 
 import { createInsightsEventHandler } from '../../lib/insights/listener';
-import { warning } from '../../lib/utils';
 import Template from '../Template/Template';
 
-import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
-import type { ComponentCSSClasses, Hit, InsightsClient } from '../../types';
+import type { ComponentCSSClasses } from '../../types';
 import type {
   InfiniteHitsCSSClasses,
   InfiniteHitsTemplates,
 } from '../../widgets/infinite-hits/infinite-hits';
 import type { Banner, SearchResults } from 'algoliasearch-helper';
+import type { SendEventForHits, BindEventForHits } from 'instantsearch-core';
+import type { Hit, InsightsClient } from 'instantsearch-core';
 
 export type InfiniteHitsComponentCSSClasses =
   ComponentCSSClasses<InfiniteHitsCSSClasses>;

@@ -1,5 +1,5 @@
 export { DefaultTaskTransport } from './transport';
-export { resolveEndpoint } from './endpoint';
+export { createTaskTransport, resolveEndpoint } from './endpoint';
 export { buildTaskPayload, fetchTask } from './fetchTask';
 export { createTaskRunner } from './taskRunner';
 

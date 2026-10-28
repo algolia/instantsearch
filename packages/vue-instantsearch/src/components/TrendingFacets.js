@@ -1,5 +1,5 @@
+import { connectTrendingFacets } from 'instantsearch-core';
 import { createTrendingFacetsComponent } from 'instantsearch-ui-components';
-import { connectTrendingFacets } from 'instantsearch.js/es/connectors/index';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';

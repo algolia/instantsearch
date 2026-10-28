@@ -1,5 +1,9 @@
-import { warning, serializePayload, deserializePayload } from '../lib/utils';
-import { createUUID } from '../lib/utils/uuid';
+import {
+  warning,
+  serializePayload,
+  deserializePayload,
+  createUUID,
+} from '../lib/utils';
 
 import type { InsightsClientMethod, InsightsClientPayload } from '../types';
 

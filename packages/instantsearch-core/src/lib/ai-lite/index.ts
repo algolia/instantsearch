@@ -14,6 +14,8 @@ export {
   generateId,
   lastAssistantMessageIsCompleteWithToolCalls,
   SerialJobExecutor,
+  resolveValue,
+  tryParseErrorMessage,
 } from './utils';
 
 // Stream parsing
@@ -26,6 +28,8 @@ export {
 } from './parse-partial-json';
 
 // Types
+export type { ToolResultSubmissionOptions } from './types';
+
 export type {
   // Status
   ChatStatus,

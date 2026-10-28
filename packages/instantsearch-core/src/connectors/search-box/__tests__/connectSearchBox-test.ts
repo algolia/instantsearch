@@ -17,7 +17,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import InstantSearch from '../../../lib/InstantSearch';
+import InstantSearch from '../../../instantsearch';
 import connectSearchBox from '../connectSearchBox';
 
 describe('connectSearchBox', () => {

@@ -2,7 +2,7 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import createInfiniteHitsSessionStorageCache from '../sessionStorage';
+import { createInfiniteHitsSessionStorageCache } from 'instantsearch-core';
 
 const KEY = 'ais.infiniteHits';
 

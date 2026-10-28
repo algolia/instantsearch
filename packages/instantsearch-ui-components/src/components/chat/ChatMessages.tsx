@@ -1,16 +1,19 @@
 /** @jsx createElement */
 
-import { cx } from '../../lib';
 import {
-  findLastProgressPart,
   findTool,
   getTextContent,
   hasTextContent,
-  isReasoningPartActive,
   isPartText,
   isPartTool,
+} from 'instantsearch-core';
+
+import { cx } from '../../lib';
+import {
+  findLastProgressPart,
+  isReasoningPartActive,
   isSilentUserMessage,
-} from '../../lib/utils/chat';
+} from '../../lib/chat';
 import { createButtonComponent } from '../Button';
 
 import { createChatMessageComponent } from './ChatMessage';
@@ -35,15 +38,8 @@ import type {
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderPropsWithContext } from './ChatMessageLoader';
 import type {
-  ChatComponentContext,
-  ChatComponentPropsWithContext,
   ChatEmptyProps,
   ChatLayoutOwnProps,
-  ChatLoaderContext,
-  ChatLoaderPhase,
-  ChatLoaderPosition,
-  ChatMessageBase,
-  ChatStatus,
   ClientSideTools,
 } from './types';
 import type {
@@ -53,6 +49,15 @@ import type {
   Renderer,
   VNode,
 } from '../../types';
+import type {
+  ChatComponentContext,
+  ChatComponentPropsWithContext,
+  ChatLoaderContext,
+  ChatLoaderPhase,
+  ChatLoaderPosition,
+  ChatMessageBase,
+  ChatStatus,
+} from 'instantsearch-core';
 
 export type ChatMessagesTranslations = {
   /**

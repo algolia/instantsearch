@@ -1,7 +1,10 @@
-import { createDocumentationMessageGenerator, warning } from '../../lib/utils';
+import {
+  createDocumentationMessageGenerator,
+  warning,
+} from 'instantsearch-core';
 
-import type { WidgetFactory, WidgetRenderState } from '../../types';
 import type { SearchParameters, SearchResults } from 'algoliasearch-helper';
+import type { WidgetFactory, WidgetRenderState } from 'instantsearch-core';
 
 export type AnalyticsWidgetParamsPushFunction = (
   /**

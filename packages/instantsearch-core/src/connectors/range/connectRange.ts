@@ -6,8 +6,9 @@ import {
   noop,
 } from '../../lib/utils';
 
+import type InstantSearch from '../../instantsearch';
 import type { SendEventForFacet } from '../../lib/utils';
-import type { Connector, InstantSearch, WidgetRenderState } from '../../types';
+import type { Connector, WidgetRenderState } from '../../types';
 import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator(

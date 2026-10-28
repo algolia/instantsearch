@@ -1,15 +1,6 @@
 import EventEmitter from '@algolia/events';
 import algoliasearchHelper from 'algoliasearch-helper';
 
-import { createInsightsMiddleware } from '../middlewares/createInsightsMiddleware';
-import {
-  createMetadataMiddleware,
-  isMetadataEnabled,
-} from '../middlewares/createMetadataMiddleware';
-import { createRouterMiddleware } from '../middlewares/createRouterMiddleware';
-import index from '../widgets/index/index';
-
-import createHelpers from './createHelpers';
 import {
   createDocumentationMessageGenerator,
   createDocumentationLink,
@@ -21,14 +12,17 @@ import {
   warning,
   setIndexHelperState,
   isIndexWidget,
-} from './utils';
+} from './lib/utils';
+import {
+  createInsightsMiddleware,
+  createMetadataMiddleware,
+  createRouterMiddleware,
+  isMetadataEnabled,
+} from './middlewares';
 import version from './version';
+import { index as indexWidget } from './widgets';
 
-import type {
-  InsightsEvent,
-  InsightsProps,
-} from '../middlewares/createInsightsMiddleware';
-import type { RouterProps } from '../middlewares/createRouterMiddleware';
+import type { InsightsEvent, InsightsProps, RouterProps } from './middlewares';
 import type {
   InsightsClient as AlgoliaInsightsClient,
   SearchClient,
@@ -41,7 +35,8 @@ import type {
   RenderState,
   InitialResults,
   CompositionClient,
-} from '../types';
+} from './types';
+import type { Expand } from './types/utils';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -193,6 +188,13 @@ export type InstantSearchOptions<
     // @MAJOR: Remove legacy behaviour here and in algoliasearch-helper
     persistHierarchicalRootCount?: boolean;
   };
+
+  /**
+   * @internal Injected by the InstantSearch.js factory to supply Hogan
+   * template helpers (`highlight`, `snippet`, `formatNumber`, …). Not part of
+   * the public API.
+   */
+  _internalHelpers?: Record<string, unknown>;
 };
 
 export type InstantSearchStatus = 'idle' | 'loading' | 'stalled' | 'error';
@@ -286,7 +288,6 @@ Use \`InstantSearch.status === "stalled"\` instead.`
     const {
       indexName = '',
       compositionID,
-      numberLocale,
       initialUiState = {} as TUiState,
       routing = null,
       insights = undefined,
@@ -313,8 +314,13 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       );
     }
 
-    if (typeof searchClient.addAlgoliaAgent === 'function') {
-      searchClient.addAlgoliaAgent(`instantsearch.js (${version})`);
+    if (
+      typeof (searchClient as { addAlgoliaAgent?: unknown }).addAlgoliaAgent ===
+      'function'
+    ) {
+      (
+        searchClient as { addAlgoliaAgent: (agent: string) => void }
+      ).addAlgoliaAgent(`instantsearch-core (${version})`);
     }
 
     warning(
@@ -368,7 +374,7 @@ See documentation: ${createDocumentationLink({
     this.compositionID = compositionID;
     this.helper = null;
     this.mainHelper = null;
-    this.mainIndex = index({
+    this.mainIndex = indexWidget({
       // we use an index widget to render compositions
       // this only works because there's only one composition index allow for now
       indexName: this.compositionID || this.indexName,
@@ -377,7 +383,7 @@ See documentation: ${createDocumentationLink({
 
     this.started = false;
     this.templatesConfig = {
-      helpers: createHelpers({ numberLocale }),
+      helpers: options._internalHelpers ?? {},
       compileOptions: {},
     };
 
@@ -962,3 +968,14 @@ See documentation: ${createDocumentationLink({
 }
 
 export default InstantSearch;
+
+type InstantSearchModule = {
+  <TUiState = Record<string, unknown>, TRouteState = TUiState>(
+    options: InstantSearchOptions<Expand<UiState & TUiState>, TRouteState>
+  ): InstantSearch<Expand<UiState & TUiState>, TRouteState>;
+  version: string;
+};
+
+export const instantsearch: InstantSearchModule = (options) =>
+  new InstantSearch(options);
+instantsearch.version = version;

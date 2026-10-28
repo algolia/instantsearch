@@ -1,6 +1,6 @@
-import { deprecate } from '../../lib/utils';
+import { deprecate } from 'instantsearch-core';
 
-import type { WidgetFactory, WidgetRenderState } from '../../types';
+import type { WidgetFactory, WidgetRenderState } from 'instantsearch-core';
 /* Places.js is an optional dependency, no error should be reported if the package is missing */
 /** @ts-ignore */
 import type * as Places from 'places.js';

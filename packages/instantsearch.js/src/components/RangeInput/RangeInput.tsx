@@ -5,10 +5,7 @@ import { h, Component } from 'preact';
 
 import Template from '../Template/Template';
 
-import type {
-  Range,
-  RangeBoundaries,
-} from '../../connectors/range/connectRange';
+import type { Range, RangeBoundaries } from '../../connectors';
 import type { ComponentCSSClasses } from '../../types';
 import type {
   RangeInputCSSClasses,

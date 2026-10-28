@@ -18,7 +18,7 @@ import {
   createRenderOptions,
   createDisposeOptions,
 } from '../../../../test/createWidget';
-import instantsearch from '../../../index.es';
+import InstantSearch, { instantsearch } from '../../../instantsearch';
 import { TAG_PLACEHOLDER } from '../../../lib/utils';
 import connectConfigure from '../../configure/connectConfigure';
 import connectAutocomplete from '../connectAutocomplete';
@@ -981,7 +981,7 @@ search.addWidgets([
         },
       });
 
-      const instantSearchInstance = instantsearch({
+      const instantSearchInstance = new InstantSearch({
         searchClient,
         stalledSearchDelay: 1,
         indexName: 'indexName',

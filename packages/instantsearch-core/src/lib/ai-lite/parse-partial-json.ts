@@ -1,4 +1,4 @@
-import { getJsonCursor } from 'instantsearch-ui-components';
+import { getJsonCursor } from '../utils/jsonCursor';
 
 export const tryParseJson = (value: string): unknown | undefined => {
   try {

@@ -1,15 +1,13 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Selector from '../../components/Selector/Selector';
-import connectSortBy from '../../connectors/sort-by/connectSortBy';
+import { connectSortBy } from '../../connectors';
 import { component } from '../../lib/suit';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import type { SelectorComponentCSSClasses } from '../../components/Selector/Selector';
 import type {
@@ -17,8 +15,12 @@ import type {
   SortByItem,
   SortByRenderState,
   SortByWidgetDescription,
-} from '../../connectors/sort-by/connectSortBy';
-import type { Renderer, TransformItems, WidgetFactory } from '../../types';
+} from '../../connectors';
+import type {
+  Renderer,
+  TransformItems,
+  WidgetFactory,
+} from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'sort-by' });
 const suit = component('SortBy');

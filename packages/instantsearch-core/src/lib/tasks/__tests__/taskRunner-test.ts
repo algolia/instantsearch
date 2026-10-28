@@ -7,7 +7,7 @@ import {
   DefaultTaskTransport,
   resolveEndpoint,
   type TaskRunnerOptions,
-} from 'instantsearch.js/es/lib/tasks';
+} from '..';
 
 function jsonResponse(body: unknown): Response {
   return new Response(JSON.stringify(body), {

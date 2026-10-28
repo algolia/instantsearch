@@ -1,6 +1,6 @@
 import { collectChatRecords, createChatRecordsStore } from '../chatRecords';
 
-import type { ChatMessageBase, ChatToolMessage } from '../../../components';
+import type { ChatMessageBase, ChatToolMessage } from '../chatMessage';
 import type { ChatRecord } from '../chatRecords';
 
 const searchPart = (

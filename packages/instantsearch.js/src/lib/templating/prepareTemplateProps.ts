@@ -1,4 +1,4 @@
-import { uniq } from '../utils/uniq';
+import { uniq } from 'instantsearch-core';
 
 import type { HoganHelpers, Templates } from '../../types';
 import type { HoganOptions } from 'hogan.js';

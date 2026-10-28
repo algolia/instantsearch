@@ -4,14 +4,19 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
+import { historyRouter } from 'instantsearch-core';
 import qs from 'qs';
 
 import instantsearch from '../..';
-import { createWidget } from '../../../test/createWidget';
+import { createWidget } from '../../../../instantsearch-core/test/createWidget';
 import { connectHitsPerPage, connectSearchBox } from '../../connectors';
-import historyRouter from '../routers/history';
 
-import type { Router, UiState, StateMapping, IndexUiState } from '../../types';
+import type {
+  Router,
+  UiState,
+  StateMapping,
+  IndexUiState,
+} from 'instantsearch-core';
 import type { JSDOM } from 'jsdom';
 
 declare const jsdom: JSDOM;

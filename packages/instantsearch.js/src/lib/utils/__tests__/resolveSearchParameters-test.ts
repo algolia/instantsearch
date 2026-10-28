@@ -2,9 +2,10 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { createIndexInitOptions } from '../../../../test/createWidget';
+import { resolveSearchParameters } from 'instantsearch-core';
+
+import { createIndexInitOptions } from '../../../../../instantsearch-core/test/createWidget';
 import { index } from '../../../widgets';
-import { resolveSearchParameters } from '../resolveSearchParameters';
 
 describe('mergeSearchParameters', () => {
   describe('1 level', () => {

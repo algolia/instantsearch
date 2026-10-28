@@ -19,7 +19,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import instantsearch from '../../../index.es';
+import InstantSearch from '../../../instantsearch';
 import connectGeoSearch from '../connectGeoSearch';
 
 import type { SearchResponse } from '../../../types';
@@ -1762,7 +1762,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         },
       });
 
-      const instantSearchInstance = instantsearch({
+      const instantSearchInstance = new InstantSearch({
         searchClient,
         stalledSearchDelay: 1,
         indexName: 'indexName',

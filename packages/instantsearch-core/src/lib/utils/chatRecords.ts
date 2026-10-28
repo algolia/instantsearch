@@ -1,6 +1,6 @@
-import { isPartTool } from './chat';
+import { isPartTool } from './chatMessage';
 
-import type { ChatMessageBase } from '../../components';
+import type { ChatMessageBase } from './chatMessage';
 
 /** A record as a tool returned it, before any display-time annotation. */
 export type ChatRecord = Record<string, unknown> & { objectID: string };

@@ -19,7 +19,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import instantsearch from '../../../index.es';
+import InstantSearch from '../../../instantsearch';
 import { TAG_PLACEHOLDER, deserializePayload } from '../../../lib/utils';
 import connectHits from '../connectHits';
 
@@ -886,7 +886,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
             },
           });
 
-          const instantSearchInstance = instantsearch({
+          const instantSearchInstance = new InstantSearch({
             searchClient,
             stalledSearchDelay: 1,
             indexName: 'indexName',

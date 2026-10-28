@@ -1,10 +1,4 @@
 import {
-  collectChatRecords,
-  createChatRecordsStore,
-  findTool,
-} from 'instantsearch-ui-components';
-
-import {
   DefaultChatTransport,
   lastAssistantMessageIsCompleteWithToolCalls,
 } from '../../lib/ai-lite';
@@ -20,6 +14,9 @@ import {
   createSendEventForHits,
   getAlgoliaAgent,
   getAppIdAndApiKey,
+  collectChatRecords,
+  createChatRecordsStore,
+  findTool,
   noop,
   safelyRunOnBrowser,
   sendChatMessageFeedback,
@@ -28,6 +25,14 @@ import {
 } from '../../lib/utils';
 import { defer } from '../../lib/utils/defer';
 
+import type {
+  AddToolResultForToolCall,
+  ApplyFiltersParams,
+  ChatInsightsEventContext,
+  ClientSideTool,
+  ClientSideTools,
+  UserClientSideTool,
+} from './types';
 import type { ChatOnToolCallCallback } from '../../lib/ai-lite';
 import type {
   AbstractChat,
@@ -35,6 +40,7 @@ import type {
   UIMessage,
 } from '../../lib/chat';
 import type { SendEventForHits } from '../../lib/utils';
+import type { ChatRecordsStore } from '../../lib/utils/chatRecords';
 import type {
   Connector,
   Renderer,
@@ -48,14 +54,8 @@ import type {
   WidgetRenderState,
   IndexRenderState,
 } from '../../types';
-import type {
-  AddToolResultForToolCall,
-  UserClientSideTool,
-  ClientSideTools,
-  ClientSideTool,
-  ChatInsightsEventContext,
-  ChatRecordsStore,
-} from 'instantsearch-ui-components';
+
+export type * from './types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'chat',
@@ -227,20 +227,6 @@ export type ChatCustomInstance<TUiMessage extends UIMessage> = {
     messages?: never;
   };
   sendAutomaticallyWhen?: never;
-};
-
-export type ApplyFiltersParams = {
-  query?: string;
-  facetFilters?: string[][];
-  /**
-   * Numeric refinements, in the Algolia `numericFilters` format
-   * (e.g. `['price <= 1500']`). Only the search tool's resolved search params
-   * can express these; the raw `facet_<attribute>` keys cannot.
-   *
-   * Kept in sync with `ApplyFiltersParams` in `instantsearch-ui-components`,
-   * which declares the same contract for the component layer.
-   */
-  numericFilters?: string[];
 };
 
 export type ChatInit<TUiMessage extends UIMessage> =

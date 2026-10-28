@@ -15,14 +15,16 @@ import algoliasearchHelper, {
   RecommendParameters,
   RecommendResults,
 } from 'algoliasearch-helper';
+import { warning } from 'instantsearch-core';
+import { index } from 'instantsearch-core';
 
 import { castToJestMock } from '../../../../../../tests/utils';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
 import {
   createWidget,
   createIndexInitOptions,
   createDisposeOptions,
-} from '../../../../test/createWidget';
+} from '../../../../../instantsearch-core/test/createWidget';
 import {
   connectHits,
   connectPagination,
@@ -30,11 +32,9 @@ import {
   connectSearchBox,
 } from '../../../connectors';
 import instantsearch from '../../../index.es';
-import { warning } from '../../../lib/utils';
-import index from '../index';
 
-import type { Widget } from '../../../types';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
+import type { Widget } from 'instantsearch-core';
 
 describe('index', () => {
   const createSearchBox = (args: Partial<Widget> = {}): Widget =>

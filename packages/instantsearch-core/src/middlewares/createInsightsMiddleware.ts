@@ -15,7 +15,7 @@ import {
   safelyRunOnBrowser,
 } from '../lib/utils';
 import { createUUID } from '../lib/utils/uuid';
-import version from '../lib/version';
+import version from '../version';
 
 import type {
   InsightsClient,

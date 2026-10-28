@@ -2,7 +2,8 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { warning } from '../../lib/utils';
+import { warning } from 'instantsearch-core';
+
 import getInsightsAnonymousUserToken, {
   ANONYMOUS_TOKEN_COOKIE_KEY,
 } from '../get-insights-anonymous-user-token';

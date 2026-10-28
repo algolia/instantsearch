@@ -1,23 +1,21 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import PoweredBy from '../../components/PoweredBy/PoweredBy';
-import connectPoweredBy from '../../connectors/powered-by/connectPoweredBy';
+import { connectPoweredBy } from '../../connectors';
 import { component } from '../../lib/suit';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import type { PoweredByComponentCSSClasses } from '../../components/PoweredBy/PoweredBy';
 import type {
   PoweredByConnectorParams,
   PoweredByRenderState,
   PoweredByWidgetDescription,
-} from '../../connectors/powered-by/connectPoweredBy';
-import type { Renderer, WidgetFactory } from '../../types';
+} from '../../connectors';
+import type { Renderer, WidgetFactory } from 'instantsearch-core';
 
 const suit = component('PoweredBy');
 const withUsage = createDocumentationMessageGenerator({ name: 'powered-by' });

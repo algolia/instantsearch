@@ -12,9 +12,9 @@ import {
   type TaskRunnerOptions,
   type TaskTransport,
   type TaskTransportOptions,
-} from 'instantsearch.js/es/lib/tasks';
+} from 'instantsearch-core';
 
-import type { TasksConnectorParams } from 'instantsearch.js/es/connectors/tasks/connectTasks';
+import type { TasksConnectorParams } from 'instantsearch-core';
 
 describe('tasks public types', () => {
   it('supports default, custom, prepared, and combined agent configuration', () => {

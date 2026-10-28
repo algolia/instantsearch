@@ -1,6 +1,6 @@
 import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { wait } from '@instantsearch/testutils';
-import { TAG_PLACEHOLDER } from 'instantsearch.js/es/lib/utils';
+import { TAG_PLACEHOLDER } from 'instantsearch-core';
 
 import type { RelatedProductsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';

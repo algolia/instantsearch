@@ -1,11 +1,12 @@
-import connectConfigure from '../../connectors/configure/connectConfigure';
-import { noop } from '../../lib/utils';
+import { noop } from 'instantsearch-core';
+
+import { connectConfigure } from '../../connectors';
 
 import type {
   ConfigureConnectorParams,
   ConfigureWidgetDescription,
-} from '../../connectors/configure/connectConfigure';
-import type { Widget } from '../../types';
+} from '../../connectors';
+import type { Widget } from 'instantsearch-core';
 
 /**
  * A list of [search parameters](https://www.algolia.com/doc/api-reference/search-api-parameters/)

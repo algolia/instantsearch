@@ -8,8 +8,8 @@ import algoliasearchHelper from 'algoliasearch-helper';
 import { createInitOptions } from '../../../../test/createWidget';
 import { connectTasks } from '../../index';
 
+import type { TaskTransport } from '../../../lib/tasks';
 import type { TasksConnectorParams } from '../connectTasks';
-import type { TaskTransport } from 'instantsearch.js/es/lib/tasks';
 
 function jsonResponse(body: unknown): Response {
   return new Response(JSON.stringify(body), {

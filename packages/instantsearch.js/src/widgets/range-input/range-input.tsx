@@ -1,16 +1,14 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import RangeInput from '../../components/RangeInput/RangeInput';
-import connectRange from '../../connectors/range/connectRange';
+import { connectRange } from '../../connectors';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import type {
   RangeInputComponentCSSClasses,
@@ -20,9 +18,10 @@ import type {
   RangeConnectorParams,
   RangeRenderState,
   RangeWidgetDescription,
-} from '../../connectors/range/connectRange';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Renderer, Template, WidgetFactory } from '../../types';
+import type { Template } from '../../types';
+import type { Renderer, WidgetFactory } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'range-input' });
 const suit = component('RangeInput');
