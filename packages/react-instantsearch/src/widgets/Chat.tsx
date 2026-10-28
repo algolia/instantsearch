@@ -11,11 +11,9 @@ import {
   getActiveContainerAnimations,
   holdContainerInertUntilReveal,
   restoreContainerInertUntilReveal,
-} from 'instantsearch-core';
-import {
-  createChatComponent,
   shouldSearchToolRenderResults,
-} from 'instantsearch-ui-components';
+} from 'instantsearch-core';
+import { createChatComponent } from 'instantsearch-ui-components';
 import React, {
   createElement,
   Fragment,

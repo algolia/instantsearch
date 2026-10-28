@@ -1,13 +1,14 @@
-import { isPartText, startsWith } from 'instantsearch-core';
+import { isPartText } from '../utils/chatMessage';
+import { startsWith } from '../utils/startsWith';
 
 import type {
   ApplyFiltersParams,
-  ChatMessageBase,
   ClientSideToolShouldRenderContext,
   ResolvedSearchParams,
   SearchToolInput,
   SearchToolQuery,
-} from 'instantsearch-core';
+} from '../../connectors/chat/types';
+import type { ChatMessageBase } from '../utils/chatMessage';
 
 /**
  * The shape `getResolvedSearchParams` needs from a chat message: just its
