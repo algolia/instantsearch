@@ -1,40 +1,32 @@
-import {
-  TAG_REPLACEMENT,
-  getPropertyByPath,
-  getHighlightedParts,
-  reverseHighlightedParts,
-  concatHighlightedParts,
-  warning,
-} from 'instantsearch-core';
-
 import { component } from '../lib/suit';
+import { TAG_REPLACEMENT, getPropertyByPath, warning } from '../lib/utils';
 
-import type { Hit } from 'instantsearch-core';
+import type { Hit } from '../types';
 
-export type ReverseSnippetOptions = {
+export type SnippetOptions = {
   // @MAJOR string should no longer be allowed to be a path, only array can be a path
   attribute: string | string[];
   highlightedTagName?: string;
   hit: Partial<Hit>;
-  cssClasses?: Partial<{
-    highlighted: string;
-  }>;
+  cssClasses?: {
+    highlighted?: string;
+  };
 };
 
-const suit = component('ReverseSnippet');
+const suit = component('Snippet');
 
 /**
- * @deprecated use html tagged templates and the ReverseSnippet component instead
+ * @deprecated use html tagged templates and the Snippet component instead
  */
-export default function reverseSnippet({
+export default function snippet({
   attribute,
   highlightedTagName = 'mark',
   hit,
   cssClasses = {},
-}: ReverseSnippetOptions): string {
+}: SnippetOptions): string {
   warning(
     false,
-    `\`instantsearch.reverseSnippet\` function has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`ReverseSnippet\` component.
+    `\`instantsearch.snippet\` function has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`Snippet\` component.
 
 For more information, visit https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/?client=html+tagged+templates#upgrade-templates`
   );
@@ -47,7 +39,7 @@ For more information, visit https://www.algolia.com/doc/guides/building-search-u
   // @MAJOR fallback to attribute value if snippet is not found
   warning(
     snippetAttributeResult,
-    `Could not enable reverse snippet for "${attribute}", will display an empty string.
+    `Could not enable snippet for "${attribute}", will display an empty string.
 Please check whether this attribute exists and is specified in \`attributesToSnippet\`.
 
 See: https://alg.li/highlighting
@@ -62,11 +54,7 @@ See: https://alg.li/highlighting
       descendantName: 'highlighted',
     }) + (cssClasses.highlighted ? ` ${cssClasses.highlighted}` : '');
 
-  const reverseHighlightedValue = concatHighlightedParts(
-    reverseHighlightedParts(getHighlightedParts(attributeValue))
-  );
-
-  return reverseHighlightedValue
+  return attributeValue
     .replace(
       new RegExp(TAG_REPLACEMENT.highlightPreTag, 'g'),
       `<${highlightedTagName} class="${className}">`

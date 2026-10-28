@@ -1,11 +1,11 @@
 // global for TypeScript alone
 /* global google */
 import { createDocumentationMessageGenerator } from 'instantsearch-core';
+import { suitComponent as component } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { render } from 'preact';
 
 import { connectGeoSearch } from '../../connectors';
-import { component } from '../../lib/suit';
 import { renderTemplate } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 

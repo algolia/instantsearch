@@ -1,12 +1,12 @@
 /** @jsx h */
 
 import { createDocumentationMessageGenerator } from 'instantsearch-core';
+import { suitComponent as component } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import RelevantSort from '../../components/RelevantSort/RelevantSort';
 import { connectRelevantSort } from '../../connectors';
-import { component } from '../../lib/suit';
 import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
