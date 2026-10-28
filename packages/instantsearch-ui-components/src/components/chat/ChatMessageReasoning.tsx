@@ -12,6 +12,14 @@ export type ChatMessageReasoningTranslations = {
    * The label for a reasoning disclosure
    */
   reasoningLabel: string;
+  /**
+   * The accessible name of a code block in message text
+   */
+  codeBlockLabel?: string;
+  /**
+   * The accessible name of a table in message text
+   */
+  tableLabel?: string;
 };
 
 export type ChatMessageReasoningClassNames = {
@@ -94,6 +102,8 @@ export function createChatMessageReasoningComponent({
       parseMarkdown ? (
         compiler(part.text, {
           createElement: createElement as any,
+          codeBlockLabel: translations.codeBlockLabel,
+          tableLabel: translations.tableLabel,
         })
       ) : (
         // Preserve newlines in plain-text reasoning.

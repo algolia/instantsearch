@@ -1505,7 +1505,14 @@ export function compiler(
 
       _render(node, _output, state) {
         return (
-          <pre key={state!.key}>
+          // Focusable so keyboard users can scroll it in Safari, which does not
+          // make scroll containers focusable on its own.
+          <pre
+            key={state!.key}
+            tabIndex={0}
+            role="region"
+            aria-label={options.codeBlockLabel || 'Code'}
+          >
             <code
               {...node.attrs}
               className={node.lang ? `lang-${node.lang}` : ''}
@@ -1864,35 +1871,45 @@ export function compiler(
       _render(node, output, state) {
         const table = node as MarkdownToJSX.TableNode;
         return (
-          <table key={state!.key}>
-            <thead>
-              <tr>
-                {table.header.map(function generateHeaderCell(content, i) {
+          // The wrapper scrolls, not the table, so the table keeps its role in
+          // screen readers. It is focusable for the same reason as the code block.
+          <div
+            key={state!.key}
+            className="ais-ChatMessage-tableScroll"
+            tabIndex={0}
+            role="region"
+            aria-label={options.tableLabel || 'Table'}
+          >
+            <table>
+              <thead>
+                <tr>
+                  {table.header.map(function generateHeaderCell(content, i) {
+                    return (
+                      <th key={i} style={getTableStyle(table, i)}>
+                        {output(content, state)}
+                      </th>
+                    );
+                  })}
+                </tr>
+              </thead>
+
+              <tbody>
+                {table.cells.map(function generateTableRow(row, i) {
                   return (
-                    <th key={i} style={getTableStyle(table, i)}>
-                      {output(content, state)}
-                    </th>
+                    <tr key={i}>
+                      {row.map(function generateTableCell(content, c) {
+                        return (
+                          <td key={c} style={getTableStyle(table, c)}>
+                            {output(content, state)}
+                          </td>
+                        );
+                      })}
+                    </tr>
                   );
                 })}
-              </tr>
-            </thead>
-
-            <tbody>
-              {table.cells.map(function generateTableRow(row, i) {
-                return (
-                  <tr key={i}>
-                    {row.map(function generateTableCell(content, c) {
-                      return (
-                        <td key={c} style={getTableStyle(table, c)}>
-                          {output(content, state)}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         );
       },
     },
@@ -2442,6 +2459,16 @@ export namespace MarkdownToJSX {
      * HTML IDs for anchor linking purposes.
      */
     slugify: (input: string, defaultFn: (input: string) => string) => string;
+
+    /**
+     * Accessible name of a fenced or indented code block. Defaults to "Code".
+     */
+    codeBlockLabel: string;
+
+    /**
+     * Accessible name of a table's scroll region. Defaults to "Table".
+     */
+    tableLabel: string;
 
     /**
      * Declare the type of the wrapper to be used when there are multiple

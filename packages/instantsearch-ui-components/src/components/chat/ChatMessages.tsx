@@ -813,6 +813,8 @@ export function createChatMessagesComponent({
       ? messageProps?.translations
       : props.messageTranslations;
     const reasoningLabel = reasoningTranslations?.reasoningLabel;
+    const codeBlockLabel = reasoningTranslations?.codeBlockLabel;
+    const tableLabel = reasoningTranslations?.tableLabel;
     const reasoningClassNames = hasOwnKey(messageProps, 'classNames')
       ? messageProps?.classNames
       : props.classNames;
@@ -854,6 +856,8 @@ export function createChatMessagesComponent({
         reasoningComponentActivePart,
         reasoningComponentTools,
         reasoningLabel,
+        codeBlockLabel,
+        tableLabel,
         reasoningClassName,
         reasoningHeaderClassName,
         reasoningIconClassName,

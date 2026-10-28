@@ -1490,6 +1490,66 @@ describe('ChatMessage', () => {
     expect(container.querySelector('strong')).toHaveTextContent('release date');
   });
 
+  test('labels code blocks and tables in text and reasoning with the translations', () => {
+    const code = '```js\nconst a = 1;\n```';
+    const table = '| a | b |\n| - | - |\n| 1 | 2 |';
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [
+            { type: 'reasoning', text: `${code}\n\n${table}`, state: 'done' },
+            { type: 'text', text: `${code}\n\n${table}` },
+          ],
+        }}
+        context={createContext()}
+        showReasoning={true}
+        translations={{ codeBlockLabel: 'Bloc de code', tableLabel: 'Tableau' }}
+      />
+    );
+
+    const labels = (selector: string) =>
+      Array.from(container.querySelectorAll(selector)).map((el) =>
+        el.getAttribute('aria-label')
+      );
+    expect(labels('pre')).toEqual(['Bloc de code', 'Bloc de code']);
+    expect(labels('.ais-ChatMessage-tableScroll')).toEqual([
+      'Tableau',
+      'Tableau',
+    ]);
+  });
+
+  test('labels code blocks and tables in English by default', () => {
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [
+            {
+              type: 'text',
+              text: '```js\nconst a = 1;\n```\n\n| a | b |\n| - | - |\n| 1 | 2 |',
+            },
+          ],
+        }}
+        context={createContext()}
+      />
+    );
+
+    expect(container.querySelector('pre')).toHaveAttribute(
+      'aria-label',
+      'Code'
+    );
+    expect(
+      container.querySelector('.ais-ChatMessage-tableScroll')
+    ).toHaveAttribute('aria-label', 'Table');
+  });
+
   test('renders reasoning as plain text when parseMarkdown is false', () => {
     const { container, getByRole } = render(
       <ChatMessage

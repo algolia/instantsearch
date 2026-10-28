@@ -70,6 +70,47 @@ describe('vendored markdown-to-jsx', () => {
     expect(renderMarkdown(markdown)).toContain(expected);
   });
 
+  test('makes code blocks keyboard-focusable scroll regions', () => {
+    const pre = (() => {
+      const container = document.createElement('div');
+      container.innerHTML = renderMarkdown('```js\nconst a = 1;\n```');
+      return container.querySelector('pre')!;
+    })();
+
+    expect(pre.getAttribute('tabindex')).toBe('0');
+    expect(pre.getAttribute('role')).toBe('region');
+    expect(pre.getAttribute('aria-label')).toBe('Code');
+  });
+
+  test('wraps tables in a keyboard-focusable scroll region that keeps table semantics', () => {
+    const container = document.createElement('div');
+    container.innerHTML = renderMarkdown('| a | b |\n| - | - |\n| 1 | 2 |');
+    const wrapper = container.querySelector('.ais-ChatMessage-tableScroll')!;
+
+    expect(wrapper.getAttribute('tabindex')).toBe('0');
+    expect(wrapper.getAttribute('role')).toBe('region');
+    expect(wrapper.getAttribute('aria-label')).toBe('Table');
+    expect(wrapper.firstElementChild!.tagName).toBe('TABLE');
+    expect(wrapper.querySelector('table')!.hasAttribute('role')).toBe(false);
+  });
+
+  test('labels code blocks and tables with the given text', () => {
+    const container = document.createElement('div');
+    container.innerHTML = renderMarkdown(
+      '```js\nconst a = 1;\n```\n\n| a | b |\n| - | - |\n| 1 | 2 |',
+      { codeBlockLabel: 'Bloc de code', tableLabel: 'Tableau' }
+    );
+
+    expect(container.querySelector('pre')!.getAttribute('aria-label')).toBe(
+      'Bloc de code'
+    );
+    expect(
+      container
+        .querySelector('.ais-ChatMessage-tableScroll')!
+        .getAttribute('aria-label')
+    ).toBe('Tableau');
+  });
+
   test('does not parse raw HTML', () => {
     const html = renderMarkdown('<b>hi</b>');
     expect(html).not.toContain('<b>');

@@ -76,15 +76,17 @@ describe('Chat message styles', () => {
     style.textContent = compileChatStylesheet('_chat-message.scss');
     document.head.appendChild(style);
 
-    // The markdown renderer emits unclassed `pre` and `table` in a bare span.
+    // The markdown renderer emits an unclassed `pre` and a table inside a
+    // scroll wrapper, all in a bare span.
     // jsdom has no layout, so this pins the rules and not the overflow itself.
     const message = document.createElement('div');
     message.className = 'ais-ChatMessage-message';
     message.innerHTML = `
       <span>
         <pre>a very long line of code</pre>
-        <table><tbody><tr><td>cell</td></tr></tbody></table>
-        <table class="tool-table"><tbody><tr><td>cell</td></tr></tbody></table>
+        <div class="ais-ChatMessage-tableScroll">
+          <table><tbody><tr><td>cell</td></tr></tbody></table>
+        </div>
       </span>
     `;
     document.body.appendChild(message);
@@ -92,14 +94,13 @@ describe('Chat message styles', () => {
     expect(getComputedStyle(message.querySelector('pre')!).overflowX).toBe(
       'auto'
     );
-    expect(getComputedStyle(message.querySelector('table')!).overflowX).toBe(
-      'auto'
+    const scroll = getComputedStyle(
+      message.querySelector('.ais-ChatMessage-tableScroll')!
     );
-    expect(getComputedStyle(message.querySelector('table')!).display).toBe(
+    expect(scroll.overflowX).toBe('auto');
+    expect(scroll.maxWidth).toBe('100%');
+    expect(getComputedStyle(message.querySelector('table')!).display).not.toBe(
       'block'
     );
-    expect(
-      getComputedStyle(message.querySelector('table.tool-table')!).display
-    ).not.toBe('block');
   });
 });

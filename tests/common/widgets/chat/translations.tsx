@@ -459,6 +459,72 @@ export function createTranslationsTests(
         ).toBe('Custom conversation');
       });
 
+      test('renders with custom code block and table labels', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '0',
+              role: 'assistant',
+              parts: [
+                {
+                  type: 'text',
+                  text: '```js\nconst a = 1;\n```\n\n| a | b |\n| - | - |\n| 1 | 2 |',
+                },
+              ],
+            },
+          ],
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              templates: {
+                message: {
+                  codeBlockLabelText: 'Bloc de code',
+                  tableLabelText: 'Tableau',
+                },
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              translations: {
+                message: {
+                  codeBlockLabel: 'Bloc de code',
+                  tableLabel: 'Tableau',
+                },
+              },
+            },
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              translations: {
+                message: {
+                  codeBlockLabel: 'Bloc de code',
+                  tableLabel: 'Tableau',
+                },
+              },
+            },
+          },
+        });
+
+        await openChat(act);
+
+        expect(document.querySelector('pre')!.getAttribute('aria-label')).toBe(
+          'Bloc de code'
+        );
+        expect(
+          document
+            .querySelector('.ais-ChatMessage-tableScroll')!
+            .getAttribute('aria-label')
+        ).toBe('Tableau');
+      });
+
       test('renders with custom message translations', async () => {
         const searchClient = createSearchClient();
 
