@@ -5,6 +5,7 @@ import { useConnector } from '../hooks/useConnector';
 import { dequal } from '../lib/dequal';
 import { useIsHydrated } from '../lib/useIsHydrated';
 import { useIsomorphicLayoutEffect } from '../lib/useIsomorphicLayoutEffect';
+import { useStableFunctions } from '../lib/useStableFunctions';
 import { warn } from '../lib/warn';
 
 import type { AdditionalWidgetProperties } from '../hooks/useConnector';
@@ -56,9 +57,10 @@ function hasPersistedOpenState(type: string) {
 }
 
 export function useChat<TUiMessage extends UIMessage = UIMessage>(
-  props: UseChatProps<TUiMessage>,
+  userProps: UseChatProps<TUiMessage>,
   additionalWidgetProperties?: AdditionalWidgetProperties
 ): ChatWidgetDescription<TUiMessage>['renderState'] {
+  const props = useStableFunctions(userProps);
   const isHydrated = useIsHydrated();
   const previousPropsRef = useRef(props);
   const previousChatStateRef = useRef<Pick<
