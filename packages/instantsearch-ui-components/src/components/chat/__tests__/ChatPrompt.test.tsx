@@ -43,6 +43,7 @@ describe('ChatPrompt', () => {
                 type="submit"
               >
                 <svg
+                  aria-hidden="true"
                   fill="none"
                   stroke="currentColor"
                   strokeLinecap="round"
@@ -126,6 +127,7 @@ describe('ChatPrompt', () => {
                 type="submit"
               >
                 <svg
+                  aria-hidden="true"
                   fill="none"
                   stroke="currentColor"
                   strokeLinecap="round"
