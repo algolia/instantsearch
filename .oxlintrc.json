@@ -215,6 +215,15 @@
       }
     },
     {
+      "files": [
+        "packages/react-instantsearch-nextjs/src/**/*",
+        "packages/react-instantsearch-router-nextjs/src/**/*"
+      ],
+      "rules": {
+        "instantsearch/no-static-react-exports": "off"
+      }
+    },
+    {
       "files": ["packages/*/test/module/**/*.cjs"],
       "rules": {
         "import/extensions": "off"
