@@ -1,7 +1,5 @@
 {
-  "extends": [
-    "../../.oxlintrc.json"
-  ],
+  "extends": ["../../.oxlintrc.json"],
   "rules": {
     "import/no-commonjs": "off",
     "new-cap": "off",

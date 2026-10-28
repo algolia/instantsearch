@@ -3,7 +3,7 @@ import { wait } from '@instantsearch/testutils';
 import { Chat } from 'instantsearch.js/es/lib/chat';
 import React from 'react';
 
-import { createDefaultWidgetParams, openChat } from './utils';
+import { createDefaultWidgetParams, openChat, vueH } from './utils';
 
 import type { ChatWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
@@ -73,15 +73,14 @@ export function createStreamingTests(
         widgetParams: {
           javascript: createDefaultWidgetParams(chat),
           react: createDefaultWidgetParams(chat),
-          vue: {},
+          vue: createDefaultWidgetParams(chat),
         },
       });
 
       await openChat(act);
 
-      const listBefore = document.querySelector<HTMLOListElement>(
-        '.ais-Carousel-list'
-      );
+      const listBefore =
+        document.querySelector<HTMLOListElement>('.ais-Carousel-list');
       expect(listBefore).not.toBeNull();
 
       // Simulate the user having scrolled the carousel horizontally.
@@ -97,9 +96,8 @@ export function createStreamingTests(
         });
       }
 
-      const listAfter = document.querySelector<HTMLOListElement>(
-        '.ais-Carousel-list'
-      );
+      const listAfter =
+        document.querySelector<HTMLOListElement>('.ais-Carousel-list');
 
       // Same DOM node across re-renders → native scroll position survives.
       expect(listAfter).toBe(listBefore);
@@ -136,7 +134,13 @@ export function createStreamingTests(
               return <div>{(item as { name?: string }).name}</div>;
             },
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(chat),
+            itemComponent: ({ item }: { item: { name?: string } }) => {
+              itemRenders++;
+              return vueH('div', item.name);
+            },
+          },
         },
       });
 

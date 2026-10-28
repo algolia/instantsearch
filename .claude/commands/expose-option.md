@@ -6,13 +6,14 @@ argument-hint: <connector> <optionName> [short description of what it does]
 You are exposing a new option through the InstantSearch fan-out. The architecture is **connector (logic) → flavor wrapper → shared UI**, so the option is defined once in the connector and surfaced by each flavor.
 
 **Input:** `$ARGUMENTS`
+
 - First token = the connector (e.g. `connectRefinementList` or just `refinementList`).
 - Second token = the new option name (e.g. `clearOnChange`).
 - Remaining text = a short description of the behavior, if given.
 
 If the connector or option name is missing or ambiguous, ask before changing files. If the behavior isn't specified, ask what the option should do — do **not** guess at semantics.
 
-This is a checklist for a cross-flavor option rollout. The connector is the single source of truth; React and Vue only *wrap* it, so do the connector first, then the wrappers.
+This is a checklist for a cross-flavor option rollout. The connector is the single source of truth; React and Vue only _wrap_ it, so do the connector first, then the wrappers.
 
 ## Steps
 
@@ -26,7 +27,7 @@ This is a checklist for a cross-flavor option rollout. The connector is the sing
 
    For a presentational-only variant, **reuse the existing connector** with a distinct `$$widgetType` — never fork connector logic.
 
-3. **If the option changes shared markup/layout** (not just behavior), update the shared `create<Name>Component` in `packages/instantsearch-ui-components` *before* wiring the flavors — its output is the contract they consume.
+3. **If the option changes shared markup/layout** (not just behavior), update the shared `create<Name>Component` in `packages/instantsearch-ui-components` _before_ wiring the flavors — its output is the contract they consume.
 
 4. **Thread it through the wrappers** (independent of each other once the connector is settled):
    - **React** — the hook `packages/react-instantsearch-core/src/connectors/use<Pascal>.ts` and the component `packages/react-instantsearch/src/widgets/<Pascal>.tsx`, kept in sync and typed.
@@ -45,5 +46,5 @@ This is a checklist for a cross-flavor option rollout. The connector is the sing
 
 ## Notes
 
-- Why this order: the connector is the contract; React and Vue only *wrap* it, so they're independent of each other and safe to do once the connector is settled.
+- Why this order: the connector is the contract; React and Vue only _wrap_ it, so they're independent of each other and safe to do once the connector is settled.
 - Don't hand-edit changelogs (Ship.js generates them). Commit message: `feat(<widget>): add <optionName> option`.

@@ -34,7 +34,9 @@ function captureIO(): CapturedIO {
 
 function copyFixture(name: string): string {
   const src = path.join(FIXTURES_ROOT, name);
-  const dest = fs.mkdtempSync(path.join(os.tmpdir(), `instantsearch-init-${name}-`));
+  const dest = fs.mkdtempSync(
+    path.join(os.tmpdir(), `instantsearch-init-${name}-`)
+  );
   copyRecursive(src, dest);
   return dest;
 }
@@ -56,7 +58,9 @@ function noopInstaller(): Installer {
   return async () => undefined;
 }
 
-function trackingInstaller(): Installer & { calls: Array<{ packages: string[]; cwd: string }> } {
+function trackingInstaller(): Installer & {
+  calls: Array<{ packages: string[]; cwd: string }>;
+} {
   const calls: Array<{ packages: string[]; cwd: string }> = [];
   const installer = (async (packages, { cwd }) => {
     calls.push({ packages, cwd });
@@ -69,7 +73,9 @@ function readEnvelope(stdout: string[]): Record<string, unknown> {
   return JSON.parse(stdout.join(''));
 }
 
-function baseOptions(overrides: Partial<InitOptions> & { cwd: string }): InitOptions {
+function baseOptions(
+  overrides: Partial<InitOptions> & { cwd: string }
+): InitOptions {
   return {
     json: true,
     yes: true,
@@ -140,7 +146,9 @@ describe('init', () => {
         features: [],
       },
     });
-    expect((manifestResult as { manifest: Manifest }).manifest.framework).toBeUndefined();
+    expect(
+      (manifestResult as { manifest: Manifest }).manifest.framework
+    ).toBeUndefined();
 
     const clientSource = fs.readFileSync(
       path.join(cwd, 'src/lib/algolia-client.ts'),
@@ -159,7 +167,9 @@ describe('init', () => {
     expect(providerSource).not.toContain("'use client'");
     expect(providerSource).not.toMatch(/indexName=/);
 
-    const importHint = (envelope as { nextSteps: string[] }).nextSteps.join('\n');
+    const importHint = (envelope as { nextSteps: string[] }).nextSteps.join(
+      '\n'
+    );
     expect(importHint).toContain('./src/lib/algolia-provider');
     expect(importHint).not.toContain(cwd);
     expect(importHint).not.toMatch(/\.(tsx|jsx|ts|js)['"`]/);
@@ -383,7 +393,9 @@ describe('init', () => {
       expect(exitCode).not.toBe(0);
       expect(installer.calls).toEqual([]);
       expect(fs.existsSync(path.join(cwd, 'instantsearch.json'))).toBe(false);
-      expect(capture.stderr.join('')).toContain('Cannot proceed without installing');
+      expect(capture.stderr.join('')).toContain(
+        'Cannot proceed without installing'
+      );
     });
   });
 
@@ -400,12 +412,18 @@ describe('init', () => {
       expect(exitCode).toBe(0);
       expect(capture.stderr.join('')).toBe('');
 
-      const manifestResult = readManifest(path.join(cwd, 'instantsearch.json'), {
-        command: 'init',
-      });
+      const manifestResult = readManifest(
+        path.join(cwd, 'instantsearch.json'),
+        {
+          command: 'init',
+        }
+      );
       expect(manifestResult).toMatchObject({
         ok: true,
-        manifest: { flavor: 'react', framework: 'next-app' } as Partial<Manifest>,
+        manifest: {
+          flavor: 'react',
+          framework: 'next-app',
+        } as Partial<Manifest>,
       });
     });
 
@@ -419,12 +437,18 @@ describe('init', () => {
       );
 
       expect(exitCode).toBe(0);
-      const manifestResult = readManifest(path.join(cwd, 'instantsearch.json'), {
-        command: 'init',
-      });
+      const manifestResult = readManifest(
+        path.join(cwd, 'instantsearch.json'),
+        {
+          command: 'init',
+        }
+      );
       expect(manifestResult).toMatchObject({
         ok: true,
-        manifest: { flavor: 'react', framework: 'next-app' } as Partial<Manifest>,
+        manifest: {
+          flavor: 'react',
+          framework: 'next-app',
+        } as Partial<Manifest>,
       });
     });
 
@@ -713,10 +737,7 @@ describe('init', () => {
     const cwd = fixture('react-vite-ts');
     const capture = captureIO();
 
-    const exitCode = await runInit(
-      baseOptions({ cwd, libPath }),
-      capture.io
-    );
+    const exitCode = await runInit(baseOptions({ cwd, libPath }), capture.io);
 
     expect(exitCode).not.toBe(0);
     expect(readEnvelope(capture.stdout)).toMatchObject({

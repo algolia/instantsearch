@@ -192,7 +192,7 @@ export function createFilterSuggestionsComponent({ createElement }: Renderer) {
     } = userProps;
 
     const HeaderComponent =
-      headerComponent === false ? null : headerComponent ?? DefaultHeader;
+      headerComponent === false ? null : (headerComponent ?? DefaultHeader);
 
     const isEmpty = suggestions.length === 0;
 

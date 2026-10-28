@@ -13,11 +13,13 @@ const createFakeComponent = (props = {}) => ({
 const createFakeIndexWidget = () => ({
   addWidgets: jest.fn(),
   removeWidgets: jest.fn(),
+  updateWidget: jest.fn(),
 });
 
 const createFakeInstance = () => ({
   addWidgets: jest.fn(),
   removeWidgets: jest.fn(),
+  updateWidget: jest.fn(),
   mainIndex: createFakeIndexWidget(),
   started: true,
 });
@@ -126,14 +128,16 @@ describe('on root index', () => {
 
     expect(wrapper.vm.state).toBe(null);
 
-    expect(instance.mainIndex.removeWidgets).toHaveBeenCalledTimes(1);
-    expect(instance.mainIndex.removeWidgets).toHaveBeenCalledWith([widget]);
-
     expect(factory).toHaveBeenCalledTimes(2);
     expect(factory).toHaveBeenCalledWith(nextWidgetParams);
 
-    expect(instance.mainIndex.addWidgets).toHaveBeenCalledTimes(2);
-    expect(instance.mainIndex.addWidgets).toHaveBeenCalledWith([widget]);
+    expect(instance.mainIndex.removeWidgets).toHaveBeenCalledTimes(0);
+    expect(instance.mainIndex.addWidgets).toHaveBeenCalledTimes(1);
+    expect(instance.mainIndex.updateWidget).toHaveBeenCalledTimes(1);
+    expect(instance.mainIndex.updateWidget).toHaveBeenCalledWith(
+      widget,
+      widget
+    );
   });
 
   it('updates local state on connector render', () => {
@@ -309,14 +313,13 @@ describe('on child index', () => {
 
     expect(wrapper.vm.state).toBe(null);
 
-    expect(indexWidget.removeWidgets).toHaveBeenCalledTimes(1);
-    expect(indexWidget.removeWidgets).toHaveBeenCalledWith([widget]);
-
     expect(factory).toHaveBeenCalledTimes(2);
     expect(factory).toHaveBeenCalledWith(nextWidgetParams);
 
-    expect(indexWidget.addWidgets).toHaveBeenCalledTimes(2);
-    expect(indexWidget.addWidgets).toHaveBeenCalledWith([widget]);
+    expect(indexWidget.removeWidgets).toHaveBeenCalledTimes(0);
+    expect(indexWidget.addWidgets).toHaveBeenCalledTimes(1);
+    expect(indexWidget.updateWidget).toHaveBeenCalledTimes(1);
+    expect(indexWidget.updateWidget).toHaveBeenCalledWith(widget, widget);
   });
 
   it('updates local state on connector render', () => {
@@ -447,18 +450,15 @@ describe('general', () => {
 
     expect(wrapper.vm.state).toBe(null);
 
-    expect(instance.mainIndex.removeWidgets).toHaveBeenCalledTimes(1);
-    expect(instance.mainIndex.removeWidgets).toHaveBeenCalledWith([widget]);
-
     expect(factory).toHaveBeenCalledTimes(2);
     expect(factory).toHaveBeenCalledWith(nextWidgetParams);
 
-    expect(instance.mainIndex.addWidgets).toHaveBeenCalledTimes(2);
-    expect(instance.mainIndex.addWidgets.mock.calls[1][0]).toEqual([
-      {
-        ...widget,
-        ...additionalProperties,
-      },
-    ]);
+    expect(instance.mainIndex.removeWidgets).toHaveBeenCalledTimes(0);
+    expect(instance.mainIndex.addWidgets).toHaveBeenCalledTimes(1);
+    expect(instance.mainIndex.updateWidget).toHaveBeenCalledTimes(1);
+    expect(instance.mainIndex.updateWidget.mock.calls[0][1]).toEqual({
+      ...widget,
+      ...additionalProperties,
+    });
   });
 });

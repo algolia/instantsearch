@@ -29,7 +29,7 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 export type LookingSimilarRenderState<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = {
   /**
    * The matched recommendations from the Algolia API.
@@ -42,7 +42,7 @@ export type LookingSimilarRenderState<
 };
 
 export type LookingSimilarConnectorParams<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = {
   /**
    * The `objectIDs` of the items to get similar looking products from.
@@ -86,21 +86,21 @@ export type LookingSimilarConnectorParams<
 };
 
 export type LookingSimilarWidgetDescription<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = {
   $$type: 'ais.lookingSimilar';
   renderState: LookingSimilarRenderState<THit>;
 };
 
 export type LookingSimilarConnector<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = Connector<
   LookingSimilarWidgetDescription<THit>,
   LookingSimilarConnectorParams<THit>
 >;
 
 export default (function connectLookingSimilar<
-  TWidgetParams extends UnknownWidgetParams
+  TWidgetParams extends UnknownWidgetParams,
 >(
   renderFn: Renderer<
     LookingSimilarRenderState,
@@ -190,7 +190,7 @@ export default (function connectLookingSimilar<
         );
 
         const transformedItems = transformItems(
-          itemsWithAbsolutePositionAndQueryID,
+          itemsWithAbsolutePositionAndQueryID as unknown as Hit<THit>[],
           {
             results: results as RecommendResponse<AlgoliaHit<THit>>,
           }

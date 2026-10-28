@@ -44,14 +44,12 @@ function resolveJsImportsToSource() {
       }
 
       const basePath = absolutePath.slice(0, -3);
-      for (const extension of RESOLVABLE_EXTENSIONS) {
-        const candidate = `${basePath}${extension}`;
-        if (existsSync(candidate)) {
-          return candidate;
-        }
-      }
 
-      return null;
+      return (
+        RESOLVABLE_EXTENSIONS.map(
+          (extension) => `${basePath}${extension}`
+        ).find((candidate) => existsSync(candidate)) || null
+      );
     },
   };
 }

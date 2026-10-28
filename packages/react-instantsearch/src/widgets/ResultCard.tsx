@@ -1,0 +1,79 @@
+import { createResultCardComponent } from 'instantsearch-ui-components';
+import React, { createElement, Fragment, useEffect, useState } from 'react';
+import { useResultCard } from 'react-instantsearch-core';
+
+import type { Pragma, ResultCardOwnProps } from 'instantsearch-ui-components';
+import type { ResultCardRenderState } from 'instantsearch.js/es/connectors/result-card/connectResultCard';
+import type { UseResultCardProps } from 'react-instantsearch-core';
+
+const ResultCardUi = createResultCardComponent({
+  createElement: createElement as Pragma,
+  Fragment,
+  useState,
+  useEffect,
+});
+
+/**
+ * Props passed to a custom `layoutComponent`: the connector render state, so a
+ * layout component owns the full markup, including every status and the
+ * retry and handoff actions.
+ */
+export type ResultCardLayoutComponentProps = ResultCardRenderState;
+
+type OwnedUiProps =
+  | 'status'
+  | 'messages'
+  | 'error'
+  | 'suggestions'
+  | 'onRetry'
+  | 'minimized'
+  | 'onToggleMinimize'
+  | 'canContinueInChat'
+  | 'onContinueInChat'
+  | 'expanded'
+  | 'onExpandedChange';
+
+export type ResultCardProps = Omit<ResultCardOwnProps, OwnedUiProps> &
+  UseResultCardProps & {
+    layoutComponent?: (
+      props: ResultCardLayoutComponentProps
+    ) => JSX.Element | null;
+  };
+
+export function ResultCard({
+  classNames = {},
+  layoutComponent: LayoutComponent,
+  agentId,
+  transport,
+  requestOptions,
+  ...props
+}: ResultCardProps) {
+  // Forwarded as-is so the connector rejects `transport` + `requestOptions`.
+  const renderState = useResultCard(
+    { agentId, transport, requestOptions } as UseResultCardProps,
+    { $$widgetType: 'ais.resultCard' }
+  );
+  const [minimized, setMinimized] = useState(false);
+
+  if (LayoutComponent) {
+    return <LayoutComponent {...renderState} />;
+  }
+
+  return (
+    <ResultCardUi
+      {...props}
+      classNames={classNames}
+      status={renderState.status}
+      messages={renderState.messages}
+      error={renderState.error}
+      suggestions={renderState.suggestions}
+      onRetry={renderState.retry}
+      minimized={minimized}
+      onToggleMinimize={() => setMinimized(!minimized)}
+      canContinueInChat={renderState.canContinueInChat}
+      onContinueInChat={renderState.continueInChat}
+      expanded={renderState.expanded}
+      onExpandedChange={renderState.setExpanded}
+    />
+  );
+}

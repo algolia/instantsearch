@@ -151,7 +151,10 @@ describe('Stats', () => {
 
     try {
       const { container, rerender } = render(
-        <Stats {...getProps()} templateProps={{ templates: defaultTemplates }} />
+        <Stats
+          {...getProps()}
+          templateProps={{ templates: defaultTemplates }}
+        />
       );
 
       const region = container.querySelector('.ais-Stats-announcement');

@@ -237,7 +237,7 @@ export type TrendingItemsWidget = WidgetFactory<
 >;
 
 export default (function trendingItems<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 >(
   widgetParams: TrendingItemsWidgetParams<THit> &
     TrendingItemsConnectorParams<THit>

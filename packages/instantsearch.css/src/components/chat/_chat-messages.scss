@@ -17,16 +17,33 @@
   padding: var(--ais-spacing);
 }
 
+// Screen-reader-only announcements (see `useStatusAnnouncement`).
+.ais-ChatMessages-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.ais-ChatMessages-scroll:focus-visible {
+  outline: 2px solid
+    rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+  outline-offset: -2px;
+}
+
 .ais-ChatMessages-content {
   display: flex;
   flex-direction: column;
   gap: calc(var(--ais-spacing) * 1.5);
   width: 100%;
 
-  transition: opacity var(--ais-transition-duration)
-      var(--ais-transition-timing-function),
-    filter var(--ais-transition-duration)
-      var(--ais-transition-timing-function);
+  transition:
+    opacity var(--ais-transition-duration) var(--ais-transition-timing-function),
+    filter var(--ais-transition-duration) var(--ais-transition-timing-function);
 }
 
 .ais-ChatMessages-content--clearing {
@@ -43,12 +60,12 @@
   height: calc(var(--ais-spacing) * 1.5);
   border-radius: var(--ais-border-radius-full);
 
-  transition: background-color var(--ais-transition-duration)
+  transition:
+    background-color var(--ais-transition-duration)
       var(--ais-transition-timing-function),
     transform var(--ais-transition-duration)
       var(--ais-transition-timing-function),
-    opacity var(--ais-transition-duration)
-      var(--ais-transition-timing-function);
+    opacity var(--ais-transition-duration) var(--ais-transition-timing-function);
 }
 
 .ais-ChatMessages-scrollToBottom--hidden {

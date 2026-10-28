@@ -881,7 +881,9 @@ export function createInstantSearchDevtools(options = {}) {
     })
     .catch((error) => {
       throw new Error(
-        `Failed to load Tweakpane for InstantSearch.css DevTools: ${error.message}`
+        `Failed to load Tweakpane for InstantSearch.css DevTools: ${
+          error.message
+        }`
       );
     });
 }

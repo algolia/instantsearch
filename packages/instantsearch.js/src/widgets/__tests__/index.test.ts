@@ -173,6 +173,22 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
 
         return autocomplete;
       }
+      case 'promptSuggestions': {
+        const promptSuggestions = widget as Widgets['promptSuggestions'];
+        return promptSuggestions({
+          container,
+          agentId: 'test-agent-id',
+          configurationId: 'prompt-suggestions',
+        });
+      }
+      case 'compareBar': {
+        const compareBar = widget as Widgets['compareBar'];
+        return compareBar({ container, configurationId: 'compare' });
+      }
+      case 'resultCard': {
+        const resultCard = widget as Widgets['resultCard'];
+        return resultCard({ container, agentId: 'test-agent-id' });
+      }
       case 'filterSuggestions': {
         const filterSuggestions = widget as Widgets['filterSuggestions'];
         return filterSuggestions({
@@ -189,7 +205,7 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
       }
       case 'trendingFacets': {
         const trendingFacets = widget as Widgets['trendingFacets'];
-        return trendingFacets({container, facetName: 'brand'});
+        return trendingFacets({ container, facetName: 'brand' });
       }
       case 'feeds': {
         const feedsWidget = widget as Widgets['feeds'];

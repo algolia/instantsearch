@@ -1,0 +1,26 @@
+{
+  "name": "example-vue-instantsearch-query-suggestions",
+  "version": "1.89.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "algoliasearch": "5.1.1",
+    "algoliasearch-helper": "3.30.1",
+    "instantsearch-ui-components": "0.44.0",
+    "instantsearch.css": "8.25.0",
+    "instantsearch.js": "4.121.0",
+    "vue": "2.7.14",
+    "vue-instantsearch": "4.31.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue2": "2.3.1",
+    "vite": "5.0.7",
+    "vite-plugin-commonjs": "0.10.0",
+    "vue-template-compiler": "2.7.14"
+  },
+  "browserslist": "Firefox 127, Chrome 125, IE 11"
+}

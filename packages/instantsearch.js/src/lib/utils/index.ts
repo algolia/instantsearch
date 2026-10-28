@@ -1,3 +1,4 @@
+export * from './addInsightsToRecommendParameters';
 export * from './addWidgetId';
 export * from './capitalize';
 export * from './checkIndexUiState';

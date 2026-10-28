@@ -4,9 +4,7 @@ const ALL_FLAVORS = ['js', 'js-umd', 'react', 'vue'];
 const ALL_BROWSERS = ['chromium', 'firefox'] as const;
 
 // Get flavors to test based on E2E_FLAVOR env var
-const flavors = process.env.E2E_FLAVOR
-  ? [process.env.E2E_FLAVOR]
-  : ALL_FLAVORS;
+const flavors = process.env.E2E_FLAVOR ? [process.env.E2E_FLAVOR] : ALL_FLAVORS;
 
 // Get browsers to test based on E2E_BROWSER env var (e.g., E2E_BROWSER=chromium for faster local dev)
 const browsers = process.env.E2E_BROWSER

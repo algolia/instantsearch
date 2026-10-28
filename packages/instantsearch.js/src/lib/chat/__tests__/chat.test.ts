@@ -1,7 +1,7 @@
 /**
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
-import { Chat, ChatState, CACHE_KEY } from '../chat';
+import { Chat, ChatState, CACHE_KEY, CONVERSATION_ID_CACHE_KEY } from '../chat';
 
 describe('ChatState', () => {
   beforeAll(() => {
@@ -158,6 +158,21 @@ describe('ChatState', () => {
     );
   });
 
+  it('should not throw at construction when sessionStorage is unavailable (e.g. React Native)', () => {
+    // eslint-disable-next-line jest/unbound-method
+    const originalGetItem = sessionStorage.getItem;
+    sessionStorage.getItem = () => {
+      throw new ReferenceError('sessionStorage is not defined');
+    };
+
+    try {
+      const chatState = new ChatState<any>('agentID9');
+      expect(chatState.messages).toEqual([]);
+    } finally {
+      sessionStorage.getItem = originalGetItem;
+    }
+  });
+
   it('should handle sessionStorage being unavailable', () => {
     const agentId = 'agentID4';
     // eslint-disable-next-line jest/unbound-method
@@ -175,5 +190,78 @@ describe('ChatState', () => {
     expect(sessionStorage.getItem(`${CACHE_KEY}-${agentId}`)).toBe(null);
 
     sessionStorage.setItem = originalSetItem;
+  });
+  describe('conversation id', () => {
+    const agentId = 'agentID-conversation';
+    const key = `${CONVERSATION_ID_CACHE_KEY}-${agentId}`;
+
+    it('restores the conversation id along with the messages', () => {
+      const first = new Chat<any>({ agentId });
+      const second = new Chat<any>({ agentId });
+
+      expect(sessionStorage.getItem(key)).toBe(first.id);
+      expect(second.id).toBe(first.id);
+    });
+
+    it('stores the id per agent', () => {
+      const first = new Chat<any>({ agentId });
+      const other = new Chat<any>({ agentId: 'another-agent' });
+
+      expect(other.id).not.toBe(first.id);
+    });
+
+    it('persists the rotated id after resetConversationId', () => {
+      const chat = new Chat<any>({ agentId });
+      const previousId = chat.id;
+
+      chat.resetConversationId();
+
+      expect(chat.id).not.toBe(previousId);
+      expect(new Chat<any>({ agentId }).id).toBe(chat.id);
+    });
+
+    it('persists the id given to setConversationId', () => {
+      const chat = new Chat<any>({ agentId });
+
+      chat.setConversationId('adopted-id');
+
+      expect(new Chat<any>({ agentId }).id).toBe('adopted-id');
+    });
+
+    it('lets an explicit id win over the stored one', () => {
+      const stored = new Chat<any>({ agentId });
+      const chat = new Chat<any>({ agentId, id: 'explicit-id' });
+
+      expect(chat.id).toBe('explicit-id');
+      expect(sessionStorage.getItem(key)).toBe(stored.id);
+    });
+
+    it('does not restore the id when messages are passed explicitly', () => {
+      const stored = new Chat<any>({ agentId });
+      const chat = new Chat<any>({ agentId, messages: [] });
+
+      expect(chat.id).not.toBe(stored.id);
+      expect(sessionStorage.getItem(key)).toBe(stored.id);
+    });
+
+    it('does not read or write the id when persistence is disabled', () => {
+      sessionStorage.setItem(key, 'stored-id');
+
+      const chat = new Chat<any>({ agentId, persistence: false });
+      chat.resetConversationId();
+
+      expect(chat.id).not.toBe('stored-id');
+      expect(sessionStorage.getItem(key)).toBe('stored-id');
+    });
+
+    it('keeps the messages stored as a bare array', () => {
+      const message = { role: 'user', content: 'Hello' };
+      const chat = new Chat<any>({ agentId });
+      chat.messages = [message];
+
+      expect(sessionStorage.getItem(`${CACHE_KEY}-${agentId}`)).toBe(
+        JSON.stringify([message])
+      );
+    });
   });
 });

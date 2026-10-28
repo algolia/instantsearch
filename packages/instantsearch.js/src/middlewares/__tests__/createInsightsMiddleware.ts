@@ -15,7 +15,7 @@ import { fireEvent } from '@testing-library/dom';
 
 import { createInsightsMiddleware } from '..';
 import { createInstantSearch } from '../../../test/createInstantSearch';
-import { connectSearchBox } from '../../connectors';
+import { connectRelatedProducts, connectSearchBox } from '../../connectors';
 import instantsearch from '../../index.es';
 import { history } from '../../lib/routers';
 import { warning } from '../../lib/utils';
@@ -1183,6 +1183,231 @@ describe('insights', () => {
     });
   });
 
+  describe('recommend', () => {
+    const getRecommendClient = () =>
+      searchClientWithCredentials as SearchClient & {
+        getRecommendations: jest.Mock;
+      };
+
+    it('sets the userToken and clickAnalytics on recommend queries', async () => {
+      const searchClient = getRecommendClient();
+      const { instantSearchInstance, getUserToken } = createTestEnvironment({
+        insights: true,
+      });
+
+      instantSearchInstance.addWidgets([
+        connectRelatedProducts(() => ({}))({ objectIDs: ['objectID'] }),
+      ]);
+
+      await wait(0);
+
+      expect(searchClient.getRecommendations).toHaveBeenCalledTimes(1);
+      expect(searchClient.getRecommendations).toHaveBeenLastCalledWith([
+        expect.objectContaining({
+          model: 'related-products',
+          objectID: 'objectID',
+          queryParameters: expect.objectContaining({
+            clickAnalytics: true,
+            userToken: getUserToken(),
+          }),
+        }),
+      ]);
+      expect(getUserToken()).toEqual(expect.stringMatching(/^anonymous-/));
+    });
+
+    it('lets the widget userToken take precedence', async () => {
+      const searchClient = getRecommendClient();
+      const { instantSearchInstance } = createTestEnvironment({
+        insights: true,
+      });
+
+      instantSearchInstance.addWidgets([
+        connectRelatedProducts(() => ({}))({
+          objectIDs: ['objectID'],
+          queryParameters: { userToken: 'widget-token' },
+        }),
+      ]);
+
+      await wait(0);
+
+      expect(searchClient.getRecommendations).toHaveBeenLastCalledWith([
+        expect.objectContaining({
+          queryParameters: expect.objectContaining({
+            userToken: 'widget-token',
+          }),
+        }),
+      ]);
+    });
+
+    it('sets them on the fallback parameters of a widget that has some', async () => {
+      const searchClient = getRecommendClient();
+      const { instantSearchInstance, getUserToken } = createTestEnvironment({
+        insights: true,
+      });
+
+      instantSearchInstance.addWidgets([
+        connectRelatedProducts(() => ({}))({
+          objectIDs: ['objectID'],
+          fallbackParameters: { filters: 'brand:Apple' },
+        }),
+      ]);
+
+      await wait(0);
+
+      expect(searchClient.getRecommendations).toHaveBeenLastCalledWith([
+        expect.objectContaining({
+          fallbackParameters: expect.objectContaining({
+            filters: 'brand:Apple',
+            clickAnalytics: true,
+            userToken: getUserToken(),
+          }),
+        }),
+      ]);
+    });
+
+    it('lets the fallback parameters of a widget take precedence', async () => {
+      const searchClient = getRecommendClient();
+      const { instantSearchInstance } = createTestEnvironment({
+        insights: true,
+      });
+
+      instantSearchInstance.addWidgets([
+        connectRelatedProducts(() => ({}))({
+          objectIDs: ['objectID'],
+          fallbackParameters: {
+            userToken: 'widget-token',
+            clickAnalytics: false,
+          },
+        }),
+      ]);
+
+      await wait(0);
+
+      expect(searchClient.getRecommendations).toHaveBeenLastCalledWith([
+        expect.objectContaining({
+          fallbackParameters: expect.objectContaining({
+            userToken: 'widget-token',
+            clickAnalytics: false,
+          }),
+        }),
+      ]);
+    });
+
+    it('leaves the fallback parameters alone when a widget has none', async () => {
+      const searchClient = getRecommendClient();
+      const { instantSearchInstance } = createTestEnvironment({
+        insights: true,
+      });
+
+      instantSearchInstance.addWidgets([
+        connectRelatedProducts(() => ({}))({ objectIDs: ['objectID'] }),
+      ]);
+
+      await wait(0);
+
+      expect(
+        searchClient.getRecommendations.mock.calls[0][0][0].fallbackParameters
+      ).toBeUndefined();
+    });
+
+    it('refetches recommendations when the userToken changes', async () => {
+      const searchClient = getRecommendClient();
+      const { insightsClient, instantSearchInstance } = createTestEnvironment({
+        started: false,
+      });
+
+      instantSearchInstance.use(createInsightsMiddleware({ insightsClient }));
+      instantSearchInstance.addWidgets([
+        connectRelatedProducts(() => ({}))({ objectIDs: ['objectID'] }),
+      ]);
+      instantSearchInstance.start();
+
+      await wait(0);
+
+      expect(searchClient.getRecommendations).toHaveBeenCalledTimes(1);
+      expect(
+        searchClient.getRecommendations.mock.calls[0][0][0].queryParameters
+          .userToken
+      ).toEqual(expect.stringMatching(/^anonymous-/));
+
+      insightsClient('setUserToken', 'authenticated-token');
+
+      await wait(0);
+
+      // Recommend responses are cached per widget, so this only happens because
+      // the middleware invalidates that cache when the token changes.
+      expect(searchClient.getRecommendations).toHaveBeenCalledTimes(2);
+      expect(searchClient.getRecommendations).toHaveBeenLastCalledWith([
+        expect.objectContaining({
+          queryParameters: expect.objectContaining({
+            userToken: 'authenticated-token',
+          }),
+        }),
+      ]);
+    });
+
+    it('does not refetch recommendations when the same numeric userToken is set again', async () => {
+      const searchClient = getRecommendClient();
+      const { insightsClient, instantSearchInstance } = createTestEnvironment({
+        started: false,
+      });
+
+      instantSearchInstance.use(createInsightsMiddleware({ insightsClient }));
+      instantSearchInstance.addWidgets([
+        connectRelatedProducts(() => ({}))({ objectIDs: ['objectID'] }),
+      ]);
+      instantSearchInstance.start();
+
+      await wait(0);
+
+      // The anonymous token is replaced, so this one does refetch.
+      insightsClient('setUserToken', 123);
+
+      await wait(0);
+
+      expect(searchClient.getRecommendations).toHaveBeenCalledTimes(2);
+      expect(
+        searchClient.getRecommendations.mock.calls[1][0][0].queryParameters
+          .userToken
+      ).toBe('123');
+
+      // The token normalizes to the same string, so this one must not.
+      insightsClient('setUserToken', 123);
+
+      await wait(0);
+
+      expect(searchClient.getRecommendations).toHaveBeenCalledTimes(2);
+    });
+
+    it('does not refetch recommendations when the userToken is unchanged', async () => {
+      const searchClient = getRecommendClient();
+      const { insightsClient, instantSearchInstance } = createTestEnvironment({
+        started: false,
+      });
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+          insightsInitParams: { userToken: 'my-token' },
+        })
+      );
+      instantSearchInstance.addWidgets([
+        connectRelatedProducts(() => ({}))({ objectIDs: ['objectID'] }),
+      ]);
+      instantSearchInstance.start();
+
+      await wait(0);
+
+      expect(searchClient.getRecommendations).toHaveBeenCalledTimes(1);
+
+      insightsClient('setUserToken', 'my-token');
+
+      await wait(0);
+
+      expect(searchClient.getRecommendations).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('sendEventToInsights', () => {
     it('sends events', () => {
       const { insightsClient, instantSearchInstance, analytics } =
@@ -1426,6 +1651,48 @@ describe('insights', () => {
           (call) => call[0] === 'viewedObjectIDs'
         )
       ).toHaveLength(1);
+    });
+
+    it('sends view events for the same objectID when queryID differs', () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+        })
+      );
+
+      insightsClient('setUserToken', 'token');
+
+      instantSearchInstance.sendEventToInsights({
+        insightsMethod: 'viewedObjectIDs',
+        widgetType: 'ais.customWidget',
+        eventType: 'view',
+        payload: {
+          index: 'my-index',
+          eventName: 'My Hits Viewed',
+          objectIDs: ['obj1'],
+          queryID: 'message_1',
+        },
+      });
+
+      instantSearchInstance.sendEventToInsights({
+        insightsMethod: 'viewedObjectIDs',
+        widgetType: 'ais.customWidget',
+        eventType: 'view',
+        payload: {
+          index: 'my-index',
+          eventName: 'My Hits Viewed',
+          objectIDs: ['obj1'],
+          queryID: 'message_2',
+        },
+      });
+
+      expect(
+        insightsClient.mock.calls.filter(
+          (call) => call[0] === 'viewedObjectIDs'
+        )
+      ).toHaveLength(2);
     });
 
     it('clears saved view events when the query changes', () => {
@@ -1674,9 +1941,7 @@ describe('insights', () => {
         }),
       ]);
 
-      instantSearchInstance.use(
-        createInsightsMiddleware({ insightsClient })
-      );
+      instantSearchInstance.use(createInsightsMiddleware({ insightsClient }));
 
       instantSearchInstance.start();
       await wait(0);

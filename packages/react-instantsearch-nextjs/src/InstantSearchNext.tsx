@@ -41,7 +41,7 @@ export type InstantSearchNextRouting<TUiState, TRouteState> = {
 
 export type InstantSearchNextProps<
   TUiState extends UiState = UiState,
-  TRouteState = TUiState
+  TRouteState = TUiState,
 > = Omit<InstantSearchProps<TUiState, TRouteState>, 'routing'> & {
   routing?: InstantSearchNextRouting<TUiState, TRouteState> | boolean;
   instance?: InstantSearchNextInstance;
@@ -50,7 +50,7 @@ export type InstantSearchNextProps<
 
 export function InstantSearchNext<
   TUiState extends UiState = UiState,
-  TRouteState = TUiState
+  TRouteState = TUiState,
 >({
   children,
   routing: passedRouting,

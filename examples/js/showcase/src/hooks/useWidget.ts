@@ -1,12 +1,14 @@
-import { useRef, useEffect } from "preact/hooks";
+import { useRef, useEffect } from 'preact/hooks';
 
-import { useSearch } from "../context/search";
+import { useSearch } from '../context/search';
 
-import type { IndexWidget, Widget } from "instantsearch.js";
+import type { IndexWidget, Widget } from 'instantsearch.js';
 
 type AnyWidget = Widget | IndexWidget;
 
-export function useWidget(factory: (container: HTMLElement) => AnyWidget | AnyWidget[]) {
+export function useWidget(
+  factory: (container: HTMLElement) => AnyWidget | AnyWidget[]
+) {
   const container = useRef<HTMLDivElement>(null);
   const search = useSearch();
 

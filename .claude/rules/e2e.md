@@ -1,18 +1,34 @@
+---
+paths:
+  - 'tests/e2e/**'
+  - '.github/workflows/e2e.yml'
+  - '.github/workflows/ci.yml'
+  - 'website/serve.json'
+  - 'examples/*/e-commerce*/**'
+  - 'packages/react-instantsearch-nextjs/playwright.config.ts'
+  - 'packages/react-instantsearch-nextjs/__tests__/e2e/**'
+  - 'packages/react-instantsearch-router-nextjs/playwright.config.ts'
+  - 'packages/react-instantsearch-router-nextjs/__tests__/e2e/**'
+---
+
 # E2E Testing Guide
 
 ## Test Locations and Frameworks
 
 | Location | Framework | Purpose |
-|----------|-----------|---------|
+| --- | --- | --- |
 | `tests/e2e/playwright/` | Playwright | Main e2e suite for all InstantSearch flavors |
 | `packages/react-instantsearch-nextjs/__tests__/e2e/` | Playwright | App Router Next.js e2e tests |
 | `packages/react-instantsearch-router-nextjs/__tests__/e2e/` | Playwright | Pages Router Next.js e2e tests |
+
+`.github/workflows/e2e.yml` runs on a weekday schedule and is called from `ci.yml` on pushes to master, never on pull requests. Run the suites locally before you push.
 
 ## Running Tests Locally
 
 ### Main E2E Suite (Playwright)
 
 **Prerequisites:** Examples must be built first:
+
 ```bash
 yarn website:examples
 ```
@@ -72,53 +88,20 @@ test.describe('feature name', () => {
 
 ### Available Helper Methods
 
-The `helpers` fixture provides these methods:
+The `helpers` fixture provides these methods. Full signatures in `tests/e2e/playwright/fixtures.ts`.
 
-**RefinementList:**
-- `clickRefinementListItem(label)` - Click a refinement list item
-- `getSelectedRefinementListItem()` - Get the selected item's text
-
-**SearchBox:**
-- `setSearchBoxValue(value)` - Set the search input value
-- `getSearchBoxValue()` - Get the current search value
-
-**Hits:**
-- `getHitsTitles()` - Get all hit titles as an array
-
-**HierarchicalMenu:**
-- `clickHierarchicalMenuItem(label)` - Click a menu item
-- `getSelectedHierarchicalMenuItems()` - Get selected items
-
-**RangeSlider:**
-- `dragRangeSliderLowerBoundTo(value)` - Drag lower handle
-- `dragRangeSliderUpperBoundTo(value)` - Drag upper handle
-- `getRangeSliderLowerBoundValue()` - Get lower bound value
-- `getRangeSliderUpperBoundValue()` - Get upper bound value
-
-**Pagination:**
-- `clickPage(n)` - Navigate to page n
-- `clickNextPage()` - Go to next page
-- `clickPreviousPage()` - Go to previous page
-- `getCurrentPage()` - Get current page number
-
-**ToggleRefinement:**
-- `clickToggleRefinement()` - Toggle the refinement
-- `getToggleRefinementStatus()` - Get checked status
-
-**RatingMenu:**
-- `clickRatingMenuItem(label)` - Click rating (e.g., "4 & up")
-- `getSelectedRatingMenuItem()` - Get selected rating label
-
-**SortBy:**
-- `setSortByValue(label)` - Select sort option by label
-- `getSortByValue()` - Get current sort value
-
-**HitsPerPage:**
-- `setHitsPerPage(label)` - Select hits per page
-- `getHitsPerPage()` - Get current value
-
-**ClearRefinements:**
-- `clickClearRefinements()` - Click clear button
+- **RefinementList:** `clickRefinementListItem(label)`, `getSelectedRefinementListItem()`
+- **SearchBox:** `setSearchBoxValue(value)`, `getSearchBoxValue()`
+- **Hits:** `getHitsTitles()`
+- **HierarchicalMenu:** `clickHierarchicalMenuItem(label)`, `getSelectedHierarchicalMenuItems()`
+- **RangeSlider:** `dragRangeSliderLowerBoundTo(value)`, `dragRangeSliderUpperBoundTo(value)`, `getRangeSliderLowerBoundValue()`, `getRangeSliderUpperBoundValue()`
+- **Pagination:** `clickPage(number)`, `clickNextPage()`, `clickPreviousPage()`, `getCurrentPage()`
+- **ToggleRefinement:** `clickToggleRefinement()`, `getToggleRefinementStatus()`
+- **RatingMenu:** `clickRatingMenuItem(label)`, `getSelectedRatingMenuItem()`. `label` is the link's `aria-label`, such as `4 & up`.
+- **SortBy:** `setSortByValue(label)`, `getSortByValue()`
+- **HitsPerPage:** `setHitsPerPage(label)`, `getHitsPerPage()`
+- **ClearRefinements:** `clickClearRefinements()`
+- **Any selector:** `waitForElement(selector)`, `getTextFromSelector(selector)`
 
 ### Best Practices
 
@@ -145,6 +128,7 @@ The main e2e suite tests multiple InstantSearch flavors:
 Tests run against example apps in `website/examples/{flavor}/e-commerce/`.
 
 To run a single flavor:
+
 ```bash
 E2E_FLAVOR=react yarn test:e2e
 ```
@@ -170,6 +154,7 @@ PWDEBUG=1 yarn workspace @instantsearch/e2e-tests test:playwright
 ### View Test Reports
 
 After running tests, open the HTML report:
+
 ```bash
 npx playwright show-report tests/e2e/playwright/playwright-report
 ```
@@ -185,15 +170,20 @@ npx playwright show-report tests/e2e/playwright/playwright-report
 ### Port conflicts on macOS
 
 On macOS, port 5000 is used by AirPlay Receiver (ControlCenter). The tests use port 3456 instead. If you need to change the port, update:
+
 - `tests/e2e/playwright/playwright.config.ts` (both `baseURL` and `webServer.command/url`)
 
 ### SPA routing not working
 
 The e-commerce examples use History API routing (e.g., `/search/Appliances/`). The `website/serve.json` file configures rewrites for these routes. If you add new SPA routes, update this file:
+
 ```json
 {
   "rewrites": [
-    { "source": "/examples/js/e-commerce/search/**", "destination": "/examples/js/e-commerce/index.html" }
+    {
+      "source": "/examples/js/e-commerce/search/**",
+      "destination": "/examples/js/e-commerce/index.html"
+    }
   ]
 }
 ```
@@ -202,28 +192,60 @@ The e-commerce examples use History API routing (e.g., `/search/Appliances/`). T
 
 The static server can handle 2 parallel workers. All configs use 2 workers for both CI and local runs.
 
-Tests have 1 retry locally and 2 retries in CI to handle occasional flakiness.
+The main suite retries once locally and twice in CI. The Next.js suites retry twice in CI and not at all locally.
 
 ### Multiple elements matched
 
 If you see "strict mode violation" errors about multiple elements:
+
 - SearchBox selectors are scoped to the header to avoid matching RefinementList search inputs
 - Use more specific selectors when targeting widgets that may appear multiple times
 
 ### Different HTML structures across flavors
 
 The JS and React examples have different HTML structures:
+
 - **JS examples**: Use `id="header"` and `data-widget="searchbox"` attributes
 - **React examples**: Use `className="header"` (class instead of id) and render SearchBox directly inside header
 
 The fixtures account for this with combined selectors like:
+
 ```typescript
-'#header .ais-SearchBox [type=search], .header > .ais-SearchBox [type=search], [data-widget="searchbox"] .ais-SearchBox [type=search]'
+'#header .ais-SearchBox [type=search], .header > .ais-SearchBox [type=search], [data-widget="searchbox"] .ais-SearchBox [type=search]';
 ```
 
 If you add new selectors, ensure they work across all flavors.
 
-## Headless Mode Timing Issues
+## Migration Notes: WebDriverIO to Playwright
+
+When migrating tests from WebDriverIO to Playwright, be aware of these differences:
+
+### URL Waiting
+
+- **WebDriverIO**: Used custom `waitForUrl()` that polls `browser.getUrl()` until match
+- **Playwright**: Use `await expect(page).toHaveURL(url)` which has built-in retrying
+
+### Element Selection
+
+- **WebDriverIO**: `$('.ais-Hits-item')` returns first match, clicking works on container elements
+- **Playwright**: `page.locator('.ais-Hits-item').first()` - clicking on container may not hit child link elements. Use `.locator('a')` to target links explicitly:
+
+  ```typescript
+  // WebDriverIO
+  const link = await $('.ais-Hits-item');
+  await link.click();
+
+  // Playwright - click the link inside the hit
+  const link = page.locator('.ais-Hits-item a').first();
+  await link.click();
+  ```
+
+### Browser Back Navigation
+
+- **WebDriverIO**: `browser.back()` worked reliably for SPA navigation
+- **Playwright**: `page.goBack()` works but may require `slowMo` in headless mode for Next.js App Router dynamic routes
+
+### Headless Mode Timing Issues
 
 Playwright's headless mode runs faster than headed mode, which can cause timing issues with SPA navigation and state updates. For Next.js App Router tests involving browser back/forward navigation with dynamic routes, add `slowMo` at the test file level (not globally, to avoid slowing down all tests):
 
@@ -239,13 +261,3 @@ test.describe('browser back/forward buttons', () => {
 ```
 
 This gives the browser enough time to process JavaScript events like popstate handlers used by InstantSearch routing, while keeping other tests fast.
-
-## CI Integration
-
-Tests run in CircleCI:
-- **e2e tests playwright** - Main suite with Chromium + Firefox
-- **e2e tests router nextjs** - Pages Router Next.js tests
-- **e2e tests app router nextjs** - App Router Next.js tests
-
-JUnit reports are stored for test results visualization.
-Playwright HTML reports are stored as artifacts.

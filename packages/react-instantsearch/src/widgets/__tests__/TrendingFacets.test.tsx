@@ -25,7 +25,7 @@ function createTrendingFacetsSearchClient() {
         createRecommendResponse(
           requests.map((request: any) => {
             return createSingleSearchResponse({
-              // @ts-expect-error trending facet items aren't Hit objects
+              // @ts-ignore trending facet items aren't Hit objects
               hits: facetFixture.slice(
                 0,
                 typeof request.maxRecommendations === 'number'

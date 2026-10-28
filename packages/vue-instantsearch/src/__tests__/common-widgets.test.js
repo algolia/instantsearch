@@ -29,6 +29,14 @@ import {
   AisPoweredBy,
   AisMenuSelect,
   AisDynamicWidgets,
+  AisRelatedProducts,
+  AisExperimentalAutocomplete,
+  AisFrequentlyBoughtTogether,
+  AisLookingSimilar,
+  AisTrendingItems,
+  AisTrendingFacets,
+  AisChat,
+  AisChatTrigger,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
@@ -512,22 +520,92 @@ const testSetups = {
 
     await nextTick();
   },
-  createRelatedProductsWidgetTests() {
-    throw new Error('RelatedProduct is not supported in Vue InstantSearch');
-  },
-  createFrequentlyBoughtTogetherWidgetTests() {
-    throw new Error(
-      'FrequentlyBoughtTogether is not supported in Vue InstantSearch'
+  async createRelatedProductsWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisRelatedProducts, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
     );
+
+    await nextTick();
   },
-  createTrendingItemsWidgetTests() {
-    throw new Error('TrendingItems is not supported in Vue InstantSearch');
+  async createFrequentlyBoughtTogetherWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisFrequentlyBoughtTogether, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
   },
-  createTrendingFacetsWidgetTests() {
-    throw new Error('TrendingFacets is not supported in Vue InstantSearch');
+  async createTrendingItemsWidgetTests({ instantSearchOptions, widgetParams }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisTrendingItems, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
   },
-  createLookingSimilarWidgetTests() {
-    throw new Error('LookingSimilar is not supported in Vue InstantSearch');
+  async createTrendingFacetsWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisTrendingFacets, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
+  },
+  async createLookingSimilarWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisLookingSimilar, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
   },
   createPoweredByWidgetTests({ instantSearchOptions, widgetParams }) {
     mountApp(
@@ -587,14 +665,78 @@ const testSetups = {
       document.body.appendChild(document.createElement('div'))
     );
   },
-  createChatWidgetTests() {
-    throw new Error('Chat is not supported in Vue InstantSearch');
+  async createChatWidgetTests({ instantSearchOptions, widgetParams }) {
+    const {
+      renderChat = true,
+      renderRefinements,
+      ...chatWidgetParams
+    } = widgetParams;
+
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            renderRefinements && h(AisSearchBox, { key: 'searchbox' }),
+            renderRefinements &&
+              h(AisRefinementList, {
+                key: 'brand',
+                props: { attribute: 'brand' },
+              }),
+            renderRefinements &&
+              h(AisRefinementList, {
+                key: 'category',
+                props: { attribute: 'category' },
+              }),
+            renderRefinements &&
+              h(AisHierarchicalMenu, {
+                key: 'hierarchy',
+                props: {
+                  attributes: [
+                    'hierarchicalCategories.lvl0',
+                    'hierarchicalCategories.lvl1',
+                    'hierarchicalCategories.lvl2',
+                  ],
+                },
+              }),
+            h(AisChatTrigger, { key: 'trigger' }),
+            renderChat && h(AisChat, { key: 'chat', props: chatWidgetParams }),
+            h(GlobalErrorSwallower, { key: 'errors' }),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
   },
-  createAutocompleteWidgetTests() {
-    throw new Error('Autocomplete is not supported in Vue InstantSearch');
+  async createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
+    const { slots = {}, ...props } = widgetParams;
+
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisExperimentalAutocomplete, {
+              props,
+              scopedSlots: slots,
+            }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
   },
   createFilterSuggestionsWidgetTests() {
     throw new Error('FilterSuggestions is not supported in Vue InstantSearch');
+  },
+  createPromptSuggestionsWidgetTests() {
+    throw new Error('PromptSuggestions is not supported in Vue InstantSearch');
+  },
+  createResultCardWidgetTests() {
+    throw new Error('ResultCard is not supported in Vue InstantSearch');
   },
 };
 
@@ -630,33 +772,30 @@ const testOptions = {
   },
   createSortByWidgetTests: undefined,
   createStatsWidgetTests: undefined,
-  createRelatedProductsWidgetTests: {
-    skippedTests: {
-      'RelatedProducts widget common tests': true,
-    },
-  },
-  createFrequentlyBoughtTogetherWidgetTests: {
-    skippedTests: { 'FrequentlyBoughtTogether widget common tests': true },
-  },
-  createTrendingItemsWidgetTests: {
-    skippedTests: { 'TrendingItems widget common tests': true },
-  },
-  createTrendingFacetsWidgetTests: {
-    skippedTests: { 'TrendingFacets widget common tests': true },
-  },
-  createLookingSimilarWidgetTests: {
-    skippedTests: { 'LookingSimilar widget common tests': true },
-  },
+  createRelatedProductsWidgetTests: undefined,
+  createFrequentlyBoughtTogetherWidgetTests: undefined,
+  createTrendingItemsWidgetTests: undefined,
+  createTrendingFacetsWidgetTests: undefined,
+  createLookingSimilarWidgetTests: undefined,
   createPoweredByWidgetTests: undefined,
   createDynamicWidgetsWidgetTests: undefined,
   createChatWidgetTests: {
-    skippedTests: { 'Chat widget common tests': true },
+    // Vue batches DOM updates, so flush them after each step the shared tests
+    // wrap in `act`.
+    act: async (callback) => {
+      await callback();
+      await nextTick();
+    },
   },
-  createAutocompleteWidgetTests: {
-    skippedTests: { 'Autocomplete widget common tests': true },
-  },
+  createAutocompleteWidgetTests: undefined,
   createFilterSuggestionsWidgetTests: {
     skippedTests: { 'FilterSuggestions widget common tests': true },
+  },
+  createPromptSuggestionsWidgetTests: {
+    skippedTests: { 'PromptSuggestions widget common tests': true },
+  },
+  createResultCardWidgetTests: {
+    skippedTests: { 'ResultCard widget common tests': true },
   },
 };
 

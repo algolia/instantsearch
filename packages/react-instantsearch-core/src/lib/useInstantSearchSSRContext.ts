@@ -8,7 +8,7 @@ import type { Context } from 'react';
 
 export function useInstantSearchSSRContext<
   TUiState extends UiState,
-  TRouteState = TUiState
+  TRouteState = TUiState,
 >() {
   return useContext(
     InstantSearchSSRContext as Context<InstantSearchSSRContextApi<

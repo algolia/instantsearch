@@ -1,23 +1,27 @@
 @use '../../shared/_variables';
 
 .ais-ChatOverlayLayout {
+  /* stylelint-disable-next-line length-zero-no-unit */
+  --ais-chat-trigger-offset: 0px;
+
   position: fixed;
   justify-content: flex-end;
   gap: var(--ais-spacing);
   align-items: flex-end;
   right: var(--ais-chat-margin);
-  bottom: var(--ais-chat-margin);
+  bottom: calc(var(--ais-chat-margin) + var(--ais-chat-trigger-offset));
   width: var(--ais-chat-width);
   height: var(--ais-chat-height);
   max-width: calc(100% - var(--ais-chat-margin) * 2);
-  max-height: calc(100% - var(--ais-chat-margin) * 2);
+  max-height: calc(
+    100% - var(--ais-chat-margin) * 2 - var(--ais-chat-trigger-offset)
+  );
   z-index: var(--ais-z-index-chat);
   pointer-events: none;
 
-  transition: width var(--ais-transition-duration)
-      var(--ais-transition-timing-function),
-    height var(--ais-transition-duration)
-      var(--ais-transition-timing-function);
+  transition:
+    width var(--ais-transition-duration) var(--ais-transition-timing-function),
+    height var(--ais-transition-duration) var(--ais-transition-timing-function);
 
   &--maximized {
     width: var(--ais-chat-maximized-width);
@@ -30,7 +34,8 @@
     transform-origin: bottom right;
     transform: scale(0.95) translateY(var(--ais-spacing));
 
-    transition: opacity var(--ais-transition-duration)
+    transition:
+      opacity var(--ais-transition-duration)
         var(--ais-transition-timing-function),
       transform var(--ais-transition-duration)
         var(--ais-transition-timing-function);
@@ -44,7 +49,7 @@
 }
 
 body:has(.ais-ChatToggleButton--floating) .ais-ChatOverlayLayout {
-  bottom: calc(var(--ais-chat-margin) + var(--ais-spacing) * 4);
+  --ais-chat-trigger-offset: calc(var(--ais-spacing) * 4);
 }
 
 @media (max-width: variables.$ais-chat-breakpoint) {

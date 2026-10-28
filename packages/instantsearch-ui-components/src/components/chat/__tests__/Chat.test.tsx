@@ -4,7 +4,7 @@
 /** @jsx createElement */
 import { fireEvent, render } from '@testing-library/preact';
 import { Fragment, createElement } from 'preact';
-import { useState } from 'preact/hooks';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 
 import { createChatComponent } from '../Chat';
 
@@ -13,8 +13,9 @@ import type { ChatProps } from '../Chat';
 const Chat = createChatComponent({
   createElement,
   Fragment,
-  memo: (component) => component,
+  useMemo,
   useState,
+  useEffect,
 });
 
 describe('Chat', () => {
@@ -58,6 +59,7 @@ describe('Chat', () => {
                   class="ais-ChatHeader-titleIcon"
                 >
                   <svg
+                    aria-hidden="true"
                     fill="none"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"
@@ -87,6 +89,7 @@ describe('Chat', () => {
                   type="button"
                 >
                   <svg
+                    aria-hidden="true"
                     fill="none"
                     stroke="currentColor"
                     strokeLinecap="round"
@@ -115,6 +118,7 @@ describe('Chat', () => {
                   type="button"
                 >
                   <svg
+                    aria-hidden="true"
                     fill="none"
                     stroke="currentColor"
                     strokeLinecap="round"
@@ -133,12 +137,23 @@ describe('Chat', () => {
               </div>
             </div>
             <div
-              aria-live="polite"
+              aria-live="off"
               class="ais-ChatMessages"
               role="log"
             >
               <div
+                aria-atomic="true"
+                aria-live="polite"
+                class="ais-ChatMessages-status"
+                role="status"
+              >
+                
+              </div>
+              <div
+                aria-label="Conversation"
                 class="ais-ChatMessages-scroll ais-Scrollbar"
+                role="region"
+                tabindex="0"
               >
                 <div
                   class="ais-ChatMessages-content"
@@ -151,6 +166,7 @@ describe('Chat', () => {
                 type="button"
               >
                 <svg
+                  aria-hidden="true"
                   fill="none"
                   stroke="currentColor"
                   strokeLinecap="round"
@@ -189,6 +205,7 @@ describe('Chat', () => {
                     type="submit"
                   >
                     <svg
+                      aria-hidden="true"
                       fill="none"
                       stroke="currentColor"
                       strokeLinecap="round"

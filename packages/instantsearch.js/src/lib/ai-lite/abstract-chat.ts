@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { isEqual } from '../utils/isEqual';
+import { warning } from '../utils/logger';
 
+import { parsePartialJson } from './parse-partial-json';
 import { processStream } from './stream-parser';
 import {
   generateId as defaultGenerateId,
@@ -22,6 +24,8 @@ import type {
   InferUIMessageToolCall,
   InferUIMessageTools,
   ProviderMetadata,
+  ToolResultSubmission,
+  ToolResultSubmissionOptions,
   UIMessage,
   UIMessageChunk,
   ChatOnErrorCallback,
@@ -45,112 +49,102 @@ type ResponseRecord = {
   didEvaluateContinuation: boolean;
 };
 
-type ToolResultSubmission<TUIMessage extends UIMessage> = <
-  TTool extends keyof InferUIMessageTools<TUIMessage>
->(options: {
-  tool: TTool;
-  toolCallId: string;
-  output: InferUIMessageTools<TUIMessage>[TTool]['output'];
-}) => Promise<void>;
-
-/** @internal */
-export type ResponseScopedOnToolCallCallback<TUIMessage extends UIMessage> = (
-  options: Parameters<ChatOnToolCallCallback<TUIMessage>>[0],
-  addToolResult: ToolResultSubmission<TUIMessage>
-) => ReturnType<ChatOnToolCallCallback<TUIMessage>>;
-
-const tryParseJson = (value: string): unknown | undefined => {
-  try {
-    return JSON.parse(value);
-  } catch {
-    return undefined;
-  }
-};
-
-const repairPartialJson = (value: string): string => {
-  let repaired = value.trim();
-
-  if (!repaired) {
-    return repaired;
-  }
-
-  let inString = false;
-  let isEscaped = false;
-  const stack: Array<'{' | '['> = [];
-
-  for (let index = 0; index < repaired.length; index++) {
-    const char = repaired[index];
-    if (inString) {
-      if (isEscaped) {
-        isEscaped = false;
-      } else if (char === '\\') {
-        isEscaped = true;
-      } else if (char === '"') {
-        inString = false;
-      }
-      continue;
-    }
-
-    if (char === '"') {
-      inString = true;
-      continue;
-    }
-
-    if (char === '{' || char === '[') {
-      stack.push(char);
-      continue;
-    }
-
-    if (char === '}' && stack[stack.length - 1] === '{') {
-      stack.pop();
-      continue;
-    }
-
-    if (char === ']' && stack[stack.length - 1] === '[') {
-      stack.pop();
-    }
-  }
-
-  if (inString && !isEscaped) {
-    repaired += '"';
-  }
-
-  repaired = repaired.replace(/,\s*$/u, '');
-
-  if (stack.length > 0) {
-    repaired += stack
-      .reverse()
-      .map((opening) => (opening === '{' ? '}' : ']'))
-      .join('');
-  }
-
-  return repaired.replace(/,\s*([}\]])/gu, '$1');
-};
-
-const parseToolInputDelta = (
-  accumulatedRawInput: string,
-  fallbackInput: unknown
-): unknown => {
-  const normalized = accumulatedRawInput.trim();
-  if (!normalized) {
-    return fallbackInput;
-  }
-
-  const directParsed = tryParseJson(normalized);
-  if (directParsed !== undefined) {
-    return directParsed;
-  }
-
-  const repairedParsed = tryParseJson(repairPartialJson(normalized));
-  if (repairedParsed !== undefined) {
-    return repairedParsed;
-  }
-
-  return fallbackInput;
-};
-
 const defaultGuardrailFallbackResponse =
   'Sorry, we are not able to generate a response at the moment.';
+
+const TOOL_CALL_CANCELLED_ERROR_TEXT =
+  'The tool call was cancelled: the conversation moved on before a result was provided.';
+const RESTORED_TOOL_CALL_ERROR_TEXT =
+  'The page was reloaded before a tool result was received. The operation may have completed.';
+const RESTORED_TOOL_INPUT_ERROR_TEXT =
+  'The page was reloaded before the tool input was complete. The operation was not started.';
+
+type TerminalToolState =
+  | { state: 'output-available'; output: unknown }
+  | { state: 'output-error'; errorText: string };
+
+function getTerminalToolState(
+  options:
+    | { state?: 'output-available'; output: unknown }
+    | { state: 'output-error'; errorText: string }
+): TerminalToolState {
+  if (options.state === 'output-error') {
+    return {
+      state: 'output-error',
+      errorText: options.errorText || 'Tool call failed.',
+    };
+  }
+
+  if (
+    options.state === undefined &&
+    'errorText' in options &&
+    typeof options.errorText === 'string'
+  ) {
+    return {
+      state: 'output-error',
+      errorText: options.errorText || 'Tool call failed.',
+    };
+  }
+
+  return { state: 'output-available', output: options.output };
+}
+
+function getToolName(part: { type: string; toolName?: string }): string {
+  if (part.type === 'dynamic-tool') {
+    return part.toolName ?? part.type;
+  }
+  return part.type.slice('tool-'.length);
+}
+
+function warnInvalidGlobalToolResult(toolCallId: string): void {
+  warning(
+    false,
+    `addToolResult ignored because toolCallId "${toolCallId}" does not identify one pending tool call. Use the scoped addToolResult callback when call IDs may be reused.`
+  );
+}
+
+// A tool call awaiting an output that the client owns. Provider-executed calls
+// are resolved server-side, so they are left alone.
+function isPendingToolPart<TPart>(part: TPart): part is TPart & {
+  toolCallId: string;
+  state: 'input-streaming' | 'input-available';
+} {
+  const candidate = part as {
+    type?: unknown;
+    toolCallId?: unknown;
+    state?: unknown;
+    providerExecuted?: unknown;
+  };
+
+  return (
+    typeof candidate.type === 'string' &&
+    typeof candidate.toolCallId === 'string' &&
+    (candidate.state === 'input-streaming' ||
+      candidate.state === 'input-available') &&
+    candidate.providerExecuted !== true
+  );
+}
+
+// Drops the fields that only belong to the state being left behind:
+// `output-error` forbids `output`, and a committed output is not `preliminary`.
+function withTerminalToolState<TPart>(
+  part: TPart,
+  terminalState: TerminalToolState
+): TPart {
+  const {
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+    preliminary: _ignoredPreliminary,
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+    rawOutput: _ignoredRawOutput,
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+    output: _ignoredOutput,
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+    errorText: _ignoredErrorText,
+    ...retainedPart
+  } = part as any;
+
+  return { ...retainedPart, ...terminalState } as TPart;
+}
 
 /**
  * Abstract base class for chat implementations.
@@ -166,18 +160,21 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
   private readonly transport?: ChatTransport<TUIMessage>;
   private onError?: ChatOnErrorCallback;
-  private onToolCall?: ResponseScopedOnToolCallCallback<TUIMessage>;
+  private onToolCall?: ChatOnToolCallCallback<TUIMessage>;
   private onFinish?: ChatOnFinishCallback<TUIMessage>;
   private onData?: ChatOnDataCallback<TUIMessage>;
   private sendAutomaticallyWhen?: (options: {
     messages: TUIMessage[];
   }) => boolean | PromiseLike<boolean>;
   private shouldRepairToolInput?: (toolName: string) => boolean;
+  private shouldRepairRestoredPendingToolPart?: ChatInit<TUIMessage>['shouldRepairRestoredPendingToolPart'];
+  private resolveCancelledToolOutput?: ChatInit<TUIMessage>['resolveCancelledToolOutput'];
 
   private activeResponse: ResponseRecord | null = null;
   private latestResponse: ResponseRecord | null = null;
   private responsesByToolCallId = new Map<string, Set<ResponseRecord>>();
   private responseByMessage = new WeakMap<TUIMessage, ResponseRecord>();
+  private restoredToolCalls: Map<string, Set<string>> | undefined;
   // Once tool ownership is discarded, an identifier-only result cannot prove
   // which response generation submitted it. Scoped submissions remain safe.
   private acceptsIdentifierOnlyToolResults = true;
@@ -194,6 +191,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     onData,
     sendAutomaticallyWhen,
     shouldRepairToolInput,
+    shouldRepairRestoredPendingToolPart,
+    resolveCancelledToolOutput,
   }: Omit<ChatInit<TUIMessage>, 'messages'> & {
     state: ChatState<TUIMessage>;
   }) {
@@ -207,6 +206,9 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     this.onData = onData;
     this.sendAutomaticallyWhen = sendAutomaticallyWhen;
     this.shouldRepairToolInput = shouldRepairToolInput;
+    this.shouldRepairRestoredPendingToolPart =
+      shouldRepairRestoredPendingToolPart;
+    this.resolveCancelledToolOutput = resolveCancelledToolOutput;
   }
 
   /**
@@ -254,6 +256,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       this.acceptsIdentifierOnlyToolResults = false;
     }
     this.conversationId = this.generateId();
+  }
+
+  /**
+   * Continues a conversation started elsewhere (e.g. by a Result Card) under
+   * its server-side id, so the next request carries that thread's context.
+   */
+  setConversationId(id: string): void {
+    this.conversationId = id;
   }
 
   get messages(): TUIMessage[] {
@@ -434,7 +444,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 role: 'user',
                 parts: fileParts,
                 metadata: message.metadata,
-              } as TUIMessage)
+              }) as TUIMessage
           );
         } else {
           userMessagePromise = Promise.resolve(undefined);
@@ -540,7 +550,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
   private commit(
     toolCallId: string,
-    output: unknown,
+    terminalState: TerminalToolState,
     messageId?: string,
     response?: ResponseRecord,
     expectedMessage?: TUIMessage
@@ -566,19 +576,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     ) {
       return false;
     }
-    const {
-      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-      preliminary: _ignoredPreliminary,
-      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-      rawOutput: _ignoredRawOutput,
-      ...committedPart
-    } = part as any;
     const updatedParts = [...message.parts];
-    updatedParts[partIndex] = {
-      ...committedPart,
-      state: 'output-available' as const,
-      output,
-    };
+    updatedParts[partIndex] = withTerminalToolState(part, terminalState);
 
     const updatedMessage = {
       ...message,
@@ -586,6 +585,127 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     } as TUIMessage;
     this.replaceMessage(messageIndex, updatedMessage, response);
     return true;
+  }
+
+  protected captureRestoredToolCalls(): void {
+    const restoredToolCalls = new Map<string, Set<string>>();
+    this.messages.forEach((message) => {
+      message.parts.forEach((part) => {
+        if (!isPendingToolPart(part)) return;
+
+        const toolCallIds =
+          restoredToolCalls.get(message.id) ?? new Set<string>();
+        toolCallIds.add(part.toolCallId);
+        restoredToolCalls.set(message.id, toolCallIds);
+      });
+    });
+    this.restoredToolCalls = restoredToolCalls;
+  }
+
+  protected clearRestoredToolCalls(): void {
+    this.restoredToolCalls = undefined;
+  }
+
+  protected repairRestoredPendingToolParts(): void {
+    const shouldRepairRestoredPendingToolPart =
+      this.shouldRepairRestoredPendingToolPart;
+    if (!shouldRepairRestoredPendingToolPart) return;
+
+    this.messages.forEach((message, messageIndex) => {
+      message.parts.forEach((part) => {
+        if (!isPendingToolPart(part)) return;
+        if (
+          this.restoredToolCalls &&
+          !this.restoredToolCalls.get(message.id)?.has(part.toolCallId)
+        ) {
+          return;
+        }
+
+        let shouldRepair = false;
+        try {
+          shouldRepair = shouldRepairRestoredPendingToolPart({
+            toolName: getToolName(part),
+            toolCallId: part.toolCallId,
+            input: 'input' in part ? part.input : undefined,
+          });
+        } catch {
+          return;
+        }
+        if (!shouldRepair) return;
+
+        this.commit(
+          part.toolCallId,
+          {
+            state: 'output-error',
+            errorText:
+              part.state === 'input-streaming'
+                ? RESTORED_TOOL_INPUT_ERROR_TEXT
+                : RESTORED_TOOL_CALL_ERROR_TEXT,
+          },
+          message.id,
+          undefined,
+          this.messages[messageIndex]
+        );
+      });
+    });
+  }
+
+  /**
+   * The transcript to send, with every tool call still awaiting an output
+   * reported as cancelled — a provider rejects a turn holding a tool call with
+   * no matching result.
+   *
+   * The repair stays on this copy rather than being committed to `messages`:
+   * the card is still mounted, so a result submitted after the send must still
+   * land, and is sent as the real output from then on.
+   */
+  private getOutboundMessages(): TUIMessage[] {
+    let outboundMessages: TUIMessage[] | undefined;
+
+    this.messages.forEach((message, messageIndex) => {
+      let repairedParts: TUIMessage['parts'] | undefined;
+
+      message.parts.forEach((part, partIndex) => {
+        if (!isPendingToolPart(part)) return;
+
+        repairedParts = repairedParts || [...message.parts];
+        repairedParts[partIndex] = withTerminalToolState(
+          part,
+          this.resolveToolCallCancellation(part)
+        );
+      });
+
+      if (repairedParts) {
+        outboundMessages = outboundMessages || [...this.messages];
+        outboundMessages[messageIndex] = {
+          ...message,
+          parts: repairedParts,
+        } as TUIMessage;
+      }
+    });
+
+    return outboundMessages || this.messages;
+  }
+
+  private resolveToolCallCancellation(
+    part: TUIMessage['parts'][number] & { toolCallId: string }
+  ): TerminalToolState {
+    let cancellation;
+
+    // Repairing the outbound transcript must never fail the request build.
+    try {
+      cancellation = this.resolveCancelledToolOutput?.({
+        toolName: getToolName(part),
+        toolCallId: part.toolCallId,
+        input: 'input' in part ? part.input : undefined,
+      });
+    } catch {
+      cancellation = undefined;
+    }
+
+    return cancellation
+      ? { state: 'output-available', output: cancellation.output }
+      : { state: 'output-error', errorText: TOOL_CALL_CANCELLED_ERROR_TEXT };
   }
 
   private continueResponse(response?: ResponseRecord): Promise<void> {
@@ -676,14 +796,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
   private submitToolResult<TTool extends keyof InferUIMessageTools<TUIMessage>>(
     response: ResponseRecord | undefined,
-    {
-      toolCallId,
-      output,
-    }: {
-      tool: TTool;
-      toolCallId: string;
-      output: InferUIMessageTools<TUIMessage>[TTool]['output'];
-    },
+    options: ToolResultSubmissionOptions<TUIMessage, TTool>,
     messageId = response?.messageId,
     expectedMessage = messageId
       ? this.messages.find((message) => message.id === messageId)
@@ -693,13 +806,19 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
     const commitResult = (): Promise<void> => {
       if (
-        !this.commit(toolCallId, output, messageId, response, expectedMessage)
+        !this.commit(
+          options.toolCallId,
+          getTerminalToolState(options),
+          messageId,
+          response,
+          expectedMessage
+        )
       ) {
         return Promise.resolve();
       }
 
-      if (response?.requiredToolCallIds.has(toolCallId)) {
-        response.resolvedToolCallIds.add(toolCallId);
+      if (response?.requiredToolCallIds.has(options.toolCallId)) {
+        response.resolvedToolCallIds.add(options.toolCallId);
       }
       return this.continueResponse(response);
     };
@@ -721,6 +840,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
    */
   addToolResult: ToolResultSubmission<TUIMessage> = (options) => {
     if (!this.acceptsIdentifierOnlyToolResults) {
+      warnInvalidGlobalToolResult(options.toolCallId);
       return Promise.resolve();
     }
 
@@ -738,17 +858,26 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       );
       return matchingMessages.length === 1 ? matchingMessages[0] : undefined;
     };
-    if (!findMatchingMessage()) return Promise.resolve();
+    if (!findMatchingMessage()) {
+      warnInvalidGlobalToolResult(options.toolCallId);
+      return Promise.resolve();
+    }
 
     return this.jobExecutor.run(() => {
-      if (!this.acceptsIdentifierOnlyToolResults) return Promise.resolve();
+      if (!this.acceptsIdentifierOnlyToolResults) {
+        warnInvalidGlobalToolResult(options.toolCallId);
+        return Promise.resolve();
+      }
 
       const message = findMatchingMessage();
+      if (!message) {
+        warnInvalidGlobalToolResult(options.toolCallId);
+        return Promise.resolve();
+      }
       if (
-        !message ||
         !this.commit(
           options.toolCallId,
-          options.output,
+          getTerminalToolState(options),
           message.id,
           undefined,
           message
@@ -762,14 +891,10 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
   /** @internal */
   '~addToolResultForMessage' = <
-    TTool extends keyof InferUIMessageTools<TUIMessage>
+    TTool extends keyof InferUIMessageTools<TUIMessage>,
   >(
     message: TUIMessage,
-    options: {
-      tool: TTool;
-      toolCallId: string;
-      output: InferUIMessageTools<TUIMessage>[TTool]['output'];
-    }
+    options: ToolResultSubmissionOptions<TUIMessage, TTool>
   ): Promise<void> => {
     const hasToolCall = (candidate: TUIMessage): boolean =>
       candidate.parts?.some(
@@ -783,13 +908,13 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     const currentMessage = this.messages.includes(message)
       ? message
       : response && !response.isRetired
-      ? this.messages.find(
-          (candidate) =>
-            candidate.id === message.id &&
-            this.responseByMessage.get(candidate) === response &&
-            hasToolCall(candidate)
-        )
-      : undefined;
+        ? this.messages.find(
+            (candidate) =>
+              candidate.id === message.id &&
+              this.responseByMessage.get(candidate) === response &&
+              hasToolCall(candidate)
+          )
+        : undefined;
     if (!currentMessage) return Promise.resolve();
 
     return this.submitToolResult(
@@ -828,10 +953,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       );
     }
 
+    // Resolved as late as possible, so a tool that submits its output in the
+    // meantime is sent as answered.
+    const messages = this.getOutboundMessages();
+
     return this.consume((abortSignal) =>
       this.transport!.sendMessages({
         chatId: this.id,
-        messages: this.messages,
+        messages,
         abortSignal,
         trigger: options.trigger,
         messageId: options.messageId,
@@ -934,8 +1063,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     };
     const getCanonicalMessage = (): TUIMessage | undefined =>
       response.messageId
-        ? this.messages.find((message) => message.id === response.messageId) ??
-          currentMessage
+        ? (this.messages.find((message) => message.id === response.messageId) ??
+          currentMessage)
         : currentMessage;
     const notifyFinish = ({
       isAbort,
@@ -988,8 +1117,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         allowRetired: !wasRetired,
       });
     };
+    // A tool call the server answers itself is server-owned, even when the
+    // stream omits `providerExecuted`: nothing is left for the client to
+    // submit, so the response must stop requiring a result for it. Dropping it
+    // from `requiredToolCallIds` also keeps the turn from auto-continuing on
+    // the server's behalf — a turn made of server-executed tool calls is
+    // already complete, and resending it would repeat the whole answer.
     const acceptServerToolResult = (toolCallId: string): void => {
-      if (response.requiredToolCallIds.has(toolCallId)) {
+      if (response.requiredToolCallIds.delete(toolCallId)) {
         response.resolvedToolCallIds.add(toolCallId);
       }
     };
@@ -1146,8 +1281,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 typeof chunk.input === 'string'
                   ? chunk.input
                   : chunk.input !== undefined
-                  ? JSON.stringify(chunk.input)
-                  : '';
+                    ? JSON.stringify(chunk.input)
+                    : '';
 
               toolRawInputByCallId[chunk.toolCallId] = initialRawInput;
 
@@ -1189,10 +1324,10 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               const toolName =
                 chunk.toolName ?? existingPart?.type?.replace('tool-', '');
               const shouldRepair = toolName
-                ? this.shouldRepairToolInput?.(toolName) ?? true
+                ? (this.shouldRepairToolInput?.(toolName) ?? true)
                 : true;
               const parsedInput = shouldRepair
-                ? parseToolInputDelta(nextRawInput, existingPart?.input)
+                ? parsePartialJson(nextRawInput, existingPart?.input)
                 : existingPart?.input;
 
               const nextToolPart = {
@@ -1290,6 +1425,9 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 response.pendingToolCallbacks++;
 
                 try {
+                  this.restoredToolCalls
+                    ?.get(currentMessage.id)
+                    ?.delete(chunk.toolCallId);
                   const result = this.onToolCall(
                     {
                       toolCall: {
@@ -1298,6 +1436,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                         input: chunk.input,
                         dynamic: 'dynamic' in chunk ? chunk.dynamic : undefined,
                       } as InferUIMessageToolCall<TUIMessage>,
+                      signal: response.abortController.signal,
                     },
                     (options) =>
                       response.isRetired
@@ -1349,7 +1488,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               const nextRawOutput = `${previousRawOutput}${delta}`;
               toolRawOutputByCallId[toolCallId] = nextRawOutput;
 
-              const parsedOutput = parseToolInputDelta(
+              const parsedOutput = parsePartialJson(
                 nextRawOutput,
                 existingPart?.output
               );

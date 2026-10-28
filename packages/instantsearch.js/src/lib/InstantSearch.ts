@@ -62,7 +62,7 @@ type NoInfer<T> = T extends infer S ? S : never;
  */
 export type InstantSearchOptions<
   TUiState extends UiState = UiState,
-  TRouteState = TUiState
+  TRouteState = TUiState,
 > = {
   /**
    * The name of the main index. If no indexName is provided, you have to manually add an index widget.
@@ -211,7 +211,7 @@ export const INSTANTSEARCH_FUTURE_DEFAULTS: Required<
  */
 class InstantSearch<
   TUiState extends UiState = UiState,
-  TRouteState = TUiState
+  TRouteState = TUiState,
 > extends EventEmitter {
   public client: InstantSearchOptions['searchClient'];
   public indexName: string;
@@ -808,23 +808,35 @@ See documentation: ${createDocumentationLink({
     }
   });
 
-  public scheduleRender = defer((shouldResetStatus: boolean = true) => {
-    if (!this.mainHelper?.hasPendingRequests()) {
-      clearTimeout(this._searchStalledTimer);
-      this._searchStalledTimer = null;
+  public scheduleRender = defer(
+    (shouldResetStatus: boolean = true) => {
+      if (!this.mainHelper?.hasPendingRequests()) {
+        clearTimeout(this._searchStalledTimer);
+        this._searchStalledTimer = null;
 
-      if (shouldResetStatus) {
-        this.status = 'idle';
-        this.error = undefined;
+        if (shouldResetStatus) {
+          this.status = 'idle';
+          this.error = undefined;
+        }
       }
-    }
 
-    this.mainIndex.render({
-      instantSearchInstance: this as unknown as InstantSearch<UiState, UiState>,
-    });
+      this.mainIndex.render({
+        instantSearchInstance: this as unknown as InstantSearch<
+          UiState,
+          UiState
+        >,
+      });
 
-    this.emit('render');
-  });
+      this.emit('render');
+    },
+    // Renders scheduled in the same microtask collapse into one run, so the
+    // status reset accumulates instead of letting the first caller decide: a
+    // render scheduled for a reason unrelated to the search must not cancel the
+    // one a search result asks for, or it would strand the status on `loading`.
+    ([shouldResetStatus = true], [nextShouldResetStatus = true]): [boolean] => [
+      shouldResetStatus || nextShouldResetStatus,
+    ]
+  );
 
   public scheduleStalledRender() {
     if (!this._searchStalledTimer) {
@@ -839,10 +851,12 @@ See documentation: ${createDocumentationLink({
    * Set the UI state and trigger a search.
    * @param uiState The next UI state or a function computing it from the current state
    * @param callOnStateChange private parameter used to know if the method is called from a state change
+   * @param onApply private parameter called with the UI state notified to the middleware when this notification applies this UI state and no other change. With a controlled `onStateChange`, it can be later or never.
    */
   public setUiState(
     uiState: TUiState | ((previousUiState: TUiState) => TUiState),
-    callOnStateChange: boolean = true
+    callOnStateChange: boolean = true,
+    onApply?: (notifiedUiState: TUiState) => void
   ): void {
     if (!this.mainHelper) {
       throw new Error(
@@ -862,23 +876,40 @@ See documentation: ${createDocumentationLink({
       this.onStateChange({
         uiState: nextUiState,
         setUiState: (finalUiState) => {
-          setIndexHelperState(
+          this._applyUiState(
             typeof finalUiState === 'function'
               ? finalUiState(nextUiState)
               : finalUiState,
-            this.mainIndex
+            onApply
           );
-
-          this.scheduleSearch();
-          this.onInternalStateChange();
         },
       });
     } else {
-      setIndexHelperState(nextUiState, this.mainIndex);
-
-      this.scheduleSearch();
-      this.onInternalStateChange();
+      this._applyUiState(nextUiState, onApply);
     }
+  }
+
+  /**
+   * Set while `_applyUiState` sets the helper state. The index widgets notify
+   * their state change with its `onApply`, as part of applying that UI state.
+   */
+  public _applyingUiState?: {
+    onApply?: (notifiedUiState: TUiState) => void;
+  };
+
+  public _applyUiState(
+    uiState: TUiState,
+    onApply?: (notifiedUiState: TUiState) => void
+  ) {
+    this._applyingUiState = { onApply };
+    try {
+      setIndexHelperState(uiState, this.mainIndex);
+    } finally {
+      this._applyingUiState = undefined;
+    }
+
+    this.scheduleSearch();
+    this.onInternalStateChange(onApply);
   }
 
   public getUiState(): TUiState {
@@ -890,15 +921,24 @@ See documentation: ${createDocumentationLink({
     return this.mainIndex.getWidgetUiState({}) as TUiState;
   }
 
-  public onInternalStateChange = defer(() => {
-    const nextUiState = this.mainIndex.getWidgetUiState({}) as TUiState;
+  public onInternalStateChange = defer(
+    (onApply?: (notifiedUiState: TUiState) => void) => {
+      const nextUiState = this.mainIndex.getWidgetUiState({}) as TUiState;
 
-    this.middleware.forEach(({ instance }) => {
-      instance.onStateChange({
-        uiState: nextUiState,
+      onApply?.(nextUiState);
+
+      this.middleware.forEach(({ instance }) => {
+        instance.onStateChange({
+          uiState: nextUiState,
+        });
       });
-    });
-  });
+    },
+    // The notified state applies a UI state given to `setUiState` when it's the
+    // last change: applying it overwrites earlier changes, but a later change
+    // is part of the notified state. The changes made while applying it pass
+    // the same `onApply`.
+    (_pending, next) => next
+  );
 
   public createURL(nextState: TUiState = {} as TUiState): string {
     if (!this.started) {

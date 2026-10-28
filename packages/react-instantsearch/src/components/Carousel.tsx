@@ -2,7 +2,13 @@ import {
   createCarouselComponent,
   generateCarouselId,
 } from 'instantsearch-ui-components';
-import React, { createElement, Fragment, useRef, useState } from 'react';
+import React, {
+  createElement,
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import type {
   CarouselProps as CarouselUiProps,
@@ -12,6 +18,8 @@ import type {
 const CarouselUiComponent = createCarouselComponent({
   createElement: createElement as Pragma,
   Fragment,
+  useEffect,
+  useRef,
 });
 
 export type CarouselProps<TObject extends Record<string, unknown>> = Omit<

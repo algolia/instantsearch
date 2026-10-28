@@ -5,6 +5,7 @@ import {
   createBanner,
   collectSourceEntries,
 } from '../../scripts/build/rollup.base.mjs';
+
 import pkg from './package.json' with { type: 'json' };
 
 const moduleInput = collectSourceEntries();

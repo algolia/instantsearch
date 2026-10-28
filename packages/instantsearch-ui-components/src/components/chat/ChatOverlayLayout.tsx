@@ -1,8 +1,8 @@
 /** @jsx createElement */
 import { cx } from '../../lib';
 
-import type { Renderer } from '../../types';
 import type { ChatLayoutOwnProps } from './types';
+import type { Renderer } from '../../types';
 
 export function createChatOverlayLayoutComponent({ createElement }: Renderer) {
   return function ChatOverlayLayout(userProps: ChatLayoutOwnProps) {
@@ -28,6 +28,8 @@ export function createChatOverlayLayoutComponent({ createElement }: Renderer) {
       error: _error,
       ...rest
     } = userProps;
+    // React versions before 19 preserve unknown boolean attributes as numbers.
+    const inert = open ? undefined : (1 as unknown as boolean);
 
     return (
       <div
@@ -41,6 +43,7 @@ export function createChatOverlayLayoutComponent({ createElement }: Renderer) {
         )}
       >
         <div
+          inert={inert}
           className={cx(
             'ais-Chat-container',
             open && 'ais-Chat-container--open',

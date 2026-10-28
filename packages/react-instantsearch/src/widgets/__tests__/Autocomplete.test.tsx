@@ -136,10 +136,7 @@ describe('Autocomplete', () => {
             searchClient={searchClient}
             indexName="indexName"
           >
-            <Autocomplete
-              indices={indices}
-              requiresSearch={requiresSearch}
-            />
+            <Autocomplete indices={indices} requiresSearch={requiresSearch} />
           </InstantSearchTestWrapper>
         );
       }
@@ -187,9 +184,7 @@ describe('Autocomplete', () => {
         await wait(0);
       });
 
-      const requestedIndices = (
-        searchClient.search as jest.Mock
-      ).mock.calls
+      const requestedIndices = (searchClient.search as jest.Mock).mock.calls
         .flatMap((call) => call[0] as Array<{ indexName: string }>)
         .map((request) => request.indexName);
       expect(requestedIndices).not.toContain('my-index');
@@ -225,9 +220,7 @@ describe('Autocomplete', () => {
         await wait(0);
       });
 
-      const requestedIndices = (
-        searchClient.search as jest.Mock
-      ).mock.calls
+      const requestedIndices = (searchClient.search as jest.Mock).mock.calls
         .flatMap((call) => call[0] as Array<{ indexName: string }>)
         .map((request) => request.indexName);
       expect(requestedIndices).toContain('my-index');
@@ -266,9 +259,7 @@ describe('Autocomplete', () => {
         await wait(0);
       });
 
-      const autocompleteRequests = (
-        searchClient.search as jest.Mock
-      ).mock.calls
+      const autocompleteRequests = (searchClient.search as jest.Mock).mock.calls
         .flatMap(
           (call) =>
             call[0] as Array<{
@@ -404,9 +395,7 @@ describe('Autocomplete', () => {
         await wait(0);
       });
 
-      const requestedIndices = (
-        searchClient.search as jest.Mock
-      ).mock.calls
+      const requestedIndices = (searchClient.search as jest.Mock).mock.calls
         .flatMap((call) => call[0] as Array<{ indexName: string }>)
         .map((request) => request.indexName);
       expect(requestedIndices).toContain('my-index');

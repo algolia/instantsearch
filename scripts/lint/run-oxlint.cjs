@@ -12,6 +12,10 @@ const oxlintBin = path.join(
   process.platform === 'win32' ? 'oxlint.cmd' : 'oxlint'
 );
 
+// oxlint applies `.gitignore` on top of this, so `.oxlintignore` only lists what isn't
+// already excluded from the repository.
+const ignorePath = path.join(repoRoot, '.oxlintignore');
+
 if (!existsSync(oxlintBin)) {
   process.stderr.write(
     [
@@ -44,9 +48,7 @@ function toPosix(filePath) {
 }
 
 function isInside(basePath, targetPath) {
-  return (
-    targetPath === basePath || targetPath.startsWith(`${basePath}/`)
-  );
+  return targetPath === basePath || targetPath.startsWith(`${basePath}/`);
 }
 
 function relativeToRoot(targetPath) {
@@ -80,16 +82,26 @@ function readGitLines(args) {
     .filter(Boolean);
 }
 
+// `--changed` covers everything CI's full lint would see on this branch: files
+// committed since `origin/master`, plus staged, unstaged and untracked work.
+// Restricting it to the committed diff makes in-progress edits invisible, so it
+// reports clean on files that the full lint fails on.
 function getChangedFiles() {
   const mergeBase = readGitLines(['merge-base', 'HEAD', 'origin/master'])[0];
 
-  return readGitLines([
-    'diff',
-    '--name-only',
-    '--diff-filter=ACMR',
-    mergeBase,
-    'HEAD',
-  ]).filter(lintableFile);
+  return dedupe([
+    ...readGitLines([
+      'diff',
+      '--name-only',
+      '--diff-filter=ACMR',
+      mergeBase,
+      'HEAD',
+    ]),
+    ...readGitLines(['diff', '--name-only', '--diff-filter=ACMR', 'HEAD']),
+    ...readGitLines(['ls-files', '--others', '--exclude-standard']),
+  ])
+    .filter(lintableFile)
+    .filter((filePath) => existsSync(path.join(repoRoot, filePath)));
 }
 
 function getStagedFiles() {
@@ -150,7 +162,13 @@ function isTopLevelTarget(target) {
   return !target.includes('/');
 }
 
-function runOxlint({ cwd, extraArgs, paths, noIgnore = false, typeAware = false }) {
+function runOxlint({
+  cwd,
+  extraArgs,
+  paths,
+  noIgnore = false,
+  typeAware = false,
+}) {
   const commandArgs = [...extraArgs];
 
   if (typeAware && !extraArgs.includes('--type-aware')) {
@@ -159,6 +177,8 @@ function runOxlint({ cwd, extraArgs, paths, noIgnore = false, typeAware = false 
 
   if (noIgnore) {
     commandArgs.push('--no-ignore');
+  } else if (!extraArgs.includes('--ignore-path')) {
+    commandArgs.push('--ignore-path', ignorePath);
   }
 
   commandArgs.push(...dedupe(paths));

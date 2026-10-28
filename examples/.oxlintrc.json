@@ -1,13 +1,6 @@
 {
-  "extends": [
-    "../.oxlintrc.json"
-  ],
-  "ignorePatterns": [
-    "dist",
-    "build",
-    ".next",
-    ".nuxt"
-  ],
+  "extends": ["../.oxlintrc.json"],
+  "ignorePatterns": ["dist", "build", ".next", ".nuxt"],
   "rules": {
     "@typescript-eslint/consistent-type-imports": "off",
     "import/named": "off",

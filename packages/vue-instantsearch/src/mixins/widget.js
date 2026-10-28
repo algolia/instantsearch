@@ -71,12 +71,12 @@ Read more on using connectors: https://alg.li/vue-custom`
     widgetParams: {
       handler(nextWidgetParams) {
         this.state = null;
-        this.getParentIndex().removeWidgets([this.widget]);
+        const previousWidget = this.widget;
         this.widget = Object.assign(
           this.factory(nextWidgetParams),
           additionalProperties
         );
-        this.getParentIndex().addWidgets([this.widget]);
+        this.getParentIndex().updateWidget(previousWidget, this.widget);
       },
       deep: true,
     },

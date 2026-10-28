@@ -18,7 +18,7 @@ export function createHitsComponent({ createElement, Fragment }: Renderer) {
 }
 ```
 
-- **`Renderer` = `{ createElement, Fragment }`** is *injected* by the consumer (`src/types/Renderer.ts`). Defaults are Preact's, but React passes `react`'s `createElement` and Vue passes its own `h` (wired up via the `renderCompat` helper in `vue-instantsearch`). **Never import `preact`/`react`/`vue` directly** — go through the injected renderer. The `/** @jsx createElement */` pragma at the top of each file is what wires JSX to the injected function.
+- **`Renderer` = `{ createElement, Fragment }`** is _injected_ by the consumer (`src/types/Renderer.ts`). Defaults are Preact's, but React passes `react`'s `createElement` and Vue passes its own `h` (wired up via the `renderCompat` helper in `vue-instantsearch`). **Never import `preact`/`react`/`vue` directly** — go through the injected renderer. The `/** @jsx createElement */` pragma at the top of each file is what wires JSX to the injected function.
 - Class names go through **`cx`** (`src/lib/cx.ts`) and follow the `ais-<Widget>-<element>` contract that `instantsearch.css` themes — treat those class names as a public API.
 - Props are typed with `ComponentProps<'div'>`-style helpers from `src/types`; expose a `classNames` partial so consumers can extend styling.
 
@@ -27,7 +27,7 @@ export function createHitsComponent({ createElement, Fragment }: Renderer) {
 - `src/components/<Name>.tsx` — a `create<Name>Component` factory. Exported from `src/components/index.ts` → `src/index.ts`.
 - Grouped families: `src/components/autocomplete/`, `src/components/chat/`, `src/components/recommend-shared/` (+ the recommend widgets `RelatedProducts`, `FrequentlyBoughtTogether`, `LookingSimilar`, `TrendingItems`, `TrendingFacets`).
 - `src/lib/` — `cx`, `stickToBottom`, shared `utils`. `src/types/` — `Renderer`, `ComponentProps`, `Hooks`, `Recommend`, `shared`.
-- Runtime deps are minimal on purpose (`markdown-to-jsx`, `@swc/helpers`); **no framework as a dependency**.
+- Runtime deps are minimal on purpose (`@swc/helpers`); **no framework as a dependency**. Markdown rendering uses a vendored copy of `markdown-to-jsx` in `src/lib/markdown-to-jsx/` (React removed, see its README); it is linted, formatted and type-checked like the rest.
 
 ## Old vs new (important)
 

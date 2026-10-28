@@ -12,8 +12,20 @@ jest.mock('../../mixins/panel');
 
 const defaultState = {
   items: [
-    { value: 'Apple', label: 'Apple', highlighted: 'Apple', count: 746, isRefined: false },
-    { value: 'Samsung', label: 'Samsung', highlighted: 'Samsung', count: 633, isRefined: false },
+    {
+      value: 'Apple',
+      label: 'Apple',
+      highlighted: 'Apple',
+      count: 746,
+      isRefined: false,
+    },
+    {
+      value: 'Samsung',
+      label: 'Samsung',
+      highlighted: 'Samsung',
+      count: 633,
+      isRefined: false,
+    },
   ],
   canRefine: true,
   canToggleShowMore: true,

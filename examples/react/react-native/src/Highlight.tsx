@@ -1,10 +1,10 @@
-import React, { Fragment } from 'react';
-import { StyleSheet, Text } from 'react-native';
 import { Hit as AlgoliaHit } from 'instantsearch.js';
 import {
   getHighlightedParts,
   getPropertyByPath,
 } from 'instantsearch.js/es/lib/utils';
+import React, { Fragment } from 'react';
+import { StyleSheet, Text } from 'react-native';
 
 type HighlightPartProps = {
   children: React.ReactNode;

@@ -23,6 +23,8 @@ import {
   ToggleRefinement,
   Chat,
   ChatTrigger,
+  CompareBar,
+  useInstantSearch,
 } from 'react-instantsearch';
 
 import {
@@ -51,10 +53,25 @@ type HitProps = {
 };
 
 function Hit({ hit }: HitProps) {
+  const { indexRenderState } = useInstantSearch();
+  const { isSelected, toggleItem, canAddItems } =
+    indexRenderState.compare ?? {};
+  const selected = isSelected?.(hit.objectID) ?? false;
+
   return (
     <>
       <Highlight hit={hit} attribute="name" className="Hit-label" />
       <span className="Hit-price">${hit.price}</span>
+      <label className="Hit-compare">
+        <input
+          type="checkbox"
+          aria-label={`Compare ${hit.name}`}
+          checked={selected}
+          disabled={!toggleItem || (!selected && !canAddItems)}
+          onChange={() => toggleItem?.(hit)}
+        />
+        Compare
+      </label>
     </>
   );
 }
@@ -205,6 +222,7 @@ export function App() {
         itemComponent={ItemComponent}
       />
       <ChatTrigger />
+      <CompareBar configurationId="algolia_comparison_7c38cb21-cf8d-4039-a9bd-730d5b751516" />
     </InstantSearch>
   );
 }

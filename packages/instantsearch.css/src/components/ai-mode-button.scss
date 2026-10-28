@@ -19,7 +19,8 @@
   padding: calc(var(--ais-spacing) * 0.375) calc(var(--ais-spacing) * 0.625);
   white-space: nowrap;
 
-  transition: background-color var(--ais-transition-duration)
+  transition:
+    background-color var(--ais-transition-duration)
       var(--ais-transition-timing-function),
     border-color var(--ais-transition-duration)
       var(--ais-transition-timing-function),

@@ -19,7 +19,7 @@ import type {
 
 export type LookingSimilarProps<
   TObject,
-  TComponentProps extends Record<string, unknown> = Record<string, unknown>
+  TComponentProps extends Record<string, unknown> = Record<string, unknown>,
 > = ComponentProps<'div'> & RecommendComponentProps<TObject, TComponentProps>;
 
 export function createLookingSimilarComponent({

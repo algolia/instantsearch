@@ -2,10 +2,23 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { Chat } from 'instantsearch.js/es/lib/chat';
 import React from 'react';
 
-import { createDefaultWidgetParams, openChat } from './utils';
+import {
+  createDefaultWidgetParams,
+  createVueElement,
+  openChat,
+  vueH,
+} from './utils';
 
 import type { ChatWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
+
+type VueTextComponentProps = {
+  part: { text: string };
+  message: { id: string };
+  messages?: Array<{ id: string }>;
+  status: string;
+  partIndex: number;
+};
 
 export function createTemplatesTests(
   setup: ChatWidgetSetup,
@@ -36,7 +49,11 @@ export function createTemplatesTests(
                 <div className="custom-header">Custom header</div>
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(),
+              headerComponent: () =>
+                vueH('div', { class: 'custom-header' }, 'Custom header'),
+            },
           },
         });
 
@@ -90,7 +107,33 @@ export function createTemplatesTests(
                 </span>
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(),
+              headerTitleIconComponent: () =>
+                vueH(
+                  'span',
+                  { class: 'custom-title-icon' },
+                  'Custom title icon'
+                ),
+              headerCloseIconComponent: () =>
+                vueH(
+                  'span',
+                  { class: 'custom-close-icon' },
+                  'Custom close icon'
+                ),
+              headerMinimizeIconComponent: () =>
+                vueH(
+                  'span',
+                  { class: 'custom-minimize-icon' },
+                  'Custom minimize icon'
+                ),
+              headerMaximizeIconComponent: () =>
+                vueH(
+                  'span',
+                  { class: 'custom-maximize-icon' },
+                  'Custom maximize icon'
+                ),
+            },
           },
         });
 
@@ -132,7 +175,11 @@ export function createTemplatesTests(
                 <div className="custom-prompt">Custom prompt</div>
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(),
+              promptComponent: () =>
+                vueH('div', { class: 'custom-prompt' }, 'Custom prompt'),
+            },
           },
         });
 
@@ -170,7 +217,13 @@ export function createTemplatesTests(
                 <div className="custom-footer">Custom footer</div>
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(),
+              promptHeaderComponent: () =>
+                vueH('div', { class: 'custom-header' }, 'Custom header'),
+              promptFooterComponent: () =>
+                vueH('div', { class: 'custom-footer' }, 'Custom footer'),
+            },
           },
         });
 
@@ -212,7 +265,11 @@ export function createTemplatesTests(
                 <div className="custom-loader">Custom loader</div>
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              loaderComponent: () =>
+                vueH('div', { class: 'custom-loader' }, 'Custom loader'),
+            },
           },
         });
 
@@ -251,7 +308,11 @@ export function createTemplatesTests(
                 <div className="custom-error">Custom error</div>
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              messagesErrorComponent: () =>
+                vueH('div', { class: 'custom-error' }, 'Custom error'),
+            },
           },
         });
 
@@ -276,8 +337,7 @@ export function createTemplatesTests(
             javascript: {
               ...createDefaultWidgetParams(chat),
               templates: {
-                empty:
-                  '<div class="custom-empty">Custom empty</div>',
+                empty: '<div class="custom-empty">Custom empty</div>',
               },
             },
             react: {
@@ -286,7 +346,11 @@ export function createTemplatesTests(
                 <div className="custom-empty">Custom empty</div>
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              emptyComponent: () =>
+                vueH('div', { class: 'custom-empty' }, 'Custom empty'),
+            },
           },
         });
 
@@ -319,8 +383,7 @@ export function createTemplatesTests(
             javascript: {
               ...createDefaultWidgetParams(chat),
               templates: {
-                empty:
-                  '<div class="custom-empty">Custom empty</div>',
+                empty: '<div class="custom-empty">Custom empty</div>',
               },
             },
             react: {
@@ -329,7 +392,11 @@ export function createTemplatesTests(
                 <div className="custom-empty">Custom empty</div>
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              emptyComponent: () =>
+                vueH('div', { class: 'custom-empty' }, 'Custom empty'),
+            },
           },
         });
 
@@ -355,8 +422,7 @@ export function createTemplatesTests(
             javascript: {
               ...createDefaultWidgetParams(chat),
               templates: {
-                empty:
-                  '<div class="custom-empty">Custom empty</div>',
+                empty: '<div class="custom-empty">Custom empty</div>',
               },
             },
             react: {
@@ -365,7 +431,11 @@ export function createTemplatesTests(
                 <div className="custom-empty">Custom empty</div>
               ),
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              emptyComponent: () =>
+                vueH('div', { class: 'custom-empty' }, 'Custom empty'),
+            },
           },
         });
 
@@ -444,7 +514,21 @@ export function createTemplatesTests(
               userMessageLeadingComponent: () => <div>User Leading</div>,
               userMessageFooterComponent: () => <div>User Footer</div>,
             },
-            vue: {},
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              classNames: {
+                message: {
+                  leading: 'MESSAGE-LEADING',
+                  footer: 'MESSAGE-FOOTER',
+                },
+              },
+              assistantMessageLeadingComponent: () =>
+                vueH('div', 'Assistant Leading'),
+              assistantMessageFooterComponent: () =>
+                vueH('div', 'Assistant Footer'),
+              userMessageLeadingComponent: () => vueH('div', 'User Leading'),
+              userMessageFooterComponent: () => vueH('div', 'User Footer'),
+            },
           },
         });
 
@@ -467,6 +551,218 @@ export function createTemplatesTests(
         expect(leadingElements[1]).toHaveClass('MESSAGE-LEADING');
         expect(footerElements[0]).toHaveClass('MESSAGE-FOOTER');
         expect(footerElements[1]).toHaveClass('MESSAGE-FOOTER');
+      });
+
+      test('renders text parts with their message context', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({
+          messages: [
+            {
+              id: 'user-1',
+              role: 'user',
+              parts: [
+                { type: 'text', text: 'User first' },
+                { type: 'step-start' },
+                { type: 'text', text: 'User second' },
+              ],
+            },
+            {
+              id: 'assistant-1',
+              role: 'assistant',
+              parts: [
+                { type: 'text', text: 'Assistant first' },
+                { type: 'step-start' },
+                { type: 'text', text: 'Assistant second' },
+              ],
+            },
+          ],
+        });
+        Object.defineProperty(chat, 'status', {
+          get: () => 'streaming',
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              templates: {
+                assistantMessage: {
+                  text: (
+                    { part, message, messages, status, partIndex },
+                    { html }
+                  ) => html`<span
+                    class="custom-text-part"
+                    data-message-id="${message.id}"
+                    data-conversation="${messages
+                      ?.map(({ id }) => id)
+                      .join(',')}"
+                    data-status="${status}"
+                    data-part-index="${partIndex}"
+                    >${part.text}</span
+                  >`,
+                },
+                userMessage: {
+                  text: (
+                    { part, message, messages, status, partIndex },
+                    { html }
+                  ) => html`<span
+                    class="custom-text-part"
+                    data-message-id="${message.id}"
+                    data-conversation="${messages
+                      ?.map(({ id }) => id)
+                      .join(',')}"
+                    data-status="${status}"
+                    data-part-index="${partIndex}"
+                    >${part.text}</span
+                  >`,
+                },
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              messagesProps: {
+                assistantMessageProps: {
+                  textComponent: ({
+                    part,
+                    message,
+                    messages,
+                    status,
+                    partIndex,
+                  }) => (
+                    <span
+                      className="custom-text-part"
+                      data-message-id={message.id}
+                      data-conversation={messages
+                        ?.map(({ id }) => id)
+                        .join(',')}
+                      data-status={status}
+                      data-part-index={partIndex}
+                    >
+                      {part.text}
+                    </span>
+                  ),
+                },
+                userMessageProps: {
+                  textComponent: ({
+                    part,
+                    message,
+                    messages,
+                    status,
+                    partIndex,
+                  }) => (
+                    <span
+                      className="custom-text-part"
+                      data-message-id={message.id}
+                      data-conversation={messages
+                        ?.map(({ id }) => id)
+                        .join(',')}
+                      data-status={status}
+                      data-part-index={partIndex}
+                    >
+                      {part.text}
+                    </span>
+                  ),
+                },
+              },
+            },
+            vue: {
+              ...createDefaultWidgetParams(chat),
+              messagesProps: {
+                assistantMessageProps: {
+                  textComponent: ({
+                    part,
+                    message,
+                    messages,
+                    status,
+                    partIndex,
+                  }: VueTextComponentProps) =>
+                    createVueElement(
+                      'span',
+                      {
+                        class: 'custom-text-part',
+                        'data-message-id': message.id,
+                        'data-conversation': messages
+                          ?.map(({ id }) => id)
+                          .join(','),
+                        'data-status': status,
+                        'data-part-index': partIndex,
+                      },
+                      part.text
+                    ),
+                },
+                userMessageProps: {
+                  textComponent: ({
+                    part,
+                    message,
+                    messages,
+                    status,
+                    partIndex,
+                  }: VueTextComponentProps) =>
+                    createVueElement(
+                      'span',
+                      {
+                        class: 'custom-text-part',
+                        'data-message-id': message.id,
+                        'data-conversation': messages
+                          ?.map(({ id }) => id)
+                          .join(','),
+                        'data-status': status,
+                        'data-part-index': partIndex,
+                      },
+                      part.text
+                    ),
+                },
+              },
+            },
+          },
+        });
+
+        await openChat(act);
+
+        expect(
+          Array.from(document.querySelectorAll('.custom-text-part')).map(
+            (element) => ({
+              text: element.textContent,
+              messageId: element.getAttribute('data-message-id'),
+              conversation: element.getAttribute('data-conversation'),
+              status: element.getAttribute('data-status'),
+              partIndex: Number(element.getAttribute('data-part-index')),
+            })
+          )
+        ).toEqual([
+          {
+            text: 'User first',
+            messageId: 'user-1',
+            conversation: 'user-1,assistant-1',
+            status: 'streaming',
+            partIndex: 0,
+          },
+          {
+            text: 'User second',
+            messageId: 'user-1',
+            conversation: 'user-1,assistant-1',
+            status: 'streaming',
+            partIndex: 2,
+          },
+          {
+            text: 'Assistant first',
+            messageId: 'assistant-1',
+            conversation: 'user-1,assistant-1',
+            status: 'streaming',
+            partIndex: 0,
+          },
+          {
+            text: 'Assistant second',
+            messageId: 'assistant-1',
+            conversation: 'user-1,assistant-1',
+            status: 'streaming',
+            partIndex: 2,
+          },
+        ]);
       });
     });
 
@@ -531,7 +827,17 @@ export function createTemplatesTests(
               );
             },
           },
-          vue: {},
+          vue: {
+            ...createDefaultWidgetParams(chat),
+            actionsComponent: ({ message }: { message: { role: string } }) =>
+              vueH(
+                'button',
+                { class: 'custom-action' },
+                message.role === 'assistant'
+                  ? 'Custom assistant action'
+                  : 'Custom user action'
+              ),
+          },
         },
       });
 

@@ -37,8 +37,30 @@ describe('ChatTrigger rendering', () => {
       <ChatTrigger classNames={{ root: 'BASECLASS' }} title="test title" />
     );
 
-    expect(container.querySelector<HTMLButtonElement>('.BASECLASS')!.title).toBe(
-      'test title'
+    expect(
+      container.querySelector<HTMLButtonElement>('.BASECLASS')!.title
+    ).toBe('test title');
+  });
+
+  test('names the button "Open chat" by default', () => {
+    const { container } = renderInSearch(<ChatTrigger />);
+
+    expect(
+      container
+        .querySelector('.ais-ChatToggleButton')!
+        .getAttribute('aria-label')
+    ).toBe('Open chat');
+  });
+
+  test('uses custom translations for the button name', () => {
+    const { container } = renderInSearch(
+      <ChatTrigger translations={{ openLabel: 'Ouvrir le chat' }} />
     );
+
+    expect(
+      container
+        .querySelector('.ais-ChatToggleButton')!
+        .getAttribute('aria-label')
+    ).toBe('Ouvrir le chat');
   });
 });

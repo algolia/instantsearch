@@ -383,8 +383,10 @@ describe('network requests', () => {
             "model": "bought-together",
             "objectID": "one",
             "queryParameters": {
+              "clickAnalytics": true,
               "highlightPostTag": "__/ais-highlight__",
               "highlightPreTag": "__ais-highlight__",
+              "userToken": "cookie-key",
             },
             "threshold": 0,
           },
@@ -434,8 +436,10 @@ describe('network requests', () => {
             "model": "bought-together",
             "objectID": "one",
             "queryParameters": {
+              "clickAnalytics": true,
               "highlightPostTag": "__/ais-highlight__",
               "highlightPreTag": "__ais-highlight__",
+              "userToken": "cookie-key",
             },
             "threshold": 0,
           },
@@ -534,8 +538,10 @@ describe('network requests', () => {
             "model": "bought-together",
             "objectID": "one",
             "queryParameters": {
+              "clickAnalytics": true,
               "highlightPostTag": "__/ais-highlight__",
               "highlightPreTag": "__ais-highlight__",
+              "userToken": "cookie-key",
             },
             "threshold": 0,
           },
@@ -585,8 +591,10 @@ describe('network requests', () => {
             "model": "bought-together",
             "objectID": "one",
             "queryParameters": {
+              "clickAnalytics": true,
               "highlightPostTag": "__/ais-highlight__",
               "highlightPreTag": "__ais-highlight__",
+              "userToken": "cookie-key",
             },
             "threshold": 0,
           },

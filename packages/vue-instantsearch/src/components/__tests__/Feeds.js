@@ -8,7 +8,7 @@ import Feeds from '../Feeds';
 
 jest.mock('../../mixins/widget');
 jest.mock('instantsearch.js/es/connectors/feeds/FeedContainer', () => ({
-  createFeedContainer: jest.fn(feedID => ({ __feedID: feedID })),
+  createFeedContainer: jest.fn((feedID) => ({ __feedID: feedID })),
 }));
 
 describe('AisFeeds', () => {
@@ -17,7 +17,7 @@ describe('AisFeeds', () => {
   });
 
   it('passes arguments to connector', () => {
-    const transformFeeds = feeds => feeds;
+    const transformFeeds = (feeds) => feeds;
     const wrapper = mount(Feeds, {
       propsData: {
         isolated: false,

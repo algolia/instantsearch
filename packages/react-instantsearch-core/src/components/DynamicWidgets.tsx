@@ -13,7 +13,7 @@ function DefaultFallbackComponent() {
 
 type AtLeastOne<
   TTarget,
-  TMapped = { [Key in keyof TTarget]: Pick<TTarget, Key> }
+  TMapped = { [Key in keyof TTarget]: Pick<TTarget, Key> },
 > = Partial<TTarget> & TMapped[keyof TMapped];
 
 export type DynamicWidgetsProps = Omit<

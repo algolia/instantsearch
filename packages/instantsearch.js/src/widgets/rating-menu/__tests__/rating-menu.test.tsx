@@ -554,7 +554,7 @@ describe('ratingMenu', () => {
               return html`<a
                 href="${url}"
                 class="${cx(cssClasses.link)}"
-                label="${`${name} and up`}"
+                aria-label="${`${name} and up`}"
               >
                 ${stars.map(
                   (isFilled, index) =>
@@ -612,9 +612,9 @@ describe('ratingMenu', () => {
               >
                 <div>
                   <a
+                    aria-label="4 and up"
                     class="ais-RatingMenu-link"
                     href="#"
-                    label="4 and up"
                   >
                     <svg
                       class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
@@ -649,9 +649,9 @@ describe('ratingMenu', () => {
               >
                 <div>
                   <a
+                    aria-label="3 and up"
                     class="ais-RatingMenu-link"
                     href="#"
-                    label="3 and up"
                   >
                     <svg
                       class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
@@ -686,9 +686,9 @@ describe('ratingMenu', () => {
               >
                 <div>
                   <a
+                    aria-label="2 and up"
                     class="ais-RatingMenu-link"
                     href="#"
-                    label="2 and up"
                   >
                     <svg
                       class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
@@ -723,9 +723,9 @@ describe('ratingMenu', () => {
               >
                 <div>
                   <a
+                    aria-label="1 and up"
                     class="ais-RatingMenu-link"
                     href="#"
-                    label="1 and up"
                   >
                     <svg
                       class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
@@ -777,7 +777,7 @@ describe('ratingMenu', () => {
                 <a
                   href={url}
                   className={cx(cssClasses.link)}
-                  label={`${name} and up`}
+                  aria-label={`${name} and up`}
                 >
                   {stars.map((isFilled, index) => (
                     <svg
@@ -835,9 +835,9 @@ describe('ratingMenu', () => {
               >
                 <div>
                   <a
+                    aria-label="4 and up"
                     class="ais-RatingMenu-link"
                     href="#"
-                    label="4 and up"
                   >
                     <svg
                       class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
@@ -872,9 +872,9 @@ describe('ratingMenu', () => {
               >
                 <div>
                   <a
+                    aria-label="3 and up"
                     class="ais-RatingMenu-link"
                     href="#"
-                    label="3 and up"
                   >
                     <svg
                       class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
@@ -909,9 +909,9 @@ describe('ratingMenu', () => {
               >
                 <div>
                   <a
+                    aria-label="2 and up"
                     class="ais-RatingMenu-link"
                     href="#"
-                    label="2 and up"
                   >
                     <svg
                       class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
@@ -946,9 +946,9 @@ describe('ratingMenu', () => {
               >
                 <div>
                   <a
+                    aria-label="1 and up"
                     class="ais-RatingMenu-link"
                     href="#"
-                    label="1 and up"
                   >
                     <svg
                       class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"

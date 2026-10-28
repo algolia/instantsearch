@@ -75,7 +75,7 @@ export type TrendingFacetsConnector = Connector<
 >;
 
 export default (function connectTrendingFacets<
-  TWidgetParams extends UnknownWidgetParams
+  TWidgetParams extends UnknownWidgetParams,
 >(
   renderFn: Renderer<
     TrendingFacetsRenderState,

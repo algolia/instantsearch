@@ -4,7 +4,7 @@ describe('widgets', () => {
   const widgets = getAllInstantSearchWidgets();
 
   const customExpectedLength: Partial<
-    Record<typeof widgets[0]['name'], number>
+    Record<(typeof widgets)[0]['name'], number>
   > = {
     // searchbox only (the isolated index attaches lazily on first focus)
     Autocomplete: 1,
@@ -74,9 +74,24 @@ describe('widgets', () => {
           "name": "Breadcrumb",
         },
         {
+          "$$type": "ais.promptSuggestions",
+          "$$widgetType": "ais.promptSuggestions",
+          "name": "PromptSuggestions",
+        },
+        {
+          "$$type": "ais.resultCard",
+          "$$widgetType": "ais.resultCard",
+          "name": "ResultCard",
+        },
+        {
           "$$type": "ais.chatTrigger",
           "$$widgetType": "ais.chatTrigger",
           "name": "ChatTrigger",
+        },
+        {
+          "$$type": "ais.compare",
+          "$$widgetType": "ais.compareBar",
+          "name": "CompareBar",
         },
         {
           "$$type": "ais.clearRefinements",

@@ -1,14 +1,14 @@
 # algoliasearch-helper
 
-The **low-level search-state manager** that sits *underneath* InstantSearch connectors. It's a separately-published, long-stable npm package (`algoliasearch-helper`, own semver — currently 3.x) that wraps the `algoliasearch` JS client with a higher-level, stateful API: it tracks search parameters, builds the actual Algolia queries, parses responses, and emits events. Every connector in `instantsearch.js` reads and writes this helper's state — but the connector is the layer you change, not this one.
+The **low-level search-state manager** that sits _underneath_ InstantSearch connectors. It's a separately-published, long-stable npm package (`algoliasearch-helper`, own semver — currently 3.x) that wraps the `algoliasearch` JS client with a higher-level, stateful API: it tracks search parameters, builds the actual Algolia queries, parses responses, and emits events. Every connector in `instantsearch.js` reads and writes this helper's state — but the connector is the layer you change, not this one.
 
-> **⚠️ Rarely the right place for a change/fix/update.** This package is mature and broadly depended on — InstantSearch (all flavors) plus other Algolia front-end libraries build on it. Almost all widget/connector behavior is implemented *on top of* the helper, not in it. Touch it **only** for a genuine state-manager or response-parsing bug, or to add a real new search-parameter primitive. Any change here is a **public-API, independently-versioned** change with a blast radius far beyond this repo — flag it explicitly and prefer fixing the connector instead.
+> **⚠️ Rarely the right place for a change/fix/update.** This package is mature and broadly depended on — InstantSearch (all flavors) plus other Algolia front-end libraries build on it. Almost all widget/connector behavior is implemented _on top of_ the helper, not in it. Touch it **only** for a genuine state-manager or response-parsing bug, or to add a real new search-parameter primitive. Any change here is a **public-API, independently-versioned** change with a blast radius far beyond this repo — flag it explicitly and prefer fixing the connector instead.
 
 ## What's in it
 
 Entry: `algoliasearchHelper(client, index, opts)` → an `AlgoliaSearchHelper` (an `EventEmitter`). Core pieces under `src/`:
 
-- **`SearchParameters/`** — the **immutable** query state (query, `facets`/`disjunctiveFacets`/`hierarchicalFacets`, numeric & tag refinements, `page`, etc.). Setters return a *new* instance; never mutate in place. This is the object connectors mutate via `getWidgetSearchParameters`.
+- **`SearchParameters/`** — the **immutable** query state (query, `facets`/`disjunctiveFacets`/`hierarchicalFacets`, numeric & tag refinements, `page`, etc.). Setters return a _new_ instance; never mutate in place. This is the object connectors mutate via `getWidgetSearchParameters`.
 - **`SearchResults/`** — parses the raw Algolia response into a richer structure: facet values, `facets_stats`, and hierarchical facet trees (`generate-hierarchical-tree.js`).
 - **`requestBuilder.js`** — turns `SearchParameters` into the actual query payload(s); notably **splits disjunctive faceting into multiple queries**.
 - **`DerivedHelper/`** — sub-requests derived from a main helper (federated / multi-index search); this is what powers the `index` widget.

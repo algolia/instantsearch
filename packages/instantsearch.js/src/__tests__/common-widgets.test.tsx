@@ -6,6 +6,7 @@ import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/widgets';
 
 import instantsearch from '../index.es';
+import { Chat as InstantSearchChat } from '../lib/chat';
 import {
   hierarchicalMenu,
   breadcrumb,
@@ -36,11 +37,14 @@ import {
   dynamicWidgets,
   chat,
   chatTrigger,
+  promptSuggestions,
+  resultCard,
   autocomplete,
   filterSuggestions,
 } from '../widgets';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
+import type { RecordWithObjectID } from 'instantsearch-ui-components';
 
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
@@ -688,22 +692,36 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       );
     }
 
+    const createChatWidget = () => {
+      const container = document.body.appendChild(
+        document.createElement('div')
+      );
+
+      if (chatWidgetParams.chat === undefined) {
+        return chat<RecordWithObjectID>({
+          container,
+          ...chatWidgetParams,
+        });
+      }
+
+      if (!(chatWidgetParams.chat instanceof InstantSearchChat)) {
+        throw new Error('Expected the caller-supplied Chat instance.');
+      }
+
+      return chat<RecordWithObjectID>({
+        container,
+        ...chatWidgetParams,
+        chat: chatWidgetParams.chat,
+      });
+    };
+
     instantsearch(instantSearchOptions)
       .addWidgets([
         ...refinementsWidgets,
         chatTrigger({
           container: document.body.appendChild(document.createElement('div')),
         }),
-        ...(renderChat
-          ? [
-              chat({
-                container: document.body.appendChild(
-                  document.createElement('div')
-                ),
-                ...chatWidgetParams,
-              }),
-            ]
-          : []),
+        ...(renderChat ? [createChatWidget()] : []),
       ])
       .on('error', () => {
         /*
@@ -736,6 +754,72 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
           container: document.body.appendChild(document.createElement('div')),
           ...widgetParams,
         }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
+  createPromptSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
+    // The widget hands clicked suggestions to a `chat` on the same index, and
+    // errors without one, so the default setup mounts both. `renderChat: false`
+    // is how a test asks for the unconfigured page.
+    const { renderChat = true, ...promptSuggestionsWidgetParams } =
+      widgetParams;
+
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        promptSuggestions({
+          container: document.body.appendChild(document.createElement('div')),
+          ...promptSuggestionsWidgetParams,
+        }),
+        ...(renderChat
+          ? [
+              chat({
+                container: document.body.appendChild(
+                  document.createElement('div')
+                ),
+                // A dedicated id: the `agentId` the chat suites use keys
+                // persisted messages in `sessionStorage` that leak across tests
+                // in this file.
+                agentId: 'promptSuggestionsChatAgentId',
+              }),
+            ]
+          : []),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
+  createResultCardWidgetTests({ instantSearchOptions, widgetParams }) {
+    // "Continue in chat" needs a `chat` with the card's `agentId` on the same
+    // index, so the default setup mounts both. `renderChat: false` is how a
+    // test asks for the unconfigured page.
+    const { renderChat = true, ...resultCardWidgetParams } = widgetParams;
+
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        resultCard({
+          container: document.body.appendChild(document.createElement('div')),
+          ...resultCardWidgetParams,
+        }),
+        ...(renderChat
+          ? [
+              chat({
+                container: document.body.appendChild(
+                  document.createElement('div')
+                ),
+                agentId: resultCardWidgetParams.agentId,
+              }),
+            ]
+          : []),
       ])
       .on('error', () => {
         /*
@@ -782,6 +866,8 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createChatWidgetTests: undefined,
   createAutocompleteWidgetTests: undefined,
   createFilterSuggestionsWidgetTests: undefined,
+  createPromptSuggestionsWidgetTests: undefined,
+  createResultCardWidgetTests: undefined,
 };
 
 describe('Common widget tests (InstantSearch.js)', () => {

@@ -11,14 +11,16 @@ import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
+import { getVueH } from './vue';
+
 import type { AutocompleteWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 
 function normalizeSnapshot(expectedId: string) {
   return function _normalizeSnapshot(html: string) {
-    // `useId()` in Preact and React have different patterns.
+    // `useId()` in Preact, React and Vue have different patterns.
     return commonNormalizeSnapshot(html).replace(
-      /(P\d+|:r[a-z0-9]+:)/g,
+      /(P\d+|:r[a-z0-9]+:|ais-\d+-\d+|aisVueHook[a-z0-9]+-\d+)/g,
       expectedId
     );
   };
@@ -29,6 +31,13 @@ export function createTemplatesTests(
   { act }: Required<TestOptions>
 ) {
   describe('templates', () => {
+    afterEach(() => {
+      // Two tests below stub `Storage.prototype.getItem` to seed recent
+      // searches. Left in place it answers every later storage read in the file
+      // — including another widget's persisted state — with recent searches.
+      jest.restoreAllMocks();
+    });
+
     test('renders indices headers', async () => {
       const searchClient = createMockedSearchClient(
         createMultiSearchResponse(
@@ -96,7 +105,20 @@ export function createTemplatesTests(
               classNames: { header: 'HEADER' },
             },
           },
-          vue: {},
+          vue: {
+            indices: [
+              { indexName: 'indexName', classNames: { header: 'HEADER' } },
+            ],
+            showQuerySuggestions: {
+              indexName: 'indexName2',
+              classNames: { header: 'HEADER' },
+            },
+            slots: {
+              item: ({ item }) => item.name,
+              header: ({ items }) => `${items.length} results`,
+              querySuggestionHeader: ({ items }) => `${items.length} results`,
+            },
+          },
         },
       });
 
@@ -177,7 +199,16 @@ export function createTemplatesTests(
               classNames: { header: 'RECENT-HEADER' },
             },
           },
-          vue: {},
+          vue: {
+            indices: [{ indexName: 'indexName' }],
+            showRecent: {
+              classNames: { header: 'RECENT-HEADER' },
+            },
+            slots: {
+              item: ({ item }) => item.name,
+              recentHeader: ({ items }) => `${items.length} recent`,
+            },
+          },
         },
       });
 
@@ -275,7 +306,28 @@ export function createTemplatesTests(
               </div>
             ),
           },
-          vue: {},
+          vue: {
+            indices: [{ indexName: 'indexName' }],
+            showQuerySuggestions: {
+              indexName: 'indexName2',
+            },
+            showRecent: true,
+            slots: {
+              item: ({ item }) => item.name,
+              querySuggestionItem: ({ item }) => item.query,
+              panel: ({ elements }) => {
+                const h = getVueH(elements);
+                return h('div', {}, [
+                  h('h1', {}, ['My custom panel']),
+                  h('div', { class: 'left' }, [
+                    elements.recent,
+                    elements.suggestions,
+                  ]),
+                  h('div', { class: 'right' }, [elements.indexName]),
+                ]);
+              },
+            },
+          },
         },
       });
 

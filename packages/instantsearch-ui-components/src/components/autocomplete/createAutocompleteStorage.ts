@@ -1,7 +1,7 @@
 import { find } from '../../lib';
 
-import type { Hooks } from '../../types';
 import type { UsePropGetters } from './createAutocompletePropGetters';
+import type { Hooks } from '../../types';
 
 type CreateAutocompleteStorageParams = Pick<
   Hooks,

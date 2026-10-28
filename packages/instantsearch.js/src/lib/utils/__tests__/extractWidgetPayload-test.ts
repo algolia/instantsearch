@@ -91,9 +91,7 @@ describe('extractWidgetPayload', () => {
       },
     };
 
-    search.addWidgets([
-      index({ indexName: 'nested' }).addWidgets([spyWidget]),
-    ]);
+    search.addWidgets([index({ indexName: 'nested' }).addWidgets([spyWidget])]);
 
     search.start();
 

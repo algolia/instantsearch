@@ -2,8 +2,8 @@
 
 import { cx } from '../../lib';
 
+import type { ChatComponentPropsWithContext, ChatEmptyProps } from './types';
 import type { ComponentProps, Renderer } from '../../types';
-import type { ChatEmptyProps } from './types';
 
 export type ChatGreetingTranslations = {
   /**
@@ -35,7 +35,7 @@ export type ChatGreetingClassNames = {
   banner?: string | string[];
 };
 
-export type ChatGreetingProps = ChatEmptyProps & ComponentProps<'div'> & {
+export type ChatGreetingProps = ComponentProps<'div'> & {
   /**
    * Optional translations
    */
@@ -53,21 +53,26 @@ export type ChatGreetingProps = ChatEmptyProps & ComponentProps<'div'> & {
 export function createChatGreetingComponent({
   createElement,
 }: Pick<Renderer, 'createElement'>) {
-  return function ChatGreeting(userProps: ChatGreetingProps) {
+  return function ChatGreeting(
+    // The deprecated root props are still accepted for back compat.
+    // eslint-disable-next-line typescript/no-deprecated
+    userProps: ChatComponentPropsWithContext<ChatGreetingProps & ChatEmptyProps>
+  ) {
     const {
       translations: userTranslations,
       classNames = {},
+      context,
+      banner,
+      // Read from `context` instead. Destructured only to keep the deprecated
+      // root-level props out of the DOM spread below; remove in the next major.
       sendMessage: _sendMessage,
       status: _status,
       onClose: _onClose,
       setInput: _setInput,
-      banner,
       ...props
     } = userProps;
     const translations: Required<ChatGreetingTranslations> = {
-      heading:
-        userTranslations?.heading ??
-        'How can I help you today?',
+      heading: userTranslations?.heading ?? 'How can I help you today?',
       subheading:
         userTranslations?.subheading ??
         "Ask me anything about our products, and I'll do my best to assist you.",

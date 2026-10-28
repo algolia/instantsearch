@@ -20,6 +20,7 @@ Run the InstantSearch pre-push checks against the **current changes** and report
 ## Output
 
 Report a short checklist:
+
 - ✅/❌ lint:changed
 - ✅/❌ type-check (+ v3/v4 if run)
 - ✅/❌ tests (list the paths run)

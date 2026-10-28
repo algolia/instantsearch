@@ -1,10 +1,10 @@
-import { searchBox, poweredBy } from "instantsearch.js/es/widgets";
+import { searchBox, poweredBy } from 'instantsearch.js/es/widgets';
 
-import { useWidget } from "../../hooks/useWidget";
+import { useWidget } from '../../hooks/useWidget';
 
 export function SearchBoxPoweredBy() {
   const searchBoxRef = useWidget((el) =>
-    searchBox({ container: el, placeholder: "Search for products..." }),
+    searchBox({ container: el, placeholder: 'Search for products...' })
   );
   const poweredByRef = useWidget((el) => poweredBy({ container: el }));
 

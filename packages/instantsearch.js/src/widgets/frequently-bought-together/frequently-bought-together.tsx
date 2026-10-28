@@ -165,7 +165,7 @@ const renderer =
 export type FrequentlyBoughtTogetherCSSClasses = Partial<RecommendClassNames>;
 
 export type FrequentlyBoughtTogetherTemplates<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = Partial<{
   /**
    * Template to use when there are no results.
@@ -210,7 +210,7 @@ export type FrequentlyBoughtTogetherTemplates<
 }>;
 
 type FrequentlyBoughtTogetherWidgetParams<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = {
   /**
    * CSS Selector or HTMLElement to insert the widget.
@@ -237,7 +237,7 @@ export type FrequentlyBoughtTogetherWidget = WidgetFactory<
 >;
 
 export default (function frequentlyBoughtTogether<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 >(
   widgetParams: FrequentlyBoughtTogetherWidgetParams<THit> &
     FrequentlyBoughtTogetherConnectorParams<THit>

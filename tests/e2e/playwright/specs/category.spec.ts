@@ -28,7 +28,9 @@ test.describe('search on specific category', () => {
     await helpers.clickHierarchicalMenuItem('Small Kitchen Appliances');
 
     // Verify URL contains full path
-    await expect(page).toHaveURL(/search\/Appliances%2FSmall\+Kitchen\+Appliances\//);
+    await expect(page).toHaveURL(
+      /search\/Appliances%2FSmall\+Kitchen\+Appliances\//
+    );
 
     // Get results for "Small Kitchen Appliances"
     const smallKitchenTitles = await helpers.getHitsTitles();

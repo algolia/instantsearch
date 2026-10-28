@@ -138,8 +138,7 @@ function fixMismatchesIn(
   for (const [group, packages] of Object.entries(packageGroups)) {
     const packageVersions = packages.map((name) => {
       const filePath = path.join(packagesDir, name, 'package.json');
-      const data = readJson(filePath);
-      return { name, filePath, data, version: data.version };
+      return { name, filePath, version: readJson(filePath).version };
     });
 
     const highestVersion = packageVersions.reduce(
@@ -154,8 +153,12 @@ function fixMismatchesIn(
           `[${group}] Bumping ${pkg.name}: ${pkg.version} -> ${highestVersion}`
         );
 
-        pkg.data.version = highestVersion;
-        writeJson(pkg.filePath, pkg.data);
+        // Re-read the file: `updateDependencyReferences` below may have
+        // rewritten it in an earlier iteration, and writing back a snapshot
+        // taken before that would clobber the dependency it just fixed.
+        const data = readJson(pkg.filePath);
+        data.version = highestVersion;
+        writeJson(pkg.filePath, data);
 
         if (
           insertChangelogEntry(

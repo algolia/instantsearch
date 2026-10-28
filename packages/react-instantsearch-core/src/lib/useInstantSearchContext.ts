@@ -9,7 +9,7 @@ import type { Context } from 'react';
 
 export function useInstantSearchContext<
   TUiState extends UiState,
-  TRouteState = TUiState
+  TRouteState = TUiState,
 >() {
   const search = useContext(
     InstantSearchContext as Context<InternalInstantSearch<

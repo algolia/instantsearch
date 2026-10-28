@@ -1,9 +1,6 @@
 name: Architecture Refactor
 
 on:
-  schedule:
-    - cron: '0 7 * * 1'
-
   workflow_dispatch:
     inputs:
       stage:
@@ -37,7 +34,7 @@ jobs:
   architecture-refactor:
     name: Run Architecture Refactor
     if: >-
-      github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (
+      github.event_name == 'workflow_dispatch' || (
         github.event_name == 'issue_comment' &&
         github.event.issue.pull_request == null &&
         startsWith(github.event.comment.body, '/implement ')

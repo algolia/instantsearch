@@ -12,7 +12,7 @@ import type { UIMessageChunk } from './types';
  * @returns A ReadableStream of parsed UIMessageChunk events
  */
 export function parseJsonEventStream<
-  TChunk extends UIMessageChunk = UIMessageChunk
+  TChunk extends UIMessageChunk = UIMessageChunk,
 >(stream: ReadableStream<Uint8Array>): ReadableStream<TChunk> {
   const decoder = new TextDecoder();
   let buffer = '';

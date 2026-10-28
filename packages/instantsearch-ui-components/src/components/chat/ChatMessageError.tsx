@@ -4,15 +4,14 @@ import { createButtonComponent } from '../Button';
 
 import { ReloadIcon } from './icons';
 
+import type { ChatComponentPropsWithContext } from './types';
 import type { ComponentProps, Renderer } from '../../types';
 
 export type ChatMessageErrorTranslations = {
   /**
    * Error message text
    */
-  errorMessage:
-    | string
-    | ((params: { errorMessage?: string }) => string);
+  errorMessage: string | ((params: { errorMessage?: string }) => string);
   /**
    * New conversation button text
    */
@@ -60,13 +59,16 @@ export function createChatMessageErrorComponent({
 }: Pick<Renderer, 'createElement'>) {
   const Button = createButtonComponent({ createElement });
 
-  return function ChatMessageError(userProps: ChatMessageErrorProps) {
+  return function ChatMessageError(
+    userProps: ChatComponentPropsWithContext<ChatMessageErrorProps>
+  ) {
     const {
       errorMessage,
       onReload,
       onNewConversation,
       actions,
       translations: userTranslations,
+      context,
       ...props
     } = userProps;
     const defaultErrorMessage =
@@ -77,7 +79,7 @@ export function createChatMessageErrorComponent({
     const resolvedErrorMessage =
       typeof errorMessageTranslation === 'function'
         ? errorMessageTranslation({ errorMessage })
-        : errorMessageTranslation ?? defaultErrorMessage;
+        : (errorMessageTranslation ?? defaultErrorMessage);
     const newConversationText =
       userTranslations?.newConversationText ?? defaultNewConversationText;
     const retryText = userTranslations?.retryText ?? defaultRetryText;

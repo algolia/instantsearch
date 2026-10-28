@@ -133,6 +133,7 @@ describe('Templates', () => {
 
     expect(templates).toEqual({
       collapseButtonText: expect.any(Function),
+      collapseButtonLabel: expect.any(Function),
     });
   });
 
