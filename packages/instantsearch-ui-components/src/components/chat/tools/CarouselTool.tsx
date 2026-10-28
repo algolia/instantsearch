@@ -40,7 +40,19 @@ type HeaderProps = {
   onClose: () => void;
 };
 
+export type CarouselToolTranslations = {
+  /**
+   * Accessible label for the previous scroll button
+   */
+  previousButtonLabel: string;
+  /**
+   * Accessible label for the next scroll button
+   */
+  nextButtonLabel: string;
+};
+
 export type CarouselToolProps<THit extends RecordWithObjectID> = {
+  translations?: Partial<CarouselToolTranslations>;
   getSearchPageURL?: (params: SearchParameters) => string;
   toolProps: ClientSideToolComponentProps;
   itemComponent?: CarouselProps<THit>['itemComponent'];
@@ -64,7 +76,8 @@ function createHeaderComponent({ createElement }: Renderer) {
     applyFilters,
     getSearchPageURL,
     onClose,
-  }: HeaderProps) {
+    translations,
+  }: HeaderProps & { translations: CarouselToolTranslations }) {
     if (nbItems < 1) {
       return null;
     }
@@ -122,6 +135,7 @@ function createHeaderComponent({ createElement }: Renderer) {
               iconOnly
               onClick={scrollLeft}
               disabled={!canScrollLeft}
+              aria-label={translations.previousButtonLabel}
               className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
             >
               <ChevronLeftIcon createElement={createElement} />
@@ -132,6 +146,7 @@ function createHeaderComponent({ createElement }: Renderer) {
               iconOnly
               onClick={scrollRight}
               disabled={!canScrollRight}
+              aria-label={translations.nextButtonLabel}
               className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
             >
               <ChevronRightIcon createElement={createElement} />
@@ -168,7 +183,13 @@ export function createCarouselToolComponent<
       getSearchPageURL,
       toolProps: { context },
       headerProps: { showViewAll },
+      translations: userTranslations,
     } = userProps;
+    const { previousButtonLabel, nextButtonLabel }: CarouselToolTranslations = {
+      previousButtonLabel: 'Previous',
+      nextButtonLabel: 'Next',
+      ...userTranslations,
+    };
     const { message, applyFilters, insightsEventContext, sendEvent, onClose } =
       context;
     const instantSearchStatus =
@@ -274,10 +295,13 @@ export function createCarouselToolComponent<
           applyFilters={applyFilters}
           getSearchPageURL={getSearchPageURL}
           onClose={onClose}
+          translations={{ previousButtonLabel, nextButtonLabel }}
           {...props}
         />
       );
     }, [
+      previousButtonLabel,
+      nextButtonLabel,
       showViewAll,
       HeaderComponent,
       output?.nbHits,

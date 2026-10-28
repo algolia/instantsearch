@@ -79,6 +79,7 @@ function renderTool(
     applyFilters: ClientSideToolComponentProps['context']['applyFilters'];
     onClose: () => void;
     getSearchPageURL: (params: any) => string;
+    translations: Parameters<typeof CarouselTool>[0]['translations'];
   }> = {}
 ) {
   const applyFilters =
@@ -91,6 +92,7 @@ function renderTool(
         getSearchPageURL={overrides.getSearchPageURL}
         headerProps={{ showViewAll: overrides.showViewAll ?? false }}
         itemComponent={ItemComponent}
+        translations={overrides.translations}
         toolProps={toolProps({
           messages: [],
           status: 'ready',
@@ -222,6 +224,30 @@ describe('CarouselTool', () => {
         '.ais-ChatToolSearchIndexCarouselHeaderScrollButton'
       )
     ).toHaveLength(2);
+  });
+
+  test('names the scroll buttons by default', () => {
+    const { getByRole } = renderTool(
+      buildMessage({ query: 'tv' }, { hits: makeHits(3), nbHits: 100 })
+    );
+
+    expect(getByRole('button', { name: 'Previous' })).toBeDisabled();
+    expect(getByRole('button', { name: 'Next' })).toBeEnabled();
+  });
+
+  test('names the scroll buttons from custom translations', () => {
+    const { getByRole } = renderTool(
+      buildMessage({ query: 'tv' }, { hits: makeHits(3), nbHits: 100 }),
+      {
+        translations: {
+          previousButtonLabel: 'Précédent',
+          nextButtonLabel: 'Suivant',
+        },
+      }
+    );
+
+    expect(getByRole('button', { name: 'Précédent' })).toBeInTheDocument();
+    expect(getByRole('button', { name: 'Suivant' })).toBeInTheDocument();
   });
 
   test('does not show "View all" when showViewAll is false', () => {

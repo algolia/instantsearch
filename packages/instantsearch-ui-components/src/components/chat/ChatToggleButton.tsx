@@ -13,6 +13,17 @@ export type ChatToggleButtonClassNames = {
   root?: string | string[];
 };
 
+export type ChatToggleButtonTranslations = {
+  /**
+   * Accessible label for the button when the chat is closed
+   */
+  openLabel: string;
+  /**
+   * Accessible label for the button when the chat is open
+   */
+  closeLabel: string;
+};
+
 export type ChatToggleButtonOwnProps = {
   /**
    * Whether the chat is open
@@ -30,6 +41,10 @@ export type ChatToggleButtonOwnProps = {
    * Optional class names
    */
   classNames?: Partial<ChatToggleButtonClassNames>;
+  /**
+   * Translations for the button's accessible label
+   */
+  translations?: Partial<ChatToggleButtonTranslations>;
 };
 
 export type ChatToggleButtonProps = ComponentProps<'button'> &
@@ -45,8 +60,14 @@ export function createChatToggleButtonComponent({ createElement }: Renderer) {
       toggleIconComponent: ToggleIcon,
       classNames = {},
       className,
+      translations: userTranslations,
       ...props
     } = userProps;
+    const translations: ChatToggleButtonTranslations = {
+      openLabel: 'Open chat',
+      closeLabel: 'Close chat',
+      ...userTranslations,
+    };
     const defaultIcon = open ? (
       <ChevronUpIcon createElement={createElement} />
     ) : (
@@ -65,6 +86,7 @@ export function createChatToggleButtonComponent({ createElement }: Renderer) {
           className
         )}
         onClick={onClick}
+        aria-label={open ? translations.closeLabel : translations.openLabel}
         {...props}
       >
         {ToggleIcon ? <ToggleIcon isOpen={open} /> : defaultIcon}
