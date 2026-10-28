@@ -123,11 +123,12 @@ export function useChat<TUiMessage extends UIMessage = UIMessage>(
       result[key] = tool.matchesToolName
         ? {
             ...tool,
-            matchesToolName: (toolName: string) =>
-              (
+            matchesToolName(toolName: string) {
+              return (
                 renderedToolsRef.current?.[key]?.matchesToolName ||
                 tool.matchesToolName!
-              )(toolName),
+              ).call(this, toolName);
+            },
           }
         : tool;
     });

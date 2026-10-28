@@ -98,11 +98,15 @@ export function useStableFunctions<TValue>(value: TValue): TValue {
     // a render there and only the inner component needs a stable identity.
     if (node?.$$typeof === MEMO) {
       const inner = stabilize(node.type, [...path, 'type'], true) as any;
+      // A class comes back as is, so keep the memo with its own defaults.
+      if (inner === node.type) {
+        return node;
+      }
       if (node.displayName && typeof inner === 'function') {
         inner.displayName = node.displayName;
       }
       // React fills the memo's own `defaultProps` first, then the inner ones.
-      if (node.defaultProps && inner !== node.type) {
+      if (node.defaultProps) {
         Object.assign(inner, {
           defaultProps: { ...inner.defaultProps, ...node.defaultProps },
         });

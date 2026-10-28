@@ -226,6 +226,34 @@ describe('useStableFunctions', () => {
     expect(container.textContent).toBe('outer inner');
   });
 
+  test('keeps memo defaultProps and the class itself for a memo class', () => {
+    class Layout extends React.Component<{ first?: string; second?: string }> {
+      // eslint-disable-next-line instantsearch/no-default-props-assignment
+      static defaultProps = { first: 'inner', second: 'inner' };
+      render() {
+        return React.createElement(
+          'i',
+          null,
+          `${this.props.first} ${this.props.second}`
+        );
+      }
+    }
+    const Memoized: any = React.memo(Layout);
+    // eslint-disable-next-line instantsearch/no-default-props-assignment
+    Memoized.defaultProps = { first: 'outer' };
+    Memoized.displayName = 'MemoLayout';
+    const { result } = renderHook(() =>
+      useStableFunctions({ tools: { a: { layoutComponent: Memoized } } })
+    );
+    const { container } = render(
+      React.createElement(result.current.tools.a.layoutComponent)
+    );
+
+    expect(container.textContent).toBe('outer inner');
+    expect(Layout.defaultProps).toEqual({ first: 'inner', second: 'inner' });
+    expect((Layout as any).displayName).toBeUndefined();
+  });
+
   test('leaves class components untouched', () => {
     class Layout extends React.Component {
       render() {
