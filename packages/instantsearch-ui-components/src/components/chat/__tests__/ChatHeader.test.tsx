@@ -31,6 +31,7 @@ describe('ChatHeader', () => {
               class="ais-ChatHeader-titleIcon"
             >
               <svg
+                aria-hidden="true"
                 fill="none"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -60,6 +61,7 @@ describe('ChatHeader', () => {
               type="button"
             >
               <svg
+                aria-hidden="true"
                 fill="none"
                 stroke="currentColor"
                 strokeLinecap="round"
@@ -88,6 +90,7 @@ describe('ChatHeader', () => {
               type="button"
             >
               <svg
+                aria-hidden="true"
                 fill="none"
                 stroke="currentColor"
                 strokeLinecap="round"
