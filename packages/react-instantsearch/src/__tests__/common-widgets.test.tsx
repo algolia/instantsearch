@@ -37,7 +37,6 @@ import {
   PromptSuggestions,
   ResultCard,
   Autocomplete,
-  FilterSuggestions,
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -446,14 +445,6 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
       </InstantSearch>
     );
   },
-  createFilterSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
-    render(
-      <InstantSearch {...instantSearchOptions}>
-        <FilterSuggestions {...widgetParams} />
-        <GlobalErrorSwallower />
-      </InstantSearch>
-    );
-  },
   createPromptSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
     // The widget hands clicked suggestions to a <Chat> on the same index, and
     // errors without one, so the default setup renders both. `renderChat: false`
@@ -540,7 +531,6 @@ const testOptions: TestOptionsMap<TestSuites> = {
     act,
   },
   createAutocompleteWidgetTests: { act },
-  createFilterSuggestionsWidgetTests: { act },
   createPromptSuggestionsWidgetTests: { act },
   createResultCardWidgetTests: { act },
 };
