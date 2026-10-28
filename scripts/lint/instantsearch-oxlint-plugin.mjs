@@ -519,7 +519,7 @@ const plugin = {
         },
         messages: {
           forbidden:
-            '`{{name}}` does not exist in every supported React version, and bundlers such as webpack 5 fail the build when a statically linked export is missing. Read it from the default import (`import React from "react"`) or with a computed key instead.',
+            '`{{name}}` does not exist in every supported React version, and bundlers such as webpack 5 fail the build when a statically linked export is missing. Read it from the default import (`import React from "react"`) instead.',
         },
         schema: [],
         type: 'problem',
@@ -552,15 +552,21 @@ const plugin = {
           },
           MemberExpression(node) {
             if (
-              node.object.type === 'Identifier' &&
-              namespaces.has(node.object.name) &&
-              !node.computed &&
-              node.property.type === 'Identifier' &&
-              reactExportsAfter17.has(node.property.name)
+              node.object.type !== 'Identifier' ||
+              !namespaces.has(node.object.name)
             ) {
+              return;
+            }
+
+            // Bundlers resolve `React.useId` and `React['useId']` alike.
+            const name = node.computed
+              ? node.property.type === 'Literal' && node.property.value
+              : node.property.type === 'Identifier' && node.property.name;
+
+            if (reactExportsAfter17.has(name)) {
               context.report({
                 messageId: 'forbidden',
-                data: { name: node.property.name },
+                data: { name },
                 node,
               });
             }
