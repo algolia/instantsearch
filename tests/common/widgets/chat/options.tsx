@@ -500,6 +500,70 @@ export function createOptionsTests(
       expect(sendMessageSpy).not.toHaveBeenCalled();
     });
 
+    test('does not send on Enter that confirms an accent or IME composition', async () => {
+      const searchClient = createSearchClient();
+
+      const chat = new Chat({});
+      const sendMessageSpy = jest
+        .spyOn(chat, 'sendMessage')
+        .mockResolvedValue(undefined);
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: createDefaultWidgetParams(chat),
+          react: createDefaultWidgetParams(chat),
+          vue: createDefaultWidgetParams(chat),
+        },
+      });
+
+      await openChat(act);
+
+      const textarea = document.querySelector('.ais-ChatPrompt-textarea')!;
+      userEvent.type(textarea, 'Hello, world!');
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const composingEnter = new KeyboardEvent('keydown', {
+        key: 'Enter',
+        isComposing: true,
+        bubbles: true,
+        cancelable: true,
+      });
+      const confirmingEnter = new KeyboardEvent('keydown', {
+        key: 'Enter',
+        bubbles: true,
+        cancelable: true,
+      });
+      Object.defineProperty(confirmingEnter, 'keyCode', { value: 229 });
+
+      await act(async () => {
+        textarea.dispatchEvent(composingEnter);
+        textarea.dispatchEvent(confirmingEnter);
+        await wait(0);
+      });
+
+      expect(sendMessageSpy).not.toHaveBeenCalled();
+
+      await act(async () => {
+        textarea.dispatchEvent(
+          new KeyboardEvent('keydown', {
+            key: 'Enter',
+            bubbles: true,
+            cancelable: true,
+          })
+        );
+        await wait(0);
+      });
+
+      expect(sendMessageSpy).toHaveBeenCalledTimes(1);
+    });
+
     test('sends messages with context attached as metadata.turnContext', async () => {
       const searchClient = createSearchClient();
 

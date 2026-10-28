@@ -293,6 +293,16 @@ export function createChatPromptComponent({ createElement }: Renderer) {
                 return;
               }
               if (event.key === 'Enter' && !event.shiftKey) {
+                // Safari clears `isComposing` before the keydown that confirms
+                // a composition, so `keyCode` 229 counts too. React wraps the
+                // event, so read the native one when there is one.
+                const keyEvent = ((
+                  event as unknown as { nativeEvent?: KeyboardEvent }
+                ).nativeEvent || event) as KeyboardEvent;
+                // eslint-disable-next-line typescript/no-deprecated
+                if (keyEvent.isComposing || keyEvent.keyCode === 229) {
+                  return;
+                }
                 event.preventDefault();
                 if (canStop) {
                   onStop?.();
