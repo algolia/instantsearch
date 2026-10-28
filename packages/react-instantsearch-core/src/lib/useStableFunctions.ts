@@ -38,8 +38,8 @@ export function useStableFunctions<TValue>(value: TValue): TValue {
   const renderRef = useRef(value);
   const wrappersRef = useRef(new Map<string, any>());
 
-  // Components, `shouldRender` and `matchesToolName` run during render and read
-  // the props being rendered. Other callbacks read committed props because a
+  // Components and `shouldRender` run during render and read the props being
+  // rendered. Other callbacks read committed props because a
   // suspended transition must not change what the visible tree calls.
   renderRef.current = value;
   useIsomorphicLayoutEffect(() => {
@@ -59,10 +59,7 @@ export function useStableFunctions<TValue>(value: TValue): TValue {
       const isComponent =
         inComponent ||
         (typeof lastKey === 'string' && /component$/i.test(lastKey));
-      const runsWhileRendering =
-        isComponent ||
-        lastKey === 'shouldRender' ||
-        lastKey === 'matchesToolName';
+      const runsWhileRendering = isComponent || lastKey === 'shouldRender';
       const source = isComponent ? node.toString() : '';
       const key = JSON.stringify(path) + source;
       const wrapper: Wrapper =
@@ -103,6 +100,12 @@ export function useStableFunctions<TValue>(value: TValue): TValue {
       const inner = stabilize(node.type, [...path, 'type'], true) as any;
       if (node.displayName && typeof inner === 'function') {
         inner.displayName = node.displayName;
+      }
+      // React fills the memo's own `defaultProps` first, then the inner ones.
+      if (node.defaultProps && inner !== node.type) {
+        Object.assign(inner, {
+          defaultProps: { ...inner.defaultProps, ...node.defaultProps },
+        });
       }
 
       return inner;

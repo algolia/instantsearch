@@ -70,24 +70,6 @@ describe('useStableFunctions', () => {
     expect(result.current).toBe(false);
   });
 
-  test('calls the current tool matcher when invoked during render', () => {
-    const { result, rerender } = renderHook(
-      ({ target }) =>
-        useStableFunctions({
-          tools: {
-            search: { matchesToolName: (name: string) => name === target },
-          },
-        }).tools.search.matchesToolName('b'),
-      { initialProps: { target: 'a' } }
-    );
-
-    expect(result.current).toBe(false);
-
-    rerender({ target: 'b' });
-
-    expect(result.current).toBe(true);
-  });
-
   test('keeps the identity of recreated memo and forwardRef components', () => {
     const { result, rerender } = renderHook(() =>
       useStableFunctions({
@@ -223,6 +205,25 @@ describe('useStableFunctions', () => {
 
     expect(wrapped.defaultProps).toEqual({ word: 'default' });
     expect(wrapped.displayName).toBe('MyLayout');
+  });
+
+  test('keeps defaultProps set on a memo component', () => {
+    function Layout({ first, second }: { first?: string; second?: string }) {
+      return React.createElement('i', null, `${first} ${second}`);
+    }
+    // eslint-disable-next-line instantsearch/no-default-props-assignment
+    Layout.defaultProps = { first: 'inner', second: 'inner' };
+    const Memoized: any = React.memo(Layout);
+    // eslint-disable-next-line instantsearch/no-default-props-assignment
+    Memoized.defaultProps = { first: 'outer' };
+    const { result } = renderHook(() =>
+      useStableFunctions({ tools: { a: { layoutComponent: Memoized } } })
+    );
+    const { container } = render(
+      React.createElement(result.current.tools.a.layoutComponent)
+    );
+
+    expect(container.textContent).toBe('outer inner');
   });
 
   test('leaves class components untouched', () => {
