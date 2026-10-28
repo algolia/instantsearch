@@ -82,15 +82,6 @@ describe('vendored markdown-to-jsx', () => {
     );
   });
 
-  test('makes code blocks and tables focusable so keyboard users can scroll them', () => {
-    const html = renderMarkdown(
-      '```js\nconst a = 1;\n```\n\n| a | b |\n| - | - |\n| 1 | 2 |'
-    );
-
-    expect(html).toContain('<pre tabindex="0">');
-    expect(html).toContain('<table tabindex="0">');
-  });
-
   test('exposes the rule types', () => {
     expect(RuleType.paragraph).toBeDefined();
   });

@@ -1505,8 +1505,7 @@ export function compiler(
 
       _render(node, _output, state) {
         return (
-          // Focusable so keyboard users can scroll a wide block in Safari.
-          <pre key={state!.key} tabIndex={0}>
+          <pre key={state!.key}>
             <code
               {...node.attrs}
               className={node.lang ? `lang-${node.lang}` : ''}
@@ -1865,7 +1864,7 @@ export function compiler(
       _render(node, output, state) {
         const table = node as MarkdownToJSX.TableNode;
         return (
-          <table key={state!.key} tabIndex={0}>
+          <table key={state!.key}>
             <thead>
               <tr>
                 {table.header.map(function generateHeaderCell(content, i) {
