@@ -2,7 +2,7 @@
 
 ## Reach for these precedents first
 
-- Shared UI via `instantsearch-ui-components`: `hits`, `related-products`, `trending-items`, `filter-suggestions`
+- Shared UI via `instantsearch-ui-components`: `hits`, `related-products`, `trending-items`
 - Older Preact widget with templates and CSS helpers: `refinement-list`, `menu`, `pagination`
 
 ## File layout

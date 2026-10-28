@@ -8,7 +8,6 @@ export { connectConfigure } from 'instantsearch-core';
 export { connectCurrentRefinements } from 'instantsearch-core';
 export { connectDynamicWidgets } from 'instantsearch-core';
 export { connectFeeds } from 'instantsearch-core';
-export { connectFilterSuggestions } from 'instantsearch-core';
 export { connectFrequentlyBoughtTogether } from 'instantsearch-core';
 export { connectGeoSearch } from 'instantsearch-core';
 export { connectHierarchicalMenu } from 'instantsearch-core';
@@ -93,13 +92,8 @@ export type {
   FeedsConnectorParams,
   FeedsRenderState,
   FeedsWidgetDescription,
-  FilterSuggestionsConnector,
 } from 'instantsearch-core';
 export type {
-  FilterSuggestionsConnectorParams,
-  FilterSuggestionsRenderState,
-  FilterSuggestionsTransport,
-  FilterSuggestionsWidgetDescription,
   FrequentlyBoughtTogetherConnector,
   FrequentlyBoughtTogetherConnectorParams,
   FrequentlyBoughtTogetherRenderState,
