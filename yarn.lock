@@ -11478,15 +11478,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autocomplete.js@npm:^0.37.0":
-  version: 0.37.0
-  resolution: "autocomplete.js@npm:0.37.0"
-  dependencies:
-    immediate: "npm:^3.2.3"
-  checksum: 10c0/4eb198f0276f19ed2d8260f66222461d9a79b2442735bc80ec8ab4cb49a845c397e66fd662ad40b94081ec410e1af899586515d720933dcc57042dc70a76e158
-  languageName: node
-  linkType: hard
-
 "autoprefixer@npm:10.4.13":
   version: 10.4.13
   resolution: "autoprefixer@npm:10.4.13"
@@ -21139,13 +21130,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"immediate@npm:^3.2.3":
-  version: 3.3.0
-  resolution: "immediate@npm:3.3.0"
-  checksum: 10c0/40eab095d5944ad79af054700beee97000271fde8743720932d8eb41ccbf2cb8c855ff95b128cf9a7fec523a4f11ee2e392b9f2fa6456b055b1160f1b4ad3e3b
-  languageName: node
-  linkType: hard
-
 "immutable@npm:^4.0.0":
   version: 4.1.0
   resolution: "immutable@npm:4.1.0"
@@ -21455,13 +21439,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"insert-css@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "insert-css@npm:2.0.0"
-  checksum: 10c0/2ccdf967e7f05454c91ab3284ad24402a955d69e5a33ae7117591b2239e4ed18059bace08138c151aeada39383b990fd5454e425a26bd7d2ecba8ea01827a20c
-  languageName: node
-  linkType: hard
-
 "instantsearch-codemods@workspace:packages/instantsearch-codemods":
   version: 0.0.0-use.local
   resolution: "instantsearch-codemods@workspace:packages/instantsearch-codemods"
@@ -21561,7 +21538,6 @@ __metadata:
     oxlint: "npm:1.55.0"
     oxlint-tsgolint: "npm:0.17.0"
     patch-package: "npm:6.2.2"
-    places.js: "npm:1.17.1"
     prop-types: "npm:15.6.2"
     react: "npm:19.0.0"
     react-dom: "npm:19.0.0"
@@ -21623,7 +21599,6 @@ __metadata:
     htm: "npm:^3.0.0"
     instantsearch-core: "npm:0.1.0"
     instantsearch-ui-components: "npm:0.44.0"
-    places.js: "npm:1.17.1"
     preact: "npm:^10.10.0"
     qs: "npm:^6.5.1"
     react: "npm:>= 0.14.0"
@@ -29779,18 +29754,6 @@ __metadata:
   dependencies:
     find-up: "npm:^2.1.0"
   checksum: 10c0/9ce9eefba264430b7bd3e21eb90d3d215d588688a510e5f29c66e72df3067de9c6249664120dcc86141b68f9b1448039034e1abf401d98ba077d31a9ed87db83
-  languageName: node
-  linkType: hard
-
-"places.js@npm:1.17.1":
-  version: 1.17.1
-  resolution: "places.js@npm:1.17.1"
-  dependencies:
-    algoliasearch: "npm:^3.35.1"
-    autocomplete.js: "npm:^0.37.0"
-    events: "npm:^3.0.0"
-    insert-css: "npm:^2.0.0"
-  checksum: 10c0/62c0fe0b11f00a2684a3b0124be0973ae6f75cb3c8e225b13265572fd7020097a50a74579fce191ed14afbb11646b4baf65fcf096167e5dacf5d7a04f3448170
   languageName: node
   linkType: hard
 
