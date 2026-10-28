@@ -1,12 +1,12 @@
 /** @jsx h */
 
 import { createDocumentationMessageGenerator } from 'instantsearch-core';
+import { suitComponent as component } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
 import { connectBreadcrumb } from '../../connectors';
-import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 

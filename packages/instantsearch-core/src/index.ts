@@ -8,6 +8,10 @@ export type {
 } from './instantsearch';
 export * from './connectors';
 export {
+  highlight,
+  snippet,
+  reverseHighlight,
+  reverseSnippet,
   insights,
   getInsightsAnonymousUserToken,
   getInsightsAnonymousUserTokenInternal,
@@ -118,6 +122,13 @@ export * from './lib/stateMappings';
 export * from './middlewares';
 export * from './types';
 export * from './widgets';
+export type {
+  HighlightOptions,
+  SnippetOptions,
+  ReverseHighlightOptions,
+  ReverseSnippetOptions,
+} from './helpers';
+export { component as suitComponent } from './lib/suit';
 export type {
   FacetRefinement,
   NumericRefinement,
