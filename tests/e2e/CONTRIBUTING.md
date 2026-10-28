@@ -1,9 +1,6 @@
 # Contributing
 
-This package contains the [Playwright](https://playwright.dev) end-to-end (e2e) test suite for
-InstantSearch. It is shared across all InstantSearch flavors — which is why it lives in the
-monorepo — and runs against the **e-commerce** example built for each flavor (`js`, `js-umd`,
-`react`, `vue`).
+This package contains the [Playwright](https://playwright.dev) end-to-end (e2e) test suite for InstantSearch. It is shared across all InstantSearch flavors — which is why it lives in the monorepo — and runs against the **e-commerce** example built for each flavor (`js`, `js-umd`, `react`, `vue`).
 
 ## Development
 
@@ -16,8 +13,7 @@ yarn website:examples
 yarn test:e2e
 ```
 
-Filter on a single flavor and/or browser by setting the `E2E_FLAVOR` / `E2E_BROWSER` environment
-variables (fastest local loop):
+Filter on a single flavor and/or browser by setting the `E2E_FLAVOR` / `E2E_BROWSER` environment variables (fastest local loop):
 
 ```sh
 E2E_FLAVOR=react E2E_BROWSER=chromium yarn test:e2e
@@ -26,9 +22,7 @@ E2E_FLAVOR=react E2E_BROWSER=chromium yarn test:e2e
 
 ### Writing tests
 
-Tests and helpers live in the [`playwright/`](playwright) directory. Each spec covers a single
-feature from a user's point of view (e.g. pagination) and uses the shared `helpers` fixture for
-common InstantSearch interactions, for readability and maintainability.
+Tests and helpers live in the [`playwright/`](playwright) directory. Each spec covers a single feature from a user's point of view (e.g. pagination) and uses the shared `helpers` fixture for common InstantSearch interactions, for readability and maintainability.
 
 Some general guidelines:
 
@@ -37,5 +31,4 @@ Some general guidelines:
 - Only assert what should be visible after an action (Is the checkbox selected? Is the result list correct?).
 - Prefer behavior-based assertions (results changed, count > 0, URL updated) over hardcoded index data where practical — some specs do assert exact product names, but that's more fragile if the index changes.
 
-The full guide — available helpers, best practices, debugging, and CI integration — is in
-[`.claude/rules/e2e.md`](../../.claude/rules/e2e.md).
+The full guide — available helpers, best practices, debugging, and CI integration — is in [`.claude/rules/e2e.md`](../../.claude/rules/e2e.md).
