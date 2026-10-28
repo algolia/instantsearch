@@ -4,11 +4,11 @@ import {
   createDocumentationMessageGenerator,
   deprecate,
 } from 'instantsearch-core';
+import { connectAnswers } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Answers from '../../components/Answers/Answers';
-import connectAnswers from '../../connectors/answers/connectAnswers';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
@@ -19,13 +19,13 @@ import type {
   AnswersComponentCSSClasses,
   AnswersComponentTemplates,
 } from '../../components/Answers/Answers';
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template } from '../../types';
 import type {
   AnswersRenderState,
   AnswersConnectorParams,
   AnswersWidgetDescription,
-} from '../../connectors/answers/connectAnswers';
-import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template } from '../../types';
+} from 'instantsearch-core';
 import type { WidgetFactory, Hit, Renderer } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'answers' });

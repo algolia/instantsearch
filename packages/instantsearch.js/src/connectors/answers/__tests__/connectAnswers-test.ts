@@ -8,13 +8,13 @@ import {
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
+import { connectAnswers } from 'instantsearch-core';
 
 import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../../instantsearch-core/test/createWidget';
-import connectAnswers from '../connectAnswers';
 
 const defaultRenderDebounceTime = 10;
 const defaultSearchDebounceTime = 10;
