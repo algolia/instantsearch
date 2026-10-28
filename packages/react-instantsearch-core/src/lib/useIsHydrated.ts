@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import { useInstantSearchServerContext } from './useInstantSearchServerContext';
 import { useInstantSearchSSRContext } from './useInstantSearchSSRContext';

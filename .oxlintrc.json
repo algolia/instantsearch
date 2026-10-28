@@ -210,7 +210,8 @@
         "packages/react-instantsearch-*/src/**/*"
       ],
       "rules": {
-        "import/extensions": ["error", "never"]
+        "import/extensions": ["error", "never"],
+        "instantsearch/no-static-react-exports": "error"
       }
     },
     {
