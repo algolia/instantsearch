@@ -160,14 +160,6 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
         const resultCard = widget as Widgets['resultCard'];
         return resultCard({ container, agentId: 'test-agent-id' });
       }
-      case 'filterSuggestions': {
-        const filterSuggestions = widget as Widgets['filterSuggestions'];
-        return filterSuggestions({
-          container,
-          agentId: 'test-agent-id',
-          attributes: ['attr'],
-        });
-      }
       case 'chatTrigger': {
         const chatTriggerWidget = widget as Widgets['chatTrigger'];
         return chatTriggerWidget({

@@ -39,7 +39,6 @@ export * from './connectors/useToggleRefinement';
 export * from './connectors/useTrendingItems';
 export * from './connectors/useTrendingFacets';
 export * from './connectors/useLookingSimilar';
-export * from './connectors/useFilterSuggestions';
 export * from './hooks/useConnector';
 export * from './hooks/useInstantSearch';
 export * from './lib/wrapPromiseWithState';
