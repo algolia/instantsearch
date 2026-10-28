@@ -1,20 +1,8 @@
 import { deprecate } from 'instantsearch-core';
 
 import { autocomplete } from './autocomplete/autocomplete';
-import configureRelatedItems from './configure-related-items/configure-related-items';
 import dynamicWidgets from './dynamic-widgets/dynamic-widgets';
 
-/** @deprecated use relatedItems instead */
-export const EXPERIMENTAL_configureRelatedItems = deprecate(
-  configureRelatedItems,
-  'EXPERIMENTAL_configureRelatedItems is deprecated and will be removed in a next minor version of InstantSearch. Please use relatedItems instead.'
-);
-
-/** @deprecated use dynamicWidgets */
-export const EXPERIMENTAL_dynamicWidgets = deprecate(
-  dynamicWidgets,
-  'use dynamicWidgets'
-);
 export { dynamicWidgets };
 
 export { autocomplete };
