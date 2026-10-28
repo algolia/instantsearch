@@ -3,7 +3,7 @@ import { isVue3 } from '../util/vue-compat';
 import { warn } from '../util/warn';
 
 export const createWidgetMixin = (
-  { connector, isEqualWidgetParams } = {},
+  { connector, isEqualWidgetParams, snapshotWidgetParams } = {},
   additionalProperties = {}
 ) => ({
   inject: {
@@ -35,6 +35,9 @@ export const createWidgetMixin = (
         this.factory(this.widgetParams),
         additionalProperties
       );
+      this.appliedWidgetParams = snapshotWidgetParams
+        ? snapshotWidgetParams(this.widgetParams)
+        : undefined;
       this.getParentIndex().addWidgets([this.widget]);
 
       if (
@@ -70,17 +73,23 @@ Read more on using connectors: https://alg.li/vue-custom`
   },
   watch: {
     widgetParams: {
-      handler(nextWidgetParams, previousWidgetParams) {
+      handler(nextWidgetParams) {
         // A deep watcher fires whenever `widgetParams` recomputes, even when a
         // parent re-render only passed new but equal references. Widgets that
         // can't afford to be replaced for nothing (`AisChat` would lose its
-        // conversation) opt into skipping those updates.
+        // conversation) opt into skipping those updates. The comparison is
+        // against a snapshot of what the widget was created with, because after
+        // an in-place mutation the previous and next params share their nested
+        // objects.
         if (
           isEqualWidgetParams &&
-          isEqualWidgetParams(previousWidgetParams, nextWidgetParams)
+          isEqualWidgetParams(this.appliedWidgetParams, nextWidgetParams)
         ) {
           return;
         }
+        this.appliedWidgetParams = snapshotWidgetParams
+          ? snapshotWidgetParams(nextWidgetParams)
+          : undefined;
 
         this.state = null;
         const previousWidget = this.widget;

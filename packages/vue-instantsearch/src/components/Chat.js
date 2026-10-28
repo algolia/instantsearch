@@ -128,11 +128,29 @@ function isEqualWidgetParams(first, second) {
   return false;
 }
 
+/**
+ * A copy of the params that keeps plain objects and arrays apart from the
+ * originals (so later in-place mutations can be detected) and everything else
+ * by reference.
+ */
+function snapshotWidgetParams(value) {
+  if (Array.isArray(value)) {
+    return value.map(snapshotWidgetParams);
+  }
+  if (isPlainObject(value)) {
+    return Object.keys(value).reduce((copy, key) => {
+      copy[key] = snapshotWidgetParams(value[key]);
+      return copy;
+    }, {});
+  }
+  return value;
+}
+
 export default {
   name: 'AisChat',
   mixins: [
     createWidgetMixin(
-      { connector: connectChat, isEqualWidgetParams },
+      { connector: connectChat, isEqualWidgetParams, snapshotWidgetParams },
       { $$widgetType: 'ais.chat' }
     ),
     createSuitMixin({ name: 'Chat' }),
@@ -319,7 +337,10 @@ export default {
     },
     getCallbackForwarder(key) {
       if (!this.callbackForwarders[key]) {
-        this.callbackForwarders[key] = (...args) => this[key](...args);
+        // The old Chat instance keeps this forwarder, and can call it after the
+        // handler was removed (e.g. mid-stream), so absent handlers are no-ops.
+        this.callbackForwarders[key] = (...args) =>
+          typeof this[key] === 'function' ? this[key](...args) : undefined;
       }
       return this.callbackForwarders[key];
     },

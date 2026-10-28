@@ -427,6 +427,81 @@ describe('AisChat', () => {
       expect(chatComponent.widget).not.toBe(widget);
       expect(chatComponent.widgetParams.context).toEqual({ page: 'product' });
     });
+
+    it('replaces the widget when a nested value is mutated in place', async () => {
+      wrapper = mount(
+        {
+          components: { InstantSearch, ChatComponent },
+          data() {
+            return {
+              searchClient: createSearchClient(),
+              requestOptions: { headers: { Authorization: 'old' } },
+            };
+          },
+          template: `
+            <InstantSearch :search-client="searchClient" index-name="indexName">
+              <ChatComponent
+                agent-id="agentId"
+                :requires-search="false"
+                :persistence="false"
+                :request-options="requestOptions"
+                ref="chat"
+              />
+            </InstantSearch>
+          `,
+        },
+        { attachTo: document.body }
+      );
+      await wait(0);
+      await nextTick();
+
+      const chatComponent = wrapper.vm.$refs.chat;
+      const widget = chatComponent.widget;
+
+      wrapper.vm.requestOptions.headers.Authorization = 'new';
+      await wait(0);
+      await nextTick();
+
+      expect(chatComponent.widget).not.toBe(widget);
+    });
+
+    it('ignores a callback that was removed after the widget was created', async () => {
+      wrapper = mount(
+        {
+          components: { InstantSearch, ChatComponent },
+          data() {
+            return {
+              searchClient: createSearchClient(),
+              handler: jest.fn(),
+            };
+          },
+          template: `
+            <InstantSearch :search-client="searchClient" index-name="indexName">
+              <ChatComponent
+                agent-id="agentId"
+                :requires-search="false"
+                :persistence="false"
+                :on-error="handler"
+                ref="chat"
+              />
+            </InstantSearch>
+          `,
+        },
+        { attachTo: document.body }
+      );
+      await wait(0);
+      await nextTick();
+
+      const chatComponent = wrapper.vm.$refs.chat;
+      const { onError } = chatComponent.widgetParams;
+
+      wrapper.vm.handler = undefined;
+      await wait(0);
+      await nextTick();
+
+      expect(chatComponent.widgetParams.onError).toBeUndefined();
+      expect(() => onError(new Error('late'))).not.toThrow();
+    });
   });
 });
 
