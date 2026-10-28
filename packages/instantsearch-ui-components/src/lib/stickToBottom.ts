@@ -502,29 +502,30 @@ export function createStickToBottom({
       [setEscapedFromLock, setIsAtBottom, isSelecting, state]
     );
 
-    const handleWheel = useCallback(
-      ({ target, deltaY }: WheelEvent) => {
-        let element = target as HTMLElement;
-
-        while (
-          !['scroll', 'auto'].includes(getComputedStyle(element).overflow)
-        ) {
-          if (!element.parentElement) {
+    /**
+     * The browser may cancel the scrolling from the mouse wheel or the
+     * keyboard if we update it from the animation in meantime, and while
+     * content streams in, its scroll events are taken for resizes.
+     * To prevent this, always escape before the browser scrolls up.
+     */
+    const escapeScrollingUp = useCallback(
+      (target: EventTarget | null) => {
+        // The closest ancestor that scrolls vertically takes the scroll.
+        // `overflowY` because the chat only lets the history scroll
+        // vertically, so its `overflow` reads `hidden auto`.
+        let element = target as HTMLElement | null;
+        while (element && element !== scrollRef.current) {
+          const { overflowY } = getComputedStyle(element);
+          if (overflowY === 'scroll' || overflowY === 'auto') {
             return;
           }
 
           element = element.parentElement;
         }
 
-        /**
-         * The browser may cancel the scrolling from the mouse wheel
-         * if we update it from the animation in meantime.
-         * To prevent this, always escape when the wheel is scrolled up.
-         */
         if (
-          element === scrollRef.current &&
-          deltaY < 0 &&
-          scrollRef.current.scrollHeight > scrollRef.current.clientHeight &&
+          element &&
+          element.scrollHeight > element.clientHeight &&
           !state.animation?.ignoreEscapes
         ) {
           setEscapedFromLock(true);
@@ -534,7 +535,39 @@ export function createStickToBottom({
       [setEscapedFromLock, setIsAtBottom, state]
     );
 
-    // Attach scroll and wheel event listeners
+    const handleWheel = useCallback(
+      ({ target, deltaY }: WheelEvent) => {
+        if (deltaY < 0) {
+          escapeScrollingUp(target);
+        }
+      },
+      [escapeScrollingUp]
+    );
+
+    const handleKeyDown = useCallback(
+      (event: KeyboardEvent) => {
+        const target = event.target as HTMLElement;
+        // Text fields move the caret with these keys, and a key another
+        // handler took doesn't scroll.
+        if (
+          event.defaultPrevented ||
+          target.isContentEditable ||
+          /^(INPUT|SELECT|TEXTAREA)$/.test(target.tagName)
+        ) {
+          return;
+        }
+
+        if (
+          ['ArrowUp', 'PageUp', 'Home'].includes(event.key) ||
+          (event.key === ' ' && event.shiftKey)
+        ) {
+          escapeScrollingUp(target);
+        }
+      },
+      [escapeScrollingUp]
+    );
+
+    // Attach scroll, wheel and keyboard event listeners
     useEffect(() => {
       const scroll = scrollRef.current;
       if (!scroll) {
@@ -543,12 +576,14 @@ export function createStickToBottom({
 
       scroll.addEventListener('scroll', handleScroll, { passive: true });
       scroll.addEventListener('wheel', handleWheel, { passive: true });
+      scroll.addEventListener('keydown', handleKeyDown);
 
       return () => {
         scroll.removeEventListener('scroll', handleScroll);
         scroll.removeEventListener('wheel', handleWheel);
+        scroll.removeEventListener('keydown', handleKeyDown);
       };
-    }, [handleScroll, handleWheel]);
+    }, [handleScroll, handleWheel, handleKeyDown]);
 
     // Attach ResizeObserver to content element
     useEffect(() => {
