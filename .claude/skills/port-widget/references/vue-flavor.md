@@ -38,5 +38,5 @@
 
 ## Missing-feature caution
 
-- Recommendation widgets, chat, and filter suggestions already have connector-level test placeholders in Vue, but several still throw explicit "not supported" errors at the widget layer.
+- Recommendation widgets and chat already have connector-level test placeholders in Vue, but several still throw explicit "not supported" errors at the widget layer.
 - If you port one of those widgets, remove the placeholder failure and replace it with real setup code plus the component implementation.
