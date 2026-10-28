@@ -38,7 +38,6 @@ import {
   PromptSuggestions,
   ResultCard,
   Autocomplete,
-  FilterSuggestions,
   CompareBar,
 } from '..';
 
@@ -455,14 +454,6 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
       </InstantSearch>
     );
   },
-  createFilterSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
-    render(
-      <InstantSearch {...instantSearchOptions}>
-        <FilterSuggestions {...widgetParams} />
-        <GlobalErrorSwallower />
-      </InstantSearch>
-    );
-  },
   createPromptSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
     // The widget hands clicked suggestions to a <Chat> on the same index, and
     // errors without one, so the default setup renders both. `renderChat: false`
@@ -596,7 +587,6 @@ const testOptions: TestOptionsMap<TestSuites> = {
       'keeps a query cleared before the first opening when submitting to the panel': true,
     },
   },
-  createFilterSuggestionsWidgetTests: { act },
   createPromptSuggestionsWidgetTests: { act },
   createCompareBarWidgetTests: { act },
   createResultCardWidgetTests: { act },

@@ -347,7 +347,6 @@ const testSetups = {
   createTrendingFacetsConnectorTests: () => {},
   createLookingSimilarConnectorTests: () => {},
   createChatConnectorTests: () => {},
-  createFilterSuggestionsConnectorTests: () => {},
   async createCompareConnectorTests({ instantSearchOptions, widgetParams }) {
     const {
       products = [],
@@ -568,11 +567,6 @@ const testOptions = {
     },
   },
   createChatConnectorTests: { skippedTests: { options: true } },
-  createFilterSuggestionsConnectorTests: {
-    skippedTests: {
-      options: true,
-    },
-  },
   createCompareConnectorTests: {
     // Vue batches DOM updates, so flush them after each step the shared tests
     // wrap in `act`.
