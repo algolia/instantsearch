@@ -100,12 +100,6 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           items: [{ label: 'x', value: 'x' }],
         });
       }
-      case 'analytics': {
-        const analytics = widget as Widgets['analytics'];
-        return analytics({
-          pushFunction() {},
-        });
-      }
       case 'queryRuleContext': {
         const queryRuleContext = widget as Widgets['queryRuleContext'];
         return queryRuleContext({
