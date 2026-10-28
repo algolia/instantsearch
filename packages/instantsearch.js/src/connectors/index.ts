@@ -1,20 +1,3 @@
-import { connectDynamicWidgets } from 'instantsearch-core';
-import { deprecate } from 'instantsearch-core';
-
-import connectConfigureRelatedItems from './configure-related-items/connectConfigureRelatedItems';
-
-/** @deprecated use connectRelatedItems instead */
-export const EXPERIMENTAL_connectConfigureRelatedItems = deprecate(
-  connectConfigureRelatedItems,
-  'EXPERIMENTAL_connectConfigureRelatedItems is deprecated and will be removed in a next minor version of InstantSearch. Please use connectRelatedItems instead.'
-);
-
-/** @deprecated use connectDynamicWidgets */
-export const EXPERIMENTAL_connectDynamicWidgets = deprecate(
-  connectDynamicWidgets,
-  'use connectDynamicWidgets'
-);
-
 export { connectAutocomplete } from 'instantsearch-core';
 export { connectBreadcrumb } from 'instantsearch-core';
 export { connectChat } from 'instantsearch-core';
