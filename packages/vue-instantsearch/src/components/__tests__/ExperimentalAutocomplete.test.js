@@ -19,7 +19,7 @@ import {
 } from '../../instantsearch';
 import { isVue3, renderCompat } from '../../util/vue-compat';
 
-jest.unmock('instantsearch.js/es');
+jest.unmock('instantsearch-core');
 
 function createMockedSearchClient(response) {
   return createSearchClient({
