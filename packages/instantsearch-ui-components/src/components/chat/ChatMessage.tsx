@@ -377,8 +377,6 @@ export function createChatMessageComponent({
       actionsLabel: 'Message actions',
       toolErrorRetryText: 'Retry',
       reasoningLabel: 'Reasoning',
-      codeBlockLabel: 'Code',
-      tableLabel: 'Table',
       ...userTranslations,
     };
 
@@ -574,8 +572,6 @@ export function createChatMessageComponent({
         }
         const markdown = compiler(part.text, {
           createElement: createElement as any,
-          codeBlockLabel: translations.codeBlockLabel,
-          tableLabel: translations.tableLabel,
         });
         return <span key={`${message.id}-${index}`}>{markdown}</span>;
       }

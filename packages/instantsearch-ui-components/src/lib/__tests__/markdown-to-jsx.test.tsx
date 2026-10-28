@@ -6,7 +6,7 @@ import { createElement, render } from 'preact';
 
 import { RuleType, compiler } from '../markdown-to-jsx';
 
-function renderToContainer(
+function renderMarkdown(
   markdown: string,
   options: Partial<Parameters<typeof compiler>[1]> = {}
 ) {
@@ -20,14 +20,7 @@ function renderToContainer(
     </span>,
     container
   );
-  return container;
-}
-
-function renderMarkdown(
-  markdown: string,
-  options: Partial<Parameters<typeof compiler>[1]> = {}
-) {
-  return renderToContainer(markdown, options).innerHTML;
+  return container.innerHTML;
 }
 
 describe('vendored markdown-to-jsx', () => {
@@ -77,43 +70,6 @@ describe('vendored markdown-to-jsx', () => {
     expect(renderMarkdown(markdown)).toContain(expected);
   });
 
-  test('makes code blocks keyboard-focusable scroll regions', () => {
-    const pre = renderToContainer('```js\nconst a = 1;\n```').querySelector(
-      'pre'
-    )!;
-
-    expect(pre.getAttribute('tabindex')).toBe('0');
-    expect(pre.getAttribute('role')).toBe('region');
-    expect(pre.getAttribute('aria-label')).toBe('Code');
-  });
-
-  test('wraps tables in a keyboard-focusable scroll region that keeps table semantics', () => {
-    const container = renderToContainer('| a | b |\n| - | - |\n| 1 | 2 |');
-    const wrapper = container.querySelector('.ais-ChatMessage-tableScroll')!;
-
-    expect(wrapper.getAttribute('tabindex')).toBe('0');
-    expect(wrapper.getAttribute('role')).toBe('region');
-    expect(wrapper.getAttribute('aria-label')).toBe('Table');
-    expect(wrapper.firstElementChild!.tagName).toBe('TABLE');
-    expect(wrapper.querySelector('table')!.hasAttribute('role')).toBe(false);
-  });
-
-  test('labels code blocks and tables with the given text', () => {
-    const container = renderToContainer(
-      '```js\nconst a = 1;\n```\n\n| a | b |\n| - | - |\n| 1 | 2 |',
-      { codeBlockLabel: 'Bloc de code', tableLabel: 'Tableau' }
-    );
-
-    expect(container.querySelector('pre')!.getAttribute('aria-label')).toBe(
-      'Bloc de code'
-    );
-    expect(
-      container
-        .querySelector('.ais-ChatMessage-tableScroll')!
-        .getAttribute('aria-label')
-    ).toBe('Tableau');
-  });
-
   test('does not parse raw HTML', () => {
     const html = renderMarkdown('<b>hi</b>');
     expect(html).not.toContain('<b>');
@@ -124,6 +80,15 @@ describe('vendored markdown-to-jsx', () => {
     expect(renderMarkdown('> [!NOTE]\n> hi')).toContain(
       '<blockquote class="markdown-alert-note">'
     );
+  });
+
+  test('makes code blocks and tables focusable so keyboard users can scroll them', () => {
+    const html = renderMarkdown(
+      '```js\nconst a = 1;\n```\n\n| a | b |\n| - | - |\n| 1 | 2 |'
+    );
+
+    expect(html).toContain('<pre tabindex="0">');
+    expect(html).toContain('<table tabindex="0">');
   });
 
   test('exposes the rule types', () => {

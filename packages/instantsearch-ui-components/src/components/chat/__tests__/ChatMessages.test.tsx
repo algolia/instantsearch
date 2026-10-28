@@ -494,42 +494,6 @@ describe('ChatMessages', () => {
     );
   });
 
-  test('updates code block and table labels for every completed message', () => {
-    const message = {
-      role: 'assistant' as const,
-      id: '1',
-      parts: [
-        {
-          type: 'text' as const,
-          text: '| a | b |\n| - | - |\n| 1 | 2 |',
-          state: 'done' as const,
-        },
-      ],
-    };
-    const renderWith = (tableLabel: string) => (
-      <MemoizedChatMessages
-        messages={[message]}
-        indexUiState={{}}
-        setIndexUiState={jest.fn()}
-        assistantMessageProps={{ translations: { tableLabel } }}
-        tools={{}}
-        onReload={jest.fn()}
-        onClose={jest.fn()}
-      />
-    );
-    const { container, rerender } = render(renderWith('Table'));
-
-    expect(
-      container.querySelector('.ais-ChatMessage-tableScroll')
-    ).toHaveAttribute('aria-label', 'Table');
-
-    rerender(renderWith('Tableau'));
-
-    expect(
-      container.querySelector('.ais-ChatMessage-tableScroll')
-    ).toHaveAttribute('aria-label', 'Tableau');
-  });
-
   test.each(['messageClassNames', 'assistantMessageProps'] as const)(
     'updates reasoning classes for every completed message through %s',
     (classNameSource) => {

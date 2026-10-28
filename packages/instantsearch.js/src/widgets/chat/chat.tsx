@@ -804,8 +804,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       actionsLabel: templates.message?.actionsLabelText,
       messageLabel: templates.message?.messageLabelText,
       reasoningLabel: templates.message?.reasoningLabelText,
-      codeBlockLabel: templates.message?.codeBlockLabelText,
-      tableLabel: templates.message?.tableLabelText,
       toolErrorRetryText: templates.message?.toolErrorRetryText,
     });
 
@@ -1117,14 +1115,6 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Label for reasoning disclosures
        */
       reasoningLabelText?: string;
-      /**
-       * Accessible name of a code block
-       */
-      codeBlockLabelText?: string;
-      /**
-       * Accessible name of a table
-       */
-      tableLabelText?: string;
       /**
        * Retry button text for failed tools
        */
