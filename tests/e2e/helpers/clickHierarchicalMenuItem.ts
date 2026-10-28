@@ -12,7 +12,6 @@ browser.addCommand('clickHierarchicalMenuItem', async (label: string) => {
 
   await item.click();
 
-  // Changing the URL will also change the page element IDs in Internet Explorer
   // Not waiting for the URL to be properly updated before continuing can make the next tests fail
   await browser.waitUntil(
     async () => (await browser.getUrl()) !== oldUrl,

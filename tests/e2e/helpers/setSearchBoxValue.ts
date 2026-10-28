@@ -18,11 +18,8 @@ browser.addCommand('setSearchBoxValue', async (value: string) => {
     await resetButton.click();
   }
 
-  // In Internet Explorer the input must be focused before updating its value
-  await searchBox.click();
   await searchBox.setValue(value);
 
-  // Changing the URL will also change the page element IDs in Internet Explorer
   // Not waiting for the URL to be properly updated before continuing can make the next tests fail
   await browser.waitUntil(
     async () => {

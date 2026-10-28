@@ -5,20 +5,13 @@ module.exports = {
   /**
    * Returns the list of flavors to be tested on.
    * When E2E_FLAVOR is set, it only tests the requested flavor.
-   * When it is not set, it will tests all flavors, except on Internet Explorer
-   * where it will only test the JS flavors.
+   * When it is not set, it will tests all flavors.
    *
-   * @param {import("webdriverio").BrowserObject} browser The WebdriverIO browser object
    * @returns The list of flavors to be tested on
    */
-  getFilteredFlavors(browser) {
-    return ALL_FLAVORS.filter(
-      !process.env.E2E_FLAVOR
-        ? (flavor) =>
-            browser.capabilities.browserName !== 'internet explorer'
-              ? true
-              : flavor.startsWith('js')
-        : (flavor) => flavor === process.env.E2E_FLAVOR
-    );
+  getFilteredFlavors() {
+    return process.env.E2E_FLAVOR
+      ? ALL_FLAVORS.filter((flavor) => flavor === process.env.E2E_FLAVOR)
+      : ALL_FLAVORS;
   },
 };

@@ -25,8 +25,8 @@ E2E_FLAVOR="react" yarn test:e2e
 When using the Sauce Labs service, tests are run on multiple browsers. To run a Sauce Labs test on a single browser, you can set the `E2E_BROWSER` environment variable:
 
 ```sh
-E2E_BROWSER="internet explorer" yarn test:e2e:saucelabs
-# Possible values: chrome, firefox, internet explorer
+E2E_BROWSER="firefox" yarn test:e2e:saucelabs
+# Possible values: chrome, firefox
 ```
 
 > [!NOTE] To run tests locally with Sauce Labs, make sure examples are built with `yarn website:examples` and set the appropriate Sauce Labs environment variables: `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY`. Additionally, the latest version of the Sauce Connect v4 tunnel (4.9.2) [doesn't support macOS](https://docs.saucelabs.com/secure-connections/sauce-connect/installation/#downloading-sauce-connect-proxy). You can pin it to the previous version by setting the `SAUCE_CONNECT_VERSION=4.9.1` variable.
@@ -104,7 +104,7 @@ function createBrandAndQueryFilteringTestSuite(flavor: string) {
 Here are some general guidelines when writing end-to-end tests:
 
 - Each separate step should be in its own `it` function. This isn't a hard rule, but it helps make the scenario more readable and properly [separate each action in Sauce Labs reports](https://user-images.githubusercontent.com/13209/62311104-56217d80-b48b-11e9-94dc-3c18b9ddc2af.png).
-- All actions on the browser are asynchronous, so be sure to always `await` them. **Never run multiple asynchronous commands in parallel as it can confuse some browsers (Internet Explorer)**.
+- All actions on the browser are asynchronous, so be sure to always `await` them. **Never run multiple asynchronous commands in parallel as it can confuse some browsers**.
 - Use [helper](#helpers) functions whenever possible, for readability but also for maintainability—if one widget is updated, we only have to updates its helpers without touching the tests.
 - Only assert what you want to see on the page after an action—for example, is the checkbox selected, is the result list correct, etc.
 - Only assert what you want to see on the page after an action (Is this checkbox selected? Is the result list correct? etc.)
