@@ -56,7 +56,7 @@ const flavor = getFlavorFromURL();
  * - `index`, `instantsearch`, `queryRuleContext` — no UI of
  *   their own.
  * - `queryRuleCustomData` — needs a matching rule on another index.
- * - `answers`, `configureRelatedItems`, `places` — deprecated.
+ * - `configureRelatedItems` — deprecated.
  */
 const allWidgets: ReferenceWidget[] = [
   searchBox,
