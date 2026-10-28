@@ -1,17 +1,19 @@
-import { useRef } from 'react';
+import { forwardRef, useRef } from 'react';
 
 import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';
 
 type Path = Array<string | number>;
 type Wrapper = (...args: unknown[]) => unknown;
 
+const MEMO = Symbol.for('react.memo');
+const FORWARD_REF = Symbol.for('react.forward_ref');
+
 function isPlainObject(value: unknown): value is Record<string, unknown> {
   if (typeof value !== 'object' || value === null) {
     return false;
   }
 
-  // React elements and component types (`memo`, `forwardRef`, `lazy`) must
-  // keep their identity.
+  // React elements and `lazy` must keep their identity.
   if ('$$typeof' in value) {
     return false;
   }
@@ -34,7 +36,7 @@ function getAtPath(root: unknown, path: Path): unknown {
 export function useStableFunctions<TValue>(value: TValue): TValue {
   const committedRef = useRef(value);
   const renderRef = useRef(value);
-  const wrappersRef = useRef(new Map<string, Wrapper>());
+  const wrappersRef = useRef(new Map<string, any>());
 
   // Components, `shouldRender` and `matchesToolName` run during render and read
   // the props being rendered. Other callbacks read committed props because a
@@ -44,9 +46,9 @@ export function useStableFunctions<TValue>(value: TValue): TValue {
     committedRef.current = value;
   });
 
-  const wrappers = new Map<string, Wrapper>();
+  const wrappers = new Map<string, any>();
 
-  function stabilize(node: unknown, path: Path): unknown {
+  function stabilize(node: any, path: Path, inComponent = false): unknown {
     if (typeof node === 'function') {
       // Classes cannot be called through `apply`.
       if (node.prototype?.isReactComponent) {
@@ -55,7 +57,8 @@ export function useStableFunctions<TValue>(value: TValue): TValue {
 
       const lastKey = path[path.length - 1];
       const isComponent =
-        typeof lastKey === 'string' && /component$/i.test(lastKey);
+        inComponent ||
+        (typeof lastKey === 'string' && /component$/i.test(lastKey));
       const runsWhileRendering =
         isComponent ||
         lastKey === 'shouldRender' ||
@@ -85,13 +88,40 @@ export function useStableFunctions<TValue>(value: TValue): TValue {
         // React reads `defaultProps` (before 19) and DevTools reads `displayName`
         // from the component type.
         Object.assign(wrapper, {
-          defaultProps: (node as any).defaultProps,
-          displayName: (node as any).displayName || node.name,
+          defaultProps: node.defaultProps,
+          displayName: node.displayName || node.name,
         });
       }
       wrappers.set(key, wrapper);
 
       return wrapper;
+    }
+
+    // The chat passes a new `context` on every render, so `memo` never skips
+    // a render there and only the inner component needs a stable identity.
+    if (node?.$$typeof === MEMO) {
+      const inner = stabilize(node.type, [...path, 'type'], true) as any;
+      if (node.displayName && typeof inner === 'function') {
+        inner.displayName = node.displayName;
+      }
+
+      return inner;
+    }
+
+    if (node?.$$typeof === FORWARD_REF) {
+      const render = stabilize(node.render, [...path, 'render'], true);
+      const key = JSON.stringify(path) + 'forwardRef';
+      const cached = wrappersRef.current.get(key);
+      const stable =
+        cached?.render === render ? cached : forwardRef(render as any);
+      Object.assign(stable, {
+        displayName: node.displayName,
+        defaultProps: node.defaultProps,
+        propTypes: node.propTypes,
+      });
+      wrappers.set(key, stable);
+
+      return stable;
     }
 
     if (Array.isArray(node)) {

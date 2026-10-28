@@ -47,6 +47,18 @@ describe('useChat with props created on every render', () => {
   test.each([
     ['tools', () => ({ tools: { search: { onToolCall: () => {} } } })],
     ['top-level functions', () => ({ sendAutomaticallyWhen: () => false })],
+    [
+      'memo components',
+      () => ({
+        tools: { search: { layoutComponent: React.memo(() => null) } },
+      }),
+    ],
+    [
+      'forwardRef components',
+      () => ({
+        tools: { search: { layoutComponent: React.forwardRef(() => null) } },
+      }),
+    ],
   ])(
     'does not re-render in a loop when %s are passed inline',
     async (_, createProps) => {

@@ -88,17 +88,69 @@ describe('useStableFunctions', () => {
     expect(result.current).toBe(true);
   });
 
-  test('leaves React component types untouched', () => {
-    const Memoized = React.memo(() => null);
-    const Forwarded = React.forwardRef(() => null);
+  test('keeps the identity of recreated memo and forwardRef components', () => {
     const { result, rerender } = renderHook(() =>
-      useStableFunctions({ tools: { a: { Memoized, Forwarded } } })
+      useStableFunctions({
+        tools: {
+          a: {
+            Memoized: React.memo(() => null),
+            Forwarded: React.forwardRef(() => null),
+          },
+        },
+      })
     );
+    const { Memoized, Forwarded } = result.current.tools.a;
 
     rerender();
 
     expect(result.current.tools.a.Memoized).toBe(Memoized);
     expect(result.current.tools.a.Forwarded).toBe(Forwarded);
+  });
+
+  test('renders the latest memo and forwardRef closures and forwards refs', () => {
+    const ref = React.createRef<HTMLElement>();
+
+    function Host({ label }: { label: string }) {
+      const stable = useStableFunctions({
+        Memoized: React.memo(() => React.createElement('i', null, label)),
+        Forwarded: React.forwardRef<HTMLElement>((_, ref) =>
+          React.createElement('b', { ref }, label)
+        ),
+      });
+      return React.createElement(
+        'div',
+        { 'data-testid': 'host' },
+        React.createElement(stable.Memoized),
+        React.createElement(stable.Forwarded, { ref })
+      );
+    }
+
+    const { container, rerender } = render(
+      React.createElement(Host, { label: 'one' })
+    );
+
+    expect(container.querySelector('i')!.textContent).toBe('one');
+    expect(container.querySelector('b')!.textContent).toBe('one');
+    expect(ref.current).toBe(container.querySelector('b'));
+
+    rerender(React.createElement(Host, { label: 'two' }));
+
+    expect(container.querySelector('i')!.textContent).toBe('two');
+    expect(container.querySelector('b')!.textContent).toBe('two');
+  });
+
+  test('keeps displayName on recreated memo and forwardRef components', () => {
+    const { result } = renderHook(() => {
+      const Memoized = React.memo(() => null);
+      Memoized.displayName = 'MemoName';
+      const Forwarded = React.forwardRef(() => null);
+      Forwarded.displayName = 'ForwardName';
+
+      return useStableFunctions({ a: { Memoized, Forwarded } });
+    });
+
+    expect((result.current.a.Memoized as any).displayName).toBe('MemoName');
+    expect((result.current.a.Forwarded as any).displayName).toBe('ForwardName');
   });
 
   test('leaves class instances untouched', () => {
