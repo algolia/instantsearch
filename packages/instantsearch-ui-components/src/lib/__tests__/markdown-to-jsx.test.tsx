@@ -6,7 +6,7 @@ import { createElement, render } from 'preact';
 
 import { RuleType, compiler } from '../markdown-to-jsx';
 
-function renderMarkdown(
+function renderToContainer(
   markdown: string,
   options: Partial<Parameters<typeof compiler>[1]> = {}
 ) {
@@ -20,7 +20,14 @@ function renderMarkdown(
     </span>,
     container
   );
-  return container.innerHTML;
+  return container;
+}
+
+function renderMarkdown(
+  markdown: string,
+  options: Partial<Parameters<typeof compiler>[1]> = {}
+) {
+  return renderToContainer(markdown, options).innerHTML;
 }
 
 describe('vendored markdown-to-jsx', () => {
@@ -71,11 +78,9 @@ describe('vendored markdown-to-jsx', () => {
   });
 
   test('makes code blocks keyboard-focusable scroll regions', () => {
-    const pre = (() => {
-      const container = document.createElement('div');
-      container.innerHTML = renderMarkdown('```js\nconst a = 1;\n```');
-      return container.querySelector('pre')!;
-    })();
+    const pre = renderToContainer('```js\nconst a = 1;\n```').querySelector(
+      'pre'
+    )!;
 
     expect(pre.getAttribute('tabindex')).toBe('0');
     expect(pre.getAttribute('role')).toBe('region');
@@ -83,8 +88,7 @@ describe('vendored markdown-to-jsx', () => {
   });
 
   test('wraps tables in a keyboard-focusable scroll region that keeps table semantics', () => {
-    const container = document.createElement('div');
-    container.innerHTML = renderMarkdown('| a | b |\n| - | - |\n| 1 | 2 |');
+    const container = renderToContainer('| a | b |\n| - | - |\n| 1 | 2 |');
     const wrapper = container.querySelector('.ais-ChatMessage-tableScroll')!;
 
     expect(wrapper.getAttribute('tabindex')).toBe('0');
@@ -95,8 +99,7 @@ describe('vendored markdown-to-jsx', () => {
   });
 
   test('labels code blocks and tables with the given text', () => {
-    const container = document.createElement('div');
-    container.innerHTML = renderMarkdown(
+    const container = renderToContainer(
       '```js\nconst a = 1;\n```\n\n| a | b |\n| - | - |\n| 1 | 2 |',
       { codeBlockLabel: 'Bloc de code', tableLabel: 'Tableau' }
     );
