@@ -53,7 +53,7 @@ const flavor = getFlavorFromURL();
  *   searches `instant_search`.
  * - `geoSearch` — needs a Maps key valid for the host, and has its own view.
  * - `feeds` — its params are part of the autocomplete union, see above.
- * - `index`, `instantsearch`, `queryRuleContext`, `analytics` — no UI of
+ * - `index`, `instantsearch`, `queryRuleContext` — no UI of
  *   their own.
  * - `queryRuleCustomData` — needs a matching rule on another index.
  * - `answers`, `configureRelatedItems`, `places` — deprecated.
