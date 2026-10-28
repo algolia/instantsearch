@@ -70,4 +70,36 @@ describe('Chat message styles', () => {
     expect(inlineRule).toContain('gap:');
     expect(inlineRule).not.toContain('margin-top');
   });
+
+  test('scrolls wide markdown blocks inside the message instead of the list', () => {
+    const style = document.createElement('style');
+    style.textContent = compileChatStylesheet('_chat-message.scss');
+    document.head.appendChild(style);
+
+    // The markdown renderer emits unclassed `pre` and `table` in a bare span.
+    // jsdom has no layout, so this pins the rules and not the overflow itself.
+    const message = document.createElement('div');
+    message.className = 'ais-ChatMessage-message';
+    message.innerHTML = `
+      <span>
+        <pre>a very long line of code</pre>
+        <table><tbody><tr><td>cell</td></tr></tbody></table>
+        <table class="tool-table"><tbody><tr><td>cell</td></tr></tbody></table>
+      </span>
+    `;
+    document.body.appendChild(message);
+
+    expect(getComputedStyle(message.querySelector('pre')!).overflowX).toBe(
+      'auto'
+    );
+    expect(getComputedStyle(message.querySelector('table')!).overflowX).toBe(
+      'auto'
+    );
+    expect(getComputedStyle(message.querySelector('table')!).display).toBe(
+      'block'
+    );
+    expect(
+      getComputedStyle(message.querySelector('table.tool-table')!).display
+    ).not.toBe('block');
+  });
 });

@@ -53,6 +53,20 @@
     max-width: 100%;
     height: auto;
   }
+
+  // Wide markdown blocks scroll on their own instead of widening the message
+  // list. The markdown output carries no classes, so these target the elements.
+  pre {
+    overflow-x: auto;
+  }
+
+  // `overflow` has no effect on a table box, so the table becomes a block.
+  // Classed tables, like the comparison tool's, keep their own layout.
+  table:not([class]) {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
 }
 
 .ais-ChatMessage-text {
