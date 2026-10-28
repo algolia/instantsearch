@@ -112,7 +112,16 @@ export function useStableFunctions<TValue>(value: TValue): TValue {
   }
 
   const stableValue = stabilize(value, []) as TValue;
-  wrappersRef.current = wrappers;
+  // Add in render so retries before a commit reuse the same wrappers. Prune in
+  // the commit so a render React throws away cannot drop committed wrappers.
+  wrappers.forEach((wrapper, key) => wrappersRef.current.set(key, wrapper));
+  useIsomorphicLayoutEffect(() => {
+    wrappersRef.current.forEach((_, key) => {
+      if (!wrappers.has(key)) {
+        wrappersRef.current.delete(key);
+      }
+    });
+  });
 
   return stableValue;
 }
