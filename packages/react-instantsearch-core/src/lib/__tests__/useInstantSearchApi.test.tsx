@@ -12,7 +12,7 @@ import { useSearchBox } from '../../connectors/useSearchBox';
 import { useInstantSearchApi } from '../useInstantSearchApi';
 
 import type { InternalInstantSearch } from '../useInstantSearchApi';
-import type { UiState } from 'instantsearch.js';
+import type { UiState } from 'instantsearch-core';
 
 jest.mock('use-sync-external-store/shim', () => ({
   useSyncExternalStore: jest.fn(),

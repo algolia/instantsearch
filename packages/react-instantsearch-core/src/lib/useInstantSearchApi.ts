@@ -1,6 +1,7 @@
-import InstantSearch, {
+import {
+  InstantSearch,
   INSTANTSEARCH_FUTURE_DEFAULTS,
-} from 'instantsearch.js/es/lib/InstantSearch';
+} from 'instantsearch-core';
 import { useCallback, useRef, version as ReactVersion } from 'react';
 import { useSyncExternalStore } from 'use-sync-external-store/shim';
 
@@ -18,7 +19,7 @@ import type {
   InstantSearchOptions,
   SearchClient,
   UiState,
-} from 'instantsearch.js';
+} from 'instantsearch-core';
 
 const defaultUserAgents = [
   `react (${ReactVersion})`,
@@ -82,7 +83,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
     // We don't use the `instantsearch()` function because it comes with other
     // top-level APIs that we don't need.
     // See https://github.com/algolia/instantsearch/blob/5b529f43d8acc680f85837eaaa41f7fd03a3f833/src/index.es.ts#L63-L86
-    const search = new InstantSearch(props) as InternalInstantSearch<
+    const search = new InstantSearch(props) as unknown as InternalInstantSearch<
       TUiState,
       TRouteState
     >;

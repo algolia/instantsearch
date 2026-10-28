@@ -8,7 +8,7 @@ import type {
   InfiniteHitsWidgetDescription,
   InfiniteHitsConnector,
 } from 'instantsearch-core';
-import type { BaseHit } from 'instantsearch.js';
+import type { BaseHit } from 'instantsearch-core';
 
 export type UseInfiniteHitsProps<THit extends BaseHit = BaseHit> =
   InfiniteHitsConnectorParams<THit>;
