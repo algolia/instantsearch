@@ -1,14 +1,14 @@
-import connectLookingSimilar from 'instantsearch.js/es/connectors/looking-similar/connectLookingSimilar';
+import { connectLookingSimilar as connectLookingSimilar } from 'instantsearch-core';
 
 import { useConnector } from '../hooks/useConnector';
 
 import type { AdditionalWidgetProperties } from '../hooks/useConnector';
-import type { BaseHit } from 'instantsearch.js';
 import type {
   LookingSimilarConnector,
   LookingSimilarConnectorParams,
   LookingSimilarWidgetDescription,
-} from 'instantsearch.js/es/connectors/looking-similar/connectLookingSimilar';
+} from 'instantsearch-core';
+import type { BaseHit } from 'instantsearch.js';
 
 export type UseLookingSimilarProps<THit extends BaseHit = BaseHit> =
   LookingSimilarConnectorParams<THit>;

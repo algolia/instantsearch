@@ -16,8 +16,8 @@
 
 import { chatToolProps } from '@instantsearch/testutils';
 import { render, screen } from '@testing-library/react';
-import { collectChatRecords } from 'instantsearch-ui-components';
-import { parsePartialJson } from 'instantsearch.js/es/lib/ai-lite';
+import { parsePartialJson } from 'instantsearch-core';
+import { collectChatRecords } from 'instantsearch-core';
 import React from 'react';
 
 import { createCompareProductsTool } from '../CompareProductsTool';
@@ -25,7 +25,7 @@ import { createCompareProductsTool } from '../CompareProductsTool';
 import type {
   ChatComponentContext,
   ClientSideToolComponentProps,
-} from 'instantsearch-ui-components';
+} from 'instantsearch-core';
 
 type ToolMessage = ClientSideToolComponentProps['context']['message'];
 

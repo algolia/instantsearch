@@ -1,4 +1,4 @@
-import { createFeedContainer } from 'instantsearch.js/es/connectors/feeds/FeedContainer';
+import { createFeedContainer } from 'instantsearch-core';
 import React, { useEffect, useRef } from 'react';
 
 import { useFeeds } from '../connectors/useFeeds';
@@ -6,8 +6,8 @@ import { IndexContext } from '../lib/IndexContext';
 import { useIndexContext } from '../lib/useIndexContext';
 import { useInstantSearchContext } from '../lib/useInstantSearchContext';
 
-import type { FeedsConnectorParams } from 'instantsearch.js/es/connectors/feeds/connectFeeds';
-import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
+import type { FeedsConnectorParams } from 'instantsearch-core';
+import type { IndexWidget } from 'instantsearch-core';
 import type { ReactNode } from 'react';
 
 export type FeedsProps = FeedsConnectorParams & {

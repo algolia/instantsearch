@@ -1,4 +1,4 @@
-import connectPromptSuggestions from 'instantsearch.js/es/connectors/prompt-suggestions/connectPromptSuggestions';
+import { connectPromptSuggestions } from 'instantsearch-core';
 
 import { useConnector } from '../hooks/useConnector';
 
@@ -6,7 +6,7 @@ import type { AdditionalWidgetProperties } from '../hooks/useConnector';
 import type {
   PromptSuggestionsConnectorParams,
   PromptSuggestionsWidgetDescription,
-} from 'instantsearch.js/es/connectors/prompt-suggestions/connectPromptSuggestions';
+} from 'instantsearch-core';
 
 export type UsePromptSuggestionsProps = PromptSuggestionsConnectorParams;
 

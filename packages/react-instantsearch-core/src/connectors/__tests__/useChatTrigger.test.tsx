@@ -4,14 +4,14 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import { act, render, screen, waitFor } from '@testing-library/react';
-import { Chat } from 'instantsearch.js/es/lib/chat/chat';
+import { Chat } from 'instantsearch-core';
 import React from 'react';
 
 import { InstantSearch } from '../../components/InstantSearch';
 import { useChat } from '../useChat';
 import { useChatTrigger } from '../useChatTrigger';
 
-import type { UIMessage } from 'instantsearch.js/es/lib/chat';
+import type { UIMessage } from 'instantsearch-core';
 
 function ChatProbe({ chat }: { chat: Chat<UIMessage> }) {
   const { open, status } = useChat<UIMessage>({

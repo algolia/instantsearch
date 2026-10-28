@@ -4443,7 +4443,7 @@ exports[`Templates React InstantSearch Native File content: src/Highlight.tsx 1`
 import {
   getHighlightedParts,
   getPropertyByPath,
-} from 'instantsearch.js/es/lib/utils';
+} from 'instantsearch-core';
 import React, { Fragment } from 'react';
 import { StyleSheet, Text } from 'react-native';
 

@@ -1,9 +1,9 @@
-import { createHighlightComponent } from 'instantsearch-ui-components';
 import {
   getHighlightedParts,
   getPropertyByPath,
   unescape,
-} from 'instantsearch.js/es/lib/utils';
+} from 'instantsearch-core';
+import { createHighlightComponent } from 'instantsearch-ui-components';
 
 import { createElement, Fragment } from '../util/pragma';
 

@@ -2,7 +2,7 @@ import { Hit as AlgoliaHit } from 'instantsearch.js';
 import {
   getHighlightedParts,
   getPropertyByPath,
-} from 'instantsearch.js/es/lib/utils';
+} from 'instantsearch-core';
 import React, { Fragment } from 'react';
 import { StyleSheet, Text } from 'react-native';
 
