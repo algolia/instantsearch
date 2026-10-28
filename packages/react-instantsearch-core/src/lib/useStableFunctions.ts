@@ -1,5 +1,7 @@
 import { useRef } from 'react';
 
+import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';
+
 type Path = Array<string | number>;
 type Wrapper = (...args: unknown[]) => unknown;
 
@@ -30,12 +32,17 @@ function getAtPath(root: unknown, path: Path): unknown {
  * changes, so inline callbacks neither loop nor go stale.
  */
 export function useStableFunctions<TValue>(value: TValue): TValue {
-  const latestRef = useRef(value);
+  const committedRef = useRef(value);
+  const renderRef = useRef(value);
   const wrappersRef = useRef(new Map<string, Wrapper>());
 
-  // Updated during render so callbacks invoked while rendering (such as
-  // `shouldRender`) see the current props.
-  latestRef.current = value;
+  // Components, `shouldRender` and `matchesToolName` run during render and read
+  // the props being rendered. Other callbacks read committed props because a
+  // suspended transition must not change what the visible tree calls.
+  renderRef.current = value;
+  useIsomorphicLayoutEffect(() => {
+    committedRef.current = value;
+  });
 
   const wrappers = new Map<string, Wrapper>();
 
@@ -49,12 +56,19 @@ export function useStableFunctions<TValue>(value: TValue): TValue {
       const lastKey = path[path.length - 1];
       const isComponent =
         typeof lastKey === 'string' && /component$/i.test(lastKey);
+      const runsWhileRendering =
+        isComponent ||
+        lastKey === 'shouldRender' ||
+        lastKey === 'matchesToolName';
       const source = isComponent ? node.toString() : '';
       const key = JSON.stringify(path) + source;
       const wrapper: Wrapper =
         wrappersRef.current.get(key) ||
         function (this: unknown, ...args) {
-          const latest = getAtPath(latestRef.current, path);
+          const latest = getAtPath(
+            (runsWhileRendering ? renderRef : committedRef).current,
+            path
+          );
           // The UI keeps the first wrapper it received, so a swapped component
           // must not run inside the old component's hook state. Inline copies
           // of the same component share their source and stay current.

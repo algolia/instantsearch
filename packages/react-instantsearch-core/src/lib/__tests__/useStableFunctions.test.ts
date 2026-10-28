@@ -70,6 +70,24 @@ describe('useStableFunctions', () => {
     expect(result.current).toBe(false);
   });
 
+  test('calls the current tool matcher when invoked during render', () => {
+    const { result, rerender } = renderHook(
+      ({ target }) =>
+        useStableFunctions({
+          tools: {
+            search: { matchesToolName: (name: string) => name === target },
+          },
+        }).tools.search.matchesToolName('b'),
+      { initialProps: { target: 'a' } }
+    );
+
+    expect(result.current).toBe(false);
+
+    rerender({ target: 'b' });
+
+    expect(result.current).toBe(true);
+  });
+
   test('leaves React component types untouched', () => {
     const Memoized = React.memo(() => null);
     const Forwarded = React.forwardRef(() => null);
