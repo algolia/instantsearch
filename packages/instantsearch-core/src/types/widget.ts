@@ -83,7 +83,6 @@ export type BuiltinTypes =
   | 'ais.menu'
   | 'ais.numericMenu'
   | 'ais.pagination'
-  | 'ais.places'
   | 'ais.poweredBy'
   | 'ais.queryRules'
   // @TODO: remove individual types for rangeSlider & rangeInput once updating checkIndexUiState
@@ -127,7 +126,6 @@ export type BuiltinWidgetTypes =
   | 'ais.menuSelect'
   | 'ais.numericMenu'
   | 'ais.pagination'
-  | 'ais.places'
   | 'ais.poweredBy'
   | 'ais.queryRuleCustomData'
   | 'ais.queryRuleContext'

@@ -27,7 +27,6 @@ import type { StatsWidgetDescription } from '../connectors/stats/connectStats';
 import type { ToggleRefinementWidgetDescription } from '../connectors/toggle-refinement/connectToggleRefinement';
 import type { VoiceSearchWidgetDescription } from '../connectors/voice-search/connectVoiceSearch';
 import type { AnalyticsWidgetDescription } from '../widgets/analytics/analytics';
-import type { PlacesWidgetDescription } from '../widgets/places/places';
 
 type ConnectorRenderStates = AnswersWidgetDescription['indexRenderState'] &
   AutocompleteWidgetDescription['indexRenderState'] &
@@ -58,8 +57,7 @@ type ConnectorRenderStates = AnswersWidgetDescription['indexRenderState'] &
   ToggleRefinementWidgetDescription['indexRenderState'] &
   VoiceSearchWidgetDescription['indexRenderState'];
 
-type WidgetRenderStates = AnalyticsWidgetDescription['indexRenderState'] &
-  PlacesWidgetDescription['indexRenderState'];
+type WidgetRenderStates = AnalyticsWidgetDescription['indexRenderState'];
 
 export type IndexRenderState = Partial<
   ConnectorRenderStates & WidgetRenderStates

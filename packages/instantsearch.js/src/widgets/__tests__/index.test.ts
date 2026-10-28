@@ -6,7 +6,6 @@ import * as widgets from '..';
 
 import type { UnknownWidgetFactory, Widget } from 'instantsearch-core';
 import type { IndexWidget } from 'instantsearch-core';
-import type { PlacesInstance } from 'places.js';
 
 /**
  * Checklist when adding a new widget
@@ -115,15 +114,6 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
               return values;
             },
           },
-        });
-      }
-      case 'places': {
-        const places = widget as Widgets['places'];
-        // @ts-expect-error
-        const placesInstance: PlacesInstance = {};
-        return places({
-          container: document.createElement('input'),
-          placesReference: () => placesInstance,
         });
       }
       case 'panel': {
