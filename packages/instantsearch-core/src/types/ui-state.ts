@@ -15,7 +15,6 @@ import type { SearchBoxWidgetDescription } from '../connectors/search-box/connec
 import type { SortByWidgetDescription } from '../connectors/sort-by/connectSortBy';
 import type { ToggleRefinementWidgetDescription } from '../connectors/toggle-refinement/connectToggleRefinement';
 import type { VoiceSearchWidgetDescription } from '../connectors/voice-search/connectVoiceSearch';
-import type { PlacesWidgetDescription } from '../widgets/places/places';
 
 type ConnectorUiStates = AutocompleteWidgetDescription['indexUiState'] &
   ConfigureWidgetDescription['indexUiState'] &
@@ -35,9 +34,7 @@ type ConnectorUiStates = AutocompleteWidgetDescription['indexUiState'] &
   ToggleRefinementWidgetDescription['indexUiState'] &
   VoiceSearchWidgetDescription['indexUiState'];
 
-type WidgetUiStates = PlacesWidgetDescription['indexUiState'];
-
-export type IndexUiState = Partial<ConnectorUiStates & WidgetUiStates>;
+export type IndexUiState = Partial<ConnectorUiStates>;
 
 export type UiState = {
   [indexId: string]: IndexUiState;
