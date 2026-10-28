@@ -1,15 +1,8 @@
 import { deprecate } from 'instantsearch-core';
 
-import answers from './answers/answers';
 import { autocomplete } from './autocomplete/autocomplete';
 import configureRelatedItems from './configure-related-items/configure-related-items';
 import dynamicWidgets from './dynamic-widgets/dynamic-widgets';
-
-/** @deprecated answers is no longer supported */
-export const EXPERIMENTAL_answers = deprecate(
-  answers,
-  'answers is no longer supported'
-);
 
 /** @deprecated use relatedItems instead */
 export const EXPERIMENTAL_configureRelatedItems = deprecate(
