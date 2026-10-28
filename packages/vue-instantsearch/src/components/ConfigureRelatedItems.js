@@ -1,4 +1,4 @@
-import { EXPERIMENTAL_connectConfigureRelatedItems } from 'instantsearch.js/es/connectors/index';
+import { connectConfigureRelatedItems } from 'instantsearch-core';
 
 import { createWidgetMixin } from '../mixins/widget';
 
@@ -8,7 +8,7 @@ export default {
   mixins: [
     createWidgetMixin(
       {
-        connector: EXPERIMENTAL_connectConfigureRelatedItems,
+        connector: connectConfigureRelatedItems,
       },
       {
         $$widgetType: 'ais.configureRelatedItems',

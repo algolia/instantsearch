@@ -1,11 +1,11 @@
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-import { connectConfigure } from 'instantsearch-core';
 
+import connectConfigure from '../../configure/connectConfigure';
 import connectConfigureRelatedItems from '../connectConfigureRelatedItems';
 
-jest.mock('instantsearch-core', () => ({
-  ...jest.requireActual('instantsearch-core'),
-  connectConfigure: jest.fn(),
+jest.mock('../../configure/connectConfigure', () => ({
+  __esModule: true,
+  default: jest.fn(),
 }));
 
 // This test ensures that the `connectConfigureRelatedItems` calls

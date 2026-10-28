@@ -4,12 +4,12 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
-import { noop } from 'instantsearch-core';
 
-import instantsearch from '../../..';
+import { instantsearch } from '../../../instantsearch';
+import { noop } from '../../../lib/utils';
 import connectConfigureRelatedItems from '../connectConfigureRelatedItems';
 
-import type { AlgoliaHit } from 'instantsearch-core';
+import type { AlgoliaHit } from '../../../types';
 
 const hit: AlgoliaHit = {
   objectID: '1',
