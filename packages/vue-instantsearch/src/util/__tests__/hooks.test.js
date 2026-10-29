@@ -2,9 +2,9 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { mount } from '../../../test/utils';
+import { mount, nextTick } from '../../../test/utils';
 import { createHooksStore } from '../hooks';
-import { renderCompat } from '../vue-compat';
+import { renderCompat, renderReactCompat } from '../vue-compat';
 
 function makeHookedComponent(useBody) {
   return {
@@ -115,6 +115,43 @@ describe('Vue hooks runtime', () => {
     await wrapper.find('#inc-count').trigger('click');
     expect(cleanupSpy).toHaveBeenCalledTimes(1);
     expect(effectSpy).toHaveBeenCalledTimes(2);
+    expect(effectSpy).toHaveBeenLastCalledWith(1);
+  });
+
+  it('runs the effects of a render that re-rendered before they flushed', async () => {
+    const effectSpy = jest.fn();
+
+    const wrapper = mount({
+      data: () => ({ count: 0 }),
+      created() {
+        this.hooksStore = createHooksStore(() => this.$forceUpdate());
+      },
+      mounted() {
+        this.hooksStore.flushEffects();
+      },
+      updated() {
+        this.hooksStore.flushEffects();
+      },
+      render: renderReactCompat(function (h) {
+        this.hooksStore.beginRender();
+        const [, setElement] = this.hooksStore.hooks.useState(null);
+        const { count } = this;
+        this.hooksStore.hooks.useEffect(() => {
+          effectSpy(count);
+        }, [count]);
+        this.hooksStore.endRender();
+
+        // The callback ref sets state during the patch, so the component
+        // renders again before `updated` flushes the effects.
+        return h('div', {}, count > 0 ? h('span', { ref: setElement }) : null);
+      }),
+    });
+
+    expect(effectSpy).toHaveBeenLastCalledWith(0);
+
+    await wrapper.setData({ count: 1 });
+    await nextTick();
+
     expect(effectSpy).toHaveBeenLastCalledWith(1);
   });
 

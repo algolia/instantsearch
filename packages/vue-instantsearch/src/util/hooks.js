@@ -39,12 +39,20 @@ export function createHooksStore(scheduleRender) {
   let cursor = 0;
   const storeId = (lastStoreId++).toString(36);
   let idCounter = 0;
-  // Effects whose deps changed during the current render, flushed post-commit.
+  // Effects whose deps changed since the last flush. Not reset per render: a
+  // state change during the patch (e.g. from a callback ref) renders again
+  // before `mounted`/`updated` flushes, and the first render's effects must
+  // still run.
   let pendingEffects = [];
+
+  function scheduleEffect(cell) {
+    if (pendingEffects.indexOf(cell) === -1) {
+      pendingEffects.push(cell);
+    }
+  }
 
   function beginRender() {
     cursor = 0;
-    pendingEffects = [];
   }
 
   function endRender() {
@@ -131,11 +139,11 @@ export function createHooksStore(scheduleRender) {
     if (cell === undefined) {
       const created = { effect, deps, cleanup: undefined };
       cells[index] = created;
-      pendingEffects.push(created);
+      scheduleEffect(created);
     } else if (deps === undefined || !areDepsEqual(cell.deps, deps)) {
       cell.effect = effect;
       cell.deps = deps;
-      pendingEffects.push(cell);
+      scheduleEffect(cell);
     }
   };
 
