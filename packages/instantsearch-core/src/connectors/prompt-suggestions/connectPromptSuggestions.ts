@@ -563,8 +563,9 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
 
           // With an explicit `context` the payload never reads the results, so
           // waiting for a search is waiting on something the request does not
-          // use — and a page that triggers no search (a `searchFunction` query
-          // gate, or a mount made only for the widgets) would wait forever.
+          // use — and a page that triggers no search (an `onStateChange` that
+          // holds back the query, or a mount made only for the widgets) would
+          // wait forever.
           // Fetch here instead, after the first render so the `isFirstRender`
           // one still arrives first.
           //
