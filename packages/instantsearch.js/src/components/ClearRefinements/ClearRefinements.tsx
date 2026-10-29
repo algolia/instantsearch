@@ -22,7 +22,7 @@ export type ClearRefinementsComponentTemplates =
 export type ClearRefinementsProps = {
   refine: ClearRefinementsRenderState['refine'];
   cssClasses: ClearRefinementsComponentCSSClasses;
-  hasRefinements: ClearRefinementsRenderState['hasRefinements'];
+  hasRefinements: boolean;
   templateProps: PreparedTemplateProps<ClearRefinementsComponentTemplates>;
 };
 

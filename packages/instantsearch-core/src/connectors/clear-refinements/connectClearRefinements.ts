@@ -46,12 +46,6 @@ export type ClearRefinementsRenderState = {
   refine: () => void;
 
   /**
-   * Indicates if search state is refined.
-   * @deprecated prefer reading canRefine
-   */
-  hasRefinements: boolean;
-
-  /**
    * Indicates if search state can be refined.
    */
   canRefine: boolean;
@@ -212,7 +206,6 @@ const connectClearRefinements: ClearRefinementsConnector =
 
           return {
             canRefine,
-            hasRefinements: canRefine,
             refine: cachedRefine,
             createURL: cachedCreateURL,
             widgetParams,

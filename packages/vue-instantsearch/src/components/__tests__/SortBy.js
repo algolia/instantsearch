@@ -15,7 +15,6 @@ const defaultState = {
     { value: 'some_index_cool', label: 'Coolness ascending' },
     { value: 'some_index_quality', label: 'Quality ascending' },
   ],
-  hasNoResults: false,
   canRefine: true,
   currentRefinement: 'some_index',
 };

@@ -101,7 +101,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       expect(firstRenderingOptions.createURL).toBeInstanceOf(Function);
       expect(firstRenderingOptions.refine).toBeInstanceOf(Function);
       expect(firstRenderingOptions.canRefine).toBe(false);
-      expect(firstRenderingOptions.hasRefinements).toBe(false);
       expect(firstRenderingOptions.widgetParams).toEqual({
         foo: 'bar', // dummy param to test `widgetParams`
       });
@@ -125,7 +124,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       expect(isFirstRenderAtRender).toBe(false);
       expect(secondRenderingOptions.createURL).toBeInstanceOf(Function);
       expect(secondRenderingOptions.refine).toBeInstanceOf(Function);
-      expect(secondRenderingOptions.hasRefinements).toBe(false);
       expect(secondRenderingOptions.canRefine).toBe(false);
     });
 
@@ -166,7 +164,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         );
 
         expect(renderState1.clearRefinements).toEqual({
-          hasRefinements: false,
           canRefine: false,
           createURL: expect.any(Function),
           refine: expect.any(Function),
@@ -213,7 +210,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         );
 
         expect(renderState2.clearRefinements).toEqual({
-          hasRefinements: true,
           canRefine: true,
           createURL: expect.any(Function),
           refine: expect.any(Function),
@@ -246,7 +242,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
           clearRefinements.getWidgetRenderState(createInitOptions());
 
         expect(renderState1).toEqual({
-          hasRefinements: false,
           canRefine: false,
           createURL: expect.any(Function),
           refine: expect.any(Function),
@@ -292,7 +287,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         );
 
         expect(renderState2).toEqual({
-          hasRefinements: true,
           canRefine: true,
           createURL: expect.any(Function),
           refine: expect.any(Function),
@@ -452,7 +446,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         })
       );
 
-      expect(rendering.mock.calls[0][0].hasRefinements).toBe(false);
       expect(rendering.mock.calls[0][0].canRefine).toBe(false);
 
       widget.render!(
@@ -465,7 +458,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         })
       );
 
-      expect(rendering.mock.calls[1][0].hasRefinements).toBe(true);
       expect(rendering.mock.calls[1][0].canRefine).toBe(true);
     });
 
@@ -491,7 +483,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         })
       );
 
-      expect(rendering.mock.calls[0][0].hasRefinements).toBe(false);
       expect(rendering.mock.calls[0][0].canRefine).toBe(false);
 
       widget.render!(
@@ -504,7 +495,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         })
       );
 
-      expect(rendering.mock.calls[1][0].hasRefinements).toBe(true);
       expect(rendering.mock.calls[1][0].canRefine).toBe(true);
     });
 
@@ -527,7 +517,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         })
       );
 
-      expect(rendering.mock.calls[0][0].hasRefinements).toBe(false);
       expect(rendering.mock.calls[0][0].canRefine).toBe(false);
 
       widget.render!(
@@ -540,7 +529,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         })
       );
 
-      expect(rendering.mock.calls[1][0].hasRefinements).toBe(false);
       expect(rendering.mock.calls[1][0].canRefine).toBe(false);
     });
 
@@ -560,7 +548,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         })
       );
 
-      expect(rendering.mock.calls[0][0].hasRefinements).toBe(false);
       expect(rendering.mock.calls[0][0].canRefine).toBe(false);
 
       widget.render!(
@@ -573,7 +560,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         })
       );
 
-      expect(rendering.mock.calls[1][0].hasRefinements).toBe(false);
       expect(rendering.mock.calls[1][0].canRefine).toBe(false);
     });
 
@@ -627,7 +613,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
       expect(helper.hasRefinements('facet1')).toBe(false);
       expect(helper.hasRefinements('facet2')).toBe(true);
-      expect(rendering.mock.calls[2][0].hasRefinements).toBe(false);
       expect(rendering.mock.calls[2][0].canRefine).toBe(false);
     });
 
@@ -678,7 +663,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
       expect(helper.hasRefinements('facet1')).toBe(false);
       expect(helper.state.query).toBe('');
-      expect(rendering.mock.calls[2][0].hasRefinements).toBe(false);
       expect(rendering.mock.calls[2][0].canRefine).toBe(false);
     });
 
@@ -727,7 +711,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         expect(helper.hasRefinements('facet1')).toBe(false);
         expect(helper.hasRefinements('facet2')).toBe(true);
 
-        expect(rendering.mock.calls[1][0].hasRefinements).toBe(true);
         expect(rendering.mock.calls[1][0].canRefine).toBe(true);
       }
 
@@ -827,7 +810,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       expect(helper.hasRefinements('facet2')).toBe(true);
       expect(helper.hasRefinements('facet3')).toBe(false);
       expect(helper.state.query).toBe('');
-      expect(rendering.mock.calls[2][0].hasRefinements).toBe(false);
       expect(rendering.mock.calls[2][0].canRefine).toBe(false);
     });
 

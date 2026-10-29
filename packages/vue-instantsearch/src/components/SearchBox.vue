@@ -2,7 +2,7 @@
   <div v-if="state" :class="suit()">
     <slot
       :current-refinement="currentRefinement"
-      :is-search-stalled="state.isSearchStalled"
+      :is-search-stalled="isSearchStalled"
       :refine="state.refine"
     >
       <search-input
@@ -12,7 +12,7 @@
         :placeholder="placeholder"
         :autofocus="autofocus"
         :show-loading-indicator="showLoadingIndicator"
-        :should-show-loading-indicator="state.isSearchStalled"
+        :should-show-loading-indicator="isSearchStalled"
         :ignore-composition-events="ignoreCompositionEvents"
         :submit-title="submitTitle"
         :reset-title="resetTitle"
@@ -105,6 +105,7 @@ export default {
   data() {
     return {
       localValue: '',
+      isSearchStalled: false,
       isVue2,
       isVue3,
     };
@@ -152,6 +153,17 @@ export default {
           this.$emit('input', val);
           this.$emit('update:modelValue', val);
         }
+      },
+    },
+  },
+  watch: {
+    // `status` is snapshotted when the connector renders, like the rest of
+    // `state`. Reading it in the template would subscribe to the (reactive)
+    // instance and re-render on every status change, e.g. mid-composition.
+    state: {
+      immediate: true,
+      handler() {
+        this.isSearchStalled = this.instantSearchInstance.status === 'stalled';
       },
     },
   },

@@ -203,7 +203,6 @@ const renderer =
   ({
     refine,
     query,
-    isSearchStalled,
     instantSearchInstance,
   }: SearchBoxRenderState & RendererOptions<SearchBoxConnectorParams>) => {
     const getChatRenderState = () => {
@@ -244,7 +243,7 @@ const renderer =
         showLoadingIndicator={showLoadingIndicator}
         submitTitle={submitTitle}
         resetTitle={resetTitle}
-        isSearchStalled={isSearchStalled}
+        isSearchStalled={instantSearchInstance.status === 'stalled'}
         cssClasses={cssClasses}
         onAiModeClick={onAiModeClick}
         aiModeButtonDisabled={aiModeButtonDisabled}
