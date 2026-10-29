@@ -56,6 +56,24 @@ describe('Vue hooks runtime', () => {
     expect(wrapper.find('button').text()).toBe('count: 2');
   });
 
+  it('useState returns the same setter on every render', async () => {
+    const setters = [];
+    const Counter = makeHookedComponent((hooks, h) => {
+      const [count, setCount] = hooks.useState(0);
+      setters.push(setCount);
+      return h('button', { on: { click: () => setCount(count + 1) } }, [
+        `count: ${count}`,
+      ]);
+    });
+
+    const wrapper = mount(Counter);
+    await wrapper.find('button').trigger('click');
+
+    expect(wrapper.find('button').text()).toBe('count: 1');
+    expect(setters).toHaveLength(2);
+    expect(setters[1]).toBe(setters[0]);
+  });
+
   it('useEffect runs after commit and re-runs only when deps change', async () => {
     const effectSpy = jest.fn();
     const cleanupSpy = jest.fn();

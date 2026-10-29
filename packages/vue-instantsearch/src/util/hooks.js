@@ -74,21 +74,26 @@ export function createHooksStore(scheduleRender) {
   const useState = (initialState) => {
     const index = cursor++;
     if (cells[index] === undefined) {
-      cells[index] = {
+      const created = {
         value:
           typeof initialState === 'function' ? initialState() : initialState,
       };
+      // Stable like React's: a setter used as a callback `ref` would otherwise
+      // be a new ref on every render, which the Vue 2 adapter resets to `null`
+      // and sets again, re-rendering forever.
+      created.setState = (next) => {
+        const nextValue =
+          typeof next === 'function' ? next(created.value) : next;
+        if (Object.is(nextValue, created.value)) {
+          return;
+        }
+        created.value = nextValue;
+        scheduleRender();
+      };
+      cells[index] = created;
     }
     const cell = cells[index];
-    const setState = (next) => {
-      const nextValue = typeof next === 'function' ? next(cell.value) : next;
-      if (Object.is(nextValue, cell.value)) {
-        return;
-      }
-      cell.value = nextValue;
-      scheduleRender();
-    };
-    return [cell.value, setState];
+    return [cell.value, cell.setState];
   };
 
   const useRef = (initialValue) => {
