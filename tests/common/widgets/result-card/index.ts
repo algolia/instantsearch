@@ -20,11 +20,18 @@ export type JSResultCardWidgetParams = Omit<JSBaseWidgetParams, 'container'> &
   ResultCardConnectorParams &
   ChatPresenceParams;
 export type ReactResultCardWidgetParams = ResultCardProps & ChatPresenceParams;
+// `AisResultCard` is plain JavaScript (no published prop types): its props
+// mirror the React ones, with `classNames` keyed by the `ais-ResultCard-*`
+// classes, and `slots` holds render functions for its scoped slots.
+export type VueResultCardWidgetParams = Record<string, unknown> &
+  ChatPresenceParams & {
+    slots?: Record<string, (props: Record<string, unknown>) => unknown>;
+  };
 
 type ResultCardWidgetParams = {
   javascript: JSResultCardWidgetParams;
   react: ReactResultCardWidgetParams;
-  vue: Record<string, never>;
+  vue: VueResultCardWidgetParams;
 };
 
 declare module '../../common' {

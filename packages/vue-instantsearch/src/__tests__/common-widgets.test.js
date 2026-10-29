@@ -5,7 +5,7 @@ import { runTestSuites } from '@instantsearch/tests/common';
 import * as testSuites from '@instantsearch/tests/widgets';
 import { connectCompare } from 'instantsearch.js/es/connectors/index';
 
-import { nextTick, mountApp } from '../../test/utils';
+import { nextTick, mountApp, mountAppOrThrow } from '../../test/utils';
 import {
   AisInstantSearch,
   AisRefinementList,
@@ -39,6 +39,7 @@ import {
   AisChat,
   AisChatTrigger,
   AisCompareBar,
+  AisResultCard,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
@@ -794,8 +795,26 @@ const testSetups = {
 
     await nextTick();
   },
-  createResultCardWidgetTests() {
-    throw new Error('ResultCard is not supported in Vue InstantSearch');
+  async createResultCardWidgetTests({ instantSearchOptions, widgetParams }) {
+    // "Continue in chat" needs an `ais-chat` with the card's `agentId` on the
+    // same index, so the default setup mounts both. `renderChat: false` is how
+    // a test asks for the unconfigured page.
+    const { renderChat = true, slots = {}, ...props } = widgetParams;
+
+    mountAppOrThrow(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisResultCard, { props, scopedSlots: slots }),
+            renderChat && h(AisChat, { props: { agentId: props.agentId } }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
   },
 };
 
@@ -854,7 +873,12 @@ const testOptions = {
     skippedTests: { 'PromptSuggestions widget common tests': true },
   },
   createResultCardWidgetTests: {
-    skippedTests: { 'ResultCard widget common tests': true },
+    // Vue batches DOM updates, so flush them after each step the shared tests
+    // wrap in `act`.
+    act: async (callback) => {
+      await callback();
+      await nextTick();
+    },
   },
   createCompareBarWidgetTests: {
     // Vue batches DOM updates, so flush them after each step the shared tests

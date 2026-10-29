@@ -1,6 +1,8 @@
 import { wait } from '@instantsearch/testutils';
 import React from 'react';
 
+import { vueH } from '../chat/utils';
+
 import { DEBOUNCE_MS, createResultsClient, mockAgentFetch } from './utils';
 
 import type { ResultCardWidgetSetup } from '.';
@@ -33,7 +35,19 @@ export function createTemplatesTests(
               </div>
             ),
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            slots: {
+              layout: ({ status, query, messages }) =>
+                vueH(
+                  'div',
+                  { class: 'custom-layout' },
+                  `Custom layout: ${status} / ${query} / ${
+                    (messages as unknown[]).length
+                  }`
+                ),
+            },
+          },
         },
       });
 

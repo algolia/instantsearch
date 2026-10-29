@@ -95,6 +95,10 @@ function getAllComponents() {
         props.disableTriggerValidation = true;
       } else if (name === 'AisCompareBar') {
         props.configurationId = 'configurationId';
+      } else if (name === 'AisResultCard') {
+        // Like `AisChat`, a transport avoids the appId/apiKey requirement.
+        props.agentId = 'agentId';
+        props.transport = {};
       } else if (name === 'AisTrendingItems' || name === 'AisChatTrigger') {
         // no required props
       } else {
