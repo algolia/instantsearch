@@ -334,7 +334,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       expect(renderState1.sortBy).toEqual({
         currentRefinement: 'index_default',
         refine: expect.any(Function),
-        hasNoResults: true,
         canRefine: false,
         options: [
           { label: 'default', value: 'index_default' },
@@ -376,7 +375,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       expect(renderState2.sortBy).toEqual({
         currentRefinement: 'index_desc',
         refine: expect.any(Function),
-        hasNoResults: false,
         canRefine: true,
         options: [
           { label: 'default', value: 'index_default' },
@@ -417,7 +415,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       expect(renderState1).toEqual({
         currentRefinement: 'index_desc',
         refine: expect.any(Function),
-        hasNoResults: true,
         canRefine: false,
         options: [
           { label: 'default', value: 'index_default' },
@@ -457,7 +454,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       expect(renderState2).toEqual({
         currentRefinement: 'index_default',
         refine: expect.any(Function),
-        hasNoResults: false,
         canRefine: true,
         options: [
           { label: 'default', value: 'index_default' },

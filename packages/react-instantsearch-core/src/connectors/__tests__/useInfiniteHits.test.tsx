@@ -18,7 +18,6 @@ describe('useInfiniteHits', () => {
     expect(result.current).toEqual({
       bindEvent: expect.any(Function),
       sendEvent: expect.any(Function),
-      hits: [],
       items: [],
       results: expect.objectContaining({ nbHits: 0 }),
       currentPageHits: [],
@@ -32,7 +31,6 @@ describe('useInfiniteHits', () => {
       // InstantSearch.js state from the `render` lifecycle step
       expect(result.current).toEqual({
         bindEvent: expect.any(Function),
-        hits: [],
         items: [],
         results: expect.objectContaining({ nbHits: 0 }),
         sendEvent: expect.any(Function),

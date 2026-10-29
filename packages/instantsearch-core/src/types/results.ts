@@ -76,11 +76,6 @@ export type Hit<THit extends NonNullable<object> = Record<string, any>> = {
 export type GeoHit<THit extends NonNullable<object> = BaseHit> = Hit<THit> &
   Required<Pick<Hit, '_geoloc'>>;
 
-/**
- * @deprecated use Hit[] directly instead
- */
-export type Hits = Hit[];
-
 export type EscapedHits<THit = Hit> = THit[] & { __escaped: boolean };
 
 export type FacetHit = SearchForFacetValues.Hit;

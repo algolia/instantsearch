@@ -3,12 +3,19 @@
  */
 
 import { mount, htmlCompat } from '../../../test/utils';
-import { __setState } from '../../mixins/widget';
+import {
+  __setState,
+  __overrideInstantSearchInstance,
+} from '../../mixins/widget';
 import SearchBox from '../SearchBox.vue';
 jest.mock('../../mixins/widget');
 import '../../../test/utils/sortedHtmlSerializer';
 
 const defaultState = {};
+
+afterEach(() => {
+  __overrideInstantSearchInstance({ status: 'idle' });
+});
 
 test('with submit title', () => {
   __setState(defaultState);
@@ -37,7 +44,8 @@ test('with reset title', () => {
 });
 
 test('with stalled search but no `showLoadingIndicator` displays the submit and hides reset, loader', () => {
-  __setState({ ...defaultState, isSearchStalled: true });
+  __setState(defaultState);
+  __overrideInstantSearchInstance({ status: 'stalled' });
   const wrapper = mount(SearchBox, {
     propsData: { showLoadingIndicator: false },
   });
@@ -97,10 +105,8 @@ test('keep local query when out of sync and input is focused', async () => {
 });
 
 test('overriding slots', () => {
-  __setState({
-    ...defaultState,
-    isSearchStalled: true,
-  });
+  __setState(defaultState);
+  __overrideInstantSearchInstance({ status: 'stalled' });
   const wrapper = mount({
     components: { SearchBox },
     data() {

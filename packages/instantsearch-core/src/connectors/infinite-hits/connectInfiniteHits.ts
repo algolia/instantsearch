@@ -127,12 +127,6 @@ export type InfiniteHitsRenderState<
 
   /**
    * Hits for current and cached pages
-   * @deprecated use `items` instead
-   */
-  hits: Array<Hit<THit>>;
-
-  /**
-   * Hits for current and cached pages
    */
   items: Array<Hit<THit>>;
 
@@ -438,7 +432,6 @@ export default (function connectInfiniteHits<
           : true;
 
         return {
-          hits: items,
           items,
           currentPageHits,
           sendEvent,
