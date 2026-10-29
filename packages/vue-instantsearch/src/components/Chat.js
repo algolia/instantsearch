@@ -91,12 +91,27 @@ function resolveComponent(vm, slotName, propName) {
 // (`:on-error="(error) => …"`) doesn't re-create the widget on every render.
 const callbackProps = ['onToolCall', 'onFinish', 'onError', 'onData'];
 
+// Component definitions (a tool's `layoutComponent`, …) are compared by
+// reference: Vue 2 adds an enumerable `_Ctor` cache to them the first time they
+// render, which would otherwise make every later comparison look like a change.
+function isComponentDefinition(value) {
+  return (
+    typeof value.render === 'function' ||
+    typeof value.setup === 'function' ||
+    typeof value.template === 'string' ||
+    '_Ctor' in value
+  );
+}
+
 function isPlainObject(value) {
   if (!value || typeof value !== 'object') {
     return false;
   }
   const proto = Object.getPrototypeOf(value);
-  return proto === Object.prototype || proto === null;
+  return (
+    (proto === Object.prototype || proto === null) &&
+    !isComponentDefinition(value)
+  );
 }
 
 /**

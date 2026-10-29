@@ -428,6 +428,48 @@ describe('AisChat', () => {
       expect(chatComponent.widgetParams.context).toEqual({ page: 'product' });
     });
 
+    it('treats component definitions as opaque, even once Vue caches a constructor on them', async () => {
+      const layoutComponent = { render: (h) => h('div') };
+      wrapper = mount(
+        {
+          components: { InstantSearch, ChatComponent },
+          data() {
+            return {
+              searchClient: createSearchClient(),
+              renders: 0,
+              tools: { custom: { layoutComponent } },
+            };
+          },
+          template: `
+            <InstantSearch :search-client="searchClient" index-name="indexName">
+              <span>{{ renders }}</span>
+              <ChatComponent
+                agent-id="agentId"
+                :requires-search="false"
+                :persistence="false"
+                :tools="{ custom: { layoutComponent: tools.custom.layoutComponent } }"
+                ref="chat"
+              />
+            </InstantSearch>
+          `,
+        },
+        { attachTo: document.body }
+      );
+      await wait(0);
+      await nextTick();
+
+      const chatComponent = wrapper.vm.$refs.chat;
+      const widget = chatComponent.widget;
+
+      // What Vue 2 does to a component's options when it first renders it.
+      layoutComponent._Ctor = {};
+      wrapper.vm.renders++;
+      await wait(0);
+      await nextTick();
+
+      expect(chatComponent.widget).toBe(widget);
+    });
+
     it('replaces the widget when a nested value is mutated in place', async () => {
       wrapper = mount(
         {
