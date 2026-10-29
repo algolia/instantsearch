@@ -107,14 +107,6 @@ export type InstantSearchOptions<
   numberLocale?: string;
 
   /**
-   * A hook that will be called each time a search needs to be done, with the
-   * helper as a parameter. It's your responsibility to call `helper.search()`.
-   * This option allows you to avoid doing searches at page load for example.
-   * @deprecated use onStateChange instead
-   */
-  searchFunction?: (helper: AlgoliaSearchHelper) => void;
-
-  /**
    * Function called when the state changes.
    *
    * Using this function makes the instance controlled. This means that you
@@ -235,8 +227,6 @@ class InstantSearch<
   public _manuallyResetScheduleSearch: boolean = false;
   public _resetScheduleSearch?: () => void;
   public _createURL: CreateURL<TUiState>;
-  public _searchFunction?: InstantSearchOptions['searchFunction'];
-  public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public _hasSearchWidget: boolean = false;
   public _hasRecommendWidget: boolean = false;
   public _insights: InstantSearchOptions['insights'];
@@ -265,20 +255,6 @@ class InstantSearch<
    */
   public error: Error | undefined = undefined;
 
-  /**
-   * @deprecated use `status === 'stalled'` instead
-   */
-  public get _isSearchStalled(): boolean {
-    warning(
-      false,
-      `\`InstantSearch._isSearchStalled\` is deprecated and will be removed in InstantSearch.js 5.0.
-
-Use \`InstantSearch.status === "stalled"\` instead.`
-    );
-
-    return this.status === 'stalled';
-  }
-
   public constructor(options: InstantSearchOptions<TUiState, TRouteState>) {
     super();
 
@@ -291,7 +267,6 @@ Use \`InstantSearch.status === "stalled"\` instead.`
       initialUiState = {} as TUiState,
       routing = null,
       insights = undefined,
-      searchFunction,
       stalledSearchDelay = 200,
       searchClient = null,
       insightsClient = null,
@@ -336,23 +311,6 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
       );
     }
 
-    warning(
-      !(options as any).searchParameters,
-      `The \`searchParameters\` option is deprecated and will not be supported in InstantSearch.js 4.x.
-
-You can replace it with the \`configure\` widget:
-
-\`\`\`
-search.addWidgets([
-  configure(${JSON.stringify((options as any).searchParameters, null, 2)})
-]);
-\`\`\`
-
-See ${createDocumentationLink({
-        name: 'configure',
-      })}`
-    );
-
     if (__DEV__ && options.future?.preserveSharedStateOnUnmount === undefined) {
       // eslint-disable-next-line no-console
       console.info(`Starting from the next major version, InstantSearch will change how widgets state is preserved when they are removed. InstantSearch will keep the state of unmounted widgets to be usable by other widgets with the same attribute.
@@ -395,14 +353,6 @@ See documentation: ${createDocumentationLink({
     this._initialResults = null;
 
     this._insights = insights;
-
-    if (searchFunction) {
-      warning(
-        false,
-        `The \`searchFunction\` option is deprecated. Use \`onStateChange\` instead.`
-      );
-      this._searchFunction = searchFunction;
-    }
 
     this.sendEventToInsights = noop;
 
@@ -479,32 +429,6 @@ See documentation: ${createDocumentationLink({
     return this;
   }
 
-  // @major we shipped with EXPERIMENTAL_use, but have changed that to just `use` now
-  public EXPERIMENTAL_use(...middleware: Middleware[]): this {
-    warning(
-      false,
-      'The middleware API is now considered stable, so we recommend replacing `EXPERIMENTAL_use` with `use` before upgrading to the next major version.'
-    );
-
-    return this.use(...middleware);
-  }
-
-  /**
-   * Adds a widget to the search instance.
-   * A widget can be added either before or after InstantSearch has started.
-   * @param widget The widget to add to InstantSearch.
-   *
-   * @deprecated This method will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`.
-   */
-  public addWidget(widget: Widget) {
-    warning(
-      false,
-      'addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
-    );
-
-    return this.addWidgets([widget]);
-  }
-
   /**
    * Adds multiple widgets to the search instance.
    * Widgets can be added either before or after InstantSearch has started.
@@ -515,9 +439,7 @@ See documentation: ${createDocumentationLink({
   ) {
     if (!Array.isArray(widgets)) {
       throw new Error(
-        withUsage(
-          'The `addWidgets` method expects an array of widgets. Please use `addWidget`.'
-        )
+        withUsage('The `addWidgets` method expects an array of widgets.')
       );
     }
 
@@ -535,22 +457,6 @@ See documentation: ${createDocumentationLink({
     this.mainIndex.addWidgets(widgets);
 
     return this;
-  }
-
-  /**
-   * Removes a widget from the search instance.
-   * @deprecated This method will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`
-   * @param widget The widget instance to remove from InstantSearch.
-   *
-   * The widget must implement a `dispose()` method to clear its state.
-   */
-  public removeWidget(widget: Widget | IndexWidget) {
-    warning(
-      false,
-      'removeWidget will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`'
-    );
-
-    return this.removeWidgets([widget]);
   }
 
   /**
@@ -635,34 +541,6 @@ See documentation: ${createDocumentationLink({
 
       return mainHelper;
     };
-
-    if (this._searchFunction) {
-      // this client isn't used to actually search, but required for the helper
-      // to not throw errors
-      const fakeClient = {
-        search: () => new Promise(noop),
-      } as any as SearchClient;
-
-      this._mainHelperSearch = mainHelper.search.bind(mainHelper);
-      mainHelper.search = () => {
-        const mainIndexHelper = this.mainIndex.getHelper();
-        const searchFunctionHelper = algoliasearchHelper(
-          fakeClient,
-          mainIndexHelper!.state.index,
-          mainIndexHelper!.state
-        );
-        searchFunctionHelper.once('search', ({ state }) => {
-          mainIndexHelper!.overrideStateWithoutTriggeringChangeEvent(state);
-          this._mainHelperSearch!();
-        });
-        // Forward state changes from `searchFunctionHelper` to `mainIndexHelper`
-        searchFunctionHelper.on('change', ({ state }) => {
-          mainIndexHelper!.setState(state);
-        });
-        this._searchFunction!(searchFunctionHelper);
-        return mainHelper;
-      };
-    }
 
     // Only the "main" Helper emits the `error` event vs the one for `search`
     // and `results` that are also emitted on the derived one.

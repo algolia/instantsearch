@@ -25,11 +25,6 @@ type SharedRenderOptions = {
   state: SearchParameters;
   renderState: IndexRenderState;
   helper: Helper;
-  /** @deprecated use `status` instead */
-  searchMetadata: {
-    /** @deprecated use `status === "stalled"` instead */
-    isSearchStalled: boolean;
-  };
   status: InstantSearch['status'];
   error: InstantSearch['error'];
   createURL: (
@@ -264,17 +259,6 @@ type RequiredUiStateLifeCycle<TWidgetDescription extends WidgetDescription> = {
       helper: Helper;
     }
   ) => Partial<IndexUiState & TWidgetDescription['indexUiState']>;
-
-  /**
-   * This function is required for a widget to be taken in account for routing.
-   * It will derive a uiState for this widget based on the existing uiState and
-   * the search parameters applied.
-   *
-   * @deprecated Use `getWidgetUiState` instead.
-   * @param uiState - Current state.
-   * @param widgetStateOptions - Extra information to calculate uiState.
-   */
-  getWidgetState?: RequiredUiStateLifeCycle<TWidgetDescription>['getWidgetUiState'];
 
   /**
    * This function is required for a widget to behave correctly when a URL is
