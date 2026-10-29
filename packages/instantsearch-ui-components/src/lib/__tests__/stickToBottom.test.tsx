@@ -198,10 +198,15 @@ describe('useStickToBottom', () => {
       await runFrames(60);
     }
 
-    test('stays where the keyboard scrolled it', async () => {
+    test.each([
+      ['PageUp', { key: 'PageUp' }],
+      ['ArrowUp', { key: 'ArrowUp' }],
+      ['Home', { key: 'Home' }],
+      ['Shift+Space', { key: ' ', shiftKey: true }],
+    ])('stays where %s scrolled it', async (_name, keyInit) => {
       const { scroll, box } = await renderAtBottom();
 
-      fireEvent.keyDown(scroll, { key: 'PageUp' });
+      fireEvent.keyDown(scroll, keyInit);
       await scrollUpWhileStreaming(scroll, box);
 
       expect(scroll.scrollTop).toBe(300);
@@ -227,13 +232,17 @@ describe('useStickToBottom', () => {
       const field = document.createElement('input');
       const widget = document.createElement('div');
       widget.addEventListener('keydown', (event) => event.preventDefault());
-      scroll.firstElementChild!.append(field, widget);
+      const button = document.createElement('button');
+      scroll.firstElementChild!.append(field, widget, button);
 
       fireEvent.keyDown(scroll, { key: 'PageDown' });
       expect(instance.state.isAtBottom).toBe(true);
       fireEvent.keyDown(field, { key: 'ArrowUp' });
       expect(instance.state.isAtBottom).toBe(true);
       fireEvent.keyDown(widget, { key: 'PageUp' });
+      expect(instance.state.isAtBottom).toBe(true);
+      // Space activates a focused button instead of scrolling.
+      fireEvent.keyDown(button, { key: ' ', shiftKey: true });
       expect(instance.state.isAtBottom).toBe(true);
     });
   });

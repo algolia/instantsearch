@@ -546,10 +546,15 @@ export function createStickToBottom({
 
     const handleKeyDown = useCallback(
       (event: KeyboardEvent) => {
-        const target = event.target as HTMLElement;
+        // The path, rather than `target`, also finds the history inside a
+        // shadow root.
+        const path = event.composedPath();
+        const target = path[0] as HTMLElement;
         // Text fields move the caret with these keys, and a key another
         // handler took doesn't scroll.
         if (
+          !scrollRef.current ||
+          !path.includes(scrollRef.current) ||
           event.defaultPrevented ||
           target.isContentEditable ||
           /^(INPUT|SELECT|TEXTAREA)$/.test(target.tagName)
@@ -559,7 +564,10 @@ export function createStickToBottom({
 
         if (
           ['ArrowUp', 'PageUp', 'Home'].includes(event.key) ||
-          (event.key === ' ' && event.shiftKey)
+          // Space activates a focused button or disclosure instead.
+          (event.key === ' ' &&
+            event.shiftKey &&
+            !target.matches('button, summary'))
         ) {
           escapeScrollingUp(target);
         }
@@ -574,14 +582,17 @@ export function createStickToBottom({
         return undefined;
       }
 
+      // On the document, so the page's own key handlers have run, including
+      // React's, which are delegated to its root.
+      const { ownerDocument } = scroll;
       scroll.addEventListener('scroll', handleScroll, { passive: true });
       scroll.addEventListener('wheel', handleWheel, { passive: true });
-      scroll.addEventListener('keydown', handleKeyDown);
+      ownerDocument.addEventListener('keydown', handleKeyDown);
 
       return () => {
         scroll.removeEventListener('scroll', handleScroll);
         scroll.removeEventListener('wheel', handleWheel);
-        scroll.removeEventListener('keydown', handleKeyDown);
+        ownerDocument.removeEventListener('keydown', handleKeyDown);
       };
     }, [handleScroll, handleWheel, handleKeyDown]);
 
