@@ -278,7 +278,16 @@ const HTML_CUSTOM_ATTR_R = /^(data|aria|x)-[a-z_][a-z\d_.-]*$/;
 const HTML_SELF_CLOSING_ELEMENT_R =
   /^ *<([a-z][a-z0-9:]*)(?:\s+((?:<.*?>|[^>])*))?\/?>(?!<\/\1>)(\s*\n)?/i;
 const INTERPOLATION_R = /^\{.*\}$/;
-const LINK_AUTOLINK_BARE_URL_R = /^(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/;
+/**
+ * Chinese, Japanese and Korean characters and punctuation. CJK prose has no
+ * spaces between words, so a bare URL ends at the first of these rather than
+ * running on into the rest of the sentence.
+ */
+const CJK_CHARS =
+  '\\u2e80-\\u9fff\\uac00-\\ud7af\\uf900-\\ufaff\\uff00-\\uffef';
+const LINK_AUTOLINK_BARE_URL_R = new RegExp(
+  `^(https?://[^\\s<${CJK_CHARS}]+[^<.,:;"')\\]\\s${CJK_CHARS}])`
+);
 const LINK_AUTOLINK_R = /^<([^ >]+[:@\/][^ >]+)>/;
 const CAPTURE_LETTER_AFTER_HYPHEN = /-([a-z])?/gi;
 const NP_TABLE_R =

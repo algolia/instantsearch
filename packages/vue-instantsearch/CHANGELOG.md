@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.31.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.30.1...vue-instantsearch@4.31.0) (2026-10-26)
+
+
+### Features
+
+* **autocomplete:** add Autocomplete components to Vue ([#7310](https://github.com/algolia/instantsearch/issues/7310)) ([22a9a88](https://github.com/algolia/instantsearch/commit/22a9a88110d050c829f47be01cfa0e7e908e5e4b))
+* **chat:** add Chat + ChatTrigger widgets to Vue (phase 1) ([#7130](https://github.com/algolia/instantsearch/issues/7130)) ([12a5b25](https://github.com/algolia/instantsearch/commit/12a5b25e6115c75e5c1be0c3e118776356c1af94))
+* **frequentlyBoughtTogether:** add FrequentlyBoughtTogether to Vue ([#7128](https://github.com/algolia/instantsearch/issues/7128)) ([0cfa3e7](https://github.com/algolia/instantsearch/commit/0cfa3e75a4cce66fc4362c3d828099284d64ca63))
+* **recommend:** add LookingSimilar, TrendingItems, TrendingFacets to Vue ([#7129](https://github.com/algolia/instantsearch/issues/7129)) ([db46c89](https://github.com/algolia/instantsearch/commit/db46c8905a226ebe5c81fcac25e88bb0aff3e174))
+* **relatedProducts:** add RelatedProducts to Vue + hook-based UI infra ([#7127](https://github.com/algolia/instantsearch/issues/7127)) ([ca8e968](https://github.com/algolia/instantsearch/commit/ca8e968bb270630880565598b6320e8652ec4a7e)), closes [#7137](https://github.com/algolia/instantsearch/issues/7137)
+
+
+
+
+
 ## [4.30.1](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.30.0...vue-instantsearch@4.30.1) (2026-10-12)
 
 **Note:** Version bump only for package vue-instantsearch

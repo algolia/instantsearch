@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.30.1](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.30.0...algoliasearch-helper@3.30.1) (2026-10-26)
+
+
+### Bug Fixes
+
+* **composition:** keep disjunctive marker on * presence ([#7319](https://github.com/algolia/instantsearch/issues/7319)) ([ff8caec](https://github.com/algolia/instantsearch/commit/ff8caecf0944043a84bae9628f72f6021ffbb4b6))
+
+
+
+
+
 # [3.30.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.29.4...algoliasearch-helper@3.30.0) (2026-10-01)
 
 

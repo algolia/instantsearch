@@ -18,6 +18,7 @@ import type {
 import type { RendererOptions, Template } from '../../types';
 import type {
   ChatToggleButtonProps,
+  ChatToggleButtonTranslations,
   Pragma,
 } from 'instantsearch-ui-components';
 
@@ -66,6 +67,11 @@ export type ChatTriggerWidgetParams = {
    * @default true
    */
   floating?: boolean;
+
+  /**
+   * Accessible labels for the button, announced by screen readers.
+   */
+  translations?: Partial<ChatToggleButtonTranslations>;
 };
 
 const ChatToggleButton = createChatToggleButtonComponent({
@@ -79,6 +85,7 @@ export default function chatTrigger(widgetParams: ChatTriggerWidgetParams) {
     templates: userTemplates = {},
     cssClasses: userCssClasses = {},
     floating = true,
+    translations,
   } = widgetParams || {};
 
   const rootClassName: string | string[] | undefined = floating
@@ -140,6 +147,7 @@ export default function chatTrigger(widgetParams: ChatTriggerWidgetParams) {
           open={open}
           onClick={toggleOpen}
           toggleIconComponent={iconComponent}
+          translations={translations}
         />,
         containerNode
       );
@@ -150,6 +158,7 @@ export default function chatTrigger(widgetParams: ChatTriggerWidgetParams) {
           onClick={toggleOpen}
           toggleIconComponent={iconComponent}
           classNames={{ root: rootClassName }}
+          translations={translations}
         />,
         containerNode
       );

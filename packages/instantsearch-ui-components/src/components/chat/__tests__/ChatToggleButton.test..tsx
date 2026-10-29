@@ -14,15 +14,51 @@ const ChatToggleButton = createChatToggleButtonComponent({
 });
 
 describe('ChatToggleButton', () => {
+  test('names the button by default, depending on the open state', () => {
+    const { getByRole, rerender } = render(
+      <ChatToggleButton open={false} onClick={jest.fn()} />
+    );
+    expect(getByRole('button', { name: 'Open chat' })).toBeInTheDocument();
+
+    rerender(<ChatToggleButton open onClick={jest.fn()} />);
+    expect(getByRole('button', { name: 'Close chat' })).toBeInTheDocument();
+  });
+
+  test('names the button from custom translations', () => {
+    const translations = { openLabel: 'Ouvrir', closeLabel: 'Fermer' };
+    const { getByRole, rerender } = render(
+      <ChatToggleButton
+        open={false}
+        onClick={jest.fn()}
+        translations={translations}
+      />
+    );
+    expect(getByRole('button', { name: 'Ouvrir' })).toBeInTheDocument();
+
+    rerender(
+      <ChatToggleButton open onClick={jest.fn()} translations={translations} />
+    );
+    expect(getByRole('button', { name: 'Fermer' })).toBeInTheDocument();
+  });
+
+  test('lets a consumer aria-label win over the translations', () => {
+    const { getByRole } = render(
+      <ChatToggleButton open={false} onClick={jest.fn()} aria-label="Ask us" />
+    );
+    expect(getByRole('button', { name: 'Ask us' })).toBeInTheDocument();
+  });
+
   test('renders with default props', () => {
     const { container } = render(<ChatToggleButton open onClick={jest.fn()} />);
     expect(container).toMatchInlineSnapshot(`
       <div>
         <button
+          aria-label="Close chat"
           class="ais-Button ais-Button--primary ais-Button--md ais-Button--icon-only ais-ChatToggleButton ais-ChatToggleButton--open"
           type="button"
         >
           <svg
+            aria-hidden="true"
             fill="none"
             stroke="currentColor"
             strokeLinecap="round"
@@ -46,10 +82,12 @@ describe('ChatToggleButton', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <button
+          aria-label="Open chat"
           class="ais-Button ais-Button--primary ais-Button--md ais-Button--icon-only ais-ChatToggleButton"
           type="button"
         >
           <svg
+            aria-hidden="true"
             fill="none"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
@@ -115,6 +153,7 @@ describe('ChatToggleButton', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <button
+          aria-label="Open chat"
           class="ais-Button ais-Button--primary ais-Button--md ais-Button--icon-only ais-ChatToggleButton"
           type="button"
         >

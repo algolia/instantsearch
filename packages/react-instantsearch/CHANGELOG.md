@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.53.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.52.0...react-instantsearch@7.53.0) (2026-10-26)
+
+
+### Bug Fixes
+
+* **compareBar:** keep focus in the bar after removing an item ([#7303](https://github.com/algolia/instantsearch/issues/7303)) ([ac71f2e](https://github.com/algolia/instantsearch/commit/ac71f2e0dd28e5b9275432be5433d7b00f606122))
+* **compareBar:** render the title as a heading ([#7301](https://github.com/algolia/instantsearch/issues/7301)) ([0d5c338](https://github.com/algolia/instantsearch/commit/0d5c338cc0ae48b3b0d323835ca64b71bfd7ced6))
+* **compare:** require configurationId in the connector ([#7306](https://github.com/algolia/instantsearch/issues/7306)) ([d680621](https://github.com/algolia/instantsearch/commit/d68062114469f1231b0dd374244a4f9f47ab4032))
+
+
+### Features
+
+* **compare:** add transformItems ([#7309](https://github.com/algolia/instantsearch/issues/7309)) ([8be0dd8](https://github.com/algolia/instantsearch/commit/8be0dd871b36aee780fea86fad42aede3af2a3cc))
+* **compare:** require a comparison configuration for the hand-off ([#7294](https://github.com/algolia/instantsearch/issues/7294)) ([365f35a](https://github.com/algolia/instantsearch/commit/365f35adcb5d8f50e82c5dd11c1896f185bd51bc))
+
+
+
+
+
 # [7.52.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.51.0...react-instantsearch@7.52.0) (2026-10-12)
 
 

@@ -36,6 +36,14 @@ export default {
       required: false,
       default: undefined,
     },
+    /**
+     * Accessible labels for the button: `openLabel` and `closeLabel`.
+     */
+    translations: {
+      type: Object,
+      required: false,
+      default: undefined,
+    },
   },
   computed: {
     widgetParams() {
@@ -70,6 +78,7 @@ export default {
       onClick: this.handleClick,
       classNames: rootClassName ? { root: rootClassName } : undefined,
       toggleIconComponent: this.toggleIconComponent,
+      translations: this.translations,
     });
   }),
 };

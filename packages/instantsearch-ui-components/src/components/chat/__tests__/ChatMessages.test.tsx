@@ -79,6 +79,7 @@ describe('ChatMessages', () => {
             type="button"
           >
             <svg
+              aria-hidden="true"
               fill="none"
               stroke="currentColor"
               strokeLinecap="round"
@@ -166,6 +167,7 @@ describe('ChatMessages', () => {
             type="button"
           >
             <svg
+              aria-hidden="true"
               fill="none"
               stroke="currentColor"
               strokeLinecap="round"
@@ -1828,6 +1830,7 @@ describe('ChatMessages', () => {
             type="button"
           >
             <svg
+              aria-hidden="true"
               fill="none"
               stroke="currentColor"
               strokeLinecap="round"

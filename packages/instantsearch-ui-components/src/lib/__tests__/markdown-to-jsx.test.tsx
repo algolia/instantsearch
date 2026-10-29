@@ -37,6 +37,39 @@ describe('vendored markdown-to-jsx', () => {
     );
   });
 
+  test('ends bare URLs before trailing punctuation', () => {
+    expect(
+      renderMarkdown('See https://www.algolia.com/doc?q=1. Thanks')
+    ).toContain(
+      '<a href="https://www.algolia.com/doc?q=1">https://www.algolia.com/doc?q=1</a>. Thanks'
+    );
+  });
+
+  test.each([
+    [
+      '详情请访问https://www.algolia.com了解更多。',
+      '<a href="https://www.algolia.com">https://www.algolia.com</a>了解更多。',
+    ],
+    [
+      '詳しくはhttps://www.algolia.com/jp/をご覧ください。',
+      '<a href="https://www.algolia.com/jp/">https://www.algolia.com/jp/</a>をご覧ください。',
+    ],
+    [
+      '자세한 내용은 https://www.algolia.com에서 확인하세요.',
+      '<a href="https://www.algolia.com">https://www.algolia.com</a>에서 확인하세요.',
+    ],
+    [
+      '请访问 https://www.algolia.com，然后注册。',
+      '<a href="https://www.algolia.com">https://www.algolia.com</a>，然后注册。',
+    ],
+    [
+      '官网：https://www.algolia.com。',
+      '<a href="https://www.algolia.com">https://www.algolia.com</a>。',
+    ],
+  ])('ends bare URLs where CJK text starts: %s', (markdown, expected) => {
+    expect(renderMarkdown(markdown)).toContain(expected);
+  });
+
   test('does not parse raw HTML', () => {
     const html = renderMarkdown('<b>hi</b>');
     expect(html).not.toContain('<b>');

@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.25.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.24.1...instantsearch.css@8.25.0) (2026-10-26)
+
+
+### Bug Fixes
+
+* **chat:** align wrapped suggestion text to the start in RTL [FX-4062] ([#7320](https://github.com/algolia/instantsearch/issues/7320)) ([1e0d63a](https://github.com/algolia/instantsearch/commit/1e0d63a583a649815abc45cd818d30766bf69910))
+* **compareBar:** render the title as a heading ([#7301](https://github.com/algolia/instantsearch/issues/7301)) ([0d5c338](https://github.com/algolia/instantsearch/commit/0d5c338cc0ae48b3b0d323835ca64b71bfd7ced6))
+
+
+### Features
+
+* **chat:** announce replies once and make the history keyboard-scrollable ([#7295](https://github.com/algolia/instantsearch/issues/7295)) ([1a72e31](https://github.com/algolia/instantsearch/commit/1a72e31b6304e9d829c237003e7f6320c900716b))
+* **result-card:** stream the answer and cap the expanded card ([#7316](https://github.com/algolia/instantsearch/issues/7316)) ([845e01c](https://github.com/algolia/instantsearch/commit/845e01c40ef223e785de97f66847b146ff6b44c2))
+
+
+
+
+
 ## [8.24.1](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.24.0...instantsearch.css@8.24.1) (2026-10-12)
 
 
