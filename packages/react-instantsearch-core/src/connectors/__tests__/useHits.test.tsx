@@ -18,7 +18,6 @@ describe('useHits', () => {
     expect(result.current).toEqual({
       banner: undefined,
       bindEvent: expect.any(Function),
-      hits: [],
       items: [],
       results: expect.objectContaining({ nbHits: 0 }),
       sendEvent: expect.any(Function),
@@ -29,7 +28,6 @@ describe('useHits', () => {
       expect(result.current).toEqual({
         banner: undefined,
         bindEvent: expect.any(Function),
-        hits: [],
         items: [],
         results: expect.objectContaining({ nbHits: 0 }),
         sendEvent: expect.any(Function),

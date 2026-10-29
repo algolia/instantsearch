@@ -11,7 +11,7 @@ jest.mock('../../mixins/widget');
 jest.mock('../../mixins/panel');
 
 const defaultState = {
-  hasRefinements: true,
+  canRefine: true,
   refine: () => {},
   createURL: () => {},
 };
@@ -59,7 +59,7 @@ describe('default render', () => {
   it('renders correctly without refinements', () => {
     __setState({
       ...defaultState,
-      hasRefinements: false,
+      canRefine: false,
     });
 
     const wrapper = mount(ClearRefinements);
@@ -118,7 +118,7 @@ describe('custom default render', () => {
   it('renders correctly without refinement', () => {
     __setState({
       ...defaultState,
-      hasRefinements: false,
+      canRefine: false,
     });
 
     const wrapper = mount({

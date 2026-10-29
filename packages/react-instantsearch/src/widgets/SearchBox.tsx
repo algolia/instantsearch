@@ -55,14 +55,15 @@ export function SearchBox({
   translations,
   ...props
 }: SearchBoxProps) {
-  const { query, refine, isSearchStalled } = useSearchBox(
+  const { query, refine } = useSearchBox(
     { queryHook },
     {
       $$widgetType: 'ais.searchBox',
       ...(aiMode ? { opensChat: true } : {}),
     }
   );
-  const { indexRenderState } = useInstantSearch();
+  const { indexRenderState, status } = useInstantSearch();
+  const isSearchStalled = status === 'stalled';
   const [inputValue, setInputValue] = useState(query);
   const inputRef = useRef<HTMLInputElement>(null);
 
