@@ -220,7 +220,6 @@ export type {
   StatsWidgetDescription,
 } from 'instantsearch-core';
 export type {
-  Suggestion,
   ToggleRefinementConnector,
   ToggleRefinementConnectorParams,
   ToggleRefinementRenderState,
