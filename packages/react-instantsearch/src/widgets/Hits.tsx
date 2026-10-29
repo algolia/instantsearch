@@ -63,7 +63,11 @@ export function Hits<THit extends BaseHit = BaseHit>({
   bannerComponent: BannerComponent,
   ...props
 }: HitsProps<THit>) {
-  const { hits, banner, sendEvent } = useHits<THit>(
+  const {
+    items: hits,
+    banner,
+    sendEvent,
+  } = useHits<THit>(
     { escapeHTML, transformItems },
     { $$widgetType: 'ais.hits' }
   );

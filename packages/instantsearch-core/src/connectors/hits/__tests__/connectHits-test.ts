@@ -124,7 +124,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        hits: [],
+        items: [],
         results: undefined,
       }),
       expect.anything()
@@ -148,7 +148,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        hits,
+        items: hits,
         results,
       }),
       expect.anything()
@@ -172,7 +172,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        hits: [],
+        items: [],
         results: undefined,
       }),
       expect.anything()
@@ -219,7 +219,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        hits: expectedHits,
+        items: expectedHits,
         results,
       }),
       expect.anything()
@@ -246,7 +246,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
     expect(renderFn).toHaveBeenNthCalledWith(
       1,
-      expect.objectContaining({ hits: [], results: undefined }),
+      expect.objectContaining({ items: [], results: undefined }),
       expect.anything()
     );
 
@@ -274,7 +274,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     expect(renderFn).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
-        hits: expectedHits,
+        items: expectedHits,
         results,
       }),
       expect.anything()
@@ -347,7 +347,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     expect(renderFn).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
-        hits: expectedHits,
+        items: expectedHits,
       }),
       expect.anything()
     );
@@ -452,7 +452,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     expect(renderFn).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
-        hits: expectedHits,
+        items: expectedHits,
         results,
       }),
       expect.anything()
@@ -507,7 +507,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       );
 
       expect(renderState1.hits).toEqual({
-        hits: [],
         items: [],
         sendEvent: expect.any(Function),
         bindEvent: expect.any(Function),
@@ -539,7 +538,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       ];
 
       expect(renderState2.hits).toEqual({
-        hits: expectedHits,
         items: expectedHits,
         sendEvent: renderState1.hits.sendEvent,
         bindEvent: renderState1.hits.bindEvent,
@@ -570,7 +568,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       );
 
       expect(renderState1).toEqual({
-        hits: [],
         items: [],
         banner: undefined,
         sendEvent: expect.any(Function),
@@ -608,7 +605,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       ];
 
       expect(renderState2).toEqual({
-        hits: expectedHits,
         items: expectedHits,
         banner,
         sendEvent: renderState1.sendEvent,

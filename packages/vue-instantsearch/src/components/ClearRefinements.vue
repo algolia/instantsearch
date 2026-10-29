@@ -62,7 +62,7 @@ export default {
       };
     },
     canRefine() {
-      return this.state.hasRefinements;
+      return this.state.canRefine;
     },
   },
 };

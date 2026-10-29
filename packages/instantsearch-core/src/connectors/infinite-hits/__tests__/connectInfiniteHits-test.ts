@@ -106,7 +106,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
         instantSearchInstance,
-        hits: [],
+        items: [],
         showPrevious: expect.any(Function),
         showMore: expect.any(Function),
         results: undefined,
@@ -134,7 +134,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
         instantSearchInstance,
-        hits: [],
+        items: [],
         showPrevious: expect.any(Function),
         showMore: expect.any(Function),
         results: expect.any(Object),
@@ -164,7 +164,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     );
 
     const firstRenderOptions = renderFn.mock.calls[0][0];
-    expect(firstRenderOptions.hits).toEqual([]);
+    expect(firstRenderOptions.items).toEqual([]);
     expect(firstRenderOptions.results).toBe(undefined);
 
     const hits = [
@@ -185,7 +185,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
     const secondRenderOptions = renderFn.mock.calls[1][0];
     const { showMore } = secondRenderOptions;
-    expect(secondRenderOptions.hits).toEqual(hits);
+    expect(secondRenderOptions.items).toEqual(hits);
     expect(secondRenderOptions.results).toEqual(results);
     showMore();
     expect(helper.search).toHaveBeenCalledTimes(1);
@@ -208,7 +208,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     );
 
     const thirdRenderOptions = renderFn.mock.calls[2][0];
-    expect(thirdRenderOptions.hits).toEqual([...hits, ...otherHits]);
+    expect(thirdRenderOptions.items).toEqual([...hits, ...otherHits]);
     expect(thirdRenderOptions.results).toEqual(otherResults);
   });
 
@@ -231,7 +231,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     );
 
     const firstRenderOptions = renderFn.mock.calls[0][0];
-    expect(firstRenderOptions.hits).toEqual([]);
+    expect(firstRenderOptions.items).toEqual([]);
     expect(firstRenderOptions.results).toBe(undefined);
 
     const hits = [
@@ -252,7 +252,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
     const secondRenderOptions = renderFn.mock.calls[1][0];
     const { showPrevious } = secondRenderOptions;
-    expect(secondRenderOptions.hits).toEqual(hits);
+    expect(secondRenderOptions.items).toEqual(hits);
     expect(secondRenderOptions.results).toEqual(results);
     showPrevious();
     expect(helper.state.page).toBe(0);
@@ -280,7 +280,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     );
 
     const thirdRenderOptions = renderFn.mock.calls[2][0];
-    expect(thirdRenderOptions.hits).toEqual([...previousHits, ...hits]);
+    expect(thirdRenderOptions.items).toEqual([...previousHits, ...hits]);
     expect(thirdRenderOptions.results).toEqual(previousResults);
   });
 
@@ -372,7 +372,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     );
 
     const firstRenderOptions = renderFn.mock.calls[0][0];
-    expect(firstRenderOptions.hits).toEqual([]);
+    expect(firstRenderOptions.items).toEqual([]);
     expect(firstRenderOptions.results).toBe(undefined);
 
     const hits = [
@@ -392,7 +392,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     );
 
     const secondRenderOptions = renderFn.mock.calls[1][0];
-    expect(secondRenderOptions.hits).toEqual(hits);
+    expect(secondRenderOptions.items).toEqual(hits);
     expect(secondRenderOptions.results).toEqual(results);
 
     helper.setQuery('data');
@@ -415,7 +415,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     );
 
     const thirdRenderOptions = renderFn.mock.calls[2][0];
-    expect(thirdRenderOptions.hits).toEqual(otherHits);
+    expect(thirdRenderOptions.items).toEqual(otherHits);
     expect(thirdRenderOptions.results).toEqual(otherResults);
   });
 
@@ -521,7 +521,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     );
 
     const firstRenderOptions = renderFn.mock.calls[0][0];
-    expect(firstRenderOptions.hits).toEqual([]);
+    expect(firstRenderOptions.items).toEqual([]);
     expect(firstRenderOptions.results).toBe(undefined);
 
     const hits = [
@@ -565,7 +565,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     ];
 
     const secondRenderOptions = renderFn.mock.calls[1][0];
-    expect(secondRenderOptions.hits).toEqual(escapedHits);
+    expect(secondRenderOptions.items).toEqual(escapedHits);
     expect(secondRenderOptions.results).toEqual(results);
   });
 
@@ -589,7 +589,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     );
 
     const firstRenderOptions = renderFn.mock.calls[0][0];
-    expect(firstRenderOptions.hits).toEqual([]);
+    expect(firstRenderOptions.items).toEqual([]);
     expect(firstRenderOptions.results).toBe(undefined);
 
     const hits = [
@@ -627,7 +627,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     ];
 
     const secondRenderOptions = renderFn.mock.calls[1][0];
-    expect(secondRenderOptions.hits).toEqual(transformedHits);
+    expect(secondRenderOptions.items).toEqual(transformedHits);
     expect(secondRenderOptions.results).toEqual(results);
   });
 
@@ -724,7 +724,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(renderFn).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
-        hits: [
+        items: [
           {
             name: 'hello',
             _highlightResult: {
@@ -795,7 +795,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(renderFn).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
-        hits: [
+        items: [
           {
             name: 'name 1',
             objectID: '1',
@@ -860,7 +860,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(renderFn).toHaveBeenCalledTimes(3);
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        hits: [{ objectID: 'a' }, { objectID: 'b' }],
+        items: [{ objectID: 'a' }, { objectID: 'b' }],
       }),
       false
     );
@@ -882,7 +882,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(renderFn).toHaveBeenCalledTimes(4);
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        hits: [{ objectID: 'a' }, { objectID: 'b' }],
+        items: [{ objectID: 'a' }, { objectID: 'b' }],
       }),
       false
     );
@@ -988,7 +988,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       renderWidget({ results: searchResults });
 
       let renderOptions = renderFn.mock.calls[2][0];
-      expect(renderOptions.hits).toEqual(firstPageHits);
+      expect(renderOptions.items).toEqual(firstPageHits);
       expect(renderOptions.results).toEqual(searchResults);
 
       // Search: page 2
@@ -1005,7 +1005,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       renderWidget({ results: searchResults });
 
       renderOptions = renderFn.mock.calls[3][0];
-      expect(renderOptions.hits).toEqual([...firstPageHits, ...secondPageHits]);
+      expect(renderOptions.items).toEqual([
+        ...firstPageHits,
+        ...secondPageHits,
+      ]);
       expect(renderOptions.results).toEqual(searchResults);
     }
 
@@ -1032,7 +1035,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       renderWidget({ results: searchResults });
 
       const renderOptions = renderFn.mock.calls[2][0];
-      expect(renderOptions.hits).toEqual([...firstPageHits, ...secondPageHits]);
+      expect(renderOptions.items).toEqual([
+        ...firstPageHits,
+        ...secondPageHits,
+      ]);
       expect(renderOptions.results).toEqual(searchResults);
     }
   });
@@ -1104,7 +1110,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       renderWidget({ results: searchResults });
 
       let renderOptions = renderFn.mock.calls[2][0];
-      expect(renderOptions.hits).toEqual(firstPageHits);
+      expect(renderOptions.items).toEqual(firstPageHits);
       expect(renderOptions.results).toEqual(searchResults);
 
       // Search: page 2
@@ -1122,7 +1128,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       renderWidget({ results: searchResults });
 
       renderOptions = renderFn.mock.calls[3][0];
-      expect(renderOptions.hits).toEqual([...firstPageHits, ...secondPageHits]);
+      expect(renderOptions.items).toEqual([
+        ...firstPageHits,
+        ...secondPageHits,
+      ]);
       expect(renderOptions.results).toEqual(searchResults);
     }
 
@@ -1150,7 +1159,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       renderWidget({ results: searchResults });
 
       const renderOptions = renderFn.mock.calls[2][0];
-      expect(renderOptions.hits).toEqual([...firstPageHits, ...secondPageHits]);
+      expect(renderOptions.items).toEqual([
+        ...firstPageHits,
+        ...secondPageHits,
+      ]);
       expect(renderOptions.results).toEqual(searchResults);
     }
   });
@@ -1364,7 +1376,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       const renderState1 = infiniteHitsWidget.getRenderState({}, initOptions);
 
       expect(renderState1.infiniteHits).toEqual({
-        hits: [],
         items: [],
         currentPageHits: [],
         sendEvent: expect.any(Function),
@@ -1428,7 +1439,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       ];
 
       expect(renderState2.infiniteHits).toEqual({
-        hits: expectedHits,
         items: expectedHits,
         currentPageHits: expectedCurrentPageHits,
         sendEvent: renderState1.infiniteHits.sendEvent,
@@ -1459,7 +1469,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       const renderState1 = infiniteHitsWidget.getWidgetRenderState(initOptions);
 
       expect(renderState1).toEqual({
-        hits: [],
         items: [],
         currentPageHits: [],
         sendEvent: expect.any(Function),
@@ -1536,7 +1545,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       ];
 
       expect(renderState2).toEqual({
-        hits: expectedHits,
         items: expectedHits,
         currentPageHits: expectedCurrentPageHits,
         sendEvent: renderState1.sendEvent,
@@ -1581,7 +1589,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         infiniteHitsWidget.getWidgetRenderState(renderOptions);
 
       expect(renderState).toEqual({
-        hits: [],
         items: [],
         currentPageHits: [],
         sendEvent: expect.any(Function),
