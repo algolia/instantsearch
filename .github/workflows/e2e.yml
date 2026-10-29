@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       soft-fail-secondary:
-        description: 'Report IE11 and Next.js failures without failing the workflow.'
+        description: 'Report Next.js failures without failing the workflow.'
         type: boolean
         default: false
   workflow_dispatch:
