@@ -100,33 +100,33 @@ export function createOptionsTests(
       expect(byTestId('Compare-maxItems')).toHaveTextContent('4');
     });
 
-    test('throws without `configurationId`', () => {
-      expect(() =>
-        setup({
+    test('throws without `configurationId`', async () => {
+      await expect(async () => {
+        await setup({
           instantSearchOptions: {
             indexName: 'indexName',
             searchClient: createSearchClient({}),
           },
           widgetParams: {} as CompareConnectorSetupParams,
-        })
-      ).toThrow('The `configurationId` option is required.');
+        });
+      }).rejects.toThrow('The `configurationId` option is required.');
     });
 
-    test('throws when `minItems` is lower than 2', () => {
-      expect(() =>
-        setup({
+    test('throws when `minItems` is lower than 2', async () => {
+      await expect(async () => {
+        await setup({
           instantSearchOptions: {
             indexName: 'indexName',
             searchClient: createSearchClient({}),
           },
           widgetParams: { configurationId: CONFIGURATION_ID, minItems: 1 },
-        })
-      ).toThrow('The `minItems` option must be at least 2.');
+        });
+      }).rejects.toThrow('The `minItems` option must be at least 2.');
     });
 
-    test('throws when `maxItems` is lower than `minItems`', () => {
-      expect(() =>
-        setup({
+    test('throws when `maxItems` is lower than `minItems`', async () => {
+      await expect(async () => {
+        await setup({
           instantSearchOptions: {
             indexName: 'indexName',
             searchClient: createSearchClient({}),
@@ -136,8 +136,8 @@ export function createOptionsTests(
             minItems: 3,
             maxItems: 2,
           },
-        })
-      ).toThrow(
+        });
+      }).rejects.toThrow(
         'The `maxItems` option must be greater than or equal to `minItems`.'
       );
     });

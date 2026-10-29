@@ -5,6 +5,7 @@ import { runTestSuites } from '@instantsearch/tests/common';
 import * as testSuites from '@instantsearch/tests/connectors';
 import {
   connectBreadcrumb,
+  connectCompare,
   connectCurrentRefinements,
   connectHierarchicalMenu,
   connectHitsPerPage,
@@ -16,8 +17,9 @@ import {
   connectToggleRefinement,
 } from 'instantsearch.js/es/connectors/index';
 
-import { nextTick, mountApp } from '../../test/utils';
+import { nextTick, mountApp, mountAppOrThrow } from '../../test/utils';
 import {
+  AisChat,
   AisInstantSearch,
   AisMenu,
   AisRefinementList,
@@ -346,8 +348,120 @@ const testSetups = {
   createLookingSimilarConnectorTests: () => {},
   createChatConnectorTests: () => {},
   createFilterSuggestionsConnectorTests: () => {},
-  createCompareConnectorTests() {
-    throw new Error('Compare is not supported in Vue InstantSearch');
+  async createCompareConnectorTests({ instantSearchOptions, widgetParams }) {
+    const {
+      products = [],
+      renderChat = true,
+      ...connectorParams
+    } = widgetParams;
+
+    const CustomCompare = {
+      mixins: [createWidgetMixin({ connector: connectCompare })],
+      data() {
+        return { result: '' };
+      },
+      computed: {
+        widgetParams() {
+          return connectorParams;
+        },
+      },
+      render: renderCompat(function (h) {
+        if (!this.state) {
+          return null;
+        }
+
+        const { items, isSelected, canAddItems, canCompare } = this.state;
+
+        return h('div', {}, [
+          h(
+            'ul',
+            {},
+            items.map((item) =>
+              h(
+                'li',
+                {
+                  key: item.objectID,
+                  attrs: {
+                    'data-testid': 'Compare-item',
+                    'data-object-id': item.objectID,
+                  },
+                },
+                item.objectID
+              )
+            )
+          ),
+          h(
+            'span',
+            { attrs: { 'data-testid': 'Compare-minItems' } },
+            String(this.state.minItems)
+          ),
+          h(
+            'span',
+            { attrs: { 'data-testid': 'Compare-maxItems' } },
+            String(this.state.maxItems)
+          ),
+          h(
+            'span',
+            { attrs: { 'data-testid': 'Compare-canAddItems' } },
+            String(canAddItems)
+          ),
+          h(
+            'span',
+            { attrs: { 'data-testid': 'Compare-canCompare' } },
+            String(canCompare)
+          ),
+          ...products.flatMap((product) => [
+            h('button', {
+              attrs: { 'data-testid': `Compare-add-${product.objectID}` },
+              on: { click: () => this.state.addItem(product) },
+            }),
+            h('button', {
+              attrs: { 'data-testid': `Compare-remove-${product.objectID}` },
+              on: { click: () => this.state.removeItem(product.objectID) },
+            }),
+            h('button', {
+              attrs: {
+                'data-testid': `Compare-toggle-${product.objectID}`,
+                'aria-pressed': String(isSelected(product.objectID)),
+              },
+              on: { click: () => this.state.toggleItem(product) },
+            }),
+          ]),
+          h('button', {
+            attrs: { 'data-testid': 'Compare-clear' },
+            on: { click: () => this.state.clearItems() },
+          }),
+          h('button', {
+            attrs: { 'data-testid': 'Compare-compare' },
+            on: {
+              click: () => {
+                this.result = String(this.state.compare());
+              },
+            },
+          }),
+          h('output', { attrs: { 'data-testid': 'Compare-result' } }, [
+            this.result,
+          ]),
+        ]);
+      }),
+    };
+
+    mountAppOrThrow(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(CustomCompare),
+            // A dedicated id: the `agentId` the chat suites use keys persisted
+            // messages in `sessionStorage` that leak across tests in this file.
+            renderChat &&
+              h(AisChat, { props: { agentId: 'compareChatAgentId' } }),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
   },
 };
 
@@ -460,7 +574,12 @@ const testOptions = {
     },
   },
   createCompareConnectorTests: {
-    skippedTests: { 'Compare connector common tests': true },
+    // Vue batches DOM updates, so flush them after each step the shared tests
+    // wrap in `act`.
+    act: async (callback) => {
+      await callback();
+      await nextTick();
+    },
   },
 };
 

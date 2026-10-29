@@ -93,6 +93,8 @@ function getAllComponents() {
         // validation is disabled since no ChatTrigger is mounted here.
         props.transport = {};
         props.disableTriggerValidation = true;
+      } else if (name === 'AisCompareBar') {
+        props.configurationId = 'configurationId';
       } else if (name === 'AisTrendingItems' || name === 'AisChatTrigger') {
         // no required props
       } else {

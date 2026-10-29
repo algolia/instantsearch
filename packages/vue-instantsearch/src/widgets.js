@@ -24,6 +24,7 @@ export { default as AisRangeInput } from './components/RangeInput.vue';
 export { default as AisRatingMenu } from './components/RatingMenu.vue';
 export { default as AisChat } from './components/Chat';
 export { default as AisChatTrigger } from './components/ChatTrigger';
+export { default as AisCompareBar } from './components/CompareBar';
 export { default as AisRelatedProducts } from './components/RelatedProducts';
 export { default as AisFrequentlyBoughtTogether } from './components/FrequentlyBoughtTogether';
 export { default as AisLookingSimilar } from './components/LookingSimilar';
