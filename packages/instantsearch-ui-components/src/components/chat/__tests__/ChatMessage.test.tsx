@@ -1541,6 +1541,223 @@ describe('ChatMessage', () => {
     expect(container.querySelector('.ais-ChatMessage-text')).toBeNull();
   });
 
+  describe('half-written markdown in a streaming part', () => {
+    const renderText = (
+      text: string,
+      state: 'streaming' | 'done' = 'streaming'
+    ) => {
+      const message: ChatMessageBase = {
+        role: 'assistant',
+        id: '1',
+        parts: [{ type: 'text', text, state }],
+      };
+      const { container } = render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={message}
+          context={createContext({ status: 'streaming', messages: [message] })}
+        />
+      );
+      return container.querySelector('.ais-ChatMessage-message')!;
+    };
+
+    test('never shows raw markers or a cut-off link while a reply streams', () => {
+      const reply =
+        'Try the **Nike Air Max 90** or [the Pegasus](https://www.example.com/pegasus) in `size 42`.';
+
+      for (let length = 1; length <= reply.length; length++) {
+        const content = renderText(reply.slice(0, length));
+
+        expect(content.textContent).not.toMatch(/\*|\]\(|`/);
+        content.querySelectorAll('a').forEach((link) => {
+          expect(link).toHaveAttribute(
+            'href',
+            'https://www.example.com/pegasus'
+          );
+        });
+      }
+    });
+
+    test('shows the text of a link whose URL is still arriving, without a link', () => {
+      const content = renderText('See [the docs](https://www.algolia.co');
+
+      expect(content.querySelector('a')).toBeNull();
+      expect(content).toHaveTextContent(/^See the docs$/);
+    });
+
+    test.each([['See [the docs'], ['See [the docs]']])(
+      'shows the text of a link before its URL starts: %s',
+      (text) => {
+        const content = renderText(text);
+
+        expect(content).toHaveTextContent(/^See the docs$/);
+      }
+    );
+
+    test.each([['Try the *'], ['Try the _'], ['Was ~']])(
+      'hides the first character of a marker: %s',
+      (text) => {
+        const content = renderText(text);
+
+        expect(content).toHaveTextContent(/^(Try the|Was)$/);
+      }
+    );
+
+    test('keeps the closing marker of finished italic text', () => {
+      const content = renderText('This is *really*');
+
+      expect(content.querySelector('em')).toHaveTextContent(/^really$/);
+    });
+
+    test('leaves out an image whose URL is still arriving', () => {
+      const content = renderText('Look: ![shoe](https://cdn.example.com/sho');
+
+      expect(content.querySelector('img')).toBeNull();
+      expect(content.querySelector('a')).toBeNull();
+      expect(content).toHaveTextContent(/^Look:$/);
+    });
+
+    test('only rewrites a link on the line that is still arriving', () => {
+      const content = renderText('Sizes [EU](see chart\nThe red pair');
+
+      expect(content).toHaveTextContent(
+        /^Sizes \[EU\]\(see chart The red pair$/
+      );
+    });
+
+    test('shows bold text before its closing marker arrives', () => {
+      const content = renderText('Try the **Nike Air Max');
+
+      expect(content.querySelector('strong')).toHaveTextContent(
+        /^Nike Air Max$/
+      );
+      expect(content).toHaveTextContent(/^Try the Nike Air Max$/);
+    });
+
+    test('shows bold text in the list item that is still arriving', () => {
+      const content = renderText('Two options:\n\n- **Red pair');
+
+      expect(content.querySelector('li strong')).toHaveTextContent(
+        /^Red pair$/
+      );
+    });
+
+    test.each([['done' as const], [undefined]])(
+      'renders a part in the %s state as written',
+      (state) => {
+        const message: ChatMessageBase = {
+          role: 'assistant',
+          id: '1',
+          parts: [
+            { type: 'text', text: 'See **[the docs](https://exa', state },
+          ],
+        };
+        const { container } = render(
+          <ChatMessage
+            indexUiState={{}}
+            setIndexUiState={jest.fn()}
+            message={message}
+            context={createContext({ messages: [message] })}
+          />
+        );
+
+        expect(container.querySelector('strong')).toBeNull();
+        expect(
+          container.querySelector('.ais-ChatMessage-message')
+        ).toHaveTextContent(/^See \*\*\[the docs\]\(https:\/\/exa$/);
+      }
+    );
+
+    test('shows reasoning that is still arriving without half-written markdown', () => {
+      const message: ChatMessageBase = {
+        role: 'assistant',
+        id: '1',
+        parts: [
+          {
+            type: 'reasoning',
+            text: 'Compare **price and [reviews](https://exa',
+            state: 'streaming',
+          },
+        ],
+      };
+      const { getByRole } = render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={message}
+          context={createContext({ status: 'streaming', messages: [message] })}
+          showReasoning={true}
+        />
+      );
+      const reasoning = getByRole('group', { name: 'Reasoning' });
+      const hint = reasoning.querySelector('.ais-ChatMessageReasoning-hint')!;
+      const body = reasoning.querySelector('.ais-ChatMessageReasoning-text')!;
+
+      [hint, body].forEach((element) => {
+        expect(element.querySelector('a')).toBeNull();
+        expect(element.querySelector('strong')).toHaveTextContent(
+          /^price and reviews$/
+        );
+      });
+    });
+
+    test('keeps bold text bold when half of its closing marker has arrived', () => {
+      const content = renderText('Try the **Nike Air Max 90*');
+
+      expect(content.querySelector('em')).toBeNull();
+      expect(content.querySelector('strong')).toHaveTextContent(
+        /^Nike Air Max 90$/
+      );
+      expect(content).toHaveTextContent(/^Try the Nike Air Max 90$/);
+    });
+
+    test('hides a bold marker that has nothing after it yet', () => {
+      const content = renderText('Try the **');
+
+      expect(content).toHaveTextContent(/^Try the$/);
+    });
+
+    test.each([
+      ['__', 'strong'],
+      ['~~', 'del'],
+    ])('closes a %s marker before it arrives', (marker, tagName) => {
+      const content = renderText(`Was ${marker}$120`);
+
+      expect(content.querySelector(tagName)).toHaveTextContent(/^\$120$/);
+      expect(content).toHaveTextContent(/^Was \$120$/);
+    });
+
+    test('shows inline code before its closing backtick arrives', () => {
+      const content = renderText('Run `npm inst');
+
+      expect(content.querySelector('code')).toHaveTextContent(/^npm inst$/);
+      expect(content).toHaveTextContent(/^Run npm inst$/);
+    });
+
+    test.each([
+      ['Use `a**b` and wait', 'Use a**b and wait'],
+      ['Use `a**b', 'Use a**b'],
+    ])('leaves markers inside inline code alone: %s', (text, shown) => {
+      const content = renderText(text);
+
+      expect(content.querySelector('strong')).toBeNull();
+      expect(content.querySelector('code')).toHaveTextContent(/^a\*\*b$/);
+      expect(content.textContent).toBe(shown);
+    });
+
+    test.each([['```js\nconst a = **b'], ['```js\nlink("[x](https://exa']])(
+      'leaves an unfinished code block alone: %j',
+      (text) => {
+        const content = renderText(text);
+
+        expect(content.querySelector('pre code')?.textContent?.trim()).toBe(
+          text.split('\n')[1]
+        );
+      }
+    );
+  });
+
   test('renders each text part with a custom component and its message context', () => {
     const message = {
       role: 'assistant' as const,
