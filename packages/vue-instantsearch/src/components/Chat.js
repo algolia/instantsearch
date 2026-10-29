@@ -87,46 +87,37 @@ function resolveComponent(vm, slotName, propName) {
   return vm.slotAdapters[slotName];
 }
 
-// Callback props forwarded through stable wrappers, so an inline handler
-// (`:on-error="(error) => …"`) doesn't re-create the widget on every render.
+// Forwarded through stable wrappers so inline handlers don't re-create the widget.
 const callbackProps = ['onToolCall', 'onFinish', 'onError', 'onData'];
-
-// Component definitions (a tool's `layoutComponent`, …) are compared by
-// reference: Vue 2 adds an enumerable `_Ctor` cache to them the first time they
-// render, which would otherwise make every later comparison look like a change.
-function isComponentDefinition(value) {
-  return (
-    typeof value.render === 'function' ||
-    typeof value.setup === 'function' ||
-    typeof value.template === 'string' ||
-    '_Ctor' in value
-  );
-}
 
 function isPlainObject(value) {
   if (!value || typeof value !== 'object') {
     return false;
   }
   const proto = Object.getPrototypeOf(value);
+  return proto === Object.prototype || proto === null;
+}
+
+// Compared by reference: Vue 2 adds an enumerable `_Ctor` cache to rendered components.
+function isComponentPath(path) {
   return (
-    (proto === Object.prototype || proto === null) &&
-    !isComponentDefinition(value)
+    path.length === 3 && path[0] === 'tools' && path[2] === 'layoutComponent'
   );
 }
 
-/**
- * Structural equality for the widget params, like React's `useStableValue`:
- * plain objects and arrays are compared by content, everything else
- * (functions, `Chat` instances, transports' class instances) by reference.
- */
-function isEqualWidgetParams(first, second) {
+function isEqualAt(first, second, path) {
   if (first === second) {
     return true;
+  }
+  if (isComponentPath(path)) {
+    return false;
   }
   if (Array.isArray(first) && Array.isArray(second)) {
     return (
       first.length === second.length &&
-      first.every((item, index) => isEqualWidgetParams(item, second[index]))
+      first.every((item, index) =>
+        isEqualAt(item, second[index], path.concat(String(index)))
+      )
     );
   }
   if (isPlainObject(first) && isPlainObject(second)) {
@@ -136,29 +127,39 @@ function isEqualWidgetParams(first, second) {
       keys.every(
         (key) =>
           Object.prototype.hasOwnProperty.call(second, key) &&
-          isEqualWidgetParams(first[key], second[key])
+          isEqualAt(first[key], second[key], path.concat(key))
       )
     );
   }
   return false;
 }
 
-/**
- * A copy of the params that keeps plain objects and arrays apart from the
- * originals (so later in-place mutations can be detected) and everything else
- * by reference.
- */
-function snapshotWidgetParams(value) {
+function snapshotAt(value, path) {
+  if (isComponentPath(path)) {
+    return value;
+  }
   if (Array.isArray(value)) {
-    return value.map(snapshotWidgetParams);
+    return value.map((item, index) =>
+      snapshotAt(item, path.concat(String(index)))
+    );
   }
   if (isPlainObject(value)) {
     return Object.keys(value).reduce((copy, key) => {
-      copy[key] = snapshotWidgetParams(value[key]);
+      copy[key] = snapshotAt(value[key], path.concat(key));
       return copy;
     }, {});
   }
   return value;
+}
+
+// Like React's `useStableValue`: plain objects and arrays by content, the rest by reference.
+function isEqualWidgetParams(first, second) {
+  return isEqualAt(first, second, []);
+}
+
+// Copies plain objects and arrays so in-place mutations are detected.
+function snapshotWidgetParams(value) {
+  return snapshotAt(value, []);
 }
 
 export default {
@@ -241,8 +242,7 @@ export default {
     createComponentProps()
   ),
   beforeCreate() {
-    // Read by `widgetParams`, which the widget mixin's `created` evaluates
-    // before this component's own `created` runs.
+    // Set before the widget mixin's `created` reads `widgetParams`.
     this.defaultTools = {};
     this.callbackForwarders = {};
   },
@@ -332,12 +332,7 @@ export default {
     getItemComponent() {
       return resolveComponent(this, 'item', 'itemComponent');
     },
-    /**
-     * The default tools, created once per `getSearchPageURL` presence (it
-     * toggles the "View all" link). They only hold stable getters, read at
-     * render time, so `item` slot or `getSearchPageURL` changes don't
-     * re-create the tools (and with them the widget).
-     */
+    // Cached so `item` slot or `getSearchPageURL` changes don't re-create the widget.
     getDefaultTools(hasSearchPageURL) {
       const key = String(hasSearchPageURL);
       if (!this.defaultTools[key]) {
@@ -352,8 +347,6 @@ export default {
     },
     getCallbackForwarder(key) {
       if (!this.callbackForwarders[key]) {
-        // The old Chat instance keeps this forwarder, and can call it after the
-        // handler was removed (e.g. mid-stream), so absent handlers are no-ops.
         this.callbackForwarders[key] = (...args) =>
           typeof this[key] === 'function' ? this[key](...args) : undefined;
       }

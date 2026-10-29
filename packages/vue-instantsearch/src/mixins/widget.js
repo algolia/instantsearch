@@ -74,13 +74,7 @@ Read more on using connectors: https://alg.li/vue-custom`
   watch: {
     widgetParams: {
       handler(nextWidgetParams) {
-        // A deep watcher fires whenever `widgetParams` recomputes, even when a
-        // parent re-render only passed new but equal references. Widgets that
-        // can't afford to be replaced for nothing (`AisChat` would lose its
-        // conversation) opt into skipping those updates. The comparison is
-        // against a snapshot of what the widget was created with, because after
-        // an in-place mutation the previous and next params share their nested
-        // objects.
+        // Deep watchers fire on new but equal references; opt-in widgets skip those.
         if (
           isEqualWidgetParams &&
           isEqualWidgetParams(this.appliedWidgetParams, nextWidgetParams)
