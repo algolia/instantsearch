@@ -21,7 +21,6 @@ export const createInstantSearch = (
     client,
     started: false,
     status: 'idle',
-    _isSearchStalled: false,
     error: undefined,
     start() {
       this.started = true;
@@ -59,12 +58,9 @@ export const createInstantSearch = (
     // See https://github.com/algolia/instantsearch/blob/f3213b2f118d75acac31a1f6cf4640241c438e9d/src/lib/utils/defer.ts#L13-L28
     onInternalStateChange: jest.fn() as any,
     createURL: jest.fn(() => '#'),
-    addWidget: jest.fn(),
     addWidgets: jest.fn(),
-    removeWidget: jest.fn(),
     removeWidgets: jest.fn(),
     use: jest.fn(),
-    EXPERIMENTAL_use: jest.fn(),
     unuse: jest.fn(),
     // methods from EventEmitter
     addListener: jest.fn(),

@@ -15,7 +15,6 @@ import algoliasearchHelper, {
   RecommendParameters,
   RecommendResults,
 } from 'algoliasearch-helper';
-import { warning } from 'instantsearch-core';
 import { index } from 'instantsearch-core';
 
 import { castToJestMock } from '../../../../../../tests/utils';
@@ -368,9 +367,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             createURL: expect.any(Function),
             scopedResults: [],
             status: instantSearchInstance.status,
-            searchMetadata: {
-              isSearchStalled: instantSearchInstance.status === 'stalled',
-            },
           });
         });
       });
@@ -428,9 +424,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             createURL: expect.any(Function),
             scopedResults: [],
             status: instantSearchInstance.status,
-            searchMetadata: {
-              isSearchStalled: instantSearchInstance.status === 'stalled',
-            },
           });
         });
 
@@ -1830,9 +1823,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           createURL: expect.any(Function),
           scopedResults: [],
           status: instantSearchInstance.status,
-          searchMetadata: {
-            isSearchStalled: instantSearchInstance.status === 'stalled',
-          },
         });
       });
     });
@@ -2556,7 +2546,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
         subLevelInstance
           .getHelper()!
-          // Simulate a change that does not emit (like `searchFunction`)
+          // Simulate a change that does not emit (like a direct helper state change)
           .overrideStateWithoutTriggeringChangeEvent({
             ...subLevelInstance.getHelper()!.state,
             query: 'Apple iPhone',
@@ -2725,14 +2715,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       const searchBox = createSearchBox({
         dependsOn: 'search',
-        getRenderState: jest.fn((renderState, { helper, searchMetadata }) => {
+        getRenderState: jest.fn((renderState, { helper, status }) => {
           return {
             ...renderState,
             searchBox: {
               query: helper.state.query || '',
               refine: searchBoxRefine,
               clear: searchBoxClear,
-              isSearchStalled: searchMetadata.isSearchStalled,
+              isSearchStalled: status === 'stalled',
               widgetParams: {},
             },
           };
@@ -2842,14 +2832,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const instantSearchInstance = createInstantSearch({ mainHelper });
       const searchBox = createSearchBox({
         dependsOn: 'search',
-        getRenderState: jest.fn((renderState, { helper, searchMetadata }) => {
+        getRenderState: jest.fn((renderState, { helper, status }) => {
           return {
             ...renderState,
             searchBox: {
               query: helper.state.query || '',
               refine: () => {},
               clear: () => {},
-              isSearchStalled: searchMetadata.isSearchStalled,
+              isSearchStalled: status === 'stalled',
               widgetParams: {},
             },
           };
@@ -2898,9 +2888,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           createURL: expect.any(Function),
           scopedResults: [],
           status: instantSearchInstance.status,
-          searchMetadata: {
-            isSearchStalled: instantSearchInstance.status === 'stalled',
-          },
         })
       );
 
@@ -3027,9 +3014,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           templatesConfig: instantSearchInstance.templatesConfig,
           createURL: expect.any(Function),
           status: instantSearchInstance.status,
-          searchMetadata: {
-            isSearchStalled: instantSearchInstance.status === 'stalled',
-          },
         });
       });
     });
@@ -3539,94 +3523,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
     });
   });
 
-  describe('getWidgetState', () => {
-    test('warns when index has this method', () => {
-      warning.cache = {};
-
-      const instance = index({ indexName: 'indexName' });
-
-      expect(() => {
-        instance.getWidgetState({});
-      }).toWarnDev(
-        '[InstantSearch.js]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
-      );
-    });
-
-    test('warns when widget has this method', () => {
-      warning.cache = {};
-
-      const createDeprecatedSearchBox = (args: Partial<Widget> = {}): Widget =>
-        createWidget({
-          dispose: jest.fn(({ state }) => {
-            return state.setQueryParameter('query', undefined);
-          }),
-          getWidgetState: jest.fn((uiState, { searchParameters }) => {
-            if (!searchParameters.query) {
-              return uiState;
-            }
-
-            return {
-              ...uiState,
-              query: searchParameters.query,
-            };
-          }),
-          getWidgetSearchParameters: jest.fn(
-            (searchParameters, { uiState }) => {
-              return searchParameters.setQueryParameter(
-                'query',
-                uiState.query || ''
-              );
-            }
-          ),
-          ...args,
-        });
-
-      const instance = index({ indexName: 'indexName' });
-      const searchClient = createSearchClient();
-      const mainHelper = algoliasearchHelper(searchClient, '', {});
-      const instantSearchInstance = createInstantSearch({
-        mainHelper,
-      });
-
-      instance.addWidgets([createDeprecatedSearchBox()]);
-
-      expect(() => {
-        instance.init(
-          createIndexInitOptions({
-            instantSearchInstance,
-            parent: null,
-          })
-        );
-      }).toWarnDev(
-        '[InstantSearch.js]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
-      );
-    });
-
-    test('does not warn for index itself', () => {
-      warning.cache = {};
-
-      const instance = index({ indexName: 'indexName' });
-      const searchClient = createSearchClient();
-      const mainHelper = algoliasearchHelper(searchClient, '', {});
-      const instantSearchInstance = createInstantSearch({
-        mainHelper,
-      });
-
-      instance.addWidgets([index({ indexName: 'other' })]);
-
-      expect(() => {
-        instance.init(
-          createIndexInitOptions({
-            instantSearchInstance,
-            parent: null,
-          })
-        );
-      }).not.toWarnDev(
-        '[InstantSearch.js]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
-      );
-    });
-  });
-
   describe('getWidgetUiState', () => {
     it('returns the index UI state of its widgets', () => {
       const instance = index({ indexName: 'instance' });
@@ -4102,17 +3998,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       expect(instance.getParent()).toBeNull();
     });
 
-    it('supports the deprecated `EXPERIMENTAL_isolated` alias with a warning', () => {
-      warning.cache = {};
-      expect(() => {
-        const instance = index({ EXPERIMENTAL_isolated: true });
-        expect(instance._isolated).toBe(true);
-        expect(instance.getParent()).toBeNull();
-      }).toWarnDev(
-        '[InstantSearch.js]: The `EXPERIMENTAL_isolated` option is no longer experimental and has been renamed. Please use `isolated` instead.'
-      );
-    });
-
     it('sets _isolated to false when isolated option is false or omitted', () => {
       const instance = index({ indexName: 'indexName' });
       expect(instance._isolated).toBe(false);
@@ -4255,7 +4140,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const search = instantsearch({
         searchClient: createCompositionClient(),
         compositionID: 'composition-id',
-      }).addWidgets([index({ EXPERIMENTAL_isolated: true })]);
+      }).addWidgets([index({ isolated: true })]);
       search.start();
 
       await wait(0);
@@ -4270,7 +4155,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         compositionID: 'composition-id',
       }).addWidgets([
         createWidget({ dependsOn: 'none' }),
-        index({ EXPERIMENTAL_isolated: true, indexName: 'a' }).addWidgets([
+        index({ isolated: true, indexName: 'a' }).addWidgets([
           virtualSearchBox({}),
         ]),
       ]);
