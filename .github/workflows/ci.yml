@@ -293,7 +293,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     uses: ./.github/workflows/e2e.yml
     with:
-      # IE11 and the Next.js suites report but never block, matching the
+      # The Next.js suites report but never block, matching the
       # CircleCI release gate, which only required `e2e tests playwright`.
       soft-fail-secondary: true
     secrets: inherit

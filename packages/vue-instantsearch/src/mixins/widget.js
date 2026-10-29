@@ -1,4 +1,3 @@
-import { _objectSpread } from '../util/polyfills';
 import { isVue3 } from '../util/vue-compat';
 import { warn } from '../util/warn';
 
@@ -31,7 +30,7 @@ export const createWidgetMixin = (
   created() {
     if (typeof connector === 'function') {
       this.factory = connector(this.updateState, () => {});
-      this.widget = _objectSpread(
+      this.widget = Object.assign(
         this.factory(this.widgetParams),
         additionalProperties
       );
@@ -87,7 +86,7 @@ Read more on using connectors: https://alg.li/vue-custom`
 
         this.state = null;
         const previousWidget = this.widget;
-        this.widget = _objectSpread(
+        this.widget = Object.assign(
           this.factory(nextWidgetParams),
           additionalProperties
         );
