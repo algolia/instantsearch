@@ -21,7 +21,6 @@ beforeEach(() => {
 it('passes props to InstantSearch.js', () => {
   const searchClient = {};
   const insightsClient = jest.fn();
-  const searchFunction = (helper) => helper.search();
 
   mount(InstantSearch, {
     propsData: {
@@ -33,7 +32,6 @@ it('passes props to InstantSearch.js', () => {
         stateMapping: {},
       },
       stalledSearchDelay: 250,
-      searchFunction,
     },
   });
 
@@ -45,7 +43,6 @@ it('passes props to InstantSearch.js', () => {
     },
     searchClient,
     insightsClient,
-    searchFunction,
     stalledSearchDelay: 250,
   });
 });
@@ -210,33 +207,11 @@ it('does not warn when the `search-client` does not change', async () => {
   expect(warn).not.toHaveBeenCalled();
 });
 
-it('Allows a change in `search-function`', async () => {
-  const oldValue = () => {};
-  const newValue = () => {};
-
-  const wrapper = mount(InstantSearch, {
-    propsData: {
-      searchClient: {},
-      indexName: 'bla',
-      searchFunction: oldValue,
-    },
-  });
-
-  expect(wrapper.vm.instantSearchInstance._searchFunction).toEqual(oldValue);
-
-  await wrapper.setProps({
-    searchFunction: newValue,
-  });
-
-  expect(wrapper.vm.instantSearchInstance._searchFunction).toEqual(newValue);
-});
-
 it('Allows a change in `stalled-search-delay`', async () => {
   const wrapper = mount(InstantSearch, {
     propsData: {
       searchClient: {},
       indexName: 'bla',
-      searchFunction: () => {},
       stalledSearchDelay: 200,
     },
   });

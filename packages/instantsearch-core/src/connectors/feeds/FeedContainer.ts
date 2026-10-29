@@ -283,10 +283,6 @@ export function createFeedContainer(
       return cleanedState;
     },
 
-    getWidgetState(uiState: UiState) {
-      return this.getWidgetUiState(uiState);
-    },
-
     getWidgetUiState<TUiState extends UiState = UiState>(
       uiState: TUiState
     ): TUiState {

@@ -56,6 +56,18 @@ function createResultsClient(hits: Array<Record<string, unknown>>) {
 }
 
 /**
+ * A search client whose requests never resolve, so the widget never gets
+ * results (the same as a page that never searches).
+ */
+function createPendingClient() {
+  return createSearchClient({
+    search: jest.fn(
+      () => new Promise(() => {})
+    ) as unknown as MockSearchClient['search'],
+  });
+}
+
+/**
  * Mocks `global.fetch` (the agent-studio transport, not the search client)
  * with the Agent Studio streaming `tasks` response.
  */
@@ -355,9 +367,7 @@ export function createOptionsTests(
     });
 
     test('requests suggestions with an explicit context when no search is triggered', async () => {
-      const searchClient = createResultsClient([
-        { objectID: '1', name: 'Product 1' },
-      ]);
+      const searchClient = createPendingClient();
       const fetchMock = mockAgentFetch();
       const context = { title: 'A product', brand: 'A brand' };
 
@@ -365,14 +375,6 @@ export function createOptionsTests(
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient,
-          // The common query gate: a page with no query never searches, so the
-          // widget never gets results. With an explicit `context` the request
-          // does not read them, so it must not wait for them either.
-          searchFunction(helper) {
-            if (helper.state.query) {
-              helper.search();
-            }
-          },
         },
         widgetParams: {
           javascript: {
@@ -393,7 +395,6 @@ export function createOptionsTests(
         await wait(DEBOUNCE_MS + 50);
       });
 
-      expect(searchClient.search).not.toHaveBeenCalled();
       expect(fetchMock).toHaveBeenCalledTimes(1);
       const [, init] = fetchMock.mock.calls[0] as unknown as [
         string,
@@ -408,20 +409,13 @@ export function createOptionsTests(
     });
 
     test('requests nothing without a context when no search is triggered', async () => {
-      const searchClient = createResultsClient([
-        { objectID: '1', name: 'Product 1' },
-      ]);
+      const searchClient = createPendingClient();
       const fetchMock = mockAgentFetch();
 
       await setup({
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient,
-          searchFunction(helper) {
-            if (helper.state.query) {
-              helper.search();
-            }
-          },
         },
         widgetParams: {
           javascript: {
