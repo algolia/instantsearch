@@ -1,6 +1,7 @@
 import { fakeAct, skippableDescribe } from '../../common';
 
 import { createOptionsTests } from './options';
+import { createTemplatesTests } from './templates';
 
 import type { TestOptions, TestSetup } from '../../common';
 import type { CompareItem } from 'instantsearch.js/es/connectors/compare/connectCompare';
@@ -21,11 +22,18 @@ type SetupParams = { products?: CompareItem[]; renderChat?: boolean };
 export type JSCompareBarWidgetParams = Omit<JSBaseWidgetParams, 'container'> &
   SetupParams;
 export type ReactCompareBarWidgetParams = CompareBarProps & SetupParams;
+// `AisCompareBar` is plain JavaScript (no published prop types): its props
+// mirror the React ones, with `classNames` keyed by the `ais-CompareBar-*`
+// classes, and `slots` holds render functions for its scoped slots.
+export type VueCompareBarWidgetParams = Record<string, unknown> &
+  SetupParams & {
+    slots?: Record<string, (props: Record<string, unknown>) => unknown>;
+  };
 
 type CompareBarWidgetParams = {
   javascript: JSCompareBarWidgetParams;
   react: ReactCompareBarWidgetParams;
-  vue: Record<string, never>;
+  vue: VueCompareBarWidgetParams;
 };
 
 declare module '../../common' {
@@ -52,6 +60,7 @@ export function createCompareBarWidgetTests(
 
   skippableDescribe('CompareBar widget common tests', skippedTests, () => {
     createOptionsTests(setup, { act, skippedTests, flavor });
+    createTemplatesTests(setup, { act, skippedTests, flavor });
   });
 }
 createCompareBarWidgetTests.flavored = true;

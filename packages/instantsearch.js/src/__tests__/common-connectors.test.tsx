@@ -26,7 +26,7 @@ import {
 } from '../connectors';
 import instantsearch from '../index.es';
 import { noop } from '../lib/utils';
-import { refinementList } from '../widgets';
+import { chat, refinementList } from '../widgets';
 
 import type { InstantSearch, Widget } from '../index.es';
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -687,10 +687,28 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
     search.start();
   },
   createCompareConnectorTests({ instantSearchOptions, widgetParams }) {
-    const { products = [], ...connectorParams } = widgetParams;
+    const {
+      products = [],
+      renderChat = true,
+      ...connectorParams
+    } = widgetParams;
 
     const result = document.body.appendChild(document.createElement('output'));
     result.setAttribute('data-testid', 'Compare-result');
+
+    function createTestElement(
+      tagName: string,
+      testId: string,
+      { text = '', onClick }: { text?: string; onClick?: () => void } = {}
+    ) {
+      const element = document.createElement(tagName);
+      element.setAttribute('data-testid', testId);
+      element.textContent = text;
+      if (onClick) {
+        element.addEventListener('click', onClick);
+      }
+      return element;
+    }
 
     const customCompare = connectCompare<{
       container: HTMLElement;
@@ -710,55 +728,54 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
         widgetParams: { container },
       } = renderOptions;
 
-      container.innerHTML = `
-        <ul>${items
-          .map(
-            (item) =>
-              `<li data-testid="Compare-item" data-object-id="${item.objectID}">${item.objectID}</li>`
-          )
-          .join('')}</ul>
-        <span data-testid="Compare-minItems">${minItems}</span>
-        <span data-testid="Compare-maxItems">${maxItems}</span>
-        <span data-testid="Compare-canAddItems">${canAddItems}</span>
-        <span data-testid="Compare-canCompare">${canCompare}</span>
-        ${products
-          .map(
-            (product) => `
-              <button data-testid="Compare-add-${product.objectID}"></button>
-              <button data-testid="Compare-remove-${product.objectID}"></button>
-              <button
-                data-testid="Compare-toggle-${product.objectID}"
-                aria-pressed="${isSelected(product.objectID)}"
-              ></button>`
-          )
-          .join('')}
-        <button data-testid="Compare-clear"></button>
-        <button data-testid="Compare-compare"></button>
-      `;
-
-      products.forEach((product) => {
-        container
-          .querySelector(`[data-testid="Compare-add-${product.objectID}"]`)!
-          .addEventListener('click', () => addItem(product));
-        container
-          .querySelector(`[data-testid="Compare-remove-${product.objectID}"]`)!
-          .addEventListener('click', () => removeItem(product.objectID));
-        container
-          .querySelector(`[data-testid="Compare-toggle-${product.objectID}"]`)!
-          .addEventListener('click', () => toggleItem(product));
-      });
-      container
-        .querySelector('[data-testid="Compare-clear"]')!
-        .addEventListener('click', clearItems);
-      container
-        .querySelector('[data-testid="Compare-compare"]')!
-        .addEventListener('click', () => {
-          try {
-            result.textContent = String(compare());
-          } catch (error) {
-            result.textContent = (error as Error).message;
-          }
+      const list = document.createElement('ul');
+      items.forEach((item) => {
+        const listItem = createTestElement('li', 'Compare-item', {
+          text: item.objectID,
         });
+        listItem.setAttribute('data-object-id', item.objectID);
+        list.appendChild(listItem);
+      });
+
+      container.textContent = '';
+      container.append(
+        list,
+        createTestElement('span', 'Compare-minItems', { text: `${minItems}` }),
+        createTestElement('span', 'Compare-maxItems', { text: `${maxItems}` }),
+        createTestElement('span', 'Compare-canAddItems', {
+          text: `${canAddItems}`,
+        }),
+        createTestElement('span', 'Compare-canCompare', {
+          text: `${canCompare}`,
+        }),
+        ...products.flatMap((product) => {
+          const toggle = createTestElement(
+            'button',
+            `Compare-toggle-${product.objectID}`,
+            { onClick: () => toggleItem(product) }
+          );
+          toggle.setAttribute(
+            'aria-pressed',
+            String(isSelected(product.objectID))
+          );
+
+          return [
+            createTestElement('button', `Compare-add-${product.objectID}`, {
+              onClick: () => addItem(product),
+            }),
+            createTestElement('button', `Compare-remove-${product.objectID}`, {
+              onClick: () => removeItem(product.objectID),
+            }),
+            toggle,
+          ];
+        }),
+        createTestElement('button', 'Compare-clear', { onClick: clearItems }),
+        createTestElement('button', 'Compare-compare', {
+          onClick: () => {
+            result.textContent = String(compare());
+          },
+        })
+      );
     });
 
     instantsearch(instantSearchOptions)
@@ -767,6 +784,19 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
           container: document.body.appendChild(document.createElement('div')),
           ...connectorParams,
         }),
+        ...(renderChat
+          ? [
+              chat({
+                container: document.body.appendChild(
+                  document.createElement('div')
+                ),
+                // A dedicated id: the `agentId` the chat suites use keys
+                // persisted messages in `sessionStorage` that leak across tests
+                // in this file.
+                agentId: 'compareChatAgentId',
+              }),
+            ]
+          : []),
       ])
       .on('error', () => {
         /*

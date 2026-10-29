@@ -843,20 +843,19 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
 
     const compareToggles = connectCompare<{ container: HTMLElement }>(
       ({ isSelected, toggleItem, widgetParams: { container } }) => {
-        container.innerHTML = products
-          .map(
-            (product) =>
-              `<button
-                data-testid="CompareToggle-${product.objectID}"
-                aria-pressed="${isSelected(product.objectID)}"
-              ></button>`
-          )
-          .join('');
-
+        container.textContent = '';
         products.forEach((product) => {
-          container
-            .querySelector(`[data-testid="CompareToggle-${product.objectID}"]`)!
-            .addEventListener('click', () => toggleItem(product));
+          const button = document.createElement('button');
+          button.setAttribute(
+            'data-testid',
+            `CompareToggle-${product.objectID}`
+          );
+          button.setAttribute(
+            'aria-pressed',
+            String(isSelected(product.objectID))
+          );
+          button.addEventListener('click', () => toggleItem(product));
+          container.appendChild(button);
         });
       }
     );
@@ -865,6 +864,7 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       .addWidgets([
         compareToggles({
           container: document.body.appendChild(document.createElement('div')),
+          configurationId: compareBarWidgetParams.configurationId,
         }),
         compareBar({
           container: document.body.appendChild(document.createElement('div')),

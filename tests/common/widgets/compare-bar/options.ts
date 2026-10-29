@@ -2,8 +2,8 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
 
-import type { CompareBarWidgetSetup } from '.';
-import type { TestOptions } from '../../common';
+import type { CompareBarWidgetSetup, ReactCompareBarWidgetParams } from '.';
+import type { SetupOptions, TestOptions } from '../../common';
 
 const CONFIGURATION_ID = 'algolia_comparison_abc';
 
@@ -74,13 +74,28 @@ export function createOptionsTests(
   setup: CompareBarWidgetSetup,
   { act }: Required<TestOptions>
 ) {
+  async function renderFlavored(
+    widgetParams: SetupOptions<CompareBarWidgetSetup>['widgetParams']
+  ) {
+    await setup({
+      instantSearchOptions: {
+        indexName: 'indexName',
+        searchClient: createSearchClient({}),
+      },
+      widgetParams,
+    });
+
+    await act(async () => {
+      await wait(0);
+    });
+  }
+
+  // The options shared by the three flavors, which name them the same.
   async function render(
-    params: {
-      minItems?: number;
-      maxItems?: number;
-      renderChat?: boolean;
-      translations?: Record<string, unknown>;
-    } = {}
+    params: Pick<
+      ReactCompareBarWidgetParams,
+      'minItems' | 'maxItems' | 'transformItems' | 'translations' | 'renderChat'
+    > = {}
   ) {
     const widgetParams = {
       configurationId: CONFIGURATION_ID,
@@ -88,20 +103,10 @@ export function createOptionsTests(
       ...params,
     };
 
-    await setup({
-      instantSearchOptions: {
-        indexName: 'indexName',
-        searchClient: createSearchClient({}),
-      },
-      widgetParams: {
-        javascript: widgetParams,
-        react: widgetParams,
-        vue: {},
-      },
-    });
-
-    await act(async () => {
-      await wait(0);
+    await renderFlavored({
+      javascript: widgetParams,
+      react: widgetParams,
+      vue: widgetParams,
     });
   }
 
@@ -305,12 +310,93 @@ export function createOptionsTests(
       expect(getButton('Drop MacBook Pro 14')).toBeInTheDocument();
     });
 
-    test('opens the chat and sends the comparison with the selection as turn context', async () => {
+    test('applies custom class names', async () => {
+      const shared = { configurationId: CONFIGURATION_ID, products: PRODUCTS };
+
+      await renderFlavored({
+        javascript: {
+          ...shared,
+          cssClasses: {
+            root: 'ROOT',
+            item: 'ITEM',
+            compareButton: 'COMPARE',
+          },
+        },
+        react: {
+          ...shared,
+          classNames: {
+            root: 'ROOT',
+            item: 'ITEM',
+            compareButton: 'COMPARE',
+          },
+        },
+        vue: {
+          ...shared,
+          classNames: {
+            'ais-CompareBar': 'ROOT',
+            'ais-CompareBar-item': 'ITEM',
+            'ais-CompareBar-compareButton': 'COMPARE',
+          },
+        },
+      });
+
+      await toggle('A');
+
+      expect(getBar()).toHaveClass('ais-CompareBar', 'ROOT');
+      expect(document.querySelector('.ais-CompareBar-item')).toHaveClass(
+        'ITEM'
+      );
+      expect(
+        document.querySelector('.ais-CompareBar-compareButton')
+      ).toHaveClass('COMPARE');
+    });
+
+    test('shows and sends the items returned by `transformItems`', async () => {
+      const fetchMock = mockAgentFetch();
+      await render({
+        transformItems: (items) =>
+          items.map((item) => ({
+            ...item,
+            name: `Refurbished ${item.name}`,
+          })),
+      });
+
+      await toggle('A', 'B');
+
+      expect(getItemLabels()).toEqual([
+        'Refurbished MacBook Pro 14',
+        'Refurbished MacBook Pro 16',
+      ]);
+      // The selection still works on the raw items.
+      expect(getToggle('A')).toHaveAttribute('aria-pressed', 'true');
+
+      await click(getButton('Compare 2'));
+
+      const [, init] = fetchMock.mock.calls[0] as unknown as [
+        string,
+        RequestInit,
+      ];
+      const body = JSON.parse(init.body as string);
+      expect(
+        body.messages[body.messages.length - 1].metadata.turnContext
+          .selected_products
+      ).toBe(
+        JSON.stringify([
+          { objectID: 'A', name: 'Refurbished MacBook Pro 14' },
+          { objectID: 'B', name: 'Refurbished MacBook Pro 16' },
+        ])
+      );
+    });
+
+    test('opens the chat with the comparison, then clears the selection', async () => {
       const fetchMock = mockAgentFetch();
       await render();
 
       await toggle('A', 'B');
       expect(fetchMock).not.toHaveBeenCalled();
+      expect(document.querySelector('.ais-Chat-container')).not.toHaveClass(
+        'ais-Chat-container--open'
+      );
 
       await click(getButton('Compare 2'));
       await act(async () => {
@@ -341,6 +427,21 @@ export function createOptionsTests(
         ]),
         comparison_configuration_id: CONFIGURATION_ID,
       });
+
+      expect(document.querySelector('.ais-Chat-container')).toHaveClass(
+        'ais-Chat-container--open'
+      );
+      expect(document.querySelector('.ais-ChatMessages')).toHaveTextContent(
+        'Here is the comparison.'
+      );
+      // The placeholder is not shown as a user message.
+      expect(document.querySelector('.ais-ChatMessages')).not.toHaveTextContent(
+        '__ALGOLIA_COMPARISON_'
+      );
+
+      expect(getBar()).toBeNull();
+      expect(getToggle('A')).toHaveAttribute('aria-pressed', 'false');
+      expect(getToggle('B')).toHaveAttribute('aria-pressed', 'false');
     });
 
     test('does not send anything when the compare button is disabled', async () => {

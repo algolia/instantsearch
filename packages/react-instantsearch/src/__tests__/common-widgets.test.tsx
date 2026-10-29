@@ -500,7 +500,9 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
     } = widgetParams;
 
     function CompareToggles() {
-      const { isSelected, toggleItem } = useCompare();
+      const { isSelected, toggleItem } = useCompare({
+        configurationId: compareBarWidgetParams.configurationId,
+      });
 
       return (
         <>

@@ -5,6 +5,8 @@ import userEvent from '@testing-library/user-event';
 import type { CompareConnectorSetup, CompareConnectorSetupParams } from '.';
 import type { TestOptions } from '../../common';
 
+const CONFIGURATION_ID = 'algolia_comparison_abc';
+
 const PRODUCTS = [
   { objectID: 'A', name: 'MacBook Pro 14' },
   { objectID: 'B', name: 'MacBook Pro 16' },
@@ -22,17 +24,50 @@ function getItemIds() {
   ).map((item) => item.getAttribute('data-object-id'));
 }
 
+function sseResponse(chunks: Array<Record<string, unknown>>): Response {
+  const body = chunks
+    .map((chunk) => `data: ${JSON.stringify(chunk)}\n\n`)
+    .join('');
+  return new Response(`${body}data: [DONE]`, {
+    headers: { 'Content-Type': 'text/event-stream' },
+  });
+}
+
+/**
+ * Mocks `global.fetch` (the Agent Studio transport, not the search client)
+ * with a streamed answer.
+ */
+function mockAgentFetch() {
+  const fetchMock = jest.fn(() =>
+    Promise.resolve(
+      sseResponse([
+        { type: 'start', messageId: 'assistant-1' },
+        { type: 'text-start', id: 't1' },
+        { type: 'text-delta', id: 't1', delta: 'Here is the comparison.' },
+        { type: 'text-end', id: 't1' },
+        { type: 'finish' },
+      ])
+    )
+  );
+  global.fetch = fetchMock as unknown as typeof fetch;
+  return fetchMock;
+}
+
 export function createOptionsTests(
   setup: CompareConnectorSetup,
   { act }: Required<TestOptions>
 ) {
-  async function render(params: CompareConnectorSetupParams = {}) {
+  async function render(params: Partial<CompareConnectorSetupParams> = {}) {
     await setup({
       instantSearchOptions: {
         indexName: 'indexName',
         searchClient: createSearchClient({}),
       },
-      widgetParams: { products: PRODUCTS, ...params },
+      widgetParams: {
+        configurationId: CONFIGURATION_ID,
+        products: PRODUCTS,
+        ...params,
+      },
     });
 
     await act(async () => {
@@ -65,6 +100,18 @@ export function createOptionsTests(
       expect(byTestId('Compare-maxItems')).toHaveTextContent('4');
     });
 
+    test('throws without `configurationId`', () => {
+      expect(() =>
+        setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient: createSearchClient({}),
+          },
+          widgetParams: {} as CompareConnectorSetupParams,
+        })
+      ).toThrow('The `configurationId` option is required.');
+    });
+
     test('throws when `minItems` is lower than 2', () => {
       expect(() =>
         setup({
@@ -72,7 +119,7 @@ export function createOptionsTests(
             indexName: 'indexName',
             searchClient: createSearchClient({}),
           },
-          widgetParams: { minItems: 1 },
+          widgetParams: { configurationId: CONFIGURATION_ID, minItems: 1 },
         })
       ).toThrow('The `minItems` option must be at least 2.');
     });
@@ -84,9 +131,15 @@ export function createOptionsTests(
             indexName: 'indexName',
             searchClient: createSearchClient({}),
           },
-          widgetParams: { minItems: 3, maxItems: 2 },
+          widgetParams: {
+            configurationId: CONFIGURATION_ID,
+            minItems: 3,
+            maxItems: 2,
+          },
         })
-      ).toThrow('The `maxItems` option must be greater than `minItems`.');
+      ).toThrow(
+        'The `maxItems` option must be greater than or equal to `minItems`.'
+      );
     });
 
     test('adds items in insertion order and ignores duplicates', async () => {
@@ -184,35 +237,54 @@ export function createOptionsTests(
       expect(getItemIds()).toEqual(['B', 'C', 'D']);
     });
 
-    test('`compare` returns false below `minItems`', async () => {
-      await render({ configurationId: 'algolia_comparison_abc' });
-
-      await click('Compare-add-A');
-      await click('Compare-compare');
-
-      expect(byTestId('Compare-result')).toHaveTextContent('false');
-    });
-
-    test('`compare` throws without a `configurationId`', async () => {
+    test('`compare` hands the selection to the chat, then clears it', async () => {
+      const fetchMock = mockAgentFetch();
       await render();
 
       await click('Compare-add-A');
       await click('Compare-add-B');
       await click('Compare-compare');
 
-      expect(byTestId('Compare-result')).toHaveTextContent(
-        'The `configurationId` option is required to start a comparison.'
-      );
+      expect(byTestId('Compare-result')).toHaveTextContent('true');
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      const [, init] = fetchMock.mock.calls[0] as unknown as [
+        string,
+        RequestInit,
+      ];
+      const body = JSON.parse(init.body as string);
+      expect(body.messages[body.messages.length - 1].parts).toEqual([
+        expect.objectContaining({
+          type: 'text',
+          text: `__ALGOLIA_COMPARISON_${CONFIGURATION_ID}__`,
+        }),
+      ]);
+      expect(getItemIds()).toEqual([]);
+      expect(byTestId('Compare-canCompare')).toHaveTextContent('false');
+    });
+
+    test('`compare` returns false below `minItems`', async () => {
+      const fetchMock = mockAgentFetch();
+      await render();
+
+      await click('Compare-add-A');
+      await click('Compare-compare');
+
+      expect(byTestId('Compare-result')).toHaveTextContent('false');
+      expect(fetchMock).not.toHaveBeenCalled();
+      expect(getItemIds()).toEqual(['A']);
     });
 
     test('`compare` returns false without a `chat` on the index', async () => {
-      await render({ configurationId: 'algolia_comparison_abc' });
+      const fetchMock = mockAgentFetch();
+      await render({ renderChat: false });
 
       await click('Compare-add-A');
       await click('Compare-add-B');
       await click('Compare-compare');
 
       expect(byTestId('Compare-result')).toHaveTextContent('false');
+      expect(fetchMock).not.toHaveBeenCalled();
+      expect(getItemIds()).toEqual(['A', 'B']);
     });
   });
 }

@@ -8,6 +8,7 @@ import { connectRatingMenu } from 'instantsearch.js/es/connectors';
 import React, { useState } from 'react';
 
 import {
+  Chat,
   InstantSearch,
   RefinementList,
   useRefinementList,
@@ -506,7 +507,11 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
     );
   },
   createCompareConnectorTests: ({ instantSearchOptions, widgetParams }) => {
-    const { products = [], ...connectorParams } = widgetParams;
+    const {
+      products = [],
+      renderChat = true,
+      ...connectorParams
+    } = widgetParams;
 
     function CustomCompare(props: UseCompareProps) {
       const [result, setResult] = useState('');
@@ -561,13 +566,7 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
           <button data-testid="Compare-clear" onClick={clearItems} />
           <button
             data-testid="Compare-compare"
-            onClick={() => {
-              try {
-                setResult(String(compare()));
-              } catch (error) {
-                setResult((error as Error).message);
-              }
-            }}
+            onClick={() => setResult(String(compare()))}
           />
           <output data-testid="Compare-result">{result}</output>
         </div>
@@ -577,6 +576,11 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
     render(
       <InstantSearch {...instantSearchOptions}>
         <CustomCompare {...connectorParams} />
+        {/*
+          A dedicated id: the `agentId` the chat suites use keys persisted
+          messages in `sessionStorage` that leak across tests in this file.
+        */}
+        {renderChat && <Chat agentId="compareChatAgentId" />}
       </InstantSearch>
     );
   },
