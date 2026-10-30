@@ -2,7 +2,6 @@
 
 import { cx } from '../../lib';
 
-import type { ChatEmptyProps } from './types';
 import type { ComponentProps, Renderer } from '../../types';
 import type { ChatComponentPropsWithContext } from 'instantsearch-core';
 
@@ -55,21 +54,13 @@ export function createChatGreetingComponent({
   createElement,
 }: Pick<Renderer, 'createElement'>) {
   return function ChatGreeting(
-    // The deprecated root props are still accepted for back compat.
-    // eslint-disable-next-line typescript/no-deprecated
-    userProps: ChatComponentPropsWithContext<ChatGreetingProps & ChatEmptyProps>
+    userProps: ChatComponentPropsWithContext<ChatGreetingProps>
   ) {
     const {
       translations: userTranslations,
       classNames = {},
       context,
       banner,
-      // Read from `context` instead. Destructured only to keep the deprecated
-      // root-level props out of the DOM spread below; remove in the next major.
-      sendMessage: _sendMessage,
-      status: _status,
-      onClose: _onClose,
-      setInput: _setInput,
       ...props
     } = userProps;
     const translations: Required<ChatGreetingTranslations> = {

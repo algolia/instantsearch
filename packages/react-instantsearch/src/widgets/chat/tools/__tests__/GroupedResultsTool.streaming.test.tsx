@@ -7,7 +7,6 @@
  * because it is partial-JSON repair closing an open string literal that lets a
  * mid-delta identifier reach `input` looking complete.
  */
-import { chatToolProps } from '@instantsearch/testutils';
 import { render, screen } from '@testing-library/react';
 import { Chat } from 'instantsearch-core';
 import { collectChatRecords } from 'instantsearch-core';
@@ -116,7 +115,7 @@ function renderFrame(part: ClientSideToolComponentProps['context']['message']) {
 
   const { unmount } = render(
     <LayoutComponent
-      {...chatToolProps({
+      context={{
         messages,
         status: 'streaming',
         isClearing: false,
@@ -134,7 +133,7 @@ function renderFrame(part: ClientSideToolComponentProps['context']['message']) {
         addToolResult: jest.fn(),
         setIndexUiState: jest.fn(),
         sendEvent: jest.fn(),
-      })}
+      }}
     />
   );
   const visible = HITS.filter((hit) =>

@@ -3,7 +3,6 @@
 import {
   CompareProductsToolType,
   connectChat,
-  DisplayResultsToolType,
   findTool,
   focusAfterReveal,
   getActiveContainerAnimations,
@@ -57,7 +56,6 @@ import type {
 import type { ChatComponentPropsWithContext } from 'instantsearch-core';
 import type {
   ChatClassNames,
-  ChatEmptyProps,
   ChatHeaderProps,
   ChatHeaderTranslations,
   ChatLayoutOwnProps,
@@ -88,11 +86,13 @@ const Chat = createChatComponent({
 export {
   SearchIndexToolType,
   RecommendToolType,
-  // eslint-disable-next-line typescript/no-deprecated
-  DisplayResultsToolType,
   CompareProductsToolType,
   GroupedResultsToolType,
 };
+
+// Legacy name of the grouped-results tool, still emitted by agents configured
+// before the rename.
+const LEGACY_GROUPED_RESULTS_TOOL_TYPE = 'algolia_display_results';
 
 function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   return Object.fromEntries(
@@ -163,8 +163,7 @@ function createDefaultTools<
     [RecommendToolType]: createCarouselTool(false, templates, getSearchPageURL),
     [GroupedResultsToolType]: groupedResultsTool,
     // Agents configured before the rename still emit the legacy tool name.
-    // eslint-disable-next-line typescript/no-deprecated
-    [DisplayResultsToolType]: groupedResultsTool,
+    [LEGACY_GROUPED_RESULTS_TOOL_TYPE]: groupedResultsTool,
     [CompareProductsToolType]: createCompareProductsTool(
       // The default `item` template dumps the record as JSON; without a custom
       // one, the product headers show the record's name instead.
@@ -213,9 +212,7 @@ type ChatWrapperProps = {
         ) => JSX.Element)
       | undefined;
     emptyComponent:
-      // The deprecated root props are still passed alongside `context`.
-      // eslint-disable-next-line typescript/no-deprecated
-      | ((props: ChatComponentPropsWithContext<ChatEmptyProps>) => JSX.Element)
+      | ((props: ChatComponentPropsWithContext) => JSX.Element)
       | undefined;
     loaderPosition: ChatMessagesProps['loaderPosition'];
     shouldShowLoader: ChatMessagesProps['shouldShowLoader'];
@@ -517,11 +514,11 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       >(messagesTemplateRef, 'error', 'div')
     : undefined;
   const stableMessagesEmptyComponent = templates.empty
-    ? createStableTemplateComponent<
-        // The deprecated root props are still passed alongside `context`.
-        // eslint-disable-next-line typescript/no-deprecated
-        ChatComponentPropsWithContext<ChatEmptyProps>
-      >(emptyTemplateRef, 'empty', 'div')
+    ? createStableTemplateComponent<ChatComponentPropsWithContext>(
+        emptyTemplateRef,
+        'empty',
+        'div'
+      )
     : undefined;
   const stableAssistantMessageLeadingComponent = templates.assistantMessage
     ?.leading
@@ -1211,9 +1208,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * Template to use for the empty screen shown when there are no messages
      */
-    // The deprecated root props are still passed alongside `context`.
-    // eslint-disable-next-line typescript/no-deprecated
-    empty?: Template<ChatComponentPropsWithContext<ChatEmptyProps>>;
+    empty?: Template<ChatComponentPropsWithContext>;
 
     /**
      * Template to use for prompt suggestions.

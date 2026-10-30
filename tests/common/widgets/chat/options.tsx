@@ -8,7 +8,6 @@ import { waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import {
   Chat,
-  DisplayResultsToolType,
   GroupedResultsToolType,
   SearchIndexToolType,
 } from 'instantsearch-core';
@@ -3744,8 +3743,7 @@ export function createOptionsTests(
       // two tests only pin that an agent configured before the rename — legacy
       // tool name, legacy flag — still resolves to the same tool.
       describe('legacy algolia_display_results tool name', () => {
-        // eslint-disable-next-line typescript/no-deprecated
-        const legacyToolType = DisplayResultsToolType;
+        const legacyToolType = 'algolia_display_results';
         const legacyMetadata = { displayResultsEnabled: true };
 
         test('renders Grouped Results and skips the search index tool', async () => {
