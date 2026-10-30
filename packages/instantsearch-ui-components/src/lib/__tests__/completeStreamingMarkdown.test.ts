@@ -13,6 +13,7 @@ describe('completeStreamingMarkdown backtracking', () => {
     ['unclosed brackets', `${'['.repeat(50000)}]x`],
     ['spaces after a bold marker', `**${' '.repeat(50000)}x`],
     ['spaces before a marker', `${' '.repeat(50000)}x*`],
+    ['indented lines', `**${'\n   '.repeat(50000)}x`],
   ])('%s are completed in linear-ish time', (_, text) => {
     expect(timeOf(() => completeStreamingMarkdown(text))).toBeLessThan(500);
   });

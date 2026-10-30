@@ -1756,6 +1756,38 @@ describe('ChatMessage', () => {
         );
       }
     );
+
+    test.each([
+      ['**Nike\nAir**', 'Nike Air', 'Nike Air'],
+      ['**Nike\nAir** and more', 'Nike Air', 'Nike Air and more'],
+      ['**Nike\nAir', 'Nike Air', 'Nike Air'],
+    ])('keeps bold text that spans a line break: %j', (text, bold, shown) => {
+      const content = renderText(text);
+
+      expect(content.querySelector('strong')).toHaveTextContent(
+        new RegExp(`^${bold}$`)
+      );
+      expect(content).toHaveTextContent(new RegExp(`^${shown}$`));
+    });
+
+    test.each([
+      ['**bold ~~gone', 'strong del'],
+      ['~~gone **bold', 'del strong'],
+    ])('closes nested markers from the inside out: %s', (text, selector) => {
+      const content = renderText(text);
+
+      expect(content.querySelector(selector)).not.toBeNull();
+      expect(content.textContent).not.toMatch(/\*|~/);
+    });
+
+    test.each([
+      ['Run `items[0', 'items[0'],
+      ['Use `arr[` here', 'arr['],
+    ])('keeps brackets inside inline code: %s', (text, code) => {
+      const content = renderText(text);
+
+      expect(content.querySelector('code')?.textContent).toBe(code);
+    });
   });
 
   test('renders each text part with a custom component and its message context', () => {
