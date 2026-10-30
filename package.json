@@ -23,7 +23,7 @@
     "lint:fix": "node ./scripts/lint/run-oxlint.cjs --fix",
     "lint:ox": "node ./scripts/lint/run-oxlint.cjs",
     "lint:staged": "node ./scripts/lint/run-oxlint.cjs --staged",
-    "type-check": "tsc && lerna run type-check",
+    "type-check": "tsc -p tsconfig.typecheck.json && lerna run type-check",
     "type-check:v3": "tsc --project tsconfig.v3.json",
     "type-check:v4": "tsc --project tsconfig.v4.json",
     "test": "jest && lerna run test",

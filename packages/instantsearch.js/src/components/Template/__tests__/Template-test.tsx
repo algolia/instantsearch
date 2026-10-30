@@ -5,9 +5,9 @@
 
 import { mount, shallow } from '@instantsearch/testutils/enzyme';
 import { render } from '@testing-library/preact';
+import { warning } from 'instantsearch-core';
 import { h } from 'preact';
 
-import { warning } from '../../../lib/utils';
 import Template from '../Template';
 
 import type { TemplateProps } from '../Template';

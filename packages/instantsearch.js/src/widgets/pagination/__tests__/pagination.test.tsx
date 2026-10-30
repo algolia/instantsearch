@@ -14,7 +14,7 @@ import instantsearch from '../../../index.es';
 import configure from '../../configure/configure';
 import pagination from '../pagination';
 
-import type { SearchResponse } from '../../../../src/types';
+import type { SearchResponse } from 'instantsearch-core';
 
 beforeEach(() => {
   document.body.innerHTML = '';

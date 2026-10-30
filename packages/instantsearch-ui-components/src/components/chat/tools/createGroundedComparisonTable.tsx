@@ -1,11 +1,11 @@
 /** @jsx createElement */
 
-import type { ChatRecord, ChatRecordsStore } from '../../../lib/utils';
 import type {
   RecommendItemComponentProps,
   RecordWithObjectID,
   Renderer,
 } from '../../../types';
+import type { ChatRecord, ChatRecordsStore } from 'instantsearch-core';
 
 /**
  * Shared presentational component for chat comparison tables. Used by the

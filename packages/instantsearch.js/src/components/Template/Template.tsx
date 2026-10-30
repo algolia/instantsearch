@@ -1,13 +1,13 @@
 /** @jsx h */
 
+import { warning, isEqual } from 'instantsearch-core';
 import { h, Component, Fragment, createRef } from 'preact';
 
 import { renderTemplate } from '../../lib/templating';
-import { warning, isEqual } from '../../lib/utils';
 
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { BindEventForHits, SendEventForHits } from '../../lib/utils';
 import type { Templates } from '../../types';
+import type { BindEventForHits, SendEventForHits } from 'instantsearch-core';
 import type { JSX } from 'preact';
 
 class RawHtml extends Component<{ content: string }> {

@@ -8,9 +8,9 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
+import { walkIndex } from 'instantsearch-core';
 
 import instantsearch from '../../..';
-import { walkIndex } from '../../../lib/utils';
 import { autocomplete } from '../autocomplete';
 
 describe('autocomplete()', () => {

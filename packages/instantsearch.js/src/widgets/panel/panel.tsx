@@ -1,25 +1,25 @@
 /** @jsx h */
 
+import {
+  createDocumentationMessageGenerator,
+  getObjectType,
+  warning,
+} from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Panel from '../../components/Panel/Panel';
 import { component } from '../../lib/suit';
-import {
-  createDocumentationMessageGenerator,
-  getContainerNode,
-  getObjectType,
-  warning,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import type { PanelComponentCSSClasses } from '../../components/Panel/Panel';
+import type { Template } from '../../types';
 import type {
-  Template,
   RenderOptions,
   WidgetFactory,
   InitOptions,
   Widget,
-} from '../../types';
+} from 'instantsearch-core';
 
 export type PanelCSSClasses = Partial<{
   /**

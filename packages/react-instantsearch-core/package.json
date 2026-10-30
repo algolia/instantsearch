@@ -47,6 +47,7 @@
   "dependencies": {
     "@swc/helpers": "0.5.18",
     "algoliasearch-helper": "3.30.1",
+    "instantsearch-core": "0.1.0",
     "instantsearch.js": "4.121.0",
     "use-sync-external-store": "^1.0.0"
   },

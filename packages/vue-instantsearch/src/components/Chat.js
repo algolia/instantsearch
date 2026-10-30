@@ -1,16 +1,16 @@
 import {
+  connectChat,
+  focusAfterReveal,
+  getActiveContainerAnimations,
+  holdContainerInertUntilReveal,
+  restoreContainerInertUntilReveal,
+} from 'instantsearch-core';
+import {
   createChatComponent,
   createChatInlineLayoutComponent,
   createChatSidePanelLayoutComponent,
   createStickToBottom,
 } from 'instantsearch-ui-components';
-import { connectChat } from 'instantsearch.js/es/connectors/index';
-import {
-  focusAfterReveal,
-  getActiveContainerAnimations,
-  holdContainerInertUntilReveal,
-  restoreContainerInertUntilReveal,
-} from 'instantsearch.js/es/lib/chat/focusAfterReveal';
 
 import { createHooksMixin } from '../mixins/hooks';
 import { createSuitMixin } from '../mixins/suit';

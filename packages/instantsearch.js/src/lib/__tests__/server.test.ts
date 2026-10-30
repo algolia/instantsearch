@@ -5,6 +5,7 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { SearchParameters } from 'algoliasearch-helper';
+import { getInitialResults, waitForResults } from 'instantsearch-core';
 
 import {
   connectConfigure,
@@ -13,7 +14,6 @@ import {
 } from '../../connectors';
 import instantsearch from '../../index.es';
 import { index } from '../../widgets';
-import { getInitialResults, waitForResults } from '../server';
 
 describe('waitForResults', () => {
   test('resolves when no search or recommend request is pending', async () => {

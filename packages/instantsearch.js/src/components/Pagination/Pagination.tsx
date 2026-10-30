@@ -1,9 +1,9 @@
 /** @jsx h */
 
+import { isSpecialClick } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h } from 'preact';
 
-import { isSpecialClick } from '../../lib/utils';
 import Template from '../Template/Template';
 
 import type { ComponentCSSClasses } from '../../types';

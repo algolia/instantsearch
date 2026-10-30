@@ -5,7 +5,7 @@ import {
 } from 'react-instantsearch-core';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import type { HierarchicalMenuItem } from 'instantsearch.js/es/connectors/hierarchical-menu/connectHierarchicalMenu';
+import type { HierarchicalMenuItem } from 'instantsearch-core';
 
 type HierarchicalMenuProps = UseHierarchicalMenuProps & {
   onChange?: () => void;

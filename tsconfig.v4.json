@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig",
+  "extends": "./tsconfig.typecheck.json",
   "exclude": [
     "**/es",
     "**/dist",

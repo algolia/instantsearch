@@ -1,5 +1,5 @@
+import { connectRelatedProducts } from 'instantsearch-core';
 import { createRelatedProductsComponent } from 'instantsearch-ui-components';
-import { connectRelatedProducts } from 'instantsearch.js/es/connectors/index';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';

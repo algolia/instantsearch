@@ -3,11 +3,11 @@
  */
 /** @jsx createElement */
 import { act, render, screen } from '@testing-library/preact';
+import { getTextContent } from 'instantsearch-core';
 import { Fragment, createElement } from 'preact';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 
-import * as chatUtils from '../../../lib/utils/chat';
-import { getTextContent } from '../../../lib/utils/chat';
+import * as chatUtils from '../../../lib/chat';
 import { createChatMessageErrorComponent } from '../ChatMessageError';
 import { createChatMessagesComponent } from '../ChatMessages';
 
@@ -16,7 +16,10 @@ import type {
   ChatMessageTextComponentProps,
 } from '../ChatMessage';
 import type { ChatMessageErrorProps } from '../ChatMessageError';
-import type { ChatComponentPropsWithContext, ChatMessageBase } from '../types';
+import type {
+  ChatComponentPropsWithContext,
+  ChatMessageBase,
+} from 'instantsearch-core';
 
 const ChatMessages = createChatMessagesComponent({
   createElement,

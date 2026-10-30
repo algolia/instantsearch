@@ -19,7 +19,7 @@ import { WidgetSwitcher } from '../components/WidgetSwitcher';
 import { ChatLayoutContext } from '../context/chatLayout';
 import { SearchContext } from '../context/search';
 
-import type { ChatRenderState } from 'instantsearch.js/es/connectors/chat/connectChat';
+import type { ChatRenderState } from 'instantsearch-core';
 
 const algoliaClient = algoliasearch(
   'latency',

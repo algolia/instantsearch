@@ -1,4 +1,5 @@
-import { warning } from '../../utils';
+import { warning } from 'instantsearch-core';
+
 import withInsights from '../client';
 
 describe('withInsights', () => {

@@ -1,4 +1,4 @@
-import connectFeeds from 'instantsearch.js/es/connectors/feeds/connectFeeds';
+import { connectFeeds as connectFeeds } from 'instantsearch-core';
 
 import { useConnector } from '../hooks/useConnector';
 
@@ -6,7 +6,7 @@ import type { AdditionalWidgetProperties } from '../hooks/useConnector';
 import type {
   FeedsConnectorParams,
   FeedsWidgetDescription,
-} from 'instantsearch.js/es/connectors/feeds/connectFeeds';
+} from 'instantsearch-core';
 
 export type UseFeedsProps = FeedsConnectorParams;
 

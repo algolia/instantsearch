@@ -3,6 +3,7 @@
  */
 import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/connectors';
+import { noop } from 'instantsearch-core';
 
 import {
   connectBreadcrumb,
@@ -24,7 +25,6 @@ import {
   connectFilterSuggestions,
 } from '../connectors';
 import instantsearch from '../index.es';
-import { noop } from '../lib/utils';
 import { refinementList } from '../widgets';
 
 import type { InstantSearch, Widget } from '../index.es';

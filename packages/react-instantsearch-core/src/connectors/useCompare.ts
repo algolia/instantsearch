@@ -1,4 +1,4 @@
-import connectCompare from 'instantsearch.js/es/connectors/compare/connectCompare';
+import { connectCompare } from 'instantsearch-core';
 
 import { useConnector } from '../hooks/useConnector';
 
@@ -6,7 +6,7 @@ import type { AdditionalWidgetProperties } from '../hooks/useConnector';
 import type {
   CompareConnectorParams,
   CompareWidgetDescription,
-} from 'instantsearch.js/es/connectors/compare/connectCompare';
+} from 'instantsearch-core';
 
 export type UseCompareProps = CompareConnectorParams;
 

@@ -5,11 +5,11 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import { fireEvent, screen } from '@testing-library/dom';
+import { openChat } from 'instantsearch-core';
+import { warning } from 'instantsearch-core';
+import { createInsightsMiddleware } from 'instantsearch-core';
 
 import instantsearch from '../../../index.es';
-import { openChat } from '../../../lib/chat/openChat';
-import { warning } from '../../../lib/utils';
-import { createInsightsMiddleware } from '../../../middlewares';
 import { chatInlineLayout } from '../../../templates';
 import chatTrigger from '../../chat-trigger/chat-trigger';
 import chat from '../chat';

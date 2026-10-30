@@ -1,3 +1,6 @@
+import { createInfiniteHitsSessionStorageCache } from 'instantsearch-core';
+import { deprecate } from 'instantsearch-core';
+
 import {
   snippet,
   reverseSnippet,
@@ -6,13 +9,11 @@ import {
   insights,
   getInsightsAnonymousUserToken,
 } from './helpers';
-import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache';
 import InstantSearch from './lib/InstantSearch';
-import { deprecate } from './lib/utils';
 import version from './lib/version';
 
-import type { InstantSearchOptions } from './lib/InstantSearch';
-import type { Expand, UiState } from './types';
+import type { InstantSearchOptions } from 'instantsearch-core';
+import type { Expand, UiState } from 'instantsearch-core';
 
 type InstantSearchModule = {
   <TUiState = Record<string, unknown>, TRouteState = TUiState>(
@@ -21,7 +22,7 @@ type InstantSearchModule = {
   version: string;
 
   // @major remove these in favour of the exports
-  /** @deprecated import { createInfiniteHitsSessionStorageCache } from 'instantsearch.js/es/lib/infiniteHitsCache' */
+  /** @deprecated import { createInfiniteHitsSessionStorageCache } from 'instantsearch-core' */
   createInfiniteHitsSessionStorageCache: typeof createInfiniteHitsSessionStorageCache;
   /** @deprecated import { highlight } from 'instantsearch.js/es/helpers' */
   highlight: typeof highlight;
@@ -65,7 +66,7 @@ instantsearch.version = version;
 
 instantsearch.createInfiniteHitsSessionStorageCache = deprecate(
   createInfiniteHitsSessionStorageCache,
-  "import { createInfiniteHitsSessionStorageCache } from 'instantsearch.js/es/lib/infiniteHitsCache'"
+  "import { createInfiniteHitsSessionStorageCache } from 'instantsearch-core'"
 );
 instantsearch.highlight = deprecate(
   highlight,

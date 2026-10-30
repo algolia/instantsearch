@@ -4,7 +4,7 @@ import { useDynamicWidgets } from '../connectors/useDynamicWidgets';
 import { invariant } from '../lib/invariant';
 import { warn } from '../lib/warn';
 
-import type { DynamicWidgetsConnectorParams } from 'instantsearch.js/es/connectors/dynamic-widgets/connectDynamicWidgets';
+import type { DynamicWidgetsConnectorParams } from 'instantsearch-core';
 import type { ReactElement, ComponentType, ReactNode } from 'react';
 
 function DefaultFallbackComponent() {

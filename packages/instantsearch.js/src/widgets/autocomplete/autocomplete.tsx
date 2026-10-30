@@ -1,6 +1,22 @@
 /** @jsx h */
 
 import {
+  getPromptSuggestionHits,
+  isChatBusy,
+  isPromptSuggestion,
+  openChat,
+  type ChatRenderState,
+} from 'instantsearch-core';
+import { createFeedContainer } from 'instantsearch-core';
+import {
+  createDocumentationMessageGenerator,
+  find,
+  noop,
+  warn,
+  walkIndex,
+} from 'instantsearch-core';
+import { index } from 'instantsearch-core';
+import {
   createAutocompleteComponent,
   createAutocompleteDetachedContainerComponent,
   createAutocompleteDetachedOverlayComponent,
@@ -15,39 +31,31 @@ import {
   createAutocompleteStorage,
   createAutocompleteSuggestionComponent,
   cx,
-  getPromptSuggestionHits,
-  isPromptSuggestion,
 } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 import { useEffect, useId, useMemo, useRef, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectFeeds from '../../connectors/feeds/connectFeeds';
-import { createFeedContainer } from '../../connectors/feeds/FeedContainer';
-import { connectAutocomplete, connectSearchBox } from '../../connectors/index';
+import {
+  connectAutocomplete,
+  connectFeeds,
+  connectSearchBox,
+} from '../../connectors/index';
 import { Highlight, ReverseHighlight } from '../../helpers/components';
-import { isChatBusy, openChat } from '../../lib/chat';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  createDocumentationMessageGenerator,
-  find,
-  getContainerNode,
-  noop,
-  warn,
-  walkIndex,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 import configure from '../configure/configure';
-import index from '../index/index';
 
 import type {
   AutocompleteConnectorParams,
   AutocompleteRenderState,
   AutocompleteWidgetDescription,
   TransformItemsIndicesConfig,
-} from '../../connectors/autocomplete/connectAutocomplete';
-import type { ChatRenderState } from '../../connectors/chat/connectChat';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template } from '../../types';
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type {
   BaseHit,
   Hit,
@@ -56,11 +64,9 @@ import type {
   InstantSearch,
   Renderer,
   RendererOptions,
-  Template,
   Widget,
   WidgetFactory,
-} from '../../types';
-import type { PlainSearchParameters } from 'algoliasearch-helper';
+} from 'instantsearch-core';
 import type {
   AutocompleteClassNames,
   AutocompleteIndexClassNames,

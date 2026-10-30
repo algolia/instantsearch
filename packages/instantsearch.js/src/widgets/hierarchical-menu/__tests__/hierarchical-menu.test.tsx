@@ -9,10 +9,10 @@ import {
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import { fireEvent, within } from '@testing-library/dom';
+import { createInsightsMiddleware } from 'instantsearch-core';
 import { h } from 'preact';
 
 import instantsearch from '../../../index.es';
-import { createInsightsMiddleware } from '../../../middlewares';
 import hierarchicalMenu from '../hierarchical-menu';
 
 beforeEach(() => {

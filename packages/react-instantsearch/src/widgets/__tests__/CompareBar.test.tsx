@@ -10,7 +10,7 @@ import { InstantSearch, useCompare } from 'react-instantsearch-core';
 
 import { CompareBar } from '../CompareBar';
 
-import type { CompareRenderState } from 'instantsearch.js/es/connectors/compare/connectCompare';
+import type { CompareRenderState } from 'instantsearch-core';
 
 // Bridges the shared compare selection out of the React tree so tests can
 // drive it the same way a per-hit "Compare" toggle would.

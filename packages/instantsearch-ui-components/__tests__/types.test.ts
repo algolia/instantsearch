@@ -257,10 +257,12 @@ test('exposes Chat text component types from the public entry point', () => {
   const source = `
     import type {
       ChatMessageBase,
-      ChatMessageProps,
-      ChatMessageTextComponentProps,
       ChatStatus,
       TextUIPart,
+    } from 'instantsearch-core';
+    import type {
+      ChatMessageProps,
+      ChatMessageTextComponentProps,
     } from '../dist/es';
 
     const textComponent: ChatMessageProps['textComponent'] = (props) => {
@@ -311,10 +313,12 @@ test('exposes Chat reasoning component types from the public entry point', () =>
     import type {
       ChatComponentContext,
       ChatMessageBase,
+      ReasoningUIPart,
+    } from 'instantsearch-core';
+    import type {
       ChatMessageProps,
       ChatMessageReasoningComponentProps,
       ChatMessageReasoningPart,
-      ReasoningUIPart,
     } from '../dist/es';
 
     const reasoningComponent: ChatMessageProps['reasoningComponent'] = (props) => {
@@ -371,10 +375,10 @@ test('preserves custom message types in Chat text component props', () => {
     'chat-message-text-component-generic.ts'
   );
   const source = `
+    import type { UIMessage } from 'instantsearch-core';
     import type {
       ChatMessageProps,
       ChatMessagesProps,
-      UIMessage,
     } from '../dist/es';
 
     type AppMetadata = { sourceIds: string[] };

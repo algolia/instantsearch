@@ -7,7 +7,7 @@ test('preserves custom message types in Chat text component props', () => {
   const source = `
     import type { ChatProps } from '../dist/es';
     import type { ChatMessageProps } from 'instantsearch-ui-components';
-    import type { UIMessage } from 'instantsearch.js/es/lib/chat';
+    import type { UIMessage } from 'instantsearch-core';
 
     type AppMetadata = { sourceIds: string[] };
     type AppMessage = UIMessage<AppMetadata>;
@@ -111,7 +111,7 @@ test('accepts Chat text components without widget-owned callbacks', () => {
   const fileName = path.join(__dirname, 'chat-text-components.tsx');
   const source = `
     import { Chat } from '../dist/es';
-    import type { UIMessage } from 'instantsearch.js/es/lib/chat';
+    import type { UIMessage } from 'instantsearch-core';
 
     type AppMetadata = { sourceIds: string[] };
     type AppMessage = UIMessage<AppMetadata>;

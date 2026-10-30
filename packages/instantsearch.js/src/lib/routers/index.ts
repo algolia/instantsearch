@@ -1,1 +1,1 @@
-export { default as history } from './history';
+export { history } from 'instantsearch-core';

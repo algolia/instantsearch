@@ -3,7 +3,7 @@ import { fakeAct } from '../../common';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { FilterSuggestionsConnectorParams } from 'instantsearch.js/es/connectors/filter-suggestions/connectFilterSuggestions';
+import type { FilterSuggestionsConnectorParams } from 'instantsearch-core';
 
 export type FilterSuggestionsConnectorSetup = TestSetup<{
   widgetParams: FilterSuggestionsConnectorParams;

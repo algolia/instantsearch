@@ -1,8 +1,7 @@
 /** @jsx h */
 
+import { omit } from 'instantsearch-core';
 import { h, Fragment } from 'preact';
-
-import { omit } from '../../lib/utils';
 
 // false positive lint error
 // eslint-disable-next-line typescript/consistent-type-imports
