@@ -486,7 +486,11 @@ export default {
             state.setInput(event.currentTarget.value);
           },
           onSubmit: () => {
-            sendMessageAndScrollToBottom({ text: state.input });
+            // `state` is the render-time snapshot; Vue re-renders
+            // asynchronously, so a `setInput` right before submitting would
+            // not be visible in it. Read the latest render state instead.
+            const { input } = toRaw(this.state);
+            sendMessageAndScrollToBottom({ text: input });
             state.setInput('');
           },
           onStop: () => {

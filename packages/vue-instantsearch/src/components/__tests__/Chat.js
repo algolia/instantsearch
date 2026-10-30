@@ -170,6 +170,33 @@ describe('AisChat', () => {
     );
   });
 
+  it('submits the latest input when a custom prompt sets it and submits in the same tick', async () => {
+    const chat = new Chat({});
+    const sendMessage = jest
+      .spyOn(chat, 'sendMessage')
+      .mockImplementation(() => Promise.resolve());
+
+    // A custom prompt has no render-time guard on `value`, so it can call
+    // `onSubmit` right after `setInput`, before Vue re-renders.
+    let promptProps;
+    const promptComponent = (props) => {
+      promptProps = props;
+      return null;
+    };
+
+    mountChat(chat, { promptComponent });
+    await openChat();
+
+    wrapper.vm.$refs.chat.setInput('typed just now');
+    promptProps.onSubmit();
+    await wait(0);
+    await nextTick();
+
+    expect(sendMessage).toHaveBeenCalledWith(
+      expect.objectContaining({ text: 'typed just now' })
+    );
+  });
+
   it('renders a pre-seeded assistant message', async () => {
     const chat = new Chat({ messages: [textMessage('Hello from Algolia')] });
     mountChat(chat);
