@@ -1,21 +1,19 @@
 import algoliasearchHelper from 'algoliasearch-helper';
-import { connectConfigure } from 'instantsearch-core';
+
 import {
   createDocumentationMessageGenerator,
   getObjectType,
   warning,
   getPropertyByPath,
-} from 'instantsearch-core';
+} from '../../lib/utils';
+import connectConfigure from '../configure/connectConfigure';
 
+import type { AlgoliaHit, Connector } from '../../types';
+import type { ConfigureWidgetDescription } from '../configure/connectConfigure';
 import type {
   SearchParameters,
   PlainSearchParameters,
 } from 'algoliasearch-helper';
-import type {
-  AlgoliaHit,
-  Connector,
-  ConfigureWidgetDescription,
-} from 'instantsearch-core';
 
 export type MatchingPatterns = {
   [attribute: string]: {

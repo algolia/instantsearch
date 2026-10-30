@@ -14,6 +14,8 @@ export { default as connectClearRefinements } from './clear-refinements/connectC
 export type * from './clear-refinements/connectClearRefinements';
 export { default as connectCompare } from './compare/connectCompare';
 export * from './compare/connectCompare';
+export { default as connectConfigureRelatedItems } from './configure-related-items/connectConfigureRelatedItems';
+export type * from './configure-related-items/connectConfigureRelatedItems';
 export { default as connectConfigure } from './configure/connectConfigure';
 export type * from './configure/connectConfigure';
 export { default as connectCurrentRefinements } from './current-refinements/connectCurrentRefinements';

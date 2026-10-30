@@ -1,12 +1,11 @@
 import { noop } from 'instantsearch-core';
+import { connectConfigureRelatedItems } from 'instantsearch-core';
 
-import connectConfigureRelatedItems from '../../connectors/configure-related-items/connectConfigureRelatedItems';
-
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type {
   ConfigureRelatedItemsConnectorParams,
   ConfigureRelatedItemsWidgetDescription,
-} from '../../connectors/configure-related-items/connectConfigureRelatedItems';
-import type { PlainSearchParameters } from 'algoliasearch-helper';
+} from 'instantsearch-core';
 import type { WidgetFactory } from 'instantsearch-core';
 
 export type ConfigureRelatedItemsWidget = WidgetFactory<

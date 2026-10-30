@@ -1,13 +1,14 @@
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
+import { connectConfigureRelatedItems } from 'instantsearch-core';
 
-import connectConfigureRelatedItems from '../../../connectors/configure-related-items/connectConfigureRelatedItems';
 import configureRelatedItems from '../configure-related-items';
 
-import type { ConfigureRelatedItemsConnectorParams } from '../../../connectors/configure-related-items/connectConfigureRelatedItems';
+import type { ConfigureRelatedItemsConnectorParams } from 'instantsearch-core';
 
-jest.mock(
-  '../../../connectors/configure-related-items/connectConfigureRelatedItems'
-);
+jest.mock('instantsearch-core', () => ({
+  ...jest.requireActual('instantsearch-core'),
+  connectConfigureRelatedItems: jest.fn(),
+}));
 
 describe('configureRelatedItems', () => {
   test('forwards the options to the connector', () => {
