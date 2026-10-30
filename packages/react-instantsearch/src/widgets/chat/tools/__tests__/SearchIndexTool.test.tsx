@@ -2,7 +2,6 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { chatToolProps } from '@instantsearch/testutils';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -59,7 +58,7 @@ describe('createCarouselTool', () => {
 
       render(
         <LayoutComponent
-          {...chatToolProps({
+          context={{
             ...metadata,
             message,
             applyFilters: jest.fn(),
@@ -67,7 +66,7 @@ describe('createCarouselTool', () => {
             addToolResult: jest.fn(),
             setIndexUiState: jest.fn(),
             sendEvent: jest.fn(),
-          })}
+          }}
         />
       );
 
@@ -95,7 +94,7 @@ describe('createCarouselTool', () => {
 
       render(
         <LayoutComponent
-          {...chatToolProps({
+          context={{
             ...metadata,
             message,
             applyFilters: jest.fn(),
@@ -103,7 +102,7 @@ describe('createCarouselTool', () => {
             addToolResult: jest.fn(),
             setIndexUiState: jest.fn(),
             sendEvent: jest.fn(),
-          })}
+          }}
         />
       );
 
@@ -182,7 +181,7 @@ describe('createCarouselTool', () => {
 
         render(
           <LayoutComponent
-            {...chatToolProps({
+            context={{
               ...metadata,
               message,
               applyFilters,
@@ -190,7 +189,7 @@ describe('createCarouselTool', () => {
               addToolResult: jest.fn(),
               setIndexUiState: jest.fn(),
               sendEvent: jest.fn(),
-            })}
+            }}
           />
         );
 
