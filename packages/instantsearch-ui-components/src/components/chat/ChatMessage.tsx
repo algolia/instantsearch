@@ -1,6 +1,5 @@
 /** @jsx createElement */
 import { cx, startsWith } from '../../lib';
-import { completeStreamingMarkdown } from '../../lib/completeStreamingMarkdown';
 import { compiler } from '../../lib/markdown-to-jsx';
 import {
   findTool,
@@ -571,12 +570,9 @@ export function createChatMessageComponent({
             </p>
           );
         }
-        const markdown = compiler(
-          part.state === 'streaming'
-            ? completeStreamingMarkdown(part.text)
-            : part.text,
-          { createElement: createElement as any }
-        );
+        const markdown = compiler(part.text, {
+          createElement: createElement as any,
+        });
         return <span key={`${message.id}-${index}`}>{markdown}</span>;
       }
       if (startsWith(part.type, 'tool-')) {

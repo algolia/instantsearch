@@ -1586,14 +1586,17 @@ describe('ChatMessage', () => {
       expect(content).toHaveTextContent(/^See the docs$/);
     });
 
-    test.each([['See [the docs'], ['See [the docs]']])(
-      'shows the text of a link before its URL starts: %s',
-      (text) => {
-        const content = renderText(text);
+    test('shows the text of a link before its URL starts', () => {
+      const content = renderText('See [the docs');
 
-        expect(content).toHaveTextContent(/^See the docs$/);
-      }
-    );
+      expect(content).toHaveTextContent(/^See the docs$/);
+    });
+
+    test('keeps the brackets of a citation that ends the text', () => {
+      const content = renderText('As shown in [1]', 'done');
+
+      expect(content).toHaveTextContent(/^As shown in \[1\]$/);
+    });
 
     test.each([['Try the *'], ['Try the _'], ['Was ~']])(
       'hides the first character of a marker: %s',
@@ -1644,7 +1647,7 @@ describe('ChatMessage', () => {
     });
 
     test.each([['done' as const], [undefined]])(
-      'renders a part in the %s state as written',
+      'completes half-written markdown in a part in the %s state too',
       (state) => {
         const message: ChatMessageBase = {
           role: 'assistant',
@@ -1662,10 +1665,10 @@ describe('ChatMessage', () => {
           />
         );
 
-        expect(container.querySelector('strong')).toBeNull();
-        expect(
-          container.querySelector('.ais-ChatMessage-message')
-        ).toHaveTextContent(/^See \*\*\[the docs\]\(https:\/\/exa$/);
+        expect(container.querySelector('a')).toBeNull();
+        expect(container.querySelector('strong')).toHaveTextContent(
+          /^the docs$/
+        );
       }
     );
 

@@ -1,6 +1,5 @@
 /** @jsx createElement */
 import { cx } from '../../lib';
-import { completeStreamingMarkdown } from '../../lib/completeStreamingMarkdown';
 import { compiler } from '../../lib/markdown-to-jsx';
 
 import { BrainIcon, ChevronDownIcon } from './icons';
@@ -91,14 +90,9 @@ export function createChatMessageReasoningComponent({
     const isStreaming = Boolean(activePart);
     const hasActiveHint = Boolean(activePart?.part.text.trim());
 
-    const toMarkdown = (part: ReasoningUIPart) =>
-      part.state === 'streaming'
-        ? completeStreamingMarkdown(part.text)
-        : part.text;
-
     const renderPart = ({ part }: ChatMessageReasoningPart) =>
       parseMarkdown ? (
-        compiler(toMarkdown(part), {
+        compiler(part.text, {
           createElement: createElement as any,
         })
       ) : (
@@ -108,7 +102,7 @@ export function createChatMessageReasoningComponent({
 
     const renderHint = (part: ReasoningUIPart) =>
       parseMarkdown
-        ? compiler(toMarkdown(part), {
+        ? compiler(part.text, {
             createElement: createElement as any,
             forceInline: true,
           })
