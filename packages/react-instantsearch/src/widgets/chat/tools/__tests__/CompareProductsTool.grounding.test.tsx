@@ -14,7 +14,6 @@
  * derived verdict) and not just on stored attributes.
  */
 
-import { chatToolProps } from '@instantsearch/testutils';
 import { render, screen } from '@testing-library/react';
 import { parsePartialJson } from 'instantsearch-core';
 import { collectChatRecords } from 'instantsearch-core';
@@ -97,7 +96,7 @@ function renderCompare(
 
   return render(
     <LayoutComponent
-      {...chatToolProps({
+      context={{
         ...metadata,
         messages,
         records: collectChatRecords(messages),
@@ -107,7 +106,7 @@ function renderCompare(
         addToolResult: jest.fn(),
         setIndexUiState: jest.fn(),
         sendEvent: jest.fn(),
-      })}
+      }}
     />
   );
 }

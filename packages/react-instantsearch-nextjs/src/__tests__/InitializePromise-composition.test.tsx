@@ -6,7 +6,7 @@ import { createCompositionClient } from '@instantsearch/mocks';
 import { act, render } from '@testing-library/react';
 import { ServerInsertedHTMLContext } from 'next/navigation';
 import React from 'react';
-import { EXPERIMENTAL_Autocomplete, SearchBox } from 'react-instantsearch';
+import { Autocomplete, SearchBox } from 'react-instantsearch';
 import {
   InstantSearch,
   InstantSearchRSCContext,
@@ -99,7 +99,7 @@ test('it ignores isolated feeds when deciding whether to run a second pass', asy
     insertedHTML,
     children: (
       <>
-        <EXPERIMENTAL_Autocomplete
+        <Autocomplete
           autoFocus
           requiresSearch={false}
           feeds={[
