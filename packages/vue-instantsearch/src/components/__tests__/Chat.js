@@ -328,6 +328,255 @@ describe('AisChat', () => {
     chatComponent.sendMessage({ text: 'hello' });
     expect(sendMessage).toHaveBeenCalledWith({ text: 'hello' });
   });
+
+  describe('widget stability', () => {
+    function mountWithInlineProps({ onError } = {}) {
+      wrapper = mount(
+        {
+          components: { InstantSearch, ChatComponent },
+          data() {
+            return {
+              searchClient: createSearchClient(),
+              renders: 0,
+              page: 'home',
+            };
+          },
+          methods: {
+            handleError(error) {
+              if (onError) {
+                onError(error, this.renders);
+              }
+            },
+          },
+          template: `
+            <InstantSearch :search-client="searchClient" index-name="indexName">
+              <span>{{ renders }}</span>
+              <ChatComponent
+                agent-id="agentId"
+                layout="inline"
+                :requires-search="false"
+                :persistence="false"
+                :context="{ page }"
+                :tools="{ custom: { streamInput: true } }"
+                :on-error="(error) => handleError(error)"
+                ref="chat"
+              />
+            </InstantSearch>
+          `,
+        },
+        { attachTo: document.body }
+      );
+      return wrapper;
+    }
+
+    async function seedConversation(chatComponent) {
+      chatComponent.state.setMessages([
+        { id: 'u1', role: 'user', parts: [{ type: 'text', text: 'hi' }] },
+      ]);
+      await wait(0);
+      await nextTick();
+    }
+
+    it('keeps the widget and conversation when the parent re-renders with inline props', async () => {
+      mountWithInlineProps();
+      await wait(0);
+      await nextTick();
+
+      const chatComponent = wrapper.vm.$refs.chat;
+      const widget = chatComponent.widget;
+      await seedConversation(chatComponent);
+
+      wrapper.vm.renders++;
+      await wait(0);
+      await nextTick();
+
+      expect(chatComponent.widget).toBe(widget);
+      expect(chatComponent.state.messages).toHaveLength(1);
+    });
+
+    it('forwards inline callbacks to the latest handler', async () => {
+      const onError = jest.fn();
+      mountWithInlineProps({ onError });
+      await wait(0);
+      await nextTick();
+
+      wrapper.vm.renders++;
+      await wait(0);
+      await nextTick();
+
+      const error = new Error('boom');
+      wrapper.vm.$refs.chat.widgetParams.onError(error);
+
+      expect(onError).toHaveBeenCalledWith(error, 1);
+    });
+
+    it('still replaces the widget when a prop value changes', async () => {
+      mountWithInlineProps();
+      await wait(0);
+      await nextTick();
+
+      const chatComponent = wrapper.vm.$refs.chat;
+      const widget = chatComponent.widget;
+
+      wrapper.vm.page = 'product';
+      await wait(0);
+      await nextTick();
+
+      expect(chatComponent.widget).not.toBe(widget);
+      expect(chatComponent.widgetParams.context).toEqual({ page: 'product' });
+    });
+
+    it('compares context data by content, even when it looks like a component', async () => {
+      wrapper = mount(
+        {
+          components: { InstantSearch, ChatComponent },
+          data() {
+            return { searchClient: createSearchClient(), renders: 0 };
+          },
+          template: `
+            <InstantSearch :search-client="searchClient" index-name="indexName">
+              <span>{{ renders }}</span>
+              <ChatComponent
+                agent-id="agentId"
+                :requires-search="false"
+                :persistence="false"
+                :context="{ template: 'product' }"
+                ref="chat"
+              />
+            </InstantSearch>
+          `,
+        },
+        { attachTo: document.body }
+      );
+      await wait(0);
+      await nextTick();
+
+      const chatComponent = wrapper.vm.$refs.chat;
+      const widget = chatComponent.widget;
+
+      wrapper.vm.renders++;
+      await wait(0);
+      await nextTick();
+
+      expect(chatComponent.widget).toBe(widget);
+    });
+
+    it('treats component definitions as opaque, even once Vue caches a constructor on them', async () => {
+      const layoutComponent = { render: (h) => h('div') };
+      wrapper = mount(
+        {
+          components: { InstantSearch, ChatComponent },
+          data() {
+            return {
+              searchClient: createSearchClient(),
+              renders: 0,
+              tools: { custom: { layoutComponent } },
+            };
+          },
+          template: `
+            <InstantSearch :search-client="searchClient" index-name="indexName">
+              <span>{{ renders }}</span>
+              <ChatComponent
+                agent-id="agentId"
+                :requires-search="false"
+                :persistence="false"
+                :tools="{ custom: { layoutComponent: tools.custom.layoutComponent } }"
+                ref="chat"
+              />
+            </InstantSearch>
+          `,
+        },
+        { attachTo: document.body }
+      );
+      await wait(0);
+      await nextTick();
+
+      const chatComponent = wrapper.vm.$refs.chat;
+      const widget = chatComponent.widget;
+
+      layoutComponent._Ctor = {}; // as Vue 2 does on first render
+      wrapper.vm.renders++;
+      await wait(0);
+      await nextTick();
+
+      expect(chatComponent.widget).toBe(widget);
+    });
+
+    it('replaces the widget when a nested value is mutated in place', async () => {
+      wrapper = mount(
+        {
+          components: { InstantSearch, ChatComponent },
+          data() {
+            return {
+              searchClient: createSearchClient(),
+              requestOptions: { headers: { Authorization: 'old' } },
+            };
+          },
+          template: `
+            <InstantSearch :search-client="searchClient" index-name="indexName">
+              <ChatComponent
+                agent-id="agentId"
+                :requires-search="false"
+                :persistence="false"
+                :request-options="requestOptions"
+                ref="chat"
+              />
+            </InstantSearch>
+          `,
+        },
+        { attachTo: document.body }
+      );
+      await wait(0);
+      await nextTick();
+
+      const chatComponent = wrapper.vm.$refs.chat;
+      const widget = chatComponent.widget;
+
+      wrapper.vm.requestOptions.headers.Authorization = 'new';
+      await wait(0);
+      await nextTick();
+
+      expect(chatComponent.widget).not.toBe(widget);
+    });
+
+    it('ignores a callback that was removed after the widget was created', async () => {
+      wrapper = mount(
+        {
+          components: { InstantSearch, ChatComponent },
+          data() {
+            return {
+              searchClient: createSearchClient(),
+              handler: jest.fn(),
+            };
+          },
+          template: `
+            <InstantSearch :search-client="searchClient" index-name="indexName">
+              <ChatComponent
+                agent-id="agentId"
+                :requires-search="false"
+                :persistence="false"
+                :on-error="handler"
+                ref="chat"
+              />
+            </InstantSearch>
+          `,
+        },
+        { attachTo: document.body }
+      );
+      await wait(0);
+      await nextTick();
+
+      const chatComponent = wrapper.vm.$refs.chat;
+      const { onError } = chatComponent.widgetParams;
+
+      wrapper.vm.handler = undefined;
+      await wait(0);
+      await nextTick();
+
+      expect(chatComponent.widgetParams.onError).toBeUndefined();
+      expect(() => onError(new Error('late'))).not.toThrow();
+    });
+  });
 });
 
 describe('AisChatTrigger', () => {

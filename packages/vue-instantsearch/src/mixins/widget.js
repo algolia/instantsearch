@@ -3,7 +3,7 @@ import { isVue3 } from '../util/vue-compat';
 import { warn } from '../util/warn';
 
 export const createWidgetMixin = (
-  { connector } = {},
+  { connector, isEqualWidgetParams, snapshotWidgetParams } = {},
   additionalProperties = {}
 ) => ({
   inject: {
@@ -35,6 +35,9 @@ export const createWidgetMixin = (
         this.factory(this.widgetParams),
         additionalProperties
       );
+      this.appliedWidgetParams = snapshotWidgetParams
+        ? snapshotWidgetParams(this.widgetParams)
+        : undefined;
       this.getParentIndex().addWidgets([this.widget]);
 
       if (
@@ -71,6 +74,17 @@ Read more on using connectors: https://alg.li/vue-custom`
   watch: {
     widgetParams: {
       handler(nextWidgetParams) {
+        // Deep watchers fire on new but equal references; opt-in widgets skip those.
+        if (
+          isEqualWidgetParams &&
+          isEqualWidgetParams(this.appliedWidgetParams, nextWidgetParams)
+        ) {
+          return;
+        }
+        this.appliedWidgetParams = snapshotWidgetParams
+          ? snapshotWidgetParams(nextWidgetParams)
+          : undefined;
+
         this.state = null;
         const previousWidget = this.widget;
         this.widget = _objectSpread(

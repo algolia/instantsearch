@@ -87,10 +87,88 @@ function resolveComponent(vm, slotName, propName) {
   return vm.slotAdapters[slotName];
 }
 
+// Forwarded through stable wrappers so inline handlers don't re-create the widget.
+const callbackProps = ['onToolCall', 'onFinish', 'onError', 'onData'];
+
+function isPlainObject(value) {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+  const proto = Object.getPrototypeOf(value);
+  return proto === Object.prototype || proto === null;
+}
+
+// Compared by reference: Vue 2 adds an enumerable `_Ctor` cache to rendered components.
+function isComponentPath(path) {
+  return (
+    path.length === 3 && path[0] === 'tools' && path[2] === 'layoutComponent'
+  );
+}
+
+function isEqualAt(first, second, path) {
+  if (first === second) {
+    return true;
+  }
+  if (isComponentPath(path)) {
+    return false;
+  }
+  if (Array.isArray(first) && Array.isArray(second)) {
+    return (
+      first.length === second.length &&
+      first.every((item, index) =>
+        isEqualAt(item, second[index], path.concat(String(index)))
+      )
+    );
+  }
+  if (isPlainObject(first) && isPlainObject(second)) {
+    const keys = Object.keys(first);
+    return (
+      keys.length === Object.keys(second).length &&
+      keys.every(
+        (key) =>
+          Object.prototype.hasOwnProperty.call(second, key) &&
+          isEqualAt(first[key], second[key], path.concat(key))
+      )
+    );
+  }
+  return false;
+}
+
+function snapshotAt(value, path) {
+  if (isComponentPath(path)) {
+    return value;
+  }
+  if (Array.isArray(value)) {
+    return value.map((item, index) =>
+      snapshotAt(item, path.concat(String(index)))
+    );
+  }
+  if (isPlainObject(value)) {
+    return Object.keys(value).reduce((copy, key) => {
+      copy[key] = snapshotAt(value[key], path.concat(key));
+      return copy;
+    }, {});
+  }
+  return value;
+}
+
+// Like React's `useStableValue`: plain objects and arrays by content, the rest by reference.
+function isEqualWidgetParams(first, second) {
+  return isEqualAt(first, second, []);
+}
+
+// Copies plain objects and arrays so in-place mutations are detected.
+function snapshotWidgetParams(value) {
+  return snapshotAt(value, []);
+}
+
 export default {
   name: 'AisChat',
   mixins: [
-    createWidgetMixin({ connector: connectChat }, { $$widgetType: 'ais.chat' }),
+    createWidgetMixin(
+      { connector: connectChat, isEqualWidgetParams, snapshotWidgetParams },
+      { $$widgetType: 'ais.chat' }
+    ),
     createSuitMixin({ name: 'Chat' }),
     createHooksMixin(),
   ],
@@ -163,6 +241,11 @@ export default {
     },
     createComponentProps()
   ),
+  beforeCreate() {
+    // Set before the widget mixin's `created` reads `widgetParams`.
+    this.defaultTools = {};
+    this.callbackForwarders = {};
+  },
   created() {
     this.useStickToBottom = createStickToBottom(this.hooksStore.hooks);
     this.slotAdapters = {};
@@ -200,10 +283,7 @@ export default {
     },
     widgetParams() {
       const tools = mergeToolOptions(
-        // `getItemComponent` is a stable method the tools call at render
-        // time, so the tools (and with them the widget) aren't re-created
-        // when the `item` slot content changes.
-        createDefaultTools(this.getItemComponent, this.getSearchPageURL),
+        this.getDefaultTools(Boolean(this.getSearchPageURL)),
         this.tools
       );
 
@@ -222,10 +302,6 @@ export default {
         feedback: this.feedback,
         requestOptions: this.requestOptions,
         id: this.id,
-        onToolCall: this.onToolCall,
-        onFinish: this.onFinish,
-        onError: this.onError,
-        onData: this.onData,
         initialMessages: this.initialMessages,
         initialUserMessage: this.initialUserMessage,
         context: this.context,
@@ -239,6 +315,11 @@ export default {
           params[key] = optional[key];
         }
       });
+      callbackProps.forEach((key) => {
+        if (this[key] !== undefined) {
+          params[key] = this.getCallbackForwarder(key);
+        }
+      });
       return params;
     },
   },
@@ -250,6 +331,26 @@ export default {
      */
     getItemComponent() {
       return resolveComponent(this, 'item', 'itemComponent');
+    },
+    // Cached so `item` slot or `getSearchPageURL` changes don't re-create the widget.
+    getDefaultTools(hasSearchPageURL) {
+      const key = String(hasSearchPageURL);
+      if (!this.defaultTools[key]) {
+        this.defaultTools[key] = createDefaultTools(
+          this.getItemComponent,
+          hasSearchPageURL
+            ? (...args) => this.getSearchPageURL(...args)
+            : undefined
+        );
+      }
+      return this.defaultTools[key];
+    },
+    getCallbackForwarder(key) {
+      if (!this.callbackForwarders[key]) {
+        this.callbackForwarders[key] = (...args) =>
+          typeof this[key] === 'function' ? this[key](...args) : undefined;
+      }
+      return this.callbackForwarders[key];
     },
     // Imperative API, the counterpart of React's `ChatHandle`.
     setOpen(open) {
