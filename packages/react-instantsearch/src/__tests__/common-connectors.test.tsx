@@ -25,7 +25,6 @@ import {
   useTrendingItems,
   useTrendingFacets,
   useLookingSimilar,
-  useFilterSuggestions,
 } from '..';
 
 import type {
@@ -43,7 +42,6 @@ import type {
   UseTrendingItemsProps,
   UseTrendingFacetsProps,
   UseLookingSimilarProps,
-  UseFilterSuggestionsProps,
 } from '..';
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 import type {
@@ -468,41 +466,6 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
     render(<App />);
   },
   createChatConnectorTests: () => {},
-  createFilterSuggestionsConnectorTests: ({
-    instantSearchOptions,
-    widgetParams,
-  }) => {
-    function CustomFilterSuggestions(props: UseFilterSuggestionsProps) {
-      const { suggestions, refine, isLoading } = useFilterSuggestions(props);
-      useRefinementList({ attribute: 'brand' });
-
-      return (
-        <div data-testid="FilterSuggestions-root">
-          {isLoading && (
-            <div data-testid="FilterSuggestions-loading">Loading...</div>
-          )}
-          <ul data-testid="FilterSuggestions-list">
-            {suggestions.map((suggestion) => (
-              <li key={`${suggestion.attribute}-${suggestion.value}`}>
-                <button
-                  data-testid="FilterSuggestions-refine"
-                  onClick={() => refine(suggestion.attribute, suggestion.value)}
-                >
-                  {suggestion.label} ({suggestion.count})
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      );
-    }
-
-    render(
-      <InstantSearch {...instantSearchOptions}>
-        <CustomFilterSuggestions {...widgetParams} />
-      </InstantSearch>
-    );
-  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -528,7 +491,6 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createTrendingFacetsConnectorTests: { act },
   createLookingSimilarConnectorTests: { act, skippedTests: { options: true } },
   createChatConnectorTests: { act, skippedTests: { options: true } },
-  createFilterSuggestionsConnectorTests: { act },
 };
 
 describe('Common connector tests (React InstantSearch)', () => {

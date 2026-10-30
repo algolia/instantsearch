@@ -11,7 +11,7 @@ import { connectAutocomplete } from 'instantsearch-core';
 import React, { version as ReactVersion } from 'react';
 import { renderToString } from 'react-dom/server';
 import {
-  EXPERIMENTAL_Autocomplete,
+  Autocomplete,
   Hits,
   RefinementList,
   TrendingItems,
@@ -56,7 +56,7 @@ function AutocompleteWithoutSearch() {
 
 function RequestFreeAutocomplete() {
   return (
-    <EXPERIMENTAL_Autocomplete
+    <Autocomplete
       autoFocus
       requiresSearch={false}
       indices={[
@@ -71,7 +71,7 @@ function RequestFreeAutocomplete() {
 
 function RequestFreeFeedsAutocomplete() {
   return (
-    <EXPERIMENTAL_Autocomplete
+    <Autocomplete
       autoFocus
       requiresSearch={false}
       feeds={[

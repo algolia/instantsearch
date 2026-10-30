@@ -207,7 +207,7 @@ describe('Usage', () => {
       // @ts-expect-error
       search.addWidgets({});
     }).toThrowErrorMatchingInlineSnapshot(`
-      "The \`addWidgets\` method expects an array of widgets. Please use \`addWidget\`.
+      "The \`addWidgets\` method expects an array of widgets.
 
       See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
     `);
@@ -327,29 +327,6 @@ describe('Usage', () => {
     `);
   });
 
-  it('warns dev with EXPERIMENTAL_use', () => {
-    const searchClient = createSearchClient({
-      addAlgoliaAgent: jest.fn(),
-    });
-
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient,
-    });
-
-    const middleware = () => ({
-      onStateChange: () => {},
-      subscribe: () => {},
-      unsubscribe: () => {},
-    });
-
-    expect(() => {
-      search.EXPERIMENTAL_use(middleware);
-    }).toWarnDev(
-      '[InstantSearch.js]: The middleware API is now considered stable, so we recommend replacing `EXPERIMENTAL_use` with `use` before upgrading to the next major version.'
-    );
-  });
-
   it('does not warn dev with use', () => {
     const searchClient = createSearchClient({
       addAlgoliaAgent: jest.fn(),
@@ -416,47 +393,6 @@ describe('InstantSearch', () => {
     });
 
     expect(algoliasearchHelper).not.toHaveBeenCalled();
-  });
-
-  it('warns deprecated usage of `searchParameters`', () => {
-    warning.cache = {};
-    const warn = jest.spyOn(global.console, 'warn');
-    warn.mockImplementation(() => {});
-
-    expect(() => {
-      // eslint-disable-next-line no-new
-      new InstantSearch({
-        indexName: 'indexName',
-        searchClient: createSearchClient(),
-        // @ts-expect-error
-        searchParameters: {
-          disjunctiveFacets: ['brand'],
-          disjunctiveFacetsRefinements: {
-            brand: ['Samsung'],
-          },
-        },
-      });
-    })
-      .toWarnDev(`[InstantSearch.js]: The \`searchParameters\` option is deprecated and will not be supported in InstantSearch.js 4.x.
-
-You can replace it with the \`configure\` widget:
-
-\`\`\`
-search.addWidgets([
-  configure({
-  "disjunctiveFacets": [
-    "brand"
-  ],
-  "disjunctiveFacetsRefinements": {
-    "brand": [
-      "Samsung"
-    ]
-  }
-})
-]);
-\`\`\`
-
-See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
   });
 
   it('does store insightsClient on the instance', () => {
@@ -814,25 +750,6 @@ describe('addWidget(s)', () => {
     warning.cache = {};
   });
 
-  it('forwards the call of `addWidget` to the main index', () => {
-    const warn = jest.spyOn(global.console, 'warn');
-    warn.mockImplementation(() => {});
-
-    const searchClient = createSearchClient();
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient,
-    });
-
-    expect(search.mainIndex.getWidgets()).toHaveLength(0);
-
-    expect(() => search.addWidget(createWidget())).toWarnDev(
-      '[InstantSearch.js]: addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
-    );
-
-    expect(search.mainIndex.getWidgets()).toHaveLength(1);
-  });
-
   it('forwards the call of `addWidgets` to the main index', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
@@ -845,27 +762,6 @@ describe('addWidget(s)', () => {
     search.addWidgets([createWidget()]);
 
     expect(search.mainIndex.getWidgets()).toHaveLength(1);
-  });
-
-  it('returns the search instance when calling `addWidget`', () => {
-    const warn = jest.spyOn(global.console, 'warn');
-    warn.mockImplementation(() => {});
-
-    const searchClient = createSearchClient();
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient,
-    });
-
-    let result: InstantSearch | null = null;
-
-    expect(() => {
-      result = search.addWidget(createWidget());
-    }).toWarnDev(
-      '[InstantSearch.js]: addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
-    );
-
-    expect(result).toBe(search);
   });
 
   it('returns the search instance when calling `addWidgets`', () => {
@@ -909,29 +805,6 @@ describe('removeWidget(s)', () => {
     warning.cache = {};
   });
 
-  it('forwards the call to `removeWidget` to the main index', () => {
-    const warn = jest.spyOn(global.console, 'warn');
-    warn.mockImplementation(() => {});
-
-    const searchClient = createSearchClient();
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient,
-    });
-
-    const widget = createWidget();
-
-    search.addWidgets([widget]);
-
-    expect(search.mainIndex.getWidgets()).toHaveLength(1);
-
-    expect(() => search.removeWidget(widget)).toWarnDev(
-      '[InstantSearch.js]: removeWidget will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`'
-    );
-
-    expect(search.mainIndex.getWidgets()).toHaveLength(0);
-  });
-
   it('forwards the call to `removeWidgets` to the main index', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
@@ -948,33 +821,6 @@ describe('removeWidget(s)', () => {
     search.removeWidgets([widget]);
 
     expect(search.mainIndex.getWidgets()).toHaveLength(0);
-  });
-
-  it('returns the search instance when calling `removeWidget`', () => {
-    const warn = jest.spyOn(global.console, 'warn');
-    warn.mockImplementation(() => {});
-
-    const searchClient = createSearchClient();
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient,
-    });
-
-    const widget = createWidget();
-
-    expect(() => search.addWidget(widget)).toWarnDev(
-      '[InstantSearch.js]: addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
-    );
-
-    let result: InstantSearch | null = null;
-
-    expect(() => {
-      result = search.removeWidget(widget);
-    }).toWarnDev(
-      '[InstantSearch.js]: removeWidget will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`'
-    );
-
-    expect(result).toBe(search);
   });
 
   it('returns the search instance when calling `removeWidgets`', () => {
@@ -1079,52 +925,6 @@ describe('start', () => {
     expect(
       search.mainHelper!.searchOnlyWithDerivedHelpers
     ).toHaveBeenCalledTimes(1);
-  });
-
-  it('calls the provided `searchFunction` with a single request', async () => {
-    const searchFunction = jest.fn((helper) =>
-      helper.setQuery('test').search()
-    );
-    const searchClient = createSearchClient();
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchFunction,
-      searchClient,
-    });
-
-    search.addWidgets([virtualSearchBox({})]);
-
-    expect(searchFunction).toHaveBeenCalledTimes(0);
-    expect(searchClient.search).toHaveBeenCalledTimes(0);
-
-    search.start();
-
-    await wait(0);
-
-    expect(searchFunction).toHaveBeenCalledTimes(1);
-    expect(searchClient.search).toHaveBeenCalledTimes(1);
-    expect(search.mainIndex.getHelper()!.state.query).toBe('test');
-  });
-
-  it('calls the provided `searchFunction` with multiple requests', () => {
-    const searchClient = createSearchClient();
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient,
-      searchFunction(helper) {
-        const nextState = helper.state
-          .addDisjunctiveFacet('brand')
-          .addDisjunctiveFacetRefinement('brand', 'Apple');
-
-        helper.setState(nextState).search();
-      },
-    });
-
-    search.addWidgets([virtualSearchBox({})]);
-
-    expect(() => {
-      search.start();
-    }).not.toThrow();
   });
 
   it('forwards the `initialUiState` to the main index', () => {
@@ -2004,9 +1804,6 @@ describe('scheduleStalledRender', () => {
     expect(widget.render).toHaveBeenCalledTimes(1);
     expect(widget.render).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        searchMetadata: {
-          isSearchStalled: false,
-        },
         status: 'idle',
       })
     );
@@ -2023,9 +1820,6 @@ describe('scheduleStalledRender', () => {
     expect(widget.render).toHaveBeenCalledTimes(1);
     expect(widget.render).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        searchMetadata: {
-          isSearchStalled: false,
-        },
         status: 'loading',
       })
     );
@@ -2038,9 +1832,6 @@ describe('scheduleStalledRender', () => {
     expect(widget.render).toHaveBeenCalledTimes(1);
     expect(widget.render).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        searchMetadata: {
-          isSearchStalled: true,
-        },
         status: 'stalled',
       })
     );
@@ -2056,9 +1847,6 @@ describe('scheduleStalledRender', () => {
     expect(widget.render).toHaveBeenCalledTimes(1);
     expect(widget.render).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        searchMetadata: {
-          isSearchStalled: false,
-        },
         status: 'idle',
       })
     );
@@ -3548,10 +3336,6 @@ describe('initialUiState', () => {
           menu: {
             category: 'Hardware',
           },
-          places: {
-            query: 'Paris',
-            position: '1,1',
-          },
           // This is a UI parameter that is not supported by default but that
           // can be added when using custom widgets. Having it in `initialUiState`
           // makes sure that it doesn't throw if it happens.
@@ -3582,7 +3366,6 @@ To fully reflect the state, some widgets need to be added to the index "indexNam
 - \`hierarchicalMenu\` needs one of these widgets: "hierarchicalMenu"
 - \`range\` needs one of these widgets: "rangeInput", "rangeSlider"
 - \`menu\` needs one of these widgets: "menu", "menuSelect"
-- \`places\` needs one of these widgets: "places"
 
 If you do not wish to display widgets but still want to support their search parameters, you can mount "virtual widgets" that don't render anything:
 

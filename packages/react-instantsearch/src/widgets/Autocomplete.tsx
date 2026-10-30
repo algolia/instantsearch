@@ -1,5 +1,4 @@
 import {
-  deprecate,
   getPromptSuggestionHits,
   isChatBusy,
   isPromptSuggestion,
@@ -927,12 +926,6 @@ export function Autocomplete<TItem extends BaseHit = BaseHit>(
     </Index>
   );
 }
-
-/** @deprecated use Autocomplete instead */
-export const EXPERIMENTAL_Autocomplete = deprecate(
-  Autocomplete,
-  'EXPERIMENTAL_Autocomplete is no longer experimental. Please use Autocomplete instead.'
-);
 
 function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   indicesConfig,

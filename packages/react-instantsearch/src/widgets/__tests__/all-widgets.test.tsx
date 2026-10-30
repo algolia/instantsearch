@@ -188,11 +188,6 @@ describe('widgets', () => {
           "$$widgetType": "ais.trendingFacets",
           "name": "TrendingFacets",
         },
-        {
-          "$$type": "ais.filterSuggestions",
-          "$$widgetType": "ais.filterSuggestions",
-          "name": "FilterSuggestions",
-        },
       ]
     `);
   });

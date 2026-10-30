@@ -7,13 +7,13 @@ export type NumericMenuProps = React.ComponentProps<'div'> &
   UseNumericMenuProps;
 
 export function NumericMenu(props: NumericMenuProps) {
-  const { hasNoResults, items, refine } = useNumericMenu(props);
+  const { canRefine, items, refine } = useNumericMenu(props);
 
   return (
     <div
       className={cx(
         'ais-NumericMenu',
-        hasNoResults && 'ais-NumericMenu--noRefinement',
+        !canRefine && 'ais-NumericMenu--noRefinement',
         props.className
       )}
     >

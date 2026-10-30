@@ -25,11 +25,6 @@ type SharedRenderOptions = {
   state: SearchParameters;
   renderState: IndexRenderState;
   helper: Helper;
-  /** @deprecated use `status` instead */
-  searchMetadata: {
-    /** @deprecated use `status === "stalled"` instead */
-    isSearchStalled: boolean;
-  };
   status: InstantSearch['status'];
   error: InstantSearch['error'];
   createURL: (
@@ -60,14 +55,11 @@ export type IndexWidgetType = (typeof indexWidgetTypes)[number];
 
 // @MAJOR: Remove these exported types if we don't need them
 export type BuiltinTypes =
-  | 'ais.analytics'
-  | 'ais.answers'
   | 'ais.autocomplete'
   | 'ais.breadcrumb'
   | 'ais.clearRefinements'
   | 'ais.chat'
   | 'ais.configure'
-  | 'ais.configureRelatedItems'
   | 'ais.currentRefinements'
   | 'ais.dynamicWidgets'
   | 'ais.feedContainer'
@@ -83,7 +75,6 @@ export type BuiltinTypes =
   | 'ais.menu'
   | 'ais.numericMenu'
   | 'ais.pagination'
-  | 'ais.places'
   | 'ais.poweredBy'
   | 'ais.queryRules'
   // @TODO: remove individual types for rangeSlider & rangeInput once updating checkIndexUiState
@@ -103,14 +94,11 @@ export type BuiltinTypes =
   | 'ais.voiceSearch';
 
 export type BuiltinWidgetTypes =
-  | 'ais.analytics'
-  | 'ais.answers'
   | 'ais.autocomplete'
   | 'ais.breadcrumb'
   | 'ais.chat'
   | 'ais.clearRefinements'
   | 'ais.configure'
-  | 'ais.configureRelatedItems'
   | 'ais.currentRefinements'
   | 'ais.dynamicWidgets'
   | 'ais.feedContainer'
@@ -127,7 +115,6 @@ export type BuiltinWidgetTypes =
   | 'ais.menuSelect'
   | 'ais.numericMenu'
   | 'ais.pagination'
-  | 'ais.places'
   | 'ais.poweredBy'
   | 'ais.queryRuleCustomData'
   | 'ais.queryRuleContext'
@@ -272,17 +259,6 @@ type RequiredUiStateLifeCycle<TWidgetDescription extends WidgetDescription> = {
       helper: Helper;
     }
   ) => Partial<IndexUiState & TWidgetDescription['indexUiState']>;
-
-  /**
-   * This function is required for a widget to be taken in account for routing.
-   * It will derive a uiState for this widget based on the existing uiState and
-   * the search parameters applied.
-   *
-   * @deprecated Use `getWidgetUiState` instead.
-   * @param uiState - Current state.
-   * @param widgetStateOptions - Extra information to calculate uiState.
-   */
-  getWidgetState?: RequiredUiStateLifeCycle<TWidgetDescription>['getWidgetUiState'];
 
   /**
    * This function is required for a widget to behave correctly when a URL is

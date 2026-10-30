@@ -1,4 +1,3 @@
-import type { AnswersWidgetDescription } from '../connectors/answers/connectAnswers';
 import type { AutocompleteWidgetDescription } from '../connectors/autocomplete/connectAutocomplete';
 import type { BreadcrumbWidgetDescription } from '../connectors/breadcrumb/connectBreadcrumb';
 import type { ChatWidgetDescription } from '../connectors/chat/connectChat';
@@ -26,11 +25,8 @@ import type { SortByWidgetDescription } from '../connectors/sort-by/connectSortB
 import type { StatsWidgetDescription } from '../connectors/stats/connectStats';
 import type { ToggleRefinementWidgetDescription } from '../connectors/toggle-refinement/connectToggleRefinement';
 import type { VoiceSearchWidgetDescription } from '../connectors/voice-search/connectVoiceSearch';
-import type { AnalyticsWidgetDescription } from '../widgets/analytics/analytics';
-import type { PlacesWidgetDescription } from '../widgets/places/places';
 
-type ConnectorRenderStates = AnswersWidgetDescription['indexRenderState'] &
-  AutocompleteWidgetDescription['indexRenderState'] &
+type ConnectorRenderStates = AutocompleteWidgetDescription['indexRenderState'] &
   BreadcrumbWidgetDescription['indexRenderState'] &
   ChatWidgetDescription['indexRenderState'] &
   ClearRefinementsWidgetDescription['indexRenderState'] &
@@ -58,12 +54,7 @@ type ConnectorRenderStates = AnswersWidgetDescription['indexRenderState'] &
   ToggleRefinementWidgetDescription['indexRenderState'] &
   VoiceSearchWidgetDescription['indexRenderState'];
 
-type WidgetRenderStates = AnalyticsWidgetDescription['indexRenderState'] &
-  PlacesWidgetDescription['indexRenderState'];
-
-export type IndexRenderState = Partial<
-  ConnectorRenderStates & WidgetRenderStates
->;
+export type IndexRenderState = Partial<ConnectorRenderStates>;
 
 export type RenderState = {
   [indexId: string]: IndexRenderState;

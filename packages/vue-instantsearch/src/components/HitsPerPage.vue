@@ -3,7 +3,6 @@
     <slot
       :items="state.items"
       :refine="state.refine"
-      :has-no-results="state.hasNoResults"
       :can-refine="state.canRefine"
       :createURL="state.createURL"
     >

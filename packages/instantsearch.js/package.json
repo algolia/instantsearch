@@ -59,7 +59,6 @@
     "@instantsearch/mocks": "1.129.0",
     "@instantsearch/tests": "1.129.0",
     "@instantsearch/testutils": "1.118.0",
-    "algoliasearch": "5.1.1",
-    "places.js": "1.17.1"
+    "algoliasearch": "5.1.1"
   }
 }

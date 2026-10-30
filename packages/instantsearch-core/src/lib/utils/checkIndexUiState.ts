@@ -91,10 +91,6 @@ const stateToWidgetsMap: StateToWidgets = {
     connectors: ['connectConfigure'],
     widgets: ['ais.configure'],
   },
-  places: {
-    connectors: [],
-    widgets: ['ais.places'],
-  },
 };
 
 type CheckIndexUiStateParams = {

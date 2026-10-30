@@ -497,7 +497,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           canRefine: false,
           refine: expect.any(Function),
           sendEvent: expect.any(Function),
-          hasNoResults: true,
           widgetParams: {
             attribute: 'grade',
           },
@@ -581,7 +580,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           canRefine: true,
           refine: expect.any(Function),
           sendEvent: renderState1.ratingMenu.grade.sendEvent,
-          hasNoResults: true,
           widgetParams: {
             attribute: 'grade',
           },
@@ -617,7 +615,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         canRefine: false,
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
-        hasNoResults: true,
         widgetParams: {
           attribute: 'grade',
         },
@@ -699,7 +696,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         canRefine: true,
         refine: expect.any(Function),
         sendEvent: renderState1.sendEvent,
-        hasNoResults: true,
         widgetParams: {
           attribute: 'grade',
         },
@@ -739,7 +735,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         canRefine: false,
         refine: expect.any(Function),
         sendEvent: renderState1.sendEvent,
-        hasNoResults: true,
         widgetParams: {
           attribute: 'grade',
         },

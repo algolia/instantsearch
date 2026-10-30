@@ -31,4 +31,3 @@ export * from './LookingSimilar';
 export * from './RelatedProducts';
 export * from './TrendingItems';
 export * from './TrendingFacets';
-export * from './FilterSuggestions';
