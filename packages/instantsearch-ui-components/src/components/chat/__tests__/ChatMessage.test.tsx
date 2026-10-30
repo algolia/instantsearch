@@ -1758,16 +1758,14 @@ describe('ChatMessage', () => {
     );
 
     test.each([
-      ['**Nike\nAir**', 'Nike Air', 'Nike Air'],
-      ['**Nike\nAir** and more', 'Nike Air', 'Nike Air and more'],
-      ['**Nike\nAir', 'Nike Air', 'Nike Air'],
+      ['**Nike\nAir**', /^Nike Air$/, /^Nike Air$/],
+      ['**Nike\nAir** and more', /^Nike Air$/, /^Nike Air and more$/],
+      ['**Nike\nAir', /^Nike Air$/, /^Nike Air$/],
     ])('keeps bold text that spans a line break: %j', (text, bold, shown) => {
       const content = renderText(text);
 
-      expect(content.querySelector('strong')).toHaveTextContent(
-        new RegExp(`^${bold}$`)
-      );
-      expect(content).toHaveTextContent(new RegExp(`^${shown}$`));
+      expect(content.querySelector('strong')).toHaveTextContent(bold);
+      expect(content).toHaveTextContent(shown);
     });
 
     test.each([
