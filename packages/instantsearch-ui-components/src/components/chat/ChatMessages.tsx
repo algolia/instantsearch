@@ -37,11 +37,7 @@ import type {
 } from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderPropsWithContext } from './ChatMessageLoader';
-import type {
-  ChatEmptyProps,
-  ChatLayoutOwnProps,
-  ClientSideTools,
-} from './types';
+import type { ChatLayoutOwnProps, ClientSideTools } from './types';
 import type {
   ComponentProps,
   Hooks,
@@ -219,9 +215,7 @@ export type ChatMessagesProps<
    * Custom empty component shown when there are no messages
    */
   emptyComponent?: (
-    // The deprecated root props are still passed alongside `context`.
-    // eslint-disable-next-line typescript/no-deprecated
-    props: ChatComponentPropsWithContext<ChatEmptyProps, TMessage>
+    props: ChatComponentPropsWithContext<{}, TMessage>
   ) => JSX.Element;
   /**
    * Custom actions component
@@ -1096,16 +1090,7 @@ export function createChatMessagesComponent({
             }}
           >
             {showEmpty && EmptyComponent && (
-              <EmptyComponent
-                // Deprecated root-level props, kept alongside `context` for
-                // empty/greeting components written against the previous API.
-                // Remove in the next major.
-                sendMessage={sendMessage}
-                setInput={setInput}
-                status={status}
-                onClose={onClose}
-                context={context}
-              />
+              <EmptyComponent context={context} />
             )}
 
             {/* A silent user message (a prompt shortcut with no display

@@ -28,7 +28,7 @@ export function createCompareProductsTool(getItemComponent, translations) {
       }
 
       return h(this.CompareProductsUiComponent, {
-        toolProps: Object.assign({}, this.$attrs, { context: this.context }),
+        toolProps: { context: this.context },
         itemComponent: getItemComponent(),
         translations,
       });

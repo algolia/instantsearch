@@ -129,8 +129,7 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           objectIDs: ['objectID'],
         });
       }
-      case 'autocomplete':
-      case 'EXPERIMENTAL_autocomplete': {
+      case 'autocomplete': {
         const autocompleteWidget = widget as Widgets['autocomplete'];
 
         const instance = autocompleteWidget({ container, indices: [] });
@@ -233,9 +232,7 @@ describe('widgets', () => {
           // the widget type of panel is the wrapped widget
           return;
         }
-        expect(widget.$$widgetType).toBe(
-          `ais.${name.replace('EXPERIMENTAL_', '')}`
-        );
+        expect(widget.$$widgetType).toBe(`ais.${name}`);
       });
     });
   });

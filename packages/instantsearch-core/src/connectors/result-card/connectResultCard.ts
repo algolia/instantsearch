@@ -1,7 +1,6 @@
 import {
   getAgentFilters,
   CompareProductsToolType,
-  DisplayResultsToolType,
   GroupedResultsToolType,
   isChatBusy,
   MemorizeToolType,
@@ -288,7 +287,9 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
         [SearchIndexToolType]: {},
         [RecommendToolType]: {},
         [GroupedResultsToolType]: {},
-        [DisplayResultsToolType]: {},
+        // Legacy name of the grouped-results tool, still emitted by agents
+        // configured before the rename.
+        algolia_display_results: {},
         [CompareProductsToolType]: {},
         [MemorizeToolType]: {},
         [MemorySearchToolType]: {},

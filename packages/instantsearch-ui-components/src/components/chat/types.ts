@@ -1,7 +1,6 @@
 import type { ComponentProps } from '../../types';
 import type {
   AbstractChat,
-  ChatComponentContext,
   ChatState,
   ClientSideToolComponentProps,
   ClientSideTool as CoreClientSideTool,
@@ -37,11 +36,3 @@ export type ChatLayoutOwnProps<TMessage extends UIMessage = UIMessage> = {
     'sendMessage' | 'regenerate' | 'stop' | 'error'
   > &
   ComponentProps<'div'>;
-
-/**
- * @deprecated Use `ChatComponentPropsWithContext` instead — an empty/greeting
- * component now reads shared chat state from its `context` prop.
- */
-export type ChatEmptyProps = Partial<
-  Pick<ChatComponentContext, 'sendMessage' | 'status' | 'onClose' | 'setInput'>
->;
