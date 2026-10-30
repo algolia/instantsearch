@@ -1,7 +1,6 @@
-import { connectDynamicWidgets } from 'instantsearch-core';
+import { connectAnswers, connectDynamicWidgets } from 'instantsearch-core';
 import { deprecate } from 'instantsearch-core';
 
-import connectAnswers from './answers/connectAnswers';
 import connectConfigureRelatedItems from './configure-related-items/connectConfigureRelatedItems';
 
 /** @deprecated answers is no longer supported */
