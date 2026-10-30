@@ -49,9 +49,7 @@ export function createCarouselTool(
         getSearchPageURL,
         headerProps: { showViewAll },
         itemComponent: getItemComponent(),
-        // The shared chat passes the (deprecated) root props alongside
-        // `context`; forward them untouched for tools that still read them.
-        toolProps: Object.assign({}, this.$attrs, { context: this.context }),
+        toolProps: { context: this.context },
       });
 
       this.hooksStore.endRender();
