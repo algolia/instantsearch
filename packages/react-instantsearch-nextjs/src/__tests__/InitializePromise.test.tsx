@@ -13,7 +13,7 @@ import { ServerInsertedHTMLContext } from 'next/navigation';
 import React from 'react';
 import {
   Configure,
-  EXPERIMENTAL_Autocomplete,
+  Autocomplete,
   SearchBox,
   TrendingItems,
 } from 'react-instantsearch';
@@ -42,7 +42,7 @@ function AutocompleteWithoutSearch() {
 
 function RequestFreeAutocomplete() {
   return (
-    <EXPERIMENTAL_Autocomplete
+    <Autocomplete
       autoFocus
       requiresSearch={false}
       searchParameters={{ hitsPerPage: 3 }}

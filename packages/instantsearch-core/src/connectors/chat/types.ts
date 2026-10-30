@@ -227,50 +227,14 @@ export type ClientSideToolContext<TMessage extends UIMessage = UIMessage> =
   };
 
 /**
- * The root-level props tool layout components received before everything moved
- * under `context`. Still passed alongside `context` so components written
- * against the previous API keep working; they are removed in the next major.
- *
- * These are spelled out rather than derived with `Pick` so that `@deprecated`
- * reaches each property at the point of use in editors.
- */
-type DeprecatedClientSideToolRootProps<TMessage extends UIMessage = UIMessage> =
-  {
-    /** @deprecated Read `context.message` instead. */
-    message: ChatToolMessage;
-    /** @deprecated Read `context.messages` instead. */
-    messages: TMessage[];
-    /** @deprecated Read `context.records` instead. */
-    records?: ChatRecordsStore;
-    /** @deprecated Read `context.insightsEventContext` instead. */
-    insightsEventContext?: ChatInsightsEventContext;
-    /** @deprecated Read `context.status` instead. */
-    status: ChatStatus;
-    /** @deprecated Read `context.indexUiState` instead. */
-    indexUiState: object;
-    /** @deprecated Read `context.setIndexUiState` instead. */
-    setIndexUiState: (state: object) => void;
-    /** @deprecated Read `context.onClose` instead. */
-    onClose: () => void;
-    /** @deprecated Read `context.addToolResult` instead. */
-    addToolResult: AddToolResultWithOutput;
-    /** @deprecated Read `context.applyFilters` instead. */
-    applyFilters: (params: ApplyFiltersParams) => SearchParameters;
-    /** @deprecated Read `context.sendEvent` instead. */
-    sendEvent: SendEventForHits;
-  };
-
-/**
  * Tool layout components receive a single `context` object holding everything
- * they render from. The deprecated root-level props are kept required (rather
- * than optional) so existing components that destructure them keep
- * type-checking under `strict`; the widget always supplies both.
+ * they render from.
  */
 export type ClientSideToolComponentProps<
   TMessage extends UIMessage = UIMessage,
 > = {
   context: ClientSideToolContext<TMessage>;
-} & DeprecatedClientSideToolRootProps<TMessage>;
+};
 
 /**
  * The renderer-agnostic shape of a tool layout component. Each flavor narrows
