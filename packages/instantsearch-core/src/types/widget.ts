@@ -60,14 +60,11 @@ export type IndexWidgetType = (typeof indexWidgetTypes)[number];
 
 // @MAJOR: Remove these exported types if we don't need them
 export type BuiltinTypes =
-  | 'ais.analytics'
-  | 'ais.answers'
   | 'ais.autocomplete'
   | 'ais.breadcrumb'
   | 'ais.clearRefinements'
   | 'ais.chat'
   | 'ais.configure'
-  | 'ais.configureRelatedItems'
   | 'ais.currentRefinements'
   | 'ais.dynamicWidgets'
   | 'ais.feedContainer'
@@ -83,7 +80,6 @@ export type BuiltinTypes =
   | 'ais.menu'
   | 'ais.numericMenu'
   | 'ais.pagination'
-  | 'ais.places'
   | 'ais.poweredBy'
   | 'ais.queryRules'
   // @TODO: remove individual types for rangeSlider & rangeInput once updating checkIndexUiState
@@ -103,14 +99,11 @@ export type BuiltinTypes =
   | 'ais.voiceSearch';
 
 export type BuiltinWidgetTypes =
-  | 'ais.analytics'
-  | 'ais.answers'
   | 'ais.autocomplete'
   | 'ais.breadcrumb'
   | 'ais.chat'
   | 'ais.clearRefinements'
   | 'ais.configure'
-  | 'ais.configureRelatedItems'
   | 'ais.currentRefinements'
   | 'ais.dynamicWidgets'
   | 'ais.feedContainer'
@@ -127,7 +120,6 @@ export type BuiltinWidgetTypes =
   | 'ais.menuSelect'
   | 'ais.numericMenu'
   | 'ais.pagination'
-  | 'ais.places'
   | 'ais.poweredBy'
   | 'ais.queryRuleCustomData'
   | 'ais.queryRuleContext'

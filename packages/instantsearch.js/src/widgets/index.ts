@@ -1,30 +1,10 @@
 import { deprecate } from 'instantsearch-core';
 
-import answers from './answers/answers';
 import { autocomplete } from './autocomplete/autocomplete';
-import configureRelatedItems from './configure-related-items/configure-related-items';
 import dynamicWidgets from './dynamic-widgets/dynamic-widgets';
 
-/** @deprecated answers is no longer supported */
-export const EXPERIMENTAL_answers = deprecate(
-  answers,
-  'answers is no longer supported'
-);
-
-/** @deprecated use relatedItems instead */
-export const EXPERIMENTAL_configureRelatedItems = deprecate(
-  configureRelatedItems,
-  'EXPERIMENTAL_configureRelatedItems is deprecated and will be removed in a next minor version of InstantSearch. Please use relatedItems instead.'
-);
-
-/** @deprecated use dynamicWidgets */
-export const EXPERIMENTAL_dynamicWidgets = deprecate(
-  dynamicWidgets,
-  'use dynamicWidgets'
-);
 export { dynamicWidgets };
 
-export { default as analytics } from './analytics/analytics';
 export { autocomplete };
 /** @deprecated use autocomplete instead */
 export const EXPERIMENTAL_autocomplete = deprecate(
@@ -48,7 +28,6 @@ export { default as menuSelect } from './menu-select/menu-select';
 export { default as numericMenu } from './numeric-menu/numeric-menu';
 export { default as pagination } from './pagination/pagination';
 export { default as panel } from './panel/panel';
-export { default as places } from './places/places';
 export { default as poweredBy } from './powered-by/powered-by';
 export { default as queryRuleContext } from './query-rule-context/query-rule-context';
 export { default as queryRuleCustomData } from './query-rule-custom-data/query-rule-custom-data';
@@ -73,4 +52,3 @@ export { default as promptSuggestions } from './prompt-suggestions/prompt-sugges
 export { default as resultCard } from './result-card/result-card';
 export { default as chatTrigger } from './chat-trigger/chat-trigger';
 export { default as compareBar } from './compare-bar/compare-bar';
-export { default as filterSuggestions } from './filter-suggestions/filter-suggestions';

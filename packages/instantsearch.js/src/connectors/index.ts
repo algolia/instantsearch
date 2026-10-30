@@ -1,27 +1,3 @@
-import { connectDynamicWidgets } from 'instantsearch-core';
-import { deprecate } from 'instantsearch-core';
-
-import connectAnswers from './answers/connectAnswers';
-import connectConfigureRelatedItems from './configure-related-items/connectConfigureRelatedItems';
-
-/** @deprecated answers is no longer supported */
-export const EXPERIMENTAL_connectAnswers = deprecate(
-  connectAnswers,
-  'answers is no longer supported'
-);
-
-/** @deprecated use connectRelatedItems instead */
-export const EXPERIMENTAL_connectConfigureRelatedItems = deprecate(
-  connectConfigureRelatedItems,
-  'EXPERIMENTAL_connectConfigureRelatedItems is deprecated and will be removed in a next minor version of InstantSearch. Please use connectRelatedItems instead.'
-);
-
-/** @deprecated use connectDynamicWidgets */
-export const EXPERIMENTAL_connectDynamicWidgets = deprecate(
-  connectDynamicWidgets,
-  'use connectDynamicWidgets'
-);
-
 export { connectAutocomplete } from 'instantsearch-core';
 export { connectBreadcrumb } from 'instantsearch-core';
 export { connectChat } from 'instantsearch-core';
@@ -32,7 +8,6 @@ export { connectConfigure } from 'instantsearch-core';
 export { connectCurrentRefinements } from 'instantsearch-core';
 export { connectDynamicWidgets } from 'instantsearch-core';
 export { connectFeeds } from 'instantsearch-core';
-export { connectFilterSuggestions } from 'instantsearch-core';
 export { connectFrequentlyBoughtTogether } from 'instantsearch-core';
 export { connectGeoSearch } from 'instantsearch-core';
 export { connectHierarchicalMenu } from 'instantsearch-core';
@@ -117,13 +92,8 @@ export type {
   FeedsConnectorParams,
   FeedsRenderState,
   FeedsWidgetDescription,
-  FilterSuggestionsConnector,
 } from 'instantsearch-core';
 export type {
-  FilterSuggestionsConnectorParams,
-  FilterSuggestionsRenderState,
-  FilterSuggestionsTransport,
-  FilterSuggestionsWidgetDescription,
   FrequentlyBoughtTogetherConnector,
   FrequentlyBoughtTogetherConnectorParams,
   FrequentlyBoughtTogetherRenderState,

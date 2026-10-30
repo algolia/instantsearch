@@ -34,7 +34,7 @@ Known variants: `menuSelect` → `connectMenu`/`useMenu`.
    - Existing connector, missing wrapper: keep the connector API unchanged and port only the wrapper plus wrapper tests.
    - Variant widget (shared connector, different UI): skip connector/hook creation; reuse the existing hook and set a distinct `$$widgetType`.
    - Missing connector or changed render state: start in `instantsearch.js`, then update every flavor and both common test suites.
-   - Vue port for a newer recommendation, chat, or filter-suggestions feature: inspect `Hits.js`, `Highlighter.js`, `DynamicWidgets.js`, and `util/vue-compat.js` before designing the wrapper.
+   - Vue port for a newer recommendation or chat feature: inspect `Hits.js`, `Highlighter.js`, `DynamicWidgets.js`, and `util/vue-compat.js` before designing the wrapper.
 2. Match a real precedent.
    - Pick one close widget in the target flavor and one close widget in another flavor.
    - Reuse the same prop names, slot or component escape hatches, `$$widgetType`, and test style.

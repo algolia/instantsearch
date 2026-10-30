@@ -6,7 +6,6 @@ import * as widgets from '..';
 
 import type { UnknownWidgetFactory, Widget } from 'instantsearch-core';
 import type { IndexWidget } from 'instantsearch-core';
-import type { PlacesInstance } from 'places.js';
 
 /**
  * Checklist when adding a new widget
@@ -45,14 +44,6 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
       case 'index': {
         const index = widget as Widgets['index'];
         return index({ indexName: 'index' });
-      }
-      case 'EXPERIMENTAL_configureRelatedItems': {
-        const EXPERIMENTAL_configureRelatedItems =
-          widget as Widgets['EXPERIMENTAL_configureRelatedItems'];
-        return EXPERIMENTAL_configureRelatedItems({
-          hit: { objectID: 'x' },
-          matchingPatterns: {},
-        });
       }
       case 'geoSearch': {
         const geoSearch = widget as Widgets['geoSearch'];
@@ -101,12 +92,6 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           items: [{ label: 'x', value: 'x' }],
         });
       }
-      case 'analytics': {
-        const analytics = widget as Widgets['analytics'];
-        return analytics({
-          pushFunction() {},
-        });
-      }
       case 'queryRuleContext': {
         const queryRuleContext = widget as Widgets['queryRuleContext'];
         return queryRuleContext({
@@ -117,15 +102,6 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           },
         });
       }
-      case 'places': {
-        const places = widget as Widgets['places'];
-        // @ts-expect-error
-        const placesInstance: PlacesInstance = {};
-        return places({
-          container: document.createElement('input'),
-          placesReference: () => placesInstance,
-        });
-      }
       case 'panel': {
         const panel = widget as Widgets['panel'];
         return panel()(widgets.hierarchicalMenu)({
@@ -133,20 +109,15 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           attributes: ['attr1', 'attr2'],
         });
       }
-      case 'dynamicWidgets':
-      case 'EXPERIMENTAL_dynamicWidgets': {
-        const EXPERIMENTAL_dynamicWidgets = widget as Widgets['dynamicWidgets'];
-        return EXPERIMENTAL_dynamicWidgets({
+      case 'dynamicWidgets': {
+        const dynamicWidgets = widget as Widgets['dynamicWidgets'];
+        return dynamicWidgets({
           transformItems(items) {
             return items;
           },
           container,
           widgets: [],
         });
-      }
-      case 'EXPERIMENTAL_answers': {
-        const EXPERIMENTAL_answers = widget as Widgets['EXPERIMENTAL_answers'];
-        return EXPERIMENTAL_answers({ container, queryLanguages: ['en'] });
       }
       case 'frequentlyBoughtTogether':
       case 'relatedProducts':
@@ -188,14 +159,6 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
       case 'resultCard': {
         const resultCard = widget as Widgets['resultCard'];
         return resultCard({ container, agentId: 'test-agent-id' });
-      }
-      case 'filterSuggestions': {
-        const filterSuggestions = widget as Widgets['filterSuggestions'];
-        return filterSuggestions({
-          container,
-          agentId: 'test-agent-id',
-          attributes: ['attr'],
-        });
       }
       case 'chatTrigger': {
         const chatTriggerWidget = widget as Widgets['chatTrigger'];
