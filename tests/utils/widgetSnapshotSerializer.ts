@@ -1,5 +1,6 @@
 import { getWidgetAttribute, isIndexWidget } from 'instantsearch-core';
-import { createInitOptions } from 'instantsearch-core/test/createWidget';
+
+import { createInitOptions } from '../../packages/instantsearch-core/test/createWidget';
 
 import type { IndexWidget } from 'instantsearch-core';
 import type { InitOptions, Widget } from 'instantsearch.js';
