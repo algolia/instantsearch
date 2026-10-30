@@ -22,10 +22,11 @@ import {
   connectLookingSimilar,
   connectChat,
   connectFilterSuggestions,
+  connectCompare,
 } from '../connectors';
 import instantsearch from '../index.es';
 import { noop } from '../lib/utils';
-import { refinementList } from '../widgets';
+import { chat, refinementList } from '../widgets';
 
 import type { InstantSearch, Widget } from '../index.es';
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -685,6 +686,126 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
 
     search.start();
   },
+  createCompareConnectorTests({ instantSearchOptions, widgetParams }) {
+    const {
+      products = [],
+      renderChat = true,
+      ...connectorParams
+    } = widgetParams;
+
+    const result = document.body.appendChild(document.createElement('output'));
+    result.setAttribute('data-testid', 'Compare-result');
+
+    function createTestElement(
+      tagName: string,
+      testId: string,
+      { text = '', onClick }: { text?: string; onClick?: () => void } = {}
+    ) {
+      const element = document.createElement(tagName);
+      element.setAttribute('data-testid', testId);
+      element.textContent = text;
+      if (onClick) {
+        element.addEventListener('click', onClick);
+      }
+      return element;
+    }
+
+    const customCompare = connectCompare<{
+      container: HTMLElement;
+    }>((renderOptions) => {
+      const {
+        items,
+        isSelected,
+        addItem,
+        removeItem,
+        toggleItem,
+        clearItems,
+        canAddItems,
+        canCompare,
+        minItems,
+        maxItems,
+        compare,
+        widgetParams: { container },
+      } = renderOptions;
+
+      const list = document.createElement('ul');
+      items.forEach((item) => {
+        const listItem = createTestElement('li', 'Compare-item', {
+          text: item.objectID,
+        });
+        listItem.setAttribute('data-object-id', item.objectID);
+        list.appendChild(listItem);
+      });
+
+      container.textContent = '';
+      container.append(
+        list,
+        createTestElement('span', 'Compare-minItems', { text: `${minItems}` }),
+        createTestElement('span', 'Compare-maxItems', { text: `${maxItems}` }),
+        createTestElement('span', 'Compare-canAddItems', {
+          text: `${canAddItems}`,
+        }),
+        createTestElement('span', 'Compare-canCompare', {
+          text: `${canCompare}`,
+        }),
+        ...products.flatMap((product) => {
+          const toggle = createTestElement(
+            'button',
+            `Compare-toggle-${product.objectID}`,
+            { onClick: () => toggleItem(product) }
+          );
+          toggle.setAttribute(
+            'aria-pressed',
+            String(isSelected(product.objectID))
+          );
+
+          return [
+            createTestElement('button', `Compare-add-${product.objectID}`, {
+              onClick: () => addItem(product),
+            }),
+            createTestElement('button', `Compare-remove-${product.objectID}`, {
+              onClick: () => removeItem(product.objectID),
+            }),
+            toggle,
+          ];
+        }),
+        createTestElement('button', 'Compare-clear', { onClick: clearItems }),
+        createTestElement('button', 'Compare-compare', {
+          onClick: () => {
+            result.textContent = String(compare());
+          },
+        })
+      );
+    });
+
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        customCompare({
+          container: document.body.appendChild(document.createElement('div')),
+          ...connectorParams,
+        }),
+        ...(renderChat
+          ? [
+              chat({
+                container: document.body.appendChild(
+                  document.createElement('div')
+                ),
+                // A dedicated id: the `agentId` the chat suites use keys
+                // persisted messages in `sessionStorage` that leak across tests
+                // in this file.
+                agentId: 'compareChatAgentId',
+              }),
+            ]
+          : []),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
 };
 
 function addWidgetToggleUi(search: InstantSearch, widget: Widget) {
@@ -719,6 +840,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createLookingSimilarConnectorTests: undefined,
   createChatConnectorTests: undefined,
   createFilterSuggestionsConnectorTests: undefined,
+  createCompareConnectorTests: undefined,
 };
 
 describe('Common connector tests (InstantSearch.js)', () => {

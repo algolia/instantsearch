@@ -3,8 +3,9 @@
  */
 import { runTestSuites } from '@instantsearch/tests/common';
 import * as testSuites from '@instantsearch/tests/widgets';
+import { connectCompare } from 'instantsearch.js/es/connectors/index';
 
-import { nextTick, mountApp } from '../../test/utils';
+import { nextTick, mountApp, mountAppOrThrow } from '../../test/utils';
 import {
   AisInstantSearch,
   AisRefinementList,
@@ -37,6 +38,8 @@ import {
   AisTrendingFacets,
   AisChat,
   AisChatTrigger,
+  AisCompareBar,
+  AisResultCard,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
@@ -735,8 +738,83 @@ const testSetups = {
   createPromptSuggestionsWidgetTests() {
     throw new Error('PromptSuggestions is not supported in Vue InstantSearch');
   },
-  createResultCardWidgetTests() {
-    throw new Error('ResultCard is not supported in Vue InstantSearch');
+  async createCompareBarWidgetTests({ instantSearchOptions, widgetParams }) {
+    // The bar hands the comparison to an `ais-chat` on the same index, so the
+    // default setup mounts both. A sibling `compare` widget renders a toggle
+    // per product, the way a per-hit "Compare" button would.
+    const {
+      renderChat = true,
+      products = [],
+      slots = {},
+      ...props
+    } = widgetParams;
+
+    const CompareToggles = {
+      mixins: [createWidgetMixin({ connector: connectCompare })],
+      computed: {
+        widgetParams() {
+          return { configurationId: props.configurationId };
+        },
+      },
+      render: renderCompat(function (h) {
+        return h(
+          'div',
+          {},
+          products.map((product) =>
+            h('button', {
+              key: product.objectID,
+              attrs: {
+                'data-testid': `CompareToggle-${product.objectID}`,
+                'aria-pressed': String(
+                  Boolean(this.state && this.state.isSelected(product.objectID))
+                ),
+              },
+              on: { click: () => this.state.toggleItem(product) },
+            })
+          )
+        );
+      }),
+    };
+
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(CompareToggles),
+            h(AisCompareBar, { props, scopedSlots: slots }),
+            // A dedicated id: the `agentId` the chat suites use keys persisted
+            // messages in `sessionStorage` that leak across tests in this file.
+            renderChat &&
+              h(AisChat, { props: { agentId: 'compareBarChatAgentId' } }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
+  },
+  async createResultCardWidgetTests({ instantSearchOptions, widgetParams }) {
+    // "Continue in chat" needs an `ais-chat` with the card's `agentId` on the
+    // same index, so the default setup mounts both. `renderChat: false` is how
+    // a test asks for the unconfigured page.
+    const { renderChat = true, slots = {}, ...props } = widgetParams;
+
+    mountAppOrThrow(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisResultCard, { props, scopedSlots: slots }),
+            renderChat && h(AisChat, { props: { agentId: props.agentId } }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
   },
 };
 
@@ -795,7 +873,20 @@ const testOptions = {
     skippedTests: { 'PromptSuggestions widget common tests': true },
   },
   createResultCardWidgetTests: {
-    skippedTests: { 'ResultCard widget common tests': true },
+    // Vue batches DOM updates, so flush them after each step the shared tests
+    // wrap in `act`.
+    act: async (callback) => {
+      await callback();
+      await nextTick();
+    },
+  },
+  createCompareBarWidgetTests: {
+    // Vue batches DOM updates, so flush them after each step the shared tests
+    // wrap in `act`.
+    act: async (callback) => {
+      await callback();
+      await nextTick();
+    },
   },
 };
 

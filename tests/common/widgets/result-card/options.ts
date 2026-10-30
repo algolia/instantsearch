@@ -19,11 +19,11 @@ export function createOptionsTests(
   { act }: Required<TestOptions>
 ) {
   describe('options', () => {
-    test('throws without agentId', () => {
+    test('throws without agentId', async () => {
       const searchClient = createSearchClient({});
 
-      expect(() =>
-        setup({
+      await expect(async () => {
+        await setup({
           instantSearchOptions: {
             indexName: 'indexName',
             searchClient,
@@ -33,8 +33,8 @@ export function createOptionsTests(
             react: {} as any,
             vue: {},
           },
-        })
-      ).toThrow('The `agentId` option is required.');
+        });
+      }).rejects.toThrow('The `agentId` option is required.');
     });
 
     test('sends its rule context with the search', async () => {
@@ -48,7 +48,7 @@ export function createOptionsTests(
         widgetParams: {
           javascript: { agentId: 'my agent.v2' },
           react: { agentId: 'my agent.v2' },
-          vue: {},
+          vue: { agentId: 'my agent.v2' },
         },
       });
 
@@ -74,7 +74,7 @@ export function createOptionsTests(
         widgetParams: {
           javascript: { agentId: AGENT_ID },
           react: { agentId: AGENT_ID },
-          vue: {},
+          vue: { agentId: AGENT_ID },
         },
       });
 
@@ -95,7 +95,7 @@ export function createOptionsTests(
         widgetParams: {
           javascript: { agentId: AGENT_ID },
           react: { agentId: AGENT_ID },
-          vue: {},
+          vue: { agentId: AGENT_ID },
         },
       });
 
@@ -116,7 +116,7 @@ export function createOptionsTests(
         widgetParams: {
           javascript: { agentId: AGENT_ID },
           react: { agentId: AGENT_ID },
-          vue: {},
+          vue: { agentId: AGENT_ID },
         },
       });
 
@@ -206,7 +206,7 @@ export function createOptionsTests(
           widgetParams: {
             javascript: { agentId: AGENT_ID },
             react: { agentId: AGENT_ID },
-            vue: {},
+            vue: { agentId: AGENT_ID },
           },
         });
 
@@ -249,7 +249,7 @@ export function createOptionsTests(
         widgetParams: {
           javascript: { agentId: AGENT_ID },
           react: { agentId: AGENT_ID },
-          vue: {},
+          vue: { agentId: AGENT_ID },
         },
       });
 
@@ -309,7 +309,7 @@ export function createOptionsTests(
         widgetParams: {
           javascript: { agentId: AGENT_ID },
           react: { agentId: AGENT_ID },
-          vue: {},
+          vue: { agentId: AGENT_ID },
         },
       });
 
@@ -354,7 +354,7 @@ export function createOptionsTests(
         widgetParams: {
           javascript: { agentId: AGENT_ID },
           react: { agentId: AGENT_ID },
-          vue: {},
+          vue: { agentId: AGENT_ID },
         },
       });
 
@@ -389,7 +389,7 @@ export function createOptionsTests(
         widgetParams: {
           javascript: { agentId: AGENT_ID, renderChat: false },
           react: { agentId: AGENT_ID, renderChat: false },
-          vue: {},
+          vue: { agentId: AGENT_ID, renderChat: false },
         },
       });
 
@@ -429,7 +429,17 @@ export function createOptionsTests(
             },
             classNames: { root: 'ROOT', header: 'HEADER' },
           },
-          vue: {},
+          vue: {
+            agentId: AGENT_ID,
+            translations: {
+              headerTitle: 'Aperçu',
+              continueInChatText: 'Continuer',
+            },
+            classNames: {
+              'ais-ResultCard': 'ROOT',
+              'ais-ResultCard-header': 'HEADER',
+            },
+          },
         },
       });
 

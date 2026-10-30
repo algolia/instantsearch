@@ -5,6 +5,7 @@
 import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/widgets';
 
+import { connectCompare } from '../connectors';
 import instantsearch from '../index.es';
 import { Chat as InstantSearchChat } from '../lib/chat';
 import {
@@ -41,6 +42,7 @@ import {
   resultCard,
   autocomplete,
   filterSuggestions,
+  compareBar,
 } from '../widgets';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -829,6 +831,67 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       })
       .start();
   },
+  createCompareBarWidgetTests({ instantSearchOptions, widgetParams }) {
+    // The bar hands the comparison to a `chat` on the same index, so the
+    // default setup mounts both. A sibling `compare` widget renders a toggle
+    // per product, the way a per-hit "Compare" button would.
+    const {
+      renderChat = true,
+      products = [],
+      ...compareBarWidgetParams
+    } = widgetParams;
+
+    const compareToggles = connectCompare<{ container: HTMLElement }>(
+      ({ isSelected, toggleItem, widgetParams: { container } }) => {
+        container.textContent = '';
+        products.forEach((product) => {
+          const button = document.createElement('button');
+          button.setAttribute(
+            'data-testid',
+            `CompareToggle-${product.objectID}`
+          );
+          button.setAttribute(
+            'aria-pressed',
+            String(isSelected(product.objectID))
+          );
+          button.addEventListener('click', () => toggleItem(product));
+          container.appendChild(button);
+        });
+      }
+    );
+
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        compareToggles({
+          container: document.body.appendChild(document.createElement('div')),
+          configurationId: compareBarWidgetParams.configurationId,
+        }),
+        compareBar({
+          container: document.body.appendChild(document.createElement('div')),
+          ...compareBarWidgetParams,
+        }),
+        ...(renderChat
+          ? [
+              chat({
+                container: document.body.appendChild(
+                  document.createElement('div')
+                ),
+                // A dedicated id: the `agentId` the chat suites use keys
+                // persisted messages in `sessionStorage` that leak across tests
+                // in this file.
+                agentId: 'compareBarChatAgentId',
+              }),
+            ]
+          : []),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -868,6 +931,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createFilterSuggestionsWidgetTests: undefined,
   createPromptSuggestionsWidgetTests: undefined,
   createResultCardWidgetTests: undefined,
+  createCompareBarWidgetTests: undefined,
 };
 
 describe('Common widget tests (InstantSearch.js)', () => {

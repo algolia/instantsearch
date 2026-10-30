@@ -103,9 +103,18 @@ export function augmentReactCreateElement(baseH) {
           data.ref = vueRef;
         }
       } else if (isEventProp(name, value)) {
-        // React `onKeyDown` -> Vue 3 `onKeydown` (compiler-style handler key)
-        const eventName = name.slice(2).toLowerCase();
-        data[`on${eventName[0].toUpperCase()}${eventName.slice(1)}`] = value;
+        // React `onKeyDown` -> Vue 3 `onKeydown` (compiler-style handler key),
+        // `onFocusCapture` -> `onFocusCapture`, which Vue 3 binds in the
+        // capture phase.
+        const isCapture = isCaptureEventProp(name);
+        const eventName = name
+          .slice(2, isCapture ? -CAPTURE_SUFFIX.length : undefined)
+          .toLowerCase();
+        data[
+          `on${eventName[0].toUpperCase()}${eventName.slice(1)}${
+            isCapture ? CAPTURE_SUFFIX : ''
+          }`
+        ] = value;
       } else if (typeof value === 'boolean' && name.indexOf('aria-') === 0) {
         data[name] = String(value);
       } else {
@@ -121,6 +130,12 @@ export function renderReactCompat(fn) {
   return function () {
     return fn.call(this, augmentReactCreateElement(Vue.h));
   };
+}
+
+const CAPTURE_SUFFIX = 'Capture';
+
+function isCaptureEventProp(name) {
+  return name.slice(-CAPTURE_SUFFIX.length) === CAPTURE_SUFFIX;
 }
 
 function isEventProp(name, value) {
