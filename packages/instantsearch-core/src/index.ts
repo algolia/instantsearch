@@ -78,7 +78,6 @@ export {
   MemorizeToolType,
   MemorySearchToolType,
   PonderToolType,
-  DisplayResultsToolType,
   CompareProductsToolType,
   GroupedResultsToolType,
   matchesSearchIndexToolName,

@@ -38,28 +38,10 @@ const ItemComponent: ItemComponentProps = ({ item }: ItemArgs) =>
     </div>
   ) as JSX.Element;
 
-/**
- * The widget hands tool components the shared `context` *and* the deprecated
- * root-level props kept for back compat, so fixtures mirror both. Drop this
- * once the deprecated root props are removed.
- */
 function toolProps(
   context: ClientSideToolComponentProps['context']
 ): ClientSideToolComponentProps {
-  return {
-    context,
-    message: context.message,
-    messages: context.messages,
-    records: context.records,
-    insightsEventContext: context.insightsEventContext,
-    status: context.status,
-    indexUiState: context.indexUiState,
-    setIndexUiState: context.setIndexUiState,
-    onClose: context.onClose,
-    addToolResult: context.addToolResult,
-    applyFilters: context.applyFilters,
-    sendEvent: context.sendEvent,
-  };
+  return { context };
 }
 
 function buildMessage(
