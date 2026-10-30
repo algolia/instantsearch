@@ -1,12 +1,12 @@
 /** @jsx h */
 
 import { createDocumentationMessageGenerator } from 'instantsearch-core';
+import { suitComponent as component } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import VoiceSearchComponent from '../../components/VoiceSearch/VoiceSearch';
 import { connectVoiceSearch } from '../../connectors';
-import { component } from '../../lib/suit';
 import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';

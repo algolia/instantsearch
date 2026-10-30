@@ -1,12 +1,12 @@
 /** @jsx h */
 
 import { createDocumentationMessageGenerator, find } from 'instantsearch-core';
+import { suitComponent as component } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Selector from '../../components/Selector/Selector';
 import { connectHitsPerPage } from '../../connectors';
-import { component } from '../../lib/suit';
 import { getContainerNode } from '../../lib/utils';
 
 import type {

@@ -1,15 +1,15 @@
 /** @jsx h */
 
 import {
+  connectAnswers,
   createDocumentationMessageGenerator,
   deprecate,
+  suitComponent as component,
 } from 'instantsearch-core';
-import { connectAnswers } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Answers from '../../components/Answers/Answers';
-import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 
