@@ -50,6 +50,7 @@ export const RuleType = {
   textMarked: '31',
   textStrikethroughed: '32',
   unorderedList: '33',
+  unfinished: '34',
 } as const;
 
 if (process.env.NODE_ENV === 'test') {
@@ -194,7 +195,7 @@ const BREAK_THEMATIC_R = /^(?:([-*_])( *\1){2,}) *(?:\n *)+\n/;
 const CODE_BLOCK_FENCED_R =
   /^(?: {1,3})?(`{3,}|~{3,}) *(\S+)? *([^\n]*?)?\n([\s\S]*?)(?:\1\n?|$)/;
 const CODE_BLOCK_R = /^(?: {4}[^\n]+\n*)+(?:\n *)+\n?/;
-const CODE_INLINE_R = /^(`+)((?:\\`|(?!\1)`|[^`])+)\1/;
+const CODE_INLINE_R = /^(`+)((?:\\`|(?!\1)`|[^`])+)(?:\1|$)/;
 const CONSECUTIVE_NEWLINE_R = /^(?:\n *)*\n/;
 const CR_NEWLINE_R = /\r\n?/g;
 
@@ -321,7 +322,7 @@ const INLINE_SKIP_R =
  * than emphasized to support nesting of both since they share a delimiter.
  */
 const TEXT_BOLD_R = new RegExp(
-  `^([*_])\\1${lookahead(1)}${INLINE_SKIP_R}\\1\\1(?!\\1)`
+  `^([*_])\\1(?=\\S|[\\s\\S]+?\\1\\1)${INLINE_SKIP_R}(?:\\1\\1(?!\\1)|\\1?$)`
 );
 
 /**
@@ -340,8 +341,14 @@ const TEXT_MARKED_R = new RegExp(`^(==)${lookahead(0)}${INLINE_SKIP_R}\\1`);
  * Detect a sequence like ~~foo~~.
  */
 const TEXT_STRIKETHROUGHED_R = new RegExp(
-  `^(~~)${lookahead(0)}${INLINE_SKIP_R}\\1`
+  `^(~~)(?=\\S|[\\s\\S]+?\\1)${INLINE_SKIP_R}(?:\\1|~?$)`
 );
+
+/**
+ * A link, image or marker that ends the text before it is complete, like
+ * `[docs](https://exa`, `![shoe](https://cdn` or a lone `**`.
+ */
+const UNFINISHED_R = /^(?:(!?)\[([^[\]\n]*)(?:\]\([^)\n]*)?|[*_~`]{1,2})$/;
 
 /**
  * Special case for shortcodes like :big-smile: or :emoji:
@@ -1997,6 +2004,31 @@ export function compiler(
         return <del key={state!.key}>{output(node.children, state)}</del>;
       },
     },
+
+    [RuleType.unfinished]: {
+      _qualify: ['[', '![', '*', '_', '~', '`'],
+      _match: inlineRegex(UNFINISHED_R),
+      _order: Priority.LOW,
+      _parse(capture, parse, state) {
+        if (capture[2] === undefined) {
+          // A marker right after a word may be closing a span, like in `5*`.
+          return {
+            children: /(^|\s)$/.test(state.prevCapture!)
+              ? []
+              : [{ type: RuleType.text, text: capture[0] }],
+          };
+        }
+        // An image with a partial URL would request it, so it's left out.
+        return {
+          children: capture[1]
+            ? []
+            : parseSimpleInline(parse, capture[2], state),
+        };
+      },
+      _render(node, output, state) {
+        return output(node.children, state);
+      },
+    },
   };
 
   const parser = parserFor(rules);
@@ -2227,6 +2259,11 @@ export namespace MarkdownToJSX {
     children: MarkdownToJSX.ParserResult[];
   }
 
+  export interface UnfinishedNode {
+    type: typeof RuleType.unfinished;
+    children: MarkdownToJSX.ParserResult[];
+  }
+
   export type ParserResult =
     | BlockQuoteNode
     | BreakLineNode
@@ -2259,7 +2296,8 @@ export namespace MarkdownToJSX {
     | ItalicTextNode
     | EscapedTextNode
     | MarkedTextNode
-    | StrikethroughTextNode;
+    | StrikethroughTextNode
+    | UnfinishedNode;
 
   export type NestedParser = (
     input: string,
