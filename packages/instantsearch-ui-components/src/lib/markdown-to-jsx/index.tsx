@@ -236,7 +236,11 @@ const FOOTNOTE_R = /^\[\^([^\]]+)](:(.*)((\n+ {4,}.*)|(\n(?!\[\^).+))*)/;
 const FOOTNOTE_REFERENCE_R = /^\[\^([^\]]+)]/;
 const FORMFEED_R = /\f/g;
 const FRONT_MATTER_R = /^---[ \t]*\n(.|\n)*\n---[ \t]*\n/;
-const GFM_TASK_R = /^\s*?\[(x|\s)\]/;
+/**
+ * Also captures the rest of the line, up to the next task, as the label that
+ * names the checkbox for screen readers. Labels can't nest, hence the stop.
+ */
+const GFM_TASK_R = /^\s*?\[(x|\s)\]((?:(?!\[(?:x|\s)\])[^\n])*)/;
 const HEADING_R = /^ *(#{1,6}) *([^\n]+?)(?: +#*)?(?:\n *)*(?:\n|$)/;
 const HEADING_ATX_COMPLIANT_R =
   /^ *(#{1,6}) +([^\n]+?)(?: +#*)?(?:\n *)*(?:\n|$)/;
@@ -1598,22 +1602,24 @@ export function compiler(
       _qualify: ['[ ]', '[x]'],
       _match: inlineRegex(GFM_TASK_R),
       _order: Priority.HIGH,
-      _parse(capture /*, parse, state*/) {
+      _parse(capture, parse, state) {
         return {
           completed: capture[1].toLowerCase() === 'x',
+          children: parse(capture[2], state),
         };
       },
-      _render(node, _output, state) {
+      _render(node, output, state) {
         return (
-          <input
-            checked={node.completed}
-            key={state!.key}
-            readOnly
-            type="checkbox"
-          />
+          <label key={state!.key}>
+            <input checked={node.completed} readOnly type="checkbox" />
+            {output(node.children, state)}
+          </label>
         );
       },
-    } as MarkdownToJSX.Rule<{ completed: boolean }>,
+    } as MarkdownToJSX.Rule<{
+      completed: boolean;
+      children: MarkdownToJSX.ParserResult[];
+    }>,
 
     [RuleType.heading]: {
       _qualify: ['#'],
@@ -2133,6 +2139,7 @@ export namespace MarkdownToJSX {
   export interface GFMTaskNode {
     type: typeof RuleType.gfmTask;
     completed: boolean;
+    children: MarkdownToJSX.ParserResult[];
   }
 
   export interface HeadingNode {

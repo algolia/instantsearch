@@ -2,6 +2,7 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
+import { render as renderWithLibrary } from '@testing-library/preact';
 import { createElement, render } from 'preact';
 
 import { RuleType, compiler } from '../markdown-to-jsx';
@@ -68,6 +69,50 @@ describe('vendored markdown-to-jsx', () => {
     ],
   ])('ends bare URLs where CJK text starts: %s', (markdown, expected) => {
     expect(renderMarkdown(markdown)).toContain(expected);
+  });
+
+  describe('task lists', () => {
+    const renderTasks = (markdown: string) =>
+      renderWithLibrary(
+        <div>{compiler(markdown, { createElement: createElement as any })}</div>
+      );
+
+    test('names each checkbox after its item', () => {
+      const { getByRole } = renderTasks(
+        '- [ ] Buy milk\n- [x] Call **Bob** about [the order](https://www.algolia.com)'
+      );
+
+      expect(getByRole('checkbox', { name: 'Buy milk' })).not.toBeChecked();
+      expect(
+        getByRole('checkbox', { name: 'Call Bob about the order' })
+      ).toBeChecked();
+      expect(getByRole('link', { name: 'the order' })).toHaveAttribute(
+        'href',
+        'https://www.algolia.com'
+      );
+    });
+
+    test('names checkboxes in loose lists', () => {
+      const { getByRole } = renderTasks('- [ ] First\n\n- [x] Second');
+
+      expect(getByRole('checkbox', { name: 'First' })).not.toBeChecked();
+      expect(getByRole('checkbox', { name: 'Second' })).toBeChecked();
+    });
+
+    test('keeps nested items out of the parent name', () => {
+      const { getByRole } = renderTasks('- [ ] Parent\n  - [x] Child');
+
+      expect(getByRole('checkbox', { name: 'Parent' })).not.toBeChecked();
+      expect(getByRole('checkbox', { name: 'Child' })).toBeChecked();
+    });
+
+    test('gives each task on a line its own name', () => {
+      const { getByRole, container } = renderTasks('Pick [x] this or [ ] that');
+
+      expect(getByRole('checkbox', { name: 'this or' })).toBeChecked();
+      expect(getByRole('checkbox', { name: 'that' })).not.toBeChecked();
+      expect(container.querySelector('label label')).toBeNull();
+    });
   });
 
   test('does not parse raw HTML', () => {
