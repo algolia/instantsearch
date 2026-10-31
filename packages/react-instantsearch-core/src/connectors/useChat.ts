@@ -1,10 +1,11 @@
 import connectChat from 'instantsearch.js/es/connectors/chat/connectChat';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 
 import { useConnector } from '../hooks/useConnector';
 import { dequal } from '../lib/dequal';
 import { useIsHydrated } from '../lib/useIsHydrated';
 import { useIsomorphicLayoutEffect } from '../lib/useIsomorphicLayoutEffect';
+import { useStableFunctions } from '../lib/useStableFunctions';
 import { warn } from '../lib/warn';
 
 import type { AdditionalWidgetProperties } from '../hooks/useConnector';
@@ -56,9 +57,16 @@ function hasPersistedOpenState(type: string) {
 }
 
 export function useChat<TUiMessage extends UIMessage = UIMessage>(
-  props: UseChatProps<TUiMessage>,
+  userProps: UseChatProps<TUiMessage>,
   additionalWidgetProperties?: AdditionalWidgetProperties
 ): ChatWidgetDescription<TUiMessage>['renderState'] {
+  const props = useStableFunctions(userProps);
+  // The chat UI resolves message parts with `matchesToolName` while rendering,
+  // so the tools it gets back read the matcher being rendered. The connector
+  // keeps the committed one for tool calls that stream in while a transition
+  // is suspended.
+  const renderedToolsRef = useRef(userProps.tools);
+  renderedToolsRef.current = userProps.tools;
   const isHydrated = useIsHydrated();
   const previousPropsRef = useRef(props);
   const previousChatStateRef = useRef<Pick<
@@ -99,13 +107,36 @@ export function useChat<TUiMessage extends UIMessage = UIMessage>(
     }
   });
 
-  const chatState = useConnector<
+  const connectorState = useConnector<
     ChatConnectorParams<TUiMessage>,
     ChatWidgetDescription<TUiMessage>
   >(
     connectChat as unknown as ChatConnector<TUiMessage>,
     props,
     additionalWidgetProperties
+  );
+  const connectorTools = connectorState.tools;
+  const tools = useMemo(() => {
+    const result: typeof connectorTools = {};
+    Object.keys(connectorTools).forEach((key) => {
+      const tool = connectorTools[key];
+      result[key] = tool.matchesToolName
+        ? {
+            ...tool,
+            matchesToolName(toolName: string) {
+              return (
+                renderedToolsRef.current?.[key]?.matchesToolName ||
+                tool.matchesToolName!
+              ).call(this, toolName);
+            },
+          }
+        : tool;
+    });
+    return result;
+  }, [connectorTools]);
+  const chatState = useMemo(
+    () => ({ ...connectorState, tools }),
+    [connectorState, tools]
   );
 
   useIsomorphicLayoutEffect(() => {

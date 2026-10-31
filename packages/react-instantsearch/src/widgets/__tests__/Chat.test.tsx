@@ -959,10 +959,10 @@ describe('Chat', () => {
 
   test('warns before changed connector props replace an open internal Chat', async () => {
     const chatRef = React.createRef<ChatHandle>();
-    const firstContext = () => ({ page: 'first' });
-    const secondContext = () => ({ page: 'second' });
+    const firstContext = { page: 'first' };
+    const secondContext = { page: 'second' };
 
-    function Subject({ context }: { context: () => { page: string } }) {
+    function Subject({ context }: { context: { page: string } }) {
       return (
         <InstantSearch searchClient={searchClient} indexName="indexName">
           <Chat
@@ -1001,10 +1001,10 @@ describe('Chat', () => {
 
   test('does not warn when changed connector props preserve persisted open state', async () => {
     const chatRef = React.createRef<ChatHandle>();
-    const firstContext = () => ({ page: 'first' });
-    const secondContext = () => ({ page: 'second' });
+    const firstContext = { page: 'first' };
+    const secondContext = { page: 'second' };
 
-    function Subject({ context }: { context: () => { page: string } }) {
+    function Subject({ context }: { context: { page: string } }) {
       return (
         <InstantSearch searchClient={searchClient} indexName="indexName">
           <Chat
@@ -1088,9 +1088,9 @@ describe('Chat', () => {
   test('warns only when a suspended prop change commits the Chat replacement', async () => {
     const chatRef = React.createRef<ChatHandle>();
     const contexts = [
-      () => ({ page: 'committed' }),
-      () => ({ page: 'suspended' }),
-      () => ({ page: 'replacement' }),
+      { page: 'committed' },
+      { page: 'suspended' },
+      { page: 'replacement' },
     ];
     const suspended = new Promise<never>(() => {});
     let setPhase!: React.Dispatch<React.SetStateAction<0 | 1 | 2>>;
@@ -1160,10 +1160,10 @@ describe('Chat', () => {
   });
 
   test('warns before changed connector props replace non-persisted messages', async () => {
-    const firstContext = () => ({ page: 'first' });
-    const secondContext = () => ({ page: 'second' });
+    const firstContext = { page: 'first' };
+    const secondContext = { page: 'second' };
 
-    function Subject({ context }: { context: () => { page: string } }) {
+    function Subject({ context }: { context: { page: string } }) {
       return (
         <InstantSearch searchClient={searchClient} indexName="indexName">
           <Chat
@@ -1276,10 +1276,10 @@ describe('Chat', () => {
       `${CACHE_KEY}-same-agent`,
       JSON.stringify([existingMessage])
     );
-    const firstContext = () => ({ page: 'first' });
-    const secondContext = () => ({ page: 'second' });
+    const firstContext = { page: 'first' };
+    const secondContext = { page: 'second' };
 
-    function Subject({ context }: { context: () => { page: string } }) {
+    function Subject({ context }: { context: { page: string } }) {
       return (
         <InstantSearch searchClient={searchClient} indexName="indexName">
           <Chat
@@ -1387,10 +1387,10 @@ describe('Chat', () => {
   });
 
   test('does not warn when changed connector props replace closed empty state', async () => {
-    const firstContext = () => ({ page: 'first' });
-    const secondContext = () => ({ page: 'second' });
+    const firstContext = { page: 'first' };
+    const secondContext = { page: 'second' };
 
-    function Subject({ context }: { context: () => { page: string } }) {
+    function Subject({ context }: { context: { page: string } }) {
       return (
         <InstantSearch searchClient={searchClient} indexName="indexName">
           <Chat
@@ -1421,10 +1421,10 @@ describe('Chat', () => {
 
   test('does not warn when changed connector props replace persisted closed messages', async () => {
     sessionStorage.setItem(CACHE_KEY, JSON.stringify([existingMessage]));
-    const firstContext = () => ({ page: 'first' });
-    const secondContext = () => ({ page: 'second' });
+    const firstContext = { page: 'first' };
+    const secondContext = { page: 'second' };
 
-    function Subject({ context }: { context: () => { page: string } }) {
+    function Subject({ context }: { context: { page: string } }) {
       return (
         <InstantSearch searchClient={searchClient} indexName="indexName">
           <Chat
@@ -1494,14 +1494,14 @@ describe('Chat', () => {
   test('does not run replacement warning checks in production', async () => {
     const originalDev = (globalThis as { __DEV__?: boolean }).__DEV__;
     const contexts = [
-      () => ({ page: 'first' }),
-      () => ({ page: 'development' }),
-      () => ({ page: 'production' }),
+      { page: 'first' },
+      { page: 'development' },
+      { page: 'production' },
     ];
     sessionStorage.setItem(CHAT_OPEN_STATE_CACHE_KEY, 'true');
     const getItem = jest.spyOn(Storage.prototype, 'getItem');
 
-    function Subject({ context }: { context: () => { page: string } }) {
+    function Subject({ context }: { context: { page: string } }) {
       return (
         <InstantSearch searchClient={searchClient} indexName="indexName">
           <Chat
