@@ -1033,11 +1033,21 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
     const toolRawInputByCallId: Record<string, string> = {};
     const toolRawOutputByCallId: Record<string, string> = {};
+    const activePartIndexById: Record<
+      'text' | 'reasoning',
+      Record<string, number>
+    > = { text: {}, reasoning: {} };
 
     const findToolPart = (toolCallId: string): number =>
       currentMessage!.parts.findIndex(
         (part) => 'toolCallId' in part && part.toolCallId === toolCallId
       );
+    const findActivePart = (type: 'text' | 'reasoning', id: string): number => {
+      const index = activePartIndexById[type][id];
+      const part =
+        index === undefined ? undefined : currentMessage!.parts[index];
+      return part?.type === type && part.state === 'streaming' ? index : -1;
+    };
     const setPart = (index: number, part: any): void => {
       const parts = [...currentMessage!.parts];
       parts[index < 0 ? parts.length : index] = part;
@@ -1219,6 +1229,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
             case 'reasoning-start': {
               if (!currentMessage) break;
               const type = chunk.type === 'text-start' ? 'text' : 'reasoning';
+              activePartIndexById[type][chunk.id] = currentMessage.parts.length;
               setPart(-1, {
                 type,
                 text: '',
@@ -1233,9 +1244,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               const type = chunk.type === 'text-delta' ? 'text' : 'reasoning';
               if (!currentMessage) break;
 
-              const partIndex = currentMessage.parts.findIndex(
-                (part) => part.type === type && part.state === 'streaming'
-              );
+              const partIndex = findActivePart(type, chunk.id);
               if (partIndex === -1) break;
 
               const part = currentMessage.parts[partIndex] as {
@@ -1252,10 +1261,9 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               if (!currentMessage) break;
               const type = chunk.type === 'text-end' ? 'text' : 'reasoning';
 
-              const partIndex = currentMessage.parts.findIndex(
-                (part) => part.type === type && part.state === 'streaming'
-              );
+              const partIndex = findActivePart(type, chunk.id);
               if (partIndex === -1) break;
+              delete activePartIndexById[type][chunk.id];
 
               setPart(partIndex, {
                 ...currentMessage.parts[partIndex],
