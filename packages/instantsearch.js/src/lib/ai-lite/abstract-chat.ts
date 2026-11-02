@@ -1035,17 +1035,17 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     const toolRawOutputByCallId: Record<string, string> = {};
     const activePartIndexById: Record<
       'text' | 'reasoning',
-      Record<string, number>
-    > = { text: {}, reasoning: {} };
+      Map<string, number>
+    > = { text: new Map(), reasoning: new Map() };
 
     const findToolPart = (toolCallId: string): number =>
       currentMessage!.parts.findIndex(
         (part) => 'toolCallId' in part && part.toolCallId === toolCallId
       );
     const findActivePart = (type: 'text' | 'reasoning', id: string): number => {
-      const index = activePartIndexById[type][id];
-      const part =
-        index === undefined ? undefined : currentMessage!.parts[index];
+      const index = activePartIndexById[type].get(id);
+      if (index === undefined) return -1;
+      const part = currentMessage!.parts[index];
       return part?.type === type && part.state === 'streaming' ? index : -1;
     };
     const setPart = (index: number, part: any): void => {
@@ -1229,7 +1229,10 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
             case 'reasoning-start': {
               if (!currentMessage) break;
               const type = chunk.type === 'text-start' ? 'text' : 'reasoning';
-              activePartIndexById[type][chunk.id] = currentMessage.parts.length;
+              activePartIndexById[type].set(
+                chunk.id,
+                currentMessage.parts.length
+              );
               setPart(-1, {
                 type,
                 text: '',
@@ -1263,7 +1266,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
               const partIndex = findActivePart(type, chunk.id);
               if (partIndex === -1) break;
-              delete activePartIndexById[type][chunk.id];
+              activePartIndexById[type].delete(chunk.id);
 
               setPart(partIndex, {
                 ...currentMessage.parts[partIndex],
