@@ -18,7 +18,6 @@ paths:
 | Location | Framework | Purpose |
 | --- | --- | --- |
 | `tests/e2e/playwright/` | Playwright | Main e2e suite for all InstantSearch flavors |
-| `tests/e2e/` (wdio files) | WebdriverIO | IE11 tests only (via Sauce Labs) |
 | `packages/react-instantsearch-nextjs/__tests__/e2e/` | Playwright | App Router Next.js e2e tests |
 | `packages/react-instantsearch-router-nextjs/__tests__/e2e/` | Playwright | Pages Router Next.js e2e tests |
 
@@ -63,16 +62,6 @@ yarn workspace react-instantsearch-router-nextjs test:e2e
 # Run with list reporter (outputs to terminal instead of opening browser)
 yarn workspace react-instantsearch-nextjs test:e2e --reporter=list
 yarn workspace react-instantsearch-router-nextjs test:e2e --reporter=list
-```
-
-### IE11 Tests (Requires Sauce Labs credentials)
-
-```bash
-# Set environment variables first
-export SAUCE_USERNAME=your_username
-export SAUCE_ACCESS_KEY=your_access_key
-
-yarn test:e2e:ie11
 ```
 
 ## Writing Playwright Tests
@@ -143,14 +132,6 @@ To run a single flavor:
 ```bash
 E2E_FLAVOR=react yarn test:e2e
 ```
-
-## IE11 Considerations
-
-IE11 tests are kept in WebdriverIO because Playwright doesn't support IE11. These tests:
-
-- Only run `js` and `js-umd` flavors
-- Require Sauce Labs for remote IE11 browser
-- Use the same test specs in `tests/e2e/specs/` and helpers in `tests/e2e/helpers/`
 
 ## Debugging
 
