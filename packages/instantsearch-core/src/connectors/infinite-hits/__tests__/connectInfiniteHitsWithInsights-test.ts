@@ -119,7 +119,7 @@ describe('connectInfiniteHitsWithInsights', () => {
     );
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
-    expect(secondRenderingOptions.hits).toEqual(expect.objectContaining(hits));
+    expect(secondRenderingOptions.items).toEqual(expect.objectContaining(hits));
     expect(secondRenderingOptions.results).toEqual(results);
   });
 

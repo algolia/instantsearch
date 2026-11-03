@@ -133,7 +133,7 @@ describe('getInitialResults', () => {
       ])
     );
     search.addWidgets([
-      index({ EXPERIMENTAL_isolated: true, indexId: 'isolated' }).addWidgets([
+      index({ isolated: true, indexId: 'isolated' }).addWidgets([
         index({ indexName: 'suggestions' }),
       ]),
       index({ indexName: 'nested' }),

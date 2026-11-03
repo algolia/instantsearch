@@ -12,8 +12,8 @@ const connectHits =
     $$type: 'ais.hits',
     init() {},
     render({ results, instantSearchInstance }) {
-      const hits = results?.hits;
-      renderFn({ hits, results, instantSearchInstance, widgetParams }, false);
+      const items = results?.hits;
+      renderFn({ items, results, instantSearchInstance, widgetParams }, false);
     },
     dispose() {
       unmountFn();
