@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { connectRefinementList } from 'instantsearch.js/es/connectors/index';
+import { connectRefinementList } from 'instantsearch-core';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';

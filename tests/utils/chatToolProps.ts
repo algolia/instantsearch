@@ -1,4 +1,4 @@
-import type { ClientSideToolComponentProps } from 'instantsearch-ui-components';
+import type { ClientSideToolComponentProps } from 'instantsearch-core';
 
 /**
  * Chat tool layout components receive the shared `context` *and* the deprecated

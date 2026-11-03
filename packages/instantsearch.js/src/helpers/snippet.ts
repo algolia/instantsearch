@@ -1,7 +1,12 @@
-import { component } from '../lib/suit';
-import { TAG_REPLACEMENT, getPropertyByPath, warning } from '../lib/utils';
+import {
+  TAG_REPLACEMENT,
+  getPropertyByPath,
+  warning,
+} from 'instantsearch-core';
 
-import type { Hit } from '../types';
+import { component } from '../lib/suit';
+
+import type { Hit } from 'instantsearch-core';
 
 export type SnippetOptions = {
   // @MAJOR string should no longer be allowed to be a path, only array can be a path

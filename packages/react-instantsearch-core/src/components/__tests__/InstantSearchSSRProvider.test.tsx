@@ -11,8 +11,8 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import algoliasearchV4 from 'algoliasearch-v4';
 import { algoliasearch as algoliasearchV5 } from 'algoliasearch-v5';
-import { history } from 'instantsearch.js/es/lib/routers';
-import { simple } from 'instantsearch.js/es/lib/stateMappings';
+import { history } from 'instantsearch-core';
+import { simple } from 'instantsearch-core';
 import React, { StrictMode } from 'react';
 import { Hits, RefinementList, SearchBox } from 'react-instantsearch';
 

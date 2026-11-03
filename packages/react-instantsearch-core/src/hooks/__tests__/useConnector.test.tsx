@@ -12,10 +12,12 @@ import {
 } from '@instantsearch/testutils';
 import { render, waitFor, renderHook } from '@testing-library/react';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
-import connectConfigure from 'instantsearch.js/es/connectors/configure/connectConfigure';
-import connectHits from 'instantsearch.js/es/connectors/hits/connectHits';
-import connectPagination from 'instantsearch.js/es/connectors/pagination/connectPagination';
-import connectRefinementList from 'instantsearch.js/es/connectors/refinement-list/connectRefinementList';
+import {
+  connectConfigure,
+  connectHits,
+  connectPagination,
+  connectRefinementList,
+} from 'instantsearch-core';
 import React, { StrictMode, useState } from 'react';
 
 import { Index } from '../../components/Index';
@@ -28,11 +30,11 @@ import { useConnector } from '../useConnector';
 
 import type { UseHitsProps } from '../../connectors/useHits';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
-import type { Connector } from 'instantsearch.js';
 import type {
   HitsConnectorParams,
   HitsWidgetDescription,
-} from 'instantsearch.js/es/connectors/hits/connectHits';
+} from 'instantsearch-core';
+import type { Connector } from 'instantsearch.js';
 
 type CustomSearchBoxWidgetDescription = {
   $$type: 'test.searchBox';

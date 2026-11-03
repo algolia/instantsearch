@@ -2,8 +2,8 @@ import { createResultCardComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment, useEffect, useState } from 'react';
 import { useResultCard } from 'react-instantsearch-core';
 
+import type { ResultCardRenderState } from 'instantsearch-core';
 import type { Pragma, ResultCardOwnProps } from 'instantsearch-ui-components';
-import type { ResultCardRenderState } from 'instantsearch.js/es/connectors/result-card/connectResultCard';
 import type { UseResultCardProps } from 'react-instantsearch-core';
 
 const ResultCardUi = createResultCardComponent({

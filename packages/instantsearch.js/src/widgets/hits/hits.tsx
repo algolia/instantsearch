@@ -1,18 +1,18 @@
 /** @jsx h */
 
+import {
+  createDocumentationMessageGenerator,
+  warning,
+} from 'instantsearch-core';
 import { createHitsComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectHits from '../../connectors/hits/connectHits';
+import { connectHits } from '../../connectors';
 import { withInsights } from '../../lib/insights';
 import { createInsightsEventHandler } from '../../lib/insights/listener';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-  warning,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
@@ -20,17 +20,11 @@ import type {
   HitsConnectorParams,
   HitsRenderState,
   HitsWidgetDescription,
-} from '../../connectors/hits/connectHits';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type {
-  Template,
-  TemplateWithBindEvent,
-  Hit,
-  WidgetFactory,
-  Renderer,
-  BaseHit,
-} from '../../types';
+import type { Template, TemplateWithBindEvent } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
+import type { Hit, WidgetFactory, Renderer, BaseHit } from 'instantsearch-core';
 import type {
   HitsClassNames as HitsUiComponentClassNames,
   HitsProps as HitsUiComponentProps,

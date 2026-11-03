@@ -1,4 +1,18 @@
 import {
+  connectAutocomplete,
+  connectFeeds,
+  connectSearchBox,
+  createFeedContainer,
+  find,
+  getHighlightedParts,
+  getPromptSuggestionHits,
+  isChatBusy,
+  isPromptSuggestion,
+  noop,
+  openChat,
+  unescape,
+} from 'instantsearch-core';
+import {
   createAutocompleteComponent,
   createAutocompleteDetachedContainerComponent,
   createAutocompleteDetachedFormContainerComponent,
@@ -14,22 +28,7 @@ import {
   createAutocompleteSuggestionComponent,
   createHighlightComponent,
   cx,
-  getPromptSuggestionHits,
-  isPromptSuggestion,
 } from 'instantsearch-ui-components';
-import { createFeedContainer } from 'instantsearch.js/es/connectors/feeds/FeedContainer';
-import {
-  connectAutocomplete,
-  connectFeeds,
-  connectSearchBox,
-} from 'instantsearch.js/es/connectors/index';
-import { isChatBusy, openChat } from 'instantsearch.js/es/lib/chat';
-import {
-  find,
-  getHighlightedParts,
-  noop,
-  unescape,
-} from 'instantsearch.js/es/lib/utils';
 
 import { createHooksMixin } from '../mixins/hooks';
 import { createSuitMixin } from '../mixins/suit';

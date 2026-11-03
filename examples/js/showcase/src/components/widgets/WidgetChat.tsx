@@ -11,7 +11,7 @@ import { useSearch } from '../../context/search';
 
 import { renderCarouselHit } from './ProductCard';
 
-import type { ChatRenderState } from 'instantsearch.js/es/connectors/chat/connectChat';
+import type { ChatRenderState } from 'instantsearch-core';
 
 export type ChatLayout = 'inline' | 'overlay' | 'sidePanel';
 

@@ -4,7 +4,7 @@
 /** @jsx h */
 import { chatToolProps } from '@instantsearch/testutils';
 import { fireEvent, screen, within } from '@testing-library/dom';
-import { collectChatRecords } from 'instantsearch-ui-components';
+import { collectChatRecords } from 'instantsearch-core';
 import { h, render } from 'preact';
 
 import { createGroupedResultsTool } from '../grouped-results-tool';
@@ -12,7 +12,7 @@ import { createGroupedResultsTool } from '../grouped-results-tool';
 import type {
   ChatComponentContext,
   ClientSideToolComponentProps,
-} from 'instantsearch-ui-components';
+} from 'instantsearch-core';
 import type { ComponentType } from 'preact';
 
 const createToolProps = (

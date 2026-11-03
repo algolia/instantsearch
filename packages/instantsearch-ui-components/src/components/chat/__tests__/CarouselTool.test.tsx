@@ -9,7 +9,10 @@ import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { createCarouselToolComponent } from '../tools/CarouselTool';
 
 import type { Pragma, RecordWithObjectID } from '../../../types';
-import type { ChatToolMessage, ClientSideToolComponentProps } from '../types';
+import type {
+  ChatToolMessage,
+  ClientSideToolComponentProps,
+} from 'instantsearch-core';
 
 type Hit = RecordWithObjectID<{ name: string }>;
 type InputHit = { objectID: string; name: string };

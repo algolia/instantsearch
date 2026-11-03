@@ -1,31 +1,28 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core';
 import { createRelatedProductsComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectRelatedProducts from '../../connectors/related-products/connectRelatedProducts';
+import { connectRelatedProducts } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import type {
   RelatedProductsWidgetDescription,
   RelatedProductsConnectorParams,
   RelatedProductsRenderState,
-} from '../../connectors/related-products/connectRelatedProducts';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template, TemplateWithBindEvent } from '../../types';
 import type {
-  Template,
   WidgetFactory,
   Hit,
   Renderer,
   BaseHit,
   RecommendResponse,
-  TemplateWithBindEvent,
-} from '../../types';
+} from 'instantsearch-core';
 import type {
   RecommendClassNames,
   RelatedProductsProps as RelatedProductsUiProps,

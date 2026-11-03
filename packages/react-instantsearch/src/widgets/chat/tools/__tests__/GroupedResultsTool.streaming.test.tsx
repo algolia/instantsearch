@@ -9,18 +9,18 @@
  */
 import { chatToolProps } from '@instantsearch/testutils';
 import { render, screen } from '@testing-library/react';
-import { collectChatRecords } from 'instantsearch-ui-components';
-import { Chat } from 'instantsearch.js/es/lib/chat';
+import { Chat } from 'instantsearch-core';
+import { collectChatRecords } from 'instantsearch-core';
 import React from 'react';
 
 import { createDefaultTools } from '../../../Chat';
 
+import type { UIMessageChunk } from 'instantsearch-core';
+import type { UIMessage } from 'instantsearch-core';
 import type {
   ChatComponentContext,
   ClientSideToolComponentProps,
-} from 'instantsearch-ui-components';
-import type { UIMessageChunk } from 'instantsearch.js/es/lib/ai-lite';
-import type { UIMessage } from 'instantsearch.js/es/lib/chat';
+} from 'instantsearch-core';
 
 type TestResult = { objectID: string; name?: string; __position: number };
 

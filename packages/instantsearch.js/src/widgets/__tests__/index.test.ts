@@ -4,8 +4,8 @@
 /* global google */
 import * as widgets from '..';
 
-import type { UnknownWidgetFactory, Widget } from '../../types';
-import type { IndexWidget } from '../index/index';
+import type { UnknownWidgetFactory, Widget } from 'instantsearch-core';
+import type { IndexWidget } from 'instantsearch-core';
 import type { PlacesInstance } from 'places.js';
 
 /**

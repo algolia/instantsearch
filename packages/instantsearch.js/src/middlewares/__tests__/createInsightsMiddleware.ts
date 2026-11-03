@@ -12,18 +12,18 @@ import {
 import { castToJestMock } from '@instantsearch/testutils';
 import { wait } from '@instantsearch/testutils/wait';
 import { fireEvent } from '@testing-library/dom';
+import { createInsightsMiddleware } from 'instantsearch-core';
+import { warning } from 'instantsearch-core';
 
-import { createInsightsMiddleware } from '..';
-import { createInstantSearch } from '../../../test/createInstantSearch';
+import { createInstantSearch } from '../../../../instantsearch-core/test/createInstantSearch';
 import { connectRelatedProducts, connectSearchBox } from '../../connectors';
 import instantsearch from '../../index.es';
 import { history } from '../../lib/routers';
-import { warning } from '../../lib/utils';
 import { dynamicWidgets, hits, refinementList } from '../../widgets';
 
-import type { InsightsProps } from '..';
 import type { SearchClient } from '../../index.es';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
+import type { InsightsProps } from 'instantsearch-core';
 import type { JSDOM } from 'jsdom';
 
 declare const jsdom: JSDOM;

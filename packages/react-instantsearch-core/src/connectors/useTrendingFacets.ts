@@ -1,4 +1,4 @@
-import connectTrendingFacets from 'instantsearch.js/es/connectors/trending-facets/connectTrendingFacets';
+import { connectTrendingFacets as connectTrendingFacets } from 'instantsearch-core';
 
 import { useConnector } from '../hooks/useConnector';
 
@@ -7,7 +7,7 @@ import type {
   TrendingFacetsConnector,
   TrendingFacetsConnectorParams,
   TrendingFacetsWidgetDescription,
-} from 'instantsearch.js/es/connectors/trending-facets/connectTrendingFacets';
+} from 'instantsearch-core';
 
 export type UseTrendingFacetsProps = TrendingFacetsConnectorParams;
 

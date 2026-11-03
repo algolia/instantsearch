@@ -10,15 +10,15 @@ import {
 import { wait } from '@instantsearch/testutils/wait';
 import { within, fireEvent, getByText } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
+import { createInsightsMiddleware } from 'instantsearch-core';
 import { Fragment, h } from 'preact';
 
 import instantsearch from '../../../index.es';
-import { createInsightsMiddleware } from '../../../middlewares';
 import configure from '../../configure/configure';
 import searchBox from '../../search-box/search-box';
 import hits from '../hits';
 
-import type { SearchResponse } from '../../../../src/types';
+import type { SearchResponse } from 'instantsearch-core';
 
 const bannerWidgetRenderingContent = {
   widgets: {

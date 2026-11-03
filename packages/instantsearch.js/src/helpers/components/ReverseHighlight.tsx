@@ -1,14 +1,14 @@
 /** @jsx h */
-import { h } from 'preact';
-
-import { ReverseHighlight as ReverseHighlightUiComponent } from '../../components/ReverseHighlight/ReverseHighlight';
 import {
   getPropertyByPath,
   unescape,
   toArray,
   warning,
   getHighlightedParts,
-} from '../../lib/utils';
+} from 'instantsearch-core';
+import { h } from 'preact';
+
+import { ReverseHighlight as ReverseHighlightUiComponent } from '../../components/ReverseHighlight/ReverseHighlight';
 
 import type { ReverseHighlightProps as ReverseHighlightUiComponentProps } from '../../components/ReverseHighlight/ReverseHighlight';
 import type {
@@ -16,7 +16,7 @@ import type {
   Hit,
   HitAttributeHighlightResult,
   PartialKeys,
-} from '../../types';
+} from 'instantsearch-core';
 
 export type ReverseHighlightProps<THit extends Hit<BaseHit>> = {
   hit: THit;

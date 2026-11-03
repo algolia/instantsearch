@@ -1,16 +1,17 @@
 /** @jsx h */
 
+import { warning } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h } from 'preact';
 
-import { warning } from '../../lib/utils';
 import Template from '../Template/Template';
 
-import type { ComponentCSSClasses, Hit } from '../../types';
+import type { ComponentCSSClasses } from '../../types';
 import type {
   AnswersCSSClasses,
   AnswersTemplates,
 } from '../../widgets/answers/answers';
+import type { Hit } from 'instantsearch-core';
 
 export type AnswersComponentCSSClasses = ComponentCSSClasses<AnswersCSSClasses>;
 

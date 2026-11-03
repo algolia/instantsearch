@@ -3,7 +3,7 @@ import type {
   ChatOnToolCallCallback,
   ToolResultSubmission,
   UIMessage,
-} from 'instantsearch.js/es/lib/ai-lite';
+} from 'instantsearch-core';
 
 type SearchMessage = UIMessage<
   unknown,

@@ -11,10 +11,12 @@ import React, {
 import type { SearchParameters } from 'algoliasearch-helper';
 import type {
   ClientSideToolComponentProps,
+  UserClientSideTool,
+} from 'instantsearch-core';
+import type {
   Pragma,
   RecommendComponentProps,
   RecordWithObjectID,
-  UserClientSideTool,
 } from 'instantsearch-ui-components';
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];

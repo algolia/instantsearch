@@ -1,5 +1,5 @@
+import { connectFrequentlyBoughtTogether } from 'instantsearch-core';
 import { createFrequentlyBoughtTogetherComponent } from 'instantsearch-ui-components';
-import { connectFrequentlyBoughtTogether } from 'instantsearch.js/es/connectors/index';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';

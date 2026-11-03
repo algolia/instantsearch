@@ -7,7 +7,7 @@ import Template from '../Template/Template';
 import type {
   ToggleRefinementRenderState,
   ToggleRefinementValue,
-} from '../../connectors/toggle-refinement/connectToggleRefinement';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { ComponentCSSClasses } from '../../types';
 import type {
