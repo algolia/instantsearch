@@ -73,7 +73,6 @@ export const DOC_SECTIONS: Array<{ title: string; slugs: string[] }> = [
       'breadcrumb',
       'stats',
       'powered-by',
-      'analytics',
       'query-rule-custom-data',
       'query-rule-context',
     ],

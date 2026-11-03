@@ -15,7 +15,6 @@ import {
 } from '../util/vue-compat';
 import { AisInstantSearch } from '../widgets';
 
-const renderlessComponents = ['AisExperimentalConfigureRelatedItems'];
 const nonWidgetComponents = [
   'AisInstantSearch',
   'AisInstantSearchSsr',
@@ -60,9 +59,6 @@ function getAllComponents() {
       const props = {};
       if (name === 'AisHierarchicalMenu' || name === 'AisBreadcrumb') {
         props.attributes = ['attr'];
-      } else if (name === 'AisExperimentalConfigureRelatedItems') {
-        props.hit = {};
-        props.matchingPatterns = {};
       } else if (name === 'AisToggleRefinement') {
         props.attribute = 'attr';
         props.label = 'label';
@@ -150,18 +146,12 @@ function getAllComponents() {
 const components = getAllComponents();
 
 describe('DOM component', () => {
-  test.each(
-    components.filter(
-      ({ name }) => renderlessComponents.includes(name) === false
-    )
-  )(
+  test.each(components)(
     '$name should have the same `name` as suit class',
     ({ name, installedName, suitClass }) => {
       expect(installedName).toBe(name);
       if (name === 'AisInstantSearchSsr') {
         expect(suitClass).toBe(`ais-InstantSearch`);
-      } else if (name === 'AisExperimentalDynamicWidgets') {
-        expect(suitClass).toBe(`ais-DynamicWidgets`);
       } else if (name === 'AisChatTrigger') {
         // Renders the shared ChatToggleButton markup.
         expect(suitClass).toBe(`ais-ChatToggleButton`);
@@ -180,11 +170,7 @@ describe('installed widget', () => {
       ({ name }) => nonWidgetComponents.includes(name) === false
     )
   )('sets widgetType $name', ({ name, widget }) => {
-    if (name === 'AisExperimentalDynamicWidgets') {
-      expect(widget.$$widgetType).toBe('ais.dynamicWidgets');
-    } else if (name === 'AisExperimentalConfigureRelatedItems') {
-      expect(widget.$$widgetType).toBe('ais.configureRelatedItems');
-    } else if (name === 'AisExperimentalAutocomplete') {
+    if (name === 'AisExperimentalAutocomplete') {
       expect(widget.$$widgetType).toBe('ais.autocomplete');
     } else {
       expect(widget.$$widgetType).toBe(
