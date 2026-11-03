@@ -7,8 +7,8 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { render, act } from '@testing-library/react';
-import connectAutocomplete from 'instantsearch.js/es/connectors/autocomplete/connectAutocomplete';
-import * as utils from 'instantsearch.js/es/lib/utils';
+import { connectAutocomplete } from 'instantsearch-core';
+import * as utils from 'instantsearch-core';
 import { ServerInsertedHTMLContext } from 'next/navigation';
 import React from 'react';
 import {
@@ -29,8 +29,8 @@ import { TriggerSearch } from '../TriggerSearch';
 
 import type { PromiseWithState } from 'react-instantsearch-core';
 
-jest.mock('instantsearch.js/es/lib/utils', () => ({
-  ...jest.requireActual('instantsearch.js/es/lib/utils'),
+jest.mock('instantsearch-core', () => ({
+  ...jest.requireActual('instantsearch-core'),
   resetWidgetId: jest.fn(),
 }));
 

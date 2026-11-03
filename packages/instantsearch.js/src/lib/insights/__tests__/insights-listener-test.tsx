@@ -6,13 +6,13 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { render, fireEvent } from '@testing-library/preact';
 import algoliasearchHelper from 'algoliasearch-helper';
-import { h } from 'preact';
-
-import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   _buildEventPayloadsForHits,
   serializePayload,
-} from '../../../lib/utils';
+} from 'instantsearch-core';
+import { h } from 'preact';
+
+import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
 import withInsightsListener, { createInsightsEventHandler } from '../listener';
 
 import type { InsightsEventHandlerOptions } from '../listener';

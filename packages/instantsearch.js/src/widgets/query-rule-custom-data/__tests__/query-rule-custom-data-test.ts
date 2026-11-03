@@ -10,7 +10,7 @@ import { render as preactRender } from 'preact';
 import {
   createDisposeOptions,
   createInitOptions,
-} from '../../../../test/createWidget';
+} from '../../../../../instantsearch-core/test/createWidget';
 import queryRuleCustomData from '../query-rule-custom-data';
 
 import type { QueryRuleCustomDataProps } from '../../../components/QueryRuleCustomData/QueryRuleCustomData';

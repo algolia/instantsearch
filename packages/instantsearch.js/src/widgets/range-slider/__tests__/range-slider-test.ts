@@ -13,15 +13,15 @@ import algoliasearchHelper, {
 } from 'algoliasearch-helper';
 import { render as preactRender } from 'preact';
 
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/createWidget';
+} from '../../../../../instantsearch-core/test/createWidget';
 import rangeSlider from '../range-slider';
 
-import type { InstantSearch } from '../../../types';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
+import type { InstantSearch } from 'instantsearch-core';
 import type { VNode } from 'preact';
 
 const render = castToJestMock(preactRender);

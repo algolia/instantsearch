@@ -1,9 +1,9 @@
 /** @jsx createElement */
 
-import { getJsonCursor } from '../../../lib/utils/jsonCursor';
+import { getJsonCursor } from 'instantsearch-core';
 
 import type { Hooks, RecordWithObjectID, Renderer } from '../../../types';
-import type { ClientSideToolComponentProps } from '../types';
+import type { ClientSideToolComponentProps } from 'instantsearch-core';
 
 export type GroupedResultsTranslations = {
   /**

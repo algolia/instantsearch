@@ -11,7 +11,7 @@ import type {
   HttpChatTransportInitOptions,
   UIMessage,
   UIMessageChunk,
-} from 'instantsearch.js/es/lib/ai-lite';
+} from 'instantsearch-core';
 import type { Tool } from 'instantsearch.js/es/widgets/chat/chat';
 
 function chunksToResponse(chunks: UIMessageChunk[]): Response {

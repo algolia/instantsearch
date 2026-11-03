@@ -1,7 +1,7 @@
 import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { normalizeSnapshot } from '@instantsearch/testutils';
 import { wait } from '@testing-library/user-event/dist/utils';
-import { TAG_PLACEHOLDER } from 'instantsearch.js/es/lib/utils';
+import { TAG_PLACEHOLDER } from 'instantsearch-core';
 
 import type { FrequentlyBoughtTogetherWidgetSetup } from '.';
 import type { TestOptions } from '../../common';

@@ -7,7 +7,7 @@ import {
   createSingleSearchResponse,
   defaultRenderingContent,
 } from '@instantsearch/mocks';
-import connectAutocomplete from 'instantsearch.js/es/connectors/autocomplete/connectAutocomplete';
+import { connectAutocomplete } from 'instantsearch-core';
 import React, { version as ReactVersion } from 'react';
 import { renderToString } from 'react-dom/server';
 import {

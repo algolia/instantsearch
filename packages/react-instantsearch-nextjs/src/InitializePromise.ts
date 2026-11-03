@@ -1,9 +1,5 @@
-import { getInitialResults } from 'instantsearch.js/es/lib/server';
-import {
-  isTwoPassWidget,
-  walkIndex,
-  resetWidgetId,
-} from 'instantsearch.js/es/lib/utils';
+import { getInitialResults } from 'instantsearch-core';
+import { isTwoPassWidget, walkIndex, resetWidgetId } from 'instantsearch-core';
 import { ServerInsertedHTMLContext } from 'next/navigation';
 import { useContext } from 'react';
 import {
@@ -19,7 +15,7 @@ import type {
   SearchOptions,
   CompositionClient,
   SearchClient,
-} from 'instantsearch.js';
+} from 'instantsearch-core';
 
 type InitializePromiseProps = {
   /**

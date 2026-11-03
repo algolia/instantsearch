@@ -8,7 +8,7 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
-import { Chat } from 'instantsearch.js/es/lib/chat';
+import { Chat } from 'instantsearch-core';
 
 import { createApp, mountApp, nextTick } from '../../../test/utils';
 import {

@@ -25,6 +25,11 @@ const VERSION_FILES = [
     format: 'cjs',
   },
   {
+    name: 'instantsearch-core',
+    versionFile: 'src/version.ts',
+    format: 'esm',
+  },
+  {
     name: 'instantsearch-ui-components',
     versionFile: 'src/version.ts',
     format: 'esm',

@@ -2,7 +2,7 @@ import {
   getHighlightedParts,
   getPropertyByPath,
   unescape,
-} from 'instantsearch.js/es/lib/utils';
+} from 'instantsearch-core';
 import React from 'react';
 
 import { ReverseHighlight as ReverseHighlightUiComponent } from '../ui/ReverseHighlight';

@@ -1,6 +1,6 @@
-import simpleStateMapping from '../simple';
+import { simple as simpleStateMapping } from 'instantsearch-core';
 
-import type { UiState } from '../../../types';
+import type { UiState } from 'instantsearch-core';
 
 describe('simpleStateMapping', () => {
   describe('stateToRoute', () => {

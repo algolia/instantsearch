@@ -1,8 +1,7 @@
 /** @jsx h */
 
+import { omit } from 'instantsearch-core';
 import { h, Fragment } from 'preact';
-
-import { omit } from '../../lib/utils';
 
 import type { InfiniteHitsComponentTemplates } from '../../components/InfiniteHits/InfiniteHits';
 

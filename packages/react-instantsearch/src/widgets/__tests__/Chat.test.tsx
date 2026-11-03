@@ -5,8 +5,8 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import { act, fireEvent, render, screen } from '@testing-library/react';
-import { Chat as ChatInstance, openChat } from 'instantsearch.js/es/lib/chat';
-import { CACHE_KEY } from 'instantsearch.js/es/lib/chat/chat';
+import { Chat as ChatInstance, openChat } from 'instantsearch-core';
+import { CACHE_KEY } from 'instantsearch-core';
 import React from 'react';
 import { InstantSearch, useInstantSearch } from 'react-instantsearch-core';
 
@@ -15,7 +15,7 @@ import { Chat } from '../Chat';
 import { ChatTrigger } from '../ChatTrigger';
 
 import type { ChatHandle, ChatProps } from '../Chat';
-import type { UIMessage } from 'instantsearch.js/es/lib/chat';
+import type { UIMessage } from 'instantsearch-core';
 
 const searchClient = createSearchClient();
 

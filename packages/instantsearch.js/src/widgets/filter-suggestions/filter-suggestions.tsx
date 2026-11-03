@@ -1,23 +1,22 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core';
 import { createFilterSuggestionsComponent } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectFilterSuggestions from '../../connectors/filter-suggestions/connectFilterSuggestions';
+import { connectFilterSuggestions } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import type {
   FilterSuggestionsRenderState,
   FilterSuggestionsConnectorParams,
   FilterSuggestionsWidgetDescription,
-} from '../../connectors/filter-suggestions/connectFilterSuggestions';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { WidgetFactory, Renderer, Template } from '../../types';
+import type { Template } from '../../types';
+import type { WidgetFactory, Renderer } from 'instantsearch-core';
 import type {
   FilterSuggestionsClassNames,
   FilterSuggestionsEmptyComponentProps,

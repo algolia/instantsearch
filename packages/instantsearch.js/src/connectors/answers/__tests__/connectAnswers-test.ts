@@ -9,11 +9,11 @@ import {
 import { wait } from '@instantsearch/testutils/wait';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/createWidget';
+} from '../../../../../instantsearch-core/test/createWidget';
 import connectAnswers from '../connectAnswers';
 
 const defaultRenderDebounceTime = 10;

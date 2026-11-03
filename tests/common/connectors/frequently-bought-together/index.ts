@@ -4,7 +4,7 @@ import { createOptionsTests } from './options';
 import { createStateTests } from './state';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { FrequentlyBoughtTogetherConnectorParams } from 'instantsearch.js/es/connectors/frequently-bought-together/connectFrequentlyBoughtTogether';
+import type { FrequentlyBoughtTogetherConnectorParams } from 'instantsearch-core';
 
 export type FrequentlyBoughtTogetherConnectorSetup = TestSetup<{
   widgetParams: FrequentlyBoughtTogetherConnectorParams;

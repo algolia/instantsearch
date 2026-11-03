@@ -4,7 +4,7 @@
 /** @jsx h */
 import { chatToolProps } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
-import { collectChatRecords } from 'instantsearch-ui-components';
+import { collectChatRecords } from 'instantsearch-core';
 import { h, render } from 'preact';
 
 import { createCompareProductsTool } from '../compare-products-tool';
@@ -12,7 +12,7 @@ import { createCompareProductsTool } from '../compare-products-tool';
 import type {
   ChatComponentContext,
   ClientSideToolComponentProps,
-} from 'instantsearch-ui-components';
+} from 'instantsearch-core';
 import type { ComponentType } from 'preact';
 
 const createToolProps = (): ClientSideToolComponentProps => {

@@ -12,7 +12,7 @@ import { connectConfigure, connectSearchBox } from '../../connectors';
 import instantsearch from '../../index.es';
 import { configure, frequentlyBoughtTogether, searchBox } from '../../widgets';
 
-import type { MiddlewareDefinition } from '../../types';
+import type { MiddlewareDefinition } from 'instantsearch-core';
 
 describe('configure', () => {
   it('provides up-to-date uiState to onStateChange', () => {

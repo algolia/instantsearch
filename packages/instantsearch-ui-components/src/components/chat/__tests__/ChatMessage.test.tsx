@@ -14,8 +14,12 @@ import {
   type ChatMessageTranslations,
 } from '../ChatMessage';
 
-import type { AddToolResult, ChatMessageBase, ClientSideTool } from '../types';
-import type { ChatComponentContext } from '../types';
+import type { ClientSideTool } from '../types';
+import type {
+  AddToolResult,
+  ChatMessageBase,
+  ChatComponentContext,
+} from 'instantsearch-core';
 
 const ChatMessage = createChatMessageComponent({
   createElement,

@@ -1,29 +1,27 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core';
 import { createTrendingFacetsComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectTrendingFacets from '../../connectors/trending-facets/connectTrendingFacets';
+import { connectTrendingFacets } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import type {
   TrendingFacetsWidgetDescription,
   TrendingFacetsConnectorParams,
   TrendingFacetsRenderState,
-} from '../../connectors/trending-facets/connectTrendingFacets';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template } from '../../types';
 import type {
-  Template,
   WidgetFactory,
   Renderer,
   RecommendResponse,
-} from '../../types';
-import type { TrendingFacetItem } from '../../types/recommend';
+} from 'instantsearch-core';
+import type { TrendingFacetItem } from 'instantsearch-core';
 import type {
   TrendingFacetsClassNames,
   TrendingFacetsProps as TrendingFacetsUiProps,

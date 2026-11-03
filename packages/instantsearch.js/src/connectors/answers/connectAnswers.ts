@@ -7,9 +7,9 @@ import {
   addAbsolutePosition,
   noop,
   escapeHits,
-} from '../../lib/utils';
+} from 'instantsearch-core';
 
-import type { DebouncedFunction } from '../../lib/utils';
+import type { DebouncedFunction } from 'instantsearch-core';
 import type {
   Connector,
   Hit,
@@ -17,7 +17,7 @@ import type {
   FindAnswersResponse,
   WidgetRenderState,
   FindAnswers,
-} from '../../types';
+} from 'instantsearch-core';
 
 type IndexWithAnswers = {
   readonly findAnswers: any;

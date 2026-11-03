@@ -1,5 +1,5 @@
+import { connectCompare } from 'instantsearch-core';
 import { createCompareBarComponent } from 'instantsearch-ui-components';
-import { connectCompare } from 'instantsearch.js/es/connectors/index';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';

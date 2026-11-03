@@ -1,4 +1,4 @@
-import { range } from '../../lib/utils';
+import { range } from 'instantsearch-core';
 
 class Paginator {
   public currentPage: number;

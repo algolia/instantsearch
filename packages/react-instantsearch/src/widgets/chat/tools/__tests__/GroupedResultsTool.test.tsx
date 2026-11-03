@@ -5,7 +5,7 @@
 import { chatToolProps } from '@instantsearch/testutils';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { collectChatRecords } from 'instantsearch-ui-components';
+import { collectChatRecords } from 'instantsearch-core';
 import React from 'react';
 
 import { createGroupedResultsTool } from '../GroupedResultsTool';
@@ -13,7 +13,7 @@ import { createGroupedResultsTool } from '../GroupedResultsTool';
 import type {
   ChatComponentContext,
   ClientSideToolComponentProps,
-} from 'instantsearch-ui-components';
+} from 'instantsearch-core';
 
 const metadata: ChatComponentContext = {
   messages: [],

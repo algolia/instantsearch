@@ -1,4 +1,4 @@
-import connectResultCard from 'instantsearch.js/es/connectors/result-card/connectResultCard';
+import { connectResultCard } from 'instantsearch-core';
 
 import { useConnector } from '../hooks/useConnector';
 
@@ -6,7 +6,7 @@ import type { AdditionalWidgetProperties } from '../hooks/useConnector';
 import type {
   ResultCardConnectorParams,
   ResultCardWidgetDescription,
-} from 'instantsearch.js/es/connectors/result-card/connectResultCard';
+} from 'instantsearch-core';
 
 export type UseResultCardProps = ResultCardConnectorParams;
 

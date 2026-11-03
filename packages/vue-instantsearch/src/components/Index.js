@@ -1,4 +1,4 @@
-import indexWidget from 'instantsearch.js/es/widgets/index/index';
+import { index as indexWidget } from 'instantsearch-core';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';

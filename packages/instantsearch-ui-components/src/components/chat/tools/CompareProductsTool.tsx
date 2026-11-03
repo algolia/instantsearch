@@ -1,22 +1,19 @@
 /** @jsx createElement */
 
-import {
-  endsInsideRootProperty,
-  getJsonCursor,
-} from '../../../lib/utils/jsonCursor';
+import { endsInsideRootProperty, getJsonCursor } from 'instantsearch-core';
 
 import {
   createGroundedComparisonTableComponent,
   defaultComparisonTableTranslations,
 } from './createGroundedComparisonTable';
 
-import type { RecordWithObjectID, Renderer } from '../../../types';
-import type { ClientSideToolComponentProps } from '../types';
 import type {
   ComparisonCriterion,
   ComparisonTableTranslations,
   GroundedComparisonTableProps,
 } from './createGroundedComparisonTable';
+import type { RecordWithObjectID, Renderer } from '../../../types';
+import type { ClientSideToolComponentProps } from 'instantsearch-core';
 
 /**
  * Builtin comparison tool (`algolia_compare_products`).

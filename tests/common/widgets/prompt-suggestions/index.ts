@@ -4,7 +4,7 @@ import { createOptionsTests } from './options';
 import { createTemplatesTests } from './templates';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { PromptSuggestionsConnectorParams } from 'instantsearch.js/es/connectors/prompt-suggestions/connectPromptSuggestions';
+import type { PromptSuggestionsConnectorParams } from 'instantsearch-core';
 import type { PromptSuggestionsWidget } from 'instantsearch.js/es/widgets/prompt-suggestions/prompt-suggestions';
 import type { PromptSuggestionsProps } from 'react-instantsearch';
 
