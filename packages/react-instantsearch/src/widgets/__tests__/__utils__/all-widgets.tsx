@@ -18,15 +18,12 @@ const NON_WIDGETS = [
   'Snippet',
   'PoweredBy',
   'Chat',
-  // Deprecated alias of `Autocomplete`, covered separately.
-  'EXPERIMENTAL_Autocomplete',
   'createDefaultTools',
   'SearchIndexToolType',
   'RecommendToolType',
   'MemorizeToolType',
   'MemorySearchToolType',
   'PonderToolType',
-  'DisplayResultsToolType',
   'CompareProductsToolType',
   'GroupedResultsToolType',
 ] as const;
@@ -40,7 +37,6 @@ const NON_COMPONENTS = [
   'MemorizeToolType',
   'MemorySearchToolType',
   'PonderToolType',
-  'DisplayResultsToolType',
   'CompareProductsToolType',
   'GroupedResultsToolType',
   // `ChatTrigger`'s permissive `ComponentProps<'button'>` base widens the
@@ -52,8 +48,6 @@ const NON_COMPONENTS = [
   // className/root-attribute assertions don't apply. Covered by a dedicated
   // test in `CompareBar.test.tsx` instead.
   'CompareBar',
-  // Deprecated alias of `Autocomplete`, covered separately.
-  'EXPERIMENTAL_Autocomplete',
 ] as const;
 type ComponentWidgets = Omit<typeof widgets, (typeof NON_COMPONENTS)[number]>;
 

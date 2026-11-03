@@ -16,14 +16,7 @@ class Helper {
 }
 
 const fakeInstantSearch = jest.fn(
-  ({
-    indexName,
-    compositionID,
-    searchClient,
-    routing,
-    stalledSearchDelay,
-    searchFunction,
-  }) => {
+  ({ indexName, compositionID, searchClient, routing, stalledSearchDelay }) => {
     if (!searchClient && !isPlainObject(searchClient)) {
       throw new Error('need searchClient to be a plain object');
     }
@@ -33,7 +26,6 @@ const fakeInstantSearch = jest.fn(
 
     const instantsearchInstance = {
       _stalledSearchDelay: stalledSearchDelay || 200,
-      _searchFunction: searchFunction,
       routing: new RoutingManager(routing),
       helper: new Helper(),
       client: searchClient,

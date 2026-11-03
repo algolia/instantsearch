@@ -1,16 +1,9 @@
-import { deprecate } from 'instantsearch-core';
-
 import { autocomplete } from './autocomplete/autocomplete';
 import dynamicWidgets from './dynamic-widgets/dynamic-widgets';
 
 export { dynamicWidgets };
 
 export { autocomplete };
-/** @deprecated use autocomplete instead */
-export const EXPERIMENTAL_autocomplete = deprecate(
-  autocomplete,
-  'EXPERIMENTAL_autocomplete is no longer experimental. Please use autocomplete instead.'
-);
 export { default as breadcrumb } from './breadcrumb/breadcrumb';
 export { default as clearRefinements } from './clear-refinements/clear-refinements';
 export { default as configure } from './configure/configure';
