@@ -166,9 +166,8 @@ function augmentInstantSearch(instantSearchOptions, cloneComponent) {
       templatesConfig: {},
       createURL: parent.createURL,
       instantSearchInstance: search,
-      searchMetadata: {
-        isSearchStalled: false,
-      },
+      status: search.status,
+      error: search.error,
     });
   };
 

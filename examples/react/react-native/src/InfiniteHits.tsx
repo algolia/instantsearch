@@ -21,12 +21,12 @@ export function InfiniteHits<THit extends AlgoliaHit<Record<string, unknown>>>({
   ListHeaderComponent,
   ...props
 }: InfiniteHitsProps<THit>) {
-  const { hits, isLastPage, showMore, sendEvent } = useInfiniteHits(props);
+  const { items, isLastPage, showMore, sendEvent } = useInfiniteHits(props);
 
   return (
     <FlatList
       ref={ref}
-      data={hits as unknown as THit[]}
+      data={items as unknown as THit[]}
       keyExtractor={(item) => item.objectID}
       ListHeaderComponent={ListHeaderComponent}
       ItemSeparatorComponent={() => <View style={styles.separator} />}

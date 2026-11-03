@@ -4,7 +4,6 @@ import {
   MemorizeToolType,
   MemorySearchToolType,
   PonderToolType,
-  DisplayResultsToolType,
   CompareProductsToolType,
   GroupedResultsToolType,
   focusAfterReveal,
@@ -38,8 +37,6 @@ export {
   MemorizeToolType,
   MemorySearchToolType,
   PonderToolType,
-  // eslint-disable-next-line typescript/no-deprecated
-  DisplayResultsToolType,
   CompareProductsToolType,
   GroupedResultsToolType,
 };
@@ -60,6 +57,10 @@ import type {
   ChatMessageProps,
 } from 'instantsearch-ui-components';
 import type { UseChatProps } from 'react-instantsearch-core';
+
+// Legacy name of the grouped-results tool, still emitted by agents configured
+// before the rename.
+const LEGACY_GROUPED_RESULTS_TOOL_TYPE = 'algolia_display_results';
 
 const ChatUiComponent = createChatComponent({
   createElement: createElement as Pragma,
@@ -89,8 +90,7 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
     ),
     [GroupedResultsToolType]: groupedResultsTool,
     // Agents configured before the rename still emit the legacy tool name.
-    // eslint-disable-next-line typescript/no-deprecated
-    [DisplayResultsToolType]: groupedResultsTool,
+    [LEGACY_GROUPED_RESULTS_TOOL_TYPE]: groupedResultsTool,
     [CompareProductsToolType]: createCompareProductsTool(itemComponent),
     [MemorizeToolType]: {},
     [MemorySearchToolType]: {},
