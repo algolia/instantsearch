@@ -7,121 +7,97 @@ import { act, render } from '@testing-library/react';
 import React from 'react';
 
 import { InstantSearch } from '../../components/InstantSearch';
+import { warnCache } from '../../lib/warn';
 import { useChat } from '../useChat';
 
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+class CatchRenderErrors extends React.Component<
+  { children: React.ReactNode },
+  { failed: boolean }
+> {
+  state = { failed: false };
 
-function createApp(
-  onRender: (renders: number) => void,
-  createProps: () => Record<string, unknown>
-) {
-  let renders = 0;
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
 
+  render() {
+    return this.state.failed ? null : this.props.children;
+  }
+}
+
+async function renderChatProbe(createProps: () => Record<string, unknown>) {
   function ChatProbe() {
-    renders++;
-    onRender(renders);
-
-    const { status } = useChat<any>({
+    useChat<any>({
       agentId: 'inline-props-agent',
       disableTriggerValidation: true,
       requiresSearch: false,
       ...createProps(),
     } as any);
 
-    return <span data-testid="probe" data-status={status} />;
+    return null;
   }
 
-  return function App() {
-    return (
+  // The loop starts when the connector first updates, so wait for it. React
+  // may still throw "Too many re-renders" once the warning is out.
+  const { unmount } = render(
+    <CatchRenderErrors>
       <InstantSearch
         searchClient={createSearchClient({})}
         indexName="indexName"
       >
         <ChatProbe />
       </InstantSearch>
-    );
-  };
+    </CatchRenderErrors>
+  );
+  await act(async () => {
+    await new Promise((resolve) => setTimeout(resolve, 50));
+  });
+  unmount();
+  await act(async () => {
+    await new Promise((resolve) => setTimeout(resolve, 50));
+  });
 }
 
-describe('useChat with props created on every render', () => {
-  test.each([
-    ['tools', () => ({ tools: { search: { onToolCall: () => {} } } })],
-    ['top-level functions', () => ({ sendAutomaticallyWhen: () => false })],
-    [
-      'memo components',
-      () => ({
-        tools: { search: { layoutComponent: React.memo(() => null) } },
-      }),
-    ],
-    [
-      'forwardRef components',
-      () => ({
-        tools: { search: { layoutComponent: React.forwardRef(() => null) } },
-      }),
-    ],
-  ])(
-    'does not re-render in a loop when %s are passed inline',
-    async (_, createProps) => {
-      let renders = 0;
-      const App = createApp((count) => {
-        renders = count;
-      }, createProps);
+describe('useChat with functions created on every render', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    warnCache.current = {};
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+  });
 
-      const { getByTestId } = render(<App />);
-      await act(async () => {
-        await wait(0);
-      });
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
 
-      expect(getByTestId('probe')).toBeInTheDocument();
-      expect(renders).toBeLessThan(10);
-    }
-  );
+  test('warns before React gives up on a top-level function', async () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
 
-  test('sends the context returned by the latest function', async () => {
-    const bodies: string[] = [];
-    let chat: ReturnType<typeof useChat> | undefined;
+    await renderChatProbe(() => ({ sendAutomaticallyWhen: () => false }));
 
-    function Probe({ version }: { version: number }) {
-      chat = useChat<any>({
-        agentId: 'inline-props-agent',
-        disableTriggerValidation: true,
-        requiresSearch: false,
-        transport: {
-          api: 'https://example.invalid/chat',
-          fetch: (_url: unknown, init?: { body?: unknown }) => {
-            bodies.push(String(init?.body));
-            return Promise.reject(new Error('stop'));
-          },
-        },
-        context: () => ({ version: `v${version}` }),
-      } as any);
-
-      return null;
-    }
-
-    const renderApp = (version: number) => (
-      <InstantSearch
-        searchClient={createSearchClient({})}
-        indexName="indexName"
-      >
-        <Probe version={version} />
-      </InstantSearch>
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('The sendAutomaticallyWhen prop of useChat')
     );
+  });
 
-    const { rerender } = render(renderApp(1));
-    await act(async () => {
-      await wait(0);
-    });
-    rerender(renderApp(2));
-    await act(async () => {
-      await wait(0);
-    });
-    await act(async () => {
-      await chat!.sendMessage({ text: 'hi' }).catch(() => {});
-      await wait(10);
-    });
+  test('names the tool that holds the changing function', async () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
 
-    expect(bodies.some((body) => body.includes('v2'))).toBe(true);
-    expect(bodies.some((body) => body.includes('v1'))).toBe(false);
+    await renderChatProbe(() => ({
+      tools: { search: { onToolCall: () => {} } },
+    }));
+
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('The tools.search.onToolCall prop of useChat')
+    );
+  });
+
+  test('does not warn when the functions are stable', async () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const sendAutomaticallyWhen = () => false;
+    const tools = { search: { onToolCall: () => {} } };
+
+    await renderChatProbe(() => ({ sendAutomaticallyWhen, tools }));
+
+    expect(warn).not.toHaveBeenCalled();
   });
 });

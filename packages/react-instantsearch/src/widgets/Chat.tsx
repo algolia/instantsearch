@@ -381,7 +381,8 @@ function ChatInner<
     ...props,
     tools,
     disableTriggerValidation: effectiveDisableTriggerValidation,
-  });
+    '~skipChangedFunctionsWarning': true,
+  } as Parameters<typeof useChat<TUiMessage>>[0]);
 
   const {
     messages,
