@@ -3,16 +3,16 @@ import {
   find,
   createDocumentationMessageGenerator,
   warning,
-} from '../utils';
+} from 'instantsearch-core';
 
+import type { SearchResults } from 'algoliasearch-helper';
 import type {
   Hit,
   InsightsClient,
   InsightsClientMethod,
   InsightsClientPayload,
   Connector,
-} from '../../types';
-import type { SearchResults } from 'algoliasearch-helper';
+} from 'instantsearch-core';
 
 const getSelectedHits = (hits: Hit[], selectedObjectIDs: string[]): Hit[] => {
   return selectedObjectIDs.map((objectID) => {

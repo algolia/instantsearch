@@ -4,10 +4,10 @@
 
 import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/widgets';
+import { Chat as InstantSearchChat } from 'instantsearch-core';
 
 import { connectCompare } from '../connectors';
 import instantsearch from '../index.es';
-import { Chat as InstantSearchChat } from '../lib/chat';
 import {
   hierarchicalMenu,
   breadcrumb,

@@ -2,8 +2,9 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { getWidgetAttribute } from '..';
-import { createInitOptions } from '../../../../test/createWidget';
+import { getWidgetAttribute } from 'instantsearch-core';
+
+import { createInitOptions } from '../../../../../instantsearch-core/test/createWidget';
 import { connectRefinementList } from '../../../connectors';
 import {
   hierarchicalMenu,

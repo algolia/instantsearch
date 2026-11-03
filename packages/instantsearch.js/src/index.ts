@@ -1,16 +1,29 @@
+import { createInfiniteHitsSessionStorageCache } from 'instantsearch-core';
+import {
+  createInsightsMiddleware,
+  createMetadataMiddleware,
+  createRouterMiddleware,
+  isMetadataEnabled,
+} from 'instantsearch-core';
+
 import * as connectors from './connectors/index';
 import * as helpers from './helpers/index';
-import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache/index';
 import InstantSearch from './lib/InstantSearch';
 import * as routers from './lib/routers/index';
 import * as stateMappings from './lib/stateMappings/index';
 import version from './lib/version';
-import * as middlewares from './middlewares/index';
 import * as templates from './templates/index';
 import * as widgets from './widgets/index';
 
-import type { InstantSearchOptions } from './lib/InstantSearch';
-import type { Expand, UiState } from './types';
+import type { InstantSearchOptions } from 'instantsearch-core';
+import type { Expand, UiState } from 'instantsearch-core';
+
+const middlewares = {
+  createInsightsMiddleware,
+  createMetadataMiddleware,
+  createRouterMiddleware,
+  isMetadataEnabled,
+};
 
 type InstantSearchModule = {
   <TUiState = Record<string, unknown>, TRouteState = TUiState>(

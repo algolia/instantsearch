@@ -8,7 +8,7 @@ A **thin routing adapter** for the **Pages Router** — not a full SSR layer. It
 
 ## What it actually does (and why)
 
-- Builds on `instantsearch.js/es/lib/routers/history`; on the server (`typeof window === 'undefined'`) it returns a simpler router reading from `serverUrl`.
+- Builds on `instantsearch-core`; on the server (`typeof window === 'undefined'`) it returns a simpler router reading from `serverUrl`.
 - `push` uses **`shallow: true`** so refinements don't re-run `getServerSideProps`, and strips the locale (`stripLocaleFromUrl`) to avoid Next i18n path errors.
 - Hooks `routeChangeComplete` + `beforePopState` to trigger SSR **only** on real page changes (back/forward to a different page), not on every refinement. `beforePopState`/`beforeStart`/`beforeDispose`/`routerOptions` let consumers compose their own logic.
 - `stripLocaleFromUrl` (`src/utils/`) handles i18n locale prefixes in the URL.

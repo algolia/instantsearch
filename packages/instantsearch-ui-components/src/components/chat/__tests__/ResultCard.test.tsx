@@ -10,7 +10,7 @@ import { useEffect, useState } from 'preact/hooks';
 import { createResultCardComponent } from '../ResultCard';
 
 import type { ResultCardOwnProps } from '../ResultCard';
-import type { ChatMessageBase } from '../types';
+import type { ChatMessageBase } from 'instantsearch-core';
 
 const ResultCard = createResultCardComponent({
   createElement,

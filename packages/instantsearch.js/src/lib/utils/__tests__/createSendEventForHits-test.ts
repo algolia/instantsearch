@@ -2,14 +2,15 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { createInstantSearch } from '../../../../test/createInstantSearch';
-import { deserializePayload } from '../../utils';
 import {
   createBindEventForHits,
   createSendEventForHits,
-} from '../createSendEventForHits';
+  deserializePayload,
+} from 'instantsearch-core';
 
-import type { EscapedHits } from '../../../types';
+import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
+
+import type { EscapedHits } from 'instantsearch-core';
 
 const createTestEnvironment = ({
   nbHits = 2,

@@ -1,8 +1,4 @@
 import {
-  createChatComponent,
-  shouldSearchToolRenderResults,
-} from 'instantsearch-ui-components';
-import {
   SearchIndexToolType,
   RecommendToolType,
   MemorizeToolType,
@@ -11,13 +7,15 @@ import {
   DisplayResultsToolType,
   CompareProductsToolType,
   GroupedResultsToolType,
-} from 'instantsearch.js/es/lib/chat';
-import {
   focusAfterReveal,
   getActiveContainerAnimations,
   holdContainerInertUntilReveal,
   restoreContainerInertUntilReveal,
-} from 'instantsearch.js/es/lib/chat/focusAfterReveal';
+} from 'instantsearch-core';
+import {
+  createChatComponent,
+  shouldSearchToolRenderResults,
+} from 'instantsearch-ui-components';
 import React, {
   createElement,
   Fragment,
@@ -49,18 +47,20 @@ export {
 };
 
 import type {
+  IndexUiState,
+  UIMessage,
+  UserClientSideTool,
+  UserClientSideTools,
+} from 'instantsearch-core';
+import type { ContainerAnimationSnapshot } from 'instantsearch-core';
+import type {
   Pragma,
   ChatProps as ChatUiProps,
   ChatLayoutOwnProps,
   RecommendComponentProps,
   RecordWithObjectID,
-  UserClientSideTool,
-  UserClientSideTools,
   ChatMessageProps,
 } from 'instantsearch-ui-components';
-import type { IndexUiState } from 'instantsearch.js';
-import type { UIMessage } from 'instantsearch.js/es/lib/chat';
-import type { ContainerAnimationSnapshot } from 'instantsearch.js/es/lib/chat/focusAfterReveal';
 import type { UseChatProps } from 'react-instantsearch-core';
 
 const ChatUiComponent = createChatComponent({

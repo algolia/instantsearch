@@ -10,7 +10,7 @@ import { h } from 'preact';
 
 import InfiniteHits from '../InfiniteHits';
 
-import type { Hit, SearchResponse } from '../../../types';
+import type { Hit, SearchResponse } from 'instantsearch-core';
 
 function createResults(partialResults: Partial<SearchResponse<any>>) {
   return new SearchResults(new SearchParameters(), [

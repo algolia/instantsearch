@@ -1,12 +1,11 @@
 /** @jsx h */
 
+import { readDataAttributes } from 'instantsearch-core';
+import { deserializePayload, warning } from 'instantsearch-core';
 import { h } from 'preact';
 
-import { readDataAttributes } from '../../helpers/insights';
-import { deserializePayload, warning } from '../utils';
-
-import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
-import type { InsightsClient } from '../../types';
+import type { InsightsEvent } from 'instantsearch-core';
+import type { InsightsClient } from 'instantsearch-core';
 
 export type InsightsEventHandlerOptions = {
   insights?: InsightsClient;

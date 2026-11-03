@@ -1,14 +1,14 @@
 /** @jsx h */
-import { h } from 'preact';
-
-import { ReverseSnippet as ReverseSnippetUiComponent } from '../../components/ReverseSnippet/ReverseSnippet';
 import {
   getPropertyByPath,
   unescape,
   toArray,
   warning,
   getHighlightedParts,
-} from '../../lib/utils';
+} from 'instantsearch-core';
+import { h } from 'preact';
+
+import { ReverseSnippet as ReverseSnippetUiComponent } from '../../components/ReverseSnippet/ReverseSnippet';
 
 import type { ReverseSnippetProps as ReverseSnippetUiComponentProps } from '../../components/ReverseSnippet/ReverseSnippet';
 import type {
@@ -16,7 +16,7 @@ import type {
   Hit,
   HitAttributeSnippetResult,
   PartialKeys,
-} from '../../types';
+} from 'instantsearch-core';
 
 export type ReverseSnippetProps<THit extends Hit<BaseHit>> = {
   hit: THit;

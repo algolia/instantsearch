@@ -4470,6 +4470,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@instantsearch/tests@workspace:tests/common"
   dependencies:
+    instantsearch-core: "npm:0.1.0"
     instantsearch.js: "npm:4.123.0"
   languageName: unknown
   linkType: soft
@@ -4482,6 +4483,7 @@ __metadata:
     enzyme: "npm:3.11.0"
     enzyme-adapter-preact-pure: "npm:2.2.0"
     enzyme-to-json: "npm:3.6.2"
+    instantsearch-core: "npm:0.1.0"
     instantsearch-ui-components: "npm:0.46.0"
     instantsearch.js: "npm:4.123.0"
     jest-serializer-html: "npm:7.1.0"
@@ -17186,6 +17188,7 @@ __metadata:
     "@types/google.maps": "npm:3.58.1"
     algoliasearch: "npm:5.1.1"
     algoliasearch-helper: "npm:3.30.2"
+    instantsearch-core: "npm:0.1.0"
     instantsearch-ui-components: "npm:0.46.0"
     instantsearch.css: "npm:8.25.1"
     instantsearch.js: "npm:4.123.0"
@@ -17370,6 +17373,7 @@ __metadata:
     algoliasearch: "npm:5.1.1"
     expo: "npm:~53.0.0"
     expo-status-bar: "npm:~2.2.3"
+    instantsearch-core: "npm:0.1.0"
     instantsearch.js: "npm:4.123.0"
     react: "npm:19.0.0"
     react-dom: "npm:19.0.0"
@@ -20881,11 +20885,27 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"instantsearch-core@npm:0.1.0, instantsearch-core@workspace:packages/instantsearch-core":
+  version: 0.0.0-use.local
+  resolution: "instantsearch-core@workspace:packages/instantsearch-core"
+  dependencies:
+    "@algolia/events": "npm:^4.0.1"
+    "@swc/helpers": "npm:0.5.18"
+    "@types/dom-speech-recognition": "npm:^0.0.1"
+    "@types/qs": "npm:^6.5.3"
+    algoliasearch-helper: "npm:3.30.2"
+    preact: "npm:^10.10.0"
+    qs: "npm:^6.5.1"
+    search-insights: "npm:^2.17.2"
+  languageName: unknown
+  linkType: soft
+
 "instantsearch-ui-components@npm:0.46.0, instantsearch-ui-components@workspace:packages/instantsearch-ui-components":
   version: 0.0.0-use.local
   resolution: "instantsearch-ui-components@workspace:packages/instantsearch-ui-components"
   dependencies:
     "@swc/helpers": "npm:0.5.18"
+    instantsearch-core: "npm:0.1.0"
   languageName: unknown
   linkType: soft
 
@@ -21004,6 +21024,7 @@ __metadata:
     algoliasearch-helper: "npm:3.30.2"
     hogan.js: "npm:^3.0.2"
     htm: "npm:^3.0.0"
+    instantsearch-core: "npm:0.1.0"
     instantsearch-ui-components: "npm:0.46.0"
     places.js: "npm:1.17.1"
     preact: "npm:^10.10.0"
@@ -31497,6 +31518,7 @@ __metadata:
     "@swc/helpers": "npm:0.5.18"
     "@types/use-sync-external-store": "npm:0.0.3"
     algoliasearch-helper: "npm:3.30.2"
+    instantsearch-core: "npm:0.1.0"
     instantsearch.js: "npm:4.123.0"
     react-instantsearch-core-v6: "npm:react-instantsearch-core@6.40.4"
     use-sync-external-store: "npm:^1.0.0"
@@ -31512,6 +31534,7 @@ __metadata:
   dependencies:
     "@playwright/test": "npm:1.49.1"
     "@swc/helpers": "npm:0.5.18"
+    instantsearch-core: "npm:0.1.0"
     instantsearch.js: "npm:4.123.0"
     next: "npm:16.0.7"
     react-instantsearch-core: "npm:7.55.0"
@@ -31529,6 +31552,7 @@ __metadata:
   dependencies:
     "@playwright/test": "npm:1.49.1"
     "@swc/helpers": "npm:0.5.18"
+    instantsearch-core: "npm:0.1.0"
     instantsearch.js: "npm:4.123.0"
     react-instantsearch-core: "npm:7.55.0"
   peerDependencies:
@@ -31541,6 +31565,7 @@ __metadata:
   resolution: "react-instantsearch@workspace:packages/react-instantsearch"
   dependencies:
     "@swc/helpers": "npm:0.5.18"
+    instantsearch-core: "npm:0.1.0"
     instantsearch-ui-components: "npm:0.46.0"
     instantsearch.js: "npm:4.123.0"
     react-instantsearch-core: "npm:7.55.0"
@@ -37830,6 +37855,7 @@ __metadata:
     algoliasearch: "npm:5.1.1"
     algoliasearch-helper: "npm:3.30.2"
     babel-preset-vue: "npm:2.0.2"
+    instantsearch-core: "npm:0.1.0"
     instantsearch-ui-components: "npm:0.46.0"
     instantsearch.js: "npm:4.123.0"
     mitt: "npm:^2.1.0"

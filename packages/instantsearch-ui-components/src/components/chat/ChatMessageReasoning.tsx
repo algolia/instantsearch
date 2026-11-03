@@ -4,8 +4,8 @@ import { compiler } from '../../lib/markdown-to-jsx';
 
 import { BrainIcon, ChevronDownIcon } from './icons';
 
-import type { ReasoningUIPart } from './types';
 import type { Renderer } from '../../types';
+import type { ReasoningUIPart } from 'instantsearch-core';
 
 export type ChatMessageReasoningTranslations = {
   /**

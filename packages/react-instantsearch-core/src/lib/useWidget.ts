@@ -1,4 +1,4 @@
-import { isTwoPassWidget } from 'instantsearch.js/es/lib/utils';
+import { isTwoPassWidget } from 'instantsearch-core';
 import { useEffect, useRef } from 'react';
 
 import { dequal } from './dequal';
@@ -8,8 +8,8 @@ import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';
 import { useRSCContext } from './useRSCContext';
 import { warn } from './warn';
 
-import type { Widget } from 'instantsearch.js';
-import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
+import type { Widget } from 'instantsearch-core';
+import type { IndexWidget } from 'instantsearch-core';
 
 export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
   widget,

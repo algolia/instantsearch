@@ -1,14 +1,14 @@
-import { shouldSearchToolRenderResults } from 'instantsearch-ui-components';
 import {
-  SearchIndexToolType,
-  RecommendToolType,
+  CompareProductsToolType,
   DisplayResultsToolType,
   GroupedResultsToolType,
-  CompareProductsToolType,
   MemorizeToolType,
   MemorySearchToolType,
   PonderToolType,
-} from 'instantsearch.js/es/lib/chat';
+  RecommendToolType,
+  SearchIndexToolType,
+} from 'instantsearch-core';
+import { shouldSearchToolRenderResults } from 'instantsearch-ui-components';
 
 import { createCompareProductsTool } from './CompareProductsTool';
 import { createGroupedResultsTool } from './GroupedResultsTool';

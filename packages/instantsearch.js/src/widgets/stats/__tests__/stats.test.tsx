@@ -15,7 +15,7 @@ import instantsearch from '../../../index.es';
 import searchBox from '../../search-box/search-box';
 import stats from '../stats';
 
-import type { SearchResponse } from '../../../../src/types';
+import type { SearchResponse } from 'instantsearch-core';
 
 beforeEach(() => {
   document.body.innerHTML = '';

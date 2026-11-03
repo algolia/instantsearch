@@ -2,7 +2,7 @@ import { wait } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
 
 import type { Act } from '../../common';
-import type { Chat } from 'instantsearch.js/es/lib/chat';
+import type { Chat } from 'instantsearch-core';
 
 // Loaded with `require` on purpose: importing `vue` would pull its type
 // declarations into this (React JSX) compilation, and Vue 2's augment the

@@ -1,4 +1,4 @@
-import connectChatTrigger from 'instantsearch.js/es/connectors/chat/connectChatTrigger';
+import { connectChatTrigger } from 'instantsearch-core';
 
 import { useConnector } from '../hooks/useConnector';
 
@@ -6,7 +6,7 @@ import type { AdditionalWidgetProperties } from '../hooks/useConnector';
 import type {
   ChatTriggerConnectorParams,
   ChatTriggerWidgetDescription,
-} from 'instantsearch.js/es/connectors/chat/connectChatTrigger';
+} from 'instantsearch-core';
 
 export type UseChatTriggerProps = ChatTriggerConnectorParams;
 

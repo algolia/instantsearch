@@ -11,10 +11,8 @@ import type {
   Tool as UserClientSideToolWithTemplate,
 } from './chat';
 import type { SearchParameters } from 'algoliasearch-helper';
-import type {
-  ClientSideToolComponentProps,
-  RecordWithObjectID,
-} from 'instantsearch-ui-components';
+import type { ClientSideToolComponentProps } from 'instantsearch-core';
+import type { RecordWithObjectID } from 'instantsearch-ui-components';
 
 export function createCarouselTool<
   THit extends RecordWithObjectID = RecordWithObjectID,

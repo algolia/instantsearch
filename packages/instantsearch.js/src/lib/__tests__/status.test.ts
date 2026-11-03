@@ -8,7 +8,7 @@ import { wait } from '@instantsearch/testutils/wait';
 import { connectAutocomplete, connectSearchBox } from '../../connectors';
 import instantsearch from '../../index.es';
 
-import type InstantSearch from '../InstantSearch';
+import type { InstantSearch } from 'instantsearch-core';
 
 function createDelayedSearchClient(timeout: number) {
   const searchClient = createSearchClient();

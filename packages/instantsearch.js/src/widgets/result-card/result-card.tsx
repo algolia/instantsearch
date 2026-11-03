@@ -1,24 +1,23 @@
 /** @jsx h */
 
+import { connectResultCard } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core';
 import { createResultCardComponent } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectResultCard from '../../connectors/result-card/connectResultCard';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template } from '../../types';
+import type { WidgetFactory, Renderer } from 'instantsearch-core';
 import type {
   ResultCardRenderState,
   ResultCardConnectorParams,
   ResultCardWidgetDescription,
-} from '../../connectors/result-card/connectResultCard';
-import type { PreparedTemplateProps } from '../../lib/templating';
-import type { WidgetFactory, Renderer, Template } from '../../types';
+} from 'instantsearch-core';
 import type {
   ResultCardClassNames,
   ResultCardOwnProps,

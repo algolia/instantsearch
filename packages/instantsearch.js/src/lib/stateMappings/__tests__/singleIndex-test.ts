@@ -1,6 +1,6 @@
-import singleIndexStateMapping from '../singleIndex';
+import { singleIndex as singleIndexStateMapping } from 'instantsearch-core';
 
-import type { UiState } from '../../../types';
+import type { UiState } from 'instantsearch-core';
 
 describe('singleIndexStateMapping', () => {
   describe('stateToRoute', () => {

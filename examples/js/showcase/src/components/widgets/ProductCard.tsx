@@ -1,5 +1,5 @@
+import type { CompareRenderState } from 'instantsearch-core';
 import type { Hit, TemplateParams } from 'instantsearch.js';
-import type { CompareRenderState } from 'instantsearch.js/es/connectors/compare/connectCompare';
 
 export function renderProductCard(
   hit: Hit,

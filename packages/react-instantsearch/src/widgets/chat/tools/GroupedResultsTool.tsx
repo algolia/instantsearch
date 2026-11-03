@@ -10,11 +10,13 @@ import { Carousel } from '../../../components';
 
 import type {
   ClientSideToolComponentProps,
+  UserClientSideTool,
+} from 'instantsearch-core';
+import type {
   HeaderComponentProps,
   Pragma,
   RecommendComponentProps,
   RecordWithObjectID,
-  UserClientSideTool,
 } from 'instantsearch-ui-components';
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];

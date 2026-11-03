@@ -2,8 +2,9 @@
 
 import { cx } from '../../lib';
 
-import type { ChatComponentPropsWithContext, ChatEmptyProps } from './types';
+import type { ChatEmptyProps } from './types';
 import type { ComponentProps, Renderer } from '../../types';
+import type { ChatComponentPropsWithContext } from 'instantsearch-core';
 
 export type ChatGreetingTranslations = {
   /**

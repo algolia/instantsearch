@@ -3,7 +3,7 @@
  */
 /* global SpeechRecognition */
 
-import createVoiceSearchHelper from '..';
+import { createVoiceSearchHelper } from 'instantsearch-core';
 
 type DummySpeechRecognition = () => void;
 declare global {

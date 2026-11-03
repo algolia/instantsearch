@@ -1,12 +1,14 @@
 /** @jsx createElement */
-import { cx, startsWith } from '../../lib';
-import { compiler } from '../../lib/markdown-to-jsx';
 import {
+  collectChatRecords,
   findTool,
-  isPartTextEmpty,
-  isReasoningPartActive,
-} from '../../lib/utils/chat';
-import { collectChatRecords } from '../../lib/utils/chatRecords';
+  startsWith,
+  type ChatRecordsStore,
+} from 'instantsearch-core';
+
+import { cx } from '../../lib';
+import { isPartTextEmpty, isReasoningPartActive } from '../../lib/chat';
+import { compiler } from '../../lib/markdown-to-jsx';
 import { createButtonComponent } from '../Button';
 
 import {
@@ -17,6 +19,13 @@ import {
 } from './ChatMessageReasoning';
 import { MenuIcon, ReloadIcon } from './icons';
 
+import type { ClientSideTool, ClientSideTools } from './types';
+import type {
+  ComponentProps,
+  Renderer,
+  SendEventForHits,
+  VNode,
+} from '../../types';
 import type {
   AddToolResult,
   AddToolResultWithOutput,
@@ -25,19 +34,10 @@ import type {
   ChatMessageBase,
   ChatStatus,
   ChatToolMessage,
-  ClientSideTool,
   ClientSideToolContext,
-  ClientSideTools,
   ReasoningUIPart,
   TextUIPart,
-} from './types';
-import type { ChatRecordsStore } from '../../lib/utils/chatRecords';
-import type {
-  ComponentProps,
-  Renderer,
-  SendEventForHits,
-  VNode,
-} from '../../types';
+} from 'instantsearch-core';
 
 /**
  * The root-level props tool layout components received before everything moved
