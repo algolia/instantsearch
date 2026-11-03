@@ -7,12 +7,13 @@ import { useState, useEffect, useRef } from 'preact/hooks';
 import { renderTemplate } from '../../lib/templating';
 import Template from '../Template/Template';
 
-import type { ComponentCSSClasses, UnknownWidgetFactory } from '../../types';
+import type { ComponentCSSClasses } from '../../types';
 import type {
   PanelCSSClasses,
   PanelSharedOptions,
   PanelTemplates,
 } from '../../widgets/panel/panel';
+import type { UnknownWidgetFactory } from 'instantsearch-core';
 
 export type PanelComponentCSSClasses = ComponentCSSClasses<PanelCSSClasses>;
 

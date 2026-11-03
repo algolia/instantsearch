@@ -1,12 +1,12 @@
-import historyRouter from 'instantsearch.js/es/lib/routers/history';
+import { history as historyRouter } from 'instantsearch-core';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useRef, useEffect } from 'react';
 
 import { useNextHeaders } from './useNextHeaders';
 
 import type { InstantSearchNextProps } from './InstantSearchNext';
-import type { UiState } from 'instantsearch.js';
-import type { BrowserHistoryArgs } from 'instantsearch.js/es/lib/routers/history';
+import type { UiState } from 'instantsearch-core';
+import type { BrowserHistoryArgs } from 'instantsearch-core';
 import type { InstantSearchProps } from 'react-instantsearch-core';
 
 export function useInstantSearchRouting<

@@ -1,31 +1,28 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core';
 import { createFrequentlyBoughtTogetherComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectFrequentlyBoughtTogether from '../../connectors/frequently-bought-together/connectFrequentlyBoughtTogether';
+import { connectFrequentlyBoughtTogether } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import type {
   FrequentlyBoughtTogetherWidgetDescription,
   FrequentlyBoughtTogetherConnectorParams,
   FrequentlyBoughtTogetherRenderState,
-} from '../../connectors/frequently-bought-together/connectFrequentlyBoughtTogether';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template, TemplateWithBindEvent } from '../../types';
 import type {
-  Template,
   WidgetFactory,
   Renderer,
   BaseHit,
   RecommendResponse,
   Hit,
-  TemplateWithBindEvent,
-} from '../../types';
+} from 'instantsearch-core';
 import type {
   RecommendClassNames,
   FrequentlyBoughtTogetherProps as FrequentlyBoughtTogetherUiProps,

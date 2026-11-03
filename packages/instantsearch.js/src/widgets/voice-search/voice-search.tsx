@@ -1,15 +1,13 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import VoiceSearchComponent from '../../components/VoiceSearch/VoiceSearch';
-import connectVoiceSearch from '../../connectors/voice-search/connectVoiceSearch';
+import { connectVoiceSearch } from '../../connectors';
 import { component } from '../../lib/suit';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
@@ -21,10 +19,11 @@ import type {
   VoiceSearchConnectorParams,
   VoiceSearchRenderState,
   VoiceSearchWidgetDescription,
-} from '../../connectors/voice-search/connectVoiceSearch';
-import type { CreateVoiceSearchHelper } from '../../lib/voiceSearchHelper/types';
-import type { WidgetFactory, Template, Renderer } from '../../types';
+} from '../../connectors';
+import type { Template } from '../../types';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
+import type { WidgetFactory, Renderer } from 'instantsearch-core';
+import type { CreateVoiceSearchHelper } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'voice-search' });
 const suit = component('VoiceSearch');

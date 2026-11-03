@@ -2,9 +2,9 @@ import { createSingleSearchResponse } from '@instantsearch/mocks';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 
 import { withInsights, inferInsightsPayload } from '../';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
 
-import type { InstantSearch, Widget } from '../../../types';
+import type { InstantSearch, Widget } from 'instantsearch-core';
 
 const connectHits =
   (renderFn: any, unmountFn: any) =>

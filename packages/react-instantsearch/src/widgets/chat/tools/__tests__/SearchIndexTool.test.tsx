@@ -12,7 +12,7 @@ import { createCarouselTool } from '../SearchIndexTool';
 import type {
   ChatComponentContext,
   ClientSideToolComponentProps,
-} from 'instantsearch-ui-components';
+} from 'instantsearch-core';
 
 const metadata: ChatComponentContext = {
   messages: [],

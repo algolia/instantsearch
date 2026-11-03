@@ -3,13 +3,13 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
+import { noop, warning } from 'instantsearch-core';
+import { historyRouter } from 'instantsearch-core';
 
 import instantsearch from '../../..';
 import { simple } from '../../stateMappings';
-import { noop, warning } from '../../utils';
-import historyRouter from '../history';
 
-import type { UiState } from '../../../types';
+import type { UiState } from 'instantsearch-core';
 
 jest.useFakeTimers();
 

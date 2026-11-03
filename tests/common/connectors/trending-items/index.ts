@@ -4,7 +4,7 @@ import { createOptionsTests } from './options';
 import { createStateTests } from './state';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { TrendingItemsConnectorParams } from 'instantsearch.js/src/connectors/trending-items/connectTrendingItems';
+import type { TrendingItemsConnectorParams } from 'instantsearch-core';
 
 export type TrendingItemsConnectorSetup = TestSetup<{
   widgetParams: TrendingItemsConnectorParams;

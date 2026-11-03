@@ -48,6 +48,7 @@ jobs:
             packages/react-instantsearch-nextjs/dist \
             packages/vue-instantsearch/vue2 \
             packages/vue-instantsearch/vue3 \
+            packages/instantsearch-core/dist \
             packages/instantsearch-ui-components/dist
 
       - name: Upload build outputs

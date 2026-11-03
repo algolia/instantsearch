@@ -1,14 +1,14 @@
 /** @jsx h */
-import { h } from 'preact';
-
-import { Snippet as SnippetUiComponent } from '../../components/Snippet/Snippet';
 import {
   getPropertyByPath,
   unescape,
   toArray,
   warning,
   getHighlightedParts,
-} from '../../lib/utils';
+} from 'instantsearch-core';
+import { h } from 'preact';
+
+import { Snippet as SnippetUiComponent } from '../../components/Snippet/Snippet';
 
 import type { SnippetProps as SnippetUiComponentProps } from '../../components/Snippet/Snippet';
 import type {
@@ -16,7 +16,7 @@ import type {
   Hit,
   HitAttributeSnippetResult,
   PartialKeys,
-} from '../../types';
+} from 'instantsearch-core';
 
 export type SnippetProps<THit extends Hit<BaseHit>> = {
   hit: THit;

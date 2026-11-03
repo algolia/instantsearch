@@ -3,7 +3,7 @@
  */
 import { runTestSuites } from '@instantsearch/tests/common';
 import * as testSuites from '@instantsearch/tests/widgets';
-import { connectCompare } from 'instantsearch.js/es/connectors/index';
+import { connectCompare } from 'instantsearch-core';
 
 import { nextTick, mountApp, mountAppOrThrow } from '../../test/utils';
 import {
@@ -341,8 +341,8 @@ const testSetups = {
 
     return {
       algoliaAgents: [
-        `instantsearch.js (${
-          require('../../../instantsearch.js/package.json').version
+        `instantsearch-core (${
+          require('../../../instantsearch-core/package.json').version
         })`,
         `Vue InstantSearch (${
           require('../../../vue-instantsearch/package.json').version

@@ -1,16 +1,14 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import MenuSelect from '../../components/MenuSelect/MenuSelect';
-import connectMenu from '../../connectors/menu/connectMenu';
+import { connectMenu } from '../../connectors';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
@@ -22,9 +20,10 @@ import type {
   MenuConnectorParams,
   MenuRenderState,
   MenuWidgetDescription,
-} from '../../connectors/menu/connectMenu';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { RendererOptions, Template, WidgetFactory } from '../../types';
+import type { Template } from '../../types';
+import type { RendererOptions, WidgetFactory } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'menu-select' });
 const suit = component('MenuSelect');

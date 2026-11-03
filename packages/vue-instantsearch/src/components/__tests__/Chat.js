@@ -3,7 +3,7 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
-import { Chat } from 'instantsearch.js/es/lib/chat';
+import { Chat } from 'instantsearch-core';
 
 import { mount, nextTick } from '../../../test/utils';
 import ChatComponent from '../Chat';

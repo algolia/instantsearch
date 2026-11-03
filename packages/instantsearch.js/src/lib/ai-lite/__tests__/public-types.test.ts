@@ -1,11 +1,10 @@
-import type { ProviderMetadata as UIComponentsProviderMetadata } from 'instantsearch-ui-components';
 import type {
   ChatInit,
   ChatOnToolCallCallback,
   ProviderMetadata,
   ToolResultSubmission,
   UIMessage,
-} from 'instantsearch.js/es/lib/ai-lite';
+} from 'instantsearch-core';
 
 // The provider metadata of AI SDK 5, 6 and 7 messages, from `@ai-sdk/provider`
 // 2.0.5, 3.0.19 and 4.0.35.
@@ -127,24 +126,13 @@ describe('ai-lite public types', () => {
         refusal: null,
       },
     };
-    const uiComponentsProviderMetadata: UIComponentsProviderMetadata =
-      providerMetadata;
 
-    const aiSdk5: AiSdk5ProviderMetadata[] = [
-      providerMetadata,
-      uiComponentsProviderMetadata,
-    ];
-    const aiSdk6: AiSdk6ProviderMetadata[] = [
-      providerMetadata,
-      uiComponentsProviderMetadata,
-    ];
-    const aiSdk7: AiSdk7ProviderMetadata[] = [
-      providerMetadata,
-      uiComponentsProviderMetadata,
-    ];
+    const aiSdk5: AiSdk5ProviderMetadata[] = [providerMetadata];
+    const aiSdk6: AiSdk6ProviderMetadata[] = [providerMetadata];
+    const aiSdk7: AiSdk7ProviderMetadata[] = [providerMetadata];
 
     expect([...aiSdk5, ...aiSdk6, ...aiSdk7]).toEqual(
-      Array(6).fill(providerMetadata)
+      Array(3).fill(providerMetadata)
     );
   });
 });

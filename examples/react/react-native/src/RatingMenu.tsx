@@ -1,4 +1,4 @@
-import connectRatingMenu from 'instantsearch.js/es/connectors/rating-menu/connectRatingMenu';
+import { connectRatingMenu } from 'instantsearch-core';
 import React from 'react';
 import { useConnector } from 'react-instantsearch-core';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -8,7 +8,7 @@ import { Rating } from './Rating';
 import type {
   RatingMenuConnectorParams,
   RatingMenuWidgetDescription,
-} from 'instantsearch.js/es/connectors/rating-menu/connectRatingMenu';
+} from 'instantsearch-core';
 
 type RatingMenuProps = {
   attribute: string;

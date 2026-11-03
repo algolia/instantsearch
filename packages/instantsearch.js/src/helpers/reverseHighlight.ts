@@ -1,4 +1,3 @@
-import { component } from '../lib/suit';
 import {
   TAG_REPLACEMENT,
   getPropertyByPath,
@@ -6,9 +5,11 @@ import {
   reverseHighlightedParts,
   concatHighlightedParts,
   warning,
-} from '../lib/utils';
+} from 'instantsearch-core';
 
-import type { Hit } from '../types';
+import { component } from '../lib/suit';
+
+import type { Hit } from 'instantsearch-core';
 
 export type ReverseHighlightOptions = {
   // @MAJOR string should no longer be allowed to be a path, only array can be a path

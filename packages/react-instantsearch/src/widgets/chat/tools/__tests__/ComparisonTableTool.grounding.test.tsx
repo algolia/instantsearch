@@ -21,7 +21,7 @@
 
 import { chatToolProps } from '@instantsearch/testutils';
 import { render, screen, within } from '@testing-library/react';
-import { collectChatRecords } from 'instantsearch-ui-components';
+import { collectChatRecords } from 'instantsearch-core';
 import React from 'react';
 
 import { createComparisonTableTool } from '../ComparisonTableTool';
@@ -29,7 +29,7 @@ import { createComparisonTableTool } from '../ComparisonTableTool';
 import type {
   ChatComponentContext,
   ClientSideToolComponentProps,
-} from 'instantsearch-ui-components';
+} from 'instantsearch-core';
 
 type ToolMessage = ClientSideToolComponentProps['context']['message'];
 

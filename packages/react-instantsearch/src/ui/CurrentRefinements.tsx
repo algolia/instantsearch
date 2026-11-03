@@ -3,7 +3,7 @@ import React from 'react';
 
 import { capitalize, isModifierClick } from './lib';
 
-import type { CurrentRefinementsConnectorParamsItem } from 'instantsearch.js/es/connectors/current-refinements/connectCurrentRefinements';
+import type { CurrentRefinementsConnectorParamsItem } from 'instantsearch-core';
 
 export type CurrentRefinementsProps = React.ComponentProps<'div'> & {
   classNames?: Partial<CurrentRefinementsClassNames>;

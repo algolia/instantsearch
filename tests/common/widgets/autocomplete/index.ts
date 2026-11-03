@@ -8,7 +8,7 @@ import type { TestOptions, TestSetup } from '../../common';
 import type {
   AutocompleteConnectorParams,
   TransformItemsIndicesConfig,
-} from 'instantsearch.js/es/connectors/autocomplete/connectAutocomplete';
+} from 'instantsearch-core';
 import type { AutocompleteWidget } from 'instantsearch.js/src/widgets/autocomplete/autocomplete';
 import type { AutocompleteProps } from 'react-instantsearch';
 

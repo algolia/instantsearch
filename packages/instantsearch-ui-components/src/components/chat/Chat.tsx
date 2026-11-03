@@ -11,8 +11,9 @@ import type { ChatHeaderProps, ChatHeaderOwnProps } from './ChatHeader';
 import type { ChatMessagesProps } from './ChatMessages';
 import type { ChatPromptProps, ChatPromptOwnProps } from './ChatPrompt';
 import type { ChatPromptSuggestionsOwnProps } from './ChatPromptSuggestions';
-import type { ChatLayoutOwnProps, ChatMessageBase } from './types';
+import type { ChatLayoutOwnProps } from './types';
 import type { Renderer, ComponentProps, Hooks } from '../../types';
+import type { ChatMessageBase } from 'instantsearch-core';
 
 export type ChatClassNames = {
   root?: string | string[];

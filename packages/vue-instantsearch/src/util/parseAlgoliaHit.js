@@ -1,5 +1,5 @@
 // copied from React InstantSearch
-import { getPropertyByPath } from 'instantsearch.js/es/lib/utils';
+import { getPropertyByPath } from 'instantsearch-core';
 
 import { unescape } from '../util/unescape';
 

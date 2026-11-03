@@ -14,12 +14,12 @@ import type {
   SnippetOptions,
   ReverseSnippetOptions,
 } from '../helpers';
+import type { HoganHelpers } from '../types';
 import type {
   Hit,
-  HoganHelpers,
   InsightsClientMethod,
   InsightsClientPayload,
-} from '../types';
+} from 'instantsearch-core';
 
 type DefaultHoganHelpers = HoganHelpers<
   | 'formatNumber'
