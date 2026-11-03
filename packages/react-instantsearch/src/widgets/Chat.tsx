@@ -377,12 +377,13 @@ function ChatInner<
   const effectiveDisableTriggerValidation =
     disableTriggerValidation || isInlineLayoutComponent;
 
-  const chatState = useChat<TUiMessage>({
+  const chatProps = {
     ...props,
     tools,
     disableTriggerValidation: effectiveDisableTriggerValidation,
     '~skipChangedFunctionsWarning': true,
-  } as Parameters<typeof useChat<TUiMessage>>[0]);
+  };
+  const chatState = useChat<TUiMessage>(chatProps);
 
   const {
     messages,
