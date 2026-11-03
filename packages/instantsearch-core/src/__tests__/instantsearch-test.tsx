@@ -262,7 +262,7 @@ describe('Usage', () => {
       // @ts-expect-error
       search.removeWidgets({});
     }).toThrowErrorMatchingInlineSnapshot(`
-      "The \`removeWidgets\` method expects an array of widgets. Please use \`removeWidget\`.
+      "The \`removeWidgets\` method expects an array of widgets.
 
       See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
     `);

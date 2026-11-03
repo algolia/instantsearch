@@ -468,9 +468,7 @@ See documentation: ${createDocumentationLink({
   public removeWidgets(widgets: Array<Widget | IndexWidget | Widget[]>) {
     if (!Array.isArray(widgets)) {
       throw new Error(
-        withUsage(
-          'The `removeWidgets` method expects an array of widgets. Please use `removeWidget`.'
-        )
+        withUsage('The `removeWidgets` method expects an array of widgets.')
       );
     }
 
