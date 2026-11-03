@@ -1,5 +1,3 @@
-export { default as connectAnswers } from './answers/connectAnswers';
-export type * from './answers/connectAnswers';
 export { default as connectAutocomplete } from './autocomplete/connectAutocomplete';
 export type * from './autocomplete/connectAutocomplete';
 export { default as Paginator } from './pagination/Paginator';
@@ -22,8 +20,6 @@ export { default as connectDynamicWidgets } from './dynamic-widgets/connectDynam
 export type * from './dynamic-widgets/connectDynamicWidgets';
 export { default as connectFeeds } from './feeds/connectFeeds';
 export type * from './feeds/connectFeeds';
-export { default as connectFilterSuggestions } from './filter-suggestions/connectFilterSuggestions';
-export type * from './filter-suggestions/connectFilterSuggestions';
 export { default as connectFrequentlyBoughtTogether } from './frequently-bought-together/connectFrequentlyBoughtTogether';
 export type * from './frequently-bought-together/connectFrequentlyBoughtTogether';
 export { default as connectGeoSearch } from './geo-search/connectGeoSearch';
