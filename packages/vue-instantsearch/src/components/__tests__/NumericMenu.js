@@ -45,7 +45,6 @@ const moreThan500 = {
 
 const defaultState = {
   items: [all, lessThan10, from10to100, from100to500, moreThan500],
-  hasNoResults: false,
   canRefine: true,
   createURL: () => {},
   refine: () => {},

@@ -486,7 +486,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
                     // same way every widget's params are. Derived dynamically from
                     // `_initialOptions` so new options are reported automatically,
                     // minus the keys that carry credentials or user data. Functions
-                    // (`onStateChange`, `searchFunction`) report their `fn.name`
+                    // (`onStateChange`) report their `fn.name`
                     // when present, tagged `type: 'function'`.
                     params: instantSearchInstance._initialOptions
                       ? serializeWidgetParams(

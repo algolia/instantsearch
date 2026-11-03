@@ -2,7 +2,6 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { chatToolProps } from '@instantsearch/testutils';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { collectChatRecords } from 'instantsearch-core';
@@ -111,7 +110,7 @@ describe('createGroupedResultsTool', () => {
 
     render(
       <LayoutComponent
-        {...chatToolProps({
+        context={{
           ...metadata,
           ...conversation(message, [{ objectID: '1', name: 'Air Runner' }]),
           status: 'streaming',
@@ -121,7 +120,7 @@ describe('createGroupedResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        })}
+        }}
       />
     );
 
@@ -150,25 +149,27 @@ describe('createGroupedResultsTool', () => {
         },
       };
 
-      return chatToolProps({
-        ...metadata,
-        ...conversationOf(
-          createMessages(
-            message,
-            objectIDs.map((objectID) => ({
-              objectID,
-              name: `Product ${objectID}`,
-            }))
-          )
-        ),
-        status: 'streaming' as const,
-        message,
-        applyFilters: jest.fn(),
-        indexUiState: {},
-        addToolResult: jest.fn(),
-        setIndexUiState: jest.fn(),
-        sendEvent: jest.fn(),
-      });
+      return {
+        context: {
+          ...metadata,
+          ...conversationOf(
+            createMessages(
+              message,
+              objectIDs.map((objectID) => ({
+                objectID,
+                name: `Product ${objectID}`,
+              }))
+            )
+          ),
+          status: 'streaming' as const,
+          message,
+          applyFilters: jest.fn(),
+          indexUiState: {},
+          addToolResult: jest.fn(),
+          setIndexUiState: jest.fn(),
+          sendEvent: jest.fn(),
+        },
+      };
     };
     const { container, rerender } = render(
       <LayoutComponent {...createToolProps('Original intro', ['1'])} />
@@ -206,7 +207,7 @@ describe('createGroupedResultsTool', () => {
     };
     const { container } = render(
       <LayoutComponent
-        {...chatToolProps({
+        context={{
           ...metadata,
           ...conversationOf(
             createMessages(message, [{ objectID: '1', name: 'Runner' }])
@@ -218,7 +219,7 @@ describe('createGroupedResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        })}
+        }}
       />
     );
 
@@ -258,7 +259,7 @@ describe('createGroupedResultsTool', () => {
 
     render(
       <LayoutComponent
-        {...chatToolProps({
+        context={{
           ...metadata,
           ...conversationOf(
             createMessages(message, [
@@ -272,7 +273,7 @@ describe('createGroupedResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        })}
+        }}
       />
     );
 
@@ -305,7 +306,7 @@ describe('createGroupedResultsTool', () => {
 
     render(
       <LayoutComponent
-        {...chatToolProps({
+        context={{
           ...metadata,
           ...conversationOf(createMessages(message, [{ objectID: '1' }])),
           message,
@@ -314,7 +315,7 @@ describe('createGroupedResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent,
-        })}
+        }}
       />
     );
 
@@ -370,7 +371,7 @@ describe('createGroupedResultsTool', () => {
 
     render(
       <LayoutComponent
-        {...chatToolProps({
+        context={{
           ...metadata,
           ...conversationOf(createMessages(message, [{ objectID: '1' }])),
           message,
@@ -379,7 +380,7 @@ describe('createGroupedResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent,
-        })}
+        }}
       />
     );
 
@@ -424,7 +425,7 @@ describe('createGroupedResultsTool', () => {
 
     render(
       <LayoutComponent
-        {...chatToolProps({
+        context={{
           ...metadata,
           ...conversationOf(messages),
           message,
@@ -433,7 +434,7 @@ describe('createGroupedResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        })}
+        }}
       />
     );
 
@@ -467,7 +468,7 @@ describe('createGroupedResultsTool', () => {
 
     render(
       <LayoutComponent
-        {...chatToolProps({
+        context={{
           ...metadata,
           ...conversationOf(messages),
           message,
@@ -476,7 +477,7 @@ describe('createGroupedResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        })}
+        }}
       />
     );
 
@@ -518,7 +519,7 @@ describe('createGroupedResultsTool', () => {
 
     render(
       <LayoutComponent
-        {...chatToolProps({
+        context={{
           ...metadata,
           ...conversationOf(
             createMessages(message, [
@@ -532,7 +533,7 @@ describe('createGroupedResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        })}
+        }}
       />
     );
 
@@ -572,7 +573,7 @@ describe('createGroupedResultsTool', () => {
 
     render(
       <LayoutComponent
-        {...chatToolProps({
+        context={{
           ...metadata,
           ...conversationOf(
             createMessages(message, [
@@ -586,7 +587,7 @@ describe('createGroupedResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent,
-        })}
+        }}
       />
     );
 
@@ -636,7 +637,7 @@ describe('createGroupedResultsTool', () => {
 
     render(
       <LayoutComponent
-        {...chatToolProps({
+        context={{
           ...metadata,
           ...conversationOf(
             createMessages(message, [
@@ -650,7 +651,7 @@ describe('createGroupedResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        })}
+        }}
       />
     );
 
@@ -668,7 +669,7 @@ describe('createGroupedResultsTool', () => {
 
     const { container } = render(
       <LayoutComponent
-        {...chatToolProps({
+        context={{
           ...metadata,
           message: {
             type: 'tool-algolia_grouped_results',
@@ -686,7 +687,7 @@ describe('createGroupedResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        })}
+        }}
       />
     );
 
@@ -714,7 +715,7 @@ describe('createGroupedResultsTool', () => {
 
     render(
       <LayoutComponent
-        {...chatToolProps({
+        context={{
           ...metadata,
           ...conversationOf(
             createMessages(message, [{ objectID: '1', name: 'Air Runner' }])
@@ -725,7 +726,7 @@ describe('createGroupedResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        })}
+        }}
       />
     );
 
@@ -740,7 +741,7 @@ describe('createGroupedResultsTool', () => {
 
     const { container } = render(
       <LayoutComponent
-        {...chatToolProps({
+        context={{
           ...metadata,
           message: {
             type: 'tool-algolia_grouped_results',
@@ -754,7 +755,7 @@ describe('createGroupedResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        })}
+        }}
       />
     );
 
@@ -781,7 +782,7 @@ describe('createGroupedResultsTool', () => {
 
     render(
       <LayoutComponent
-        {...chatToolProps({
+        context={{
           ...metadata,
           ...conversationOf(
             createMessages(message, [{ objectID: '1', name: 'Air Runner' }])
@@ -792,7 +793,7 @@ describe('createGroupedResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        })}
+        }}
       />
     );
 
@@ -814,7 +815,7 @@ describe('createGroupedResultsTool', () => {
 
     render(
       <LayoutComponent
-        {...chatToolProps({
+        context={{
           ...metadata,
           ...conversationOf(createMessages(message, [])),
           status: 'streaming',
@@ -824,7 +825,7 @@ describe('createGroupedResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        })}
+        }}
       />
     );
 
@@ -837,7 +838,7 @@ describe('createGroupedResultsTool', () => {
 
     const { container } = render(
       <LayoutComponent
-        {...chatToolProps({
+        context={{
           ...metadata,
           message: {
             type: 'tool-algolia_grouped_results',
@@ -851,7 +852,7 @@ describe('createGroupedResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        })}
+        }}
       />
     );
 
@@ -911,7 +912,7 @@ describe('createGroupedResultsTool', () => {
 
     render(
       <LayoutComponent
-        {...chatToolProps({
+        context={{
           ...metadata,
           ...conversationOf(messages),
           message,
@@ -920,7 +921,7 @@ describe('createGroupedResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        })}
+        }}
       />
     );
 
@@ -1000,7 +1001,7 @@ describe('createGroupedResultsTool', () => {
 
     const firstRender = render(
       <LayoutComponent
-        {...chatToolProps({
+        context={{
           ...metadata,
           ...conversationOf(messages),
           message: firstDisplayMessage,
@@ -1009,7 +1010,7 @@ describe('createGroupedResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        })}
+        }}
       />
     );
 
@@ -1021,7 +1022,7 @@ describe('createGroupedResultsTool', () => {
 
     render(
       <LayoutComponent
-        {...chatToolProps({
+        context={{
           ...metadata,
           ...conversationOf(messages),
           message: secondDisplayMessage,
@@ -1030,7 +1031,7 @@ describe('createGroupedResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        })}
+        }}
       />
     );
 

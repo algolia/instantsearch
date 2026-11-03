@@ -19,7 +19,6 @@
  * catalog-sourced values, no matter what the model emits.
  */
 
-import { chatToolProps } from '@instantsearch/testutils';
 import { render, screen, within } from '@testing-library/react';
 import { collectChatRecords } from 'instantsearch-core';
 import React from 'react';
@@ -117,7 +116,7 @@ function renderComparison(
 
   return render(
     <LayoutComponent
-      {...chatToolProps({
+      context={{
         ...metadata,
         messages,
         // The tool only consumes records; the search tool fetched them.
@@ -128,7 +127,7 @@ function renderComparison(
         addToolResult: jest.fn(),
         setIndexUiState: jest.fn(),
         sendEvent: jest.fn(),
-      })}
+      }}
     />
   );
 }

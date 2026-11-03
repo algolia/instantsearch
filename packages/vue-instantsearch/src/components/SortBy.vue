@@ -2,7 +2,6 @@
   <div :class="suit()" v-if="state">
     <slot
       :items="state.options"
-      :has-no-results="state.hasNoResults"
       :refine="state.refine"
       :current-refinement="state.currentRefinement"
       :can-refine="state.canRefine"
