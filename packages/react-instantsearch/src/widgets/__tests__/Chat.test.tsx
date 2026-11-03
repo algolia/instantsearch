@@ -134,7 +134,7 @@ describe('Chat', () => {
           agentId="test-agent-id"
           disableTriggerValidation={true}
           requiresSearch={false}
-          itemComponent={() => null}
+          itemComponent={() => <div />}
         />
       </InstantSearch>
     );
@@ -147,7 +147,7 @@ describe('Chat', () => {
           agentId="test-agent-id"
           disableTriggerValidation={true}
           requiresSearch={false}
-          itemComponent={() => null}
+          itemComponent={() => <div />}
         />
       </InstantSearch>
     );
