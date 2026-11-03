@@ -28,4 +28,3 @@ export * from './Stats';
 export * from './ToggleRefinement';
 export * from './TrendingItems';
 export * from './TrendingFacets';
-export * from './FilterSuggestions';
