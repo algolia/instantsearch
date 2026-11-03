@@ -934,7 +934,6 @@ describe('ChatMessages', () => {
     render(<ChatMessages {...props} />);
 
     expect(isReasoningPartActive).toHaveBeenCalled();
-    isReasoningPartActive.mockRestore();
   });
 
   test('toggles the disclosure on completed messages when the option changes', () => {
