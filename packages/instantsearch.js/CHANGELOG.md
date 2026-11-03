@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.122.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.121.0...instantsearch.js@4.122.0) (2026-11-03)
+
+
+### Features
+
+* **chat:** add accessible names to the launcher and carousel buttons ([#7332](https://github.com/algolia/instantsearch/issues/7332)) ([7780406](https://github.com/algolia/instantsearch/commit/7780406c56c96b1d2287a38b5e26dce9229da720))
+* **vue:** add CompareBar and ResultCard, with common tests [FX-4089] ([#7340](https://github.com/algolia/instantsearch/issues/7340)) ([1598f50](https://github.com/algolia/instantsearch/commit/1598f5096266c4c8ad7e9ff92da7892ddb664f6d))
+
+
+
+
+
 # [4.121.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.120.0...instantsearch.js@4.121.0) (2026-10-26)
 
 

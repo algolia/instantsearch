@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.54.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.53.1...react-instantsearch-core@7.54.0) (2026-11-03)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+## [7.53.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.53.0...react-instantsearch-core@7.53.1) (2026-11-03)
+
+
+### Bug Fixes
+
+* **react:** avoid static useSyncExternalStore import ([#7337](https://github.com/algolia/instantsearch/issues/7337)) ([e75593f](https://github.com/algolia/instantsearch/commit/e75593fd92cd1094d8d01120488986f337cd3037)), closes [#7335](https://github.com/algolia/instantsearch/issues/7335)
+
+
+
+
+
 # [7.53.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.52.0...react-instantsearch-core@7.53.0) (2026-10-26)
 
 

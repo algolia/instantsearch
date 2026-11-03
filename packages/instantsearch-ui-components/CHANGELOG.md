@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.45.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.44.0...instantsearch-ui-components@0.45.0) (2026-11-03)
+
+
+### Bug Fixes
+
+* **chat:** don't send on Enter when the page already handled the key [FX-4055] ([#7327](https://github.com/algolia/instantsearch/issues/7327)) ([ee2f8de](https://github.com/algolia/instantsearch/commit/ee2f8de2bd2e2526b1922ed74bbefb7ddf537815))
+* **chat:** don't send when Enter confirms an accent or IME text [FX-4054] ([#7329](https://github.com/algolia/instantsearch/issues/7329)) ([4dc32e8](https://github.com/algolia/instantsearch/commit/4dc32e87beb315eece06639109eb58942bdc4236))
+* **chat:** end bare URLs where CJK text starts [FX-4061] ([#7321](https://github.com/algolia/instantsearch/issues/7321)) ([437ab83](https://github.com/algolia/instantsearch/commit/437ab83992020e2214c1e761e5f8be5e1c1b52a5))
+* **chat:** hide decorative icons from screen readers ([#7330](https://github.com/algolia/instantsearch/issues/7330)) ([f2ee627](https://github.com/algolia/instantsearch/commit/f2ee62716f621237902df4e310039e1ccd6b6aab))
+* **chat:** hide half-written markdown while a reply streams [FX-4059] ([#7346](https://github.com/algolia/instantsearch/issues/7346)) ([b482aa9](https://github.com/algolia/instantsearch/commit/b482aa998a06257d0361da0e91c57137100161a1))
+
+
+### Features
+
+* **chat:** add accessible names to the launcher and carousel buttons ([#7332](https://github.com/algolia/instantsearch/issues/7332)) ([7780406](https://github.com/algolia/instantsearch/commit/7780406c56c96b1d2287a38b5e26dce9229da720))
+
+
+
+
+
 # [0.44.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.43.0...instantsearch-ui-components@0.44.0) (2026-10-26)
 
 
