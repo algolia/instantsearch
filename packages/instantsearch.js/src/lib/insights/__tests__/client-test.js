@@ -16,7 +16,7 @@ describe('withInsights', () => {
       init() {
         renderFn({
           results: {},
-          hits: [
+          items: [
             { objectID: '1', __queryID: 'theQueryID', __position: 9 },
             { objectID: '2', __queryID: 'theQueryID', __position: 10 },
             { objectID: '3', __queryID: 'theQueryID', __position: 11 },

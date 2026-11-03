@@ -6,7 +6,6 @@ import {
   createDocumentationMessageGenerator,
   resolveSearchParameters,
   mergeSearchParameters,
-  warning,
   isIndexWidget,
   createInitArgs,
   createRenderArgs,
@@ -57,10 +56,6 @@ export type IndexWidgetParams =
        * @default false
        */
       isolated?: false;
-      /**
-       * @deprecated Use `isolated` instead.
-       */
-      EXPERIMENTAL_isolated?: false;
     }
   | {
       /**
@@ -75,32 +70,6 @@ export type IndexWidgetParams =
        * @default false
        */
       isolated: true;
-      /**
-       * @deprecated Use `isolated` instead.
-       */
-      EXPERIMENTAL_isolated?: boolean;
-      /**
-       * The index or composition id to target.
-       */
-      indexName?: string;
-      /**
-       * Id to use for the index if there are multiple indices with the same name.
-       * This will be used to create the URL and the render state.
-       */
-      indexId?: string;
-    }
-  | {
-      /**
-       * @deprecated Use `isolated` instead.
-       */
-      EXPERIMENTAL_isolated: true;
-      /**
-       * If `true`, the index will not be merged with the main helper's state.
-       * This means that the index will not be part of the main search request.
-       *
-       * @default false
-       */
-      isolated?: boolean;
       /**
        * The index or composition id to target.
        */
@@ -139,7 +108,7 @@ export type IndexWidgetDescription = {
 
 export type IndexWidget<TUiState extends UiState = UiState> = Omit<
   Widget<IndexWidgetDescription & { widgetParams: IndexWidgetParams }>,
-  'getWidgetUiState' | 'getWidgetState'
+  'getWidgetUiState'
 > & {
   getIndexName: () => string;
   getIndexId: () => string;
@@ -180,10 +149,6 @@ export type IndexWidget<TUiState extends UiState = UiState> = Omit<
   init: (options: IndexInitOptions) => void;
   render: (options: IndexRenderOptions) => void;
   dispose: () => void;
-  /**
-   * @deprecated
-   */
-  getWidgetState: (uiState: UiState) => UiState;
   getWidgetUiState: <TSpecificUiState extends UiState = TUiState>(
     uiState: TSpecificUiState
   ) => TSpecificUiState;
@@ -271,15 +236,11 @@ function getLocalWidgetsUiState(
       return uiState;
     }
 
-    if (!widget.getWidgetUiState && !widget.getWidgetState) {
+    if (!widget.getWidgetUiState) {
       return uiState;
     }
 
-    if (widget.getWidgetUiState) {
-      return widget.getWidgetUiState(uiState, widgetStateOptions);
-    }
-
-    return widget.getWidgetState!(uiState, widgetStateOptions);
+    return widget.getWidgetUiState(uiState, widgetStateOptions);
   }, initialUiState);
 }
 
@@ -416,18 +377,9 @@ function recomputeInstantSearchRequestDependencies(
 const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   if (
     widgetParams === undefined ||
-    (widgetParams.indexName === undefined &&
-      !widgetParams.isolated &&
-      !widgetParams.EXPERIMENTAL_isolated)
+    (widgetParams.indexName === undefined && !widgetParams.isolated)
   ) {
     throw new Error(withUsage('The `indexName` option is required.'));
-  }
-
-  if (__DEV__ && widgetParams.EXPERIMENTAL_isolated !== undefined) {
-    warning(
-      false,
-      'The `EXPERIMENTAL_isolated` option is no longer experimental and has been renamed. Please use `isolated` instead.'
-    );
   }
 
   // When isolated=true, we use an empty string as the default indexName.
@@ -435,7 +387,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   const {
     indexName = '',
     indexId = indexName,
-    isolated = widgetParams.EXPERIMENTAL_isolated ?? false,
+    isolated = false,
   } = widgetParams;
 
   let localWidgets: Array<Widget | IndexWidget> = [];
@@ -1080,13 +1032,6 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       });
 
       localWidgets.forEach((widget) => {
-        warning(
-          // if it has NO getWidgetState or if it has getWidgetUiState, we don't warn
-          // aka we warn if there's _only_ getWidgetState
-          !widget.getWidgetState || Boolean(widget.getWidgetUiState),
-          'The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
-        );
-
         if (widget.init) {
           widget.init(createInitArgs(instantSearchInstance, this, uiState));
         }
@@ -1248,15 +1193,6 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
             },
           }
         );
-    },
-
-    getWidgetState(uiState: UiState) {
-      warning(
-        false,
-        'The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
-      );
-
-      return this.getWidgetUiState(uiState);
     },
 
     getWidgetSearchParameters(searchParameters, { uiState }) {
