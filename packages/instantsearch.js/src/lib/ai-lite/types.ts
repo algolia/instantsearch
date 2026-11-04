@@ -17,7 +17,13 @@ export type UITool = {
 
 export type UITools = Record<string, UITool>;
 
-export type ProviderMetadata = Record<string, Record<string, unknown>>;
+type JSONValue = null | string | number | boolean | JSONObject | JSONArray;
+type JSONObject = { [key: string]: JSONValue };
+type JSONArray = JSONValue[];
+
+// AI SDK 5's `SharedV2ProviderMetadata`, the strictest of AI SDK 5, 6 and 7:
+// only this one keeps our messages assignable to all three `UIMessage`s.
+export type ProviderMetadata = Record<string, Record<string, JSONValue>>;
 
 type ValueOf<T> = T[keyof T];
 

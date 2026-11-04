@@ -5,10 +5,16 @@ import type { SearchParameters } from 'algoliasearch-helper';
 export type ChatStatus = 'ready' | 'submitted' | 'streaming' | 'error';
 export type ChatRole = 'data' | 'user' | 'assistant' | 'system';
 
+type JSONValue = null | string | number | boolean | JSONObject | JSONArray;
+type JSONObject = { [key: string]: JSONValue };
+type JSONArray = JSONValue[];
+
 /**
- * Provider metadata type for UI message parts.
+ * Provider metadata type for UI message parts. This is AI SDK 5's
+ * `SharedV2ProviderMetadata`, the strictest of AI SDK 5, 6 and 7: only this
+ * one keeps our messages assignable to all three `UIMessage`s.
  */
-export type ProviderMetadata = Record<string, Record<string, unknown>>;
+export type ProviderMetadata = Record<string, Record<string, JSONValue>>;
 
 /**
  * A record of data types for data parts in UI messages.
