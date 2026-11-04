@@ -14,7 +14,7 @@ The core package. **Every connector lives here and is consumed by all flavors** 
 ## Working here
 
 ```bash
-yarn workspace instantsearch.js build      # rollup → esm + cjs + umd + .d.ts
+yarn lerna run build --scope instantsearch.js   # rollup → esm + cjs + umd + .d.ts
 yarn jest packages/instantsearch.js/src/connectors/<name>   # run one connector's tests (from repo root)
 ```
 
