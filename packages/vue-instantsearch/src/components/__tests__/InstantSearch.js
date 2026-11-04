@@ -12,6 +12,7 @@ import { warn } from '../../util/warn';
 import InstantSearch from '../InstantSearch';
 import '../../../test/utils/sortedHtmlSerializer';
 
+jest.mock('instantsearch-core');
 jest.mock('../../util/warn');
 
 beforeEach(() => {
