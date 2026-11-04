@@ -223,14 +223,14 @@ describe('recommend()', () => {
       getRecommendations: jest.fn().mockResolvedValue({
         results: [
           { hits: [{ objectID: 'a' }, { objectID: '2' }] },
-          { hits: [{ objectID: '1' }, { objectID: 'c' }] },
+          { hits: [{ objectID: '0' }, { objectID: 'c' }] },
         ],
       }),
     };
 
     var helper = algoliasearchHelper(client, 'indexName', {});
 
-    helper.addFrequentlyBoughtTogether({ $$id: 1, objectID: 1 });
+    helper.addFrequentlyBoughtTogether({ $$id: 1, objectID: 0 });
     helper.addFrequentlyBoughtTogether({ $$id: 1, objectID: 2 });
 
     helper.on('error', (event) => done(event.error));

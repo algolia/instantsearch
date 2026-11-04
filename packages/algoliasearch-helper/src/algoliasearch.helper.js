@@ -1992,7 +1992,7 @@ AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
     states.forEach(function (s) {
       s.state.params.forEach(function (param) {
         // `id` is a key of `idsMap`, so it's a string even when `$$id` isn't.
-        if (String(param.$$id) === id && param.objectID) {
+        if (String(param.$$id) === id && param.objectID != null) {
           inputObjectIDs.push(String(param.objectID));
         }
       });
