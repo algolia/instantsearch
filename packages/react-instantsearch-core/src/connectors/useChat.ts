@@ -55,10 +55,66 @@ function hasPersistedOpenState(type: string) {
   }
 }
 
+function findChangedFunctions(
+  previous: unknown,
+  next: unknown,
+  path: string[] = []
+): string[] {
+  if (typeof previous === 'function' && typeof next === 'function') {
+    return previous === next ? [] : [path.join('.')];
+  }
+
+  if (
+    path.length < 3 &&
+    previous &&
+    next &&
+    typeof previous === 'object' &&
+    typeof next === 'object' &&
+    Object.getPrototypeOf(next) === Object.prototype
+  ) {
+    return Object.keys(next).reduce<string[]>(
+      (changed, key) =>
+        changed.concat(
+          findChangedFunctions(
+            (previous as Record<string, unknown>)[key],
+            (next as Record<string, unknown>)[key],
+            path.concat(key)
+          )
+        ),
+      []
+    );
+  }
+
+  return [];
+}
+
 export function useChat<TUiMessage extends UIMessage = UIMessage>(
   props: UseChatProps<TUiMessage>,
   additionalWidgetProperties?: AdditionalWidgetProperties
 ): ChatWidgetDescription<TUiMessage>['renderState'] {
+  const renderedPropsRef = useRef(props);
+  if (
+    __DEV__ &&
+    !(props as { '~skipChangedFunctionsWarning'?: true })[
+      '~skipChangedFunctionsWarning'
+    ]
+  ) {
+    // Runs while rendering: a function created on every render makes React
+    // throw "Too many re-renders" before any effect gets to run. The Chat
+    // widget rebuilds its default tools itself and does not loop.
+    const changedFunctions = findChangedFunctions(
+      renderedPropsRef.current,
+      props
+    );
+    renderedPropsRef.current = props;
+    warn(
+      changedFunctions.length === 0,
+      `The ${changedFunctions.join(
+        ', '
+      )} prop of useChat changed between renders. Functions created inline on every render can cause "Too many re-renders" errors. Keep them stable with useCallback, useMemo, or by defining them outside the component.`
+    );
+  }
+
   const isHydrated = useIsHydrated();
   const previousPropsRef = useRef(props);
   const previousChatStateRef = useRef<Pick<
