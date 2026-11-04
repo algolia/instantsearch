@@ -444,6 +444,76 @@ describe('createSendEventForHits', () => {
     });
   });
 
+  it('sends one click event per queryID when hits come from several responses', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'q1', objectID: 'a' },
+      { __position: 2, __queryID: 'q2', objectID: 'c' },
+      { __position: 3, __queryID: 'q1', objectID: 'b' },
+    ];
+
+    sendEvent('click', hits, 'Product Clicked');
+
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(2);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith(
+      expect.objectContaining({
+        payload: expect.objectContaining({
+          queryID: 'q1',
+          objectIDs: ['a', 'b'],
+          positions: [1, 3],
+        }),
+      })
+    );
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith(
+      expect.objectContaining({
+        payload: expect.objectContaining({
+          queryID: 'q2',
+          objectIDs: ['c'],
+          positions: [2],
+        }),
+      })
+    );
+  });
+
+  it('sends one conversion event per queryID when hits come from several responses', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'q1', objectID: 'a' },
+      { __position: 2, __queryID: 'q2', objectID: 'c' },
+    ];
+
+    sendEvent('conversion', hits, 'Product Ordered');
+
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(2);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith(
+      expect.objectContaining({
+        payload: expect.objectContaining({ queryID: 'q1', objectIDs: ['a'] }),
+      })
+    );
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith(
+      expect.objectContaining({
+        payload: expect.objectContaining({ queryID: 'q2', objectIDs: ['c'] }),
+      })
+    );
+  });
+
+  it('sends a single view event when hits come from several responses', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'q1', objectID: 'a' },
+      { __position: 2, __queryID: 'q2', objectID: 'c' },
+    ];
+
+    sendEvent('view', hits);
+
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith(
+      expect.objectContaining({
+        payload: expect.objectContaining({ objectIDs: ['a', 'c'] }),
+      })
+    );
+  });
+
   it('sends conversion event', () => {
     const { sendEvent, instantSearchInstance, hits, additionalData } =
       createTestEnvironment();

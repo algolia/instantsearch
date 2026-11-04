@@ -30,6 +30,22 @@ function chunk<TItem>(arr: TItem[], chunkSize: number = 20): TItem[][] {
   return chunks;
 }
 
+// Recommend widgets merge several responses, so their hits can carry
+// different queryIDs, but a click or conversion event only carries one.
+function chunkByQueryID(hits: Hit[]): Hit[][] {
+  const groups: Hit[][] = [];
+  const groupIndexByQueryID: Record<string, number> = {};
+  hits.forEach((hit) => {
+    const key = hit.__queryID || '';
+    if (groupIndexByQueryID[key] === undefined) {
+      groupIndexByQueryID[key] = groups.length;
+      groups.push([]);
+    }
+    groups[groupIndexByQueryID[key]].push(hit);
+  });
+  return groups.reduce<Hit[][]>((acc, group) => acc.concat(chunk(group)), []);
+}
+
 export function _buildEventPayloadsForHits({
   helper,
   widgetType,
@@ -82,8 +98,8 @@ export function _buildEventPayloadsForHits({
   if (hitsArray.length === 0) {
     return [];
   }
-  const queryID = hitsArray[0].__queryID;
-  const hitsChunks = chunk(hitsArray);
+  const hitsChunks =
+    eventType === 'view' ? chunk(hitsArray) : chunkByQueryID(hitsArray);
   const objectIDsByChunk = hitsChunks.map((batch) =>
     batch.map((hit) => hit.objectID)
   );
@@ -119,7 +135,7 @@ export function _buildEventPayloadsForHits({
         payload: {
           eventName: eventName || 'Hit Clicked',
           index: helper.lastResults?.index || helper.state.index,
-          queryID,
+          queryID: batch[0].__queryID,
           objectIDs: objectIDsByChunk[i],
           positions: positionsByChunk[i],
           ...additionalData,
@@ -137,7 +153,7 @@ export function _buildEventPayloadsForHits({
         payload: {
           eventName: eventName || 'Hit Converted',
           index: helper.lastResults?.index || helper.state.index,
-          queryID,
+          queryID: batch[0].__queryID,
           objectIDs: objectIDsByChunk[i],
           ...additionalData,
         },

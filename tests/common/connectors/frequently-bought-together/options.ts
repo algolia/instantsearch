@@ -1,3 +1,8 @@
+import {
+  createRecommendResponse,
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
@@ -137,6 +142,54 @@ export function createOptionsTests(
           </li>
         </ul>
       `);
+    });
+    test('attributes each recommendation to the queryID of the request that returned it', async () => {
+      const searchClient = createSearchClient({
+        getRecommendations: jest.fn((requests) =>
+          Promise.resolve(
+            createRecommendResponse(
+              // @ts-ignore
+              // `request` will be implicitly typed as any in type-check:v3
+              // since `getRecommendations` is not available there
+              requests.map((request: { objectID?: string }) =>
+                createSingleSearchResponse(
+                  request.objectID === '1'
+                    ? {
+                        queryID: 'q1',
+                        hits: [{ objectID: 'a' }, { objectID: 'b' }],
+                      }
+                    : {
+                        queryID: 'q2',
+                        hits: [{ objectID: 'c' }, { objectID: 'a' }],
+                      }
+                )
+              )
+            )
+          )
+        ),
+      });
+      const options: SetupOptions<FrequentlyBoughtTogetherConnectorSetup> = {
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: {
+          objectIDs: ['1', '2'],
+          transformItems(items) {
+            return items.map((item) => ({
+              ...item,
+              objectID: `${item.objectID}:${item.__queryID}`,
+            }));
+          },
+        },
+      };
+
+      await setup(options);
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(
+        screen.getAllByRole('listitem').map((item) => item.textContent)
+      ).toEqual(['a:q1', 'c:q2', 'b:q1']);
     });
   });
 }

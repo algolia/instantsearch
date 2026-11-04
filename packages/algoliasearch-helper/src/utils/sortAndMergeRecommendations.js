@@ -1,7 +1,7 @@
 'use strict';
 
 var find = require('../functions/find');
-var flat = require('../functions/flat');
+var findIndex = require('../functions/findIndex');
 
 function getAverageIndices(indexTracker, nrOfObjs) {
   var avgIndices = [];
@@ -21,7 +21,12 @@ function getAverageIndices(indexTracker, nrOfObjs) {
   });
 }
 
-function sortAndMergeRecommendations(objectIDs, results) {
+/**
+ * @param {string[]} objectIDs source objectIDs, excluded from the merged list
+ * @param {Array<Array<object>>} results hits of each response
+ * @param {Array<string|undefined>} [queryIDs] queryID of each response, same order as `results`
+ */
+function sortAndMergeRecommendations(objectIDs, results, queryIDs) {
   var indexTracker = {};
 
   results.forEach(function (hits) {
@@ -45,10 +50,26 @@ function sortAndMergeRecommendations(objectIDs, results) {
     orderedHits,
     avgIndexRef
   ) {
-    var result = find(flat(results), function (hit) {
+    var resultIndex = findIndex(results, function (hits) {
+      return Boolean(
+        find(hits, function (hit) {
+          return hit.objectID === avgIndexRef.objectID;
+        })
+      );
+    });
+    if (resultIndex === -1) return orderedHits;
+
+    var result = find(results[resultIndex], function (hit) {
       return hit.objectID === avgIndexRef.objectID;
     });
-    return result ? orderedHits.concat(result) : orderedHits;
+    var queryID = queryIDs && queryIDs[resultIndex];
+
+    // Each response has its own queryID: a merged hit must keep the one of the
+    // response it comes from, or insights events get attributed to the wrong
+    // request. Copied so the cached response stays untouched.
+    return orderedHits.concat(
+      queryID ? Object.assign({}, result, { __queryID: queryID }) : result
+    );
   }, []);
 
   return finalOrder;
