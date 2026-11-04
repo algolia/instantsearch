@@ -47,7 +47,6 @@
     "@swc/helpers": "0.5.18",
     "instantsearch-core": "0.1.0",
     "instantsearch-ui-components": "0.46.0",
-    "instantsearch.js": "4.123.0",
     "react-instantsearch-core": "7.55.0"
   },
   "peerDependencies": {

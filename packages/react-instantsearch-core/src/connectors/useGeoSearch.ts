@@ -8,7 +8,7 @@ import type {
   GeoSearchConnectorParams,
   GeoSearchWidgetDescription,
 } from 'instantsearch-core';
-import type { GeoHit } from 'instantsearch.js';
+import type { GeoHit } from 'instantsearch-core';
 
 export type UseGeoSearchProps<THit extends GeoHit = GeoHit> =
   GeoSearchConnectorParams<THit>;

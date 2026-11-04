@@ -8,7 +8,7 @@ import type {
   HitsWidgetDescription,
   HitsConnector,
 } from 'instantsearch-core';
-import type { BaseHit } from 'instantsearch.js';
+import type { BaseHit } from 'instantsearch-core';
 
 export type UseHitsProps<THit extends BaseHit = BaseHit> =
   HitsConnectorParams<THit>;

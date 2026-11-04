@@ -19,7 +19,7 @@ import { Hits, RefinementList, SearchBox } from 'react-instantsearch';
 import { InstantSearch } from '../InstantSearch';
 import { InstantSearchSSRProvider } from '../InstantSearchSSRProvider';
 
-import type { Hit as AlgoliaHit, SearchClient } from 'instantsearch.js';
+import type { Hit as AlgoliaHit, SearchClient } from 'instantsearch-core';
 
 function HitComponent({ hit }: { hit: AlgoliaHit }) {
   return <>{hit.objectID}</>;

@@ -9,7 +9,7 @@ import React from 'react';
 
 import { SearchBox } from '../SearchBox';
 
-import type { UiState } from 'instantsearch.js';
+import type { UiState } from 'instantsearch-core';
 
 describe('SearchBox', () => {
   test('forwards custom class names and `div` props to the root element', () => {
