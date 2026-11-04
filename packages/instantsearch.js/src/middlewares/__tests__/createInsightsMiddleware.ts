@@ -1989,5 +1989,49 @@ describe('insights', () => {
       expect(rootParamNames).not.toContain('insightsClient');
       expect(rootParamNames).not.toContain('initialUiState');
     });
+
+    it('reports the flavor version passed to the instance', async () => {
+      const { insightsClient } = createInsights();
+      const instantSearchInstance = instantsearch({
+        searchClient: searchClientWithCredentials,
+        indexName: 'my-index',
+        _internalVersion: '9.9.9',
+      });
+
+      instantSearchInstance.use(createInsightsMiddleware({ insightsClient }));
+      instantSearchInstance.start();
+      await wait(0);
+
+      const [, payload] = castToJestMock(insightsClient).mock.calls.find(
+        ([method]) => method === 'sendEvents'
+      )!;
+      const [event] = payload as Array<{
+        version: string;
+        widgets: Array<{ params: Array<{ name: string }> }>;
+      }>;
+
+      expect(event.version).toBe('9.9.9');
+      expect(event.widgets[0].params.map((p) => p.name)).not.toContain(
+        '_internalVersion'
+      );
+    });
+
+    it('defaults to the instantsearch.js version', async () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment({
+        started: false,
+      });
+
+      instantSearchInstance.use(createInsightsMiddleware({ insightsClient }));
+      instantSearchInstance.start();
+      await wait(0);
+
+      const [, payload] = castToJestMock(insightsClient).mock.calls.find(
+        ([method]) => method === 'sendEvents'
+      )!;
+
+      expect((payload as Array<{ version: string }>)[0].version).toBe(
+        instantsearch.version
+      );
+    });
   });
 });
