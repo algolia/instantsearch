@@ -115,14 +115,12 @@ const createRenderer =
       expanded,
       setExpanded,
       sendEvent,
-      instantSearchInstance,
     },
     isFirstRendering
   ) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps<ResultCardTemplates>({
         defaultTemplates: {},
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;

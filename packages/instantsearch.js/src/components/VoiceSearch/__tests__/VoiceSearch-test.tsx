@@ -110,13 +110,23 @@ describe('VoiceSearch', () => {
         },
         templates: {
           buttonText: ``,
-          status: `
-            <p>status: {{status}}</p>
-            <p>errorCode: {{errorCode}}</p>
-            <p>isListening: {{isListening}}</p>
-            <p>transcript: {{transcript}}</p>
-            <p>isSpeechFinal: {{isSpeechFinal}}</p>
-            <p>isBrowserSupported: {{isBrowserSupported}}</p>
+          status: (
+            {
+              status,
+              errorCode,
+              isListening,
+              transcript,
+              isSpeechFinal,
+              isBrowserSupported,
+            },
+            { html }
+          ) => html`
+            <p>status: ${status}</p>
+            <p>errorCode: ${errorCode}</p>
+            <p>isListening: ${String(isListening)}</p>
+            <p>transcript: ${transcript}</p>
+            <p>isSpeechFinal: ${String(isSpeechFinal)}</p>
+            <p>isBrowserSupported: ${String(isBrowserSupported)}</p>
           `,
         },
       };
