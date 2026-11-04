@@ -7,7 +7,6 @@ import { mount } from '@instantsearch/testutils/enzyme';
 import { act, render } from '@testing-library/preact';
 import { h } from 'preact';
 
-import createHelpers from '../../../lib/createHelpers';
 import defaultTemplates from '../../../widgets/stats/defaultTemplates';
 import Stats from '../Stats';
 
@@ -36,12 +35,9 @@ describe('Stats', () => {
       >
         <span
           className="text"
-          dangerouslySetInnerHTML={
-            {
-              "__html": "1,234 results found in 42ms",
-            }
-          }
-        />
+        >
+          1,234 results found in 42ms
+        </span>
         <span
           aria-atomic="true"
           aria-live="polite"
@@ -89,9 +85,6 @@ describe('Stats', () => {
         {...getProps({ nbSortedHits: 150, areHitsSorted: true })}
         templateProps={{
           templates: defaultTemplates,
-          templatesConfig: {
-            helpers: createHelpers({}),
-          },
         }}
       />
     );
@@ -110,9 +103,6 @@ describe('Stats', () => {
         {...getProps({ nbSortedHits: 1, areHitsSorted: true })}
         templateProps={{
           templates: defaultTemplates,
-          templatesConfig: {
-            helpers: createHelpers({}),
-          },
         }}
       />
     );
@@ -131,9 +121,6 @@ describe('Stats', () => {
         {...getProps({ areHitsSorted: true })}
         templateProps={{
           templates: defaultTemplates,
-          templatesConfig: {
-            helpers: createHelpers({}),
-          },
         }}
       />
     );

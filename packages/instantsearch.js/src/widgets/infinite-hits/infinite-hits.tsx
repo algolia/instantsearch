@@ -188,7 +188,6 @@ const renderer =
       showPrevious,
       isFirstPage,
       isLastPage,
-      instantSearchInstance,
       insights,
       bindEvent,
       sendEvent,
@@ -200,7 +199,6 @@ const renderer =
       renderState.templateProps =
         prepareTemplateProps<InfiniteHitsComponentTemplates>({
           defaultTemplates,
-          templatesConfig: instantSearchInstance.templatesConfig,
           templates: templates as InfiniteHitsComponentTemplates,
         });
       return;

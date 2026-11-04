@@ -61,7 +61,6 @@ function createRenderer({
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates: {} as unknown as Required<TrendingFacetsTemplates>,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
 

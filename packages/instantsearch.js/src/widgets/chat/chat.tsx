@@ -32,7 +32,7 @@ import { createCarouselTool } from './search-index-tool';
 
 import type { TemplateProps } from '../../components/Template/Template';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { TemplateWithBindEvent, Template } from '../../types';
+import type { TemplateWithBindEvent, Template, Templates } from '../../types';
 import type {
   WidgetFactory,
   Renderer,
@@ -411,7 +411,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   containerNode: HTMLElement;
   cssClasses: ChatCSSClasses;
   renderState: {
-    templateProps?: PreparedTemplateProps<ChatTemplates<THit>>;
+    templateProps?: PreparedTemplateProps<Templates>;
   };
   templates: ChatTemplates<THit>;
   tools: UserClientSideToolsWithTemplate;
@@ -431,7 +431,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   // textarea focus) on every keystroke. Create them once and read the latest
   // `PreparedTemplateProps` from mutable refs updated per render.
   type TemplateRef = {
-    current: PreparedTemplateProps<ChatTemplates<THit>> | undefined;
+    current: PreparedTemplateProps<Templates> | undefined;
   };
   const makeTemplateRef = (): TemplateRef => ({ current: undefined });
   const headerTemplateRef = makeTemplateRef();
@@ -463,7 +463,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   ): (props?: TProps) => JSX.Element {
     return (props?: TProps) => (
       <TemplateComponent
-        {...(templateRef.current as PreparedTemplateProps<ChatTemplates<THit>>)}
+        {...(templateRef.current as PreparedTemplateProps<Templates>)}
         templateKey={templateKey}
         rootTagName={rootTagName}
         data={props as unknown as Record<string, unknown>}
@@ -635,9 +635,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         } = layoutProps;
         return (
           <TemplateComponent
-            {...(layoutTemplateRef.current as PreparedTemplateProps<
-              ChatTemplates<THit>
-            >)}
+            {...(layoutTemplateRef.current as PreparedTemplateProps<Templates>)}
             templateKey="layout"
             rootTagName="fragment"
             data={{
@@ -658,7 +656,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     const {
       indexUiState,
       input,
-      instantSearchInstance,
       messages,
       open,
       sendMessage,
@@ -685,7 +682,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates: {} as unknown as ChatTemplates<THit>,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;
@@ -736,9 +732,8 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['header']>
       >,
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates: templates.header,
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    });
     const headerTranslations: Partial<ChatHeaderTranslations> =
       getDefinedProperties({
         title: templates.header?.titleText,
@@ -752,23 +747,20 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['messages']>
       >,
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates: templates.messages,
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    });
     loaderTemplateRef.current = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<Pick<ChatTemplates<THit>, 'loader'>>
       >,
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates: { loader: templates.loader },
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    });
     emptyTemplateRef.current = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<Pick<ChatTemplates<THit>, 'empty'>>
       >,
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates: { empty: templates.empty },
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    });
     const messagesTranslations: Partial<ChatMessagesTranslations> =
       getDefinedProperties({
         scrollToBottomLabel: templates.messages?.scrollToBottomLabelText,
@@ -786,9 +778,8 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['assistantMessage']>
       >,
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates: templates.assistantMessage,
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    });
 
     const messageTranslations = getDefinedProperties({
       actionsLabel: templates.message?.actionsLabelText,
@@ -801,17 +792,15 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['userMessage']>
       >,
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates: templates.userMessage,
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    });
 
     promptTemplateRef.current = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['prompt']>
       >,
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates: templates.prompt,
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    });
     const promptTranslations: Partial<ChatPromptTranslations> =
       getDefinedProperties({
         textareaLabel: templates.prompt?.textareaLabelText,
@@ -826,9 +815,8 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       defaultTemplates: {} as unknown as NonNullable<
         Required<Pick<ChatTemplates<THit>, 'layout'>>
       >,
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates: { layout: templates.layout },
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    });
 
     state.subscribe(rerender);
 
