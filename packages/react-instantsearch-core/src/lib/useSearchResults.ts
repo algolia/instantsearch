@@ -6,7 +6,7 @@ import { useIndexContext } from './useIndexContext';
 import { useInstantSearchContext } from './useInstantSearchContext';
 
 import type { SearchResults } from 'algoliasearch-helper';
-import type { ScopedResult } from 'instantsearch.js';
+import type { ScopedResult } from 'instantsearch-core';
 
 export type SearchResultsApi = {
   results: SearchResults<any>;
