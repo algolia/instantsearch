@@ -227,6 +227,53 @@ describe('useStickToBottom', () => {
       expect(instance.state.isAtBottom).toBe(false);
     });
 
+    test.each([
+      [
+        'the wheel',
+        (target: Element) => fireEvent.wheel(target, { deltaY: -120 }),
+      ],
+      [
+        'ArrowUp',
+        (target: Element) => fireEvent.keyDown(target, { key: 'ArrowUp' }),
+      ],
+    ])(
+      'stays where %s scrolled it from an element that only scrolls sideways',
+      async (_name, scrollUp) => {
+        const { scroll, box } = await renderAtBottom();
+        // Browsers compute `overflow-y` to `auto` for `overflow-x: auto`.
+        const codeBlock = document.createElement('pre');
+        codeBlock.style.overflowX = 'auto';
+        codeBlock.style.overflowY = 'auto';
+        Object.defineProperties(codeBlock, {
+          clientHeight: { configurable: true, value: 40 },
+          scrollHeight: { configurable: true, value: 40 },
+        });
+        scroll.firstElementChild!.append(codeBlock);
+
+        scrollUp(codeBlock);
+        await scrollUpWhileStreaming(scroll, box);
+
+        expect(scroll.scrollTop).toBe(300);
+        expect(instance.state.isAtBottom).toBe(false);
+      }
+    );
+
+    test('keeps following when an element inside scrolls up on its own', async () => {
+      const { scroll } = await renderAtBottom();
+      const list = document.createElement('div');
+      list.style.overflowY = 'auto';
+      Object.defineProperties(list, {
+        clientHeight: { configurable: true, value: 50 },
+        scrollHeight: { configurable: true, value: 200 },
+      });
+      scroll.firstElementChild!.append(list);
+
+      fireEvent.wheel(list, { deltaY: -120 });
+      fireEvent.keyDown(list, { key: 'ArrowUp' });
+
+      expect(instance.state.isAtBottom).toBe(true);
+    });
+
     test('keeps following for keys that do not scroll it up', async () => {
       const { scroll } = await renderAtBottom();
       const field = document.createElement('input');

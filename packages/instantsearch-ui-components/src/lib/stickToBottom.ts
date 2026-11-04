@@ -512,11 +512,16 @@ export function createStickToBottom({
       (target: EventTarget | null) => {
         // The closest ancestor that scrolls vertically takes the scroll.
         // `overflowY` because the chat only lets the history scroll
-        // vertically, so its `overflow` reads `hidden auto`.
+        // vertically, so its `overflow` reads `hidden auto`. An element that
+        // only scrolls sideways, like a code block, computes `overflowY` to
+        // `auto` too, so its content also has to be taller than it.
         let element = target as HTMLElement | null;
         while (element && element !== scrollRef.current) {
           const { overflowY } = getComputedStyle(element);
-          if (overflowY === 'scroll' || overflowY === 'auto') {
+          if (
+            (overflowY === 'scroll' || overflowY === 'auto') &&
+            element.scrollHeight > element.clientHeight
+          ) {
             return;
           }
 
