@@ -30,20 +30,48 @@ function chunk<TItem>(arr: TItem[], chunkSize: number = 20): TItem[][] {
   return chunks;
 }
 
+type IndexedHit = { hit: Hit; index: number };
+type ObjectData = Record<string, any>;
+
 // Recommend widgets merge several responses, so their hits can carry
-// different queryIDs, but a click or conversion event only carries one.
-function chunkByQueryID(hits: Hit[]): Hit[][] {
-  const groups: Hit[][] = [];
+// different queryIDs. A click event carries a single queryID, which
+// search-insights also remembers per objectID to infer the queryID of later
+// conversions, so clicks are split by queryID.
+function chunkByQueryID(hits: IndexedHit[]): IndexedHit[][] {
+  const groups: IndexedHit[][] = [];
   const groupIndexByQueryID: Record<string, number> = {};
-  hits.forEach((hit) => {
-    const key = hit.__queryID || '';
+  hits.forEach((indexedHit) => {
+    const key = indexedHit.hit.__queryID || '';
     if (groupIndexByQueryID[key] === undefined) {
       groupIndexByQueryID[key] = groups.length;
       groups.push([]);
     }
-    groups[groupIndexByQueryID[key]].push(hit);
+    groups[groupIndexByQueryID[key]].push(indexedHit);
   });
-  return groups.reduce<Hit[][]>((acc, group) => acc.concat(chunk(group)), []);
+  return groups.reduce<IndexedHit[][]>(
+    (acc, group) => acc.concat(chunk(group)),
+    []
+  );
+}
+
+// Splitting a conversion would duplicate its value, so hits with different
+// queryIDs stay in one event and carry their own in `objectData`. A queryID
+// set by the caller wins.
+function addObjectQueryIDs(
+  hits: Hit[],
+  objectData: ObjectData[] | undefined
+): ObjectData[] | undefined {
+  const queryID = hits[0].__queryID;
+  if (hits.every((hit) => hit.__queryID === queryID)) {
+    return objectData;
+  }
+  return hits.map((hit, i) => {
+    const data = objectData ? objectData[i] : undefined;
+    if ((data && data.queryID) || !hit.__queryID) {
+      return data || {};
+    }
+    return { ...data, queryID: hit.__queryID };
+  });
 }
 
 export function _buildEventPayloadsForHits({
@@ -98,13 +126,25 @@ export function _buildEventPayloadsForHits({
   if (hitsArray.length === 0) {
     return [];
   }
-  const hitsChunks =
-    eventType === 'view' ? chunk(hitsArray) : chunkByQueryID(hitsArray);
+  const indexedHits = hitsArray.map((hit, index) => ({ hit, index }));
+  const indexedChunks =
+    eventType === 'click' ? chunkByQueryID(indexedHits) : chunk(indexedHits);
+  const hitsChunks = indexedChunks.map((batch) => batch.map(({ hit }) => hit));
   const objectIDsByChunk = hitsChunks.map((batch) =>
     batch.map((hit) => hit.objectID)
   );
   const positionsByChunk = hitsChunks.map((batch) =>
     batch.map((hit) => hit.__position)
+  );
+  // The Insights API rejects an event whose objectData doesn't line up with
+  // its objectIDs, so each event only gets the entries of its own hits.
+  const objectData: ObjectData[] | undefined =
+    Array.isArray(additionalData.objectData) &&
+    additionalData.objectData.length === hitsArray.length
+      ? additionalData.objectData
+      : undefined;
+  const objectDataByChunk = indexedChunks.map((batch) =>
+    objectData ? batch.map(({ index }) => objectData[index]) : undefined
   );
 
   if (eventType === 'view') {
@@ -139,6 +179,7 @@ export function _buildEventPayloadsForHits({
           objectIDs: objectIDsByChunk[i],
           positions: positionsByChunk[i],
           ...additionalData,
+          ...(objectDataByChunk[i] && { objectData: objectDataByChunk[i] }),
         },
         hits: batch,
         eventModifier,
@@ -146,6 +187,10 @@ export function _buildEventPayloadsForHits({
     });
   } else if (eventType === 'conversion') {
     return hitsChunks.map((batch, i) => {
+      const conversionObjectData =
+        additionalData.objectData && !objectData
+          ? undefined
+          : addObjectQueryIDs(batch, objectDataByChunk[i]);
       return {
         insightsMethod: 'convertedObjectIDsAfterSearch',
         widgetType,
@@ -156,6 +201,7 @@ export function _buildEventPayloadsForHits({
           queryID: batch[0].__queryID,
           objectIDs: objectIDsByChunk[i],
           ...additionalData,
+          ...(conversionObjectData && { objectData: conversionObjectData }),
         },
         hits: batch,
         eventModifier,
