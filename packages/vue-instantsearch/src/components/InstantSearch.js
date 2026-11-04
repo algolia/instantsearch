@@ -1,4 +1,4 @@
-import instantsearch from 'instantsearch.js/es';
+import { instantsearch } from 'instantsearch-core';
 
 import { version } from '../../package.json'; // rollup does pick only what needed from json
 import { createInstantSearchComponent } from '../util/createInstantSearchComponent';
