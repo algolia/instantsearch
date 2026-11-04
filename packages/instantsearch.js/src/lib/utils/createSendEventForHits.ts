@@ -33,13 +33,11 @@ function chunk<TItem>(arr: TItem[], chunkSize: number = 20): TItem[][] {
 type IndexedHit = { hit: Hit; index: number };
 type ObjectData = Record<string, any>;
 
-// Recommend widgets merge several responses, so their hits can carry
-// different queryIDs. A click event carries a single queryID, which
-// search-insights also remembers per objectID to infer the queryID of later
-// conversions, so clicks are split by queryID.
+// search-insights stores a click's queryID per objectID to infer later
+// conversions, so one click event can't mix queryIDs.
 function chunkByQueryID(hits: IndexedHit[]): IndexedHit[][] {
   const groups: IndexedHit[][] = [];
-  const groupIndexByQueryID: Record<string, number> = {};
+  const groupIndexByQueryID: Record<string, number> = Object.create(null);
   hits.forEach((indexedHit) => {
     const key = indexedHit.hit.__queryID || '';
     if (groupIndexByQueryID[key] === undefined) {
@@ -54,9 +52,8 @@ function chunkByQueryID(hits: IndexedHit[]): IndexedHit[][] {
   );
 }
 
-// Splitting a conversion would duplicate its value, so hits with different
-// queryIDs stay in one event and carry their own in `objectData`. A queryID
-// set by the caller wins.
+// Splitting a conversion would duplicate its value, so mixed queryIDs go in
+// `objectData` instead.
 function addObjectQueryIDs(
   hits: Hit[],
   objectData: ObjectData[] | undefined
@@ -127,11 +124,20 @@ export function _buildEventPayloadsForHits({
     return [];
   }
   const indexedHits = hitsArray.map((hit, index) => ({ hit, index }));
-  // A queryID passed by the caller applies to the whole event, so the hits'
-  // own queryIDs neither split it nor end up in its objectData.
-  const hasCallerQueryID = Boolean(additionalData.queryID);
+  // The Insights API rejects objectData that doesn't match objectIDs.
+  const objectData: ObjectData[] | undefined =
+    Array.isArray(additionalData.objectData) &&
+    additionalData.objectData.length === hitsArray.length
+      ? additionalData.objectData
+      : undefined;
+  // These overwrite the built payload, so it can't be split or annotated.
+  const callerShapesPayload =
+    Boolean(additionalData.queryID) ||
+    additionalData.objectIDs !== undefined ||
+    additionalData.positions !== undefined ||
+    (additionalData.objectData !== undefined && !objectData);
   const indexedChunks =
-    eventType === 'click' && !hasCallerQueryID
+    eventType === 'click' && !callerShapesPayload
       ? chunkByQueryID(indexedHits)
       : chunk(indexedHits);
   const hitsChunks = indexedChunks.map((batch) => batch.map(({ hit }) => hit));
@@ -141,15 +147,10 @@ export function _buildEventPayloadsForHits({
   const positionsByChunk = hitsChunks.map((batch) =>
     batch.map((hit) => hit.__position)
   );
-  // The Insights API rejects an event whose objectData doesn't line up with
-  // its objectIDs, so each event only gets the entries of its own hits.
-  const objectData: ObjectData[] | undefined =
-    Array.isArray(additionalData.objectData) &&
-    additionalData.objectData.length === hitsArray.length
-      ? additionalData.objectData
-      : undefined;
   const objectDataByChunk = indexedChunks.map((batch) =>
-    objectData ? batch.map(({ index }) => objectData[index]) : undefined
+    objectData && !callerShapesPayload
+      ? batch.map(({ index }) => objectData[index])
+      : undefined
   );
 
   if (eventType === 'view') {
@@ -193,7 +194,7 @@ export function _buildEventPayloadsForHits({
   } else if (eventType === 'conversion') {
     return hitsChunks.map((batch, i) => {
       let conversionObjectData = objectDataByChunk[i];
-      if (!hasCallerQueryID && (objectData || !additionalData.objectData)) {
+      if (!callerShapesPayload) {
         conversionObjectData = addObjectQueryIDs(batch, conversionObjectData);
       }
       return {

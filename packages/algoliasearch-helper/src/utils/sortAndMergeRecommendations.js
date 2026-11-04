@@ -21,11 +21,6 @@ function getAverageIndices(indexTracker, nrOfObjs) {
   });
 }
 
-/**
- * @param {string[]} objectIDs source objectIDs, excluded from the merged list
- * @param {Array<Array<object>>} results hits of each response
- * @param {Array<string|undefined>} [queryIDs] queryID of each response, same order as `results`
- */
 function sortAndMergeRecommendations(objectIDs, results, queryIDs) {
   var indexTracker = {};
 
@@ -64,9 +59,7 @@ function sortAndMergeRecommendations(objectIDs, results, queryIDs) {
     });
     var queryID = queryIDs && queryIDs[resultIndex];
 
-    // Each response has its own queryID: a merged hit must keep the one of the
-    // response it comes from, or insights events get attributed to the wrong
-    // request. Copied so the cached response stays untouched.
+    // Copied so the cached response isn't mutated.
     return orderedHits.concat(
       queryID ? Object.assign({}, result, { __queryID: queryID }) : result
     );

@@ -13,11 +13,7 @@ export function addQueryID<THit extends AlgoliaHit>(
   }));
 }
 
-/**
- * Recommend widgets with several objectIDs get one response per objectID,
- * merged by the helper. Each merged hit already carries the queryID of its
- * own response, so only hits without one fall back to `queryID`.
- */
+// Merged Recommend hits already carry their own response's queryID.
 export function addMissingQueryID<THit extends AlgoliaHit>(
   hits: Array<THit & { __queryID?: string }>,
   queryID?: string

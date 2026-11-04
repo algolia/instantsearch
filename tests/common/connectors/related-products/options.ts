@@ -148,9 +148,7 @@ export function createOptionsTests(
         getRecommendations: jest.fn((requests) =>
           Promise.resolve(
             createRecommendResponse(
-              // @ts-ignore
-              // `request` will be implicitly typed as any in type-check:v3
-              // since `getRecommendations` is not available there
+              // @ts-ignore `getRecommendations` isn't typed in v3
               requests.map((request: { objectID?: string }) =>
                 createSingleSearchResponse(
                   request.objectID === '1'

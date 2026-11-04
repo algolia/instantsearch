@@ -630,6 +630,138 @@ describe('createSendEventForHits', () => {
     );
   });
 
+  it('attributes hits from several infinite hits pages to their own page', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    // connectInfiniteHits sets each page's queryID on that page's hits.
+    const hits = [
+      { __position: 1, __queryID: 'page0', objectID: 'a' },
+      { __position: 2, __queryID: 'page0', objectID: 'b' },
+      { __position: 3, __queryID: 'page1', objectID: 'c' },
+    ];
+
+    sendEvent('click', hits, 'Product Clicked');
+
+    const payloads = (
+      instantSearchInstance.sendEventToInsights as jest.Mock
+    ).mock.calls.map(([event]) => event.payload);
+    expect(payloads).toEqual([
+      {
+        eventName: 'Product Clicked',
+        index: 'testIndex',
+        queryID: 'page0',
+        objectIDs: ['a', 'b'],
+        positions: [1, 2],
+      },
+      {
+        eventName: 'Product Clicked',
+        index: 'testIndex',
+        queryID: 'page1',
+        objectIDs: ['c'],
+        positions: [3],
+      },
+    ]);
+  });
+
+  it('groups hits whose queryID is an Object.prototype key', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'constructor', objectID: 'a' },
+      { __position: 2, __queryID: '__proto__', objectID: 'b' },
+    ];
+
+    sendEvent('click', hits, 'Product Clicked');
+
+    const payloads = (
+      instantSearchInstance.sendEventToInsights as jest.Mock
+    ).mock.calls.map(([event]) => event.payload);
+    expect(
+      payloads.map(({ queryID, objectIDs }) => [queryID, objectIDs])
+    ).toEqual([
+      ['constructor', ['a']],
+      ['__proto__', ['b']],
+    ]);
+  });
+
+  it('sends a single click when the caller sets the positions', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'q1', objectID: 'a' },
+      { __position: 2, __queryID: 'q2', objectID: 'c' },
+    ];
+
+    sendEvent('click', hits, 'Product Clicked', { positions: [5, 6] });
+
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
+    expect(
+      (instantSearchInstance.sendEventToInsights as jest.Mock).mock.calls[0][0]
+        .payload
+    ).toEqual({
+      eventName: 'Product Clicked',
+      index: 'testIndex',
+      queryID: 'q1',
+      objectIDs: ['a', 'c'],
+      positions: [5, 6],
+    });
+  });
+
+  it('sends a single click when the caller sets the objectIDs', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'q1', objectID: 'a' },
+      { __position: 2, __queryID: 'q2', objectID: 'c' },
+    ];
+
+    sendEvent('click', hits, 'Product Clicked', { objectIDs: ['x', 'y'] });
+
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
+    expect(
+      (instantSearchInstance.sendEventToInsights as jest.Mock).mock.calls[0][0]
+        .payload
+    ).toEqual({
+      eventName: 'Product Clicked',
+      index: 'testIndex',
+      queryID: 'q1',
+      objectIDs: ['x', 'y'],
+      positions: [1, 2],
+    });
+  });
+
+  it('keeps objectData that does not line up with the hits in a single event', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'q1', objectID: 'a' },
+      { __position: 2, __queryID: 'q2', objectID: 'c' },
+    ];
+
+    sendEvent('click', hits, 'Product Clicked', {
+      objectData: [{ price: 10 }],
+    });
+    sendEvent('conversion', hits, 'Product Ordered', {
+      objectData: [{ price: 10 }],
+    });
+
+    const payloads = (
+      instantSearchInstance.sendEventToInsights as jest.Mock
+    ).mock.calls.map(([event]) => event.payload);
+    expect(payloads).toEqual([
+      {
+        eventName: 'Product Clicked',
+        index: 'testIndex',
+        queryID: 'q1',
+        objectIDs: ['a', 'c'],
+        positions: [1, 2],
+        objectData: [{ price: 10 }],
+      },
+      {
+        eventName: 'Product Ordered',
+        index: 'testIndex',
+        queryID: 'q1',
+        objectIDs: ['a', 'c'],
+        objectData: [{ price: 10 }],
+      },
+    ]);
+  });
+
   it('leaves a conversion untouched when its hits share one queryID', () => {
     const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
 
