@@ -24,7 +24,7 @@ import type {
   InfiniteHitsWidgetDescription,
 } from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template, TemplateWithBindEvent } from '../../types';
+import type { Template, TemplateWithSendEvent } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 import type {
   WidgetFactory,
@@ -116,7 +116,7 @@ export type InfiniteHitsTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * The template to use for each result.
      */
-    item: TemplateWithBindEvent<
+    item: TemplateWithSendEvent<
       Hit<THit> & {
         /** @deprecated the index in the hits array, use __position instead, which is the absolute position */
         __hitIndex: number;
@@ -189,7 +189,6 @@ const renderer =
       isFirstPage,
       isLastPage,
       insights,
-      bindEvent,
       sendEvent,
       banner,
     },
@@ -217,7 +216,6 @@ const renderer =
         isLastPage={isLastPage}
         insights={insights as InsightsClient}
         sendEvent={sendEvent}
-        bindEvent={bindEvent}
         banner={banner}
       />,
       containerNode
