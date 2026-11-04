@@ -5,11 +5,7 @@ import type {
   Snippet,
 } from '../helpers/components';
 import type { html } from 'htm/preact';
-import type {
-  BuiltInBindEventForHits,
-  CustomBindEventForHits,
-  SendEventForHits,
-} from 'instantsearch-core';
+import type { SendEventForHits } from 'instantsearch-core';
 import type { VNode } from 'preact';
 
 export type Template<TTemplateData = void> = (
@@ -28,22 +24,14 @@ export type TemplateParams = {
   sendEvent?: SendEventForHits;
 };
 
-interface TemplateWithBindEventParams extends TemplateParams {
-  /** @deprecated use sendEvent instead */
-  (
-    ...args: Parameters<BuiltInBindEventForHits>
-  ): ReturnType<BuiltInBindEventForHits>;
-  /** @deprecated use sendEvent instead */
-  (
-    ...args: Parameters<CustomBindEventForHits>
-  ): ReturnType<CustomBindEventForHits>;
+type TemplateWithSendEventParams = TemplateParams & {
   sendEvent: SendEventForHits;
-}
+};
 
-export type TemplateWithBindEvent<TTemplateData = void> = (
+export type TemplateWithSendEvent<TTemplateData = void> = (
   data: TTemplateData,
-  params: TemplateWithBindEventParams
-) => VNode | VNode[] | string;
+  params: TemplateWithSendEventParams
+) => VNode | VNode[] | string | null;
 
 /**
  * The `templates` option of a widget. Besides templates, it can hold nested
@@ -53,7 +41,7 @@ export type TemplateWithBindEvent<TTemplateData = void> = (
 export type Templates = {
   [key: string]:
     | Template<any>
-    | TemplateWithBindEvent<any>
+    | TemplateWithSendEvent<any>
     | Templates
     | string
     | undefined;
