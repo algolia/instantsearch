@@ -40,7 +40,7 @@ Node `20.19.0` (`.nvmrc`). Use Yarn (v4, pinned by `packageManager`).
 ```bash
 # Build
 yarn build                      # all packages (lerna)
-yarn workspace <pkg> build      # single package, e.g. yarn workspace instantsearch.js build
+yarn lerna run build --scope <pkg>   # single package; swap in build:types for declarations only
 
 # Unit tests (Jest, jsdom)
 yarn jest <path-or-pattern>     # fastest loop: run one file/pattern at root
@@ -58,6 +58,8 @@ yarn type-check                 # tsc + per-package (also :v3 / :v4 for legacy a
 # E2E — see .claude/rules/e2e.md (Playwright). Examples must be built first:
 yarn website:examples && E2E_FLAVOR=react E2E_BROWSER=chromium yarn test:e2e
 ```
+
+Packages build with the root's `rollup` and `tsc`, which only scripts started from the root can reach, so build through Lerna as CI does: `yarn workspace <pkg> build` stops at `command not found`, and `instantsearch.js`'s `build:types` exits 0 with stale declarations. `yarn type-check` reads other packages, and public paths like `instantsearch.js/es/…`, from those built declarations: rebuild the packages you changed before type-checking.
 
 ## Conventions
 
