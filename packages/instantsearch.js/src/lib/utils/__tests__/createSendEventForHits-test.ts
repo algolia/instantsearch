@@ -366,6 +366,45 @@ describe('createSendEventForHits', () => {
     });
   });
 
+  it('sends every event of an internal click split by queryID', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'q1', objectID: 'a' },
+      { __position: 2, __queryID: 'q2', objectID: 'c' },
+    ];
+
+    sendEvent('click:internal', hits, 'Product Clicked');
+
+    const payloads = (
+      instantSearchInstance.sendEventToInsights as jest.Mock
+    ).mock.calls.map(([event]) => event.payload);
+    expect(payloads).toEqual([
+      {
+        eventName: 'Product Clicked',
+        index: 'testIndex',
+        queryID: 'q1',
+        objectIDs: ['a'],
+        positions: [1],
+      },
+      {
+        eventName: 'Product Clicked',
+        index: 'testIndex',
+        queryID: 'q2',
+        objectIDs: ['c'],
+        positions: [2],
+      },
+    ]);
+  });
+
+  it('skips an internal click after a click in the same tick', () => {
+    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
+
+    sendEvent('click', hits[0], 'Product Clicked');
+    sendEvent('click:internal', hits[0], 'Product Clicked');
+
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
+  });
+
   it('lets additional click event data override the search query ID', () => {
     const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
 

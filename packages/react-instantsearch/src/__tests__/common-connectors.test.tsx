@@ -607,7 +607,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createFrequentlyBoughtTogetherConnectorTests: { act },
   createTrendingItemsConnectorTests: { act },
   createTrendingFacetsConnectorTests: { act },
-  createLookingSimilarConnectorTests: { act, skippedTests: { options: true } },
+  createLookingSimilarConnectorTests: { act },
   createChatConnectorTests: { act, skippedTests: { options: true } },
   createFilterSuggestionsConnectorTests: { act },
   createCompareConnectorTests: { act },

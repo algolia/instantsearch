@@ -243,11 +243,13 @@ export function createSendEventForHits({
       instantSearchInstance,
     });
 
+    // Checked once per call: a click split by queryID isn't its own duplicate.
+    const clickAlreadySent = sentEvents.click;
     payloads.forEach((payload) => {
       if (
         payload.eventType === 'click' &&
         payload.eventModifier === 'internal' &&
-        sentEvents[payload.eventType]
+        clickAlreadySent
       ) {
         return;
       }
