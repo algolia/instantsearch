@@ -171,7 +171,6 @@ function augmentInstantSearch(instantSearchOptions, cloneComponent) {
       scopedResults: parent.getScopedResults(),
       parent,
       state,
-      templatesConfig: {},
       createURL: parent.createURL,
       instantSearchInstance: search,
       status: search.status,
