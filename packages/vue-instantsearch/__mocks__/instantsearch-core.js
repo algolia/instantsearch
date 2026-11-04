@@ -1,6 +1,8 @@
 /* eslint-disable import/no-commonjs */
 const isPlainObject = require('lodash/isPlainObject');
 
+const actual = jest.requireActual('instantsearch-core');
+
 class RoutingManager {
   constructor(routing) {
     this._routing = routing;
@@ -63,4 +65,7 @@ const fakeInstantSearch = jest.fn(
   }
 );
 
-module.exports = fakeInstantSearch;
+module.exports = {
+  ...actual,
+  instantsearch: fakeInstantSearch,
+};

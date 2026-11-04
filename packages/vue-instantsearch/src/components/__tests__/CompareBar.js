@@ -10,7 +10,7 @@ import { mount, nextTick } from '../../../test/utils';
 import CompareBar from '../CompareBar';
 import InstantSearch from '../InstantSearch';
 
-jest.unmock('instantsearch.js/es');
+jest.unmock('instantsearch-core');
 
 let wrapper;
 

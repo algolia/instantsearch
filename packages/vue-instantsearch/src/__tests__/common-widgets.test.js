@@ -43,7 +43,7 @@ import {
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
-jest.unmock('instantsearch.js/es');
+jest.unmock('instantsearch-core');
 
 /**
  * prevent rethrowing InstantSearch errors, so tests can be asserted.

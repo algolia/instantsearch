@@ -10,7 +10,7 @@ import ChatComponent from '../Chat';
 import ChatTrigger from '../ChatTrigger';
 import InstantSearch from '../InstantSearch';
 
-jest.unmock('instantsearch.js/es');
+jest.unmock('instantsearch-core');
 
 const wait = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms));
 
