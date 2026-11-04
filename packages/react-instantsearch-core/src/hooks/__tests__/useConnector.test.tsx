@@ -34,7 +34,7 @@ import type {
   HitsConnectorParams,
   HitsWidgetDescription,
 } from 'instantsearch-core';
-import type { Connector } from 'instantsearch.js';
+import type { Connector } from 'instantsearch-core';
 
 type CustomSearchBoxWidgetDescription = {
   $$type: 'test.searchBox';

@@ -9,7 +9,7 @@ import { Snippet as SnippetUiComponent } from '../ui/Snippet';
 
 import type { PartialKeys } from '../types';
 import type { SnippetProps as SnippetUiComponentProps } from '../ui/Snippet';
-import type { BaseHit, Hit } from 'instantsearch.js';
+import type { BaseHit, Hit } from 'instantsearch-core';
 
 export type SnippetProps<THit extends Hit<BaseHit>> = {
   hit: THit;

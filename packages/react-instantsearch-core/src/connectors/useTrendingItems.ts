@@ -8,7 +8,7 @@ import type {
   TrendingItemsConnectorParams,
   TrendingItemsWidgetDescription,
 } from 'instantsearch-core';
-import type { BaseHit } from 'instantsearch.js';
+import type { BaseHit } from 'instantsearch-core';
 
 export type UseTrendingItemsProps<THit extends BaseHit = BaseHit> =
   TrendingItemsConnectorParams<THit>;
