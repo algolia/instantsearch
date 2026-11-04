@@ -187,6 +187,13 @@ export type InstantSearchOptions<
    * the public API.
    */
   _internalHelpers?: Record<string, unknown>;
+
+  /**
+   * @internal Injected by each flavor (InstantSearch.js, React, Vue) so usage
+   * events report the flavor's own version instead of `instantsearch-core`'s.
+   * Not part of the public API.
+   */
+  _internalVersion?: string;
 };
 
 export type InstantSearchStatus = 'idle' | 'loading' | 'stalled' | 'error';
@@ -245,6 +252,11 @@ class InstantSearch<
   }> = [];
   public sendEventToInsights: (event: InsightsEvent) => void;
   public _createdAt: number = now();
+  /**
+   * The version reported in usage events: the flavor's own when it provided
+   * one, otherwise `instantsearch-core`'s.
+   */
+  public _version: string = version;
   /**
    * The status of the search. Can be "idle", "loading", "stalled", or "error".
    */
@@ -325,6 +337,7 @@ See documentation: ${createDocumentationLink({
     }
 
     this._initialOptions = options as unknown as InstantSearchOptions;
+    this._version = options._internalVersion ?? version;
     this.client = searchClient;
     this.future = future;
     this.insightsClient = insightsClient;
