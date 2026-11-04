@@ -1,34 +1,19 @@
 /** @jsx h */
 
 import { readDataAttributes } from 'instantsearch-core';
-import { deserializePayload, warning } from 'instantsearch-core';
+import { warning } from 'instantsearch-core';
 import { h } from 'preact';
 
-import type { InsightsEvent } from 'instantsearch-core';
 import type { InsightsClient } from 'instantsearch-core';
 
 export type InsightsEventHandlerOptions = {
   insights?: InsightsClient;
-  sendEvent: (event: InsightsEvent) => void;
 };
 
 export const createInsightsEventHandler =
-  ({ insights, sendEvent }: InsightsEventHandlerOptions) =>
+  ({ insights }: InsightsEventHandlerOptions) =>
   (event: MouseEvent): void => {
-    // new way, e.g. bindEvent("click", hit, "Hit clicked")
-    const insightsThroughSendEvent = findInsightsTarget(
-      event.target as HTMLElement | null,
-      event.currentTarget as HTMLElement | null,
-      (element) => element.hasAttribute('data-insights-event')
-    );
-
-    if (insightsThroughSendEvent) {
-      const payload = parseInsightsEvent(insightsThroughSendEvent);
-
-      payload.forEach((single) => sendEvent(single));
-    }
-
-    // old way, e.g. instantsearch.insights("clickedObjectIDsAfterSearch", { .. })
+    // e.g. instantsearch.insights("clickedObjectIDsAfterSearch", { .. })
     const insightsThroughFunction = findInsightsTarget(
       event.target as HTMLElement | null,
       event.currentTarget as HTMLElement | null,
@@ -55,24 +40,6 @@ function findInsightsTarget(
     element = element.parentElement;
   }
   return element;
-}
-
-function parseInsightsEvent(element: HTMLElement): InsightsEvent[] {
-  const serializedPayload = element.getAttribute('data-insights-event');
-
-  if (typeof serializedPayload !== 'string') {
-    throw new Error(
-      'The insights middleware expects `data-insights-event` to be a base64-encoded JSON string.'
-    );
-  }
-
-  try {
-    return deserializePayload(serializedPayload);
-  } catch (error) {
-    throw new Error(
-      'The insights middleware was unable to parse `data-insights-event`.'
-    );
-  }
 }
 
 /**

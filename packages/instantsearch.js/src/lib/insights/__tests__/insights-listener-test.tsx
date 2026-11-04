@@ -3,16 +3,10 @@
  */
 /** @jsx h */
 
-import { createSearchClient } from '@instantsearch/mocks';
 import { render, fireEvent } from '@testing-library/preact';
-import algoliasearchHelper from 'algoliasearch-helper';
-import {
-  _buildEventPayloadsForHits,
-  serializePayload,
-} from 'instantsearch-core';
+import { serializePayload } from 'instantsearch-core';
 import { h } from 'preact';
 
-import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
 import withInsightsListener, { createInsightsEventHandler } from '../listener';
 
 import type { InsightsEventHandlerOptions } from '../listener';
@@ -38,12 +32,9 @@ describe('createInsightsEventHandler', () => {
 
       const props = {
         insights: jest.fn(),
-        sendEvent: jest.fn(),
       };
 
-      const { container } = render(
-        <Hits insights={props.insights} sendEvent={props.sendEvent} />
-      );
+      const { container } = render(<Hits insights={props.insights} />);
       const button = container.querySelector('button') as HTMLButtonElement;
 
       fireEvent.click(button);
@@ -77,12 +68,9 @@ describe('createInsightsEventHandler', () => {
 
       const props = {
         insights: jest.fn(),
-        sendEvent: jest.fn(),
       };
 
-      const { container } = render(
-        <Hits insights={props.insights} sendEvent={props.sendEvent} />
-      );
+      const { container } = render(<Hits insights={props.insights} />);
       const innerChild = container.querySelector('h1') as HTMLElement;
 
       fireEvent.click(innerChild);
@@ -111,196 +99,14 @@ describe('createInsightsEventHandler', () => {
 
       const props = {
         insights: jest.fn(),
-        sendEvent: jest.fn(),
       };
 
-      const { container } = render(
-        <Hits insights={props.insights} sendEvent={props.sendEvent} />
-      );
+      const { container } = render(<Hits insights={props.insights} />);
       const button = container.querySelector('button') as HTMLButtonElement;
 
       fireEvent.click(button);
 
       expect(props.insights).toHaveBeenCalledTimes(0);
-    });
-  });
-
-  describe('sendEvent', () => {
-    it('should capture clicks performed on inner elements with data-insights-event defined', () => {
-      const payload = serializePayload(
-        _buildEventPayloadsForHits({
-          widgetType: 'ais.hits',
-          helper: algoliasearchHelper(createSearchClient(), 'instant_search'),
-          instantSearchInstance: createInstantSearch(),
-          methodName: 'bindEvent',
-          args: ['click', { objectID: '1', __position: 1 }, 'Hit Clicked'],
-        })
-      );
-
-      const Hits = (props: InsightsEventHandlerOptions) => (
-        <div onClick={createInsightsEventHandler(props)}>
-          <button data-insights-event={payload}>Add to Cart</button>
-        </div>
-      );
-
-      const props = {
-        insights: jest.fn(),
-        sendEvent: jest.fn(),
-      };
-
-      const { container } = render(
-        <Hits insights={props.insights} sendEvent={props.sendEvent} />
-      );
-      const button = container.querySelector('button') as HTMLButtonElement;
-
-      fireEvent.click(button);
-
-      expect(props.sendEvent).toHaveBeenCalledTimes(1);
-      expect(props.sendEvent).toHaveBeenCalledWith({
-        eventType: 'click',
-        hits: [{ objectID: '1', __position: 1 }],
-        insightsMethod: 'clickedObjectIDsAfterSearch',
-        payload: {
-          eventName: 'Hit Clicked',
-          index: 'instant_search',
-          objectIDs: ['1'],
-          positions: [1],
-        },
-        widgetType: 'ais.hits',
-      });
-    });
-
-    it('should capture clicks performed on inner elements whose parents have data-insights-event defined', () => {
-      const payload = serializePayload(
-        _buildEventPayloadsForHits({
-          widgetType: 'ais.hits',
-          helper: algoliasearchHelper(createSearchClient(), 'instant_search'),
-          instantSearchInstance: createInstantSearch(),
-          methodName: 'bindEvent',
-          args: ['click', { objectID: '1', __position: 1 }, 'Hit Clicked'],
-        })
-      );
-
-      const Hits = (props: InsightsEventHandlerOptions) => (
-        <div onClick={createInsightsEventHandler(props)}>
-          <button data-insights-event={payload}>
-            <h1>Add to Cart</h1>
-          </button>
-        </div>
-      );
-
-      const props = {
-        insights: jest.fn(),
-        sendEvent: jest.fn(),
-      };
-
-      const { container } = render(
-        <Hits insights={props.insights} sendEvent={props.sendEvent} />
-      );
-      const heading = container.querySelector('h1') as HTMLHeadingElement;
-
-      fireEvent.click(heading);
-
-      expect(props.sendEvent).toHaveBeenCalledTimes(1);
-      expect(props.sendEvent).toHaveBeenCalledWith({
-        eventType: 'click',
-        hits: [{ objectID: '1', __position: 1 }],
-        insightsMethod: 'clickedObjectIDsAfterSearch',
-        payload: {
-          eventName: 'Hit Clicked',
-          index: 'instant_search',
-          objectIDs: ['1'],
-          positions: [1],
-        },
-        widgetType: 'ais.hits',
-      });
-    });
-
-    it('should not capture clicks performed on inner elements with no data-insights-event defined', () => {
-      const Hits = (props: InsightsEventHandlerOptions) => (
-        <div onClick={createInsightsEventHandler(props)}>
-          <button>Add to Cart</button>
-        </div>
-      );
-
-      const props = {
-        insights: jest.fn(),
-        sendEvent: jest.fn(),
-      };
-
-      const { container } = render(
-        <Hits insights={props.insights} sendEvent={props.sendEvent} />
-      );
-      const button = container.querySelector('button') as HTMLButtonElement;
-
-      fireEvent.click(button);
-
-      expect(props.sendEvent).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('combined', () => {
-    it('should capture clicks performed on inner elements with both data-insights-method and data-insights-event defined', () => {
-      const legacyPayload = serializePayload({
-        objectIDs: ['1'],
-        eventName: 'Product Clicked',
-      });
-      const modernPayload = serializePayload(
-        _buildEventPayloadsForHits({
-          widgetType: 'ais.hits',
-          helper: algoliasearchHelper(createSearchClient(), 'instant_search'),
-          instantSearchInstance: createInstantSearch(),
-          methodName: 'bindEvent',
-          args: ['click', { objectID: '1', __position: 1 }, 'Product Clicked'],
-        })
-      );
-
-      const Hits = (props: InsightsEventHandlerOptions) => (
-        <div onClick={createInsightsEventHandler(props)}>
-          <button
-            data-insights-method="clickedObjectIDsAfterSearch"
-            data-insights-payload={legacyPayload}
-            data-insights-event={modernPayload}
-          >
-            <h1>Add to Cart</h1>
-          </button>
-        </div>
-      );
-
-      const props = {
-        insights: jest.fn(),
-        sendEvent: jest.fn(),
-      };
-
-      const { container } = render(
-        <Hits insights={props.insights} sendEvent={props.sendEvent} />
-      );
-      const heading = container.querySelector('h1') as HTMLHeadingElement;
-
-      fireEvent.click(heading);
-
-      expect(props.insights).toHaveBeenCalledTimes(1);
-      expect(props.insights).toHaveBeenCalledWith(
-        'clickedObjectIDsAfterSearch',
-        {
-          eventName: 'Product Clicked',
-          objectIDs: ['1'],
-        }
-      );
-
-      expect(props.sendEvent).toHaveBeenCalledTimes(1);
-      expect(props.sendEvent).toHaveBeenCalledWith({
-        eventType: 'click',
-        hits: [{ objectID: '1', __position: 1 }],
-        insightsMethod: 'clickedObjectIDsAfterSearch',
-        payload: {
-          eventName: 'Product Clicked',
-          index: 'instant_search',
-          objectIDs: ['1'],
-          positions: [1],
-        },
-        widgetType: 'ais.hits',
-      });
     });
   });
 });
