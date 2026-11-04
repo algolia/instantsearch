@@ -39,13 +39,6 @@ exports[`GeoSearch expect to render 2`] = `
       "reset": [Function],
       "toggle": [Function],
     },
-    "templatesConfig": undefined,
-    "useCustomCompileOptions": {
-      "HTMLMarker": true,
-      "redo": true,
-      "reset": true,
-      "toggle": true,
-    },
   },
 }
 `;
@@ -88,13 +81,6 @@ exports[`GeoSearch expect to render with custom classNames 2`] = `
       "redo": [Function],
       "reset": [Function],
       "toggle": [Function],
-    },
-    "templatesConfig": undefined,
-    "useCustomCompileOptions": {
-      "HTMLMarker": true,
-      "redo": true,
-      "reset": true,
-      "toggle": true,
     },
   },
 }

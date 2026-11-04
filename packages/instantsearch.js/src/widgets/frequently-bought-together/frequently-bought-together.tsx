@@ -62,7 +62,6 @@ const renderer =
         defaultTemplates: {} as unknown as Required<
           FrequentlyBoughtTogetherTemplates<THit>
         >,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;

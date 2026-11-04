@@ -15,8 +15,6 @@ exports[`RefinementListItem renders an item 1`] = `
     template="props"
     templateKey="item key"
     templates={{}}
-    templatesConfig={{}}
-    useCustomCompileOptions={{}}
   />
   <div />
 </li>

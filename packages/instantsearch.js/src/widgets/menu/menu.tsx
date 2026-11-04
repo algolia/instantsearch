@@ -69,7 +69,7 @@ export type MenuCSSClasses = Partial<{
 
 export type MenuTemplates = Partial<{
   /**
-   * Item template. The string template gets the same values as the function.
+   * Item template.
    */
   item: Template<{
     count: number;
@@ -127,7 +127,6 @@ const renderer =
       refine,
       items,
       createURL,
-      instantSearchInstance,
       isShowingMore,
       toggleShowMore,
       canToggleShowMore,
@@ -137,7 +136,6 @@ const renderer =
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;

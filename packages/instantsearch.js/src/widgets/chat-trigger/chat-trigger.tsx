@@ -108,13 +108,10 @@ export default function chatTrigger(widgetParams: ChatTriggerWidgetParams) {
       RendererOptions<ChatTriggerConnectorParams>,
     _isFirstRender: boolean
   ) {
-    const { open, toggleOpen, instantSearchInstance } = renderState;
+    const { open, toggleOpen } = renderState;
 
-    // Resolve template props at render time so user-provided helpers and
-    // compile options from `instantSearchInstance.templatesConfig` apply.
     const templateProps = prepareTemplateProps({
       defaultTemplates: {} as unknown as ChatTriggerTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates,
     });
 

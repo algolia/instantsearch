@@ -12,6 +12,11 @@ import type {
 } from 'instantsearch-core';
 import type { VNode } from 'preact';
 
+/**
+ * A string is rendered as text. A function receives the template data and
+ * `{ html, components, sendEvent }`, and returns a VNode, a string (rendered
+ * as text) or `null`.
+ */
 export type Template<TTemplateData = void> =
   | string
   | ((
@@ -56,8 +61,3 @@ export type Templates = {
     | Templates
     | undefined;
 };
-
-export type HoganHelpers<TKeys extends string = string> = Record<
-  TKeys,
-  (text: string, render: (value: string) => string) => string
->;

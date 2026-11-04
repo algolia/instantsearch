@@ -140,14 +140,12 @@ const renderer =
       refine,
       items,
       createURL,
-      instantSearchInstance,
     }: RatingMenuRenderState & RendererOptions<RatingMenuConnectorParams>,
     isFirstRendering: boolean
   ) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
 
