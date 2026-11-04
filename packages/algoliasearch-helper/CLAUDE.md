@@ -20,4 +20,4 @@ Events emitted by the helper (what InstantSearch's lifecycle listens to): `chang
 ## Conventions that differ from the rest of the monorepo
 
 - **Plain CommonJS JavaScript**, not the TS-strict source the other packages use. Public types are **hand-written** in `index.d.ts` — update them by hand if you change the surface.
-- Has its own **`README.md` + `CHANGELOG.md`** (don't fold into the monorepo's). Build is Rollup (`yarn workspace algoliasearch-helper build`); tests run via its own `scripts/test.sh` (`yarn workspace algoliasearch-helper test`).
+- Has its own **`README.md` + `CHANGELOG.md`** (don't fold into the monorepo's). Build is Rollup (`yarn lerna run build --scope algoliasearch-helper`); tests run via its own `scripts/test.sh` (`yarn workspace algoliasearch-helper test`).

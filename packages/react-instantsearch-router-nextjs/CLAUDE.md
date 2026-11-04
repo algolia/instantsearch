@@ -16,7 +16,7 @@ A **thin routing adapter** for the **Pages Router** — not a full SSR layer. It
 ## Working here
 
 ```bash
-yarn workspace react-instantsearch-router-nextjs build
+yarn lerna run build --scope react-instantsearch-router-nextjs
 yarn workspace react-instantsearch-router-nextjs test:e2e   # Playwright (Pages Router)
 ```
 
