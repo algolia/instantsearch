@@ -49,21 +49,12 @@ const renderer =
     templates: HitsTemplates<THit>;
   }): Renderer<HitsRenderState, Partial<HitsWidgetParams>> =>
   (
-    {
-      items,
-      results,
-      instantSearchInstance,
-      insights,
-      bindEvent,
-      sendEvent,
-      banner,
-    },
+    { items, results, insights, bindEvent, sendEvent, banner },
     isFirstRendering
   ) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps<HitsTemplates<THit>>({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;

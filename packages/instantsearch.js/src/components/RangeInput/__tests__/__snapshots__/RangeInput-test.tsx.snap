@@ -38,8 +38,6 @@ exports[`RangeInput expect to render 1`] = `
           "submitText": "Go",
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
     <label
       className="label"
@@ -73,8 +71,6 @@ exports[`RangeInput expect to render 1`] = `
           "submitText": "Go",
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
   </form>
 </div>
@@ -118,8 +114,6 @@ exports[`RangeInput expect to render with disabled state 1`] = `
           "submitText": "Go",
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
     <label
       className="label"
@@ -153,8 +147,6 @@ exports[`RangeInput expect to render with disabled state 1`] = `
           "submitText": "Go",
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
   </form>
 </div>
@@ -198,8 +190,6 @@ exports[`RangeInput expect to render with values 1`] = `
           "submitText": "Go",
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
     <label
       className="label"
@@ -233,8 +223,6 @@ exports[`RangeInput expect to render with values 1`] = `
           "submitText": "Go",
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
   </form>
 </div>
@@ -278,8 +266,6 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
           "submitText": "Go",
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
     <label
       className="label"
@@ -313,8 +299,6 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
           "submitText": "Go",
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
   </form>
 </div>
@@ -358,8 +342,6 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
           "submitText": "Go",
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
     <label
       className="label"
@@ -393,8 +375,6 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
           "submitText": "Go",
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
   </form>
 </div>
@@ -438,8 +418,6 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
           "submitText": "Go",
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
     <label
       className="label"
@@ -473,8 +451,6 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
           "submitText": "Go",
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
   </form>
 </div>
@@ -518,8 +494,6 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
           "submitText": "Go",
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
     <label
       className="label"
@@ -553,8 +527,6 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
           "submitText": "Go",
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
   </form>
 </div>
