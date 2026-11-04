@@ -455,7 +455,6 @@ describe('useConnector', () => {
       ],
       state: helperState,
       renderState: searchContext.current!.renderState,
-      templatesConfig: searchContext.current!.templatesConfig,
       createURL: indexContext.current!.createURL,
       status: 'idle',
       error: undefined,

@@ -101,12 +101,6 @@ export type InstantSearchOptions<
   searchClient: SearchClient | CompositionClient;
 
   /**
-   * The locale used to display numbers. This will be passed
-   * to `Number.prototype.toLocaleString()`
-   */
-  numberLocale?: string;
-
-  /**
    * Function called when the state changes.
    *
    * Using this function makes the instance controlled. This means that you
@@ -182,13 +176,6 @@ export type InstantSearchOptions<
   };
 
   /**
-   * @internal Injected by the InstantSearch.js factory to supply Hogan
-   * template helpers (`highlight`, `snippet`, `formatNumber`, …). Not part of
-   * the public API.
-   */
-  _internalHelpers?: Record<string, unknown>;
-
-  /**
    * @internal Injected by each flavor (InstantSearch.js, React, Vue) so usage
    * events report the flavor's own version instead of `instantsearch-core`'s.
    * Not part of the public API.
@@ -225,7 +212,6 @@ class InstantSearch<
   public mainHelper: AlgoliaSearchHelper | null;
   public mainIndex: IndexWidget;
   public started: boolean;
-  public templatesConfig: Record<string, unknown>;
   public renderState: RenderState = {};
   public _stalledSearchDelay: number;
   public _searchStalledTimer: any;
@@ -353,10 +339,6 @@ See documentation: ${createDocumentationLink({
     this.onStateChange = onStateChange;
 
     this.started = false;
-    this.templatesConfig = {
-      helpers: options._internalHelpers ?? {},
-      compileOptions: {},
-    };
 
     this._stalledSearchDelay = stalledSearchDelay;
     this._searchStalledTimer = null;
