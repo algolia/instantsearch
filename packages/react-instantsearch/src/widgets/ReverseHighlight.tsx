@@ -9,7 +9,7 @@ import { ReverseHighlight as ReverseHighlightUiComponent } from '../ui/ReverseHi
 
 import type { PartialKeys } from '../types';
 import type { ReverseHighlightProps as ReverseHighlightUiComponentProps } from '../ui/ReverseHighlight';
-import type { BaseHit, Hit } from 'instantsearch.js';
+import type { BaseHit, Hit } from 'instantsearch-core';
 
 export type ReverseHighlightProps<THit extends Hit<BaseHit>> = {
   hit: THit;

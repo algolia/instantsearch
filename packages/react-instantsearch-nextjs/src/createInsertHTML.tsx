@@ -2,7 +2,7 @@ import React from 'react';
 
 import { htmlEscapeJsonString } from './htmlEscape';
 
-import type { InitialResults } from 'instantsearch.js';
+import type { InitialResults } from 'instantsearch-core';
 
 export const createInsertHTML =
   ({

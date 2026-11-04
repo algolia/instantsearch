@@ -9,7 +9,7 @@ import React from 'react';
 import { InfiniteHits } from '../InfiniteHits';
 
 import type { InfiniteHitsProps } from '../InfiniteHits';
-import type { Hit } from 'instantsearch.js';
+import type { Hit } from 'instantsearch-core';
 
 describe('InfiniteHits', () => {
   function createProps<THit extends Hit = Hit>(

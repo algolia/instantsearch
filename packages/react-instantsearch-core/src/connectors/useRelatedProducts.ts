@@ -8,7 +8,7 @@ import type {
   RelatedProductsConnectorParams,
   RelatedProductsWidgetDescription,
 } from 'instantsearch-core';
-import type { BaseHit } from 'instantsearch.js';
+import type { BaseHit } from 'instantsearch-core';
 
 export type UseRelatedProductsProps<THit extends BaseHit = BaseHit> =
   RelatedProductsConnectorParams<THit>;

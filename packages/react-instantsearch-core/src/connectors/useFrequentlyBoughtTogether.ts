@@ -8,7 +8,7 @@ import type {
   FrequentlyBoughtTogetherConnectorParams,
   FrequentlyBoughtTogetherWidgetDescription,
 } from 'instantsearch-core';
-import type { BaseHit } from 'instantsearch.js';
+import type { BaseHit } from 'instantsearch-core';
 
 export type UseFrequentlyBoughtTogetherProps<THit extends BaseHit = BaseHit> =
   FrequentlyBoughtTogetherConnectorParams<THit>;

@@ -8,7 +8,7 @@ import type {
   LookingSimilarConnectorParams,
   LookingSimilarWidgetDescription,
 } from 'instantsearch-core';
-import type { BaseHit } from 'instantsearch.js';
+import type { BaseHit } from 'instantsearch-core';
 
 export type UseLookingSimilarProps<THit extends BaseHit = BaseHit> =
   LookingSimilarConnectorParams<THit>;
