@@ -127,8 +127,13 @@ export function _buildEventPayloadsForHits({
     return [];
   }
   const indexedHits = hitsArray.map((hit, index) => ({ hit, index }));
+  // A queryID passed by the caller applies to the whole event, so the hits'
+  // own queryIDs neither split it nor end up in its objectData.
+  const hasCallerQueryID = Boolean(additionalData.queryID);
   const indexedChunks =
-    eventType === 'click' ? chunkByQueryID(indexedHits) : chunk(indexedHits);
+    eventType === 'click' && !hasCallerQueryID
+      ? chunkByQueryID(indexedHits)
+      : chunk(indexedHits);
   const hitsChunks = indexedChunks.map((batch) => batch.map(({ hit }) => hit));
   const objectIDsByChunk = hitsChunks.map((batch) =>
     batch.map((hit) => hit.objectID)
@@ -187,10 +192,10 @@ export function _buildEventPayloadsForHits({
     });
   } else if (eventType === 'conversion') {
     return hitsChunks.map((batch, i) => {
-      const conversionObjectData =
-        additionalData.objectData && !objectData
-          ? undefined
-          : addObjectQueryIDs(batch, objectDataByChunk[i]);
+      let conversionObjectData = objectDataByChunk[i];
+      if (!hasCallerQueryID && (objectData || !additionalData.objectData)) {
+        conversionObjectData = addObjectQueryIDs(batch, conversionObjectData);
+      }
       return {
         insightsMethod: 'convertedObjectIDsAfterSearch',
         widgetType,

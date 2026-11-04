@@ -583,6 +583,53 @@ describe('createSendEventForHits', () => {
     );
   });
 
+  it('lets a caller queryID override mixed hit queryIDs in a conversion', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'q1', objectID: 'a' },
+      { __position: 2, __queryID: 'q2', objectID: 'c' },
+    ];
+
+    sendEvent('conversion', hits, 'Product Ordered', {
+      queryID: 'message_assistant-message-id',
+      objectData: [{ price: 10 }, { price: 20, queryID: 'caller' }],
+    });
+
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith(
+      expect.objectContaining({
+        payload: expect.objectContaining({
+          queryID: 'message_assistant-message-id',
+          objectIDs: ['a', 'c'],
+          objectData: [{ price: 10 }, { price: 20, queryID: 'caller' }],
+        }),
+      })
+    );
+  });
+
+  it('lets a caller queryID override mixed hit queryIDs in a click', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'q1', objectID: 'a' },
+      { __position: 2, __queryID: 'q2', objectID: 'c' },
+    ];
+
+    sendEvent('click', hits, 'Product Clicked', {
+      queryID: 'message_assistant-message-id',
+    });
+
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith(
+      expect.objectContaining({
+        payload: expect.objectContaining({
+          queryID: 'message_assistant-message-id',
+          objectIDs: ['a', 'c'],
+          positions: [1, 2],
+        }),
+      })
+    );
+  });
+
   it('leaves a conversion untouched when its hits share one queryID', () => {
     const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
 
