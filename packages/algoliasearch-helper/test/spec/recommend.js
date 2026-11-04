@@ -188,4 +188,34 @@ describe('recommend()', () => {
       ]);
     });
   });
+  test('excludes the input objectIDs from merged results', (done) => {
+    var client = {
+      getRecommendations: jest.fn().mockResolvedValue({
+        results: [
+          { hits: [{ objectID: 'a' }, { objectID: 'cart2' }] },
+          { hits: [{ objectID: 'cart1' }, { objectID: 'c' }] },
+        ],
+      }),
+    };
+
+    var helper = algoliasearchHelper(client, 'indexName', {});
+
+    helper.addFrequentlyBoughtTogether({ $$id: 1, objectID: 'cart1' });
+    helper.addFrequentlyBoughtTogether({ $$id: 1, objectID: 'cart2' });
+
+    // The helper reports a throwing listener as an `error` event.
+    helper.on('error', (event) => done(event.error));
+    helper.on('recommend:result', (event) => {
+      var hits = event.recommend.results[1].hits;
+
+      expect(
+        hits.map(function (hit) {
+          return hit.objectID;
+        })
+      ).toEqual(['a', 'c']);
+      done();
+    });
+
+    helper.recommend();
+  });
 });

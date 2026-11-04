@@ -1,3 +1,8 @@
+import {
+  createRecommendResponse,
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
@@ -137,6 +142,39 @@ export function createOptionsTests(
           </li>
         </ul>
       `);
+    });
+    test('does not recommend the input objectIDs', async () => {
+      const searchClient = createSearchClient({
+        getRecommendations: jest.fn((requests) =>
+          Promise.resolve(
+            createRecommendResponse(
+              // @ts-ignore `getRecommendations` isn't typed in v3
+              requests.map((request: { objectID?: string }) =>
+                createSingleSearchResponse({
+                  hits:
+                    request.objectID === '1'
+                      ? [{ objectID: 'a' }, { objectID: '2' }]
+                      : [{ objectID: '1' }, { objectID: 'c' }],
+                })
+              )
+            )
+          )
+        ),
+      });
+      const options: SetupOptions<RelatedProductsConnectorSetup> = {
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: { objectIDs: ['1', '2'] },
+      };
+
+      await setup(options);
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(
+        screen.getAllByRole('listitem').map((item) => item.textContent)
+      ).toEqual(['a', 'c']);
     });
   });
 }
