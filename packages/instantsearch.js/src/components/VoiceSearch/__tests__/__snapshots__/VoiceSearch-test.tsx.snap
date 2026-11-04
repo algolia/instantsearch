@@ -5,27 +5,27 @@ exports[`VoiceSearch Rendering with custom template for status 1`] = `
   class="status"
 >
   <p>
-    status: recognizing
+    status: 
+    recognizing
   </p>
-   
   <p>
     errorCode: 
   </p>
-   
   <p>
-    isListening: true
+    isListening: 
+    true
   </p>
-   
   <p>
-    transcript: Hello
+    transcript: 
+    Hello
   </p>
-   
   <p>
-    isSpeechFinal: false
+    isSpeechFinal: 
+    false
   </p>
-   
   <p>
-    isBrowserSupported: true
+    isBrowserSupported: 
+    true
   </p>
 </div>
 `;

@@ -9,6 +9,7 @@ import { h } from 'preact';
 import defaultTemplates from '../../../widgets/refinement-list/defaultTemplates';
 import RefinementList from '../RefinementList';
 
+import type { TemplateParams } from '../../../types';
 import type {
   RefinementListItemData,
   RefinementListTemplates,
@@ -18,29 +19,24 @@ import type { RefinementListProps } from '../RefinementList';
 const defaultProps = {
   createURL: () => '#',
   templateProps: {
-    templatesConfig: {},
     templates: {
-      item({ value, count, isRefined }: RefinementListItemData) {
-        return `
-  <label>
-    <input
-      type="checkbox"
-      value="${value}"
-      ${isRefined ? 'checked' : ''}
-    />
-    <span data-testid="value">${value}</span>
-    <span data-testid="count">${count}</span>
-  </label>
-  `;
+      item(
+        { value, count, isRefined }: RefinementListItemData,
+        { html }: TemplateParams
+      ) {
+        return html`
+          <label>
+            <input type="checkbox" value="${value}" checked=${isRefined} />
+            <span data-testid="value">${value}</span>
+            <span data-testid="count">${count}</span>
+          </label>
+        `;
       },
-      showMoreText() {
-        return `
-  <button data-testid="show-more">Show more</button>
-    `;
+      showMoreText(_data: unknown, { html }: TemplateParams) {
+        return html`<button data-testid="show-more">Show more</button>`;
       },
       searchableNoResults: 'No results',
     },
-    useCustomCompileOptions: {},
   },
   toggleRefinement: () => {},
   cssClasses: {
@@ -157,8 +153,8 @@ describe('RefinementList', () => {
       const { container } = render(<RefinementList {...props} />);
       const [firstItem, secondItem] = container.querySelectorAll('input');
 
-      expect(firstItem).not.toHaveAttribute('checked');
-      expect(secondItem).toHaveAttribute('checked');
+      expect(firstItem).not.toBeChecked();
+      expect(secondItem).toBeChecked();
     });
 
     it('should escape the items in the default template to prevent XSS', () => {
@@ -181,9 +177,7 @@ describe('RefinementList', () => {
           },
         ],
         templateProps: {
-          templatesConfig: {},
           templates: defaultTemplates,
-          useCustomCompileOptions: {},
         },
         cssClasses: {
           ...defaultProps.cssClasses,
@@ -221,9 +215,7 @@ describe('RefinementList', () => {
           },
         ],
         templateProps: {
-          templatesConfig: {},
           templates: defaultTemplates,
-          useCustomCompileOptions: {},
         },
         cssClasses: {
           ...defaultProps.cssClasses,
@@ -437,9 +429,7 @@ describe('RefinementList', () => {
         cssClasses,
         className: 'customClassName',
         templateProps: {
-          templatesConfig: {},
           templates,
-          useCustomCompileOptions: {},
         },
         toggleRefinement: () => {},
       };
@@ -466,18 +456,14 @@ describe('RefinementList', () => {
         searchPlaceholder: 'Search',
         searchFacetValues: (x) => x,
         templateProps: {
-          templatesConfig: {},
           templates,
-          useCustomCompileOptions: {},
         },
         searchBoxTemplateProps: {
-          templatesConfig: {},
           templates: {
             reset: 'reset',
             submit: 'submit',
             loadingIndicator: 'loadingIndicator',
           },
-          useCustomCompileOptions: {},
         },
         toggleRefinement: () => {},
       };
@@ -512,9 +498,7 @@ describe('RefinementList', () => {
         cssClasses,
         className: 'customClassName',
         templateProps: {
-          templatesConfig: {},
           templates,
-          useCustomCompileOptions: {},
         },
         toggleRefinement: () => {},
         createURL: () => '',
@@ -553,9 +537,7 @@ describe('RefinementList', () => {
         isShowingMore: false,
         canToggleShowMore: true,
         templateProps: {
-          templatesConfig: {},
           templates,
-          useCustomCompileOptions: {},
         },
         toggleRefinement: () => {},
         createURL: () => '',
@@ -594,9 +576,7 @@ describe('RefinementList', () => {
         isShowingMore: false,
         canToggleShowMore: false,
         templateProps: {
-          templatesConfig: {},
           templates,
-          useCustomCompileOptions: {},
         },
         toggleRefinement: () => {},
         createURL: () => '',
@@ -635,18 +615,14 @@ describe('RefinementList', () => {
         searchPlaceholder: 'Search',
         searchFacetValues: (x) => x,
         templateProps: {
-          templatesConfig: {},
           templates,
-          useCustomCompileOptions: {},
         },
         searchBoxTemplateProps: {
-          templatesConfig: {},
           templates: {
             reset: 'reset',
             submit: 'submit',
             loadingIndicator: 'loadingIndicator',
           },
-          useCustomCompileOptions: {},
         },
         toggleRefinement: () => {},
         createURL: () => '',
@@ -660,12 +636,12 @@ describe('RefinementList', () => {
       const toggleRefinement = jest.fn();
 
       const templates = {
-        item: (item: RefinementListItemData) => `
-              <label>
-                <input type="radio" checked="${item.isRefined}" />
-                ${item.value}
-              </label>
-            `,
+        item: (item: RefinementListItemData, { html }: TemplateParams) => html`
+          <label>
+            <input type="radio" checked=${item.isRefined} />
+            ${item.value}
+          </label>
+        `,
         showMoreText: '',
       };
       type TestTemplates = typeof templates;
@@ -681,16 +657,14 @@ describe('RefinementList', () => {
           item: 'item',
         },
         templateProps: {
-          templatesConfig: {},
           templates,
-          useCustomCompileOptions: {},
         },
         toggleRefinement,
         createURL: () => '',
       };
 
       const { container } = render(<RefinementList {...props} />);
-      const checkedItem = container.querySelector('.item [checked="true"]');
+      const checkedItem = container.querySelector('.item input:checked');
 
       fireEvent.click(checkedItem!);
 

@@ -82,7 +82,6 @@ describe('InfiniteHits', () => {
             return '';
           },
         },
-        templatesConfig: {},
         templates: {},
       }),
       ...props,

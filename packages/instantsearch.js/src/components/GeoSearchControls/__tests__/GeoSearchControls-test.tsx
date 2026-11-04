@@ -30,7 +30,6 @@ describe('GeoSearchControls', () => {
       HTMLMarker: '',
     },
     templates: {},
-    templatesConfig: {},
   });
 
   const defaultProps = {

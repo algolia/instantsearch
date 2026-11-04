@@ -105,9 +105,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
       helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: [attribute],
       });
-      instantSearchInstance = createInstantSearch({
-        templatesConfig: undefined,
-      });
+      instantSearchInstance = createInstantSearch();
     });
 
     it('should render without results', () => {
