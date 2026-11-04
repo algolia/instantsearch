@@ -44,6 +44,7 @@ it('passes props to InstantSearch.js', () => {
     searchClient,
     insightsClient,
     stalledSearchDelay: 250,
+    _internalVersion: version,
   });
 });
 
