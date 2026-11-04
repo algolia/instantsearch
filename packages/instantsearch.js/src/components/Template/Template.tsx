@@ -7,7 +7,7 @@ import { renderTemplate } from '../../lib/templating';
 
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { Templates } from '../../types';
-import type { BindEventForHits, SendEventForHits } from 'instantsearch-core';
+import type { SendEventForHits } from 'instantsearch-core';
 import type { JSX } from 'preact';
 
 const defaultProps = {
@@ -21,7 +21,6 @@ export type TemplateProps = {
   rootProps?: Record<string, any>;
   rootTagName: keyof JSX.IntrinsicElements | 'fragment';
   templateKey: string;
-  bindEvent?: BindEventForHits;
   sendEvent?: SendEventForHits;
 } & PreparedTemplateProps<Templates> &
   Readonly<typeof defaultProps>;
@@ -46,7 +45,6 @@ class Template extends Component<TemplateProps> {
       templates: this.props.templates,
       templateKey: this.props.templateKey,
       data: this.props.data,
-      bindEvent: this.props.bindEvent,
       sendEvent: this.props.sendEvent,
     });
 

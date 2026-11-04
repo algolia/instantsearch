@@ -166,13 +166,10 @@ export {
   warning,
 } from './lib/utils';
 export type {
-  BindEventForHits,
-  BuiltInBindEventForHits,
   ChatMessageBase,
   ChatRecord,
   ChatRecordsStore,
   ChatToolMessage,
-  CustomBindEventForHits,
   SendEventForHits,
   WidgetMetadata,
 } from './lib/utils';

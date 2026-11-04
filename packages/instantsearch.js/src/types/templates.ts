@@ -5,11 +5,7 @@ import type {
   Snippet,
 } from '../helpers/components';
 import type { html } from 'htm/preact';
-import type {
-  BuiltInBindEventForHits,
-  CustomBindEventForHits,
-  SendEventForHits,
-} from 'instantsearch-core';
+import type { SendEventForHits } from 'instantsearch-core';
 import type { VNode } from 'preact';
 
 /**
@@ -35,29 +31,21 @@ export type TemplateParams = {
   sendEvent?: SendEventForHits;
 };
 
-interface TemplateWithBindEventParams extends TemplateParams {
-  /** @deprecated use sendEvent instead */
-  (
-    ...args: Parameters<BuiltInBindEventForHits>
-  ): ReturnType<BuiltInBindEventForHits>;
-  /** @deprecated use sendEvent instead */
-  (
-    ...args: Parameters<CustomBindEventForHits>
-  ): ReturnType<CustomBindEventForHits>;
+interface TemplateWithSendEventParams extends TemplateParams {
   sendEvent: SendEventForHits;
 }
 
-export type TemplateWithBindEvent<TTemplateData = void> =
+export type TemplateWithSendEvent<TTemplateData = void> =
   | string
   | ((
       data: TTemplateData,
-      params: TemplateWithBindEventParams
+      params: TemplateWithSendEventParams
     ) => VNode | VNode[] | string);
 
 export type Templates = {
   [key: string]:
     | Template<any>
-    | TemplateWithBindEvent<any>
+    | TemplateWithSendEvent<any>
     | Templates
     | undefined;
 };
