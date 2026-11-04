@@ -31,9 +31,7 @@ const getDefaultProps = () => ({
   isCollapsed: false,
   data: createRenderOptions(),
   templates: {
-    header: '',
-    footer: '',
-    collapseButtonText: '',
+    collapseButtonText: () => '',
   },
 });
 
@@ -80,9 +78,9 @@ describe('Panel', () => {
       const props = {
         ...getDefaultProps(),
         templates: {
-          header: 'Header',
-          footer: 'Footer',
-          collapseButtonText: 'Toggle',
+          header: () => 'Header',
+          footer: () => 'Footer',
+          collapseButtonText: () => 'Toggle',
         },
       };
 
@@ -129,9 +127,9 @@ describe('Panel', () => {
         ...getDefaultProps(),
         hidden: true,
         templates: {
-          header: 'Header',
-          footer: 'Footer',
-          collapseButtonText: 'Toggle',
+          header: () => 'Header',
+          footer: () => 'Footer',
+          collapseButtonText: () => 'Toggle',
         },
       };
 
@@ -172,8 +170,8 @@ describe('Panel', () => {
       const props: PanelProps<any> = {
         ...getDefaultProps(),
         templates: {
-          header: 'Header',
-          footer: 'Footer',
+          header: () => 'Header',
+          footer: () => 'Footer',
           collapseButtonText: ({ collapsed }) => (collapsed ? 'More' : 'Less'),
         },
         collapsible: true,
@@ -218,8 +216,8 @@ describe('Panel', () => {
         collapsible: true,
         isCollapsed: true,
         templates: {
-          header: 'Header',
-          footer: 'Footer',
+          header: () => 'Header',
+          footer: () => 'Footer',
           collapseButtonText: ({ collapsed }) => (collapsed ? 'More' : 'Less'),
         },
       };
@@ -263,8 +261,8 @@ describe('Panel', () => {
         collapsible: true,
         isCollapsed: false,
         templates: {
-          header: 'Header',
-          footer: 'Footer',
+          header: () => 'Header',
+          footer: () => 'Footer',
           collapseButtonText: ({ collapsed }) => (collapsed ? 'More' : 'Less'),
         },
       };

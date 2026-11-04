@@ -115,13 +115,13 @@ search.addWidgets([
     hitsPerPage: 8,
   }),
   panel({
-    templates: { header: 'brand' },
+    templates: { header: () => 'brand' },
   })(refinementList)({
     container: '#brand-list',
     attribute: 'brand',
   }),
   panel({
-    templates: { header: 'brand' },
+    templates: { header: () => 'brand' },
   })(refinementList)({
     container: '#brand-list-mobile',
     attribute: 'brand',
@@ -137,7 +137,7 @@ search.addWidgets([
   clearRefinements({
     container: '[data-widget="clear-filters-mobile"]',
     templates: {
-      resetLabel: 'Reset filters',
+      resetLabel: () => 'Reset filters',
     },
   }),
   stats({

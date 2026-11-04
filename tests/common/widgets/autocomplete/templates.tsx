@@ -72,8 +72,8 @@ export function createTemplatesTests(
                 indexName: 'indexName',
                 templates: {
                   item: (props) => props.item.name,
-                  header: (props) =>
-                    `<span>${props.items.length} results</span>`,
+                  header: (props, { html }) =>
+                    html`<span>${props.items.length} results</span>`,
                 },
                 cssClasses: { header: 'HEADER' },
               },
@@ -81,7 +81,8 @@ export function createTemplatesTests(
             showQuerySuggestions: {
               indexName: 'indexName2',
               templates: {
-                header: (props) => `<span>${props.items.length} results</span>`,
+                header: (props, { html }) =>
+                  html`<span>${props.items.length} results</span>`,
               },
               cssClasses: { header: 'HEADER' },
             },
@@ -180,7 +181,8 @@ export function createTemplatesTests(
             ],
             showRecent: {
               templates: {
-                header: (props) => `<span>${props.items.length} recent</span>`,
+                header: (props, { html }) =>
+                  html`<span>${props.items.length} recent</span>`,
               },
               cssClasses: { header: 'RECENT-HEADER' },
             },

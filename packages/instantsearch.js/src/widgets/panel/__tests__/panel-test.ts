@@ -40,7 +40,7 @@ describe('Usage', () => {
   test('with templates does not throw', () => {
     expect(() => {
       panel({
-        templates: { header: 'header' },
+        templates: { header: () => 'header' },
       });
     }).not.toThrow();
   });
@@ -138,9 +138,10 @@ describe('Templates', () => {
   });
 
   test('with header template', () => {
+    const header = () => 'Custom header';
     const widgetWithPanel = panel({
       templates: {
-        header: 'Custom header',
+        header,
       },
     })(widgetFactory);
 
@@ -155,13 +156,14 @@ describe('Templates', () => {
     >;
     const { templates } = firstRender.props as PanelProps<typeof widgetFactory>;
 
-    expect(templates.header).toBe('Custom header');
+    expect(templates.header).toBe(header);
   });
 
   test('with footer template', () => {
+    const footer = () => 'Custom footer';
     const widgetWithPanel = panel({
       templates: {
-        footer: 'Custom footer',
+        footer,
       },
     })(widgetFactory);
 
@@ -176,13 +178,14 @@ describe('Templates', () => {
     >;
     const { templates } = firstRender.props as PanelProps<typeof widgetFactory>;
 
-    expect(templates.footer).toBe('Custom footer');
+    expect(templates.footer).toBe(footer);
   });
 
   test('with collapseButtonText template', () => {
+    const collapseButtonText = () => 'Custom collapseButtonText';
     const widgetWithPanel = panel({
       templates: {
-        collapseButtonText: 'Custom collapseButtonText',
+        collapseButtonText,
       },
     })(widgetFactory);
 
@@ -197,7 +200,7 @@ describe('Templates', () => {
     >;
     const { templates } = firstRender.props as PanelProps<typeof widgetFactory>;
 
-    expect(templates.collapseButtonText).toBe('Custom collapseButtonText');
+    expect(templates.collapseButtonText).toBe(collapseButtonText);
   });
 });
 

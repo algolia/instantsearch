@@ -99,7 +99,7 @@ export type PanelTemplates<TWidget extends AnyWidgetFactory> = Partial<{
    * Text template for the collapse button's accessible name.
    * Defaults to "Expand panel" or "Collapse panel" unless `collapseButtonText` is set.
    */
-  collapseButtonLabel: string | ((data: { collapsed: boolean }) => string);
+  collapseButtonLabel: (data: { collapsed: boolean }) => string;
 }>;
 
 type GetWidgetRenderState<TWidgetFactory extends AnyWidgetFactory> =
@@ -268,18 +268,20 @@ const panel: PanelWidget = (panelWidgetParams) => {
     const containerNode = getContainerNode(widgetParams.container);
 
     const defaultTemplates: PanelTemplates<typeof widgetFactory> = {
-      collapseButtonText: ({ collapsed: isCollapsed }) =>
-        `<svg
+      collapseButtonText: ({ collapsed: isCollapsed }) => (
+        <svg
           aria-hidden="true"
           focusable="false"
-          class="${cssClasses.collapseIcon}"
-          style="width: 1em; height: 1em;"
+          className={cssClasses.collapseIcon}
+          style={{ width: '1em', height: '1em' }}
           viewBox="0 0 500 500"
         >
-        <path d="${
-          isCollapsed ? 'M100 250l300-150v300z' : 'M250 400l150-300H100z'
-        }" fill="currentColor" />
-        </svg>`,
+          <path
+            d={isCollapsed ? 'M100 250l300-150v300z' : 'M250 400l150-300H100z'}
+            fill="currentColor"
+          />
+        </svg>
+      ),
     };
 
     if (templates.collapseButtonText === undefined) {
