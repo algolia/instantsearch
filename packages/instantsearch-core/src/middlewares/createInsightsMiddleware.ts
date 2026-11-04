@@ -15,7 +15,6 @@ import {
   safelyRunOnBrowser,
 } from '../lib/utils';
 import { createUUID } from '../lib/utils/uuid';
-import version from '../version';
 
 import type {
   InsightsClient,
@@ -60,6 +59,7 @@ const SENSITIVE_OPTIONS = [
   'searchClient',
   'insightsClient',
   'initialUiState',
+  '_internalVersion',
 ] as const;
 
 export type InsightsClientWithGlobals = InsightsClient & {
@@ -474,7 +474,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
               sendUsageEvent({
                 eventName: '__start__',
                 algoliaAgent: getAlgoliaAgent(instantSearchInstance.client),
-                version,
+                version: instantSearchInstance._version,
                 applicationId: appId,
                 performance: {
                   bootstrapMs,

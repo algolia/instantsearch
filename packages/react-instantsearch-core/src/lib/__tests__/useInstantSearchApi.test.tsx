@@ -9,6 +9,7 @@ import { useSyncExternalStore } from 'use-sync-external-store/shim';
 
 import { InstantSearch } from '../../components/InstantSearch';
 import { useSearchBox } from '../../connectors/useSearchBox';
+import version from '../../version';
 import { useInstantSearchApi } from '../useInstantSearchApi';
 
 import type { InternalInstantSearch } from '../useInstantSearchApi';
@@ -26,6 +27,21 @@ describe('useInstantSearchApi', () => {
 
   afterEach(() => {
     jest.useRealTimers();
+  });
+
+  test('reports its own version in usage events', () => {
+    (useSyncExternalStore as jest.Mock).mockImplementation(
+      (_subscribe, getSnapshot) => getSnapshot()
+    );
+
+    const { result } = renderHook(() =>
+      useInstantSearchApi({
+        searchClient: createAlgoliaSearchClient({}),
+        indexName: 'test',
+      })
+    );
+
+    expect(result.current._version).toBe(version);
   });
 
   test('restarts the disposed instance when subscribe is called after the cleanup timeout (Activity hide/reveal)', () => {

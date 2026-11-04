@@ -23,6 +23,7 @@ class InstantSearch<
     super({
       ...options,
       _internalHelpers: createHelpers({ numberLocale: options.numberLocale }),
+      _internalVersion: options._internalVersion ?? version,
     });
 
     const { searchClient } = options;
