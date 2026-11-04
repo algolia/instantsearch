@@ -72,7 +72,7 @@ export function App() {
     <FlavorContext.Provider value={flavor}>
       <div class="p-4">
         <div class="@container mb-6 flex flex-wrap items-start justify-between gap-3">
-          <div class="grid min-w-0 flex-1 grid-cols-1 gap-3 @xl:flex-none @xl:auto-cols-fr @xl:grid-cols-none @xl:grid-flow-col">
+          <div class="grid min-w-0 flex-1 grid-cols-1 gap-3 @3xl:flex-auto @3xl:auto-cols-fr @3xl:grid-cols-none @3xl:grid-flow-col">
             {experiences.map((experience, index) => (
               <button
                 key={index}
