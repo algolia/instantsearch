@@ -10,7 +10,7 @@ import InstantSearch from '../InstantSearch';
 import ResultCard from '../ResultCard';
 import SearchBox from '../SearchBox.vue';
 
-jest.unmock('instantsearch.js/es');
+jest.unmock('instantsearch-core');
 
 // The card renders nothing until a Rule enables it in the results; this
 // response activates it (the connector then shows its skeleton before
