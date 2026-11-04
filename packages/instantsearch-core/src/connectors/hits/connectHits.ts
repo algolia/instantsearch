@@ -4,11 +4,10 @@ import {
   addAbsolutePosition,
   addQueryID,
   createSendEventForHits,
-  createBindEventForHits,
   noop,
 } from '../../lib/utils';
 
-import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
+import type { SendEventForHits } from '../../lib/utils';
 import type {
   TransformItems,
   Connector,
@@ -46,11 +45,6 @@ export type HitsRenderState<THit extends NonNullable<object> = BaseHit> = {
    * Sends an event to the Insights middleware.
    */
   sendEvent: SendEventForHits;
-
-  /**
-   * Returns a string for the `data-insights-event` attribute for the Insights middleware
-   */
-  bindEvent: BindEventForHits;
 };
 
 export type HitsConnectorParams<THit extends NonNullable<object> = BaseHit> = {
@@ -87,7 +81,6 @@ export default (function connectHits<TWidgetParams>(
       >,
     } = widgetParams || {};
     let sendEvent: SendEventForHits;
-    let bindEvent: BindEventForHits;
 
     return {
       $$type: 'ais.hits',
@@ -136,21 +129,12 @@ export default (function connectHits<TWidgetParams>(
           });
         }
 
-        if (!bindEvent) {
-          bindEvent = createBindEventForHits({
-            helper,
-            widgetType: this.$$type,
-            instantSearchInstance,
-          });
-        }
-
         if (!results) {
           return {
             items: [],
             results: undefined,
             banner: undefined,
             sendEvent,
-            bindEvent,
             widgetParams,
           };
         }
@@ -177,7 +161,6 @@ export default (function connectHits<TWidgetParams>(
           results,
           banner,
           sendEvent,
-          bindEvent,
           widgetParams,
         };
       },

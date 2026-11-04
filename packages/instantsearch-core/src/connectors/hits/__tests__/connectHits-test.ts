@@ -19,7 +19,7 @@ import {
   createRenderOptions,
 } from '../../../../test/createWidget';
 import InstantSearch from '../../../instantsearch';
-import { TAG_PLACEHOLDER, deserializePayload } from '../../../lib/utils';
+import { TAG_PLACEHOLDER } from '../../../lib/utils';
 import connectHits from '../connectHits';
 
 import type { Hit, SearchResponse } from '../../../types';
@@ -364,7 +364,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       expect(renderState1.hits).toEqual({
         items: [],
         sendEvent: expect.any(Function),
-        bindEvent: expect.any(Function),
         results: undefined,
         widgetParams: {},
       });
@@ -395,7 +394,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       expect(renderState2.hits).toEqual({
         items: expectedHits,
         sendEvent: renderState1.hits.sendEvent,
-        bindEvent: renderState1.hits.bindEvent,
         results,
         widgetParams: {},
       });
@@ -426,7 +424,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         items: [],
         banner: undefined,
         sendEvent: expect.any(Function),
-        bindEvent: expect.any(Function),
         results: undefined,
         widgetParams: {},
       });
@@ -463,7 +460,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         items: expectedHits,
         banner,
         sendEvent: renderState1.sendEvent,
-        bindEvent: renderState2.bindEvent,
         results,
         widgetParams: {},
       });
@@ -795,71 +791,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
             },
             widgetType: 'ais.hits',
           });
-        });
-      });
-
-      describe('bindEvent', () => {
-        it('returns a payload for click event', () => {
-          const { renderFn, hits } = createRenderedWidget();
-          const { bindEvent } =
-            renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
-          const payload = bindEvent('click', hits[0], 'Product Added');
-          expect(payload.startsWith('data-insights-event=')).toBe(true);
-          expect(
-            deserializePayload(payload.substr('data-insights-event='.length))
-          ).toEqual([
-            {
-              eventType: 'click',
-              hits: [
-                {
-                  __position: 0,
-                  __queryID: 'test-query-id',
-                  fake: 'data',
-                  objectID: '1',
-                },
-              ],
-              insightsMethod: 'clickedObjectIDsAfterSearch',
-              payload: {
-                eventName: 'Product Added',
-                index: '',
-                objectIDs: ['1'],
-                positions: [0],
-                queryID: 'test-query-id',
-              },
-              widgetType: 'ais.hits',
-            },
-          ]);
-        });
-
-        it('returns a payload for conversion event', () => {
-          const { renderFn, hits } = createRenderedWidget();
-          const { bindEvent } =
-            renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
-          const payload = bindEvent('conversion', hits[1], 'Product Ordered');
-          expect(payload.startsWith('data-insights-event=')).toBe(true);
-          expect(
-            deserializePayload(payload.substr('data-insights-event='.length))
-          ).toEqual([
-            {
-              eventType: 'conversion',
-              hits: [
-                {
-                  __position: 1,
-                  __queryID: 'test-query-id',
-                  objectID: '2',
-                  sample: 'infos',
-                },
-              ],
-              insightsMethod: 'convertedObjectIDsAfterSearch',
-              payload: {
-                eventName: 'Product Ordered',
-                index: '',
-                objectIDs: ['2'],
-                queryID: 'test-query-id',
-              },
-              widgetType: 'ais.hits',
-            },
-          ]);
         });
       });
     });

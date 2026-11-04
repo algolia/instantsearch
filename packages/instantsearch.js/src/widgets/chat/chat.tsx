@@ -32,7 +32,7 @@ import { createCarouselTool } from './search-index-tool';
 
 import type { TemplateProps } from '../../components/Template/Template';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { TemplateWithBindEvent, Template, Templates } from '../../types';
+import type { TemplateWithSendEvent, Template, Templates } from '../../types';
 import type {
   WidgetFactory,
   Renderer,
@@ -937,7 +937,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
 export type ClientSideToolTemplateData = ClientSideToolComponentProps;
 
 export type UserClientSideToolTemplates = Partial<{
-  layout: TemplateWithBindEvent<ClientSideToolTemplateData>;
+  layout: TemplateWithSendEvent<ClientSideToolTemplateData>;
 }>;
 
 type UserClientSideToolWithTemplate = Omit<
@@ -977,7 +977,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * Template to use for each result. This template will receive an object containing a single record.
      */
-    item: TemplateWithBindEvent<Hit<THit>>;
+    item: TemplateWithSendEvent<Hit<THit>>;
 
     /**
      * Custom loader template for the chat widget.

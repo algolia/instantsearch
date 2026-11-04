@@ -35,7 +35,7 @@ export function getUsageSessionId(): string {
   }
 }
 
-/** @deprecated use bindEvent instead */
+/** @deprecated use sendEvent instead */
 export function readDataAttributes(domElement: HTMLElement): {
   method: InsightsClientMethod;
   payload: Partial<InsightsClientPayload>;
@@ -63,7 +63,7 @@ export function readDataAttributes(domElement: HTMLElement): {
   }
 }
 
-/** @deprecated use bindEvent instead */
+/** @deprecated use sendEvent instead */
 export function writeDataAttributes({
   method,
   payload,

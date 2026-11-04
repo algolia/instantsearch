@@ -9,19 +9,17 @@ import {
 } from '../../helpers/components';
 
 import type { Templates, TemplateParams } from '../../types';
-import type { BindEventForHits, SendEventForHits } from 'instantsearch-core';
+import type { SendEventForHits } from 'instantsearch-core';
 
 export function renderTemplate({
   templates,
   templateKey,
   data,
-  bindEvent,
   sendEvent,
 }: {
   templates: Templates;
   templateKey: string;
   data?: Record<string, any>;
-  bindEvent?: BindEventForHits;
   sendEvent?: SendEventForHits;
 }) {
   const template = templates[templateKey];
@@ -34,9 +32,9 @@ export function renderTemplate({
 
   const content =
     typeof template === 'function'
-      ? // `Templates` also covers templates typed with `bindEvent` params,
-        // whose `sendEvent` is required
-        template(data, getTemplateParams({ bindEvent, sendEvent }) as any)
+      ? // `Templates` also covers templates whose `sendEvent` param is
+        // required; the widgets using them always provide it
+        template(data, getTemplateParams(sendEvent) as any)
       : template;
 
   if (__DEV__ && typeof content === 'string') {
@@ -55,24 +53,15 @@ See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#up
   return content;
 }
 
-function getTemplateParams({
-  bindEvent,
-  sendEvent,
-}: {
-  bindEvent?: BindEventForHits;
-  sendEvent?: SendEventForHits;
-}) {
-  // @MAJOR no longer pass bindEvent once it is removed from the render state
-  const params = (bindEvent || {}) as TemplateParams;
-
-  params.html = html;
-  params.sendEvent = sendEvent;
-  params.components = {
-    Highlight,
-    ReverseHighlight,
-    Snippet,
-    ReverseSnippet,
+function getTemplateParams(sendEvent?: SendEventForHits): TemplateParams {
+  return {
+    html,
+    sendEvent,
+    components: {
+      Highlight,
+      ReverseHighlight,
+      Snippet,
+      ReverseSnippet,
+    },
   };
-
-  return params;
 }

@@ -6,12 +6,11 @@ import {
   addQueryID,
   noop,
   createSendEventForHits,
-  createBindEventForHits,
   walkIndex,
   isTwoPassWidget,
 } from '../../lib/utils';
 
-import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
+import type { SendEventForHits } from '../../lib/utils';
 import type {
   Connector,
   TransformItems,
@@ -105,11 +104,6 @@ export type InfiniteHitsRenderState<
    * Send event to insights middleware
    */
   sendEvent: SendEventForHits;
-
-  /**
-   * Returns a string of data-insights-event attribute for insights middleware
-   */
-  bindEvent: BindEventForHits;
 
   /**
    * Hits for the current page
@@ -218,7 +212,6 @@ export default (function connectInfiniteHits<
     let showPrevious: () => void;
     let showMore: () => void;
     let sendEvent: SendEventForHits;
-    let bindEvent: BindEventForHits;
     const getFirstReceivedPage = (
       state: SearchParameters,
       cachedHits: InfiniteHitsCachedHits<THit>
@@ -349,11 +342,6 @@ export default (function connectInfiniteHits<
             helper,
             widgetType: this.$$type,
           });
-          bindEvent = createBindEventForHits({
-            helper,
-            widgetType: this.$$type,
-            instantSearchInstance,
-          });
         }
 
         if (!results) {
@@ -420,7 +408,6 @@ export default (function connectInfiniteHits<
           items,
           currentPageHits,
           sendEvent,
-          bindEvent,
           banner,
           results: results || undefined,
           showPrevious,
