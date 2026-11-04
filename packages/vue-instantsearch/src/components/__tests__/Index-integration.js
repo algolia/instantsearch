@@ -102,7 +102,6 @@ it('child widgets render with right data', () => {
       instantSearchInstance: search,
       parent: indexWidget,
       state: expect.any(Object),
-      templatesConfig: expect.any(Object),
       uiState: {},
     })
   );
