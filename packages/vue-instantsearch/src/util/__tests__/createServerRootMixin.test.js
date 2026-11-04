@@ -1204,7 +1204,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
           ],
           "state": Anything,
           "status": "idle",
-          "templatesConfig": {},
         }
       `
       );

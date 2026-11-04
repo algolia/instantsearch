@@ -22,7 +22,6 @@ export const createInitOptions = (
     instantSearchInstance,
     parent: instantSearchInstance.mainIndex,
     uiState: instantSearchInstance._initialUiState,
-    templatesConfig: instantSearchInstance.templatesConfig,
     helper,
     state: helper.state,
     renderState: instantSearchInstance.renderState,
@@ -61,7 +60,6 @@ export const createRenderOptions = (
   return {
     instantSearchInstance,
     parent: instantSearchInstance.mainIndex,
-    templatesConfig: instantSearchInstance.templatesConfig,
     helper,
     state: helper.state,
     renderState: instantSearchInstance.renderState,
