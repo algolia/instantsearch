@@ -8,10 +8,6 @@ export type {
 } from './instantsearch';
 export * from './connectors';
 export {
-  highlight,
-  snippet,
-  reverseHighlight,
-  reverseSnippet,
   getInsightsAnonymousUserToken,
   getInsightsAnonymousUserTokenInternal,
   ANONYMOUS_TOKEN_COOKIE_KEY,
@@ -174,12 +170,6 @@ export * from './lib/stateMappings';
 export * from './middlewares';
 export * from './types';
 export * from './widgets';
-export type {
-  HighlightOptions,
-  SnippetOptions,
-  ReverseHighlightOptions,
-  ReverseSnippetOptions,
-} from './helpers';
 export { component as suitComponent } from './lib/suit';
 export type {
   FacetRefinement,
