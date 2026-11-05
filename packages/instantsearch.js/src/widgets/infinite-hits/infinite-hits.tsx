@@ -1,13 +1,13 @@
 /** @jsx h */
 
 import { createDocumentationMessageGenerator } from 'instantsearch-core';
+import { suitComponent as component } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
 import { connectInfiniteHits } from '../../connectors';
 import { withInsights } from '../../lib/insights';
-import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 
