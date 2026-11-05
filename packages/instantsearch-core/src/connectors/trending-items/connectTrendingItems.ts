@@ -2,7 +2,6 @@ import {
   createDocumentationMessageGenerator,
   checkRendering,
   noop,
-  escapeHits,
   TAG_PLACEHOLDER,
   getObjectType,
   createSendEventForHits,
@@ -84,12 +83,6 @@ export type TrendingItemsConnectorParams<
     'page' | 'hitsPerPage' | 'offset' | 'length'
   >;
   /**
-   * Whether to escape HTML tags from items string values.
-   *
-   * @default true
-   */
-  escapeHTML?: boolean;
-  /**
    * Function to transform the items passed to the templates.
    */
   transformItems?: TransformItems<
@@ -132,8 +125,6 @@ export default (function connectTrendingItems<
       threshold,
       fallbackParameters,
       queryParameters,
-      // @MAJOR: this can default to false
-      escapeHTML = true,
       transformItems = ((items) => items) as NonNullable<
         TrendingItemsConnectorParams<THit>['transformItems']
       >,
@@ -195,10 +186,6 @@ export default (function connectTrendingItems<
           return { items: [], widgetParams, sendEvent };
         }
 
-        if (escapeHTML && results.hits.length > 0) {
-          results.hits = escapeHits(results.hits);
-        }
-
         const itemsWithAbsolutePosition = addAbsolutePosition(
           results.hits,
           0,
@@ -237,13 +224,13 @@ export default (function connectTrendingItems<
           threshold,
           fallbackParameters: fallbackParameters
             ? {
+                ...TAG_PLACEHOLDER,
                 ...fallbackParameters,
-                ...(escapeHTML ? TAG_PLACEHOLDER : {}),
               }
             : undefined,
           queryParameters: {
+            ...TAG_PLACEHOLDER,
             ...queryParameters,
-            ...(escapeHTML ? TAG_PLACEHOLDER : {}),
           },
           $$id: this.$$id!,
         });

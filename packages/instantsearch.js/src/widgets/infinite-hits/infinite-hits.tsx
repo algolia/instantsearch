@@ -234,7 +234,6 @@ export default (function infiniteHits<
 ) {
   const {
     container,
-    escapeHTML,
     transformItems,
     templates = {},
     cssClasses: userCssClasses = {},
@@ -294,7 +293,6 @@ export default (function infiniteHits<
 
   return {
     ...makeWidget({
-      escapeHTML,
       transformItems,
       showPrevious,
       cache,

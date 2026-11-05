@@ -5,8 +5,6 @@
     :highlighted-tag-name="highlightedTagName"
     :suit="suit"
     highlight-property="_highlightResult"
-    pre-tag="<mark>"
-    post-tag="</mark>"
   />
 </template>
 

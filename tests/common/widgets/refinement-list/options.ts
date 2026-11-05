@@ -21,10 +21,6 @@ function normalizeSnapshot(html: string) {
   return (
     commonNormalizeSnapshot(html)
       .replace(
-        '<mark>',
-        '<span class="ais-Highlight"><mark class="ais-Highlight-highlighted">'
-      )
-      .replace(
         /<\/mark>(\w*?)<\/span>/,
         '</mark><span class="ais-Highlight-nonHighlighted">$1</span></span>'
       )

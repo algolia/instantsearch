@@ -140,18 +140,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
                             description: 'A smartphone by Apple.',
                             _highlightResult: {
                               name: {
-                                value: `Apple iPhone <mark>smartphone</mark>`,
+                                value: `Apple iPhone __ais-highlight__smartphone__/ais-highlight__`,
                                 matchLevel: 'full' as const,
                                 matchedWords: ['smartphone'],
                               },
                             },
                             _snippetResult: {
                               name: {
-                                value: `Apple iPhone <mark>smartphone</mark>`,
+                                value: `Apple iPhone __ais-highlight__smartphone__/ais-highlight__`,
                                 matchLevel: 'full' as const,
                               },
                               description: {
-                                value: `A <mark>smartphone</mark> by Apple.`,
+                                value: `A __ais-highlight__smartphone__/ais-highlight__ by Apple.`,
                                 matchLevel: 'full' as const,
                               },
                             },
@@ -162,18 +162,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
                             description: 'A smartphone by Samsung.',
                             _highlightResult: {
                               name: {
-                                value: `Samsung Galaxy <mark>smartphone</mark>`,
+                                value: `Samsung Galaxy __ais-highlight__smartphone__/ais-highlight__`,
                                 matchLevel: 'full' as const,
                                 matchedWords: ['smartphone'],
                               },
                             },
                             _snippetResult: {
                               name: {
-                                value: `Samsung Galaxy <mark>smartphone</mark>`,
+                                value: `Samsung Galaxy __ais-highlight__smartphone__/ais-highlight__`,
                                 matchLevel: 'full' as const,
                               },
                               description: {
-                                value: `A <mark>smartphone</mark> by Samsung.`,
+                                value: `A __ais-highlight__smartphone__/ais-highlight__ by Samsung.`,
                                 matchLevel: 'full' as const,
                               },
                             },
@@ -233,7 +233,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
           "description": "A smartphone by Apple.",
           "_highlightResult": {
             "name": {
-              "value": "Apple iPhone &lt;mark&gt;smartphone&lt;/mark&gt;",
+              "value": "Apple iPhone __ais-highlight__smartphone__/ais-highlight__",
               "matchLevel": "full",
               "matchedWords": [
                 "smartphone"
@@ -242,11 +242,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
           },
           "_snippetResult": {
             "name": {
-              "value": "Apple iPhone &lt;mark&gt;smartphone&lt;/mark&gt;",
+              "value": "Apple iPhone __ais-highlight__smartphone__/ais-highlight__",
               "matchLevel": "full"
             },
             "description": {
-              "value": "A &lt;mark&gt;smartphone&lt;/mark&gt; by Apple.",
+              "value": "A __ais-highlight__smartphone__/ais-highlight__ by Apple.",
               "matchLevel": "full"
             }
           },
@@ -262,7 +262,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
           "description": "A smartphone by Samsung.",
           "_highlightResult": {
             "name": {
-              "value": "Samsung Galaxy &lt;mark&gt;smartphone&lt;/mark&gt;",
+              "value": "Samsung Galaxy __ais-highlight__smartphone__/ais-highlight__",
               "matchLevel": "full",
               "matchedWords": [
                 "smartphone"
@@ -271,11 +271,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
           },
           "_snippetResult": {
             "name": {
-              "value": "Samsung Galaxy &lt;mark&gt;smartphone&lt;/mark&gt;",
+              "value": "Samsung Galaxy __ais-highlight__smartphone__/ais-highlight__",
               "matchLevel": "full"
             },
             "description": {
-              "value": "A &lt;mark&gt;smartphone&lt;/mark&gt; by Samsung.",
+              "value": "A __ais-highlight__smartphone__/ais-highlight__ by Samsung.",
               "matchLevel": "full"
             }
           },
@@ -860,18 +860,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
                             description: 'A smartphone by Apple.',
                             _highlightResult: {
                               name: {
-                                value: `Apple iPhone <mark>smartphone</mark>`,
+                                value: `Apple iPhone __ais-highlight__smartphone__/ais-highlight__`,
                                 matchLevel: 'full' as const,
                                 matchedWords: ['smartphone'],
                               },
                             },
                             _snippetResult: {
                               name: {
-                                value: `Apple iPhone <mark>smartphone</mark>`,
+                                value: `Apple iPhone __ais-highlight__smartphone__/ais-highlight__`,
                                 matchLevel: 'full' as const,
                               },
                               description: {
-                                value: `A <mark>smartphone</mark> by Apple.`,
+                                value: `A __ais-highlight__smartphone__/ais-highlight__ by Apple.`,
                                 matchLevel: 'full' as const,
                               },
                             },
@@ -882,18 +882,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
                             description: 'A smartphone by Samsung.',
                             _highlightResult: {
                               name: {
-                                value: `Samsung Galaxy <mark>smartphone</mark>`,
+                                value: `Samsung Galaxy __ais-highlight__smartphone__/ais-highlight__`,
                                 matchLevel: 'full' as const,
                                 matchedWords: ['smartphone'],
                               },
                             },
                             _snippetResult: {
                               name: {
-                                value: `Samsung Galaxy <mark>smartphone</mark>`,
+                                value: `Samsung Galaxy __ais-highlight__smartphone__/ais-highlight__`,
                                 matchLevel: 'full' as const,
                               },
                               description: {
-                                value: `A <mark>smartphone</mark> by Samsung.`,
+                                value: `A __ais-highlight__smartphone__/ais-highlight__ by Samsung.`,
                                 matchLevel: 'full' as const,
                               },
                             },

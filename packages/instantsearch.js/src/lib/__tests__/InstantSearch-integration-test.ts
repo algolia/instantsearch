@@ -195,6 +195,8 @@ describe('network requests', () => {
           {
             "indexName": "indexName",
             "params": {
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
               "query": "",
             },
           },
@@ -267,6 +269,8 @@ describe('network requests', () => {
           {
             "indexName": "indexName",
             "params": {
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
               "query": "",
             },
           },
@@ -341,6 +345,8 @@ describe('network requests', () => {
             "indexName": "indexName",
             "params": {
               "clickAnalytics": true,
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
               "query": "",
               "userToken": "cookie-key",
             },
@@ -419,6 +425,8 @@ describe('network requests', () => {
             "indexName": "indexName",
             "params": {
               "clickAnalytics": true,
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
               "query": "",
               "userToken": "cookie-key",
             },
@@ -496,6 +504,8 @@ describe('network requests', () => {
             "indexName": "indexName",
             "params": {
               "clickAnalytics": true,
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
               "query": "",
               "userToken": "cookie-key",
             },
@@ -574,6 +584,8 @@ describe('network requests', () => {
             "indexName": "indexName",
             "params": {
               "clickAnalytics": true,
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
               "query": "",
               "userToken": "cookie-key",
             },
@@ -627,6 +639,8 @@ describe('network requests', () => {
           {
             "indexName": "indexName",
             "params": {
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
               "query": "",
             },
           },

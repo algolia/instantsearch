@@ -17,6 +17,7 @@ import {
   connectHits,
   connectPagination,
   connectRefinementList,
+  TAG_PLACEHOLDER,
 } from 'instantsearch-core';
 import React, { StrictMode, useState } from 'react';
 
@@ -427,6 +428,7 @@ describe('useConnector', () => {
       facetsRefinements: {},
       hierarchicalFacets: [],
       hierarchicalFacetsRefinements: {},
+      ...TAG_PLACEHOLDER,
       index: 'indexName',
       numericRefinements: {},
       query: 'query',

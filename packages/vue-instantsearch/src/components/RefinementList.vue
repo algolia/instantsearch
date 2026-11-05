@@ -197,7 +197,6 @@ export default {
         showMore: this.showMore,
         showMoreLimit: this.showMoreLimit,
         sortBy: this.sortBy,
-        escapeFacetValues: true,
         transformItems: this.transformItems,
       };
     },

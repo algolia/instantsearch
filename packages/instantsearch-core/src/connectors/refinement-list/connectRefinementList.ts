@@ -1,7 +1,5 @@
 import {
-  escapeFacets,
   TAG_PLACEHOLDER,
-  TAG_REPLACEMENT,
   checkRendering,
   createDocumentationMessageGenerator,
   createSendEventForFacet,
@@ -85,10 +83,6 @@ export type RefinementListConnectorParams = {
    * If a facetOrdering is set in the index settings, it is used when sortBy isn't passed
    */
   sortBy?: SortBy<SearchResults.FacetValue>;
-  /**
-   * Escapes the content of the facet values.
-   */
-  escapeFacetValues?: boolean;
   /**
    * Function to transform the items passed to the templates.
    */
@@ -192,7 +186,6 @@ const connectRefinementList: RefinementListConnector =
         showMore = false,
         showMoreLimit = 20,
         sortBy = DEFAULT_SORT,
-        escapeFacetValues = true,
         transformItems = ((items) => items) as NonNullable<
           RefinementListConnectorParams['transformItems']
         >,
@@ -284,15 +277,6 @@ const connectRefinementList: RefinementListConnector =
                 false
               );
             } else {
-              const tags = {
-                highlightPreTag: escapeFacetValues
-                  ? TAG_PLACEHOLDER.highlightPreTag
-                  : TAG_REPLACEMENT.highlightPreTag,
-                highlightPostTag: escapeFacetValues
-                  ? TAG_PLACEHOLDER.highlightPostTag
-                  : TAG_REPLACEMENT.highlightPostTag,
-              };
-
               helper
                 .searchForFacetValues(
                   attribute,
@@ -301,19 +285,17 @@ const connectRefinementList: RefinementListConnector =
                   // doesn't support a greater number.
                   // See https://www.algolia.com/doc/api-reference/api-parameters/maxFacetHits/
                   Math.min(getLimit(), 100),
-                  tags
+                  TAG_PLACEHOLDER
                 )
                 .then((results) => {
-                  const facetValues = escapeFacetValues
-                    ? escapeFacets(results.facetHits)
-                    : results.facetHits;
-
                   const normalizedFacetValues = transformItems(
-                    facetValues.map(({ escapedValue, value, ...item }) => ({
-                      ...item,
-                      value: escapedValue,
-                      label: value,
-                    })),
+                    results.facetHits.map(
+                      ({ escapedValue, value, ...item }) => ({
+                        ...item,
+                        value: escapedValue,
+                        label: value,
+                      })
+                    ),
                     { results: searchResults }
                   );
 

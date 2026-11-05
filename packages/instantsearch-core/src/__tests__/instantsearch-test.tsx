@@ -21,7 +21,7 @@ import {
   connectPagination,
 } from '../connectors';
 import InstantSearch from '../instantsearch';
-import { noop, warning } from '../lib/utils';
+import { TAG_PLACEHOLDER, noop, warning } from '../lib/utils';
 import { createInsightsMiddleware } from '../middlewares';
 import { index } from '../widgets';
 
@@ -1207,6 +1207,7 @@ describe('start', () => {
       {
         indexName: 'indexName',
         params: {
+          ...TAG_PLACEHOLDER,
           query: '',
         },
       },

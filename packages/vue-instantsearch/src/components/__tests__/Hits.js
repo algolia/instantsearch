@@ -28,20 +28,6 @@ it('accepts a showBanner prop', () => {
   expect(wrapper.vm.widgetParams.showBanner).toBe(true);
 });
 
-it('accepts an escapeHTML prop', () => {
-  __setState({
-    ...defaultState,
-  });
-
-  const wrapper = mount(Hits, {
-    propsData: {
-      escapeHTML: true,
-    },
-  });
-
-  expect(wrapper.vm.widgetParams.escapeHTML).toBe(true);
-});
-
 it('exposes banner prop to the banner slot', () => {
   __setState({
     ...defaultState,

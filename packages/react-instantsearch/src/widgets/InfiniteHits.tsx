@@ -43,7 +43,6 @@ export type InfiniteHitsProps<THit extends BaseHit = BaseHit> = Omit<
 export function InfiniteHits<THit extends BaseHit = BaseHit>({
   showPrevious: shouldShowPrevious = true,
   cache,
-  escapeHTML,
   transformItems,
   translations,
   bannerComponent: BannerComponent,
@@ -58,7 +57,7 @@ export function InfiniteHits<THit extends BaseHit = BaseHit>({
     isFirstPage,
     isLastPage,
   } = useInfiniteHits<THit>(
-    { cache, escapeHTML, showPrevious: shouldShowPrevious, transformItems },
+    { cache, showPrevious: shouldShowPrevious, transformItems },
     { $$widgetType: 'ais.infiniteHits' }
   );
 

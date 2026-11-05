@@ -416,7 +416,7 @@ describe('RefinementList', () => {
         {
           value: 'Samsung',
           label: 'Samsung',
-          highlighted: '<mark>Sam</mark>sung',
+          highlighted: '__ais-highlight__Sam__/ais-highlight__sung',
           count: 633,
           isRefined: false,
         },

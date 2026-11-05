@@ -126,10 +126,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    escapeHTML: {
-      type: Boolean,
-      default: true,
-    },
     transformItems: {
       type: Function,
       default: undefined,
@@ -144,7 +140,6 @@ export default {
       return {
         showBanner: this.showBanner,
         showPrevious: this.showPrevious,
-        escapeHTML: this.escapeHTML,
         transformItems: this.transformItems,
         cache: this.cache,
       };

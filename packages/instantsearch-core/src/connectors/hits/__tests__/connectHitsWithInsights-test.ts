@@ -10,7 +10,6 @@ import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
-  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
@@ -107,9 +106,8 @@ describe('connectHitsWithInsights', () => {
     const rendering = () => {};
     const makeWidget = connectHitsWithInsights(rendering);
     const widget = makeWidget({});
-    const helper = algoliasearchHelper(createSearchClient(), '', {});
     expect(() => {
-      widget.dispose(createDisposeOptions({ helper, state: helper.state }));
+      widget.dispose();
     }).not.toThrow();
   });
 });

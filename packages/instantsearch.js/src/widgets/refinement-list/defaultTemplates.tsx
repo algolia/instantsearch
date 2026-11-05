@@ -1,7 +1,9 @@
 /** @jsx h */
+import { getHighlightedParts } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h } from 'preact';
 
+import { Highlight } from '../../components/Highlight/Highlight';
 import { formatNumber } from '../../lib/formatNumber';
 
 import type { RefinementListComponentTemplates } from './refinement-list';
@@ -16,14 +18,12 @@ const defaultTemplates: RefinementListComponentTemplates = {
           value={value}
           defaultChecked={isRefined}
         />
-        {/* @MAJOR: use the `<Highlight>` component instead */}
-        <span
-          className={cx(cssClasses.labelText)}
-          dangerouslySetInnerHTML={
-            isFromSearch ? { __html: highlighted } : undefined
-          }
-        >
-          {!isFromSearch && highlighted}
+        <span className={cx(cssClasses.labelText)}>
+          {isFromSearch ? (
+            <Highlight parts={[getHighlightedParts(highlighted)]} />
+          ) : (
+            highlighted
+          )}
         </span>
         <span className={cx(cssClasses.count)}>{formatNumber(count)}</span>
       </label>

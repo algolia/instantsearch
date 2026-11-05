@@ -13,7 +13,7 @@ import { castToJestMock } from '@instantsearch/testutils';
 import { wait } from '@instantsearch/testutils/wait';
 import { fireEvent } from '@testing-library/dom';
 import { createInsightsMiddleware } from 'instantsearch-core';
-import { warning } from 'instantsearch-core';
+import { TAG_PLACEHOLDER, warning } from 'instantsearch-core';
 
 import { createInstantSearch } from '../../../../instantsearch-core/test/createInstantSearch';
 import { connectRelatedProducts, connectSearchBox } from '../../connectors';
@@ -779,6 +779,7 @@ describe('insights', () => {
         {
           indexName: 'my-index',
           params: {
+            ...TAG_PLACEHOLDER,
             clickAnalytics: true,
             query: '',
             userToken: getUserToken(),
@@ -823,6 +824,7 @@ describe('insights', () => {
         {
           indexName: 'my-index',
           params: {
+            ...TAG_PLACEHOLDER,
             query: '',
           },
         },
@@ -842,6 +844,7 @@ describe('insights', () => {
         {
           indexName: 'my-index',
           params: {
+            ...TAG_PLACEHOLDER,
             clickAnalytics: true,
             query: '',
             userToken: getUserToken(),
@@ -868,6 +871,7 @@ describe('insights', () => {
         {
           indexName: 'my-index',
           params: {
+            ...TAG_PLACEHOLDER,
             clickAnalytics: true,
             query: '',
             userToken: getUserToken(),

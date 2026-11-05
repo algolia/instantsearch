@@ -42,14 +42,6 @@ export default {
       type: String,
       required: true,
     },
-    preTag: {
-      type: String,
-      required: true,
-    },
-    postTag: {
-      type: String,
-      required: true,
-    },
   },
   data() {
     return { TextNode };
@@ -60,8 +52,6 @@ export default {
         attribute: this.attribute,
         hit: this.hit,
         highlightProperty: this.highlightProperty,
-        preTag: this.preTag,
-        postTag: this.postTag,
       });
     },
   },

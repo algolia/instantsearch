@@ -15,7 +15,7 @@ import algoliasearchHelper, {
   RecommendParameters,
   RecommendResults,
 } from 'algoliasearch-helper';
-import { index } from 'instantsearch-core';
+import { TAG_PLACEHOLDER, index } from 'instantsearch-core';
 
 import { castToJestMock } from '../../../../../../tests/utils';
 import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
@@ -25,6 +25,7 @@ import {
   createDisposeOptions,
 } from '../../../../../instantsearch-core/test/createWidget';
 import {
+  connectConfigure,
   connectHits,
   connectPagination,
   connectRefinementList,
@@ -283,6 +284,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
             index: 'indexName',
+            ...TAG_PLACEHOLDER,
             query: 'Apple',
           })
         );
@@ -298,6 +300,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
             index: 'indexName',
+            ...TAG_PLACEHOLDER,
             query: 'Apple',
             page: 5,
           })
@@ -616,6 +619,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
             index: 'indexName',
+            ...TAG_PLACEHOLDER,
             query: 'Apple',
             page: 5,
           })
@@ -633,6 +637,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
             index: 'indexName',
+            ...TAG_PLACEHOLDER,
             query: 'Apple',
           })
         );
@@ -673,6 +678,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
             index: 'indexName',
+            ...TAG_PLACEHOLDER,
             query: 'Apple iPhone',
             hitsPerPage: 5,
             distinct: true,
@@ -684,6 +690,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
             index: 'indexName',
+            ...TAG_PLACEHOLDER,
             query: 'Apple iPhone',
             distinct: true,
           })
@@ -724,6 +731,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
             index: 'indexName',
+            ...TAG_PLACEHOLDER,
             maxValuesPerFacet: 10,
             disjunctiveFacets: ['brand'],
             disjunctiveFacetsRefinements: {
@@ -737,6 +745,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
             index: 'indexName',
+            ...TAG_PLACEHOLDER,
             maxValuesPerFacet: 10,
             disjunctiveFacets: ['brand'],
             disjunctiveFacetsRefinements: {
@@ -775,6 +784,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
             index: 'indexName',
+            ...TAG_PLACEHOLDER,
             maxValuesPerFacet: 10,
             disjunctiveFacets: ['brand'],
             disjunctiveFacetsRefinements: {
@@ -788,6 +798,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
             index: 'indexName',
+            ...TAG_PLACEHOLDER,
             maxValuesPerFacet: 10,
             disjunctiveFacets: ['brand'],
             disjunctiveFacetsRefinements: {
@@ -826,6 +837,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
             index: 'indexName',
+            ...TAG_PLACEHOLDER,
             maxValuesPerFacet: 10,
             disjunctiveFacets: ['brand'],
             disjunctiveFacetsRefinements: {
@@ -839,6 +851,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
             index: 'indexName',
+            ...TAG_PLACEHOLDER,
             maxValuesPerFacet: 10,
             disjunctiveFacets: ['brand'],
             disjunctiveFacetsRefinements: {
@@ -1467,6 +1480,76 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             params: expect.objectContaining({
               query: 'Apple',
               page: 5,
+            }),
+          },
+        ])
+      );
+    });
+
+    it('sets the highlight tags without any widget', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchClient = createSearchClient();
+      const mainHelper = algoliasearchHelper(searchClient, '', {});
+      const instantSearchInstance = createInstantSearch({
+        mainHelper,
+      });
+
+      instance.init(
+        createIndexInitOptions({
+          instantSearchInstance,
+          parent: null,
+        })
+      );
+
+      instance.getHelper()!.search();
+
+      expect(searchClient.search).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          {
+            indexName: 'indexName',
+            params: {
+              highlightPreTag: '__ais-highlight__',
+              highlightPostTag: '__/ais-highlight__',
+            },
+          },
+        ])
+      );
+    });
+
+    it('keeps the highlight tags set by a widget', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchClient = createSearchClient();
+      const mainHelper = algoliasearchHelper(searchClient, '', {});
+      const instantSearchInstance = createInstantSearch({
+        mainHelper,
+      });
+
+      instance.addWidgets([
+        connectConfigure(() => {})({
+          searchParameters: {
+            highlightPreTag: '<em>',
+            highlightPostTag: '</em>',
+          },
+        }),
+        connectHits(() => {})({}),
+      ]);
+
+      instance.init(
+        createIndexInitOptions({
+          instantSearchInstance,
+          parent: null,
+        })
+      );
+
+      instance.getHelper()!.search();
+
+      expect(searchClient.search).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          {
+            indexName: 'indexName',
+            params: expect.objectContaining({
+              highlightPreTag: '<em>',
+              highlightPostTag: '</em>',
             }),
           },
         ])
@@ -2424,6 +2507,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
             index: 'indexName',
+            ...TAG_PLACEHOLDER,
             query: 'Apple iPhone',
             page: 5,
           })
@@ -3694,6 +3778,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         ],
         _state: {
           index: 'indexName',
+          ...TAG_PLACEHOLDER,
           disjunctiveFacets: [],
           disjunctiveFacetsRefinements: {},
           facets: [],
@@ -4051,6 +4136,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           {
             "indexName": "a",
             "params": {
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
               "query": "",
             },
           },
@@ -4080,6 +4167,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           {
             "indexName": "a",
             "params": {
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
               "query": "please search now",
             },
           },

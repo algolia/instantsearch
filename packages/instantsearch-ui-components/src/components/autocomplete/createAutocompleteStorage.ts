@@ -1,4 +1,4 @@
-import { find } from 'instantsearch-core';
+import { find, TAG_PLACEHOLDER } from 'instantsearch-core';
 
 import type { UsePropGetters } from './createAutocompletePropGetters';
 import type { Hooks } from '../../types';
@@ -130,7 +130,7 @@ function getHighlightedAttribute({
       value: item.query.replace(
         new RegExp(query.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&'), 'gi'),
         (match) => {
-          return `<mark>${match}</mark>`;
+          return `${TAG_PLACEHOLDER.highlightPreTag}${match}${TAG_PLACEHOLDER.highlightPostTag}`;
         }
       ),
     },

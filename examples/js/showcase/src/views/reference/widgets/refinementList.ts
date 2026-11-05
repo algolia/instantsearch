@@ -54,13 +54,6 @@ export const refinementList = defineWidget({
       value: { searchableIsAlwaysActive: false },
     },
     {
-      key: 'searchableEscapeFacetValues',
-      flavors: ['js'],
-      label: 'false',
-      requires: 'searchable',
-      value: { searchableEscapeFacetValues: false },
-    },
-    {
       key: 'searchableSelectOnSubmit',
       flavors: ['js', 'react'],
       label: 'false',
@@ -75,5 +68,4 @@ export const refinementList = defineWidget({
       value: { showMoreButtonLabel: 'More categories' },
     },
   ],
-  // `escapeFacetValues` is omitted: it has no observable effect on this data.
 });

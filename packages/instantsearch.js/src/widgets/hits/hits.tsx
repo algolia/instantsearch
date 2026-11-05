@@ -208,7 +208,6 @@ export default (function hits<THit extends NonNullable<object> = BaseHit>(
 ) {
   const {
     container,
-    escapeHTML,
     transformItems,
     templates = {},
     cssClasses = {},
@@ -233,7 +232,6 @@ export default (function hits<THit extends NonNullable<object> = BaseHit>(
 
   return {
     ...makeWidget({
-      escapeHTML,
       transformItems,
     }),
     $$widgetType: 'ais.hits',
