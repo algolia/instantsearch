@@ -5,11 +5,11 @@ import {
   getObjectType,
   warning,
 } from 'instantsearch-core';
+import { suitComponent as component } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Panel from '../../components/Panel/Panel';
-import { component } from '../../lib/suit';
 import { getContainerNode } from '../../lib/utils';
 
 import type { PanelComponentCSSClasses } from '../../components/Panel/Panel';
