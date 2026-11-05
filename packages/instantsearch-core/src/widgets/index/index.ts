@@ -11,6 +11,7 @@ import {
   createRenderArgs,
   storeRenderState,
   defer,
+  TAG_PLACEHOLDER,
 } from '../../lib/utils';
 import { addWidgetId } from '../../lib/utils/addWidgetId';
 
@@ -249,6 +250,11 @@ function getLocalWidgetsSearchParameters(
   widgetSearchParametersOptions: LocalWidgetSearchParametersOptions
 ): SearchParameters {
   const { initialSearchParameters, ...rest } = widgetSearchParametersOptions;
+  // `setQueryParameter` keeps the instance when unchanged, which avoids
+  // emitting a `change` event when no widget changes the state.
+  const initialState = initialSearchParameters
+    .setQueryParameter('highlightPreTag', TAG_PLACEHOLDER.highlightPreTag)
+    .setQueryParameter('highlightPostTag', TAG_PLACEHOLDER.highlightPostTag);
 
   return widgets.reduce<SearchParameters>((state, widget) => {
     if (!widget.getWidgetSearchParameters || isIndexWidget(widget)) {
@@ -260,7 +266,7 @@ function getLocalWidgetsSearchParameters(
     }
 
     return widget.getWidgetSearchParameters(state, rest);
-  }, initialSearchParameters);
+  }, initialState);
 }
 
 function getLocalWidgetsRecommendParameters(
