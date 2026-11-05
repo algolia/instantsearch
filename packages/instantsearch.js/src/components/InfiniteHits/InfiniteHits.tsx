@@ -13,7 +13,7 @@ import type {
   InfiniteHitsTemplates,
 } from '../../widgets/infinite-hits/infinite-hits';
 import type { Banner, SearchResults } from 'algoliasearch-helper';
-import type { SendEventForHits, BindEventForHits } from 'instantsearch-core';
+import type { SendEventForHits } from 'instantsearch-core';
 import type { Hit, InsightsClient } from 'instantsearch-core';
 
 export type InfiniteHitsComponentCSSClasses =
@@ -35,7 +35,6 @@ export type InfiniteHitsProps = {
   isLastPage: boolean;
   insights?: InsightsClient;
   sendEvent: SendEventForHits;
-  bindEvent: BindEventForHits;
   banner?: Banner;
 };
 
@@ -82,7 +81,6 @@ const InfiniteHits = ({
   results,
   hits,
   insights,
-  bindEvent,
   sendEvent,
   hasShowPrevious,
   showPrevious,
@@ -93,10 +91,7 @@ const InfiniteHits = ({
   templateProps,
   banner,
 }: InfiniteHitsProps) => {
-  const handleInsightsClick = createInsightsEventHandler({
-    insights,
-    sendEvent,
-  });
+  const handleInsightsClick = createInsightsEventHandler({ insights });
 
   if (results.hits.length === 0) {
     return (
@@ -189,7 +184,6 @@ const InfiniteHits = ({
                 return index;
               },
             }}
-            bindEvent={bindEvent}
             sendEvent={sendEvent}
           />
         ))}

@@ -48,7 +48,6 @@ describe('InfiniteHits', () => {
       ]),
       hits: hits as THit[],
       sendEvent: jest.fn(),
-      bindEvent: jest.fn(),
       showPrevious: jest.fn(),
       showMore: jest.fn(),
       hasShowPrevious: true,

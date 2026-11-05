@@ -22,7 +22,7 @@ import type {
   HitsWidgetDescription,
 } from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template, TemplateWithBindEvent } from '../../types';
+import type { Template, TemplateWithSendEvent } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 import type { Hit, WidgetFactory, Renderer, BaseHit } from 'instantsearch-core';
 import type {
@@ -48,10 +48,7 @@ const renderer =
     };
     templates: HitsTemplates<THit>;
   }): Renderer<HitsRenderState, Partial<HitsWidgetParams>> =>
-  (
-    { items, results, insights, bindEvent, sendEvent, banner },
-    isFirstRendering
-  ) => {
+  ({ items, results, insights, sendEvent, banner }, isFirstRendering) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps<HitsTemplates<THit>>({
         defaultTemplates,
@@ -60,10 +57,7 @@ const renderer =
       return;
     }
 
-    const handleInsightsClick = createInsightsEventHandler({
-      insights,
-      sendEvent,
-    });
+    const handleInsightsClick = createInsightsEventHandler({ insights });
 
     const emptyComponent: HitsUiComponentProps<Hit>['emptyComponent'] = ({
       ...rootProps
@@ -109,7 +103,6 @@ const renderer =
             return index;
           },
         }}
-        bindEvent={bindEvent}
         sendEvent={sendEvent}
       />
     );
@@ -155,7 +148,7 @@ export type HitsTemplates<THit extends NonNullable<object> = BaseHit> =
      *
      * @default ''
      */
-    item: TemplateWithBindEvent<
+    item: TemplateWithSendEvent<
       Hit<THit> & {
         /** @deprecated the index in the hits array, use __position instead, which is the absolute position */
         __hitIndex: number;
