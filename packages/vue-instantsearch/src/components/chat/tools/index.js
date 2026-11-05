@@ -6,8 +6,8 @@ import {
   PonderToolType,
   RecommendToolType,
   SearchIndexToolType,
+  shouldSearchToolRenderResults,
 } from 'instantsearch-core';
-import { shouldSearchToolRenderResults } from 'instantsearch-ui-components';
 
 import { createCompareProductsTool } from './CompareProductsTool';
 import { createGroupedResultsTool } from './GroupedResultsTool';
