@@ -1,14 +1,7 @@
 import { createInfiniteHitsSessionStorageCache } from 'instantsearch-core';
 import { deprecate } from 'instantsearch-core';
 
-import {
-  snippet,
-  reverseSnippet,
-  highlight,
-  reverseHighlight,
-  insights,
-  getInsightsAnonymousUserToken,
-} from './helpers';
+import { insights, getInsightsAnonymousUserToken } from './helpers';
 import InstantSearch from './lib/InstantSearch';
 import version from './lib/version';
 
@@ -24,14 +17,6 @@ type InstantSearchModule = {
   // @major remove these in favour of the exports
   /** @deprecated import { createInfiniteHitsSessionStorageCache } from 'instantsearch-core' */
   createInfiniteHitsSessionStorageCache: typeof createInfiniteHitsSessionStorageCache;
-  /** @deprecated import { highlight } from 'instantsearch.js/es/helpers' */
-  highlight: typeof highlight;
-  /** @deprecated import { reverseHighlight } from 'instantsearch.js/es/helpers' */
-  reverseHighlight: typeof reverseHighlight;
-  /** @deprecated import { snippet } from 'instantsearch.js/es/helpers' */
-  snippet: typeof snippet;
-  /** @deprecated import { reverseSnippet } from 'instantsearch.js/es/helpers' */
-  reverseSnippet: typeof reverseSnippet;
   /**
    * @deprecated use createInsightsMiddleware
    * @link https://www.algolia.com/doc/api-reference/widgets/insights/js/
@@ -67,22 +52,6 @@ instantsearch.version = version;
 instantsearch.createInfiniteHitsSessionStorageCache = deprecate(
   createInfiniteHitsSessionStorageCache,
   "import { createInfiniteHitsSessionStorageCache } from 'instantsearch-core'"
-);
-instantsearch.highlight = deprecate(
-  highlight,
-  "import { highlight } from 'instantsearch.js/es/helpers'"
-);
-instantsearch.reverseHighlight = deprecate(
-  reverseHighlight,
-  "import { reverseHighlight } from 'instantsearch.js/es/helpers'"
-);
-instantsearch.snippet = deprecate(
-  snippet,
-  "import { snippet } from 'instantsearch.js/es/helpers'"
-);
-instantsearch.reverseSnippet = deprecate(
-  reverseSnippet,
-  "import { reverseSnippet } from 'instantsearch.js/es/helpers'"
 );
 instantsearch.insights = insights;
 instantsearch.getInsightsAnonymousUserToken = getInsightsAnonymousUserToken;
