@@ -7,13 +7,13 @@ import {
   isPartText,
   isPartTool,
 } from 'instantsearch-core';
-
-import { cx } from '../../lib';
 import {
   findLastProgressPart,
   isReasoningPartActive,
   isSilentUserMessage,
-} from '../../lib/chat';
+} from 'instantsearch-core';
+
+import { cx } from '../../lib';
 import { createButtonComponent } from '../Button';
 
 import { createChatMessageComponent } from './ChatMessage';

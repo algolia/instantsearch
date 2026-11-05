@@ -5,9 +5,9 @@ import {
   startsWith,
   type ChatRecordsStore,
 } from 'instantsearch-core';
+import { isPartTextEmpty, isReasoningPartActive } from 'instantsearch-core';
 
 import { cx } from '../../lib';
-import { isPartTextEmpty, isReasoningPartActive } from '../../lib/chat';
 import { compiler } from '../../lib/markdown-to-jsx';
 import { createButtonComponent } from '../Button';
 

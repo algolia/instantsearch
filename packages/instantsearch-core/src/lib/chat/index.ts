@@ -5,6 +5,18 @@ export { ChatState } from './chat';
 export { Chat } from './chat';
 export { CACHE_KEY, CONVERSATION_ID_CACHE_KEY } from './chat';
 
+export {
+  isSilentUserMessage,
+  isReasoningPartActive,
+  isPartTextEmpty,
+  isPartProgressSignal,
+  findLastProgressPart,
+  getResolvedSearchParams,
+  getApplyFiltersParamsFromToolInput,
+  isGroupedResultsEnabled,
+  shouldSearchToolRenderResults,
+} from './helpers';
+
 export { openChat, isChatBusy } from './openChat';
 export type { OpenChatOptions, ChatReferer } from './openChat';
 export { applyAgentFilters, getAgentFilters } from './filters';

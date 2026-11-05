@@ -1,9 +1,13 @@
 /** @jsx createElement */
 /** @jsxFrag Fragment */
-import { isPartText, isPartTool } from 'instantsearch-core';
+import {
+  findLastProgressPart,
+  isPartText,
+  isPartTextEmpty,
+  isPartTool,
+} from 'instantsearch-core';
 
 import { cx } from '../../lib';
-import { findLastProgressPart, isPartTextEmpty } from '../../lib/chat';
 import { createButtonComponent } from '../Button';
 
 import { createChatMessageComponent } from './ChatMessage';

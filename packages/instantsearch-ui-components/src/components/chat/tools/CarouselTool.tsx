@@ -1,11 +1,11 @@
 /** @jsx createElement */
 
 import { addAbsolutePosition, addQueryID } from 'instantsearch-core';
-
 import {
   getApplyFiltersParamsFromToolInput,
   getResolvedSearchParams,
-} from '../../../lib/chat';
+} from 'instantsearch-core';
+
 import { createButtonComponent } from '../../Button';
 import { createCarouselComponent, generateCarouselId } from '../../Carousel';
 import { ArrowRightIcon, ChevronLeftIcon, ChevronRightIcon } from '../icons';

@@ -4,10 +4,10 @@
 /** @jsx createElement */
 import { act, render, screen } from '@testing-library/preact';
 import { getTextContent } from 'instantsearch-core';
+import * as chatUtils from 'instantsearch-core';
 import { Fragment, createElement } from 'preact';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 
-import * as chatUtils from '../../../lib/chat';
 import { createChatMessageErrorComponent } from '../ChatMessageError';
 import { createChatMessagesComponent } from '../ChatMessages';
 
@@ -20,6 +20,14 @@ import type {
   ChatComponentPropsWithContext,
   ChatMessageBase,
 } from 'instantsearch-core';
+
+jest.mock('instantsearch-core', () => {
+  const actual = jest.requireActual('instantsearch-core');
+  return {
+    ...actual,
+    isReasoningPartActive: jest.fn(actual.isReasoningPartActive),
+  };
+});
 
 const ChatMessages = createChatMessagesComponent({
   createElement,
@@ -883,10 +891,8 @@ describe('ChatMessages', () => {
   });
 
   test('does not scan for active reasoning once the disclosure is off', () => {
-    const isReasoningPartActive = jest.spyOn(
-      chatUtils,
-      'isReasoningPartActive'
-    );
+    const isReasoningPartActive = chatUtils.isReasoningPartActive as jest.Mock;
+    isReasoningPartActive.mockClear();
     const message = {
       role: 'assistant' as const,
       id: '1',
@@ -928,7 +934,6 @@ describe('ChatMessages', () => {
     render(<ChatMessages {...props} />);
 
     expect(isReasoningPartActive).toHaveBeenCalled();
-    isReasoningPartActive.mockRestore();
   });
 
   test('toggles the disclosure on completed messages when the option changes', () => {
