@@ -1,6 +1,7 @@
 import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
+import { TAG_PLACEHOLDER } from 'instantsearch-core';
 
 import { skippableDescribe } from '../../common';
 
@@ -23,7 +24,6 @@ export function createOptionsTests(
           threshold: 3,
           fallbackParameters: { facetFilters: ['test1'] },
           queryParameters: { analytics: true },
-          escapeHTML: false,
         },
       };
 
@@ -34,13 +34,34 @@ export function createOptionsTests(
           expect.objectContaining({
             maxRecommendations: 2,
             threshold: 3,
-            fallbackParameters: { facetFilters: ['test1'] },
-            queryParameters: { analytics: true },
+            fallbackParameters: { facetFilters: ['test1'], ...TAG_PLACEHOLDER },
+            queryParameters: { analytics: true, ...TAG_PLACEHOLDER },
             model: 'trending-items',
             indexName: 'indexName',
           }),
         ])
       );
+    });
+
+    test('keeps custom highlight tags', async () => {
+      const searchClient = createRecommendSearchClient();
+      const customTags = { highlightPreTag: '<em>', highlightPostTag: '</em>' };
+      const options: SetupOptions<TrendingItemsConnectorSetup> = {
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: {
+          fallbackParameters: customTags,
+          queryParameters: customTags,
+        },
+      };
+
+      await setup(options);
+
+      expect(searchClient.getRecommendations).toHaveBeenCalledWith([
+        expect.objectContaining({
+          fallbackParameters: customTags,
+          queryParameters: customTags,
+        }),
+      ]);
     });
 
     test('returns recommendations', async () => {

@@ -57,7 +57,6 @@ const HitsUiComponent = createHitsComponent({
 });
 
 export function Hits<THit extends BaseHit = BaseHit>({
-  escapeHTML,
   transformItems,
   hitComponent: HitComponent = DefaultHitComponent,
   bannerComponent: BannerComponent,
@@ -67,10 +66,7 @@ export function Hits<THit extends BaseHit = BaseHit>({
     items: hits,
     banner,
     sendEvent,
-  } = useHits<THit>(
-    { escapeHTML, transformItems },
-    { $$widgetType: 'ais.hits' }
-  );
+  } = useHits<THit>({ transformItems }, { $$widgetType: 'ais.hits' });
 
   const itemComponent: HitsUiComponentProps<Hit<THit>>['itemComponent'] =
     useMemo(

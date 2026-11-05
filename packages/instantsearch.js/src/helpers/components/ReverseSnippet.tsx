@@ -1,7 +1,6 @@
 /** @jsx h */
 import {
   getPropertyByPath,
-  unescape,
   toArray,
   warning,
   getHighlightedParts,
@@ -47,12 +46,10 @@ See: https://alg.li/highlighting
   );
 
   const parts = properties.map(({ value }) =>
-    getHighlightedParts(unescape(value || '')).map(
-      ({ isHighlighted, ...rest }) => ({
-        ...rest,
-        isHighlighted: !isHighlighted,
-      })
-    )
+    getHighlightedParts(value || '').map(({ isHighlighted, ...rest }) => ({
+      ...rest,
+      isHighlighted: !isHighlighted,
+    }))
   );
 
   return (

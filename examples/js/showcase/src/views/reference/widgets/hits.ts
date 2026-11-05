@@ -21,11 +21,6 @@ export const hits = defineWidget({
   ],
   toggles: [
     {
-      key: 'escapeHTML',
-      label: 'false',
-      value: { escapeHTML: false },
-    },
-    {
       key: 'transformItems',
       label: 'firstThreeOnly',
       value: { transformItems: firstThreeOnly },

@@ -1,8 +1,4 @@
-import {
-  getHighlightedParts,
-  getPropertyByPath,
-  unescape,
-} from 'instantsearch-core';
+import { getHighlightedParts, getPropertyByPath } from 'instantsearch-core';
 import { createHighlightComponent } from 'instantsearch-ui-components';
 
 import { createElement, Fragment } from '../util/pragma';
@@ -32,14 +28,6 @@ export default {
       type: String,
       required: true,
     },
-    preTag: {
-      type: String,
-      required: true,
-    },
-    postTag: {
-      type: String,
-      required: true,
-    },
   },
   render() {
     const property =
@@ -47,7 +35,7 @@ export default {
     const properties = Array.isArray(property) ? property : [property];
 
     const parts = properties.map((singleValue) =>
-      getHighlightedParts(unescape(singleValue.value || '')).map(
+      getHighlightedParts(singleValue.value || '').map(
         ({ value, isHighlighted }) => ({
           // We have to do this because Vue gets rid of TextNodes with a single white space
           value: value === ' ' ? '  ' : value,

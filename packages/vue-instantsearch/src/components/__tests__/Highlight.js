@@ -12,7 +12,7 @@ test('renders proper HTML', () => {
   const hit = {
     _highlightResult: {
       attr: {
-        value: `con<mark>ten</mark>t`,
+        value: `con__ais-highlight__ten__/ais-highlight__t`,
       },
     },
   };
@@ -31,7 +31,7 @@ test('renders proper HTML with highlightTagName', () => {
   const hit = {
     _highlightResult: {
       attr: {
-        value: `con<mark>ten</mark>t`,
+        value: `con__ais-highlight__ten__/ais-highlight__t`,
       },
     },
   };
@@ -68,7 +68,7 @@ test('allows usage of dot delimited path to access nested attribute', () => {
     _highlightResult: {
       attr: {
         nested: {
-          value: `nested <mark>val</mark>`,
+          value: `nested __ais-highlight__val__/ais-highlight__`,
         },
       },
     },
@@ -88,7 +88,7 @@ test('retains whitespace nodes', () => {
   const hit = {
     _highlightResult: {
       attr: {
-        value: `con<mark>tent</mark> <mark>search</mark>ing`,
+        value: `con__ais-highlight__tent__/ais-highlight__ __ais-highlight__search__/ais-highlight__ing`,
       },
     },
   };

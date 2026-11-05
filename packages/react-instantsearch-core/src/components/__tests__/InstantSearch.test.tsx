@@ -7,7 +7,7 @@ import { createInstantSearchSpy, wait } from '@instantsearch/testutils';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { history } from 'instantsearch-core';
-import { simple } from 'instantsearch-core';
+import { simple, TAG_PLACEHOLDER } from 'instantsearch-core';
 import React, { StrictMode, Suspense, version as ReactVersion } from 'react';
 import { SearchBox } from 'react-instantsearch';
 
@@ -190,11 +190,12 @@ describe('InstantSearch', () => {
     expect(searchClient.search).toHaveBeenLastCalledWith([
       {
         indexName: 'indexName',
-        params: { query: '' },
+        params: { ...TAG_PLACEHOLDER, query: '' },
       },
       {
         indexName: 'subIndexName',
         params: {
+          ...TAG_PLACEHOLDER,
           facets: ['brand'],
           maxValuesPerFacet: 10,
           query: '',
@@ -224,11 +225,12 @@ describe('InstantSearch', () => {
     expect(searchClient.search).toHaveBeenLastCalledWith([
       {
         indexName: 'indexName',
-        params: { query: '' },
+        params: { ...TAG_PLACEHOLDER, query: '' },
       },
       {
         indexName: 'subIndexName',
         params: {
+          ...TAG_PLACEHOLDER,
           facets: ['brand'],
           maxValuesPerFacet: 10,
           query: '',

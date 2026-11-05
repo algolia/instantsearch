@@ -117,7 +117,6 @@ describe('connectTrendingItems', () => {
         limit: 10,
         threshold: 95,
         queryParameters: { userToken: 'token' },
-        escapeHTML: false,
       });
 
       // @ts-expect-error
@@ -133,7 +132,11 @@ describe('connectTrendingItems', () => {
           facetValue: undefined,
           maxRecommendations: 10,
           threshold: 95,
-          queryParameters: { userToken: 'token' },
+          queryParameters: {
+            userToken: 'token',
+            highlightPostTag: '__/ais-highlight__',
+            highlightPreTag: '__ais-highlight__',
+          },
         })
       );
     });
@@ -147,7 +150,6 @@ describe('connectTrendingItems', () => {
         limit: 10,
         threshold: 95,
         queryParameters: { userToken: 'token' },
-        escapeHTML: false,
       });
 
       // @ts-expect-error
@@ -163,12 +165,16 @@ describe('connectTrendingItems', () => {
           facetValue: 'value',
           maxRecommendations: 10,
           threshold: 95,
-          queryParameters: { userToken: 'token' },
+          queryParameters: {
+            userToken: 'token',
+            highlightPostTag: '__/ais-highlight__',
+            highlightPreTag: '__ais-highlight__',
+          },
         })
       );
     });
 
-    it('adds escapeHTML tags', () => {
+    it('adds highlight tags', () => {
       const render = () => {};
       const makeWidget = connectTrendingItems(render);
       const widget = makeWidget({
@@ -177,7 +183,6 @@ describe('connectTrendingItems', () => {
         limit: 10,
         threshold: 95,
         queryParameters: { userToken: 'token' },
-        escapeHTML: true,
         fallbackParameters: { query: 'query' },
       });
 

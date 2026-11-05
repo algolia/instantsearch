@@ -42,7 +42,6 @@ export function RelatedProducts<TItem extends BaseHit = BaseHit>({
   threshold,
   fallbackParameters,
   queryParameters,
-  escapeHTML,
   transformItems,
   itemComponent,
   headerComponent,
@@ -58,7 +57,6 @@ export function RelatedProducts<TItem extends BaseHit = BaseHit>({
       threshold,
       fallbackParameters,
       queryParameters,
-      escapeHTML,
       transformItems,
     },
     { $$widgetType: 'ais.relatedProducts' }

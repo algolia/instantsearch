@@ -21,18 +21,11 @@ import { createInfiniteHitsSessionStorageCache } from '../../../lib/infiniteHits
 import { TAG_PLACEHOLDER, deserializePayload } from '../../../lib/utils';
 import connectInfiniteHits from '../connectInfiniteHits';
 
-import type {
-  SearchClient,
-  HitAttributeHighlightResult,
-  Hit,
-  EscapedHits,
-  SearchResponse,
-} from '../../../types';
+import type { SearchClient, Hit, SearchResponse } from '../../../types';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,
-  // especially with the __escaped mark, we thus make sure the mock also has the
-  // same behavior regarding the array.
+  // we thus make sure the mock also has the same behavior regarding the array.
   addAbsolutePosition: (hits: Hit[]) => hits.map((x) => x),
 }));
 
@@ -85,9 +78,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const renderFn = jest.fn();
     const instantSearchInstance = createInstantSearch();
     const makeWidget = connectInfiniteHits(renderFn);
-    const widget = makeWidget({
-      escapeHTML: true,
-    });
+    const widget = makeWidget({});
 
     expect(renderFn).toHaveBeenCalledTimes(0);
 
@@ -112,9 +103,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         results: undefined,
         isFirstPage: true,
         isLastPage: true,
-        widgetParams: {
-          escapeHTML: true,
-        },
+        widgetParams: {},
       }),
       true
     );
@@ -140,9 +129,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         results: expect.any(Object),
         isFirstPage: true,
         isLastPage: true,
-        widgetParams: {
-          escapeHTML: true,
-        },
+        widgetParams: {},
       }),
       false
     );
@@ -505,10 +492,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     );
   });
 
-  it('escape highlight properties if requested', () => {
+  it('does not escape highlight properties', () => {
     const renderFn = jest.fn();
     const makeWidget = connectInfiniteHits(renderFn);
-    const widget = makeWidget({ escapeHTML: true });
+    const widget = makeWidget({});
 
     const helper = algoliasearchHelper({} as SearchClient, '', {});
     helper.search = jest.fn();
@@ -550,14 +537,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       })
     );
 
-    const escapedHits = [
+    const expectedHits = [
       {
         foobar: '<script>foobar</script>',
         _highlightResult: {
           foobar: {
             matchLevel: 'full',
             matchedWords: [],
-            value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
+            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
           },
         },
         objectID: '1',
@@ -565,7 +552,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     ];
 
     const secondRenderOptions = renderFn.mock.calls[1][0];
-    expect(secondRenderOptions.items).toEqual(escapedHits);
+    expect(secondRenderOptions.items).toEqual(expectedHits);
     expect(secondRenderOptions.results).toEqual(results);
   });
 
@@ -655,102 +642,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(transformItems).toHaveBeenLastCalledWith(
       expect.anything(),
       expect.objectContaining({ results })
-    );
-  });
-
-  it('transform items after escaping', () => {
-    const renderFn = jest.fn();
-    const makeWidget = connectInfiniteHits(renderFn);
-    const widget = makeWidget({
-      transformItems: (items) =>
-        items.map((item) => {
-          const name = item._highlightResult!
-            .name as HitAttributeHighlightResult;
-
-          name.value = name.value.toUpperCase();
-
-          return item;
-        }),
-      escapeHTML: true,
-    });
-
-    const helper = algoliasearchHelper({} as SearchClient, '', {});
-    helper.search = jest.fn();
-
-    widget.init(
-      createInitOptions({
-        state: helper.state,
-        helper,
-      })
-    );
-
-    const hits = [
-      {
-        name: 'hello',
-        _highlightResult: {
-          name: {
-            matchLevel: 'full' as const,
-            matchedWords: [],
-            value: `he${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}`,
-          },
-        },
-        objectID: '1',
-      },
-      {
-        name: 'halloween',
-        _highlightResult: {
-          name: {
-            matchLevel: 'full' as const,
-            matchedWords: [],
-            value: `ha${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}ween`,
-          },
-        },
-        objectID: '2',
-      },
-    ];
-
-    const results = new SearchResults(helper.state, [
-      createSingleSearchResponse({ hits }),
-    ]);
-
-    widget.render(
-      createRenderOptions({
-        state: helper.state,
-        results,
-        helper,
-      })
-    );
-
-    expect(renderFn).toHaveBeenNthCalledWith(
-      2,
-      expect.objectContaining({
-        items: [
-          {
-            name: 'hello',
-            _highlightResult: {
-              name: {
-                matchLevel: 'full',
-                matchedWords: [],
-                value: 'HE<MARK>LLO</MARK>',
-              },
-            },
-            objectID: '1',
-          },
-          {
-            name: 'halloween',
-            _highlightResult: {
-              name: {
-                matchLevel: 'full',
-                matchedWords: [],
-                value: 'HA<MARK>LLO</MARK>WEEN',
-              },
-            },
-            objectID: '2',
-          },
-        ],
-        results,
-      }),
-      expect.anything()
     );
   });
 
@@ -886,40 +777,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       }),
       false
     );
-  });
-
-  it('keeps the __escaped mark', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectInfiniteHits(rendering);
-    const widget = makeWidget({});
-
-    const helper = algoliasearchHelper({} as SearchClient, '', {});
-    helper.search = jest.fn();
-
-    createInitOptions();
-
-    widget.init(
-      createInitOptions({
-        state: helper.state,
-        helper,
-      })
-    );
-
-    const results = new SearchResults(helper.state, [
-      createSingleSearchResponse({
-        hits: [{ whatever: 'i like kittens', objectID: '1' }],
-      }),
-    ]);
-
-    widget.render(
-      createRenderOptions({
-        state: helper.state,
-        results,
-        helper,
-      })
-    );
-
-    expect((results.hits as unknown as EscapedHits).__escaped).toBe(true);
   });
 
   it('does not overwrite custom cache when dynamic widgets have no facets in state yet', () => {
@@ -1193,60 +1050,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       expect(() =>
         widget.dispose(createDisposeOptions({ helper, state: helper.state }))
       ).not.toThrow();
-    });
-
-    it('removes the TAG_PLACEHOLDER from the `SearchParameters`', () => {
-      const helper = algoliasearchHelper({} as SearchClient, '', {
-        ...TAG_PLACEHOLDER,
-      });
-
-      const renderFn = (): void => {};
-      const makeWidget = connectInfiniteHits(renderFn);
-      const widget = makeWidget({});
-
-      expect(helper.state.highlightPreTag).toBe(
-        TAG_PLACEHOLDER.highlightPreTag
-      );
-
-      expect(helper.state.highlightPostTag).toBe(
-        TAG_PLACEHOLDER.highlightPostTag
-      );
-
-      const nextState = widget.dispose(
-        createDisposeOptions({
-          helper,
-          state: helper.state,
-        })
-      );
-
-      expect(nextState.highlightPreTag).toBeUndefined();
-      expect(nextState.highlightPostTag).toBeUndefined();
-    });
-
-    it('does not remove the TAG_PLACEHOLDER from the `SearchParameters` with `escapeHTML` disabled', () => {
-      const helper = algoliasearchHelper({} as SearchClient, '', {
-        highlightPreTag: '<mark>',
-        highlightPostTag: '</mark>',
-      });
-
-      const renderFn = (): void => {};
-      const makeWidget = connectInfiniteHits(renderFn);
-      const widget = makeWidget({
-        escapeHTML: false,
-      });
-
-      expect(helper.state.highlightPreTag).toBe('<mark>');
-      expect(helper.state.highlightPostTag).toBe('</mark>');
-
-      const nextState = widget.dispose(
-        createDisposeOptions({
-          helper,
-          state: helper.state,
-        })
-      );
-
-      expect(nextState.highlightPreTag).toBe('<mark>');
-      expect(nextState.highlightPostTag).toBe('</mark>');
     });
 
     it('removes the `page` from the `SearchParameters`', () => {
@@ -1605,43 +1408,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   describe('getWidgetSearchParameters', () => {
-    test('return default Search Parameters with highlighted tags by default', () => {
+    test('does not set highlight tags in the Search Parameters', () => {
       const render = jest.fn();
       const makeWidget = connectInfiniteHits(render);
       const helper = algoliasearchHelper(createSearchClient(), 'indexName');
       const widget = makeWidget({});
-
-      const actual = widget.getWidgetSearchParameters(helper.state, {
-        uiState: {},
-      });
-
-      expect(actual.highlightPreTag).toEqual(TAG_PLACEHOLDER.highlightPreTag);
-      expect(actual.highlightPostTag).toEqual(TAG_PLACEHOLDER.highlightPostTag);
-    });
-
-    test('return Search Parameters with highlighted tags with `escapeHTML`', () => {
-      const render = jest.fn();
-      const makeWidget = connectInfiniteHits(render);
-      const helper = algoliasearchHelper(createSearchClient(), 'indexName');
-      const widget = makeWidget({
-        escapeHTML: true,
-      });
-
-      const actual = widget.getWidgetSearchParameters(helper.state, {
-        uiState: {},
-      });
-
-      expect(actual.highlightPreTag).toEqual(TAG_PLACEHOLDER.highlightPreTag);
-      expect(actual.highlightPostTag).toEqual(TAG_PLACEHOLDER.highlightPostTag);
-    });
-
-    test('return Search Parameters without highlighted tags when `escapeHTML` is `false`', () => {
-      const render = jest.fn();
-      const makeWidget = connectInfiniteHits(render);
-      const helper = algoliasearchHelper(createSearchClient(), 'indexName');
-      const widget = makeWidget({
-        escapeHTML: false,
-      });
 
       const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},

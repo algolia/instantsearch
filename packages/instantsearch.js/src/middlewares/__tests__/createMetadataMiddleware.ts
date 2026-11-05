@@ -115,7 +115,10 @@ describe('createMetadataMiddleware', () => {
       search.addWidgets([
         searchBox({ container: document.createElement('div') }),
         searchBox({ container: document.createElement('div') }),
-        hits({ container: document.createElement('div'), escapeHTML: true }),
+        hits({
+          container: document.createElement('div'),
+          transformItems: (items) => items,
+        }),
         index({ indexName: 'test2' }).addWidgets([
           pagination({ container: document.createElement('div') }),
           configure({ distinct: true, filters: 'hehe secret string!' }),
@@ -129,7 +132,7 @@ describe('createMetadataMiddleware', () => {
       expect(document.head).toMatchInlineSnapshot(`
         <head>
           <meta
-            content="{\\"widgets\\":[{\\"type\\":\\"ais.searchBox\\",\\"widgetType\\":\\"ais.searchBox\\",\\"params\\":[]},{\\"type\\":\\"ais.searchBox\\",\\"widgetType\\":\\"ais.searchBox\\",\\"params\\":[]},{\\"type\\":\\"ais.hits\\",\\"widgetType\\":\\"ais.hits\\",\\"params\\":[\\"escapeHTML\\"]},{\\"type\\":\\"ais.index\\",\\"widgetType\\":\\"ais.index\\",\\"params\\":[]},{\\"type\\":\\"ais.pagination\\",\\"widgetType\\":\\"ais.pagination\\",\\"params\\":[]},{\\"type\\":\\"ais.configure\\",\\"widgetType\\":\\"ais.configure\\",\\"params\\":[\\"searchParameters\\"]},{\\"middleware\\":true,\\"type\\":\\"ais.metadata\\",\\"internal\\":true}]}"
+            content="{\\"widgets\\":[{\\"type\\":\\"ais.searchBox\\",\\"widgetType\\":\\"ais.searchBox\\",\\"params\\":[]},{\\"type\\":\\"ais.searchBox\\",\\"widgetType\\":\\"ais.searchBox\\",\\"params\\":[]},{\\"type\\":\\"ais.hits\\",\\"widgetType\\":\\"ais.hits\\",\\"params\\":[\\"transformItems\\"]},{\\"type\\":\\"ais.index\\",\\"widgetType\\":\\"ais.index\\",\\"params\\":[]},{\\"type\\":\\"ais.pagination\\",\\"widgetType\\":\\"ais.pagination\\",\\"params\\":[]},{\\"type\\":\\"ais.configure\\",\\"widgetType\\":\\"ais.configure\\",\\"params\\":[\\"searchParameters\\"]},{\\"middleware\\":true,\\"type\\":\\"ais.metadata\\",\\"internal\\":true}]}"
             name="instantsearch:widgets"
           />
         </head>
@@ -150,7 +153,7 @@ describe('createMetadataMiddleware', () => {
           },
           {
             "params": [
-              "escapeHTML",
+              "transformItems",
             ],
             "type": "ais.hits",
             "widgetType": "ais.hits",

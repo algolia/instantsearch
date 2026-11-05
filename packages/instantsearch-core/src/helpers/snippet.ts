@@ -1,5 +1,10 @@
 import { component } from '../lib/suit';
-import { TAG_REPLACEMENT, getPropertyByPath, warning } from '../lib/utils';
+import {
+  TAG_PLACEHOLDER,
+  escape,
+  getPropertyByPath,
+  warning,
+} from '../lib/utils';
 
 import type { Hit } from '../types';
 
@@ -54,13 +59,9 @@ See: https://alg.li/highlighting
       descendantName: 'highlighted',
     }) + (cssClasses.highlighted ? ` ${cssClasses.highlighted}` : '');
 
-  return attributeValue
-    .replace(
-      new RegExp(TAG_REPLACEMENT.highlightPreTag, 'g'),
-      `<${highlightedTagName} class="${className}">`
-    )
-    .replace(
-      new RegExp(TAG_REPLACEMENT.highlightPostTag, 'g'),
-      `</${highlightedTagName}>`
-    );
+  return escape(attributeValue)
+    .split(TAG_PLACEHOLDER.highlightPreTag)
+    .join(`<${highlightedTagName} class="${className}">`)
+    .split(TAG_PLACEHOLDER.highlightPostTag)
+    .join(`</${highlightedTagName}>`);
 }

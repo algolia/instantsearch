@@ -1,4 +1,4 @@
-import { getHighlightedParts, unescape } from 'instantsearch-core';
+import { getHighlightedParts } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import React from 'react';
 
@@ -158,9 +158,7 @@ export function RefinementList({
                 >
                   {query.length > 0 ? (
                     <Highlight
-                      parts={[
-                        getHighlightedParts(unescape(item.highlighted || '')),
-                      ]}
+                      parts={[getHighlightedParts(item.highlighted || '')]}
                     />
                   ) : (
                     item.label

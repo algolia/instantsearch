@@ -11,7 +11,7 @@ describe('concatHighlightedParts', () => {
         },
       ])
     ).toMatchInlineSnapshot(
-      `"Amazon<mark> - Fire HD8 - 8&quot; - Tablet - 16GB - Wi-Fi - Black</mark>"`
+      `"Amazon__ais-highlight__ - Fire HD8 - 8&quot; - Tablet - 16GB - Wi-Fi - Black__/ais-highlight__"`
     );
   });
 
@@ -28,7 +28,7 @@ describe('concatHighlightedParts', () => {
         { isHighlighted: false, value: 'Black' },
       ])
     ).toMatchInlineSnapshot(
-      `"Amazon<mark> - Fire HD8 - 8&quot; - Tablet - 16GB - Wi-</mark>Fi - Black"`
+      `"Amazon__ais-highlight__ - Fire HD8 - 8&quot; - Tablet - 16GB - Wi-__/ais-highlight__Fi - Black"`
     );
   });
 });

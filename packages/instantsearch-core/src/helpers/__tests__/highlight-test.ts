@@ -25,20 +25,20 @@ const hit = {
   _highlightResult: {
     name: {
       value:
-        '<mark>Amazon</mark> - Fire TV Stick with Alexa Voice Remote - Black',
+        '__ais-highlight__Amazon__/ais-highlight__ - Fire TV Stick with Alexa Voice Remote - Black',
       matchLevel: FULL,
       fullyHighlighted: false,
       matchedWords: ['amazon'],
     },
     description: {
       value:
-        'Enjoy smart access to videos, games and apps with this <mark>Amazon</mark> Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core processor, 1GB internal memory and 8GB of storage, this portable <mark>Amazon</mark> Fire TV stick works fast for buffer-free streaming.',
+        'Enjoy smart access to videos, games and apps with this __ais-highlight__Amazon__/ais-highlight__ Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core processor, 1GB internal memory and 8GB of storage, this portable __ais-highlight__Amazon__/ais-highlight__ Fire TV stick works fast for buffer-free streaming.',
       matchLevel: FULL,
       fullyHighlighted: false,
       matchedWords: ['amazon'],
     },
     brand: {
-      value: '<mark>Amazon</mark>',
+      value: '__ais-highlight__Amazon__/ais-highlight__',
       matchLevel: FULL,
       fullyHighlighted: true,
       matchedWords: ['amazon'],
@@ -62,7 +62,7 @@ const hit = {
     },
     meta: {
       name: {
-        value: 'Nested <mark>Amazon</mark> name',
+        value: 'Nested __ais-highlight__Amazon__/ais-highlight__ name',
         matchLevel: NONE,
         matchedWords: ['Amazon'],
       },
@@ -134,6 +134,26 @@ describe('highlight', () => {
       })
     ).toMatchInlineSnapshot(
       `"Nested <mark class=\\"ais-Highlight-highlighted\\">Amazon</mark> name"`
+    );
+  });
+
+  test('escapes HTML from the record', () => {
+    expect(
+      highlight({
+        attribute: 'name',
+        hit: {
+          _highlightResult: {
+            name: {
+              value:
+                '<script>alert(1)</script> __ais-highlight__Amazon__/ais-highlight__',
+              matchLevel: FULL,
+              matchedWords: ['amazon'],
+            },
+          },
+        },
+      })
+    ).toMatchInlineSnapshot(
+      `"&lt;script&gt;alert(1)&lt;/script&gt; <mark class=\\"ais-Highlight-highlighted\\">Amazon</mark>"`
     );
   });
 

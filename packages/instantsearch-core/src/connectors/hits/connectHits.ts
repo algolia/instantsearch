@@ -1,6 +1,4 @@
 import {
-  escapeHits,
-  TAG_PLACEHOLDER,
   checkRendering,
   createDocumentationMessageGenerator,
   addAbsolutePosition,
@@ -57,13 +55,6 @@ export type HitsRenderState<THit extends NonNullable<object> = BaseHit> = {
 
 export type HitsConnectorParams<THit extends NonNullable<object> = BaseHit> = {
   /**
-   * Whether to escape HTML tags from hits string values.
-   *
-   * @default true
-   */
-  escapeHTML?: boolean;
-
-  /**
    * Function to transform the items passed to the templates.
    */
   transformItems?: TransformItems<Hit<THit>>;
@@ -91,8 +82,6 @@ export default (function connectHits<TWidgetParams>(
     widgetParams: TWidgetParams & HitsConnectorParams<THit>
   ) => {
     const {
-      // @MAJOR: this can default to false
-      escapeHTML = true,
       transformItems = ((items) => items) as NonNullable<
         HitsConnectorParams['transformItems']
       >,
@@ -166,10 +155,6 @@ export default (function connectHits<TWidgetParams>(
           };
         }
 
-        if (escapeHTML && results.hits.length > 0) {
-          results.hits = escapeHits(results.hits);
-        }
-
         const hitsWithAbsolutePosition = addAbsolutePosition(
           results.hits,
           results.page,
@@ -197,31 +182,8 @@ export default (function connectHits<TWidgetParams>(
         };
       },
 
-      dispose({ state }) {
+      dispose() {
         unmountFn();
-
-        if (!escapeHTML) {
-          return state;
-        }
-
-        return state.setQueryParameters(
-          Object.keys(TAG_PLACEHOLDER).reduce(
-            (acc, key) => ({
-              ...acc,
-              [key]: undefined,
-            }),
-            {}
-          )
-        );
-      },
-
-      getWidgetSearchParameters(state, _uiState) {
-        if (!escapeHTML) {
-          return state;
-        }
-
-        // @MAJOR: set this globally, not in the Hits widget to allow Hits to be conditionally used
-        return state.setQueryParameters(TAG_PLACEHOLDER);
       },
     };
   };

@@ -1597,7 +1597,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const widget = makeWidget({
         attribute: 'category',
         limit: 2,
-        escapeFacetValues: false,
       });
 
       const helper = jsHelper(
@@ -1610,12 +1609,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
                 facetHits: [
                   {
                     count: 33,
-                    highlighted: 'Salvador <mark>Da</mark>li',
+                    highlighted: `Salvador ${TAG_PLACEHOLDER.highlightPreTag}Da${TAG_PLACEHOLDER.highlightPostTag}li`,
                     value: 'Salvador Dali',
                   },
                   {
                     count: 9,
-                    highlighted: '<mark>Da</mark>vidoff',
+                    highlighted: `${TAG_PLACEHOLDER.highlightPreTag}Da${TAG_PLACEHOLDER.highlightPostTag}vidoff`,
                     value: 'Davidoff',
                   },
                 ],
@@ -1688,10 +1687,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       expect(sffvQuery).toBe('da');
       expect(sffvFacet).toBe('category');
       expect(maxNbItems).toBe(2);
-      expect(paramOverride).toEqual({
-        highlightPreTag: '<mark>',
-        highlightPostTag: '</mark>',
-      });
+      expect(paramOverride).toEqual(TAG_PLACEHOLDER);
 
       await wait(0);
 
@@ -1699,14 +1695,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       expect(rendering.mock.calls[2][0].items).toEqual([
         {
           count: 33,
-          highlighted: 'Salvador <mark>Da</mark>li',
+          highlighted: `Salvador ${TAG_PLACEHOLDER.highlightPreTag}Da${TAG_PLACEHOLDER.highlightPostTag}li`,
           label: 'Salvador Dali',
           value: 'Salvador Dali',
           isRefined: false,
         },
         {
           count: 9,
-          highlighted: '<mark>Da</mark>vidoff',
+          highlighted: `${TAG_PLACEHOLDER.highlightPreTag}Da${TAG_PLACEHOLDER.highlightPostTag}vidoff`,
           label: 'Davidoff',
           value: 'Davidoff',
           isRefined: false,
@@ -1795,7 +1791,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const widget = makeWidget({
         attribute: 'category',
         limit: 2,
-        escapeFacetValues: false,
         transformItems: (items) =>
           items.map((item) => ({
             ...item,
@@ -1886,260 +1881,22 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       expect(sffvQuery).toBe('transfo');
       expect(sffvFacet).toBe('category');
       expect(maxNbItems).toBe(2);
-      expect(paramOverride).toEqual({
-        highlightPreTag: '<mark>',
-        highlightPostTag: '</mark>',
-      });
-
-      await wait(0);
-
-      expect(rendering).toHaveBeenCalledTimes(3);
-      expect(rendering.mock.calls[2][0].items).toEqual([
-        expect.objectContaining({
-          highlighted: 'transformed',
-          label: 'transformed',
-          value: 'transformed',
-        }),
-        expect.objectContaining({
-          highlighted: 'transformed',
-          label: 'transformed',
-          value: 'transformed',
-        }),
-      ]);
-    });
-
-    it('can search in facet values, and reset pre post tags if needed', async () => {
-      const { makeWidget, rendering } = createWidgetFactory();
-      const widget = makeWidget({
-        attribute: 'category',
-        limit: 2,
-        escapeFacetValues: false,
-      });
-
-      const helper = jsHelper(
-        createSearchClient({
-          // @ts-ignore v5 does not have this method, but it's easier to have it here. In a future version we can replace this method and its usages with search({ type: 'facet })
-          searchForFacetValues() {
-            return Promise.resolve([
-              {
-                exhaustiveFacetsCount: true,
-                facetHits: [
-                  {
-                    count: 33,
-                    highlighted: 'Salvador <mark>Da</mark>li',
-                    value: 'Salvador Dali',
-                  },
-                  {
-                    count: 9,
-                    highlighted: '<mark>Da</mark>vidoff',
-                    value: 'Davidoff',
-                  },
-                ],
-                processingTimeMS: 1,
-              },
-            ]);
-          },
-        }),
-        '',
-        {
-          ...widget.getWidgetSearchParameters(new SearchParameters({}), {
-            uiState: {},
-          }),
-          // Here we simulate that another widget has set some highlight tags
-          ...TAG_PLACEHOLDER,
-        }
-      );
-      helper.search = jest.fn();
-      const searchForFacetValuesSpy = jest.spyOn(
-        helper,
-        'searchForFacetValues'
-      );
-
-      // Simulate the lifecycle
-      widget.init!(
-        createInitOptions({
-          helper,
-          state: helper.state,
-          createURL: () => '#',
-        })
-      );
-      expect(rendering).toHaveBeenCalledTimes(1);
-
-      widget.render!(
-        createRenderOptions({
-          results: new SearchResults(helper.state, [
-            createSingleSearchResponse({
-              hits: [],
-              facets: {
-                category: {
-                  c1: 880,
-                },
-              },
-            }),
-            createSingleSearchResponse({
-              facets: {
-                category: {
-                  c1: 880,
-                },
-              },
-            }),
-          ]),
-          state: helper.state,
-          helper,
-          createURL: () => '#',
-        })
-      );
-      expect(rendering).toHaveBeenCalledTimes(2);
-      // Simulation end
-
-      const search = rendering.mock.calls[1][0].searchForItems;
-      search('da');
-
-      const [sffvFacet, sffvQuery, maxNbItems, paramOverride] =
-        searchForFacetValuesSpy.mock.calls[0];
-
-      expect(sffvQuery).toBe('da');
-      expect(sffvFacet).toBe('category');
-      expect(maxNbItems).toBe(2);
-      expect(paramOverride).toEqual({
-        highlightPreTag: '<mark>',
-        highlightPostTag: '</mark>',
-      });
-
-      await wait(0);
-
-      expect(rendering).toHaveBeenCalledTimes(3);
-      expect(rendering.mock.calls[2][0].items).toEqual([
-        {
-          count: 33,
-          isRefined: false,
-          highlighted: 'Salvador <mark>Da</mark>li',
-          label: 'Salvador Dali',
-          value: 'Salvador Dali',
-        },
-        {
-          count: 9,
-          isRefined: false,
-          highlighted: '<mark>Da</mark>vidoff',
-          label: 'Davidoff',
-          value: 'Davidoff',
-        },
-      ]);
-    });
-
-    it('can search in facet values, and set post and pre tags by default', async () => {
-      const { makeWidget, rendering } = createWidgetFactory();
-      const widget = makeWidget({
-        attribute: 'category',
-        limit: 2,
-        escapeFacetValues: true,
-      });
-
-      const helper = jsHelper(
-        createSearchClient({
-          // @ts-ignore v5 does not have this method, but it's easier to have it here. In a future version we can replace this method and its usages with search({ type: 'facet })
-          searchForFacetValues() {
-            return Promise.resolve([
-              {
-                exhaustiveFacetsCount: true,
-                facetHits: [
-                  {
-                    count: 33,
-                    highlighted: `Salvador ${TAG_PLACEHOLDER.highlightPreTag}Da${TAG_PLACEHOLDER.highlightPostTag}li`,
-                    value: 'Salvador Dali',
-                  },
-                  {
-                    count: 9,
-                    highlighted: `${TAG_PLACEHOLDER.highlightPreTag}Da${TAG_PLACEHOLDER.highlightPostTag}vidoff`,
-                    value: 'Davidoff',
-                  },
-                ],
-                processingTimeMS: 1,
-              },
-            ]);
-          },
-        }),
-        '',
-        {
-          ...widget.getWidgetSearchParameters(new SearchParameters({}), {
-            uiState: {},
-          }),
-          // Here we simulate that another widget has set some highlight tags
-          ...TAG_PLACEHOLDER,
-        }
-      );
-      helper.search = jest.fn();
-      const searchForFacetValuesSpy = jest.spyOn(
-        helper,
-        'searchForFacetValues'
-      );
-
-      // Simulate the lifecycle
-      widget.init!(
-        createInitOptions({
-          helper,
-          state: helper.state,
-          createURL: () => '#',
-        })
-      );
-      expect(rendering).toHaveBeenCalledTimes(1);
-
-      widget.render!(
-        createRenderOptions({
-          results: new SearchResults(helper.state, [
-            createSingleSearchResponse({
-              hits: [],
-              facets: {
-                category: {
-                  c1: 880,
-                },
-              },
-            }),
-            createSingleSearchResponse({
-              facets: {
-                category: {
-                  c1: 880,
-                },
-              },
-            }),
-          ]),
-          state: helper.state,
-          helper,
-          createURL: () => '#',
-        })
-      );
-      expect(rendering).toHaveBeenCalledTimes(2);
-      // Simulation end
-
-      const search = rendering.mock.calls[1][0].searchForItems;
-      search('da');
-
-      const [sffvFacet, sffvQuery, maxNbItems, paramOverride] =
-        searchForFacetValuesSpy.mock.calls[0];
-
-      expect(sffvQuery).toBe('da');
-      expect(sffvFacet).toBe('category');
-      expect(maxNbItems).toBe(2);
       expect(paramOverride).toEqual(TAG_PLACEHOLDER);
 
       await wait(0);
 
       expect(rendering).toHaveBeenCalledTimes(3);
       expect(rendering.mock.calls[2][0].items).toEqual([
-        {
-          count: 33,
-          isRefined: false,
-          highlighted: 'Salvador <mark>Da</mark>li',
-          label: 'Salvador Dali',
-          value: 'Salvador Dali',
-        },
-        {
-          count: 9,
-          isRefined: false,
-          highlighted: '<mark>Da</mark>vidoff',
-          label: 'Davidoff',
-          value: 'Davidoff',
-        },
+        expect.objectContaining({
+          highlighted: 'transformed',
+          label: 'transformed',
+          value: 'transformed',
+        }),
+        expect.objectContaining({
+          highlighted: 'transformed',
+          label: 'transformed',
+          value: 'transformed',
+        }),
       ]);
     });
   });

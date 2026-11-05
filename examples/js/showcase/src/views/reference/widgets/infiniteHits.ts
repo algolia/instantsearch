@@ -28,10 +28,5 @@ export const infiniteHits = defineWidget({
       label: 'sessionStorageCache',
       value: { cache: createInfiniteHitsSessionStorageCache() },
     },
-    {
-      key: 'escapeHTML',
-      label: 'false',
-      value: { escapeHTML: false },
-    },
   ],
 });

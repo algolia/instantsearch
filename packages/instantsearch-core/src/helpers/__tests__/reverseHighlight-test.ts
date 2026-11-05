@@ -25,20 +25,20 @@ const hit = {
   _highlightResult: {
     name: {
       value:
-        '<mark>Amazon</mark> - Fire TV Stick with Alexa Voice Remote - Black',
+        '__ais-highlight__Amazon__/ais-highlight__ - Fire TV Stick with Alexa Voice Remote - Black',
       matchLevel: FULL,
       fullyHighlighted: false,
       matchedWords: ['amazon'],
     },
     description: {
       value:
-        'Enjoy smart access to videos, games and apps with this <mark>Amazon</mark> Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core <mark>processor</mark>, <mark>1GB</mark> internal memory and 8GB of storage, this portable <mark>Amazon</mark> Fire TV stick works fast for buffer-free streaming.',
+        'Enjoy smart access to videos, games and apps with this __ais-highlight__Amazon__/ais-highlight__ Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core __ais-highlight__processor__/ais-highlight__, __ais-highlight__1GB__/ais-highlight__ internal memory and 8GB of storage, this portable __ais-highlight__Amazon__/ais-highlight__ Fire TV stick works fast for buffer-free streaming.',
       matchLevel: FULL,
       fullyHighlighted: false,
       matchedWords: ['amazon', 'processor', '1GB'],
     },
     brand: {
-      value: '<mark>Amazon</mark>',
+      value: '__ais-highlight__Amazon__/ais-highlight__',
       matchLevel: FULL,
       fullyHighlighted: true,
       matchedWords: ['amazon'],
@@ -56,26 +56,28 @@ const hit = {
       },
     ],
     type: {
-      value: '<mark>Streaming</mark> - (<mark>media</mark> plyr)',
+      value:
+        '__ais-highlight__Streaming__/ais-highlight__ - (__ais-highlight__media__/ais-highlight__ plyr)',
       matchLevel: FULL,
       fullyHighlighted: false,
       matchedWords: ['streaming', 'media'],
     },
     typeMissingSibling: {
-      value: 'Streaming - (<mark>media</mark> plyr)',
+      value: 'Streaming - (__ais-highlight__media__/ais-highlight__ plyr)',
       matchLevel: FULL,
       fullyHighlighted: false,
       matchedWords: ['media'],
     },
     typeFullMatch: {
-      value: '<mark>Streaming</mark> - (<mark>media</mark> <mark>plyr</mark>)',
+      value:
+        '__ais-highlight__Streaming__/ais-highlight__ - (__ais-highlight__media__/ais-highlight__ __ais-highlight__plyr__/ais-highlight__)',
       matchLevel: FULL,
       fullyHighlighted: false,
       matchedWords: ['streaming', 'media', 'plyr'],
     },
     meta: {
       name: {
-        value: 'Nested <mark>Amazon</mark> name',
+        value: 'Nested __ais-highlight__Amazon__/ais-highlight__ name',
         matchLevel: NONE,
         matchedWords: ['Amazon'],
       },
