@@ -8,11 +8,19 @@ export type {
 } from './instantsearch';
 export * from './connectors';
 export {
+  highlight,
+  snippet,
+  reverseHighlight,
+  reverseSnippet,
   insights,
+  getInsightsAnonymousUserToken,
+  getInsightsAnonymousUserTokenInternal,
+  ANONYMOUS_TOKEN_COOKIE_KEY,
   getUsageSessionId,
   readDataAttributes,
   writeDataAttributes,
 } from './helpers';
+export { withInsights, inferInsightsPayload } from './lib/insights';
 export { AbstractChat } from './lib/ai-lite';
 export {
   DefaultChatTransport,
@@ -117,11 +125,7 @@ export {
   buildWidgetTree,
   capitalize,
   collectChatRecords,
-  concatHighlightedParts,
-  createBindEventForHits,
   createDocumentationMessageGenerator,
-  createSendEventForFacet,
-  createSendEventForHits,
   deprecate,
   deserializePayload,
   endsInsideRootProperty,
@@ -139,7 +143,6 @@ export {
   hasTextContent,
   hydrateSearchClient,
   isEqual,
-  isFacetRefined,
   isIndexWidget,
   isPartText,
   isPartTool,
@@ -151,13 +154,11 @@ export {
   range,
   resetWidgetId,
   resolveSearchParameters,
-  reverseHighlightedParts,
   safelyRunOnBrowser,
   serializePayload,
   serializeWidgetParams,
   startsWith,
   TAG_PLACEHOLDER,
-  TAG_REPLACEMENT,
   toArray,
   unescape,
   uniq,
@@ -182,5 +183,17 @@ export * from './lib/stateMappings';
 export * from './middlewares';
 export * from './types';
 export * from './widgets';
+export type {
+  HighlightOptions,
+  SnippetOptions,
+  ReverseHighlightOptions,
+  ReverseSnippetOptions,
+} from './helpers';
+export { component as suitComponent } from './lib/suit';
+export type {
+  FacetRefinement,
+  NumericRefinement,
+  Refinement,
+} from './lib/utils';
 // both ./types and ./middlewares export InsightsEvent; pick the middleware one
 export type { InsightsEvent } from './middlewares';

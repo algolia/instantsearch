@@ -17,6 +17,7 @@
     "algoliasearch-helper": "3.30.1",
     "express": "4.17.1",
     "instantsearch-ui-components": "0.44.0",
+    "instantsearch.js": "4.121.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-instantsearch": "7.53.0",

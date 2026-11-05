@@ -1,6 +1,4 @@
-import { warning } from 'instantsearch-core';
-
-import withInsights from '../client';
+import { warning, withInsights } from 'instantsearch-core';
 
 describe('withInsights', () => {
   it('shows a deprecation warning', () => {

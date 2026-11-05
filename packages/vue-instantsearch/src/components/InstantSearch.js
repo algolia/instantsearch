@@ -1,5 +1,6 @@
-import instantsearch from 'instantsearch.js/es';
+import { instantsearch } from 'instantsearch-core';
 
+import { version } from '../../package.json'; // rollup does pick only what needed from json
 import { createInstantSearchComponent } from '../util/createInstantSearchComponent';
 import { renderCompat, getDefaultSlot } from '../util/vue-compat';
 import { warn } from '../util/warn';
@@ -107,6 +108,7 @@ export default createInstantSearchComponent({
         onStateChange: this.onStateChange,
         initialUiState: this.initialUiState,
         future: this.future,
+        _internalVersion: version,
       }),
     };
   },
