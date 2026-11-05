@@ -1,6 +1,7 @@
 import { component } from '../lib/suit';
 import {
   TAG_PLACEHOLDER,
+  escape,
   getPropertyByPath,
   getHighlightedParts,
   reverseHighlightedParts,
@@ -65,7 +66,7 @@ See: https://alg.li/highlighting
     reverseHighlightedParts(getHighlightedParts(attributeValue))
   );
 
-  return reverseHighlightedValue
+  return escape(reverseHighlightedValue)
     .split(TAG_PLACEHOLDER.highlightPreTag)
     .join(`<${highlightedTagName} class="${className}">`)
     .split(TAG_PLACEHOLDER.highlightPostTag)

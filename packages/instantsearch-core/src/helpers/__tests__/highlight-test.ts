@@ -137,6 +137,26 @@ describe('highlight', () => {
     );
   });
 
+  test('escapes HTML from the record', () => {
+    expect(
+      highlight({
+        attribute: 'name',
+        hit: {
+          _highlightResult: {
+            name: {
+              value:
+                '<script>alert(1)</script> __ais-highlight__Amazon__/ais-highlight__',
+              matchLevel: FULL,
+              matchedWords: ['amazon'],
+            },
+          },
+        },
+      })
+    ).toMatchInlineSnapshot(
+      `"&lt;script&gt;alert(1)&lt;/script&gt; <mark class=\\"ais-Highlight-highlighted\\">Amazon</mark>"`
+    );
+  });
+
   test('with array attribute as array', () => {
     expect(
       highlight({
