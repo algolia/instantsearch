@@ -10,8 +10,6 @@ import {
 
 import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
 
-import type { EscapedHits } from 'instantsearch-core';
-
 const createTestEnvironment = ({
   nbHits = 2,
   index = 'testIndex',
@@ -627,37 +625,6 @@ describe('createSendEventForHits', () => {
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
       hello: 'world',
       custom: 'event',
-    });
-  });
-
-  it('removes __escaped marker', () => {
-    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
-
-    (hits as EscapedHits).__escaped = true;
-
-    sendEvent('view', hits);
-    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
-    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
-      eventType: 'view',
-      hits: [
-        {
-          __position: 0,
-          __queryID: 'test-query-id',
-          objectID: 'obj0',
-        },
-        {
-          __position: 1,
-          __queryID: 'test-query-id',
-          objectID: 'obj1',
-        },
-      ],
-      insightsMethod: 'viewedObjectIDs',
-      payload: {
-        eventName: 'Hits Viewed',
-        index: 'testIndex',
-        objectIDs: ['obj0', 'obj1'],
-      },
-      widgetType: 'ais.testWidget',
     });
   });
 });

@@ -18,7 +18,7 @@ describe('Snippet', () => {
           _snippetResult: {
             data: {
               matchLevel: 'partial',
-              value: '<mark>te</mark>st',
+              value: '__ais-highlight__te__/ais-highlight__st',
             },
           },
         }}
@@ -57,7 +57,7 @@ describe('Snippet', () => {
             data: [
               {
                 matchLevel: 'partial',
-                value: '<mark>te</mark>st',
+                value: '__ais-highlight__te__/ais-highlight__st',
               },
               { matchLevel: 'none', value: 'nothing' },
             ],
@@ -108,7 +108,7 @@ describe('Snippet', () => {
             data: {
               subdata: {
                 matchLevel: 'partial',
-                value: '<mark>te</mark>st',
+                value: '__ais-highlight__te__/ais-highlight__st',
               },
             },
           },
@@ -149,7 +149,7 @@ describe('Snippet', () => {
             data: {
               subdata: {
                 matchLevel: 'partial',
-                value: '<mark>te</mark>st',
+                value: '__ais-highlight__te__/ais-highlight__st',
               },
             },
           },
@@ -199,7 +199,7 @@ describe('Snippet', () => {
     `);
   });
 
-  test("doesn't render html escaped content", () => {
+  test('renders html from the record as text', () => {
     const { container } = render(
       <Snippet
         hit={{
@@ -211,7 +211,7 @@ describe('Snippet', () => {
               matchedWords: ["don't"],
               matchLevel: 'partial',
               value:
-                '<mark>don</mark>&#39;t &lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt;',
+                '__ais-highlight__don__/ais-highlight__\'t <script>alert("xss");</script>',
             },
           },
         }}
@@ -260,7 +260,7 @@ describe('Snippet', () => {
             array: [
               {
                 matchLevel: 'partial',
-                value: '<mark>it</mark>em1',
+                value: '__ais-highlight__it__/ais-highlight__em1',
               },
               { matchLevel: 'none', value: 'item2' },
             ],

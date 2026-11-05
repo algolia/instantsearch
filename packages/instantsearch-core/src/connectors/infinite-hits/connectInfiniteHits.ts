@@ -1,6 +1,4 @@
 import {
-  escapeHits,
-  TAG_PLACEHOLDER,
   checkRendering,
   createDocumentationMessageGenerator,
   isEqual,
@@ -59,13 +57,6 @@ export type InfiniteHitsCache<THit extends NonNullable<object> = BaseHit> = {
 export type InfiniteHitsConnectorParams<
   THit extends NonNullable<object> = BaseHit,
 > = {
-  /**
-   * Escapes HTML entities from hits string values.
-   *
-   * @default `true`
-   */
-  escapeHTML?: boolean;
-
   /**
    * Enable the button to load previous results.
    *
@@ -219,8 +210,6 @@ export default (function connectInfiniteHits<
     widgetParams: TWidgetParams & InfiniteHitsConnectorParams<THit>
   ) => {
     const {
-      // @MAJOR: this can default to false
-      escapeHTML = true,
       transformItems = ((items) => items) as NonNullable<
         InfiniteHitsConnectorParams<THit>['transformItems']
       >,
@@ -374,10 +363,6 @@ export default (function connectInfiniteHits<
         } else {
           const { page = 0 } = state;
 
-          if (escapeHTML && results.hits.length > 0) {
-            results.hits = escapeHits(results.hits);
-          }
-
           const hitsWithAbsolutePosition = addAbsolutePosition(
             results.hits,
             results.page,
@@ -449,21 +434,7 @@ export default (function connectInfiniteHits<
       dispose({ state }) {
         unmountFn();
 
-        const stateWithoutPage = state.setQueryParameter('page', undefined);
-
-        if (!escapeHTML) {
-          return stateWithoutPage;
-        }
-
-        return stateWithoutPage.setQueryParameters(
-          Object.keys(TAG_PLACEHOLDER).reduce(
-            (acc, key) => ({
-              ...acc,
-              [key]: undefined,
-            }),
-            {}
-          )
-        );
+        return state.setQueryParameter('page', undefined);
       },
 
       getWidgetUiState(uiState, { searchParameters }) {
@@ -484,19 +455,11 @@ export default (function connectInfiniteHits<
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        let widgetSearchParameters = searchParameters;
-
-        if (escapeHTML) {
-          // @MAJOR: set this globally, not in the InfiniteHits widget to allow InfiniteHits to be conditionally used
-          widgetSearchParameters =
-            searchParameters.setQueryParameters(TAG_PLACEHOLDER);
-        }
-
         // The page in the search parameters is decremented by one
         // to get to the actual parameter value from the UI state.
         const page = uiState.page ? uiState.page - 1 : 0;
 
-        return widgetSearchParameters.setQueryParameter('page', page);
+        return searchParameters.setQueryParameter('page', page);
       },
     };
   };

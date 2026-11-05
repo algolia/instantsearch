@@ -39,11 +39,6 @@ export default {
     createSuitMixin({ name: 'Autocomplete' }),
   ],
   props: {
-    escapeHTML: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
     requiresSearch: {
       type: Boolean,
       required: false,
@@ -53,7 +48,6 @@ export default {
   computed: {
     widgetParams() {
       return {
-        escapeHTML: this.escapeHTML,
         requiresSearch: this.requiresSearch,
       };
     },

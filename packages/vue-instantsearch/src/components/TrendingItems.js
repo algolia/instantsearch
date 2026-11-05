@@ -61,11 +61,6 @@ export default {
       required: false,
       default: undefined,
     },
-    escapeHTML: {
-      type: Boolean,
-      required: false,
-      default: undefined,
-    },
     transformItems: {
       type: Function,
       required: false,
@@ -87,7 +82,6 @@ export default {
         threshold: this.threshold,
         fallbackParameters: this.fallbackParameters,
         queryParameters: this.queryParameters,
-        escapeHTML: this.escapeHTML,
         transformItems: this.transformItems,
       };
     },

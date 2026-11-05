@@ -193,11 +193,6 @@ export type RefinementListWidgetParams = {
    */
   searchableIsAlwaysActive?: boolean;
   /**
-   * When activated, it will escape the facet values that are returned from Algolia.
-   * In this case, the surrounding tags will always be `<mark></mark>`.
-   */
-  searchableEscapeFacetValues?: boolean;
-  /**
    * When activated, submitting the search box will select the first item in the list.
    * @default true
    */
@@ -337,7 +332,6 @@ const refinementList: RefinementListWidget = function refinementList(
     showMoreButtonLabel,
     searchable = false,
     searchablePlaceholder = 'Search...',
-    searchableEscapeFacetValues = true,
     searchableIsAlwaysActive = true,
     searchableSelectOnSubmit = true,
     cssClasses: userCssClasses = {},
@@ -349,9 +343,6 @@ const refinementList: RefinementListWidget = function refinementList(
     throw new Error(withUsage('The `container` option is required.'));
   }
 
-  const escapeFacetValues = searchable
-    ? Boolean(searchableEscapeFacetValues)
-    : false;
   const containerNode = getContainerNode(container);
 
   const cssClasses = {
@@ -453,7 +444,6 @@ const refinementList: RefinementListWidget = function refinementList(
       showMore,
       showMoreLimit,
       sortBy,
-      escapeFacetValues,
       transformItems,
     }),
     $$widgetType: 'ais.refinementList',

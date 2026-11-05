@@ -101,7 +101,6 @@ describe('connectRelatedProducts', () => {
         limit: 10,
         threshold: 95,
         queryParameters: { userToken: 'token' },
-        escapeHTML: false,
       });
 
       // @ts-expect-error
@@ -117,7 +116,11 @@ describe('connectRelatedProducts', () => {
             objectID: '1',
             maxRecommendations: 10,
             threshold: 95,
-            queryParameters: { userToken: 'token' },
+            queryParameters: {
+              userToken: 'token',
+              highlightPostTag: '__/ais-highlight__',
+              highlightPreTag: '__ais-highlight__',
+            },
           })
           .addRelatedProducts({
             // @ts-expect-error
@@ -125,12 +128,16 @@ describe('connectRelatedProducts', () => {
             objectID: '2',
             maxRecommendations: 10,
             threshold: 95,
-            queryParameters: { userToken: 'token' },
+            queryParameters: {
+              userToken: 'token',
+              highlightPostTag: '__/ais-highlight__',
+              highlightPreTag: '__ais-highlight__',
+            },
           })
       );
     });
 
-    it('adds escapeHTML tags', () => {
+    it('adds highlight tags', () => {
       const render = () => {};
       const makeWidget = connectRelatedProducts(render);
       const widget = makeWidget({
@@ -139,7 +146,6 @@ describe('connectRelatedProducts', () => {
         threshold: 95,
         queryParameters: { userToken: 'token' },
         fallbackParameters: { query: 'query' },
-        escapeHTML: true,
       });
 
       // @ts-expect-error
