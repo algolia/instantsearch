@@ -73,6 +73,28 @@ export function createOptionsTests(
       );
     });
 
+    test('keeps custom highlight tags', async () => {
+      const searchClient = createRecommendSearchClient();
+      const customTags = { highlightPreTag: '<em>', highlightPostTag: '</em>' };
+      const options: SetupOptions<FrequentlyBoughtTogetherConnectorSetup> = {
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: {
+          objectIDs: ['1'],
+          fallbackParameters: customTags,
+          queryParameters: customTags,
+        },
+      };
+
+      await setup(options);
+
+      expect(searchClient.getRecommendations).toHaveBeenCalledWith([
+        expect.objectContaining({
+          fallbackParameters: customTags,
+          queryParameters: customTags,
+        }),
+      ]);
+    });
+
     test('returns recommendations', async () => {
       const options: SetupOptions<FrequentlyBoughtTogetherConnectorSetup> = {
         instantSearchOptions: {

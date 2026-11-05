@@ -211,13 +211,13 @@ export default (function connectFrequentlyBoughtTogether<
               // @ts-ignore until @algolia/recommend types are updated
               fallbackParameters: fallbackParameters
                 ? {
-                    ...fallbackParameters,
                     ...TAG_PLACEHOLDER,
+                    ...fallbackParameters,
                   }
                 : undefined,
               queryParameters: {
-                ...queryParameters,
                 ...TAG_PLACEHOLDER,
+                ...queryParameters,
               },
               $$id: this.$$id!,
             }),

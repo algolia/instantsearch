@@ -183,5 +183,31 @@ describe('connectTrendingFacets', () => {
         } as any)
       );
     });
+
+    it('keeps custom highlight tags', () => {
+      const render = () => {};
+      const makeWidget = connectTrendingFacets(render);
+      const widget = makeWidget({
+        facetName: 'brand',
+        fallbackParameters: {
+          highlightPreTag: '<em>',
+          highlightPostTag: '</em>',
+        },
+      });
+
+      // @ts-expect-error
+      const actual = widget.getWidgetParameters(new RecommendParameters(), {
+        uiState: {},
+      });
+
+      expect(actual.params[0]).toEqual(
+        expect.objectContaining({
+          fallbackParameters: {
+            highlightPreTag: '<em>',
+            highlightPostTag: '</em>',
+          },
+        })
+      );
+    });
   });
 });

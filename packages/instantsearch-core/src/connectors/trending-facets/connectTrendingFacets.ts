@@ -163,8 +163,8 @@ export default (function connectTrendingFacets<
           threshold,
           fallbackParameters: fallbackParameters
             ? {
-                ...fallbackParameters,
                 ...TAG_PLACEHOLDER,
+                ...fallbackParameters,
               }
             : undefined,
           $$id: this.$$id!,

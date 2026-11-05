@@ -224,13 +224,13 @@ export default (function connectTrendingItems<
           threshold,
           fallbackParameters: fallbackParameters
             ? {
-                ...fallbackParameters,
                 ...TAG_PLACEHOLDER,
+                ...fallbackParameters,
               }
             : undefined,
           queryParameters: {
-            ...queryParameters,
             ...TAG_PLACEHOLDER,
+            ...queryParameters,
           },
           $$id: this.$$id!,
         });
