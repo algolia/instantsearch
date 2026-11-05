@@ -25,6 +25,7 @@ import {
   createDisposeOptions,
 } from '../../../../../instantsearch-core/test/createWidget';
 import {
+  connectConfigure,
   connectHits,
   connectPagination,
   connectRefinementList,
@@ -1510,6 +1511,46 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
               highlightPreTag: '__ais-highlight__',
               highlightPostTag: '__/ais-highlight__',
             },
+          },
+        ])
+      );
+    });
+
+    it('keeps the highlight tags set by a widget', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchClient = createSearchClient();
+      const mainHelper = algoliasearchHelper(searchClient, '', {});
+      const instantSearchInstance = createInstantSearch({
+        mainHelper,
+      });
+
+      instance.addWidgets([
+        connectConfigure(() => {})({
+          searchParameters: {
+            highlightPreTag: '<em>',
+            highlightPostTag: '</em>',
+          },
+        }),
+        connectHits(() => {})({}),
+      ]);
+
+      instance.init(
+        createIndexInitOptions({
+          instantSearchInstance,
+          parent: null,
+        })
+      );
+
+      instance.getHelper()!.search();
+
+      expect(searchClient.search).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          {
+            indexName: 'indexName',
+            params: expect.objectContaining({
+              highlightPreTag: '<em>',
+              highlightPostTag: '</em>',
+            }),
           },
         ])
       );
