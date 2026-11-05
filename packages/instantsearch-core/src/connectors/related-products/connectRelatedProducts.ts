@@ -2,7 +2,6 @@ import {
   createDocumentationMessageGenerator,
   checkRendering,
   noop,
-  escapeHits,
   TAG_PLACEHOLDER,
   createSendEventForHits,
   addAbsolutePosition,
@@ -72,12 +71,6 @@ export type RelatedProductsConnectorParams<
     'page' | 'hitsPerPage' | 'offset' | 'length'
   >;
   /**
-   * Whether to escape HTML tags from items string values.
-   *
-   * @default true
-   */
-  escapeHTML?: boolean;
-  /**
    * Function to transform the items passed to the templates.
    */
   transformItems?: TransformItems<
@@ -115,8 +108,6 @@ export default (function connectRelatedProducts<
     widgetParams: TWidgetParams & RelatedProductsConnectorParams<THit>
   ) => {
     const {
-      // @MAJOR: this can default to false
-      escapeHTML = true,
       objectIDs,
       limit,
       threshold,
@@ -175,10 +166,6 @@ export default (function connectRelatedProducts<
           return { items: [], widgetParams, sendEvent };
         }
 
-        if (escapeHTML && results.hits.length > 0) {
-          results.hits = escapeHits(results.hits);
-        }
-
         const itemsWithAbsolutePosition = addAbsolutePosition(
           results.hits,
           0,
@@ -219,12 +206,12 @@ export default (function connectRelatedProducts<
               fallbackParameters: fallbackParameters
                 ? {
                     ...fallbackParameters,
-                    ...(escapeHTML ? TAG_PLACEHOLDER : {}),
+                    ...TAG_PLACEHOLDER,
                   }
                 : undefined,
               queryParameters: {
                 ...queryParameters,
-                ...(escapeHTML ? TAG_PLACEHOLDER : {}),
+                ...TAG_PLACEHOLDER,
               },
               $$id: this.$$id!,
             }),

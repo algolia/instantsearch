@@ -4,7 +4,6 @@ import {
   noop,
   TAG_PLACEHOLDER,
 } from '../../lib/utils';
-import { escape } from '../../lib/utils/escape-html';
 
 import type {
   Connector,
@@ -50,12 +49,6 @@ export type TrendingFacetsConnectorParams = {
     'page' | 'hitsPerPage' | 'offset' | 'length'
   >;
   /**
-   * Whether to escape HTML tags from items string values.
-   *
-   * @default true
-   */
-  escapeHTML?: boolean;
-  /**
    * Function to transform the items passed to the templates.
    */
   transformItems?: TransformItems<
@@ -91,8 +84,6 @@ export default (function connectTrendingFacets<
       limit,
       threshold,
       fallbackParameters,
-      // @MAJOR: this can default to false
-      escapeHTML = true,
       transformItems = ((items) => items) as NonNullable<
         TrendingFacetsConnectorParams['transformItems']
       >,
@@ -148,13 +139,6 @@ export default (function connectTrendingFacets<
           _score: hit._score as number,
         }));
 
-        if (escapeHTML) {
-          items = items.map((item) => ({
-            ...item,
-            facetValue: escape(item.facetValue),
-          }));
-        }
-
         items = transformItems(items, {
           results: results as RecommendResponse<TrendingFacetItem>,
         });
@@ -180,7 +164,7 @@ export default (function connectTrendingFacets<
           fallbackParameters: fallbackParameters
             ? {
                 ...fallbackParameters,
-                ...(escapeHTML ? TAG_PLACEHOLDER : {}),
+                ...TAG_PLACEHOLDER,
               }
             : undefined,
           $$id: this.$$id!,

@@ -1,6 +1,6 @@
 import { component } from '../lib/suit';
 import {
-  TAG_REPLACEMENT,
+  TAG_PLACEHOLDER,
   getPropertyByPath,
   getHighlightedParts,
   reverseHighlightedParts,
@@ -66,12 +66,8 @@ See: https://alg.li/highlighting
   );
 
   return reverseHighlightedValue
-    .replace(
-      new RegExp(TAG_REPLACEMENT.highlightPreTag, 'g'),
-      `<${highlightedTagName} class="${className}">`
-    )
-    .replace(
-      new RegExp(TAG_REPLACEMENT.highlightPostTag, 'g'),
-      `</${highlightedTagName}>`
-    );
+    .split(TAG_PLACEHOLDER.highlightPreTag)
+    .join(`<${highlightedTagName} class="${className}">`)
+    .split(TAG_PLACEHOLDER.highlightPostTag)
+    .join(`</${highlightedTagName}>`);
 }

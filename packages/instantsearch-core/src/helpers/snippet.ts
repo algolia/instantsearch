@@ -1,5 +1,5 @@
 import { component } from '../lib/suit';
-import { TAG_REPLACEMENT, getPropertyByPath, warning } from '../lib/utils';
+import { TAG_PLACEHOLDER, getPropertyByPath, warning } from '../lib/utils';
 
 import type { Hit } from '../types';
 
@@ -55,12 +55,8 @@ See: https://alg.li/highlighting
     }) + (cssClasses.highlighted ? ` ${cssClasses.highlighted}` : '');
 
   return attributeValue
-    .replace(
-      new RegExp(TAG_REPLACEMENT.highlightPreTag, 'g'),
-      `<${highlightedTagName} class="${className}">`
-    )
-    .replace(
-      new RegExp(TAG_REPLACEMENT.highlightPostTag, 'g'),
-      `</${highlightedTagName}>`
-    );
+    .split(TAG_PLACEHOLDER.highlightPreTag)
+    .join(`<${highlightedTagName} class="${className}">`)
+    .split(TAG_PLACEHOLDER.highlightPostTag)
+    .join(`</${highlightedTagName}>`);
 }

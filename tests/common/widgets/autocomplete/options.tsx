@@ -1603,7 +1603,7 @@ export function createOptionsTests(
                 query: 'hello',
                 _highlightResult: {
                   query: {
-                    value: '<mark>hell</mark>o',
+                    value: '__ais-highlight__hell__/ais-highlight__o',
                     matchLevel: 'partial',
                     matchedWords: ['hell'],
                   },

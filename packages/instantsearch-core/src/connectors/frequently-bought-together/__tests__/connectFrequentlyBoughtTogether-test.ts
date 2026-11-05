@@ -101,7 +101,6 @@ describe('connectFrequentlyBoughtTogether', () => {
         limit: 10,
         threshold: 95,
         queryParameters: { userToken: 'token' },
-        escapeHTML: false,
       });
 
       // @ts-expect-error
@@ -117,7 +116,11 @@ describe('connectFrequentlyBoughtTogether', () => {
             objectID: '1',
             maxRecommendations: 10,
             threshold: 95,
-            queryParameters: { userToken: 'token' },
+            queryParameters: {
+              userToken: 'token',
+              highlightPostTag: '__/ais-highlight__',
+              highlightPreTag: '__ais-highlight__',
+            },
           })
           .addFrequentlyBoughtTogether({
             // @ts-expect-error
@@ -125,7 +128,11 @@ describe('connectFrequentlyBoughtTogether', () => {
             objectID: '2',
             maxRecommendations: 10,
             threshold: 95,
-            queryParameters: { userToken: 'token' },
+            queryParameters: {
+              userToken: 'token',
+              highlightPostTag: '__/ais-highlight__',
+              highlightPreTag: '__ais-highlight__',
+            },
           })
       );
     });

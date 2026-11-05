@@ -15,7 +15,6 @@ import algoliasearchHelper, {
 
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
-  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
@@ -23,17 +22,11 @@ import InstantSearch from '../../../instantsearch';
 import { TAG_PLACEHOLDER, deserializePayload } from '../../../lib/utils';
 import connectHits from '../connectHits';
 
-import type {
-  EscapedHits,
-  Hit,
-  HitAttributeHighlightResult,
-  SearchResponse,
-} from '../../../types';
+import type { Hit, SearchResponse } from '../../../types';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,
-  // especially with the __escaped mark, we thus make sure the mock also has the
-  // same behavior regarding the array.
+  // we thus make sure the mock also has the same behavior regarding the array.
   addAbsolutePosition: (hits: Hit[]) => hits.map((x) => x),
 }));
 
@@ -69,7 +62,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
   it('Renders during init and render', () => {
     const renderFn = jest.fn();
     const makeWidget = connectHits(renderFn);
-    const widget = makeWidget({ escapeHTML: true });
+    const widget = makeWidget({});
 
     // test if widget is not rendered yet at this point
     expect(renderFn).toHaveBeenCalledTimes(0);
@@ -86,7 +79,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
     expect(renderFn).toHaveBeenCalledTimes(1);
     expect(renderFn).toHaveBeenLastCalledWith(
-      expect.objectContaining({ widgetParams: { escapeHTML: true } }),
+      expect.objectContaining({ widgetParams: {} }),
       true
     );
 
@@ -102,7 +95,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
     expect(renderFn).toHaveBeenCalledTimes(2);
     expect(renderFn).toHaveBeenLastCalledWith(
-      expect.objectContaining({ widgetParams: { escapeHTML: true } }),
+      expect.objectContaining({ widgetParams: {} }),
       false
     );
   });
@@ -155,10 +148,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     );
   });
 
-  it('escape highlight properties if requested', () => {
+  it('does not escape highlight properties', () => {
     const renderFn = jest.fn();
     const makeWidget = connectHits(renderFn);
-    const widget = makeWidget({ escapeHTML: true });
+    const widget = makeWidget({});
 
     const helper = algoliasearchHelper(createSearchClient(), '', {});
     helper.search = jest.fn();
@@ -209,7 +202,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         objectID: '1',
         _highlightResult: {
           foobar: {
-            value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
+            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
             matchLevel: 'partial',
             matchedWords: ['foobar'],
           },
@@ -353,144 +346,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     );
   });
 
-  it('transform items after escaping', () => {
-    const renderFn = jest.fn();
-    const makeWidget = connectHits(renderFn);
-    const widget = makeWidget({
-      transformItems: (items) =>
-        items.map((item) => {
-          const highlightResult = item._highlightResult!
-            .name as HitAttributeHighlightResult;
-
-          return {
-            ...item,
-            _highlightResult: {
-              name: {
-                ...highlightResult,
-                value: (
-                  item._highlightResult!.name as HitAttributeHighlightResult
-                ).value.toUpperCase(),
-              },
-            },
-          };
-        }),
-      escapeHTML: true,
-    });
-
-    const helper = algoliasearchHelper(createSearchClient(), '', {});
-    helper.search = jest.fn();
-
-    widget.init(
-      createInitOptions({
-        helper,
-        state: helper.state,
-      })
-    );
-
-    const hits = [
-      {
-        objectID: '1',
-        name: 'hello',
-        _highlightResult: {
-          name: {
-            matchLevel: 'full' as const,
-            matchedWords: [],
-            value: `he${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}`,
-          },
-        },
-      },
-      {
-        objectID: '2',
-        name: 'halloween',
-        _highlightResult: {
-          name: {
-            matchLevel: 'full' as const,
-            matchedWords: [],
-            value: `ha${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}ween`,
-          },
-        },
-      },
-    ];
-
-    const results = new SearchResults(helper.state, [
-      createSingleSearchResponse({ hits }),
-    ]);
-
-    widget.render(
-      createRenderOptions({
-        results,
-        state: helper.state,
-        helper,
-      })
-    );
-
-    const expectedHits = [
-      {
-        objectID: '1',
-        name: 'hello',
-        _highlightResult: {
-          name: {
-            matchLevel: 'full',
-            matchedWords: [],
-            value: 'HE<MARK>LLO</MARK>',
-          },
-        },
-      },
-      {
-        objectID: '2',
-        name: 'halloween',
-        _highlightResult: {
-          name: {
-            matchLevel: 'full',
-            matchedWords: [],
-            value: 'HA<MARK>LLO</MARK>WEEN',
-          },
-        },
-      },
-    ];
-
-    expect(renderFn).toHaveBeenNthCalledWith(
-      2,
-      expect.objectContaining({
-        items: expectedHits,
-        results,
-      }),
-      expect.anything()
-    );
-  });
-
-  it('keeps the __escaped mark', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectHits(rendering);
-    const widget = makeWidget({});
-
-    const helper = algoliasearchHelper(createSearchClient(), '', {});
-    helper.search = jest.fn();
-
-    widget.init(
-      createInitOptions({
-        helper,
-        state: helper.state,
-      })
-    );
-
-    const results = new SearchResults(helper.state, [
-      createSingleSearchResponse({
-        hits: [{ objectID: '1', whatever: 'i like kittens' }],
-      }),
-    ]);
-
-    widget.render(
-      createRenderOptions({
-        results,
-        state: helper.state,
-        helper,
-      })
-    );
-
-    expect((results.hits as unknown as EscapedHits).__escaped).toBe(true);
-  });
-
   describe('getRenderState', () => {
     it('returns the render state', () => {
       const renderFn = jest.fn();
@@ -615,38 +470,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     });
   });
 
-  describe('getWidgetSearchParameters', () => {
-    it('adds the TAG_PLACEHOLDER to the `SearchParameters`', () => {
-      const render = () => {};
-      const makeWidget = connectHits(render);
-      const widget = makeWidget({});
-
-      const actual = widget.getWidgetSearchParameters(new SearchParameters(), {
-        uiState: {},
-      });
-
-      expect(actual).toEqual(new SearchParameters(TAG_PLACEHOLDER));
-    });
-
-    it('does not add the TAG_PLACEHOLDER to the `SearchParameters` with `escapeHTML` disabled', () => {
-      const render = () => {};
-      const makeWidget = connectHits(render);
-      const widget = makeWidget({
-        escapeHTML: false,
-      });
-
-      const actual = widget.getWidgetSearchParameters(new SearchParameters(), {
-        uiState: {},
-      });
-
-      expect(actual).toEqual(new SearchParameters());
-    });
-  });
-
   describe('dispose', () => {
     it('calls the unmount function', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '');
-
       const renderFn = () => {};
       const unmountFn = jest.fn();
       const makeWidget = connectHits(renderFn, unmountFn);
@@ -654,75 +479,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
       expect(unmountFn).toHaveBeenCalledTimes(0);
 
-      widget.dispose(createDisposeOptions({ helper, state: helper.state }));
+      widget.dispose();
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
 
     it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '');
-
       const renderFn = () => {};
       const makeWidget = connectHits(renderFn);
       const widget = makeWidget({});
 
-      expect(() =>
-        widget.dispose(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
-    });
-
-    it('removes the TAG_PLACEHOLDER from the `SearchParameters`', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '', {
-        ...TAG_PLACEHOLDER,
-      });
-
-      const renderFn = () => {};
-      const makeWidget = connectHits(renderFn);
-      const widget = makeWidget({});
-
-      expect(helper.state.highlightPreTag).toBe(
-        TAG_PLACEHOLDER.highlightPreTag
-      );
-
-      expect(helper.state.highlightPostTag).toBe(
-        TAG_PLACEHOLDER.highlightPostTag
-      );
-
-      const nextState = widget.dispose(
-        createDisposeOptions({
-          helper,
-          state: helper.state,
-        })
-      );
-
-      expect(nextState.highlightPreTag).toBeUndefined();
-      expect(nextState.highlightPostTag).toBeUndefined();
-    });
-
-    it('does not remove the TAG_PLACEHOLDER from the `SearchParameters` with `escapeHTML` disabled', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '', {
-        highlightPreTag: '<mark>',
-        highlightPostTag: '</mark>',
-      });
-
-      const renderFn = () => {};
-      const makeWidget = connectHits(renderFn);
-      const widget = makeWidget({
-        escapeHTML: false,
-      });
-
-      expect(helper.state.highlightPreTag).toBe('<mark>');
-      expect(helper.state.highlightPostTag).toBe('</mark>');
-
-      const nextState = widget.dispose(
-        createDisposeOptions({
-          helper,
-          state: helper.state,
-        })
-      );
-
-      expect(nextState.highlightPreTag).toBe('<mark>');
-      expect(nextState.highlightPostTag).toBe('</mark>');
+      expect(() => widget.dispose()).not.toThrow();
     });
   });
 

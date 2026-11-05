@@ -200,20 +200,20 @@ describe('RefinementList', () => {
       expect(secondItem.innerHTML).toEqual('Apple');
     });
 
-    it('should allow HTML in the items when SFFV', () => {
+    it('should highlight the items when SFFV', () => {
       const props: RefinementListProps<typeof defaultTemplates> = {
         ...defaultProps,
         isFromSearch: true,
         facetValues: [
           {
-            highlighted: '<mark>Sam</mark>sung',
+            highlighted: '__ais-highlight__Sam__/ais-highlight__sung',
             value: 'Samsung',
             label: 'Samsung',
             count: 0,
             isRefined: true,
           },
           {
-            highlighted: 'Apple',
+            highlighted: '<b>Apple</b>',
             value: 'Apple',
             label: 'Apple',
             count: 10,
@@ -234,8 +234,12 @@ describe('RefinementList', () => {
       const { container } = render(<RefinementList {...props} />);
       const [firstItem, secondItem] = container.querySelectorAll('.labelText');
 
-      expect(firstItem.innerHTML).toEqual('<mark>Sam</mark>sung');
-      expect(secondItem.innerHTML).toEqual('Apple');
+      expect(firstItem.innerHTML).toEqual(
+        '<span class="ais-Highlight"><mark class="ais-Highlight-highlighted">Sam</mark><span class="ais-Highlight-nonHighlighted">sung</span></span>'
+      );
+      expect(secondItem.innerHTML).toEqual(
+        '<span class="ais-Highlight"><span class="ais-Highlight-nonHighlighted">&lt;b&gt;Apple&lt;/b&gt;</span></span>'
+      );
     });
   });
 

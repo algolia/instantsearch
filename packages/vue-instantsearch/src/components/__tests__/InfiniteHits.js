@@ -13,7 +13,6 @@ const defaultState = {
   widgetParams: {
     showBanner: true,
     showPrevious: false,
-    escapeHTML: true,
     transformItems: (items) => items,
   },
   sendEvent: jest.fn(),

@@ -1,8 +1,6 @@
 import {
   addAbsolutePosition,
   addQueryID,
-  escapeHits,
-  TAG_PLACEHOLDER,
   checkRendering,
   createDocumentationMessageGenerator,
   createSendEventForHits,
@@ -34,12 +32,6 @@ export type TransformItemsIndicesConfig = {
 };
 
 export type AutocompleteConnectorParams = {
-  /**
-   * Escapes HTML entities from hits string values.
-   *
-   * @default `true`
-   */
-  escapeHTML?: boolean;
   /**
    * Transforms the items of all indices.
    */
@@ -137,8 +129,6 @@ const connectAutocomplete: AutocompleteConnector = function connectAutocomplete(
 
   return (widgetParams) => {
     const {
-      // @MAJOR: this can default to false
-      escapeHTML = true,
       transformItems = ((indices) => indices) as NonNullable<
         AutocompleteConnectorParams['transformItems']
       >,
@@ -236,14 +226,6 @@ search.addWidgets([
 
         const sendEventMap: Record<string, SendEventForHits> = {};
         const indices = scopedResults.map((scopedResult) => {
-          // We need to escape the hits because highlighting
-          // exposes HTML tags to the end-user.
-          if (scopedResult.results) {
-            scopedResult.results.hits = escapeHTML
-              ? escapeHits(scopedResult.results.hits)
-              : scopedResult.results.hits;
-          }
-
           sendEventMap[scopedResult.indexId] = createSendEventForHits({
             instantSearchInstance,
             helper: scopedResult.helper,
@@ -298,38 +280,16 @@ search.addWidgets([
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        const parameters = {
-          query: undefinedEmptyQuery ? uiState.query : uiState.query || '',
-        };
-
-        if (!escapeHTML) {
-          return searchParameters.setQueryParameters(parameters);
-        }
-
-        return searchParameters.setQueryParameters({
-          ...parameters,
-          ...TAG_PLACEHOLDER,
-        });
+        return searchParameters.setQueryParameter(
+          'query',
+          undefinedEmptyQuery ? uiState.query : uiState.query || ''
+        );
       },
 
       dispose({ state }) {
         unmountFn();
 
-        const stateWithoutQuery = state.setQueryParameter('query', undefined);
-
-        if (!escapeHTML) {
-          return stateWithoutQuery;
-        }
-
-        return stateWithoutQuery.setQueryParameters(
-          Object.keys(TAG_PLACEHOLDER).reduce(
-            (acc, key) => ({
-              ...acc,
-              [key]: undefined,
-            }),
-            {}
-          )
-        );
+        return state.setQueryParameter('query', undefined);
       },
     };
   };

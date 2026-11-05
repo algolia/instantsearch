@@ -135,7 +135,6 @@ describe('connectTrendingFacets', () => {
         facetName: 'brand',
         limit: 10,
         threshold: 95,
-        escapeHTML: false,
       });
 
       // @ts-expect-error
@@ -154,14 +153,13 @@ describe('connectTrendingFacets', () => {
       );
     });
 
-    it('adds escapeHTML tags', () => {
+    it('adds highlight tags', () => {
       const render = () => {};
       const makeWidget = connectTrendingFacets(render);
       const widget = makeWidget({
         facetName: 'brand',
         limit: 10,
         threshold: 95,
-        escapeHTML: true,
         fallbackParameters: { query: 'query' },
       });
 

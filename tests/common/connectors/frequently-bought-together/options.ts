@@ -1,6 +1,7 @@
 import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
+import { TAG_PLACEHOLDER } from 'instantsearch-core';
 
 import { skippableDescribe } from '../../common';
 
@@ -43,7 +44,6 @@ export function createOptionsTests(
           threshold: 3,
           fallbackParameters: { facetFilters: ['test1'] },
           queryParameters: { analytics: true },
-          escapeHTML: false,
         },
       };
 
@@ -55,8 +55,8 @@ export function createOptionsTests(
             objectID: '1',
             maxRecommendations: 2,
             threshold: 3,
-            fallbackParameters: { facetFilters: ['test1'] },
-            queryParameters: { analytics: true },
+            fallbackParameters: { facetFilters: ['test1'], ...TAG_PLACEHOLDER },
+            queryParameters: { analytics: true, ...TAG_PLACEHOLDER },
             model: 'bought-together',
             indexName: 'indexName',
           }),
@@ -64,8 +64,8 @@ export function createOptionsTests(
             objectID: '2',
             maxRecommendations: 2,
             threshold: 3,
-            fallbackParameters: { facetFilters: ['test1'] },
-            queryParameters: { analytics: true },
+            fallbackParameters: { facetFilters: ['test1'], ...TAG_PLACEHOLDER },
+            queryParameters: { analytics: true, ...TAG_PLACEHOLDER },
             model: 'bought-together',
             indexName: 'indexName',
           }),
