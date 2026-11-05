@@ -9,10 +9,14 @@ export type {
 export * from './connectors';
 export {
   insights,
+  getInsightsAnonymousUserToken,
+  getInsightsAnonymousUserTokenInternal,
+  ANONYMOUS_TOKEN_COOKIE_KEY,
   getUsageSessionId,
   readDataAttributes,
   writeDataAttributes,
 } from './helpers';
+export { withInsights, inferInsightsPayload } from './lib/insights';
 export { AbstractChat } from './lib/ai-lite';
 export {
   DefaultChatTransport,
