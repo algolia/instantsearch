@@ -23,10 +23,6 @@ export default {
       type: Boolean,
       default: true,
     },
-    escapeHTML: {
-      type: Boolean,
-      default: true,
-    },
     transformItems: {
       type: Function,
       default: undefined,
@@ -36,7 +32,6 @@ export default {
     widgetParams() {
       return {
         showBanner: this.showBanner,
-        escapeHTML: this.escapeHTML,
         transformItems: this.transformItems,
       };
     },

@@ -8,6 +8,7 @@ import {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
+import { TAG_PLACEHOLDER } from 'instantsearch-core';
 import VueI18n from 'vue-i18n';
 import { createI18n } from 'vue-i18n-vue3';
 import Router from 'vue-router';
@@ -304,6 +305,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
           {
             "indexName": "hello",
             "params": {
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
               "hitsPerPage": 100,
               "query": "",
             },
@@ -359,6 +362,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
               expect(state.hello).toEqual({
                 requestParams: [
                   {
+                    ...TAG_PLACEHOLDER,
                     hitsPerPage: 100,
                     query: '',
                   },
@@ -376,6 +380,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
                   facetsRefinements: {},
                   hierarchicalFacets: [],
                   hierarchicalFacetsRefinements: {},
+                  ...TAG_PLACEHOLDER,
                   hitsPerPage: 100,
                   index: 'hello',
                   numericRefinements: {},
@@ -388,6 +393,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
               expect(state.nestedIndex).toEqual({
                 requestParams: [
                   {
+                    ...TAG_PLACEHOLDER,
                     hitsPerPage: 100,
                     query: '',
                   },
@@ -405,6 +411,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
                   facetsRefinements: {},
                   hierarchicalFacets: [],
                   hierarchicalFacetsRefinements: {},
+                  ...TAG_PLACEHOLDER,
                   index: 'hello2',
                   numericRefinements: {},
                   tagRefinements: [],
@@ -919,6 +926,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
             {
               "indexName": "hello",
               "params": {
+                "highlightPostTag": "__/ais-highlight__",
+                "highlightPreTag": "__ais-highlight__",
                 "hitsPerPage": 100,
                 "query": "",
               },
@@ -993,6 +1002,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
             {
               "indexName": "hello",
               "params": {
+                "highlightPostTag": "__/ais-highlight__",
+                "highlightPreTag": "__ais-highlight__",
                 "hitsPerPage": 100,
                 "query": "",
               },
@@ -1223,6 +1234,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       const state = new SearchParameters(resultsState.state);
       const localState = new SearchParameters({
         index: 'lol',
+        ...TAG_PLACEHOLDER,
       });
       const results = new SearchResults(state, resultsState.results);
 

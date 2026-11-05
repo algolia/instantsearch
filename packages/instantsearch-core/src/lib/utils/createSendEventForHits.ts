@@ -2,7 +2,7 @@ import { serializePayload } from './serializer';
 
 import type InstantSearch from '../../instantsearch';
 import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
-import type { Hit, EscapedHits } from '../../types';
+import type { Hit } from '../../types';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
 type BuiltInSendEventForHits = (
@@ -50,7 +50,7 @@ export function _buildEventPayloadsForHits({
   }
   const [eventType, eventModifier]: [string, string] = args[0].split(':');
 
-  const hits: Hit | Hit[] | EscapedHits = args[1];
+  const hits: Hit | Hit[] = args[1];
   const eventName: string | undefined = args[2];
   const additionalData: Record<string, any> = args[3] || {};
 

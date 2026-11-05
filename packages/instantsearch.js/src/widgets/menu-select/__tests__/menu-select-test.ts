@@ -9,6 +9,7 @@ import {
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import { wait } from '@instantsearch/testutils/wait';
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
+import { TAG_PLACEHOLDER } from 'instantsearch-core';
 import { render as preactRender } from 'preact';
 
 import instantsearch from '../../../index.es';
@@ -238,6 +239,7 @@ describe('menuSelect', () => {
       expect(search.helper!.state).toEqual(
         new SearchParameters({
           index: 'test',
+          ...TAG_PLACEHOLDER,
         })
       );
 
@@ -248,6 +250,7 @@ describe('menuSelect', () => {
       expect(search.helper!.state).toEqual(
         new SearchParameters({
           index: 'test',
+          ...TAG_PLACEHOLDER,
           hierarchicalFacets: [{ attributes: ['test'], name: 'test' }],
           hierarchicalFacetsRefinements: { test: [] },
           maxValuesPerFacet: 10,
@@ -261,7 +264,7 @@ describe('menuSelect', () => {
       expect(render).toHaveBeenCalledTimes(2);
       expect(render).toHaveBeenLastCalledWith(null, container);
       expect(search.helper!.state).toEqual(
-        new SearchParameters({ index: 'test' })
+        new SearchParameters({ index: 'test', ...TAG_PLACEHOLDER })
       );
     });
   });

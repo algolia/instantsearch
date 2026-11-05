@@ -135,7 +135,6 @@ describe('connectTrendingFacets', () => {
         facetName: 'brand',
         limit: 10,
         threshold: 95,
-        escapeHTML: false,
       });
 
       // @ts-expect-error
@@ -154,14 +153,13 @@ describe('connectTrendingFacets', () => {
       );
     });
 
-    it('adds escapeHTML tags', () => {
+    it('adds highlight tags', () => {
       const render = () => {};
       const makeWidget = connectTrendingFacets(render);
       const widget = makeWidget({
         facetName: 'brand',
         limit: 10,
         threshold: 95,
-        escapeHTML: true,
         fallbackParameters: { query: 'query' },
       });
 
@@ -183,6 +181,32 @@ describe('connectTrendingFacets', () => {
             query: 'query',
           },
         } as any)
+      );
+    });
+
+    it('keeps custom highlight tags', () => {
+      const render = () => {};
+      const makeWidget = connectTrendingFacets(render);
+      const widget = makeWidget({
+        facetName: 'brand',
+        fallbackParameters: {
+          highlightPreTag: '<em>',
+          highlightPostTag: '</em>',
+        },
+      });
+
+      // @ts-expect-error
+      const actual = widget.getWidgetParameters(new RecommendParameters(), {
+        uiState: {},
+      });
+
+      expect(actual.params[0]).toEqual(
+        expect.objectContaining({
+          fallbackParameters: {
+            highlightPreTag: '<em>',
+            highlightPostTag: '</em>',
+          },
+        })
       );
     });
   });

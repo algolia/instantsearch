@@ -54,7 +54,6 @@ export function RefinementList({
   showMore,
   showMoreLimit,
   sortBy,
-  escapeFacetValues,
   transformItems,
   translations,
   ...props
@@ -76,7 +75,6 @@ export function RefinementList({
       showMore,
       showMoreLimit,
       sortBy,
-      escapeFacetValues,
       transformItems,
     },
     {

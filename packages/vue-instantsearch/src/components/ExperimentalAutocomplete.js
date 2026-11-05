@@ -10,7 +10,6 @@ import {
   isPromptSuggestion,
   noop,
   openChat,
-  unescape,
 } from 'instantsearch-core';
 import {
   createAutocompleteComponent,
@@ -125,13 +124,11 @@ function renderConditionalHighlight(
 
   const prefix = reverse ? 'ais-ReverseHighlight' : 'ais-Highlight';
   const parts = [
-    getHighlightedParts(unescape(result.value || '')).map(
-      ({ value, isHighlighted }) => ({
-        // Vue gets rid of TextNodes with a single white space
-        value: value === ' ' ? '  ' : value,
-        isHighlighted: reverse ? !isHighlighted : isHighlighted,
-      })
-    ),
+    getHighlightedParts(result.value || '').map(({ value, isHighlighted }) => ({
+      // Vue gets rid of TextNodes with a single white space
+      value: value === ' ' ? '  ' : value,
+      isHighlighted: reverse ? !isHighlighted : isHighlighted,
+    })),
   ];
 
   return createElement(Highlight, {
@@ -408,7 +405,6 @@ export default {
     showRecent: { type: [Boolean, Object], default: false },
     searchParameters: { type: Object, default: undefined },
     requiresSearch: { type: Boolean, default: true },
-    escapeHTML: { type: Boolean, default: true },
     getSearchPageUrl: { type: Function, default: undefined },
     onSelect: { type: Function, default: undefined },
     transformItems: { type: Function, default: undefined },
@@ -585,7 +581,6 @@ export default {
             ]
           : null,
         connectorParams: {
-          escapeHTML: this.escapeHTML,
           transformItems,
           future: { undefinedEmptyQuery: true },
         },
