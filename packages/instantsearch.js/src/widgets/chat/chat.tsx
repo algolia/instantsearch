@@ -14,12 +14,10 @@ import {
   RecommendToolType,
   restoreContainerInertUntilReveal,
   SearchIndexToolType,
+  shouldSearchToolRenderResults,
 } from 'instantsearch-core';
 import { createDocumentationMessageGenerator } from 'instantsearch-core';
-import {
-  createChatComponent,
-  shouldSearchToolRenderResults,
-} from 'instantsearch-ui-components';
+import { createChatComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 import { useCallback, useEffect, useMemo, useState } from 'preact/hooks';
 
