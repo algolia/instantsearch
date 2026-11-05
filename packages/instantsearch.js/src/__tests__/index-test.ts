@@ -30,10 +30,6 @@ describe('instantsearch()', () => {
         "stateMappings",
         "templates",
         "createInfiniteHitsSessionStorageCache",
-        "highlight",
-        "reverseHighlight",
-        "snippet",
-        "reverseSnippet",
       ]
     `);
   });
