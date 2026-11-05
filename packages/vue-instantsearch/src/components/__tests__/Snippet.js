@@ -12,7 +12,7 @@ test('renders proper HTML', () => {
   const hit = {
     _snippetResult: {
       attr: {
-        value: `con<mark>ten</mark>t`,
+        value: `con__ais-highlight__ten__/ais-highlight__t`,
       },
     },
   };
@@ -31,7 +31,7 @@ test('renders proper HTML with highlightTagName', () => {
   const hit = {
     _snippetResult: {
       attr: {
-        value: `con<mark>ten</mark>t`,
+        value: `con__ais-highlight__ten__/ais-highlight__t`,
       },
     },
   };
@@ -70,7 +70,7 @@ test('allows usage of dot delimited path to access nested attribute', () => {
     _snippetResult: {
       attr: {
         nested: {
-          value: `nested <mark>val</mark>`,
+          value: `nested __ais-highlight__val__/ais-highlight__`,
         },
       },
     },

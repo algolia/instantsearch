@@ -55,11 +55,6 @@ const commonToggles: Option[] = [
     value: { threshold: 80 },
   },
   {
-    key: 'escapeHTML',
-    label: 'false',
-    value: { escapeHTML: false },
-  },
-  {
     key: 'queryParameters',
     label: "{ filters: 'free_shipping:true' }",
     value: { queryParameters: { filters: 'free_shipping:true' } },

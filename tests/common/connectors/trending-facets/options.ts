@@ -20,7 +20,6 @@ export function createOptionsTests(
           facetName: 'brand',
           limit: 2,
           threshold: 3,
-          escapeHTML: false,
         },
       };
 

@@ -246,7 +246,7 @@ search.addWidgets([
     const searchClient = createSearchClient();
     const render = jest.fn();
     const makeWidget = connectAutocomplete(render);
-    const widget = makeWidget({ escapeHTML: false });
+    const widget = makeWidget({});
 
     const helper = algoliasearchHelper(searchClient, '', {});
     helper.search = jest.fn();
@@ -330,89 +330,11 @@ search.addWidgets([
     expect(helper.state.query).toBe('foo');
   });
 
-  it('with escapeHTML should escape the hits and the results', () => {
+  it('does not escape the hits', () => {
     const searchClient = createSearchClient();
     const render = jest.fn();
     const makeWidget = connectAutocomplete(render);
-    const widget = makeWidget({ escapeHTML: true });
-
-    const helper = algoliasearchHelper(searchClient, '', {});
-    helper.search = jest.fn();
-
-    const hits = [
-      {
-        _highlightResult: {
-          foobar: {
-            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
-            matchLevel: 'full' as const,
-            matchedWords: ['foobar'],
-          },
-        },
-        objectID: '1',
-      },
-    ];
-
-    const escapedHits = Object.assign(
-      [
-        {
-          _highlightResult: {
-            foobar: {
-              value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
-              matchLevel: 'full',
-              matchedWords: ['foobar'],
-            },
-          },
-          objectID: '1',
-        },
-      ],
-      { __escaped: true }
-    );
-
-    const enrichedEscapedHits = [
-      {
-        _highlightResult: {
-          foobar: {
-            value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
-            matchLevel: 'full',
-            matchedWords: ['foobar'],
-          },
-        },
-        objectID: '1',
-        __position: 1,
-      },
-    ];
-
-    widget.init!(createInitOptions({ helper }));
-
-    widget.render!(
-      createRenderOptions({
-        scopedResults: [
-          {
-            indexId: 'index0',
-            results: new SearchResults(helper.state, [
-              createSingleSearchResponse({
-                hits,
-              }),
-            ]),
-            helper,
-          },
-        ],
-        state: helper.state,
-        helper,
-      })
-    );
-
-    const rendering = render.mock.calls[1][0];
-
-    expect(rendering.indices[0].hits).toEqual(enrichedEscapedHits);
-    expect(rendering.indices[0].results.hits).toEqual(escapedHits);
-  });
-
-  it('without escapeHTML should not escape the hits', () => {
-    const searchClient = createSearchClient();
-    const render = jest.fn();
-    const makeWidget = connectAutocomplete(render);
-    const widget = makeWidget({ escapeHTML: false });
+    const widget = makeWidget({});
 
     const helper = algoliasearchHelper(searchClient, '', {});
     helper.search = jest.fn();
@@ -513,60 +435,6 @@ search.addWidgets([
       ) as SearchParameters;
 
       expect(nextState.query).toBeUndefined();
-    });
-
-    it('removes the TAG_PLACEHOLDER from the `SearchParameters`', () => {
-      const searchClient = createSearchClient();
-      const helper = algoliasearchHelper(searchClient, '', {
-        ...TAG_PLACEHOLDER,
-      });
-
-      const render = jest.fn();
-      const makeWidget = connectAutocomplete(render);
-      const widget = makeWidget({});
-
-      expect(helper.state.highlightPreTag).toBe(
-        TAG_PLACEHOLDER.highlightPreTag
-      );
-
-      expect(helper.state.highlightPostTag).toBe(
-        TAG_PLACEHOLDER.highlightPostTag
-      );
-
-      widget.init!(createInitOptions({ helper }));
-
-      const nextState = widget.dispose!(
-        createDisposeOptions({ helper, state: helper.state })
-      ) as SearchParameters;
-
-      expect(nextState.highlightPreTag).toBeUndefined();
-      expect(nextState.highlightPostTag).toBeUndefined();
-    });
-
-    it('does not remove the TAG_PLACEHOLDER from the `SearchParameters` with `escapeHTML` disabled', () => {
-      const searchClient = createSearchClient();
-      const helper = algoliasearchHelper(searchClient, '', {
-        highlightPreTag: '<mark>',
-        highlightPostTag: '</mark>',
-      });
-
-      const render = jest.fn();
-      const makeWidget = connectAutocomplete(render);
-      const widget = makeWidget({
-        escapeHTML: false,
-      });
-
-      expect(helper.state.highlightPreTag).toBe('<mark>');
-      expect(helper.state.highlightPostTag).toBe('</mark>');
-
-      widget.init!(createInitOptions({ helper }));
-
-      const nextState = widget.dispose!(
-        createDisposeOptions({ helper, state: helper.state })
-      ) as SearchParameters;
-
-      expect(nextState.highlightPreTag).toBe('<mark>');
-      expect(nextState.highlightPostTag).toBe('</mark>');
     });
   });
 
@@ -672,14 +540,12 @@ search.addWidgets([
         createRenderOptions({ helper })
       );
 
-      const hits = Object.assign([], { __escaped: true });
-
       expect(renderState).toEqual({
         currentRefinement: 'query',
         indices: [
           expect.objectContaining({
             results: expect.objectContaining({
-              hits,
+              hits: [],
             }),
             sendEvent: expect.any(Function),
           }),
@@ -752,37 +618,12 @@ search.addWidgets([
         new SearchParameters({
           index: '',
           query: 'Apple',
-          ...TAG_PLACEHOLDER,
         })
       );
     });
 
     test('returns the `SearchParameters` with the default value', () => {
       const [widget, helper] = getInitializedWidget();
-
-      expect(helper.state).toEqual(
-        new SearchParameters({
-          index: '',
-        })
-      );
-
-      const actual = widget.getWidgetSearchParameters(helper.state, {
-        uiState: {},
-      });
-
-      expect(actual).toEqual(
-        new SearchParameters({
-          index: '',
-          query: '',
-          ...TAG_PLACEHOLDER,
-        })
-      );
-    });
-
-    test('does not add highlight tags if escapeHTML is false', () => {
-      const [widget, helper] = getInitializedWidget({
-        escapeHTML: false,
-      });
 
       expect(helper.state).toEqual(
         new SearchParameters({
@@ -822,7 +663,6 @@ search.addWidgets([
         new SearchParameters({
           index: '',
           query: '',
-          ...TAG_PLACEHOLDER,
         })
       );
     });
@@ -833,7 +673,7 @@ search.addWidgets([
       const searchClient = createSearchClient();
       const render = jest.fn();
       const makeWidget = connectAutocomplete(render);
-      const widget = makeWidget({ escapeHTML: false });
+      const widget = makeWidget({});
 
       const helper = algoliasearchHelper(searchClient, '', {});
       helper.search = jest.fn();

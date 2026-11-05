@@ -1,7 +1,6 @@
 /** @jsx h */
 import {
   getPropertyByPath,
-  unescape,
   toArray,
   warning,
   getHighlightedParts,
@@ -46,9 +45,7 @@ See: https://alg.li/highlighting
 `
   );
 
-  const parts = properties.map(({ value }) =>
-    getHighlightedParts(unescape(value || ''))
-  );
+  const parts = properties.map(({ value }) => getHighlightedParts(value || ''));
 
   return (
     <SnippetUiComponent {...props} parts={parts} classNames={cssClasses} />

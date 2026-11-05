@@ -1219,7 +1219,6 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
   const isFeedsMode = feeds !== undefined;
   const {
     container,
-    escapeHTML,
     showQuerySuggestions,
     showPromptSuggestions,
     showRecent,
@@ -1577,7 +1576,6 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
           ...feedContainers,
           {
             ...makeWidget({
-              escapeHTML,
               transformItems: effectiveTransformItems,
               future: { undefinedEmptyQuery: true },
             }),
@@ -1607,7 +1605,6 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
         ),
         {
           ...makeWidget({
-            escapeHTML,
             transformItems: effectiveTransformItems,
             future: { undefinedEmptyQuery: true },
           }),
