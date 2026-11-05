@@ -1,12 +1,12 @@
 /** @jsx h */
 
 import { createDocumentationMessageGenerator } from 'instantsearch-core';
+import { suitComponent as component } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import ToggleRefinement from '../../components/ToggleRefinement/ToggleRefinement';
 import { connectToggleRefinement } from '../../connectors';
-import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 

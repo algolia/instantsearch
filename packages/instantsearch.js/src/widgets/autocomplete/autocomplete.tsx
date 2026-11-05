@@ -16,6 +16,7 @@ import {
   walkIndex,
 } from 'instantsearch-core';
 import { index } from 'instantsearch-core';
+import { suitComponent as component } from 'instantsearch-core';
 import {
   createAutocompleteComponent,
   createAutocompleteDetachedContainerComponent,
@@ -42,7 +43,6 @@ import {
   connectSearchBox,
 } from '../../connectors/index';
 import { Highlight, ReverseHighlight } from '../../helpers/components';
-import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 import configure from '../configure/configure';

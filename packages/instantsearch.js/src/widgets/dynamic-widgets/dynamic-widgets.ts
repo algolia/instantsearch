@@ -2,9 +2,9 @@ import {
   createDocumentationMessageGenerator,
   getWidgetAttribute,
 } from 'instantsearch-core';
+import { suitComponent as component } from 'instantsearch-core';
 
 import { connectDynamicWidgets } from '../../connectors';
-import { component } from '../../lib/suit';
 import { getContainerNode } from '../../lib/utils';
 
 import type {
