@@ -45,10 +45,6 @@ describe('instantsearch()', () => {
       [
         "version",
         "createInfiniteHitsSessionStorageCache",
-        "highlight",
-        "reverseHighlight",
-        "snippet",
-        "reverseSnippet",
         "insights",
         "getInsightsAnonymousUserToken",
       ]
