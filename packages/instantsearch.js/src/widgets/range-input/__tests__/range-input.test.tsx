@@ -94,14 +94,7 @@ describe('rangeInput', () => {
 
       search.addWidgets([rangeInput({ container, attribute: 'price' })]);
 
-      // @MAJOR Once Hogan.js and string-based templates are removed,
-      // `search.start()` can be moved to the test body and the following
-      // assertion can go away.
-      expect(async () => {
-        search.start();
-
-        await wait(0);
-      }).not.toWarnDev();
+      search.start();
 
       await wait(0);
 

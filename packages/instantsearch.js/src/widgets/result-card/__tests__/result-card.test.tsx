@@ -116,7 +116,8 @@ describe('resultCard', () => {
       container,
       agentId: 'a',
       templates: {
-        layout: ({ status, query }) => `<p>${status}: ${query}</p>`,
+        layout: ({ status, query }, { html }) =>
+          html`<p>${status}: ${query}</p>`,
       },
     });
 

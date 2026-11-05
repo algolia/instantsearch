@@ -17,7 +17,7 @@ const cssClasses = {
 };
 
 const templates: RelevantSortComponentTemplates = {
-  text: '',
+  text: () => '',
   button: ({ isRelevantSorted }) => {
     return isRelevantSorted ? 'See all results' : 'See relevant results';
   },

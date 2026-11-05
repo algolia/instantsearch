@@ -49,7 +49,7 @@ search.addWidgets([
     aiMode: true,
   }),
   panel({
-    templates: { header: 'Current Refinements' },
+    templates: { header: () => 'Current Refinements' },
     hidden: ({ items }) => items.length === 0,
   })(currentRefinements)({
     container: '#current-refinements',
@@ -74,14 +74,14 @@ search.addWidgets([
     hitsPerPage: 8,
   }),
   panel({
-    templates: { header: 'brand' },
+    templates: { header: () => 'brand' },
   })(refinementList)({
     container: '#brand-list',
     attribute: 'brand',
     showMore: true,
   }),
   panel({
-    templates: { header: 'categories' },
+    templates: { header: () => 'categories' },
   })(refinementList)({
     container: '#categories-list',
     attribute: 'categories',

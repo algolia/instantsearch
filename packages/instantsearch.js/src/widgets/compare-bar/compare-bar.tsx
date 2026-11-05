@@ -106,12 +106,10 @@ export default function compareBar(widgetParams: CompareBarWidgetParams) {
       removeItem,
       clearItems,
       compare,
-      instantSearchInstance,
     } = renderState;
 
     const templateProps = prepareTemplateProps({
       defaultTemplates: {} as unknown as CompareBarTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates,
     });
 
