@@ -34,6 +34,7 @@ describe('routing using `replaceState`', () => {
       routing: {
         router: historyRouter({
           writeDelay,
+          cleanUrlOnDispose: true,
         }),
       },
     });

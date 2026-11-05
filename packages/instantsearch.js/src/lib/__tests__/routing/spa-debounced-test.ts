@@ -32,6 +32,7 @@ describe('routing with debounced third-party client-side router', () => {
       routing: {
         router: historyRouter({
           writeDelay,
+          cleanUrlOnDispose: true,
         }),
       },
     });

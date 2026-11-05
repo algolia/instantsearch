@@ -164,10 +164,8 @@ describe('InstantSearchSSRProvider', () => {
     const routing = {
       stateMapping: simple(),
       router: history({
-        getLocation() {
-          return new URL(
-            `http://localhost/?indexName[query]=iphone`
-          ) as unknown as Location;
+        getCurrentURL() {
+          return new URL(`http://localhost/?indexName[query]=iphone`);
         },
       }),
     };

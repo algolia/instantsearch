@@ -29,6 +29,7 @@ describe('routing with no navigation', () => {
       routing: {
         router: historyRouter({
           writeDelay,
+          cleanUrlOnDispose: true,
         }),
       },
     });
