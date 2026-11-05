@@ -1,57 +1,52 @@
-import {
-  TAG_REPLACEMENT,
-  getPropertyByPath,
-  warning,
-} from 'instantsearch-core';
-
 import { component } from '../lib/suit';
+import { getPropertyByPath, TAG_REPLACEMENT, warning } from '../lib/utils';
 
-import type { Hit } from 'instantsearch-core';
+import type { Hit } from '../types';
 
-export type SnippetOptions = {
+export type HighlightOptions = {
   // @MAJOR string should no longer be allowed to be a path, only array can be a path
   attribute: string | string[];
   highlightedTagName?: string;
   hit: Partial<Hit>;
-  cssClasses?: {
-    highlighted?: string;
-  };
+  cssClasses?: Partial<{
+    highlighted: string;
+  }>;
 };
 
-const suit = component('Snippet');
+const suit = component('Highlight');
 
 /**
- * @deprecated use html tagged templates and the Snippet component instead
+ * @deprecated use html tagged templates and the Highlight component instead
  */
-export default function snippet({
+export default function highlight({
   attribute,
   highlightedTagName = 'mark',
   hit,
   cssClasses = {},
-}: SnippetOptions): string {
+}: HighlightOptions): string {
   warning(
     false,
-    `\`instantsearch.snippet\` function has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`Snippet\` component.
+    `\`instantsearch.highlight\` function has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`Highlight\` component.
 
 For more information, visit https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/?client=html+tagged+templates#upgrade-templates`
   );
 
-  const snippetAttributeResult = getPropertyByPath(
-    hit._snippetResult,
+  const highlightAttributeResult = getPropertyByPath(
+    hit._highlightResult,
     attribute
   );
 
-  // @MAJOR fallback to attribute value if snippet is not found
+  // @MAJOR fallback to attribute value if highlight is not found
   warning(
-    snippetAttributeResult,
-    `Could not enable snippet for "${attribute}", will display an empty string.
-Please check whether this attribute exists and is specified in \`attributesToSnippet\`.
+    highlightAttributeResult,
+    `Could not enable highlight for "${attribute}", will display an empty string.
+Please check whether this attribute exists and is either searchable or specified in \`attributesToHighlight\`.
 
 See: https://alg.li/highlighting
 `
   );
 
-  const { value: attributeValue = '' } = snippetAttributeResult || {};
+  const { value: attributeValue = '' } = highlightAttributeResult || {};
 
   // cx is not used, since it would be bundled as a dependency for Vue
   const className =

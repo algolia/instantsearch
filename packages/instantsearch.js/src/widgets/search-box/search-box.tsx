@@ -2,12 +2,12 @@
 
 import { isChatBusy, openChat } from 'instantsearch-core';
 import { createDocumentationMessageGenerator } from 'instantsearch-core';
+import { suitComponent as component } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import SearchBox from '../../components/SearchBox/SearchBox';
 import { connectSearchBox } from '../../connectors';
-import { component } from '../../lib/suit';
 import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
