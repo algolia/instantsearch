@@ -583,7 +583,12 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createChatWidgetTests: {
     act,
   },
-  createAutocompleteWidgetTests: { act },
+  createAutocompleteWidgetTests: {
+    act,
+    skippedTests: {
+      'keeps a query cleared before the first opening in standalone mode': true,
+    },
+  },
   createFilterSuggestionsWidgetTests: { act },
   createPromptSuggestionsWidgetTests: { act },
   createCompareBarWidgetTests: { act },

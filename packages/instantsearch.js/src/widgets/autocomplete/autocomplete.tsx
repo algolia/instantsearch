@@ -1446,6 +1446,9 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
   let parentRef: IndexWidget | null | undefined;
   let instanceRef: InstantSearch | null = null;
   let activated = false;
+  // A query refined before activation (e.g. clearing the detached search
+  // button), which takes precedence over the parent query.
+  let pendingQuery: string | undefined;
 
   const activate = () => {
     if (activated || !parentRef || !isolatedTree || !instanceRef) return;
@@ -1455,9 +1458,14 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
     // parent's own state hasn't changed; cancel it so only the isolated tree
     // searches on activation.
     instanceRef.scheduleSearch.cancel();
-    const parentQuery = parentRef.getHelper()?.state.query;
-    if (parentQuery) {
-      isolatedTree.getHelper()?.setQuery(parentQuery);
+    if (pendingQuery !== undefined) {
+      isolatedTree.getHelper()?.setQuery(pendingQuery);
+      pendingQuery = undefined;
+    } else {
+      const parentQuery = parentRef.getHelper()?.state.query;
+      if (parentQuery) {
+        isolatedTree.getHelper()?.setQuery(parentQuery);
+      }
     }
     isolatedTree.scheduleLocalSearch();
   };
@@ -1608,7 +1616,9 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
         parentRef = parent;
         instanceRef = instantSearchInstance;
         isolatedTree = buildTree(instantSearchInstance);
-        renderShell(specializedRenderer, instantSearchInstance);
+        renderShell(specializedRenderer, instantSearchInstance, (query) => {
+          pendingQuery = query;
+        });
       },
       render() {},
       dispose({ parent }) {
@@ -1620,6 +1630,7 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
         parentRef = undefined;
         instanceRef = null;
         activated = false;
+        pendingQuery = undefined;
         return undefined;
       },
     };
@@ -1631,13 +1642,14 @@ function renderShell<TItem extends BaseHit>(
     AutocompleteRenderState,
     Partial<AutocompleteWidgetParams<TItem>>
   >,
-  instantSearchInstance: InstantSearch
+  instantSearchInstance: InstantSearch,
+  refine: AutocompleteRenderState['refine']
 ) {
   renderer(
     {
       instantSearchInstance,
       indices: [],
-      refine: noop,
+      refine,
       currentRefinement: '',
       widgetParams: {},
     } as AutocompleteRenderState &

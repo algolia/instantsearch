@@ -443,7 +443,8 @@ export default {
       activatedLazily: false,
       // The isolated index, once its connector is mounted.
       isolatedIndex: null,
-      // A query typed between activation and the connector's first render.
+      // A query refined before the connector's first render (e.g. clearing
+      // the detached search button before activation).
       pendingQuery: undefined,
       renderOptions: null,
       hasWarnedMissingPromptSuggestionsChat: false,
@@ -614,7 +615,7 @@ export default {
       const refineAutocomplete = (query) => {
         if (state.isolatedIndex) {
           state.renderOptions.refine(query);
-        } else if (state.activated) {
+        } else {
           state.pendingQuery = query;
         }
       };
