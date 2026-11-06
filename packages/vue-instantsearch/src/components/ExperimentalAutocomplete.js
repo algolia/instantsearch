@@ -418,6 +418,9 @@ export default {
     detachedMediaQuery: { type: String, default: undefined },
     translations: { type: Object, default: undefined },
     aiMode: { type: Boolean, default: false },
+    // Selecting an item or submitting only updates the autocomplete's query,
+    // not the parent index's, and keeps the panel open.
+    standalone: { type: Boolean, default: false },
     // Overrides the `classNames` prop of the suit mixin: the keys are the ones
     // of the other flavors' `cssClasses` (`root`, `panel`, `panelOpen`, ...).
     classNames: { type: Object, default: () => ({}) },
@@ -440,7 +443,8 @@ export default {
       activatedLazily: false,
       // The isolated index, once its connector is mounted.
       isolatedIndex: null,
-      // A query typed between activation and the connector's first render.
+      // A query refined before the connector's first render (e.g. clearing
+      // the detached search button before activation).
       pendingQuery: undefined,
       renderOptions: null,
       hasWarnedMissingPromptSuggestionsChat: false,
@@ -611,7 +615,7 @@ export default {
       const refineAutocomplete = (query) => {
         if (state.isolatedIndex) {
           state.renderOptions.refine(query);
-        } else if (state.activated) {
+        } else {
           state.pendingQuery = query;
         }
       };
@@ -822,18 +826,20 @@ export default {
       const onRefine = (query) => {
         setLocalQuery(query);
         refineAutocomplete(query);
-        instantSearchInstance.setUiState((uiState) => ({
-          ...uiState,
-          // A new query starts from the first page, like `setQuery` does.
-          [targetIndex.getIndexId()]: {
-            ...omitPage(uiState[targetIndex.getIndexId()]),
-            query,
-          },
-          // Before activation there is no isolated index to mirror the query to.
-          ...(state.isolatedIndex
-            ? { [isolatedIndex.getIndexId()]: { query } }
-            : {}),
-        }));
+        if (!this.standalone) {
+          instantSearchInstance.setUiState((uiState) => ({
+            ...uiState,
+            // A new query starts from the first page, like `setQuery` does.
+            [targetIndex.getIndexId()]: {
+              ...omitPage(uiState[targetIndex.getIndexId()]),
+              query,
+            },
+            // Before activation there is no isolated index to mirror the query to.
+            ...(state.isolatedIndex
+              ? { [isolatedIndex.getIndexId()]: { query } }
+              : {}),
+          }));
+        }
         if (query.length > 0) {
           storage.onAdd(query);
         }
@@ -886,7 +892,11 @@ export default {
           return;
         }
 
-        if (!isSearchPage && typeof this.getSearchPageUrl !== 'undefined') {
+        if (
+          !this.standalone &&
+          !isSearchPage &&
+          typeof this.getSearchPageUrl !== 'undefined'
+        ) {
           const indexUiState =
             instantSearchInstance.getUiState()[targetIndex.getIndexId()];
           window.location.href = this.getSearchPageUrl({
@@ -917,13 +927,14 @@ export default {
         },
         onSubmit: () => {
           // Close the detached modal when form is submitted
-          if (isDetached) {
+          if (isDetached && !this.standalone) {
             setIsModalOpen(false);
           }
         },
         placeholder: this.placeholder,
         isDetached,
         shouldHidePanel: shouldHideEmptyPanel,
+        closeOnSubmit: !this.standalone,
         autoFocus: this.autofocus,
       });
 

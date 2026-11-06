@@ -230,6 +230,7 @@ type RendererParams<TItem extends BaseHit> = {
   | 'placeholder'
   | 'autofocus'
   | 'aiMode'
+  | 'standalone'
 > & {
     showRecent:
       | Exclude<IndicesAutocompleteWidgetParams<TItem>['showRecent'], boolean>
@@ -360,6 +361,7 @@ type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
   | 'detachedMediaQuery'
   | 'translations'
   | 'aiMode'
+  | 'standalone'
 > &
   Pick<AutocompleteRenderState, 'indices' | 'refine'> &
   RendererOptions<Partial<AutocompleteWidgetParams<TItem>>>;
@@ -383,6 +385,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   detachedMediaQuery,
   translations,
   aiMode,
+  standalone,
 }: AutocompleteWrapperProps<TItem>) {
   const { isolatedIndex, targetIndex } = renderState;
 
@@ -588,14 +591,16 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   const onRefine = (query: string) => {
     setLocalQuery(query);
     refineAutocomplete(query);
-    instantSearchInstance.setUiState((uiState) => ({
-      ...uiState,
-      [targetIndex!.getIndexId()]: {
-        ...uiState[targetIndex!.getIndexId()],
-        query,
-      },
-      [isolatedIndex!.getIndexId()]: { query },
-    }));
+    if (!standalone) {
+      instantSearchInstance.setUiState((uiState) => ({
+        ...uiState,
+        [targetIndex!.getIndexId()]: {
+          ...uiState[targetIndex!.getIndexId()],
+          query,
+        },
+        [isolatedIndex!.getIndexId()]: { query },
+      }));
+    }
     query.length > 0 && storage.onAdd(query);
   };
 
@@ -661,7 +666,11 @@ function AutocompleteWrapper<TItem extends BaseHit>({
           return;
         }
 
-        if (!isSearchPage && typeof getSearchPageURL !== 'undefined') {
+        if (
+          !standalone &&
+          !isSearchPage &&
+          typeof getSearchPageURL !== 'undefined'
+        ) {
           const indexUiState =
             instantSearchInstance.getUiState()[targetIndex!.getIndexId()];
           window.location.href = getSearchPageURL({ ...indexUiState, query });
@@ -675,13 +684,14 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     },
     onSubmit: () => {
       // Close the detached modal when form is submitted
-      if (isDetached) {
+      if (isDetached && !standalone) {
         setIsModalOpen(false);
       }
     },
     placeholder,
     isDetached,
     shouldHidePanel: shouldHideEmptyPanel,
+    closeOnSubmit: !standalone,
     autoFocus: autofocus,
   });
 
@@ -1134,6 +1144,14 @@ type BaseAutocompleteWidgetParams<TItem extends BaseHit> = {
    * Requires a Chat widget on the same index.
    */
   aiMode?: boolean;
+
+  /**
+   * When true, selecting an item or submitting only updates the query of the
+   * autocomplete, not the parent index, and the panel stays open.
+   * Items with a URL still navigate, but `getSearchPageURL` is ignored.
+   * @default false
+   */
+  standalone?: boolean;
 };
 
 export type IndicesAutocompleteWidgetParams<TItem extends BaseHit> =
@@ -1204,6 +1222,7 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
     detachedMediaQuery,
     translations: userTranslations = {},
     aiMode,
+    standalone,
   } = safeWidgetParams;
 
   if (isFeedsMode && indices !== undefined) {
@@ -1427,6 +1446,9 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
   let parentRef: IndexWidget | null | undefined;
   let instanceRef: InstantSearch | null = null;
   let activated = false;
+  // A query refined before activation (e.g. clearing the detached search
+  // button), which takes precedence over the parent query.
+  let pendingQuery: string | undefined;
 
   const activate = () => {
     if (activated || !parentRef || !isolatedTree || !instanceRef) return;
@@ -1436,9 +1458,14 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
     // parent's own state hasn't changed; cancel it so only the isolated tree
     // searches on activation.
     instanceRef.scheduleSearch.cancel();
-    const parentQuery = parentRef.getHelper()?.state.query;
-    if (parentQuery) {
-      isolatedTree.getHelper()?.setQuery(parentQuery);
+    if (pendingQuery !== undefined) {
+      isolatedTree.getHelper()?.setQuery(pendingQuery);
+      pendingQuery = undefined;
+    } else {
+      const parentQuery = parentRef.getHelper()?.state.query;
+      if (parentQuery) {
+        isolatedTree.getHelper()?.setQuery(parentQuery);
+      }
     }
     isolatedTree.scheduleLocalSearch();
   };
@@ -1469,6 +1496,7 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
     },
     templates,
     aiMode,
+    standalone,
   });
 
   const makeWidget = connectAutocomplete(specializedRenderer, () =>
@@ -1588,7 +1616,9 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
         parentRef = parent;
         instanceRef = instantSearchInstance;
         isolatedTree = buildTree(instantSearchInstance);
-        renderShell(specializedRenderer, instantSearchInstance);
+        renderShell(specializedRenderer, instantSearchInstance, (query) => {
+          pendingQuery = query;
+        });
       },
       render() {},
       dispose({ parent }) {
@@ -1600,6 +1630,7 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
         parentRef = undefined;
         instanceRef = null;
         activated = false;
+        pendingQuery = undefined;
         return undefined;
       },
     };
@@ -1611,13 +1642,14 @@ function renderShell<TItem extends BaseHit>(
     AutocompleteRenderState,
     Partial<AutocompleteWidgetParams<TItem>>
   >,
-  instantSearchInstance: InstantSearch
+  instantSearchInstance: InstantSearch,
+  refine: AutocompleteRenderState['refine']
 ) {
   renderer(
     {
       instantSearchInstance,
       indices: [],
-      refine: noop,
+      refine,
       currentRefinement: '',
       widgetParams: {},
     } as AutocompleteRenderState &
