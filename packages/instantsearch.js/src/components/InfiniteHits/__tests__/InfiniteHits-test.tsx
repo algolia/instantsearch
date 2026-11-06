@@ -61,10 +61,10 @@ describe('InfiniteHits', () => {
         isLastPage: false,
         templateProps: {
           templates: {
-            empty: 'empty',
-            showPreviousText: 'showPreviousText',
-            showMoreText: 'showMoreText',
-            item: 'item',
+            empty: () => 'empty',
+            showPreviousText: () => 'showPreviousText',
+            showMoreText: () => 'showMoreText',
+            item: () => 'item',
           },
         },
         cssClasses,
@@ -101,10 +101,10 @@ describe('InfiniteHits', () => {
         isLastPage: true,
         templateProps: {
           templates: {
-            empty: 'empty',
-            showPreviousText: 'showPreviousText',
-            showMoreText: 'showMoreText',
-            item: 'item',
+            empty: () => 'empty',
+            showPreviousText: () => 'showPreviousText',
+            showMoreText: () => 'showMoreText',
+            item: () => 'item',
           },
         },
         cssClasses,
@@ -130,10 +130,10 @@ describe('InfiniteHits', () => {
         isLastPage: false,
         templateProps: {
           templates: {
-            empty: 'empty',
-            showPreviousText: 'showPreviousText',
-            showMoreText: 'showMoreText',
-            item: 'item',
+            empty: () => 'empty',
+            showPreviousText: () => 'showPreviousText',
+            showMoreText: () => 'showMoreText',
+            item: () => 'item',
           },
         },
         cssClasses,
@@ -159,10 +159,10 @@ describe('InfiniteHits', () => {
         isLastPage: true,
         templateProps: {
           templates: {
-            empty: 'empty',
-            showPreviousText: 'showPreviousText',
-            showMoreText: 'showMoreText',
-            item: 'item',
+            empty: () => 'empty',
+            showPreviousText: () => 'showPreviousText',
+            showMoreText: () => 'showMoreText',
+            item: () => 'item',
           },
         },
         cssClasses,
@@ -199,10 +199,10 @@ describe('InfiniteHits', () => {
         isLastPage: false,
         templateProps: {
           templates: {
-            empty: 'empty',
-            showPreviousText: 'showPreviousText',
-            showMoreText: 'showMoreText',
-            item: 'item',
+            empty: () => 'empty',
+            showPreviousText: () => 'showPreviousText',
+            showMoreText: () => 'showMoreText',
+            item: () => 'item',
           },
         },
         cssClasses,
@@ -244,10 +244,10 @@ describe('InfiniteHits', () => {
         isLastPage: true,
         templateProps: {
           templates: {
-            empty: 'empty',
-            showPreviousText: 'showPreviousText',
-            showMoreText: 'showMoreText',
-            item: 'item',
+            empty: () => 'empty',
+            showPreviousText: () => 'showPreviousText',
+            showMoreText: () => 'showMoreText',
+            item: () => 'item',
           },
         },
         cssClasses,

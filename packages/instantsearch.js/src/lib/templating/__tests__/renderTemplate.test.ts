@@ -1,164 +1,113 @@
+/**
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ */
+
+import { html } from 'htm/preact';
+
+import {
+  Highlight,
+  ReverseHighlight,
+  ReverseSnippet,
+  Snippet,
+} from '../../../helpers/components';
 import { renderTemplate } from '../renderTemplate';
 
-import type { HoganHelpers } from '../../../types';
+import type { TemplateParams } from '../../../types';
 
 describe('renderTemplate', () => {
-  it('expect to process templates as string', () => {
-    const templateKey = 'test';
-    const templates = { test: 'it works with {{type}}' };
-    const data = { type: 'strings' };
-
-    const actual = renderTemplate({
-      templateKey,
-      templates,
-      data,
-    });
-
-    const expectation = 'it works with strings';
-
-    expect(actual).toBe(expectation);
-  });
-
-  it('expect to process templates as function', () => {
-    const templateKey = 'test';
+  it('renders a template returning a string', () => {
     const data = { type: 'functions' };
     const templates = {
       test: (d: typeof data) => `it works with ${d.type}`,
     };
 
-    const actual = renderTemplate({
-      templateKey,
-      templates,
-      data,
-    });
-
-    const expectation = 'it works with functions';
-
-    expect(actual).toBe(expectation);
+    expect(renderTemplate({ templateKey: 'test', templates, data })).toBe(
+      'it works with functions'
+    );
   });
 
-  it('expect to use custom compiler options', () => {
-    const templateKey = 'test';
-    const templates = { test: 'it works with <%options%>' };
-    const data = { options: 'custom delimiter' };
-    const compileOptions = { delimiters: '<% %>' };
+  it('renders a template returning a VNode', () => {
+    const templates = {
+      test: ({ name }: { name: string }, { html: h }: TemplateParams) =>
+        h`<strong>${name}</strong>`,
+    };
 
-    const actual = renderTemplate({
-      templateKey,
-      templates,
-      data,
-      compileOptions,
-    });
-
-    const expectation = 'it works with custom delimiter';
-
-    expect(actual).toBe(expectation);
-  });
-
-  it('expect to compress templates', () => {
     expect(
       renderTemplate({
-        templateKey: 'message',
-        templates: {
-          message: ` <h1> hello</h1>
-        <p>message</p> `,
-        },
+        templateKey: 'test',
+        templates,
+        data: { name: 'world' },
       })
-    ).toMatchInlineSnapshot(`
-      <h1>
-        hello
-      </h1>
-      <p>
-        message
-      </p>
-    `);
+    ).toMatchObject({ type: 'strong', props: { children: 'world' } });
   });
 
-  it('expect to throw when the template is not a function or a string', () => {
-    const actual0 = () =>
-      renderTemplate({
-        templateKey: 'test',
-        templates: {},
-      });
+  it('renders a template returning null', () => {
+    const templates = { test: () => null };
 
-    const actual1 = () =>
+    expect(renderTemplate({ templateKey: 'test', templates })).toBeNull();
+  });
+
+  it('passes `html`, `components` and `sendEvent` to the template', () => {
+    const sendEvent = jest.fn();
+    const template = jest.fn(() => 'rendered');
+    const templates = { test: template };
+
+    renderTemplate({
+      templateKey: 'test',
+      templates,
+      data: { id: 1 },
+      sendEvent,
+    });
+
+    expect(template).toHaveBeenCalledTimes(1);
+    expect(template).toHaveBeenCalledWith(
+      { id: 1 },
+      expect.objectContaining({
+        html,
+        sendEvent,
+        components: { Highlight, ReverseHighlight, Snippet, ReverseSnippet },
+      })
+    );
+  });
+
+  it('throws when the template is missing', () => {
+    expect(() =>
+      renderTemplate({ templateKey: 'test', templates: {} })
+    ).toThrow(`Template must be a function, was 'undefined' (key: test).`);
+  });
+
+  it('throws when the template is not a function', () => {
+    expect(() =>
       renderTemplate({
         templateKey: 'test',
         // @ts-expect-error wrong usage
         templates: { test: null },
-      });
+      })
+    ).toThrow(`Template must be a function, was 'object' (key: test).`);
 
-    const actual2 = () =>
+    expect(() =>
       renderTemplate({
         templateKey: 'test',
         // @ts-expect-error wrong usage
         templates: { test: 10 },
-      });
-
-    const expectation0 = `Template must be 'string' or 'function', was 'undefined' (key: test)`;
-    const expectation1 = `Template must be 'string' or 'function', was 'object' (key: test)`;
-    const expectation2 = `Template must be 'string' or 'function', was 'number' (key: test)`;
-
-    expect(() => actual0()).toThrow(expectation0);
-    expect(() => actual1()).toThrow(expectation1);
-    expect(() => actual2()).toThrow(expectation2);
+      })
+    ).toThrow(`Template must be a function, was 'number' (key: test).`);
   });
 
-  describe('with helpers', () => {
-    it('expect to call the relevant function', () => {
-      const templateKey = 'test';
-      const templates = {
-        test: '{{#helpers.emphasis}}{{feature}}{{/helpers.emphasis}}',
-      };
+  it('throws with migration instructions when the template is a string', () => {
+    expect(() =>
+      renderTemplate({
+        templateKey: 'item',
+        templates: { item: '<div>{{name}}</div>' },
+      })
+    ).toThrowErrorMatchingInlineSnapshot(`
+      "Template must be a function, was 'string' (key: item).
 
-      const data = {
-        feature: 'helpers',
-      };
+      String-based (Hogan.js) templates are no longer supported. Use a function template with the \`html\` tagged template or JSX instead:
 
-      const helpers: HoganHelpers<'emphasis'> = {
-        emphasis: (text, render) => `<em>${render(text)}</em>`,
-      };
+        item: (data, { html }) => html\`...\`
 
-      const actual = renderTemplate({
-        templateKey,
-        templates,
-        data,
-        helpers,
-      });
-
-      const expectation = '<em>helpers</em>';
-
-      expect(actual).toBe(expectation);
-    });
-
-    it('expect to set the context (`this`) to the template `data`', () => {
-      const templateKey = 'test';
-      const templates = {
-        test: '{{#helpers.emphasis}}{{feature}}{{/helpers.emphasis}}',
-      };
-
-      const data = {
-        feature: 'helpers',
-      };
-
-      const helpers = {
-        emphasis() {
-          // context will be different when using arrow function (lexical scope used)
-          expect(this).toBe(data);
-          return 'irrelevant return';
-        },
-      };
-
-      const actual = renderTemplate({
-        templateKey,
-        templates,
-        data,
-        helpers,
-      });
-
-      const expectation = 'irrelevant return';
-
-      expect(actual).toBe(expectation);
-    });
+      See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#upgrade-templates"
+    `);
   });
 });

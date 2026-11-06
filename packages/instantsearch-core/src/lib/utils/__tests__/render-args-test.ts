@@ -17,7 +17,6 @@ const createFakeParent = (helper: any): IndexWidget =>
 const createFakeInstantSearch = (): InstantSearch =>
   ({
     renderState: {},
-    templatesConfig: {},
     status: 'idle',
     error: undefined,
   }) as any;

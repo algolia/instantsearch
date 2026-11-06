@@ -10,15 +10,14 @@ import { h } from 'preact';
 
 import Template from '../Template';
 
+import type { TemplateParams } from '../../../types';
 import type { TemplateProps } from '../Template';
 
 function getProps({
-  templates = { test: '' },
+  templates = { test: () => '' },
   data = {},
   templateKey = 'test',
   rootProps = {},
-  useCustomCompileOptions = {},
-  templatesConfig = { helpers: {}, compileOptions: {} },
   ...props
 }: Partial<TemplateProps>) {
   return {
@@ -27,8 +26,6 @@ function getProps({
     data,
     templateKey,
     rootProps,
-    useCustomCompileOptions,
-    templatesConfig,
   };
 }
 
@@ -37,16 +34,26 @@ describe('Template', () => {
     warning.cache = {};
   });
 
-  it('can configure compilation options', () => {
+  it('renders the template inside the root element', () => {
     const props = getProps({
-      templates: { test: 'it configures compilation <%options%>' },
-      data: { options: 'delimiters' },
-      useCustomCompileOptions: { test: true },
-      templatesConfig: { helpers: {}, compileOptions: { delimiters: '<% %>' } },
+      templates: {
+        test: ({ name }: { name: string }, { html }: TemplateParams) =>
+          html`<span>Hello ${name}</span>`,
+      },
+      data: { name: 'world' },
     });
-    const wrapper = mount(<Template {...props} />);
+    const wrapper = render(<Template {...props} />);
 
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.container).toMatchInlineSnapshot(`
+      <div>
+        <div>
+          <span>
+            Hello 
+            world
+          </span>
+        </div>
+      </div>
+    `);
   });
 
   it('can configure custom rootTagName', () => {
@@ -54,23 +61,6 @@ describe('Template', () => {
     const wrapper = mount(<Template {...props} />);
 
     expect(wrapper).toMatchSnapshot();
-  });
-
-  it('can have Fragment as rootTagName with string template', () => {
-    const props = getProps({
-      rootTagName: 'fragment',
-      templates: { test: 'Hello <span>{{name}}</span> !' },
-      data: { name: 'world' },
-    });
-    const wrapper = render(<Template {...props} />);
-
-    expect(wrapper.container).toMatchSnapshot();
-
-    props.data = { name: 'world2' };
-
-    wrapper.rerender(<Template {...props} />);
-
-    expect(wrapper.container).toMatchSnapshot();
   });
 
   it('can have Fragment as rootTagName with Preact template', () => {
@@ -83,41 +73,68 @@ describe('Template', () => {
     expect(wrapper.container).toMatchSnapshot();
   });
 
-  it('can have Fragment as rootTagName with simple string', () => {
+  it('can have Fragment as rootTagName with a template returning a string', () => {
     const props = getProps({
       rootTagName: 'fragment',
-      templates: { test: 'test' },
+      templates: { test: () => 'test' },
     });
     const wrapper = render(<Template {...props} />);
 
-    expect(wrapper.container).toMatchSnapshot();
+    expect(wrapper.container).toMatchInlineSnapshot(`
+      <div>
+        test
+      </div>
+    `);
   });
 
-  it('remounts RawHtml component when using Fragment with a string template', () => {
+  it('renders strings as text, not as HTML', () => {
     const props = getProps({
-      rootTagName: 'fragment',
-      templates: { test: 'test' },
+      templates: { test: ({ name }: { name: string }) => `<b>${name}</b>` },
+      data: { name: 'world' },
+    });
+
+    expect(() => {
+      const wrapper = render(<Template {...props} />);
+
+      expect(wrapper.container.textContent).toBe('<b>world</b>');
+      expect(wrapper.container.querySelector('b')).toBeNull();
+    })
+      .toWarnDev(`[InstantSearch.js]: The "test" template returned a string that starts with "<". Strings are rendered as text, not as HTML.
+
+Return the result of the provided \`html\` function or JSX instead.
+
+See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#upgrade-templates`);
+  });
+
+  it('does not warn for strings that do not look like HTML', () => {
+    const props = getProps({
+      templates: { test: () => '1 < 2' },
+    });
+
+    expect(() => render(<Template {...props} />)).not.toWarnDev();
+  });
+
+  it('renders nothing when the template returns null', () => {
+    const props = getProps({
+      templates: { test: () => null },
     });
     const wrapper = render(
       <div>
         <Template {...props} />
       </div>
     );
-    wrapper.rerender(
-      <div>
-        <div>Hello</div>
-        {/* It won't rerender if props don't change in testing-library */}
-        <Template {...props} data={{ a: 'a' }} />
-      </div>
-    );
 
-    expect(wrapper.container).toMatchSnapshot();
+    expect(wrapper.container).toMatchInlineSnapshot(`
+      <div>
+        <div />
+      </div>
+    `);
   });
 
   it('correctly unmounts empty', () => {
     const props = getProps({
       rootTagName: 'fragment',
-      templates: { test: '' },
+      templates: { test: () => '' },
     });
     const wrapper = render(
       <div>
@@ -147,27 +164,15 @@ describe('Template', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  it('warns when using string-based templates', () => {
-    expect(() =>
-      render(
-        <Template
-          {...getProps({ templates: { test: 'test', test2: () => 'test' } })}
-        />
-      )
-    )
-      .toWarnDev(`[InstantSearch.js]: Hogan.js and string-based templates are deprecated and will not be supported in InstantSearch.js 5.x.
+  it('throws when the template is a string', () => {
+    const props = getProps({
+      templates: { test: 'Hello {{name}}' },
+      data: { name: 'world' },
+    });
 
-You can replace them with function-form templates and use either the provided \`html\` function or JSX templates.
-
-String-based templates: test.
-
-See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#upgrade-templates`);
-  });
-
-  it('does not warn when using exclusively function-based templates', () => {
-    expect(() =>
-      render(<Template {...getProps({ templates: { test: () => 'test' } })} />)
-    ).not.toWarnDev();
+    expect(() => render(<Template {...props} />)).toThrow(
+      `Template must be a function, was 'string' (key: test).`
+    );
   });
 
   describe('shouldComponentUpdate', () => {
@@ -207,7 +212,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#up
       wrapper.setProps({
         templateKey: 'newTemplateKey',
         templates: {
-          newTemplateKey: '',
+          newTemplateKey: () => '',
         },
       });
 

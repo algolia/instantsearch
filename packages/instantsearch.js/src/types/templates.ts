@@ -12,12 +12,10 @@ import type {
 } from 'instantsearch-core';
 import type { VNode } from 'preact';
 
-export type Template<TTemplateData = void> =
-  | string
-  | ((
-      data: TTemplateData,
-      params: TemplateParams
-    ) => VNode | VNode[] | string | null);
+export type Template<TTemplateData = void> = (
+  data: TTemplateData,
+  params: TemplateParams
+) => VNode | VNode[] | string | null;
 
 export type TemplateParams = {
   html: typeof html;
@@ -42,22 +40,21 @@ interface TemplateWithBindEventParams extends TemplateParams {
   sendEvent: SendEventForHits;
 }
 
-export type TemplateWithBindEvent<TTemplateData = void> =
-  | string
-  | ((
-      data: TTemplateData,
-      params: TemplateWithBindEventParams
-    ) => VNode | VNode[] | string);
+export type TemplateWithBindEvent<TTemplateData = void> = (
+  data: TTemplateData,
+  params: TemplateWithBindEventParams
+) => VNode | VNode[] | string;
 
+/**
+ * The `templates` option of a widget. Besides templates, it can hold nested
+ * template groups and plain-text options (labels, placeholders, …) that
+ * widgets read directly. Only functions can be rendered as templates.
+ */
 export type Templates = {
   [key: string]:
     | Template<any>
     | TemplateWithBindEvent<any>
     | Templates
+    | string
     | undefined;
 };
-
-export type HoganHelpers<TKeys extends string = string> = Record<
-  TKeys,
-  (text: string, render: (value: string) => string) => string
->;

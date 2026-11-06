@@ -443,7 +443,7 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
           container: document.body.appendChild(document.createElement('div')),
           ...widgetParams,
           templates: {
-            labelText: label,
+            labelText: label === undefined ? undefined : () => label,
           },
         }),
       ])
