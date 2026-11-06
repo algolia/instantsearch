@@ -1,0 +1,33 @@
+{
+  "name": "example-react-instantsearch-agentic-search",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:fake": "VITE_AGENTIC_BACKEND=fake vite",
+    "start": "vite",
+    "server": "node server/index.mjs",
+    "setup-rules": "node scripts/setup-rules.mjs",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "algoliasearch": "5.1.1",
+    "algoliasearch-helper": "3.30.1",
+    "instantsearch.css": "8.25.1",
+    "instantsearch.js": "4.122.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "react-instantsearch": "7.54.0",
+    "react-instantsearch-core": "7.54.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.0.3",
+    "@types/react-dom": "19.0.2",
+    "@vitejs/plugin-react": "4.2.1",
+    "typescript": "5.5.2",
+    "vite": "5.0.7",
+    "vite-plugin-commonjs": "0.10.0"
+  }
+}
