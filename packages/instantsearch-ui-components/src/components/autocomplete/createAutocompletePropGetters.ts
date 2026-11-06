@@ -154,7 +154,10 @@ export function createAutocompletePropGetters({
       }
 
       const onBodyClick = (event: MouseEvent) => {
-        if (unwrapRef(rootRef)?.contains(event.target as HTMLElement)) {
+        const root = unwrapRef(rootRef);
+        // The path is captured at dispatch, so it still includes the root when
+        // the clicked node was re-rendered away by its own click handler.
+        if (root && event.composedPath().includes(root)) {
           return;
         }
 
