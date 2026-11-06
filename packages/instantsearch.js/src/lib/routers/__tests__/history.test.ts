@@ -77,50 +77,50 @@ describe('life cycle', () => {
     });
   });
 
-  describe('getLocation', () => {
-    test('calls getLocation on windowTitle', () => {
-      const getLocation = jest.fn(() => window.location);
+  describe('getCurrentURL', () => {
+    test('calls getCurrentURL on windowTitle', () => {
+      const getCurrentURL = jest.fn(() => new URL(window.location.href));
 
       historyRouter<UiState>({
         windowTitle() {
           return 'Search';
         },
-        getLocation,
+        getCurrentURL,
         cleanUrlOnDispose: true,
       });
 
-      expect(getLocation).toHaveBeenCalledTimes(1);
+      expect(getCurrentURL).toHaveBeenCalledTimes(1);
     });
 
-    test('calls getLocation on read', () => {
-      const getLocation = jest.fn(() => window.location);
+    test('calls getCurrentURL on read', () => {
+      const getCurrentURL = jest.fn(() => new URL(window.location.href));
       const router = historyRouter<UiState>({
-        getLocation,
+        getCurrentURL,
         cleanUrlOnDispose: true,
       });
 
-      expect(getLocation).toHaveBeenCalledTimes(0);
+      expect(getCurrentURL).toHaveBeenCalledTimes(0);
 
       router.write({ indexName: { query: 'query1' } });
       jest.runAllTimers();
 
-      expect(getLocation).toHaveBeenCalledTimes(1);
+      expect(getCurrentURL).toHaveBeenCalledTimes(1);
 
       router.read();
 
-      expect(getLocation).toHaveBeenCalledTimes(2);
+      expect(getCurrentURL).toHaveBeenCalledTimes(2);
     });
 
-    test('calls getLocation on createURL', () => {
-      const getLocation = jest.fn(() => window.location);
+    test('calls getCurrentURL on createURL', () => {
+      const getCurrentURL = jest.fn(() => new URL(window.location.href));
       const router = historyRouter<UiState>({
-        getLocation,
+        getCurrentURL,
         cleanUrlOnDispose: true,
       });
 
       router.createURL({ indexName: { query: 'query1' } });
 
-      expect(getLocation).toHaveBeenCalledTimes(1);
+      expect(getCurrentURL).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -223,17 +223,17 @@ describe('life cycle', () => {
         search.start();
         jest.runAllTimers();
       }).toThrowErrorMatchingInlineSnapshot(
-        `"You need to provide \`getLocation\` to the \`history\` router in environments where \`window\` does not exist."`
+        `"You need to provide \`getCurrentURL\` to the \`history\` router in environments where \`window\` does not exist."`
       );
     });
 
-    test('does not fail on environments without window with provided getLocation', () => {
+    test('does not fail on environments without window with provided getCurrentURL', () => {
       // @ts-expect-error
       delete global.window;
 
       expect(() => {
         const router = historyRouter<UiState>({
-          getLocation() {
+          getCurrentURL() {
             return {
               protocol: '',
               hostname: '',
@@ -241,7 +241,7 @@ describe('life cycle', () => {
               pathname: '',
               hash: '',
               search: '',
-            } as unknown as Location;
+            } as unknown as URL;
           },
           cleanUrlOnDispose: true,
         });
@@ -259,13 +259,13 @@ describe('life cycle', () => {
       }).not.toThrow();
     });
 
-    test('does not fail when running the whole router lifecycle with getLocation', () => {
+    test('does not fail when running the whole router lifecycle with getCurrentURL', () => {
       // @ts-expect-error
       delete global.window;
 
       expect(() => {
         const router = historyRouter<UiState>({
-          getLocation() {
+          getCurrentURL() {
             return {
               protocol: '',
               hostname: '',
@@ -273,7 +273,7 @@ describe('life cycle', () => {
               pathname: '',
               hash: '',
               search: '',
-            } as unknown as Location;
+            } as unknown as URL;
           },
           cleanUrlOnDispose: true,
         });
@@ -318,24 +318,9 @@ describe('life cycle', () => {
     });
 
     describe('cleanUrlOnDispose', () => {
-      const consoleSpy = jest.spyOn(global.console, 'info');
-      consoleSpy.mockImplementation(() => {});
-
-      beforeEach(() => {
-        consoleSpy.mockReset();
-      });
-
-      test('cleans refinements from URL if not defined', () => {
+      test('does not clean refinements from URL if not defined', () => {
         const windowPushState = jest.spyOn(window.history, 'pushState');
         const router = historyRouter<UiState>();
-
-        expect(consoleSpy)
-          .toHaveBeenCalledWith(`Starting from the next major version, InstantSearch will not clean up the URL from active refinements when it is disposed.
-
-We recommend setting \`cleanUrlOnDispose\` to false to adopt this change today.
-To stay with the current behaviour and remove this warning, set the option to true.
-
-See documentation: https://www.algolia.com/doc/api-reference/widgets/history-router/js/#widget-param-cleanurlondispose`);
 
         router.write({ indexName: { query: 'query1' } });
         jest.runAllTimers();
@@ -352,19 +337,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/history-rou
         router.dispose();
         jest.runAllTimers();
 
-        expect(windowPushState).toHaveBeenCalledTimes(2);
-        expect(windowPushState).toHaveBeenLastCalledWith(
-          {},
-          '',
-          'http://localhost/'
-        );
+        expect(windowPushState).toHaveBeenCalledTimes(1);
       });
 
       test('cleans refinements from URL if `true`', () => {
         const windowPushState = jest.spyOn(window.history, 'pushState');
         const router = historyRouter<UiState>({ cleanUrlOnDispose: true });
-
-        expect(consoleSpy).not.toHaveBeenCalled();
 
         router.write({ indexName: { query: 'query1' } });
         jest.runAllTimers();
@@ -392,8 +370,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/history-rou
       test('does not clean refinements from URL if `false`', () => {
         const windowPushState = jest.spyOn(window.history, 'pushState');
         const router = historyRouter<UiState>({ cleanUrlOnDispose: false });
-
-        expect(consoleSpy).not.toHaveBeenCalled();
 
         router.write({ indexName: { query: 'query1' } });
         jest.runAllTimers();

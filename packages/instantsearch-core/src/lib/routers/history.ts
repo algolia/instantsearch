@@ -1,18 +1,18 @@
 import qs from 'qs';
 
-import { createDocumentationLink, safelyRunOnBrowser, warning } from '../utils';
+import { safelyRunOnBrowser, warning } from '../utils';
 
 import type { Router, RouterWriteOptions, UiState } from '../../types';
 
 type CreateURL<TRouteState> = (args: {
   qsModule: typeof qs;
   routeState: TRouteState;
-  location: Location;
+  currentURL: URL;
 }) => string;
 
 type ParseURL<TRouteState> = (args: {
   qsModule: typeof qs;
-  location: Location;
+  currentURL: URL;
 }) => TRouteState;
 
 export type BrowserHistoryArgs<TRouteState> = {
@@ -20,10 +20,7 @@ export type BrowserHistoryArgs<TRouteState> = {
   writeDelay: number;
   createURL: CreateURL<TRouteState>;
   parseURL: ParseURL<TRouteState>;
-  // @MAJOR: The `Location` type is hard to simulate in non-browser environments
-  // so we should accept a subset of it that is easier to work with in any
-  // environments.
-  getLocation: () => Location;
+  getCurrentURL: () => URL;
   start?: (onUpdate: () => void) => void;
   dispose?: () => void;
   push?: (url: string) => void;
@@ -31,9 +28,8 @@ export type BrowserHistoryArgs<TRouteState> = {
    * Whether the URL should be cleaned up when the router is disposed.
    * This can be useful when closing a modal containing InstantSearch, to
    * remove active refinements from the URL.
-   * @default true
+   * @default false
    */
-  // @MAJOR: Switch the default to `false` and remove the console info in the next major version.
   cleanUrlOnDispose?: boolean;
 };
 
@@ -79,12 +75,12 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     BrowserHistoryArgs<TRouteState>
   >['parseURL'];
   /**
-   * Returns the location to store in the history.
-   * @default () => window.location
+   * Returns the current URL.
+   * @default () => new URL(window.location.href)
    */
-  private readonly getLocation: Required<
+  private readonly getCurrentURL: Required<
     BrowserHistoryArgs<TRouteState>
-  >['getLocation'];
+  >['getCurrentURL'];
 
   private writeTimer?: ReturnType<typeof setTimeout>;
   private _onPopState?: (event: PopStateEvent) => void;
@@ -122,7 +118,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     writeDelay = 400,
     createURL,
     parseURL,
-    getLocation,
+    getCurrentURL,
     start,
     dispose,
     push,
@@ -133,24 +129,11 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     this.writeDelay = writeDelay;
     this._createURL = createURL;
     this.parseURL = parseURL;
-    this.getLocation = getLocation;
+    this.getCurrentURL = getCurrentURL;
     this._start = start;
     this._dispose = dispose;
     this._push = push;
-    this._cleanUrlOnDispose =
-      typeof cleanUrlOnDispose === 'undefined' ? true : cleanUrlOnDispose;
-
-    if (__DEV__ && typeof cleanUrlOnDispose === 'undefined') {
-      // eslint-disable-next-line no-console
-      console.info(`Starting from the next major version, InstantSearch will not clean up the URL from active refinements when it is disposed.
-
-We recommend setting \`cleanUrlOnDispose\` to false to adopt this change today.
-To stay with the current behaviour and remove this warning, set the option to true.
-
-See documentation: ${createDocumentationLink({
-        name: 'history-router',
-      })}#widget-param-cleanurlondispose`);
-    }
+    this._cleanUrlOnDispose = cleanUrlOnDispose ?? false;
 
     safelyRunOnBrowser(({ window: browserWindow }) => {
       const title = this.windowTitle && this.windowTitle(this.read());
@@ -164,7 +147,7 @@ See documentation: ${createDocumentationLink({
    * Reads the URL and returns a syncable UI search state.
    */
   public read(): TRouteState {
-    return this.parseURL({ qsModule: qs, location: this.getLocation() });
+    return this.parseURL({ qsModule: qs, currentURL: this.getCurrentURL() });
   }
 
   /**
@@ -253,7 +236,7 @@ See documentation: ${createDocumentationLink({
     const url = this._createURL({
       qsModule: qs,
       routeState,
-      location: this.getLocation(),
+      currentURL: this.getCurrentURL(),
     });
 
     if (__DEV__) {
@@ -274,7 +257,7 @@ Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algo
   }
 
   /**
-   * Removes the event listener and cleans up the URL.
+   * Removes the event listener and, when `cleanUrlOnDispose` is true, cleans up the URL.
    */
   public dispose(): void {
     if (this._dispose) {
@@ -330,13 +313,13 @@ Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algo
 }
 
 export default function historyRouter<TRouteState = UiState>({
-  createURL = ({ qsModule, routeState, location }) => {
-    const { protocol, hostname, port = '', pathname, hash } = location;
+  createURL = ({ qsModule, routeState, currentURL }) => {
+    const { protocol, hostname, port = '', pathname, hash } = currentURL;
     const queryString = qsModule.stringify(routeState);
     const portWithPrefix = port === '' ? '' : `:${port}`;
 
-    // We rebuild the origin from its parts rather than reading `location.origin`
-    // because a custom `getLocation` (e.g. for SSR) may return a partial location
+    // We rebuild the origin from its parts rather than reading `currentURL.origin`
+    // because a custom `getCurrentURL` (e.g. for SSR) may return a partial URL
     // object that does not include `origin`.
     if (!queryString) {
       return `${protocol}//${hostname}${portWithPrefix}${pathname}${hash}`;
@@ -344,7 +327,7 @@ export default function historyRouter<TRouteState = UiState>({
 
     return `${protocol}//${hostname}${portWithPrefix}${pathname}?${queryString}${hash}`;
   },
-  parseURL = ({ qsModule, location }) => {
+  parseURL = ({ qsModule, currentURL }) => {
     // `qs` by default converts arrays with more than 20 items to an object.
     // We want to avoid this because the data structure manipulated can therefore vary.
     // Setting the limit to `100` seems a good number because the engine's default is 100
@@ -355,19 +338,19 @@ export default function historyRouter<TRouteState = UiState>({
     // See:
     //   - https://github.com/ljharb/qs#parsing-arrays
     //   - https://www.algolia.com/doc/api-reference/api-parameters/maxValuesPerFacet/
-    return qsModule.parse(location.search.slice(1), {
+    return qsModule.parse(currentURL.search.slice(1), {
       arrayLimit: 99,
     }) as unknown as TRouteState;
   },
   writeDelay = 400,
   windowTitle,
-  getLocation = () => {
-    return safelyRunOnBrowser<Location>(
-      ({ window: browserWindow }) => browserWindow.location,
+  getCurrentURL = () => {
+    return safelyRunOnBrowser<URL>(
+      ({ window: browserWindow }) => new URL(browserWindow.location.href),
       {
         fallback: () => {
           throw new Error(
-            'You need to provide `getLocation` to the `history` router in environments where `window` does not exist.'
+            'You need to provide `getCurrentURL` to the `history` router in environments where `window` does not exist.'
           );
         },
       }
@@ -383,7 +366,7 @@ export default function historyRouter<TRouteState = UiState>({
     parseURL,
     writeDelay,
     windowTitle,
-    getLocation,
+    getCurrentURL,
     start,
     dispose,
     push,

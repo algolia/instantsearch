@@ -39,6 +39,7 @@ describe('routing back and forth to an InstantSearch instance', () => {
       routing: {
         router: historyRouter({
           writeDelay,
+          cleanUrlOnDispose: true,
         }),
       },
     });
