@@ -481,7 +481,7 @@ describe('RoutingManager', () => {
       // In a next refactor, we can consider changing this test implementation.
       const parsedUrl = router.parseURL({
         qsModule: qs,
-        location: window.location,
+        currentURL: new URL(window.location.href),
       });
 
       expect(parsedUrl.refinementList!.brand).toBeInstanceOf(Array);
@@ -528,7 +528,7 @@ describe('RoutingManager', () => {
       // In a next refactor, we can consider changing this test implementation.
       const parsedUrl = router.parseURL({
         qsModule: qs,
-        location: window.location,
+        currentURL: new URL(window.location.href),
       });
 
       expect(parsedUrl.refinementList!.brand).toBeInstanceOf(Array);

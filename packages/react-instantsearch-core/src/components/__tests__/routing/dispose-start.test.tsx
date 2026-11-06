@@ -37,7 +37,9 @@ describe('routing back and forth to an InstantSearch instance', () => {
         <InstantSearch
           searchClient={searchClient}
           indexName="indexName"
-          routing={{ router: historyRouter({ writeDelay: 0 }) }}
+          routing={{
+            router: historyRouter({ writeDelay: 0, cleanUrlOnDispose: true }),
+          }}
         >
           <QueryController />
           <SearchBox />
