@@ -10,8 +10,6 @@ export function normalizeSnapshot(html: string) {
         /(<button[^>]*>)\s+(.+?)\s+(<\/button>)/gs,
         (_, open, content, close) => `${open}${content.trim()}${close}`
       )
-      // Vue's `<AisClearRefinements>` widget uses `type="reset"` unlike other flavors
-      .replace(/(type="reset")(.+class="ais-ClearRefinements-button)/gs, '$2')
       // Vue uses XHTML syntax
       .replace(/disabled="disabled"/gs, 'disabled=""')
       // Vue renders a useless extra space between last list item element and closing list tag
