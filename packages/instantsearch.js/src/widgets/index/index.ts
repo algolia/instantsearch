@@ -450,6 +450,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   // the stalled timer), and rolling back on every one of them would discard
   // state written after the failed search.
   let restoredForError: Error | undefined;
+  let retriedAfterRestore = false;
 
   const recomputeLocalRequestDependencies = () => {
     if (localInstantSearchInstance) {
@@ -1139,6 +1140,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // then would no longer be thrown for global handlers.
       if (instantSearchInstance.status !== 'error') {
         restoredForError = undefined;
+        // `loading` is part of the retry itself: only a settled search resets it.
+        if (instantSearchInstance.status === 'idle') {
+          retriedAfterRestore = false;
+        }
       } else if (
         instantSearchInstance.error !== restoredForError &&
         !instantSearchInstance.mainHelper!.hasPendingRequests() &&
@@ -1146,6 +1151,13 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       ) {
         restoredForError = instantSearchInstance.error;
         helper!.setState(lastValidSearchParameters);
+        // Restoring the state doesn't search, so the error would stay
+        // rendered over the restored state. Search again to get its results
+        // (usually from the client cache), once: a failing retry must not loop.
+        if (!retriedAfterRestore) {
+          retriedAfterRestore = true;
+          instantSearchInstance.scheduleSearch();
+        }
       }
 
       // We only render index widgets if there are no results.
