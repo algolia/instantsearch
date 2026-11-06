@@ -1993,6 +1993,9 @@ AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
         ids,
         indices.map(function (idx) {
           return content.results[idx].hits;
+        }),
+        indices.map(function (idx) {
+          return content.results[idx].queryID;
         })
       ),
     });

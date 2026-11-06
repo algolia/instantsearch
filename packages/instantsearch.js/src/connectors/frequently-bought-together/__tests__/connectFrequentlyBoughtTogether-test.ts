@@ -2,13 +2,19 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { createSearchClient } from '@instantsearch/mocks';
+import {
+  createRecommendResponse,
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
 import algoliasearchHelper, { RecommendParameters } from 'algoliasearch-helper';
 
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
+import instantsearch from '../../../index.es';
 import connectFrequentlyBoughtTogether from '../connectFrequentlyBoughtTogether';
 
 describe('connectFrequentlyBoughtTogether', () => {
@@ -128,6 +134,86 @@ describe('connectFrequentlyBoughtTogether', () => {
             queryParameters: { userToken: 'token' },
           })
       );
+    });
+  });
+  describe('insights with several objectIDs', () => {
+    const setup = async () => {
+      const searchClient = createSearchClient({
+        getRecommendations: jest.fn((requests) =>
+          Promise.resolve(
+            createRecommendResponse(
+              // @ts-ignore `getRecommendations` isn't typed in v3
+              requests.map((request: { objectID?: string }) =>
+                createSingleSearchResponse(
+                  request.objectID === '1'
+                    ? {
+                        queryID: 'q1',
+                        hits: [{ objectID: 'a' }, { objectID: 'b' }],
+                      }
+                    : {
+                        queryID: 'q2',
+                        hits: [{ objectID: 'c' }, { objectID: 'a' }],
+                      }
+                )
+              )
+            )
+          )
+        ),
+      });
+      const renderFn = jest.fn();
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+      search.addWidgets([
+        connectFrequentlyBoughtTogether(renderFn)({ objectIDs: ['1', '2'] }),
+      ]);
+      search.start();
+      await wait(0);
+      search.sendEventToInsights = jest.fn();
+
+      const { items, sendEvent } =
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+
+      return { search, items, sendEvent };
+    };
+
+    it('sends a click with the queryID of the request that returned the item', async () => {
+      const { search, items, sendEvent } = await setup();
+
+      expect(items.map((item: any) => item.objectID)).toEqual(['a', 'c', 'b']);
+
+      sendEvent('click', items[1], 'Product Clicked');
+
+      expect(search.sendEventToInsights).toHaveBeenCalledTimes(1);
+      expect(
+        (search.sendEventToInsights as jest.Mock).mock.calls[0][0].payload
+      ).toEqual({
+        eventName: 'Product Clicked',
+        index: 'indexName',
+        queryID: 'q2',
+        objectIDs: ['c'],
+        positions: [2],
+      });
+    });
+
+    it("sends a single conversion carrying each item's queryID", async () => {
+      const { search, items, sendEvent } = await setup();
+
+      sendEvent('conversion', items, 'Product Purchased', {
+        value: 30,
+        currency: 'USD',
+      });
+
+      expect(search.sendEventToInsights).toHaveBeenCalledTimes(1);
+      expect(
+        (search.sendEventToInsights as jest.Mock).mock.calls[0][0].payload
+      ).toEqual({
+        eventName: 'Product Purchased',
+        index: 'indexName',
+        queryID: 'q1',
+        objectIDs: ['a', 'c', 'b'],
+        objectData: [{ queryID: 'q1' }, { queryID: 'q2' }, { queryID: 'q1' }],
+        value: 30,
+        currency: 'USD',
+      });
     });
   });
 });

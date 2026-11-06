@@ -366,6 +366,45 @@ describe('createSendEventForHits', () => {
     });
   });
 
+  it('sends every event of an internal click split by queryID', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'q1', objectID: 'a' },
+      { __position: 2, __queryID: 'q2', objectID: 'c' },
+    ];
+
+    sendEvent('click:internal', hits, 'Product Clicked');
+
+    const payloads = (
+      instantSearchInstance.sendEventToInsights as jest.Mock
+    ).mock.calls.map(([event]) => event.payload);
+    expect(payloads).toEqual([
+      {
+        eventName: 'Product Clicked',
+        index: 'testIndex',
+        queryID: 'q1',
+        objectIDs: ['a'],
+        positions: [1],
+      },
+      {
+        eventName: 'Product Clicked',
+        index: 'testIndex',
+        queryID: 'q2',
+        objectIDs: ['c'],
+        positions: [2],
+      },
+    ]);
+  });
+
+  it('skips an internal click after a click in the same tick', () => {
+    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
+
+    sendEvent('click', hits[0], 'Product Clicked');
+    sendEvent('click:internal', hits[0], 'Product Clicked');
+
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
+  });
+
   it('lets additional click event data override the search query ID', () => {
     const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
 
@@ -442,6 +481,352 @@ describe('createSendEventForHits', () => {
       },
       widgetType: 'ais.testWidget',
     });
+  });
+
+  it('sends one click event per queryID when hits come from several responses', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'q1', objectID: 'a' },
+      { __position: 2, __queryID: 'q2', objectID: 'c' },
+      { __position: 3, __queryID: 'q1', objectID: 'b' },
+    ];
+
+    sendEvent('click', hits, 'Product Clicked');
+
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(2);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith(
+      expect.objectContaining({
+        payload: expect.objectContaining({
+          queryID: 'q1',
+          objectIDs: ['a', 'b'],
+          positions: [1, 3],
+        }),
+      })
+    );
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith(
+      expect.objectContaining({
+        payload: expect.objectContaining({
+          queryID: 'q2',
+          objectIDs: ['c'],
+          positions: [2],
+        }),
+      })
+    );
+  });
+
+  it('splits the objectData of a click across its per-queryID events', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'q1', objectID: 'a' },
+      { __position: 2, __queryID: 'q2', objectID: 'c' },
+    ];
+
+    sendEvent('click', hits, 'Product Clicked', {
+      objectData: [{ price: 10 }, { price: 20 }],
+    });
+
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(2);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith(
+      expect.objectContaining({
+        payload: expect.objectContaining({
+          queryID: 'q1',
+          objectIDs: ['a'],
+          objectData: [{ price: 10 }],
+        }),
+      })
+    );
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith(
+      expect.objectContaining({
+        payload: expect.objectContaining({
+          queryID: 'q2',
+          objectIDs: ['c'],
+          objectData: [{ price: 20 }],
+        }),
+      })
+    );
+  });
+
+  it('sends a single conversion with per-object queryIDs when hits come from several responses', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'q1', objectID: 'a' },
+      { __position: 2, __queryID: 'q2', objectID: 'c' },
+    ];
+
+    sendEvent('conversion', hits, 'Product Purchased', {
+      eventSubtype: 'purchase',
+      objectData: [
+        { price: 10, quantity: 1 },
+        { price: 20, quantity: 1 },
+      ],
+      value: 30,
+      currency: 'USD',
+    });
+
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith(
+      expect.objectContaining({
+        insightsMethod: 'convertedObjectIDsAfterSearch',
+        payload: expect.objectContaining({
+          queryID: 'q1',
+          objectIDs: ['a', 'c'],
+          objectData: [
+            { price: 10, quantity: 1, queryID: 'q1' },
+            { price: 20, quantity: 1, queryID: 'q2' },
+          ],
+          value: 30,
+          currency: 'USD',
+        }),
+      })
+    );
+  });
+
+  it('adds per-object queryIDs to a conversion without objectData', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'q1', objectID: 'a' },
+      { __position: 2, __queryID: 'q2', objectID: 'c' },
+    ];
+
+    sendEvent('conversion', hits, 'Product Ordered');
+
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith(
+      expect.objectContaining({
+        payload: expect.objectContaining({
+          queryID: 'q1',
+          objectIDs: ['a', 'c'],
+          objectData: [{ queryID: 'q1' }, { queryID: 'q2' }],
+        }),
+      })
+    );
+  });
+
+  it('keeps an objectData queryID set by the caller', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'q1', objectID: 'a' },
+      { __position: 2, __queryID: 'q2', objectID: 'c' },
+    ];
+
+    sendEvent('conversion', hits, 'Product Ordered', {
+      objectData: [{}, { queryID: 'caller' }],
+    });
+
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith(
+      expect.objectContaining({
+        payload: expect.objectContaining({
+          objectData: [{ queryID: 'q1' }, { queryID: 'caller' }],
+        }),
+      })
+    );
+  });
+
+  it('lets a caller queryID override mixed hit queryIDs in a conversion', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'q1', objectID: 'a' },
+      { __position: 2, __queryID: 'q2', objectID: 'c' },
+    ];
+
+    sendEvent('conversion', hits, 'Product Ordered', {
+      queryID: 'message_assistant-message-id',
+      objectData: [{ price: 10 }, { price: 20, queryID: 'caller' }],
+    });
+
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith(
+      expect.objectContaining({
+        payload: expect.objectContaining({
+          queryID: 'message_assistant-message-id',
+          objectIDs: ['a', 'c'],
+          objectData: [{ price: 10 }, { price: 20, queryID: 'caller' }],
+        }),
+      })
+    );
+  });
+
+  it('lets a caller queryID override mixed hit queryIDs in a click', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'q1', objectID: 'a' },
+      { __position: 2, __queryID: 'q2', objectID: 'c' },
+    ];
+
+    sendEvent('click', hits, 'Product Clicked', {
+      queryID: 'message_assistant-message-id',
+    });
+
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith(
+      expect.objectContaining({
+        payload: expect.objectContaining({
+          queryID: 'message_assistant-message-id',
+          objectIDs: ['a', 'c'],
+          positions: [1, 2],
+        }),
+      })
+    );
+  });
+
+  it('attributes hits from several infinite hits pages to their own page', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    // connectInfiniteHits sets each page's queryID on that page's hits.
+    const hits = [
+      { __position: 1, __queryID: 'page0', objectID: 'a' },
+      { __position: 2, __queryID: 'page0', objectID: 'b' },
+      { __position: 3, __queryID: 'page1', objectID: 'c' },
+    ];
+
+    sendEvent('click', hits, 'Product Clicked');
+
+    const payloads = (
+      instantSearchInstance.sendEventToInsights as jest.Mock
+    ).mock.calls.map(([event]) => event.payload);
+    expect(payloads).toEqual([
+      {
+        eventName: 'Product Clicked',
+        index: 'testIndex',
+        queryID: 'page0',
+        objectIDs: ['a', 'b'],
+        positions: [1, 2],
+      },
+      {
+        eventName: 'Product Clicked',
+        index: 'testIndex',
+        queryID: 'page1',
+        objectIDs: ['c'],
+        positions: [3],
+      },
+    ]);
+  });
+
+  it('groups hits whose queryID is an Object.prototype key', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'constructor', objectID: 'a' },
+      { __position: 2, __queryID: '__proto__', objectID: 'b' },
+    ];
+
+    sendEvent('click', hits, 'Product Clicked');
+
+    const payloads = (
+      instantSearchInstance.sendEventToInsights as jest.Mock
+    ).mock.calls.map(([event]) => event.payload);
+    expect(
+      payloads.map(({ queryID, objectIDs }) => [queryID, objectIDs])
+    ).toEqual([
+      ['constructor', ['a']],
+      ['__proto__', ['b']],
+    ]);
+  });
+
+  it('sends a single click when the caller sets the positions', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'q1', objectID: 'a' },
+      { __position: 2, __queryID: 'q2', objectID: 'c' },
+    ];
+
+    sendEvent('click', hits, 'Product Clicked', { positions: [5, 6] });
+
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
+    expect(
+      (instantSearchInstance.sendEventToInsights as jest.Mock).mock.calls[0][0]
+        .payload
+    ).toEqual({
+      eventName: 'Product Clicked',
+      index: 'testIndex',
+      queryID: 'q1',
+      objectIDs: ['a', 'c'],
+      positions: [5, 6],
+    });
+  });
+
+  it('sends a single click when the caller sets the objectIDs', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'q1', objectID: 'a' },
+      { __position: 2, __queryID: 'q2', objectID: 'c' },
+    ];
+
+    sendEvent('click', hits, 'Product Clicked', { objectIDs: ['x', 'y'] });
+
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
+    expect(
+      (instantSearchInstance.sendEventToInsights as jest.Mock).mock.calls[0][0]
+        .payload
+    ).toEqual({
+      eventName: 'Product Clicked',
+      index: 'testIndex',
+      queryID: 'q1',
+      objectIDs: ['x', 'y'],
+      positions: [1, 2],
+    });
+  });
+
+  it('keeps objectData that does not line up with the hits in a single event', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'q1', objectID: 'a' },
+      { __position: 2, __queryID: 'q2', objectID: 'c' },
+    ];
+
+    sendEvent('click', hits, 'Product Clicked', {
+      objectData: [{ price: 10 }],
+    });
+    sendEvent('conversion', hits, 'Product Ordered', {
+      objectData: [{ price: 10 }],
+    });
+
+    const payloads = (
+      instantSearchInstance.sendEventToInsights as jest.Mock
+    ).mock.calls.map(([event]) => event.payload);
+    expect(payloads).toEqual([
+      {
+        eventName: 'Product Clicked',
+        index: 'testIndex',
+        queryID: 'q1',
+        objectIDs: ['a', 'c'],
+        positions: [1, 2],
+        objectData: [{ price: 10 }],
+      },
+      {
+        eventName: 'Product Ordered',
+        index: 'testIndex',
+        queryID: 'q1',
+        objectIDs: ['a', 'c'],
+        objectData: [{ price: 10 }],
+      },
+    ]);
+  });
+
+  it('leaves a conversion untouched when its hits share one queryID', () => {
+    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
+
+    sendEvent('conversion', hits, 'Product Ordered');
+
+    expect(
+      (instantSearchInstance.sendEventToInsights as jest.Mock).mock.calls[0][0]
+        .payload
+    ).not.toHaveProperty('objectData');
+  });
+
+  it('sends a single view event when hits come from several responses', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
+    const hits = [
+      { __position: 1, __queryID: 'q1', objectID: 'a' },
+      { __position: 2, __queryID: 'q2', objectID: 'c' },
+    ];
+
+    sendEvent('view', hits);
+
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith(
+      expect.objectContaining({
+        payload: expect.objectContaining({ objectIDs: ['a', 'c'] }),
+      })
+    );
   });
 
   it('sends conversion event', () => {
