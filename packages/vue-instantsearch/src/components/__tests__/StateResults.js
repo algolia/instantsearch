@@ -53,7 +53,6 @@ it('gives state & results to default slot', () => {
   mount(StateResults, {
     scopedSlots: {
       default: (props) => {
-        expect(props).toEqual(expect.objectContaining(results));
         expect(props.results).toEqual(results);
         expect(props.state).toEqual(state);
         expect(props.status).toEqual('idle');
@@ -183,76 +182,22 @@ it('allows default slot to render whatever they want (falsy query)', () => {
 `);
 });
 
-describe('legacy spread props', () => {
-  it('allows default slot to render whatever they want (truthy query)', () => {
-    __setIndexResults({
-      query: 'q',
-      hits: [
-        { objectID: '1', name: 'one' },
-        { objectID: '2', name: 'two' },
-      ],
-      page: 1,
-    });
-    __setIndexHelper({ state: {} });
-
-    const wrapper = mount({
-      components: { StateResults },
-      template: `
-        <StateResults>
-          <template v-slot="{ query }">
-            <p v-if="query">
-              Query is here
-            </p>
-            <p v-else>
-              There's no query
-            </p>
-          </template>
-        </StateResults>
-      `,
-    });
-
-    expect(wrapper.html()).toMatchInlineSnapshot(`
-<div class="ais-StateResults">
-  <p>
-    Query is here
-  </p>
-</div>
-`);
+it('does not spread results at the root of the slot props', () => {
+  __setIndexResults({
+    query: 'q',
+    hits: [{ objectID: '1', name: 'one' }],
+    page: 1,
   });
+  __setIndexHelper({ state: {} });
 
-  it('allows default slot to render whatever they want (falsy query)', () => {
-    __setIndexResults({
-      query: '',
-      hits: [
-        { objectID: '1', name: 'one' },
-        { objectID: '2', name: 'two' },
-      ],
-      page: 1,
-    });
-    __setIndexHelper({ state: {} });
+  const slot = jest.fn(() => null);
+  mount(StateResults, { scopedSlots: { default: slot } });
 
-    const wrapper = mount({
-      components: { StateResults },
-      template: `
-        <StateResults>
-          <template v-slot="{ query }">
-            <p v-if="query">
-              Query is here
-            </p>
-            <p v-else>
-              There's no query
-            </p>
-          </template>
-        </StateResults>
-      `,
-    });
-
-    expect(wrapper.html()).toMatchInlineSnapshot(`
-<div class="ais-StateResults">
-  <p>
-    There's no query
-  </p>
-</div>
-`);
-  });
+  expect(slot).toHaveBeenCalled();
+  expect(Object.keys(slot.mock.calls[0][0]).sort()).toEqual([
+    'error',
+    'results',
+    'state',
+    'status',
+  ]);
 });
