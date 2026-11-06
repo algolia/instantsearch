@@ -80,7 +80,6 @@ export {
   Chat,
   ChatState,
   CACHE_KEY,
-  CONVERSATION_ID_CACHE_KEY,
   SearchIndexToolType,
   RecommendToolType,
   MemorizeToolType,
@@ -88,10 +87,6 @@ export {
   PonderToolType,
   CompareProductsToolType,
   GroupedResultsToolType,
-  matchesSearchIndexToolName,
-  applyAgentFilters,
-  getAgentFilters,
-  stripInternalHitMetadata,
   focusAfterReveal,
   getActiveContainerAnimations,
   holdContainerInertUntilReveal,
@@ -123,7 +118,64 @@ export type {
 } from './lib/voiceSearchHelper/types';
 export * from './lib/infiniteHitsCache';
 export * from './lib/tasks';
-export * from './lib/utils';
+export {
+  _buildEventPayloadsForHits,
+  addAbsolutePosition,
+  addQueryID,
+  buildWidgetTree,
+  capitalize,
+  collectChatRecords,
+  createDocumentationMessageGenerator,
+  deprecate,
+  deserializePayload,
+  endsInsideRootProperty,
+  extractWidgetPayload,
+  find,
+  findTool,
+  getAppIdAndApiKey,
+  getHighlightedParts,
+  getJsonCursor,
+  getObjectType,
+  getPromptSuggestionHits,
+  getPropertyByPath,
+  getTextContent,
+  getWidgetAttribute,
+  hasTextContent,
+  hydrateSearchClient,
+  isEqual,
+  isIndexWidget,
+  isPartText,
+  isPartTool,
+  isPromptSuggestion,
+  isSpecialClick,
+  isTwoPassWidget,
+  noop,
+  omit,
+  range,
+  resetWidgetId,
+  resolveSearchParameters,
+  safelyRunOnBrowser,
+  serializePayload,
+  serializeWidgetParams,
+  startsWith,
+  TAG_PLACEHOLDER,
+  toArray,
+  uniq,
+  walkIndex,
+  warn,
+  warning,
+} from './lib/utils';
+export type {
+  BindEventForHits,
+  BuiltInBindEventForHits,
+  ChatMessageBase,
+  ChatRecord,
+  ChatRecordsStore,
+  ChatToolMessage,
+  CustomBindEventForHits,
+  SendEventForHits,
+  WidgetMetadata,
+} from './lib/utils';
 export * from './lib/routers';
 export * from './lib/server';
 export * from './lib/stateMappings';
@@ -142,4 +194,5 @@ export type {
   NumericRefinement,
   Refinement,
 } from './lib/utils';
+// both ./types and ./middlewares export InsightsEvent; pick the middleware one
 export type { InsightsEvent } from './middlewares';
