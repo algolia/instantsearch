@@ -1,4 +1,3 @@
-import { createInfiniteHitsSessionStorageCache } from 'instantsearch-core';
 import { deprecate } from 'instantsearch-core';
 
 import {
@@ -9,6 +8,7 @@ import {
   insights,
   getInsightsAnonymousUserToken,
 } from './helpers';
+import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache/index';
 import InstantSearch from './lib/InstantSearch';
 import version from './lib/version';
 

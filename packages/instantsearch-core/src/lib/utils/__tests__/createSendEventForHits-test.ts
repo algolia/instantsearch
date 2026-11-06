@@ -2,13 +2,12 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createBindEventForHits,
   createSendEventForHits,
-  deserializePayload,
-} from 'instantsearch-core';
-
-import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
+} from '../createSendEventForHits';
+import { deserializePayload } from '../serializer';
 
 const createTestEnvironment = ({
   nbHits = 2,
