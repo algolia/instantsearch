@@ -2002,6 +2002,9 @@ AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
         inputObjectIDs,
         indices.map(function (idx) {
           return content.results[idx].hits;
+        }),
+        indices.map(function (idx) {
+          return content.results[idx].queryID;
         })
       ),
     });

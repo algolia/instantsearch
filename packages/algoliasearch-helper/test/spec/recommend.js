@@ -245,4 +245,32 @@ describe('recommend()', () => {
 
     helper.recommend();
   });
+  test('attributes merged hits to the queryID of the response they come from', (done) => {
+    var client = {
+      getRecommendations: jest.fn().mockResolvedValue({
+        results: [
+          { queryID: 'q1', hits: [{ objectID: 'a' }, { objectID: 'b' }] },
+          { queryID: 'q2', hits: [{ objectID: 'c' }, { objectID: 'a' }] },
+        ],
+      }),
+    };
+
+    var helper = algoliasearchHelper(client, 'indexName', {});
+
+    helper.addFrequentlyBoughtTogether({ $$id: 1, objectID: 'cart1' });
+    helper.addFrequentlyBoughtTogether({ $$id: 1, objectID: 'cart2' });
+
+    helper.on('recommend:result', (event) => {
+      var results = event.recommend.results;
+
+      expect(results[1].hits).toEqual([
+        { objectID: 'a', __queryID: 'q1' },
+        { objectID: 'c', __queryID: 'q2' },
+        { objectID: 'b', __queryID: 'q1' },
+      ]);
+      done();
+    });
+
+    helper.recommend();
+  });
 });

@@ -176,5 +176,51 @@ export function createOptionsTests(
         screen.getAllByRole('listitem').map((item) => item.textContent)
       ).toEqual(['a', 'c']);
     });
+    test('attributes each recommendation to the queryID of the request that returned it', async () => {
+      const searchClient = createSearchClient({
+        getRecommendations: jest.fn((requests) =>
+          Promise.resolve(
+            createRecommendResponse(
+              // @ts-ignore `getRecommendations` isn't typed in v3
+              requests.map((request: { objectID?: string }) =>
+                createSingleSearchResponse(
+                  request.objectID === '1'
+                    ? {
+                        queryID: 'q1',
+                        hits: [{ objectID: 'a' }, { objectID: 'b' }],
+                      }
+                    : {
+                        queryID: 'q2',
+                        hits: [{ objectID: 'c' }, { objectID: 'a' }],
+                      }
+                )
+              )
+            )
+          )
+        ),
+      });
+      const options: SetupOptions<FrequentlyBoughtTogetherConnectorSetup> = {
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: {
+          objectIDs: ['1', '2'],
+          transformItems(items) {
+            return items.map((item) => ({
+              ...item,
+              objectID: `${item.objectID}:${item.__queryID}`,
+            }));
+          },
+        },
+      };
+
+      await setup(options);
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(
+        screen.getAllByRole('listitem').map((item) => item.textContent)
+      ).toEqual(['a:q1', 'c:q2', 'b:q1']);
+    });
   });
 }
