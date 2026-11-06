@@ -791,12 +791,33 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         });
       };
 
+      // Agent Studio runs its tools server-side without flagging the calls
+      // `providerExecuted`, so the server may still answer a call no tool
+      // handles later in the stream. Only a call still unanswered once its
+      // response completes is the client's to answer.
+      const unhandledToolCalls = new Map<string, () => void>();
+
       let canRepairRestoredPendingToolParts = !resume;
       const chat = new Chat({
         ...options,
         onData: (dataPart) => {
           applyPromptShortcutEcho(dataPart);
           options.onData?.(dataPart);
+        },
+        onFinish: (event) => {
+          if (!event.isAbort && !event.isDisconnect && !event.isError) {
+            event.message.parts.forEach((part) => {
+              if (
+                'toolCallId' in part &&
+                (part.state === 'input-streaming' ||
+                  part.state === 'input-available')
+              ) {
+                unhandledToolCalls.get(part.toolCallId)?.();
+              }
+            });
+          }
+          unhandledToolCalls.clear();
+          options.onFinish?.(event);
         },
         persistence: normalizedPersistence.messages,
         sendAutomaticallyWhen,
@@ -834,17 +855,18 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           const tool = findTool(toolCall.toolName, tools);
 
           if (!tool) {
-            if (__DEV__) {
-              throw new Error(
-                `No tool implementation found for "${toolCall.toolName}". Please provide a tool implementation in the \`tools\` prop.`
+            unhandledToolCalls.set(toolCall.toolCallId, () => {
+              warning(
+                false,
+                `No tool implementation found for "${toolCall.toolName}" and the server returned no result for it. Please provide a tool implementation in the \`tools\` prop.`
               );
-            }
-
-            return submitToolResult({
-              output: `No tool implemented for "${toolCall.toolName}".`,
-              tool: toolCall.toolName,
-              toolCallId: toolCall.toolCallId,
+              void submitToolResult({
+                output: `No tool implemented for "${toolCall.toolName}".`,
+                tool: toolCall.toolName,
+                toolCallId: toolCall.toolCallId,
+              }).catch(() => undefined);
             });
+            return Promise.resolve();
           }
 
           if (tool.onToolCall) {
