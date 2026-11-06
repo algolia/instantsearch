@@ -205,4 +205,42 @@ describe('createAutocompletePropGetters', () => {
       expect(onSubmit).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('closeOnSubmit parameter', () => {
+    test('closes the panel on Enter by default', () => {
+      const setIsOpenMock = jest.fn();
+      const customUsePropGetters = createUsePropGetters({
+        useState: (initialState) => [initialState, setIsOpenMock],
+      });
+
+      const result = customUsePropGetters({
+        ...defaultParams,
+        autoFocus: true,
+      });
+
+      result.getInputProps().onKeyDown?.(createKeyDownEvent('Enter', 'hello'));
+
+      expect(setIsOpenMock).toHaveBeenCalledWith(false);
+    });
+
+    test('keeps the panel open on Enter when closeOnSubmit is false', () => {
+      const setIsOpenMock = jest.fn();
+      const onRefine = jest.fn();
+      const customUsePropGetters = createUsePropGetters({
+        useState: (initialState) => [initialState, setIsOpenMock],
+      });
+
+      const result = customUsePropGetters({
+        ...defaultParams,
+        onRefine,
+        autoFocus: true,
+        closeOnSubmit: false,
+      });
+
+      result.getInputProps().onKeyDown?.(createKeyDownEvent('Enter', 'hello'));
+
+      expect(onRefine).toHaveBeenCalledWith('hello');
+      expect(setIsOpenMock).not.toHaveBeenCalledWith(false);
+    });
+  });
 });

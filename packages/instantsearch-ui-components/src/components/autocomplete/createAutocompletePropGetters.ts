@@ -75,6 +75,12 @@ export type UsePropGetters<TItem extends BaseHit> = (params: {
    */
   shouldHidePanel?: boolean;
   /**
+   * Whether submitting (Enter or selecting an item) closes the panel, or
+   * blurs the input when the panel is already closed.
+   * @default true
+   */
+  closeOnSubmit?: boolean;
+  /**
    * Whether the input should be focused and the panel open initially.
    */
   autoFocus?: boolean;
@@ -122,6 +128,7 @@ export function createAutocompletePropGetters({
     placeholder,
     isDetached = false,
     shouldHidePanel = false,
+    closeOnSubmit = true,
     autoFocus = false,
     id,
   }: Parameters<UsePropGetters<TItem>>[0]): ReturnType<UsePropGetters<TItem>> {
@@ -182,10 +189,12 @@ export function createAutocompletePropGetters({
         activeDescendant?: string;
       } = {}
     ) => {
-      if (isOpen) {
-        setIsOpen(false);
-      } else {
-        inputRef.current?.blur();
+      if (closeOnSubmit) {
+        if (isOpen) {
+          setIsOpen(false);
+        } else {
+          inputRef.current?.blur();
+        }
       }
 
       const actualDescendant = override.activeDescendant ?? activeDescendant;
