@@ -3,7 +3,7 @@
 var algoliasearchHelper = require('../../../index');
 var SearchParameters = require('../../../src/SearchParameters');
 
-test('searchOnce should call the algolia client according to the number of refinements and call callback with no error and with results when no error', function (done) {
+test('searchOnce should call the algolia client according to the number of refinements and resolve with results when no error', function () {
   var testData = require('../../datasets/SearchParameters/search.dataset')();
 
   var client = {
@@ -21,8 +21,8 @@ test('searchOnce should call the algolia client according to the number of refin
     .addDisjunctiveFacetRefinement('city', 'Paris')
     .addDisjunctiveFacetRefinement('city', 'New York');
 
-  helper.searchOnce(parameters, function (err, data) {
-    expect(err).toBe(null);
+  return helper.searchOnce(parameters).then(function (res) {
+    var data = res.content;
 
     // shame deepclone, to remove any associated methods coming from the results
     expect(JSON.parse(JSON.stringify(data))).toEqual(
@@ -85,12 +85,10 @@ test('searchOnce should call the algolia client according to the number of refin
       expect(query.query).toBeUndefined();
       expect(query.params.query).toBeUndefined();
     }
-
-    done();
   });
 });
 
-test('searchOnce should call the algolia client according to the number of refinements and call callback with error and no results when error', function (done) {
+test('searchOnce should call the algolia client according to the number of refinements and reject with the error when error', function () {
   var error = { message: 'error' };
   var client = {
     search: jest.fn().mockImplementationOnce(function () {
@@ -107,19 +105,21 @@ test('searchOnce should call the algolia client according to the number of refin
     .addDisjunctiveFacetRefinement('city', 'Paris')
     .addDisjunctiveFacetRefinement('city', 'New York');
 
-  helper.searchOnce(parameters, function (err, data) {
-    expect(err).toBe(error);
-    expect(data).toBe(null);
+  return helper.searchOnce(parameters).then(
+    function () {
+      throw new Error('searchOnce should reject');
+    },
+    function (err) {
+      expect(err).toBe(error);
 
-    expect(client.search).toHaveBeenCalledTimes(1);
+      expect(client.search).toHaveBeenCalledTimes(1);
 
-    var queries = client.search.mock.calls[0][0];
-    for (var i = 0; i < queries.length; i++) {
-      var query = queries[i];
-      expect(query.query).toBeUndefined();
-      expect(query.params.query).toBeUndefined();
+      var queries = client.search.mock.calls[0][0];
+      for (var i = 0; i < queries.length; i++) {
+        var query = queries[i];
+        expect(query.query).toBeUndefined();
+        expect(query.params.query).toBeUndefined();
+      }
     }
-
-    done();
-  });
+  );
 });
