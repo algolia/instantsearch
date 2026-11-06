@@ -160,7 +160,6 @@ export {
   startsWith,
   TAG_PLACEHOLDER,
   toArray,
-  unescape,
   uniq,
   walkIndex,
   warn,
