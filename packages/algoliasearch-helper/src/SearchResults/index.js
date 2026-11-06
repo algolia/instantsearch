@@ -339,22 +339,6 @@ function SearchResults(state, results, options) {
    * @example "c7-use-2.algolia.net",
    */
   /**
-   * Boolean that indicates if the computation of the counts did time out.
-   * @deprecated
-   * @name timeoutCounts
-   * @member {boolean}
-   * @memberof SearchResults
-   * @instance
-   */
-  /**
-   * Boolean that indicates if the computation of the hits did time out.
-   * @deprecated
-   * @name timeoutHits
-   * @member {boolean}
-   * @memberof SearchResults
-   * @instance
-   */
-  /**
    * True if the counts of the facets is exhaustive
    * @name exhaustiveFacetsCount
    * @member {boolean}

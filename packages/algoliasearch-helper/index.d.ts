@@ -1214,16 +1214,6 @@ declare namespace algoliasearchHelper {
      * @example "c7-use-2.algolia.net",
      */
     serverUsed: string;
-    /**
-     * Boolean that indicates if the computation of the counts did time out.
-     * @deprecated
-     */
-    timeoutCounts: boolean;
-    /**
-     * Boolean that indicates if the computation of the hits did time out.
-     * @deprecated
-     */
-    timeoutHits: boolean;
 
     /**
      * True if the counts of the facets is exhaustive
