@@ -113,7 +113,7 @@ angular.module('searchApp', ['ngSanitize', 'algoliasearch'])
   });
   $scope.toggleRefine = function($event, facet, value) {
     $event.preventDefault();
-    $scope.helper.toggleRefine(facet, value).search();
+    $scope.helper.toggleFacetRefinement(facet, value).search();
   };
   $scope.$watch('q', function(q) {
     $scope.helper.setQuery(q).search();
@@ -731,21 +731,6 @@ var currentIndex = helper.getIndex();
 Sometime it's convenient to reuse the current search parameters with small changes without changing the state stored in the helper. That's why there is a function called `searchOnce`. This method does not trigger `change` or `error` events.
 
 In the following, we are using `searchOnce` to fetch only a single element using all the other parameters already set in the search parameters.
-
-#### Using searchOnce with a callback
-
-```js
-var state = helper.searchOnce(
-  { hitsPerPage: 1 },
-  function (error, content, state) {
-    // if an error occured it will be passed in error, otherwise its value is null
-    // content contains the results formatted as a SearchResults
-    // state is the instance of SearchParameters used for this search
-  }
-);
-```
-
-#### Using searchOnce with a promise
 
 ```js
 var state1 = helper.searchOnce({ hitsPerPage: 1 }).then(function (res) {
