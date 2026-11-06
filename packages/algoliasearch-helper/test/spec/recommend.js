@@ -188,6 +188,63 @@ describe('recommend()', () => {
       ]);
     });
   });
+  test('excludes the input objectIDs from merged results', (done) => {
+    var client = {
+      getRecommendations: jest.fn().mockResolvedValue({
+        results: [
+          { hits: [{ objectID: 'a' }, { objectID: 'cart2' }] },
+          { hits: [{ objectID: 'cart1' }, { objectID: 'c' }] },
+        ],
+      }),
+    };
+
+    var helper = algoliasearchHelper(client, 'indexName', {});
+
+    helper.addFrequentlyBoughtTogether({ $$id: 1, objectID: 'cart1' });
+    helper.addFrequentlyBoughtTogether({ $$id: 1, objectID: 'cart2' });
+
+    // The helper reports a throwing listener as an `error` event.
+    helper.on('error', (event) => done(event.error));
+    helper.on('recommend:result', (event) => {
+      var hits = event.recommend.results[1].hits;
+
+      expect(
+        hits.map(function (hit) {
+          return hit.objectID;
+        })
+      ).toEqual(['a', 'c']);
+      done();
+    });
+
+    helper.recommend();
+  });
+  test('excludes numeric input objectIDs', (done) => {
+    var client = {
+      getRecommendations: jest.fn().mockResolvedValue({
+        results: [
+          { hits: [{ objectID: 'a' }, { objectID: '2' }] },
+          { hits: [{ objectID: '0' }, { objectID: 'c' }] },
+        ],
+      }),
+    };
+
+    var helper = algoliasearchHelper(client, 'indexName', {});
+
+    helper.addFrequentlyBoughtTogether({ $$id: 1, objectID: 0 });
+    helper.addFrequentlyBoughtTogether({ $$id: 1, objectID: 2 });
+
+    helper.on('error', (event) => done(event.error));
+    helper.on('recommend:result', (event) => {
+      expect(
+        event.recommend.results[1].hits.map(function (hit) {
+          return hit.objectID;
+        })
+      ).toEqual(['a', 'c']);
+      done();
+    });
+
+    helper.recommend();
+  });
   test('attributes merged hits to the queryID of the response they come from', (done) => {
     var client = {
       getRecommendations: jest.fn().mockResolvedValue({
