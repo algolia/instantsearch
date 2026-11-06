@@ -420,6 +420,13 @@ type AutocompleteCommonProps<TItem extends BaseHit> = ComponentProps<'div'> & {
    * Requires a Chat widget on the same index.
    */
   aiMode?: boolean;
+  /**
+   * When true, selecting an item or submitting only updates the query of the
+   * autocomplete, not the parent index, and the panel stays open.
+   * Items with a URL still navigate, but `getSearchPageURL` is ignored.
+   * @default false
+   */
+  standalone?: boolean;
 };
 
 export type AutocompleteIndicesProps<TItem extends BaseHit> =
@@ -802,6 +809,7 @@ export function Autocomplete<TItem extends BaseHit = BaseHit>(
       panelComponent: _shellUnusedPanelComponent,
       getSearchPageURL: _shellUnusedGetSearchPageURL,
       onSelect: _shellUnusedOnSelect,
+      standalone: _shellUnusedStandalone,
       ...shellRootProps
     } = restProps as Record<string, unknown>;
     const activateWithQueryMirror = () => {
@@ -952,6 +960,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   aiMode,
   domId,
   detached,
+  standalone,
   ...props
 }: InnerAutocompleteProps<TItem>) {
   const {
@@ -962,6 +971,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     transformItems,
     future: { undefinedEmptyQuery: true },
   });
+  const refineParent = standalone ? () => {} : refineSearchBox;
 
   const resolvedQuery =
     currentRefinement !== undefined
@@ -1070,7 +1080,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     indicesConfig: indicesConfigForPropGetters,
     onRefine: (query) => {
       refineAutocomplete(query);
-      refineSearchBox(query);
+      refineParent(query);
       storage.onAdd(query);
     },
     onApply: (query) => {
@@ -1109,7 +1119,11 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
           return;
         }
 
-        if (!isSearchPage && typeof getSearchPageURL !== 'undefined') {
+        if (
+          !standalone &&
+          !isSearchPage &&
+          typeof getSearchPageURL !== 'undefined'
+        ) {
           window.location.href = getSearchPageURL({ ...indexUiState, query });
           return;
         }
@@ -1118,13 +1132,14 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       }),
     onSubmit: () => {
       // Close the detached modal when form is submitted
-      if (isDetached) {
+      if (isDetached && !standalone) {
         setIsModalOpen(false);
       }
     },
     placeholder,
     isDetached,
     shouldHidePanel: shouldHideEmptyPanel,
+    closeOnSubmit: !standalone,
     autoFocus,
   });
 
@@ -1223,7 +1238,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     <AutocompleteSearch
       inputProps={getInputProps()}
       clearQuery={() => {
-        refineSearchBox('');
+        refineParent('');
         refineAutocomplete('');
       }}
       onQueryChange={(query) => {
@@ -1253,7 +1268,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
                   referer: 'ai-mode',
                 })
               ) {
-                refineSearchBox('');
+                refineParent('');
                 refineAutocomplete('');
               }
             }
@@ -1313,7 +1328,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
             setIsOpen(true);
           }}
           onClear={() => {
-            refineSearchBox('');
+            refineParent('');
             refineAutocomplete('');
           }}
           translations={translations}

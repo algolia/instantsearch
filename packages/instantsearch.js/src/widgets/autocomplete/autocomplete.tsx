@@ -230,6 +230,7 @@ type RendererParams<TItem extends BaseHit> = {
   | 'placeholder'
   | 'autofocus'
   | 'aiMode'
+  | 'standalone'
 > & {
     showRecent:
       | Exclude<IndicesAutocompleteWidgetParams<TItem>['showRecent'], boolean>
@@ -360,6 +361,7 @@ type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
   | 'detachedMediaQuery'
   | 'translations'
   | 'aiMode'
+  | 'standalone'
 > &
   Pick<AutocompleteRenderState, 'indices' | 'refine'> &
   RendererOptions<Partial<AutocompleteWidgetParams<TItem>>>;
@@ -383,6 +385,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   detachedMediaQuery,
   translations,
   aiMode,
+  standalone,
 }: AutocompleteWrapperProps<TItem>) {
   const { isolatedIndex, targetIndex } = renderState;
 
@@ -588,14 +591,16 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   const onRefine = (query: string) => {
     setLocalQuery(query);
     refineAutocomplete(query);
-    instantSearchInstance.setUiState((uiState) => ({
-      ...uiState,
-      [targetIndex!.getIndexId()]: {
-        ...uiState[targetIndex!.getIndexId()],
-        query,
-      },
-      [isolatedIndex!.getIndexId()]: { query },
-    }));
+    if (!standalone) {
+      instantSearchInstance.setUiState((uiState) => ({
+        ...uiState,
+        [targetIndex!.getIndexId()]: {
+          ...uiState[targetIndex!.getIndexId()],
+          query,
+        },
+        [isolatedIndex!.getIndexId()]: { query },
+      }));
+    }
     query.length > 0 && storage.onAdd(query);
   };
 
@@ -661,7 +666,11 @@ function AutocompleteWrapper<TItem extends BaseHit>({
           return;
         }
 
-        if (!isSearchPage && typeof getSearchPageURL !== 'undefined') {
+        if (
+          !standalone &&
+          !isSearchPage &&
+          typeof getSearchPageURL !== 'undefined'
+        ) {
           const indexUiState =
             instantSearchInstance.getUiState()[targetIndex!.getIndexId()];
           window.location.href = getSearchPageURL({ ...indexUiState, query });
@@ -675,13 +684,14 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     },
     onSubmit: () => {
       // Close the detached modal when form is submitted
-      if (isDetached) {
+      if (isDetached && !standalone) {
         setIsModalOpen(false);
       }
     },
     placeholder,
     isDetached,
     shouldHidePanel: shouldHideEmptyPanel,
+    closeOnSubmit: !standalone,
     autoFocus: autofocus,
   });
 
@@ -1134,6 +1144,14 @@ type BaseAutocompleteWidgetParams<TItem extends BaseHit> = {
    * Requires a Chat widget on the same index.
    */
   aiMode?: boolean;
+
+  /**
+   * When true, selecting an item or submitting only updates the query of the
+   * autocomplete, not the parent index, and the panel stays open.
+   * Items with a URL still navigate, but `getSearchPageURL` is ignored.
+   * @default false
+   */
+  standalone?: boolean;
 };
 
 export type IndicesAutocompleteWidgetParams<TItem extends BaseHit> =
@@ -1204,6 +1222,7 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
     detachedMediaQuery,
     translations: userTranslations = {},
     aiMode,
+    standalone,
   } = safeWidgetParams;
 
   if (isFeedsMode && indices !== undefined) {
@@ -1469,6 +1488,7 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
     },
     templates,
     aiMode,
+    standalone,
   });
 
   const makeWidget = connectAutocomplete(specializedRenderer, () =>

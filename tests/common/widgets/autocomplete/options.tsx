@@ -1885,6 +1885,151 @@ export function createOptionsTests(
       );
     });
 
+    describe('standalone', () => {
+      type SearchRequest = {
+        indexName: string;
+        params?: { query?: string };
+      };
+      const getRequests = (searchClient: { search: unknown }) =>
+        (searchClient.search as jest.Mock).mock.calls.flatMap(
+          ([requests]: [SearchRequest[]]) => requests
+        );
+
+      test('only refines the autocomplete and keeps the panel open when selecting an item', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'query_suggestions',
+              hits: [
+                { objectID: '1', query: 'hello' },
+                { objectID: '2', query: 'hi' },
+              ],
+            })
+          )
+        );
+        const getSearchPageURL = jest.fn(() => '#');
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'products',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              showQuerySuggestions: { indexName: 'query_suggestions' },
+              getSearchPageURL,
+              standalone: true,
+            },
+            react: {
+              showQuerySuggestions: { indexName: 'query_suggestions' },
+              getSearchPageURL,
+              standalone: true,
+            },
+            vue: {
+              showQuerySuggestions: { indexName: 'query_suggestions' },
+              getSearchPageUrl: getSearchPageURL,
+              standalone: true,
+            },
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        await act(async () => {
+          userEvent.click(screen.getByRole('combobox', { name: /submit/i }));
+          await wait(0);
+        });
+
+        (searchClient.search as jest.Mock).mockClear();
+
+        await act(async () => {
+          screen.getByText('hello').click();
+          await wait(0);
+        });
+
+        const input = screen.getByRole('combobox', { name: /submit/i });
+        expect(input).toHaveValue('hello');
+        expect(input).toHaveAttribute('aria-expanded', 'true');
+        expect(getSearchPageURL).not.toHaveBeenCalled();
+        expect(getRequests(searchClient)).toContainEqual(
+          expect.objectContaining({
+            indexName: 'query_suggestions',
+            params: expect.objectContaining({ query: 'hello' }),
+          })
+        );
+        expect(
+          getRequests(searchClient).filter(
+            ({ indexName }) => indexName === 'products'
+          )
+        ).toEqual([]);
+      });
+
+      test('only refines the autocomplete and keeps the panel open when pressing enter', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'query_suggestions',
+              hits: [{ objectID: '1', query: 'hello' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'products',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              showQuerySuggestions: { indexName: 'query_suggestions' },
+              standalone: true,
+            },
+            react: {
+              showQuerySuggestions: { indexName: 'query_suggestions' },
+              standalone: true,
+            },
+            vue: {
+              showQuerySuggestions: { indexName: 'query_suggestions' },
+              standalone: true,
+            },
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        await act(async () => {
+          userEvent.click(screen.getByRole('combobox', { name: /submit/i }));
+          await wait(0);
+        });
+
+        const input = screen.getByRole('combobox', { name: /submit/i });
+
+        await act(async () => {
+          await userEvent.paste(input, 'hel');
+          await wait(0);
+        });
+
+        (searchClient.search as jest.Mock).mockClear();
+
+        await act(async () => {
+          userEvent.keyboard('{Enter}');
+          await wait(0);
+        });
+
+        expect(input).toHaveAttribute('aria-expanded', 'true');
+        expect(input).toHaveFocus();
+        expect(
+          getRequests(searchClient).filter(
+            ({ indexName }) => indexName === 'products'
+          )
+        ).toEqual([]);
+      });
+    });
+
     describe('detached mode', () => {
       const detachedMediaQuery = '(max-width: 680px)';
       const detachedModalMediaQuery = '(min-width: 680px)';

@@ -38,6 +38,7 @@ type AutocompleteWidgetParams = {
     detachedMediaQuery?: string;
     translations?: Record<string, string>;
     aiMode?: boolean;
+    standalone?: boolean;
     /**
      * Scoped slots (`item`, `header`, `noResults`, `querySuggestionItem`,
      * `promptSuggestionItem`, `recentItem`, `panel`, ...).
