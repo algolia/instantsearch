@@ -29,7 +29,9 @@ describe('routing using `replaceState`', () => {
         <InstantSearch
           searchClient={searchClient}
           indexName="indexName"
-          routing={{ router: historyRouter({ writeDelay: 0 }) }}
+          routing={{
+            router: historyRouter({ writeDelay: 0, cleanUrlOnDispose: true }),
+          }}
         >
           <SearchBox />
         </InstantSearch>
