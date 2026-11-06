@@ -40,18 +40,7 @@ describe('instantsearch()', () => {
     `);
   });
 
-  it('includes the helper functions', () => {
-    expect(Object.keys(instantsearch)).toMatchInlineSnapshot(`
-      [
-        "version",
-        "createInfiniteHitsSessionStorageCache",
-        "highlight",
-        "reverseHighlight",
-        "snippet",
-        "reverseSnippet",
-        "insights",
-        "getInsightsAnonymousUserToken",
-      ]
-    `);
+  it('only includes the version', () => {
+    expect(Object.keys(instantsearch)).toEqual(['version']);
   });
 });
