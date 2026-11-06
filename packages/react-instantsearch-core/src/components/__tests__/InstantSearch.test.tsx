@@ -244,10 +244,8 @@ describe('InstantSearch', () => {
     const routing = {
       stateMapping: simple(),
       router: history({
-        getLocation() {
-          return new URL(
-            `http://localhost/?indexName[query]=iphone`
-          ) as unknown as Location;
+        getCurrentURL() {
+          return new URL(`http://localhost/?indexName[query]=iphone`);
         },
       }),
     };
@@ -306,8 +304,8 @@ describe('InstantSearch', () => {
       const routing = {
         stateMapping: simple(),
         router: history({
-          getLocation() {
-            return new URL(url) as unknown as Location;
+          getCurrentURL() {
+            return new URL(url);
           },
         }),
       };
