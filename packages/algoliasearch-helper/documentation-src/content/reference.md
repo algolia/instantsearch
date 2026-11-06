@@ -62,10 +62,6 @@ Finally, you can retrieve if there is an on-going search with `hasPendingRequest
 
 {{> jsdoc jsdoc/helper/setPage}}
 
-{{> jsdoc jsdoc/helper/nextPage}}
-
-{{> jsdoc jsdoc/helper/previousPage}}
-
 {{> jsdoc jsdoc/helper/getPage}}
 
 ### Query parameters

@@ -26,7 +26,7 @@ test('hierarchical facets: using sortBy', function (done) {
     ],
   });
 
-  helper.toggleRefine('categories', 'beers > IPA > Flying dog');
+  helper.toggleFacetRefinement('categories', 'beers > IPA > Flying dog');
 
   var algoliaResponse = {
     results: [

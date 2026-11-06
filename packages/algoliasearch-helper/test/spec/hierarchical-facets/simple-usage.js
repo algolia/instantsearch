@@ -101,7 +101,7 @@ describe('hierarchical facets: simple usage', function () {
       ],
     });
 
-    helper.toggleRefine('categories', 'beers > IPA > Flying dog');
+    helper.toggleFacetRefinement('categories', 'beers > IPA > Flying dog');
 
     var expectedHelperResponse = [
       {
@@ -234,9 +234,6 @@ describe('hierarchical facets: simple usage', function () {
       ]);
 
       expect(event.results.hierarchicalFacets).toEqual(expectedHelperResponse);
-      expect(event.results.getFacetByName('categories')).toEqual(
-        expectedHelperResponse[0]
-      );
 
       // we do not yet support multiple values for hierarchicalFacetsRefinements
       // but at some point we may want to open multiple leafs of a hierarchical menu
@@ -270,7 +267,7 @@ describe('hierarchical facets: simple usage', function () {
       }
     );
 
-    helper.toggleRefine('categories', 'beers > IPA > Flying dog');
+    helper.toggleFacetRefinement('categories', 'beers > IPA > Flying dog');
 
     var expectedHelperResponse = [
       {
@@ -403,9 +400,6 @@ describe('hierarchical facets: simple usage', function () {
       ]);
 
       expect(event.results.hierarchicalFacets).toEqual(expectedHelperResponse);
-      expect(event.results.getFacetByName('categories')).toEqual(
-        expectedHelperResponse[0]
-      );
 
       // we do not yet support multiple values for hierarchicalFacetsRefinements
       // but at some point we may want to open multiple leafs of a hierarchical menu

@@ -20,6 +20,6 @@ test('hierarchical facets: throw on unknown facet', function () {
   });
 
   expect(function () {
-    helper.toggleRefine('unknownFacet', 'beers');
+    helper.toggleFacetRefinement('unknownFacet', 'beers');
   }).toThrow();
 });

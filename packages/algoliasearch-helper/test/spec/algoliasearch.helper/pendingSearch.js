@@ -6,39 +6,6 @@ algoliasearch = algoliasearch.algoliasearch || algoliasearch;
 
 var algoliasearchHelper = require('../../../index');
 
-test('When searchOnce with callback, hasPendingRequests is true', function (done) {
-  var testData = require('../../datasets/SearchParameters/search.dataset')();
-  var client = algoliasearch('dsf', 'dsfdf');
-
-  var triggerCb;
-  client.search = function () {
-    return new Promise(function (resolve) {
-      triggerCb = function () {
-        resolve(testData.response);
-      };
-    });
-  };
-
-  var helper = algoliasearchHelper(client, 'test_hotels-node');
-  var countNoMoreSearch = 0;
-  helper.on('searchQueueEmpty', function () {
-    countNoMoreSearch += 1;
-  });
-
-  expect(helper.hasPendingRequests()).toBe(false);
-
-  helper.searchOnce(helper.state, function () {
-    expect(helper.hasPendingRequests()).toBe(false);
-    expect(countNoMoreSearch).toBe(1);
-    done();
-  });
-
-  expect(helper.hasPendingRequests()).toBe(true);
-  expect(countNoMoreSearch).toBe(0);
-
-  triggerCb();
-});
-
 test('When searchOnce with promises, hasPendingRequests is true', function (done) {
   var testData = require('../../datasets/SearchParameters/search.dataset')();
   var client = algoliasearch('dsf', 'dsfdf');
@@ -227,10 +194,13 @@ test('When helper.search() and one request is discarded, hasPendingRequests is t
     expect(countNoMoreSearch).toBe(0);
   });
 
-  helper.searchOnce({}, function () {
-    expect(helper.hasPendingRequests()).toBe(false);
-    expect(countNoMoreSearch).toBe(1);
-  });
+  helper
+    .searchOnce({})
+    .then(function () {
+      expect(helper.hasPendingRequests()).toBe(false);
+      expect(countNoMoreSearch).toBe(1);
+    })
+    .catch(done);
 
   // The third search returns from Algolia
   triggerCbs[2]();
