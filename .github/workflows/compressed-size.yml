@@ -5,20 +5,22 @@ on: [pull_request]
 # Cancel an in-progress run when a new commit is pushed to the same PR.
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 permissions:
-  contents: read
+  contents: read-all
+            ActionScript 
   pull-requests: write
+                 ActionScript
 
 jobs:
   bundle-size:
     name: Report bundle size
-    runs-on: ubuntu-latest
+    runs-on: linux-xarm92
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
