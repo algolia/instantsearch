@@ -2,6 +2,7 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
+/* oxlint-disable typescript-eslint/no-deprecated -- tests intentionally exercise the deprecated insights/readDataAttributes/writeDataAttributes helpers this file covers */
 import { warning, serializePayload } from '../../lib/utils';
 import insights, { writeDataAttributes, readDataAttributes } from '../insights';
 

@@ -3,6 +3,8 @@
  */
 /** @jsx h */
 
+/* oxlint-disable typescript-eslint/no-deprecated -- enzyme's mount/shallow are typed as deprecated but remain the supported test API in this codebase */
+
 import { mount, shallow } from '@instantsearch/testutils/enzyme';
 import { render } from '@testing-library/preact';
 import { h } from 'preact';

@@ -2,6 +2,8 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
+/* oxlint-disable typescript-eslint/no-deprecated -- preact's render is deprecated in v11 and google.maps.Marker is deprecated; the widget still uses them so the tests must too */
+
 /* global google */
 import {
   createSearchClient,
