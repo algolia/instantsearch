@@ -16,11 +16,12 @@ import connectConfigure from 'instantsearch.js/es/connectors/configure/connectCo
 import connectHits from 'instantsearch.js/es/connectors/hits/connectHits';
 import connectPagination from 'instantsearch.js/es/connectors/pagination/connectPagination';
 import connectRefinementList from 'instantsearch.js/es/connectors/refinement-list/connectRefinementList';
-import React, { StrictMode, useState } from 'react';
+import React, { StrictMode, useEffect, useState } from 'react';
 
 import { Index } from '../../components/Index';
 import { InstantSearch } from '../../components/InstantSearch';
 import { InstantSearchSSRProvider } from '../../components/InstantSearchSSRProvider';
+import { useDynamicWidgets } from '../../connectors/useDynamicWidgets';
 import { useHits } from '../../connectors/useHits';
 import { IndexContext } from '../../lib/IndexContext';
 import { noop } from '../../lib/noop';
@@ -894,6 +895,151 @@ describe('useConnector', () => {
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(2));
     // The refinement on `brand` is dropped: no mounted widget claims it anymore.
     expect(searchContext.current!.getUiState()).toEqual({ indexName: {} });
+  });
+
+  test('keeps the uiState no widget has claimed yet when the widget params change', async () => {
+    const searchClient = createSearchClient({});
+    const { InstantSearchSpy, searchContext } = createInstantSearchSpy();
+
+    function Pagination({ padding }: { padding: number }) {
+      useConnector(connectPagination, { padding });
+
+      return null;
+    }
+
+    function RefinementList() {
+      useConnector(connectRefinementList, { attribute: 'brand' });
+
+      return null;
+    }
+
+    function App({
+      padding,
+      showRefinementList,
+    }: {
+      padding: number;
+      showRefinementList: boolean;
+    }) {
+      return (
+        <InstantSearchSpy
+          searchClient={searchClient}
+          indexName="indexName"
+          initialUiState={{
+            indexName: { refinementList: { brand: ['Apple'] } },
+          }}
+          future={{ preserveSharedStateOnUnmount: true }}
+        >
+          <Pagination padding={padding} />
+          {showRefinementList && <RefinementList />}
+        </InstantSearchSpy>
+      );
+    }
+
+    const { rerender } = render(<App padding={2} showRefinementList={false} />);
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
+
+    // No widget claims `brand` yet, like when the widget only mounts after the
+    // first results (with `DynamicWidgets` for example).
+    rerender(<App padding={3} showRefinementList={false} />);
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(2));
+    expect(searchContext.current!.getUiState()).toEqual({
+      indexName: { refinementList: { brand: ['Apple'] } },
+    });
+
+    // The state is picked up when the widget finally mounts.
+    rerender(<App padding={3} showRefinementList />);
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(3));
+    // A disjunctive facet also sends a second request for its facet values.
+    expect(searchClient.search).toHaveBeenLastCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({
+          params: expect.objectContaining({ facetFilters: [['brand:Apple']] }),
+        }),
+      ])
+    );
+  });
+
+  test('keeps the uiState of the widgets rendered by `useDynamicWidgets` when a widget param changes on mount', async () => {
+    const searchClient = createSearchClient({
+      search: jest.fn((requests) =>
+        Promise.resolve({
+          results: requests.map(() =>
+            createSingleSearchResponse({
+              facets: { brand: { Apple: 5, Samsung: 3 } },
+              renderingContent: {
+                facetOrdering: { facets: { order: ['brand'] } },
+              },
+            })
+          ),
+        })
+      ),
+    });
+    const { InstantSearchSpy, searchContext } = createInstantSearchSpy();
+
+    function DynamicRefinementList({ attribute }: { attribute: string }) {
+      useConnector(connectRefinementList, { attribute });
+
+      return <div data-testid={`refinement-${attribute}`} />;
+    }
+
+    function Dynamic() {
+      const { attributesToRender } = useDynamicWidgets();
+
+      return (
+        <>
+          {attributesToRender.map((attribute: string) => (
+            <DynamicRefinementList key={attribute} attribute={attribute} />
+          ))}
+        </>
+      );
+    }
+
+    // The `padding` changes right after the first render, before
+    // `DynamicWidgets` has any results to render its children with.
+    function Pagination() {
+      const [padding, setPadding] = useState(2);
+      useEffect(() => {
+        setPadding(3);
+      }, []);
+      useConnector(connectPagination, { padding });
+
+      return null;
+    }
+
+    const { getByTestId } = render(
+      <InstantSearchSpy
+        searchClient={searchClient}
+        indexName="indexName"
+        initialUiState={{
+          indexName: { refinementList: { brand: ['Apple'] } },
+        }}
+        future={{ preserveSharedStateOnUnmount: true }}
+      >
+        <Dynamic />
+        <Pagination />
+      </InstantSearchSpy>
+    );
+
+    await waitFor(() =>
+      expect(getByTestId('refinement-brand')).toBeInTheDocument()
+    );
+    await waitFor(() =>
+      expect(searchClient.search).toHaveBeenLastCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            params: expect.objectContaining({
+              facetFilters: [['brand:Apple']],
+            }),
+          }),
+        ])
+      )
+    );
+    expect(searchContext.current!.getUiState()).toEqual({
+      indexName: { refinementList: { brand: ['Apple'] } },
+    });
   });
 
   test('keeps the widget in place among its siblings on a prop change', async () => {
