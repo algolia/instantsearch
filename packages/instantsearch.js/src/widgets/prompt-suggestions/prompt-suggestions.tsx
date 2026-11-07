@@ -3,9 +3,8 @@
 import { createPromptSuggestionsComponent } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
-import TemplateComponent from '../../components/Template/Template';
+import TemplateComponent from '../../components/Template/FunctionTemplate';
 import connectPromptSuggestions from '../../connectors/prompt-suggestions/connectPromptSuggestions';
-import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
@@ -16,7 +15,6 @@ import type {
   PromptSuggestionsConnectorParams,
   PromptSuggestionsWidgetDescription,
 } from '../../connectors/prompt-suggestions/connectPromptSuggestions';
-import type { PreparedTemplateProps } from '../../lib/templating';
 import type { WidgetFactory, Renderer, Template } from '../../types';
 import type {
   PromptSuggestionsClassNames,
@@ -100,16 +98,12 @@ const createRenderer =
   ({
     containerNode,
     cssClasses,
-    renderState,
     templates,
     translations,
     onSuggestionClickOverride,
   }: {
     containerNode: HTMLElement;
     cssClasses: PromptSuggestionsCSSClasses;
-    renderState: {
-      templateProps?: PreparedTemplateProps<PromptSuggestionsPreparedTemplates>;
-    };
     templates?: PromptSuggestionsTemplates;
     translations?: Partial<PromptSuggestionsTranslations>;
     onSuggestionClickOverride?: PromptSuggestionsWidgetParams['onSuggestionClick'];
@@ -125,17 +119,10 @@ const createRenderer =
       onSuggestionClick,
       isChatBusy,
       sendToChat,
-      instantSearchInstance,
     },
     isFirstRendering
   ) => {
     if (isFirstRendering) {
-      renderState.templateProps =
-        prepareTemplateProps<PromptSuggestionsPreparedTemplates>({
-          defaultTemplates: {},
-          templatesConfig: instantSearchInstance.templatesConfig,
-          templates: templates as Partial<PromptSuggestionsPreparedTemplates>,
-        });
       return;
     }
 
@@ -155,7 +142,7 @@ const createRenderer =
     if (templates?.layout) {
       render(
         <TemplateComponent
-          {...renderState.templateProps}
+          templates={templates as PromptSuggestionsPreparedTemplates}
           templateKey="layout"
           rootTagName="fragment"
           data={{
@@ -179,7 +166,7 @@ const createRenderer =
         headerProps: PromptSuggestionsHeaderComponentProps
       ) => (
         <TemplateComponent
-          {...renderState.templateProps}
+          templates={templates as PromptSuggestionsPreparedTemplates}
           templateKey="header"
           rootTagName="fragment"
           data={headerProps}
@@ -222,7 +209,6 @@ export default (function promptSuggestions(
   const specializedRenderer = createRenderer({
     containerNode,
     cssClasses,
-    renderState: {},
     templates,
     translations,
     onSuggestionClickOverride,

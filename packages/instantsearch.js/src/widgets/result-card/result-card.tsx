@@ -4,9 +4,8 @@ import { createResultCardComponent } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
-import TemplateComponent from '../../components/Template/Template';
+import TemplateComponent from '../../components/Template/FunctionTemplate';
 import connectResultCard from '../../connectors/result-card/connectResultCard';
-import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
@@ -17,7 +16,6 @@ import type {
   ResultCardConnectorParams,
   ResultCardWidgetDescription,
 } from '../../connectors/result-card/connectResultCard';
-import type { PreparedTemplateProps } from '../../lib/templating';
 import type { WidgetFactory, Renderer, Template } from '../../types';
 import type {
   ResultCardClassNames,
@@ -91,15 +89,11 @@ const createRenderer =
   ({
     containerNode,
     cssClasses,
-    renderState,
     templates,
     translations,
   }: {
     containerNode: HTMLElement;
     cssClasses: ResultCardCSSClasses;
-    renderState: {
-      templateProps?: PreparedTemplateProps<ResultCardTemplates>;
-    };
     templates?: ResultCardTemplates;
     translations?: Partial<ResultCardTranslations>;
   }): Renderer<ResultCardRenderState, Partial<ResultCardWidgetParams>> =>
@@ -116,23 +110,17 @@ const createRenderer =
       expanded,
       setExpanded,
       sendEvent,
-      instantSearchInstance,
     },
     isFirstRendering
   ) => {
     if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps<ResultCardTemplates>({
-        defaultTemplates: {},
-        templatesConfig: instantSearchInstance.templatesConfig,
-        templates,
-      });
       return;
     }
 
     if (templates?.layout) {
       render(
         <TemplateComponent
-          {...renderState.templateProps}
+          templates={templates}
           templateKey="layout"
           rootTagName="fragment"
           data={{
@@ -192,7 +180,6 @@ export default (function resultCard(
   const specializedRenderer = createRenderer({
     containerNode,
     cssClasses,
-    renderState: {},
     templates,
     translations,
   });

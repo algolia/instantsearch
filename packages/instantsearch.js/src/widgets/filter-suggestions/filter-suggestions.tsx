@@ -3,9 +3,8 @@
 import { createFilterSuggestionsComponent } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
-import TemplateComponent from '../../components/Template/Template';
+import TemplateComponent from '../../components/Template/FunctionTemplate';
 import connectFilterSuggestions from '../../connectors/filter-suggestions/connectFilterSuggestions';
-import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
@@ -16,7 +15,6 @@ import type {
   FilterSuggestionsConnectorParams,
   FilterSuggestionsWidgetDescription,
 } from '../../connectors/filter-suggestions/connectFilterSuggestions';
-import type { PreparedTemplateProps } from '../../lib/templating';
 import type { WidgetFactory, Renderer, Template } from '../../types';
 import type {
   FilterSuggestionsClassNames,
@@ -71,7 +69,6 @@ type FilterSuggestionsTemplatesWithoutHeader = Partial<{
 
 const createRenderer =
   ({
-    renderState,
     cssClasses,
     containerNode,
     templates,
@@ -79,9 +76,6 @@ const createRenderer =
   }: {
     containerNode: HTMLElement;
     cssClasses: FilterSuggestionsCSSClasses;
-    renderState: {
-      templateProps?: PreparedTemplateProps<FilterSuggestionsTemplatesWithoutHeader>;
-    };
     templates: FilterSuggestionsTemplates;
     maxSuggestions?: number;
   }): Renderer<
@@ -89,22 +83,17 @@ const createRenderer =
     Partial<FilterSuggestionsWidgetParams>
   > =>
   (props, isFirstRendering) => {
-    const { suggestions, isLoading, refine, instantSearchInstance } = props;
+    const { suggestions, isLoading, refine } = props;
 
     const headerTemplate =
       templates.header === false ? undefined : templates.header;
+    const functionTemplates: FilterSuggestionsTemplatesWithoutHeader = {
+      header: headerTemplate,
+      item: templates.item,
+      empty: templates.empty,
+    };
 
     if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
-        defaultTemplates:
-          {} as unknown as FilterSuggestionsTemplatesWithoutHeader,
-        templatesConfig: instantSearchInstance.templatesConfig,
-        templates: {
-          header: headerTemplate,
-          item: templates.item,
-          empty: templates.empty,
-        },
-      });
       return;
     }
 
@@ -117,7 +106,7 @@ const createRenderer =
       ) => {
         return (
           <TemplateComponent
-            {...renderState.templateProps}
+            templates={functionTemplates}
             templateKey="header"
             rootTagName="div"
             data={headerProps}
@@ -130,7 +119,7 @@ const createRenderer =
       ? (itemProps: FilterSuggestionsItemComponentProps) => {
           return (
             <TemplateComponent
-              {...renderState.templateProps}
+              templates={functionTemplates}
               templateKey="item"
               rootTagName="fragment"
               data={itemProps}
@@ -143,7 +132,7 @@ const createRenderer =
       ? (emptyProps: FilterSuggestionsEmptyComponentProps) => {
           return (
             <TemplateComponent
-              {...renderState.templateProps}
+              templates={functionTemplates}
               templateKey="empty"
               rootTagName="div"
               data={emptyProps}
@@ -221,7 +210,6 @@ export default (function filterSuggestions(
   const specializedRenderer = createRenderer({
     containerNode,
     cssClasses,
-    renderState: {},
     templates,
     maxSuggestions,
   });
