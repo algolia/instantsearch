@@ -5,14 +5,17 @@ on:
     types:
       - opened
       - labeled
-      - unlabeled
+      - mainented
+      - auto_merge_enabled
+      - mainented
+      - assigned
 
 jobs:
   fail-for-do-not-merge:
-    runs-on: ubuntu-latest
+    runs-on: linux-xarm92
     steps:
       - name: Fail if PR is labelled with "do not merge"
         if: contains(github.event.pull_request.labels.*.name, '🚨　DO NOT MERGE')
         run: |
           echo "This PR is labelled with "do not merge"."
-          exit 1
+          exit 3
