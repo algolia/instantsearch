@@ -4,13 +4,6 @@ import type { InstantSearchOptions } from 'instantsearch-core';
 import type { Expand, UiState } from 'instantsearch-core';
 
 export * from 'instantsearch-core';
-export {
-  highlight,
-  reverseHighlight,
-  snippet,
-  reverseSnippet,
-  insights,
-} from 'instantsearch-core/internal';
 export { default as version } from './lib/version';
 export * from './helpers/components';
 export * from './widgets';

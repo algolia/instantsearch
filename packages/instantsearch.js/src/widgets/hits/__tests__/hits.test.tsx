@@ -11,9 +11,10 @@ import { wait } from '@instantsearch/testutils/wait';
 import { within, fireEvent, getByText } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { createInsightsMiddleware } from 'instantsearch-core';
+import { insights } from 'instantsearch-core/internal';
 import { Fragment, h } from 'preact';
 
-import { instantsearch, insights } from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import configure from '../../configure/configure';
 import searchBox from '../../search-box/search-box';
 import hits from '../hits';

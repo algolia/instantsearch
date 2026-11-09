@@ -9,7 +9,7 @@ const {
   searchBox,
   connectSearchBox,
   historyRouter,
-  highlight,
+  carousel,
 } = instantsearchModule;
 
 assert.ok(instantsearch);
@@ -17,7 +17,7 @@ assert.ok(version);
 assert.ok(searchBox);
 assert.ok(connectSearchBox);
 assert.ok(historyRouter);
-assert.ok(highlight);
+assert.ok(carousel);
 assert.ok(!('default' in instantsearchModule), 'has no default export');
 
 assert.throws(() => require('instantsearch.js/cjs/widgets/index.js'), {

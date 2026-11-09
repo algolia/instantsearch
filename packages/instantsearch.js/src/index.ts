@@ -4,7 +4,6 @@ import InstantSearch from './lib/InstantSearch';
 import version from './lib/version';
 import * as templates from './templates/index';
 import * as connectors from './umd/connectors';
-import * as helpers from './umd/helpers';
 import * as middlewares from './umd/middlewares';
 import * as routers from './umd/routers';
 import * as stateMappings from './umd/stateMappings';
@@ -28,21 +27,6 @@ type InstantSearchModule = {
   templates: typeof templates;
 
   createInfiniteHitsSessionStorageCache: typeof createInfiniteHitsSessionStorageCache;
-
-  /** @deprecated use html tagged templates and the Highlight component instead */
-  highlight: typeof helpers.highlight;
-  /** @deprecated use html tagged templates and the ReverseHighlight component instead */
-  reverseHighlight: typeof helpers.reverseHighlight;
-  /** @deprecated use html tagged templates and the Snippet component instead */
-  snippet: typeof helpers.snippet;
-  /** @deprecated use html tagged templates and the ReverseSnippet component instead */
-  reverseSnippet: typeof helpers.reverseSnippet;
-
-  /**
-   * @deprecated use createInsightsMiddleware
-   * @link https://www.algolia.com/doc/api-reference/widgets/insights/js/
-   */
-  insights: typeof helpers.insights;
 };
 
 /**
@@ -75,10 +59,5 @@ instantsearch.templates = templates;
 
 instantsearch.createInfiniteHitsSessionStorageCache =
   createInfiniteHitsSessionStorageCache;
-instantsearch.highlight = helpers.highlight;
-instantsearch.reverseHighlight = helpers.reverseHighlight;
-instantsearch.snippet = helpers.snippet;
-instantsearch.reverseSnippet = helpers.reverseSnippet;
-instantsearch.insights = helpers.insights;
 
 export default instantsearch;

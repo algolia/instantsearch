@@ -28,10 +28,6 @@ describe('index.es', () => {
         historyRouter: expect.any(Function),
         simpleStateMapping: expect.any(Function),
         singleIndexStateMapping: expect.any(Function),
-        highlight: expect.any(Function),
-        snippet: expect.any(Function),
-        reverseHighlight: expect.any(Function),
-        reverseSnippet: expect.any(Function),
       })
     );
   });
@@ -40,5 +36,17 @@ describe('index.es', () => {
     expect(instantsearchModule).not.toHaveProperty('history');
     expect(instantsearchModule).not.toHaveProperty('simple');
     expect(instantsearchModule).not.toHaveProperty('singleIndex');
+  });
+
+  it('does not export the deprecated HTML-string and legacy insights helpers', () => {
+    [
+      'highlight',
+      'snippet',
+      'reverseHighlight',
+      'reverseSnippet',
+      'insights',
+    ].forEach((name) => {
+      expect(instantsearchModule).not.toHaveProperty(name);
+    });
   });
 });
