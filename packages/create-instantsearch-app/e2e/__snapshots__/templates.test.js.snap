@@ -1806,7 +1806,7 @@ exports[`Templates InstantSearch.js File content: index.html 1`] = `
   </div>
 
   <script src=\\"https://cdn.jsdelivr.net/npm/algoliasearch@4.10.5/dist/algoliasearch-lite.umd.js\\"></script>
-  <script src=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@3.0.0/dist/instantsearch.production.min.js\\"></script>
+  <script src=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@5.0.0/dist/instantsearch.production.min.js\\"></script>
   <script src=\\"./src/app.js\\"></script>
 </body>
 
@@ -1825,7 +1825,7 @@ exports[`Templates InstantSearch.js File content: package.json 1`] = `
     \\"lint:fix\\": \\"eslint . --fix && prettier --write .\\"
   },
   \\"partialDependencies\\": {
-    \\"instantsearch.js\\": \\"3.0.0\\"
+    \\"instantsearch.js\\": \\"5.0.0\\"
   }
 }"
 `;
@@ -2869,7 +2869,7 @@ exports[`Templates InstantSearch.js widget File content: package.json 1`] = `
     \\"dist\\"
   ],
   \\"peerDependencies\\": {
-    \\"instantsearch.js\\": \\"^4.27.1\\"
+    \\"instantsearch.js\\": \\"^5.0.0\\"
   },
   \\"browserslist\\": [
     \\"last 2 chrome versions\\",
