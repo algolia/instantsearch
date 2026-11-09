@@ -176,7 +176,7 @@ describe('RangeInput', () => {
         fireEvent.submit(form);
       }
 
-      expect(props.refine).toHaveBeenCalledWith([20, 480]);
+      expect(props.refine).toHaveBeenCalledWith({ min: 20, max: 480 });
     });
 
     it('expect to call refine with min, max as float', () => {
@@ -202,7 +202,7 @@ describe('RangeInput', () => {
         fireEvent.submit(form);
       }
 
-      expect(props.refine).toHaveBeenCalledWith([20.05, 480.05]);
+      expect(props.refine).toHaveBeenCalledWith({ min: 20.05, max: 480.05 });
     });
 
     it('expect to call refine with min only', () => {
@@ -225,7 +225,7 @@ describe('RangeInput', () => {
         fireEvent.submit(form);
       }
 
-      expect(props.refine).toHaveBeenCalledWith([20, undefined]);
+      expect(props.refine).toHaveBeenCalledWith({ min: 20, max: undefined });
     });
 
     it('expect to call refine with max only', () => {
@@ -248,7 +248,7 @@ describe('RangeInput', () => {
         fireEvent.submit(form);
       }
 
-      expect(props.refine).toHaveBeenCalledWith([undefined, 480]);
+      expect(props.refine).toHaveBeenCalledWith({ min: undefined, max: 480 });
     });
 
     it('expect to call refine without values', () => {
@@ -263,7 +263,10 @@ describe('RangeInput', () => {
         fireEvent.submit(form);
       }
 
-      expect(props.refine).toHaveBeenCalledWith([undefined, undefined]);
+      expect(props.refine).toHaveBeenCalledWith({
+        min: undefined,
+        max: undefined,
+      });
     });
   });
 });
