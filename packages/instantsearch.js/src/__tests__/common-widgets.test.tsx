@@ -734,12 +734,27 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       .start();
   },
   createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
+    const { renderChat = false, ...autocompleteWidgetParams } = widgetParams;
+
     instantsearch(instantSearchOptions)
       .addWidgets([
         autocomplete({
           container: document.body.appendChild(document.createElement('div')),
-          ...widgetParams,
+          ...autocompleteWidgetParams,
         } as Parameters<typeof autocomplete>[0]),
+        ...(renderChat
+          ? [
+              chat({
+                container: document.body.appendChild(
+                  document.createElement('div')
+                ),
+                // A dedicated id: the `agentId` the chat suites use keys
+                // persisted messages in `sessionStorage` that leak across tests
+                // in this file.
+                agentId: 'autocompleteChatAgentId',
+              }),
+            ]
+          : []),
       ])
       .on('error', () => {
         /*

@@ -420,6 +420,16 @@ type AutocompleteCommonProps<TItem extends BaseHit> = ComponentProps<'div'> & {
    * Requires a Chat widget on the same index.
    */
   aiMode?: boolean;
+  /**
+   * Where a submitted query goes (Enter, or selecting a suggestion or a recent
+   * search):
+   * - `'page'`: the parent index is refined, or `getSearchPageURL` navigates.
+   * - `'panel'`: only the autocomplete's query is updated and the panel stays
+   *   open. `getSearchPageURL` is ignored, but items with a URL still
+   *   navigate and prompt suggestions still open the chat.
+   * @default 'page'
+   */
+  submitTarget?: 'page' | 'panel';
 };
 
 export type AutocompleteIndicesProps<TItem extends BaseHit> =
@@ -802,6 +812,7 @@ export function Autocomplete<TItem extends BaseHit = BaseHit>(
       panelComponent: _shellUnusedPanelComponent,
       getSearchPageURL: _shellUnusedGetSearchPageURL,
       onSelect: _shellUnusedOnSelect,
+      submitTarget: _shellUnusedSubmitTarget,
       ...shellRootProps
     } = restProps as Record<string, unknown>;
     const activateWithQueryMirror = () => {
@@ -952,6 +963,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   aiMode,
   domId,
   detached,
+  submitTarget = 'page',
   ...props
 }: InnerAutocompleteProps<TItem>) {
   const {
@@ -962,6 +974,8 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     transformItems,
     future: { undefinedEmptyQuery: true },
   });
+  const submitsToPanel = submitTarget === 'panel';
+  const refineParent = submitsToPanel ? () => {} : refineSearchBox;
 
   const resolvedQuery =
     currentRefinement !== undefined
@@ -1070,7 +1084,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     indicesConfig: indicesConfigForPropGetters,
     onRefine: (query) => {
       refineAutocomplete(query);
-      refineSearchBox(query);
+      refineParent(query);
       storage.onAdd(query);
     },
     onApply: (query) => {
@@ -1088,6 +1102,9 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
               })
             ) {
               setQuery('');
+              // The chat is the destination, whatever the `submitTarget`.
+              setIsOpen(false);
+              setIsModalOpen(false);
             }
             return;
           }
@@ -1109,7 +1126,11 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
           return;
         }
 
-        if (!isSearchPage && typeof getSearchPageURL !== 'undefined') {
+        if (
+          !submitsToPanel &&
+          !isSearchPage &&
+          typeof getSearchPageURL !== 'undefined'
+        ) {
           window.location.href = getSearchPageURL({ ...indexUiState, query });
           return;
         }
@@ -1118,13 +1139,14 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       }),
     onSubmit: () => {
       // Close the detached modal when form is submitted
-      if (isDetached) {
+      if (isDetached && !submitsToPanel) {
         setIsModalOpen(false);
       }
     },
     placeholder,
     isDetached,
     shouldHidePanel: shouldHideEmptyPanel,
+    closeOnSubmit: !submitsToPanel,
     autoFocus,
   });
 
@@ -1223,7 +1245,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     <AutocompleteSearch
       inputProps={getInputProps()}
       clearQuery={() => {
-        refineSearchBox('');
+        refineParent('');
         refineAutocomplete('');
       }}
       onQueryChange={(query) => {
@@ -1253,7 +1275,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
                   referer: 'ai-mode',
                 })
               ) {
-                refineSearchBox('');
+                refineParent('');
                 refineAutocomplete('');
               }
             }
@@ -1313,7 +1335,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
             setIsOpen(true);
           }}
           onClear={() => {
-            refineSearchBox('');
+            refineParent('');
             refineAutocomplete('');
           }}
           translations={translations}

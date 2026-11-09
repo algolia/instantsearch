@@ -418,6 +418,9 @@ export default {
     detachedMediaQuery: { type: String, default: undefined },
     translations: { type: Object, default: undefined },
     aiMode: { type: Boolean, default: false },
+    // `'panel'`: selecting an item or submitting only updates the
+    // autocomplete's query, not the parent index's, and keeps the panel open.
+    submitTarget: { type: String, default: 'page' },
     // Overrides the `classNames` prop of the suit mixin: the keys are the ones
     // of the other flavors' `cssClasses` (`root`, `panel`, `panelOpen`, ...).
     classNames: { type: Object, default: () => ({}) },
@@ -440,7 +443,8 @@ export default {
       activatedLazily: false,
       // The isolated index, once its connector is mounted.
       isolatedIndex: null,
-      // A query typed between activation and the connector's first render.
+      // A query refined before the connector's first render (e.g. clearing
+      // the detached search button before activation).
       pendingQuery: undefined,
       renderOptions: null,
       hasWarnedMissingPromptSuggestionsChat: false,
@@ -611,7 +615,7 @@ export default {
       const refineAutocomplete = (query) => {
         if (state.isolatedIndex) {
           state.renderOptions.refine(query);
-        } else if (state.activated) {
+        } else {
           state.pendingQuery = query;
         }
       };
@@ -638,25 +642,25 @@ export default {
         root: cx('ais-Autocomplete', this.classNames.root),
       };
 
-      const targetIndex = this.getParentIndex();
-      const isolatedIndex = state.isolatedIndex || targetIndex;
+      const parentIndex = this.getParentIndex();
+      const isolatedIndex = state.isolatedIndex || parentIndex;
 
       const searchboxQuery = isolatedIndex?.getHelper()?.state.query;
-      const targetIndexQuery = targetIndex?.getHelper()?.state.query;
+      const parentIndexQuery = parentIndex?.getHelper()?.state.query;
 
       const [localQuery, setLocalQuery] = useState(
-        searchboxQuery !== undefined ? searchboxQuery : (targetIndexQuery ?? '')
+        searchboxQuery !== undefined ? searchboxQuery : (parentIndexQuery ?? '')
       );
 
       useEffect(() => {
         // When the isolated index has a defined query (including ''), use it.
         // Only fall back to the target index query when not yet set.
         const query =
-          searchboxQuery !== undefined ? searchboxQuery : targetIndexQuery;
+          searchboxQuery !== undefined ? searchboxQuery : parentIndexQuery;
         if (query !== undefined) {
           setLocalQuery(query);
         }
-      }, [searchboxQuery, targetIndexQuery]);
+      }, [searchboxQuery, parentIndexQuery]);
 
       const resolvedDetachedMediaQuery = useMemo(
         () =>
@@ -813,7 +817,7 @@ export default {
       };
 
       const isSearchPage =
-        targetIndex
+        parentIndex
           ?.getWidgets()
           .some(({ $$type }) =>
             ['ais.hits', 'ais.infiniteHits'].includes($$type)
@@ -822,18 +826,20 @@ export default {
       const onRefine = (query) => {
         setLocalQuery(query);
         refineAutocomplete(query);
-        instantSearchInstance.setUiState((uiState) => ({
-          ...uiState,
-          // A new query starts from the first page, like `setQuery` does.
-          [targetIndex.getIndexId()]: {
-            ...omitPage(uiState[targetIndex.getIndexId()]),
-            query,
-          },
-          // Before activation there is no isolated index to mirror the query to.
-          ...(state.isolatedIndex
-            ? { [isolatedIndex.getIndexId()]: { query } }
-            : {}),
-        }));
+        if (this.submitTarget !== 'panel') {
+          instantSearchInstance.setUiState((uiState) => ({
+            ...uiState,
+            // A new query starts from the first page, like `setQuery` does.
+            [parentIndex.getIndexId()]: {
+              ...omitPage(uiState[parentIndex.getIndexId()]),
+              query,
+            },
+            // Before activation there is no isolated index to mirror the query to.
+            ...(state.isolatedIndex
+              ? { [isolatedIndex.getIndexId()]: { query } }
+              : {}),
+          }));
+        }
         if (query.length > 0) {
           storage.onAdd(query);
         }
@@ -851,7 +857,7 @@ export default {
         allIndicesEmpty && recentEmpty && !noResultsSlot && !panelSlot;
 
       const getChatRenderState = () =>
-        instantSearchInstance.renderState[targetIndex.getIndexId()]?.chat;
+        instantSearchInstance.renderState[parentIndex.getIndexId()]?.chat;
 
       const defaultOnSelect = ({ query, item, setQuery, url }) => {
         if (isPromptSuggestion(item)) {
@@ -865,6 +871,9 @@ export default {
               })
             ) {
               setQuery('');
+              // The chat is the destination, whatever the `submitTarget`.
+              setIsOpen(false);
+              setIsModalOpen(false);
             }
             return;
           }
@@ -886,9 +895,13 @@ export default {
           return;
         }
 
-        if (!isSearchPage && typeof this.getSearchPageUrl !== 'undefined') {
+        if (
+          this.submitTarget !== 'panel' &&
+          !isSearchPage &&
+          typeof this.getSearchPageUrl !== 'undefined'
+        ) {
           const indexUiState =
-            instantSearchInstance.getUiState()[targetIndex.getIndexId()];
+            instantSearchInstance.getUiState()[parentIndex.getIndexId()];
           window.location.href = this.getSearchPageUrl({
             ...indexUiState,
             query,
@@ -917,13 +930,14 @@ export default {
         },
         onSubmit: () => {
           // Close the detached modal when form is submitted
-          if (isDetached) {
+          if (isDetached && this.submitTarget !== 'panel') {
             setIsModalOpen(false);
           }
         },
         placeholder: this.placeholder,
         isDetached,
         shouldHidePanel: shouldHideEmptyPanel,
+        closeOnSubmit: this.submitTarget !== 'panel',
         autoFocus: this.autofocus,
       });
 

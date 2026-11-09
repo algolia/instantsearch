@@ -713,7 +713,7 @@ const testSetups = {
     await nextTick();
   },
   async createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
-    const { slots = {}, ...props } = widgetParams;
+    const { slots = {}, renderChat = false, ...props } = widgetParams;
 
     mountApp(
       {
@@ -723,6 +723,8 @@ const testSetups = {
               props,
               scopedSlots: slots,
             }),
+            renderChat &&
+              h(AisChat, { props: { agentId: 'autocompleteChatAgentId' } }),
             h(GlobalErrorSwallower),
           ])
         ),

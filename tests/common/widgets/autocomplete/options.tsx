@@ -8,6 +8,8 @@ import { screen, waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
+import { skippableTest } from '../../common';
+
 import { getVueH } from './vue';
 
 import type { AutocompleteWidgetSetup } from '.';
@@ -22,9 +24,20 @@ function createMockedSearchClient(
   });
 }
 
+type SearchRequest = {
+  indexName: string;
+  params?: { query?: string };
+};
+
+function getRequests(searchClient: { search: unknown }) {
+  return (searchClient.search as jest.Mock).mock.calls.flatMap(
+    ([requests]: [SearchRequest[]]) => requests
+  );
+}
+
 export function createOptionsTests(
   setup: AutocompleteWidgetSetup,
-  { act }: Required<TestOptions>
+  { act, skippedTests }: Required<TestOptions>
 ) {
   describe('options', () => {
     test('renders with default options', async () => {
@@ -1885,6 +1898,202 @@ export function createOptionsTests(
       );
     });
 
+    describe('submitTarget: panel', () => {
+      test('only refines the autocomplete and keeps the panel open when selecting an item', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'query_suggestions',
+              hits: [
+                { objectID: '1', query: 'hello' },
+                { objectID: '2', query: 'hi' },
+              ],
+            })
+          )
+        );
+        const getSearchPageURL = jest.fn(() => '#');
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'products',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              showQuerySuggestions: { indexName: 'query_suggestions' },
+              getSearchPageURL,
+              submitTarget: 'panel',
+            },
+            react: {
+              showQuerySuggestions: { indexName: 'query_suggestions' },
+              getSearchPageURL,
+              submitTarget: 'panel',
+            },
+            vue: {
+              showQuerySuggestions: { indexName: 'query_suggestions' },
+              getSearchPageUrl: getSearchPageURL,
+              submitTarget: 'panel',
+            },
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        await act(async () => {
+          userEvent.click(screen.getByRole('combobox', { name: /submit/i }));
+          await wait(0);
+        });
+
+        (searchClient.search as jest.Mock).mockClear();
+
+        await act(async () => {
+          screen.getByText('hello').click();
+          await wait(0);
+        });
+
+        const input = screen.getByRole('combobox', { name: /submit/i });
+        expect(input).toHaveValue('hello');
+        expect(input).toHaveAttribute('aria-expanded', 'true');
+        expect(getSearchPageURL).not.toHaveBeenCalled();
+        expect(getRequests(searchClient)).toContainEqual(
+          expect.objectContaining({
+            indexName: 'query_suggestions',
+            params: expect.objectContaining({ query: 'hello' }),
+          })
+        );
+        expect(
+          getRequests(searchClient).filter(
+            ({ indexName }) => indexName === 'products'
+          )
+        ).toEqual([]);
+      });
+
+      test('only refines the autocomplete and keeps the panel open when pressing enter', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'query_suggestions',
+              hits: [{ objectID: '1', query: 'hello' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'products',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              showQuerySuggestions: { indexName: 'query_suggestions' },
+              submitTarget: 'panel',
+            },
+            react: {
+              showQuerySuggestions: { indexName: 'query_suggestions' },
+              submitTarget: 'panel',
+            },
+            vue: {
+              showQuerySuggestions: { indexName: 'query_suggestions' },
+              submitTarget: 'panel',
+            },
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        await act(async () => {
+          userEvent.click(screen.getByRole('combobox', { name: /submit/i }));
+          await wait(0);
+        });
+
+        const input = screen.getByRole('combobox', { name: /submit/i });
+
+        await act(async () => {
+          await userEvent.paste(input, 'hel');
+          await wait(0);
+        });
+
+        (searchClient.search as jest.Mock).mockClear();
+
+        await act(async () => {
+          userEvent.keyboard('{Enter}');
+          await wait(0);
+        });
+
+        expect(input).toHaveAttribute('aria-expanded', 'true');
+        expect(input).toHaveFocus();
+        expect(
+          getRequests(searchClient).filter(
+            ({ indexName }) => indexName === 'products'
+          )
+        ).toEqual([]);
+      });
+
+      test('closes the panel when a prompt suggestion opens the chat', async () => {
+        // Keeps the chat's agent request pending.
+        global.fetch = jest.fn(
+          () => new Promise<Response>(() => {})
+        ) as unknown as typeof fetch;
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'prompt_suggestions',
+              hits: [{ objectID: '1', prompt: 'What is the best product?' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'products',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              showPromptSuggestions: { indexName: 'prompt_suggestions' },
+              submitTarget: 'panel',
+              renderChat: true,
+            },
+            react: {
+              showPromptSuggestions: { indexName: 'prompt_suggestions' },
+              submitTarget: 'panel',
+              renderChat: true,
+            },
+            vue: {
+              showPromptSuggestions: { indexName: 'prompt_suggestions' },
+              submitTarget: 'panel',
+              renderChat: true,
+            },
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        await act(async () => {
+          userEvent.click(screen.getByRole('combobox', { name: /submit/i }));
+          await wait(0);
+        });
+
+        await act(async () => {
+          screen.getByText('What is the best product?').click();
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-Chat-container--open')
+        ).toBeInTheDocument();
+        expect(
+          screen.getByRole('combobox', { name: /submit/i })
+        ).toHaveAttribute('aria-expanded', 'false');
+      });
+    });
+
     describe('detached mode', () => {
       const detachedMediaQuery = '(max-width: 680px)';
       const detachedModalMediaQuery = '(min-width: 680px)';
@@ -1975,6 +2184,157 @@ export function createOptionsTests(
       afterEach(() => {
         mockMatchMedia(false);
         document.body.classList.remove('ais-Autocomplete--detached');
+      });
+
+      // React doesn't render the clear button before activation.
+      skippableTest(
+        'keeps a query cleared before the first opening when submitting to the panel',
+        skippedTests,
+        async () => {
+          mockMatchMedia(true);
+
+          const searchClient = createMockedSearchClient(
+            createMultiSearchResponse(
+              createSingleSearchResponse({
+                index: 'query_suggestions',
+                hits: [{ objectID: '1', query: 'hello' }],
+              })
+            )
+          );
+
+          await setup({
+            instantSearchOptions: {
+              indexName: 'products',
+              searchClient,
+              initialUiState: { products: { query: 'shoes' } },
+            },
+            widgetParams: {
+              javascript: {
+                detachedMediaQuery,
+                showQuerySuggestions: { indexName: 'query_suggestions' },
+                submitTarget: 'panel',
+              },
+              react: {
+                detachedMediaQuery,
+                showQuerySuggestions: { indexName: 'query_suggestions' },
+                submitTarget: 'panel',
+              },
+              vue: {
+                detachedMediaQuery,
+                showQuerySuggestions: { indexName: 'query_suggestions' },
+                submitTarget: 'panel',
+              },
+            },
+          });
+
+          // Effects run after paint, so wait for them before interacting.
+          await act(async () => {
+            await wait(150);
+          });
+
+          await act(async () => {
+            userEvent.click(screen.getByRole('button', { name: /clear/i }));
+            await wait(0);
+          });
+
+          (searchClient.search as jest.Mock).mockClear();
+
+          await act(async () => {
+            userEvent.click(
+              document.querySelector('.ais-AutocompleteDetachedSearchButton')!
+            );
+            await wait(150);
+          });
+
+          expect(getRequests(searchClient)).not.toEqual([]);
+          expect(screen.getByRole('combobox', { name: /submit/i })).toHaveValue(
+            ''
+          );
+          expect(getRequests(searchClient)).not.toContainEqual(
+            expect.objectContaining({
+              indexName: 'query_suggestions',
+              params: expect.objectContaining({ query: 'shoes' }),
+            })
+          );
+        }
+      );
+
+      test('closes the modal when a prompt suggestion opens the chat with `submitTarget: panel`', async () => {
+        mockMatchMedia(true);
+        // Keeps the chat's agent request pending.
+        global.fetch = jest.fn(
+          () => new Promise<Response>(() => {})
+        ) as unknown as typeof fetch;
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'prompt_suggestions',
+              hits: [{ objectID: '1', prompt: 'What is the best product?' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'products',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              detachedMediaQuery,
+              showPromptSuggestions: { indexName: 'prompt_suggestions' },
+              submitTarget: 'panel',
+              renderChat: true,
+            },
+            react: {
+              detachedMediaQuery,
+              showPromptSuggestions: { indexName: 'prompt_suggestions' },
+              submitTarget: 'panel',
+              renderChat: true,
+            },
+            vue: {
+              detachedMediaQuery,
+              showPromptSuggestions: { indexName: 'prompt_suggestions' },
+              submitTarget: 'panel',
+              renderChat: true,
+            },
+          },
+        });
+
+        await act(async () => {
+          await wait(150);
+        });
+
+        // For lazy-activation flavors (React), the detached UI only renders
+        // after the input is focused.
+        const preActivationInput = screen.queryByRole('combobox', {
+          name: /submit/i,
+        });
+        if (preActivationInput) {
+          await act(async () => {
+            userEvent.click(preActivationInput);
+            await wait(0);
+          });
+        }
+
+        await act(async () => {
+          userEvent.click(
+            document.querySelector('.ais-AutocompleteDetachedSearchButton')!
+          );
+          await wait(150);
+        });
+
+        await act(async () => {
+          screen.getByText('What is the best product?').click();
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-Chat-container--open')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-AutocompleteDetachedOverlay')
+        ).toBeNull();
       });
 
       test('renders detached search button and toggles overlay', async () => {
