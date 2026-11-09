@@ -652,9 +652,9 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         return this;
       }
 
-      // We still dispose the previous widget, for its side effects. The search
-      // state it returns is only used as a base when shared state isn't preserved
-      // on unmount, like in `removeWidgets`.
+      // We still dispose the previous widget, for its side effects. Only the
+      // recommend state it returns is kept: like in `removeWidgets`, the search
+      // parameters are computed again from the `uiState`.
       const disposedState = previousWidget.dispose({
         helper: helper!,
         state: helper!.state,
@@ -665,18 +665,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         disposedState instanceof algoliasearchHelper.RecommendParameters
           ? disposedState
           : helper!.recommendState;
-      const cleanedSearchState =
-        disposedState &&
-        !(disposedState instanceof algoliasearchHelper.RecommendParameters)
-          ? disposedState
-          : helper!.state;
 
-      const initialSearchParameters = localInstantSearchInstance.future
-        .preserveSharedStateOnUnmount
-        ? new algoliasearchHelper.SearchParameters({
-            index: this.getIndexName(),
-          })
-        : cleanedSearchState;
+      const initialSearchParameters = new algoliasearchHelper.SearchParameters({
+        index: this.getIndexName(),
+      });
 
       // We hand the previous `uiState` over to the next widgets, then read the
       // `uiState` back from them. Widgets only pick up the state they claim, so
@@ -769,48 +761,36 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       recomputeLocalRequestDependencies();
 
       if (localInstantSearchInstance && Boolean(flatWidgets.length)) {
-        const { cleanedSearchState, cleanedRecommendState } =
-          flatWidgets.reduce(
-            (states, widget) => {
-              // the `dispose` method exists at this point we already assert it
-              const next = widget.dispose!({
-                helper: helper!,
-                state: states.cleanedSearchState,
-                recommendState: states.cleanedRecommendState,
-                parent: this,
-              });
-
-              if (next instanceof algoliasearchHelper.RecommendParameters) {
-                states.cleanedRecommendState = next;
-              } else if (next) {
-                states.cleanedSearchState = next;
-              }
-
-              return states;
-            },
-            {
-              cleanedSearchState: helper!.state,
-              cleanedRecommendState: helper!.recommendState,
-            }
-          );
-
-        const newState = localInstantSearchInstance.future
-          .preserveSharedStateOnUnmount
-          ? getLocalWidgetsSearchParameters(localWidgets, {
-              uiState: localUiState,
-              initialSearchParameters: new algoliasearchHelper.SearchParameters(
-                {
-                  index: this.getIndexName(),
-                }
-              ),
-            })
-          : getLocalWidgetsSearchParameters(localWidgets, {
-              uiState: getLocalWidgetsUiState(localWidgets, {
-                searchParameters: cleanedSearchState,
-                helper: helper!,
-              }),
-              initialSearchParameters: cleanedSearchState,
+        const { cleanedRecommendState } = flatWidgets.reduce(
+          (states, widget) => {
+            // the `dispose` method exists at this point we already assert it
+            const next = widget.dispose!({
+              helper: helper!,
+              state: states.cleanedSearchState,
+              recommendState: states.cleanedRecommendState,
+              parent: this,
             });
+
+            if (next instanceof algoliasearchHelper.RecommendParameters) {
+              states.cleanedRecommendState = next;
+            } else if (next) {
+              states.cleanedSearchState = next;
+            }
+
+            return states;
+          },
+          {
+            cleanedSearchState: helper!.state,
+            cleanedRecommendState: helper!.recommendState,
+          }
+        );
+
+        const newState = getLocalWidgetsSearchParameters(localWidgets, {
+          uiState: localUiState,
+          initialSearchParameters: new algoliasearchHelper.SearchParameters({
+            index: this.getIndexName(),
+          }),
+        });
 
         localUiState = getLocalWidgetsUiState(localWidgets, {
           searchParameters: newState,

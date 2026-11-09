@@ -1911,7 +1911,6 @@ const searchClient = algoliasearch('appId', 'apiKey');
 const search = instantsearch({
   indexName: 'indexName',
   searchClient,
-  future: { preserveSharedStateOnUnmount: true },
   insights: true,
 });
 
@@ -4137,8 +4136,6 @@ import './App.css';
 
 const searchClient = algoliasearch('appId', 'apiKey');
 
-const future = { preserveSharedStateOnUnmount: true };
-
 export function App() {
   return (
     <div>
@@ -4158,7 +4155,6 @@ export function App() {
         <InstantSearch
           searchClient={searchClient}
           indexName=\\"indexName\\"
-          future={future}
           insights
         >
           <Configure hitsPerPage={8} />
@@ -4292,8 +4288,6 @@ const searchClient = algoliasearch(
   'apiKey'
 );
 
-const future = { preserveSharedStateOnUnmount: true };
-
 export default function App() {
   const listRef = useRef<FlatList<ProductHit>>(null);
 
@@ -4305,7 +4299,6 @@ export default function App() {
           <InstantSearch
             searchClient={searchClient}
             indexName=\\"indexName\\"
-            future={future}
           >
             <SearchBox
               onChange={() =>
@@ -5178,7 +5171,6 @@ exports[`Templates Vue InstantSearch with Vue 3 File content: src/App.vue 1`] = 
       <ais-instant-search
         :search-client=\\"searchClient\\"
         index-name=\\"indexName\\"
-        :future=\\"future\\"
         insights
       >
         <ais-configure :hits-per-page.camel=\\"8\\" />
@@ -5233,7 +5225,6 @@ export default {
   data() {
     return {
       searchClient: algoliasearch('appId', 'apiKey'),
-      future: { preserveSharedStateOnUnmount: true },
     };
   },
 };
