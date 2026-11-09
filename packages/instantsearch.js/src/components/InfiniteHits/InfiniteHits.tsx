@@ -4,7 +4,6 @@ import { warning } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h } from 'preact';
 
-import { createInsightsEventHandler } from '../../lib/insights/listener';
 import Template from '../Template/Template';
 
 import type { ComponentCSSClasses } from '../../types';
@@ -14,7 +13,7 @@ import type {
 } from '../../widgets/infinite-hits/infinite-hits';
 import type { Banner, SearchResults } from 'algoliasearch-helper';
 import type { SendEventForHits } from 'instantsearch-core';
-import type { Hit, InsightsClient } from 'instantsearch-core';
+import type { Hit } from 'instantsearch-core';
 
 export type InfiniteHitsComponentCSSClasses =
   ComponentCSSClasses<InfiniteHitsCSSClasses>;
@@ -33,7 +32,6 @@ export type InfiniteHitsProps = {
   };
   isFirstPage: boolean;
   isLastPage: boolean;
-  insights?: InsightsClient;
   sendEvent: SendEventForHits;
   banner?: Banner;
 };
@@ -80,7 +78,6 @@ const DefaultBanner = ({
 const InfiniteHits = ({
   results,
   hits,
-  insights,
   sendEvent,
   hasShowPrevious,
   showPrevious,
@@ -91,14 +88,9 @@ const InfiniteHits = ({
   templateProps,
   banner,
 }: InfiniteHitsProps) => {
-  const handleInsightsClick = createInsightsEventHandler({ insights });
-
   if (results.hits.length === 0) {
     return (
-      <div
-        className={cx(cssClasses.root, cssClasses.emptyRoot)}
-        onClick={handleInsightsClick}
-      >
+      <div className={cx(cssClasses.root, cssClasses.emptyRoot)}>
         {banner &&
           (templateProps.templates.banner ? (
             <Template
@@ -164,12 +156,10 @@ const InfiniteHits = ({
             rootTagName="li"
             rootProps={{
               className: cssClasses.item,
-              onClick: (event: MouseEvent) => {
-                handleInsightsClick(event);
+              onClick: () => {
                 sendEvent('click:internal', hit, 'Hit Clicked');
               },
-              onAuxClick: (event: MouseEvent) => {
-                handleInsightsClick(event);
+              onAuxClick: () => {
                 sendEvent('click:internal', hit, 'Hit Clicked');
               },
             }}
