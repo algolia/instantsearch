@@ -32,6 +32,10 @@ describe('connectChat production tool handling', () => {
     (globalThis as any).__DEV__ = originalDev;
   });
 
+  beforeEach(() => {
+    sessionStorage.clear();
+  });
+
   it('submits the unknown-tool fallback once the response ends and continues once', async () => {
     const fetchMock = jest
       .fn()
@@ -74,6 +78,66 @@ describe('connectChat production tool handling', () => {
       state: 'output-available',
       output: 'No tool implemented for "missingTool".',
     });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('submits the fallback for every unknown tool the server leaves unanswered', async () => {
+    const fetchMock = jest
+      .fn()
+      .mockResolvedValueOnce(
+        chatStream([
+          { type: 'start', messageId: 'assistant-1' },
+          {
+            type: 'tool-input-available',
+            toolName: 'missingTool',
+            toolCallId: 'call-1',
+            input: {},
+          },
+          {
+            type: 'tool-input-available',
+            toolName: 'otherMissingTool',
+            toolCallId: 'call-2',
+            input: {},
+          },
+          { type: 'finish' },
+        ])
+      )
+      .mockResolvedValueOnce(
+        chatStream([
+          { type: 'start', messageId: 'assistant-2' },
+          { type: 'finish' },
+        ])
+      );
+    const widget = connectChat(jest.fn())({
+      agentId: undefined,
+      disableTriggerValidation: true,
+      transport: { fetch: fetchMock },
+    } as ChatConnectorParams);
+    const helper = algoliasearchHelper(createSearchClient(), '');
+    widget.init(createInitOptions({ helper }));
+
+    await widget.chatInstance.sendMessage({ text: 'use two missing tools' });
+
+    await waitFor(() =>
+      expect(
+        widget.chatInstance.messages.find(
+          (message) => message.id === 'assistant-1'
+        )?.parts
+      ).toMatchObject([
+        {
+          toolCallId: 'call-1',
+          state: 'output-available',
+          output: 'No tool implemented for "missingTool".',
+        },
+        {
+          toolCallId: 'call-2',
+          state: 'output-available',
+          output: 'No tool implemented for "otherMissingTool".',
+        },
+      ])
+    );
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+    await wait(0);
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 

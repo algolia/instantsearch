@@ -795,7 +795,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       // `providerExecuted`, so the server may still answer a call no tool
       // handles later in the stream. Only a call still unanswered once its
       // response completes is the client's to answer.
-      const unhandledToolCalls = new Map<string, () => void>();
+      const unhandledToolCalls = new Map<string, () => Promise<void>>();
 
       let canRepairRestoredPendingToolParts = !resume;
       const chat = new Chat({
@@ -806,15 +806,17 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         },
         onFinish: (event) => {
           if (!event.isAbort && !event.isDisconnect && !event.isError) {
-            event.message.parts.forEach((part) => {
-              if (
+            // One at a time: a submission holds the message it commits to,
+            // and each commit replaces that message.
+            void event.message.parts.reduce<Promise<void>>((previous, part) => {
+              const answer =
                 'toolCallId' in part &&
                 (part.state === 'input-streaming' ||
                   part.state === 'input-available')
-              ) {
-                unhandledToolCalls.get(part.toolCallId)?.();
-              }
-            });
+                  ? unhandledToolCalls.get(part.toolCallId)
+                  : undefined;
+              return answer ? previous.then(answer) : previous;
+            }, Promise.resolve());
           }
           unhandledToolCalls.clear();
           options.onFinish?.(event);
@@ -860,7 +862,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
                 false,
                 `No tool implementation found for "${toolCall.toolName}" and the server returned no result for it. Please provide a tool implementation in the \`tools\` prop.`
               );
-              void submitToolResult({
+              return submitToolResult({
                 output: `No tool implemented for "${toolCall.toolName}".`,
                 tool: toolCall.toolName,
                 toolCallId: toolCall.toolCallId,
