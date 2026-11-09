@@ -1,7 +1,8 @@
 'use strict';
 
 // NOTE: this behaves like lodash/defaults, but doesn't mutate the target
-// it also preserve keys order and keep the highest numeric value
+// it also keeps the highest numeric value, and the order of the keys of the
+// last source: a key that already exists is updated in place, not moved
 function mergeNumericMax() {
   var sources = Array.prototype.slice.call(arguments);
 
@@ -15,10 +16,6 @@ function mergeNumericMax() {
       }
 
       if (sourceValue >= accValue) {
-        if (acc[key] !== undefined) {
-          // remove if already added, so that we can add it in correct order
-          delete acc[key];
-        }
         acc[key] = sourceValue;
       }
     });
