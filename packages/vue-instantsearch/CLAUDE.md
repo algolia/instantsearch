@@ -1,6 +1,6 @@
 # vue-instantsearch
 
-Vue 2 **and** Vue 3 bindings (single source, built for both). Components wrap the `instantsearch.js` connectors — the logic isn't reimplemented here.
+Vue 2 **and** Vue 3 bindings (single source, built for both). Components wrap the connectors from `instantsearch-core` — the logic isn't reimplemented here. The package re-exports core's public root (`export * from 'instantsearch-core'` in `src/instantsearch.js`), so users import routers, state mappings, connectors and middlewares from `vue-instantsearch` and never install `instantsearch.js` or `instantsearch-core`. Flavor-only helpers come from `instantsearch-core/internal`. Don't import `instantsearch.js` here (lint-enforced). The published entry points are fixed by the `exports` map in `package.json`; new public paths must be added there.
 
 ## Layout
 

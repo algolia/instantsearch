@@ -5,7 +5,17 @@
     "import/named": "off",
     "import/namespace": "off",
     "instantsearch/naming-convention": "off",
-    "no-restricted-imports": "off",
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": ["instantsearch.js", "instantsearch.js/*"],
+            "message": "vue-instantsearch is backed by `instantsearch-core`; it must not depend on `instantsearch.js`."
+          }
+        ]
+      }
+    ],
     "no-use-before-define": "off",
     "no-warning-comments": "warn",
     "react-hooks/exhaustive-deps": "off",
