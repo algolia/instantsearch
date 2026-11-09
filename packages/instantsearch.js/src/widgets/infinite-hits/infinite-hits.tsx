@@ -7,7 +7,6 @@ import { h, render } from 'preact';
 
 import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
 import { connectInfiniteHits } from '../../connectors';
-import { withInsights } from '../../lib/insights';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 
@@ -26,13 +25,7 @@ import type {
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { Template, TemplateWithSendEvent } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
-import type {
-  WidgetFactory,
-  InsightsClient,
-  Renderer,
-  BaseHit,
-  Hit,
-} from 'instantsearch-core';
+import type { WidgetFactory, Renderer, BaseHit, Hit } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',
@@ -188,7 +181,6 @@ const renderer =
       showPrevious,
       isFirstPage,
       isLastPage,
-      insights,
       sendEvent,
       banner,
     },
@@ -214,7 +206,6 @@ const renderer =
         templateProps={renderState.templateProps!}
         isFirstPage={isFirstPage}
         isLastPage={isLastPage}
-        insights={insights as InsightsClient}
         sendEvent={sendEvent}
         banner={banner}
       />,
@@ -282,9 +273,8 @@ export default (function infiniteHits<
     renderState: {},
   });
 
-  const makeWidget = withInsights(connectInfiniteHits)(
-    specializedRenderer,
-    () => render(null, containerNode)
+  const makeWidget = connectInfiniteHits(specializedRenderer, () =>
+    render(null, containerNode)
   );
 
   return {
