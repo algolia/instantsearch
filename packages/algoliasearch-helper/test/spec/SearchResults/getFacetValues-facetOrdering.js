@@ -1016,7 +1016,8 @@ test('does not return empty items', function () {
 });
 
 describe('values with the same count', function () {
-  function getNames(refinedBrand) {
+  // the main request is filtered by the refinement, the disjunctive one is not
+  function getNames(refinedBrand, mainFacets, disjunctiveFacets) {
     var state = new SearchParameters({
       index: 'indexName',
       disjunctiveFacets: ['brand'],
@@ -1024,7 +1025,6 @@ describe('values with the same count', function () {
         ? { brand: [refinedBrand] }
         : {},
     });
-    // the main request is filtered by the refinement, the disjunctive one is not
     var main = {
       hits: [],
       renderingContent: {
@@ -1032,32 +1032,123 @@ describe('values with the same count', function () {
           values: { brand: { sortRemainingBy: 'count' } },
         },
       },
-      facets: {
-        brand: refinedBrand
-          ? { [refinedBrand]: 110 }
-          : { Canon: 110, Sony: 110, Apple: 90 },
+      facets: { brand: mainFacets },
+    };
+    var disjunctive = { hits: [], facets: { brand: disjunctiveFacets } };
+
+    return new SearchResults(state, [main, disjunctive])
+      .getFacetValues('brand')
+      .map(function (v) {
+        return v.name;
+      });
+  }
+
+  var tied = { Canon: 110, Sony: 110, Apple: 90 };
+
+  test('keep their order when nothing is selected', function () {
+    expect(getNames(undefined, tied, tied)).toEqual(['Canon', 'Sony', 'Apple']);
+  });
+
+  test('keep their order when selecting the first one', function () {
+    expect(getNames('Canon', { Canon: 110 }, tied)).toEqual([
+      'Canon',
+      'Sony',
+      'Apple',
+    ]);
+  });
+
+  test('keep their order when selecting the second one', function () {
+    expect(getNames('Sony', { Sony: 110 }, tied)).toEqual([
+      'Canon',
+      'Sony',
+      'Apple',
+    ]);
+  });
+
+  test('keep the order when selecting a value with a lower count', function () {
+    expect(getNames('Apple', { Apple: 90 }, tied)).toEqual([
+      'Canon',
+      'Sony',
+      'Apple',
+    ]);
+  });
+
+  test('keep the order when the main response has a higher count', function () {
+    // non-exhaustive counts: the main response can report more than the
+    // disjunctive one, that must not change the order of the values
+    expect(
+      getNames('Sony', { Sony: 110 }, { Canon: 110, Sony: 100, Apple: 90 })
+    ).toEqual(['Canon', 'Sony', 'Apple']);
+  });
+
+  test('sort by count when counts differ', function () {
+    expect(
+      getNames('Apple', { Apple: 90 }, { Canon: 80, Sony: 100, Apple: 90 })
+    ).toEqual(['Sony', 'Apple', 'Canon']);
+  });
+
+  test('keep the order with several selected values', function () {
+    var state = new SearchParameters({
+      index: 'indexName',
+      disjunctiveFacets: ['brand'],
+      disjunctiveFacetsRefinements: { brand: ['Sony', 'Canon'] },
+    });
+    var main = {
+      hits: [],
+      renderingContent: {
+        facetOrdering: { values: { brand: { sortRemainingBy: 'count' } } },
       },
+      facets: { brand: { Canon: 110, Sony: 110 } },
     };
     var disjunctive = {
       hits: [],
       facets: { brand: { Canon: 110, Sony: 110, Apple: 90 } },
     };
-    var results = new SearchResults(
-      state,
-      refinedBrand ? [main, disjunctive] : [main]
-    );
 
-    return results.getFacetValues('brand').map(function (v) {
-      return v.name;
-    });
-  }
-
-  test('keep their order when selecting the first one', function () {
-    expect(getNames(undefined)).toEqual(['Canon', 'Sony', 'Apple']);
-    expect(getNames('Canon')).toEqual(['Canon', 'Sony', 'Apple']);
+    expect(
+      new SearchResults(state, [main, disjunctive])
+        .getFacetValues('brand')
+        .map(function (v) {
+          return v.name;
+        })
+    ).toEqual(['Canon', 'Sony', 'Apple']);
   });
 
-  test('keep their order when selecting the second one', function () {
-    expect(getNames('Sony')).toEqual(['Canon', 'Sony', 'Apple']);
+  test('keep a selected value that is missing from the disjunctive response', function () {
+    var state = new SearchParameters({
+      index: 'indexName',
+      disjunctiveFacets: ['brand'],
+      disjunctiveFacetsRefinements: { brand: ['Nokia'] },
+    });
+    var main = {
+      hits: [],
+      renderingContent: {
+        facetOrdering: { values: { brand: { sortRemainingBy: 'count' } } },
+      },
+      facets: { brand: {} },
+    };
+    var disjunctive = {
+      hits: [],
+      facets: { brand: { Canon: 110, Sony: 110 } },
+    };
+
+    var values = new SearchResults(state, [main, disjunctive]).getFacetValues(
+      'brand'
+    );
+    expect(
+      values.map(function (v) {
+        return [v.name, v.count, v.isRefined];
+      })
+    ).toEqual([
+      ['Canon', 110, false],
+      ['Sony', 110, false],
+      ['Nokia', 0, true],
+    ]);
+  });
+
+  test('use the highest count of both responses', function () {
+    expect(
+      getNames('Sony', { Sony: 130 }, { Canon: 110, Sony: 100, Apple: 90 })
+    ).toEqual(['Sony', 'Canon', 'Apple']);
   });
 });
