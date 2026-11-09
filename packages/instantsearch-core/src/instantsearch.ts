@@ -86,13 +86,10 @@ export type InstantSearchOptions<
    *   indexName: 'indexName',
    *   searchClient: {
    *     search(requests) {
-   *       // fetch response based on requests
+   *       // fetch response based on requests, including the searches for
+   *       // facet values (`type: 'facet'`)
    *       return response;
    *     },
-   *     searchForFacetValues(requests) {
-   *       // fetch response based on requests
-   *       return response;
-   *     }
    *   }
    * });
    * ```
