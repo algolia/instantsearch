@@ -1,6 +1,6 @@
-import { Hit as AlgoliaHit } from 'instantsearch.js';
 import React from 'react';
 import {
+  Hit as AlgoliaHit,
   useInfiniteHits,
   UseInfiniteHitsProps,
 } from 'react-instantsearch-core';

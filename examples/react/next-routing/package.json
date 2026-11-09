@@ -13,7 +13,6 @@
     "algoliasearch-helper": "3.30.1",
     "instantsearch-ui-components": "0.44.0",
     "instantsearch.css": "8.25.0",
-    "instantsearch.js": "4.121.0",
     "next": "16.0.7",
     "react": "19.0.0",
     "react-dom": "19.0.0",

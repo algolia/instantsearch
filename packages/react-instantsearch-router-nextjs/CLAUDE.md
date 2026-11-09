@@ -20,5 +20,5 @@ yarn workspace react-instantsearch-router-nextjs build
 yarn workspace react-instantsearch-router-nextjs test:e2e   # Playwright (Pages Router)
 ```
 
-- Surface is small — most behavior lives in the shared history router (`instantsearch.js`) and react-instantsearch SSR core. Keep this package to the **Next-specific routing glue**.
+- Surface is small — most behavior lives in the shared history router (`instantsearch-core`) and react-instantsearch SSR core. Keep this package to the **Next-specific routing glue**.
 - The tricky cases are i18n/locale paths and back/forward navigation deciding whether to re-SSR. e2e in `__tests__/e2e/` (Playwright); see `.claude/rules/e2e.md`.
