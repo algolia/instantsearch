@@ -40,7 +40,7 @@ describe('GeoSearchControls', () => {
     enableRefine: true,
     isRefineOnMapMove: true,
     isRefinedWithMap: false,
-    hasMapMoveSinceLastRefine: false,
+    hasMapMovedSinceLastRefine: false,
     onRefineToggle: () => {},
     onRefineClick: () => {},
     onClearClick: () => {},
@@ -64,7 +64,7 @@ describe('GeoSearchControls', () => {
         ...defaultProps,
         enableRefineControl: true,
         isRefineOnMapMove: true,
-        hasMapMoveSinceLastRefine: false,
+        hasMapMovedSinceLastRefine: false,
       };
 
       const { container } = render(<GeoSearchControls {...props} />);
@@ -77,7 +77,7 @@ describe('GeoSearchControls', () => {
         ...defaultProps,
         enableRefineControl: true,
         isRefineOnMapMove: true,
-        hasMapMoveSinceLastRefine: true,
+        hasMapMovedSinceLastRefine: true,
       };
 
       const { container } = render(<GeoSearchControls {...props} />);
@@ -90,7 +90,7 @@ describe('GeoSearchControls', () => {
         ...defaultProps,
         enableRefineControl: true,
         isRefineOnMapMove: false,
-        hasMapMoveSinceLastRefine: false,
+        hasMapMovedSinceLastRefine: false,
       };
 
       const { container } = render(<GeoSearchControls {...props} />);
@@ -103,7 +103,7 @@ describe('GeoSearchControls', () => {
         ...defaultProps,
         enableRefineControl: true,
         isRefineOnMapMove: false,
-        hasMapMoveSinceLastRefine: true,
+        hasMapMovedSinceLastRefine: true,
       };
 
       const { container } = render(<GeoSearchControls {...props} />);
@@ -116,7 +116,7 @@ describe('GeoSearchControls', () => {
         ...defaultProps,
         enableRefineControl: true,
         isRefineOnMapMove: true,
-        hasMapMoveSinceLastRefine: false,
+        hasMapMovedSinceLastRefine: false,
         onRefineToggle: jest.fn(),
       };
 
@@ -134,7 +134,7 @@ describe('GeoSearchControls', () => {
         ...defaultProps,
         enableRefineControl: true,
         isRefineOnMapMove: false,
-        hasMapMoveSinceLastRefine: true,
+        hasMapMovedSinceLastRefine: true,
         onRefineClick: jest.fn(),
       };
 
@@ -154,7 +154,7 @@ describe('GeoSearchControls', () => {
         ...defaultProps,
         enableRefineControl: false,
         isRefineOnMapMove: false,
-        hasMapMoveSinceLastRefine: true,
+        hasMapMovedSinceLastRefine: true,
       };
 
       const { container } = render(<GeoSearchControls {...props} />);
@@ -167,7 +167,7 @@ describe('GeoSearchControls', () => {
         ...defaultProps,
         enableRefineControl: false,
         isRefineOnMapMove: false,
-        hasMapMoveSinceLastRefine: false,
+        hasMapMovedSinceLastRefine: false,
       };
 
       const { container } = render(<GeoSearchControls {...props} />);
@@ -192,7 +192,7 @@ describe('GeoSearchControls', () => {
         ...defaultProps,
         enableRefineControl: false,
         isRefineOnMapMove: false,
-        hasMapMoveSinceLastRefine: true,
+        hasMapMovedSinceLastRefine: true,
         onRefineClick: jest.fn(),
       };
 
