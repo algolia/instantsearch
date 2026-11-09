@@ -4024,7 +4024,7 @@ exports[`Templates React InstantSearch File content: package.json 1`] = `
     \\"start\\": \\"parcel index.html\\"
   },
   \\"partialDependencies\\": {
-    \\"react-instantsearch\\": \\"7.0.0\\"
+    \\"react-instantsearch\\": \\"8.0.0\\"
   }
 }"
 `;
@@ -4432,7 +4432,7 @@ exports[`Templates React InstantSearch Native File content: package.json 1`] = `
     \\"web\\": \\"expo start --web\\"
   },
   \\"partialDependencies\\": {
-    \\"react-instantsearch-core\\": \\"7.0.0\\"
+    \\"react-instantsearch-core\\": \\"8.0.0\\"
   }
 }"
 `;

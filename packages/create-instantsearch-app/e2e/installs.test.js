@@ -143,6 +143,7 @@ describe('Installation', () => {
         `yarn start ${appPath}/react \
           --name ${appName} \
           --template "React InstantSearch" \
+          --library-version 8.0.0 \
           --no-interactive \
           --no-installation`,
         { stdio: 'ignore' }
