@@ -34,7 +34,6 @@ describe('instantsearch()', () => {
         "reverseHighlight",
         "snippet",
         "reverseSnippet",
-        "insights",
       ]
     `);
   });
