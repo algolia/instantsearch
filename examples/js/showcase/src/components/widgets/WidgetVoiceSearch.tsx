@@ -1,4 +1,4 @@
-import { voiceSearch } from 'instantsearch.js/es/widgets';
+import { voiceSearch } from 'instantsearch.js';
 
 import { useWidget } from '../../hooks/useWidget';
 

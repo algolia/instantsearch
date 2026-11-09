@@ -1,12 +1,12 @@
 /** @jsx h */
 
+import { connectRange } from 'instantsearch-core';
 import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Slider from '../../components/Slider/Slider';
-import { connectRange } from '../../connectors';
 import { getContainerNode } from '../../lib/utils';
 
 import type { RangeSliderComponentCSSClasses } from '../../components/Slider/Slider';
@@ -15,7 +15,7 @@ import type {
   RangeConnectorParams,
   RangeRenderState,
   RangeWidgetDescription,
-} from '../../connectors';
+} from 'instantsearch-core';
 import type { Renderer, WidgetFactory } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'range-slider' });

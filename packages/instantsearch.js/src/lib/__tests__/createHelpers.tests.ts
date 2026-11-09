@@ -2,7 +2,8 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { insights } from '../../helpers';
+import { insights } from 'instantsearch-core/internal';
+
 import createHelpers from '../createHelpers';
 import { renderTemplate } from '../templating';
 

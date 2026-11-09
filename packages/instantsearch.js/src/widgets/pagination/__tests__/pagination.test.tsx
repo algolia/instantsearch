@@ -10,7 +10,7 @@ import {
 import { wait } from '@instantsearch/testutils/wait';
 import { findByLabelText, findByRole } from '@testing-library/dom';
 
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import configure from '../../configure/configure';
 import pagination from '../pagination';
 

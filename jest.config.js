@@ -43,8 +43,7 @@ const config = {
       '<rootDir>/packages/react-instantsearch-core/src$1',
     '^react-instantsearch-(.*[^v6])$':
       '<rootDir>/packages/react-instantsearch-$1/src/',
-    '^instantsearch.js$': '<rootDir>/packages/instantsearch.js/src/',
-    '^instantsearch.js/es(.*)$': '<rootDir>/packages/instantsearch.js/src$1',
+    '^instantsearch.js$': '<rootDir>/packages/instantsearch.js/src/index.es.ts',
     '^instantsearch.js/(.*)$': '<rootDir>/packages/instantsearch.js/$1',
     '^instantsearch-core/internal$':
       '<rootDir>/packages/instantsearch-core/src/internal.ts',

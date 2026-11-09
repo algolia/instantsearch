@@ -13,8 +13,7 @@ import userEvent from '@testing-library/user-event';
 import { createInsightsMiddleware } from 'instantsearch-core';
 import { Fragment, h } from 'preact';
 
-import { insights } from '../../../helpers';
-import instantsearch from '../../../index.es';
+import { instantsearch, insights } from '../../../index.es';
 import configure from '../../configure/configure';
 import searchBox from '../../search-box/search-box';
 import hits from '../hits';

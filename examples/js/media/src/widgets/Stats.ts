@@ -1,4 +1,4 @@
-import { connectHits } from 'instantsearch.js/es/connectors';
+import { connectHits } from 'instantsearch.js';
 
 import { formatNumber, getDateRangeFromTimestamp } from '../utils';
 

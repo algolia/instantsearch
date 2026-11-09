@@ -11,12 +11,12 @@ import { widgetSnapshotSerializer } from '@instantsearch/testutils/widgetSnapsho
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 
 import { index, searchBox, menu, dynamicWidgets } from '../..';
-import instantsearch from '../../..';
 import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../../instantsearch-core/test/createWidget';
+import { instantsearch } from '../../../index.es';
 import refinementList from '../../refinement-list/refinement-list';
 
 import type { SearchResponse } from 'instantsearch-core';

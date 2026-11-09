@@ -8,10 +8,10 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
+import { connectHierarchicalMenu } from 'instantsearch-core';
 import { h } from 'preact';
 
-import { connectHierarchicalMenu } from '../../../connectors';
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import breadcrumb from '../breadcrumb';
 
 const hierarchicalFacets = {

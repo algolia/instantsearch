@@ -5,13 +5,13 @@ import { h } from 'preact';
 
 import Template from '../Template/Template';
 
-import type { ClearRefinementsRenderState } from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { ComponentCSSClasses } from '../../types';
 import type {
   ClearRefinementsCSSClasses,
   ClearRefinementsTemplates,
 } from '../../widgets/clear-refinements/clear-refinements';
+import type { ClearRefinementsRenderState } from 'instantsearch-core';
 
 export type ClearRefinementsComponentCSSClasses =
   ComponentCSSClasses<ClearRefinementsCSSClasses>;

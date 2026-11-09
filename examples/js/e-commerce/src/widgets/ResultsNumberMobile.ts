@@ -1,5 +1,4 @@
-import { stats } from 'instantsearch.js/es/widgets';
-
+import { stats } from 'instantsearch.js';
 export const resultsNumberMobile = stats({
   container: '[data-widget="results-number-mobile"]',
   templates: {

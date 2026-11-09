@@ -4,7 +4,7 @@ import { createOptionsTests } from './options';
 import { createStateTests } from './state';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { RelatedProductsConnectorParams } from 'instantsearch-core';
+import type { RelatedProductsConnectorParams } from 'instantsearch.js';
 
 export type RelatedProductsConnectorSetup = TestSetup<{
   widgetParams: RelatedProductsConnectorParams;

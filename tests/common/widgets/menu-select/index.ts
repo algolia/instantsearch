@@ -4,7 +4,7 @@ import { createLinksTests } from './links';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { MenuSelectWidget } from 'instantsearch.js/es/widgets/menu-select/menu-select';
+import type { MenuSelectWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<MenuSelectWidget>[0];
 export type MenuSelectWidgetSetup = TestSetup<{

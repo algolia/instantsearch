@@ -1,15 +1,21 @@
 import InstantSearch from './lib/InstantSearch';
-import version from './lib/version';
 
 import type { InstantSearchOptions } from 'instantsearch-core';
 import type { Expand, UiState } from 'instantsearch-core';
 
-type InstantSearchModule = {
-  <TUiState = Record<string, unknown>, TRouteState = TUiState>(
-    options: InstantSearchOptions<Expand<UiState & TUiState>, TRouteState>
-  ): InstantSearch<Expand<UiState & TUiState>, TRouteState>;
-  version: string;
-};
+export * from 'instantsearch-core';
+export {
+  highlight,
+  reverseHighlight,
+  snippet,
+  reverseSnippet,
+  insights,
+} from 'instantsearch-core/internal';
+export { default as version } from './lib/version';
+export * from './helpers/components';
+export * from './widgets';
+export * from './templates';
+export * from './types';
 
 /**
  * InstantSearch is the main component of InstantSearch.js. This object
@@ -26,47 +32,11 @@ type InstantSearchModule = {
  * If you want to get up and running quickly with InstantSearch.js, have a
  * look at the [getting started](https://www.algolia.com/doc/guides/building-search-ui/getting-started/js/).
  */
-const instantsearch: InstantSearchModule = (options) =>
-  new InstantSearch(options);
-
-instantsearch.version = version;
-
-Object.defineProperty(instantsearch, 'widgets', {
-  get() {
-    throw new ReferenceError(
-      `"instantsearch.widgets" are not available from the ES build.
-
-To import the widgets:
-
-import { searchBox } from 'instantsearch.js/es/widgets'`
-    );
-  },
-});
-
-Object.defineProperty(instantsearch, 'connectors', {
-  get() {
-    throw new ReferenceError(
-      `"instantsearch.connectors" are not available from the ES build.
-
-To import the connectors:
-
-import { connectSearchBox } from 'instantsearch.js/es/connectors'`
-    );
-  },
-});
-
-Object.defineProperty(instantsearch, 'templates', {
-  get() {
-    throw new ReferenceError(
-      `"instantsearch.templates" are not available from the ES build.
-
-To import the templates:
-
-import { carousel } from 'instantsearch.js/es/templates'`
-    );
-  },
-});
-
-export default instantsearch;
-
-export * from './types';
+export function instantsearch<
+  TUiState = Record<string, unknown>,
+  TRouteState = TUiState,
+>(
+  options: InstantSearchOptions<Expand<UiState & TUiState>, TRouteState>
+): InstantSearch<Expand<UiState & TUiState>, TRouteState> {
+  return new InstantSearch(options);
+}

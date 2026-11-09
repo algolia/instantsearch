@@ -1,4 +1,4 @@
-import { searchBox } from 'instantsearch.js/es/widgets';
+import { searchBox } from 'instantsearch.js';
 
 import { useWidget } from '../../hooks/useWidget';
 

@@ -15,6 +15,13 @@ import algoliasearchHelper, {
   RecommendParameters,
   RecommendResults,
 } from 'algoliasearch-helper';
+import {
+  connectConfigure,
+  connectHits,
+  connectPagination,
+  connectRefinementList,
+  connectSearchBox,
+} from 'instantsearch-core';
 import { TAG_PLACEHOLDER, index } from 'instantsearch-core/internal';
 
 import { castToJestMock } from '../../../../../../tests/utils';
@@ -24,14 +31,7 @@ import {
   createIndexInitOptions,
   createDisposeOptions,
 } from '../../../../../instantsearch-core/test/createWidget';
-import {
-  connectConfigure,
-  connectHits,
-  connectPagination,
-  connectRefinementList,
-  connectSearchBox,
-} from '../../../connectors';
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 
 import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type { Widget } from 'instantsearch-core';

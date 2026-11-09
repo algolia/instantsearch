@@ -4,7 +4,7 @@ import { createLinksTests } from './links';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { DynamicWidgetsWidget } from 'instantsearch.js/es/widgets/dynamic-widgets/dynamic-widgets';
+import type { DynamicWidgetsWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<DynamicWidgetsWidget>[0];
 export type DynamicWidgetsWidgetSetup = TestSetup<{

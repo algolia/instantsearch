@@ -1,12 +1,13 @@
-import * as connectors from './connectors/index';
-import * as helpers from './helpers/index';
-import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache/index';
+import { createInfiniteHitsSessionStorageCache } from 'instantsearch-core';
+
 import InstantSearch from './lib/InstantSearch';
-import * as routers from './lib/routers/index';
-import * as stateMappings from './lib/stateMappings/index';
 import version from './lib/version';
-import * as middlewares from './middlewares/index';
 import * as templates from './templates/index';
+import * as connectors from './umd/connectors';
+import * as helpers from './umd/helpers';
+import * as middlewares from './umd/middlewares';
+import * as routers from './umd/routers';
+import * as stateMappings from './umd/stateMappings';
 import * as widgets from './widgets/index';
 
 import type { InstantSearchOptions } from 'instantsearch-core';

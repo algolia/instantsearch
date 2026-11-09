@@ -13,12 +13,12 @@ import { castToJestMock } from '@instantsearch/testutils';
 import { wait } from '@instantsearch/testutils/wait';
 import { fireEvent } from '@testing-library/dom';
 import { createInsightsMiddleware } from 'instantsearch-core';
+import { connectRelatedProducts, connectSearchBox } from 'instantsearch-core';
+import { historyRouter } from 'instantsearch-core';
 import { TAG_PLACEHOLDER, warning } from 'instantsearch-core/internal';
 
 import { createInstantSearch } from '../../../../instantsearch-core/test/createInstantSearch';
-import { connectRelatedProducts, connectSearchBox } from '../../connectors';
-import instantsearch from '../../index.es';
-import { history } from '../../lib/routers';
+import { instantsearch, version } from '../../index.es';
 import { dynamicWidgets, hits, refinementList } from '../../widgets';
 
 import type { SearchClient } from '../../index.es';
@@ -1799,7 +1799,7 @@ describe('insights', () => {
       indexName: 'instant_search',
       searchClient: searchClientWithCredentials,
       routing: {
-        router: history({
+        router: historyRouter({
           writeDelay: 10,
         }),
       },
@@ -1833,7 +1833,7 @@ describe('insights', () => {
       indexName: 'instant_search',
       searchClient: searchClientWithCredentials,
       routing: {
-        router: history({
+        router: historyRouter({
           writeDelay: 10,
         }),
       },
@@ -2033,9 +2033,7 @@ describe('insights', () => {
         ([method]) => method === 'sendEvents'
       )!;
 
-      expect((payload as Array<{ version: string }>)[0].version).toBe(
-        instantsearch.version
-      );
+      expect((payload as Array<{ version: string }>)[0].version).toBe(version);
     });
   });
 });

@@ -8,7 +8,7 @@ import { createDefaultWidgetParams, createVueElement, openChat } from './utils';
 
 import type { ChatWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
-import type { ClientSideToolTemplateData } from 'instantsearch.js/es/widgets/chat/chat';
+import type { ClientSideToolTemplateData } from 'instantsearch.js';
 
 export function createToolResultTests(
   setup: ChatWidgetSetup,

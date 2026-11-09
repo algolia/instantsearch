@@ -4,8 +4,8 @@ import { createOptionsTests } from './options';
 import { createTemplatesTests } from './templates';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { PromptSuggestionsConnectorParams } from 'instantsearch-core';
-import type { PromptSuggestionsWidget } from 'instantsearch.js/es/widgets/prompt-suggestions/prompt-suggestions';
+import type { PromptSuggestionsConnectorParams } from 'instantsearch.js';
+import type { PromptSuggestionsWidget } from 'instantsearch.js';
 import type { PromptSuggestionsProps } from 'react-instantsearch';
 
 type JSBaseWidgetParams = Parameters<PromptSuggestionsWidget>[0];

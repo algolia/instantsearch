@@ -1,6 +1,4 @@
-import { refinementList } from 'instantsearch.js/es/widgets';
-import { PanelTemplates } from 'instantsearch.js/es/widgets/panel/panel';
-
+import { PanelTemplates, refinementList } from 'instantsearch.js';
 export const collapseButtonText: PanelTemplates<
   typeof refinementList
 >['collapseButtonText'] = ({ collapsed }, { html }) => {

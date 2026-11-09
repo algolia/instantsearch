@@ -6,8 +6,7 @@ import {
 import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
-import { history } from 'instantsearch.js/es/lib/routers';
-import { simple } from 'instantsearch.js/es/lib/stateMappings';
+import { historyRouter, simpleStateMapping } from 'instantsearch.js';
 
 import type { HierarchicalMenuConnectorSetup } from '.';
 import type { SetupOptions, TestOptions } from '../../common';
@@ -29,12 +28,12 @@ export function createRoutingTests(
         const delay = 100;
         const margin = 10;
         const attributes = ['1', '2'];
-        const router = history();
+        const router = historyRouter();
         const options: SetupOptions<HierarchicalMenuConnectorSetup> = {
           instantSearchOptions: {
             indexName: 'indexName',
             routing: {
-              stateMapping: simple(),
+              stateMapping: simpleStateMapping(),
               router,
             },
             searchClient: createSearchClient({
@@ -203,7 +202,7 @@ export function createRoutingTests(
       test('works with unsafe "routeToState" implementation', async () => {
         const delay = 100;
         const attributes = ['brand'];
-        const router = history();
+        const router = historyRouter();
         const options: SetupOptions<HierarchicalMenuConnectorSetup> = {
           instantSearchOptions: {
             indexName: 'indexName',

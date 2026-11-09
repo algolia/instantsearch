@@ -4,7 +4,7 @@ import { createLinksTests } from './links';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { FrequentlyBoughtTogetherWidget } from 'instantsearch.js/es/widgets/frequently-bought-together/frequently-bought-together';
+import type { FrequentlyBoughtTogetherWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<FrequentlyBoughtTogetherWidget>[0];
 export type FrequentlyBoughtTogetherWidgetSetup = TestSetup<{

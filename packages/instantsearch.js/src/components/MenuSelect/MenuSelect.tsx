@@ -6,12 +6,12 @@ import { h } from 'preact';
 
 import Template from '../Template/Template';
 
-import type { MenuRenderState } from '../../connectors';
 import type { ComponentCSSClasses } from '../../types';
 import type {
   MenuSelectCSSClasses,
   MenuSelectTemplates,
 } from '../../widgets/menu-select/menu-select';
+import type { MenuRenderState } from 'instantsearch-core';
 
 export type MenuSelectComponentCSSClasses =
   ComponentCSSClasses<MenuSelectCSSClasses>;

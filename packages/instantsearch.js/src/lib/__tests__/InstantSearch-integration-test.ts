@@ -7,9 +7,9 @@ import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { castToJestMock } from '@instantsearch/testutils';
 import { wait } from '@instantsearch/testutils/wait';
 import { getByText, fireEvent } from '@testing-library/dom';
+import { connectConfigure, connectSearchBox } from 'instantsearch-core';
 
-import { connectConfigure, connectSearchBox } from '../../connectors';
-import instantsearch from '../../index.es';
+import { instantsearch } from '../../index.es';
 import { configure, frequentlyBoughtTogether, searchBox } from '../../widgets';
 
 import type { MiddlewareDefinition } from 'instantsearch-core';

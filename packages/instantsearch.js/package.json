@@ -18,6 +18,18 @@
   "module": "es/index.js",
   "jsdelivr": "dist/instantsearch.production.min.js",
   "unpkg": "dist/instantsearch.production.min.js",
+  "exports": {
+    ".": {
+      "types": "./es/index.d.ts",
+      "import": "./es/index.js",
+      "require": "./cjs/index.js"
+    },
+    "./dist/instantsearch.development": "./dist/instantsearch.development.js",
+    "./dist/instantsearch.development.js": "./dist/instantsearch.development.js",
+    "./dist/instantsearch.production.min": "./dist/instantsearch.production.min.js",
+    "./dist/instantsearch.production.min.js": "./dist/instantsearch.production.min.js",
+    "./package.json": "./package.json"
+  },
   "sideEffects": false,
   "files": [
     "dist",
@@ -35,7 +47,7 @@
     "algoliasearch-helper": "3.30.1",
     "hogan.js": "^3.0.2",
     "htm": "^3.0.0",
-    "instantsearch-core": "0.1.0",
+    "instantsearch-core": "^0.1.0",
     "instantsearch-ui-components": "0.44.0",
     "preact": "^10.10.0",
     "qs": "^6.5.1",

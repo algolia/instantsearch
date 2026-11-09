@@ -1,5 +1,5 @@
 import { setOptions, importLibrary } from '@googlemaps/js-api-loader';
-import { geoSearch } from 'instantsearch.js/es/widgets';
+import { geoSearch } from 'instantsearch.js';
 import { useRef, useEffect, useState } from 'preact/hooks';
 
 import { useSearch } from '../../context/search';

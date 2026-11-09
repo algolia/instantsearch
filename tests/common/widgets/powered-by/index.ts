@@ -4,7 +4,7 @@ import { createLinksTests } from './links';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { PoweredByWidget } from 'instantsearch.js/es/widgets/powered-by/powered-by';
+import type { PoweredByWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<PoweredByWidget>[0];
 export type PoweredByWidgetSetup = TestSetup<

@@ -1806,7 +1806,7 @@ exports[`Templates InstantSearch.js File content: index.html 1`] = `
   </div>
 
   <script src=\\"https://cdn.jsdelivr.net/npm/algoliasearch@4.10.5/dist/algoliasearch-lite.umd.js\\"></script>
-  <script src=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@3.0.0\\"></script>
+  <script src=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@3.0.0/dist/instantsearch.production.min.js\\"></script>
   <script src=\\"./src/app.js\\"></script>
 </body>
 
@@ -2797,8 +2797,7 @@ exports[`Templates InstantSearch.js widget File content: example/index.html 1`] 
 
 exports[`Templates InstantSearch.js widget File content: example/index.ts 1`] = `
 "import algoliasearch from 'algoliasearch/lite';
-import instantsearch from 'instantsearch.js/es';
-import { configure, hits, searchBox } from 'instantsearch.js/es/widgets';
+import { configure, hits, instantsearch, searchBox } from 'instantsearch.js';
 
 import { datePicker } from '../src';
 
@@ -3072,7 +3071,7 @@ export const createDatePickerRenderer: DatePickerRendererCreator = ({
 `;
 
 exports[`Templates InstantSearch.js widget File content: src/types.ts 1`] = `
-"import type { Renderer, Connector, WidgetFactory } from 'instantsearch.js/es';
+"import type { Renderer, Connector, WidgetFactory } from 'instantsearch.js';
 
 /*
  * Parameters send only to the widget creator function

@@ -1,4 +1,4 @@
-import { rangeInput } from 'instantsearch.js/es/widgets';
+import { rangeInput } from 'instantsearch.js';
 
 import { useWidget } from '../../hooks/useWidget';
 

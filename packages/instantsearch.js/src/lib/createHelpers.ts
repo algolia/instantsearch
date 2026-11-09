@@ -4,22 +4,22 @@ import {
   snippet,
   reverseSnippet,
   insights,
-} from '../helpers';
+} from 'instantsearch-core/internal';
 
 import { formatNumber } from './formatNumber';
 
-import type {
-  HighlightOptions,
-  ReverseHighlightOptions,
-  SnippetOptions,
-  ReverseSnippetOptions,
-} from '../helpers';
 import type { HoganHelpers } from '../types';
 import type {
   Hit,
   InsightsClientMethod,
   InsightsClientPayload,
 } from 'instantsearch-core';
+import type {
+  HighlightOptions,
+  ReverseHighlightOptions,
+  SnippetOptions,
+  ReverseSnippetOptions,
+} from 'instantsearch-core/internal';
 
 type DefaultHoganHelpers = HoganHelpers<
   | 'formatNumber'

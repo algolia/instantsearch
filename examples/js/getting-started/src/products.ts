@@ -1,8 +1,11 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import instantsearch from 'instantsearch.js';
-import { carousel } from 'instantsearch.js/es/templates';
-import { configure, hits, relatedProducts } from 'instantsearch.js/es/widgets';
-
+import {
+  carousel,
+  configure,
+  hits,
+  instantsearch,
+  relatedProducts,
+} from 'instantsearch.js';
 import 'instantsearch.css/themes/satellite.css';
 
 const searchParams = new URLSearchParams(document.location.search);
