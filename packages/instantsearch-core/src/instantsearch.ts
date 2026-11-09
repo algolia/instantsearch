@@ -149,19 +149,11 @@ export type InstantSearchOptions<
    * @deprecated This property will be still supported in 4.x releases, but not further. It is replaced by the `insights` middleware. For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/
    */
   insightsClient?: AlgoliaInsightsClient;
-  future?: {
-    /**
-     * Changes the way root levels of hierarchical facets have their count displayed.
-     *
-     * If `false` (by default), the count of the refined root level is updated to match the count of the actively refined parent level.
-     *
-     * If `true`, the count of the root level stays the same as the count of all children levels.
-     *
-     * @default false
-     */
-    // @MAJOR: Remove legacy behaviour here and in algoliasearch-helper
-    persistHierarchicalRootCount?: boolean;
-  };
+  /**
+   * Opt-in flags for behaviour that becomes the default in the next major
+   * version. There are none in this version.
+   */
+  future?: Record<string, never>;
 
   /**
    * @internal Injected by each flavor (InstantSearch.js, React, Vue) so usage
@@ -175,9 +167,7 @@ export type InstantSearchStatus = 'idle' | 'loading' | 'stalled' | 'error';
 
 export const INSTANTSEARCH_FUTURE_DEFAULTS: Required<
   InstantSearchOptions['future']
-> = {
-  persistHierarchicalRootCount: false,
-};
+> = {};
 
 /**
  * The actual implementation of the InstantSearch. This is
@@ -463,10 +453,7 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
     // In Vue InstantSearch' hydrate, a main helper gets set before start, so
     // we need to respect this helper as a way to keep all listeners correct.
     const mainHelper =
-      this.mainHelper ||
-      algoliasearchHelper(this.client, this.indexName, undefined, {
-        persistHierarchicalRootCount: this.future.persistHierarchicalRootCount,
-      });
+      this.mainHelper || algoliasearchHelper(this.client, this.indexName);
 
     if (this.compositionID) {
       mainHelper.searchForFacetValues =
