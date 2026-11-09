@@ -4,7 +4,7 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import { act, waitFor } from '@testing-library/react';
-import { CACHE_KEY } from 'instantsearch-core';
+import { CACHE_KEY } from 'instantsearch-core/internal';
 import React from 'react';
 import { hydrateRoot } from 'react-dom/client';
 import { renderToString } from 'react-dom/server';

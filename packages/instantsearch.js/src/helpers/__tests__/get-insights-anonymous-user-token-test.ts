@@ -2,11 +2,9 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { warning } from 'instantsearch-core';
-import {
-  getInsightsAnonymousUserToken,
-  ANONYMOUS_TOKEN_COOKIE_KEY,
-} from 'instantsearch-core';
+import { getInsightsAnonymousUserToken } from 'instantsearch-core';
+import { warning } from 'instantsearch-core/internal';
+import { ANONYMOUS_TOKEN_COOKIE_KEY } from 'instantsearch-core/internal';
 
 const DAY = 86400000; /* 1 day in ms*/
 const DATE_TOMORROW = new Date(Date.now() + DAY).toUTCString();

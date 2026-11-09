@@ -8,7 +8,7 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
-import { Chat } from 'instantsearch-core';
+import { Chat } from 'instantsearch-core/internal';
 
 import { createApp, mountApp, nextTick } from '../../../test/utils';
 import {
@@ -19,7 +19,7 @@ import {
 } from '../../instantsearch';
 import { isVue3, renderCompat } from '../../util/vue-compat';
 
-jest.unmock('instantsearch-core');
+jest.unmock('instantsearch-core/internal');
 
 function createMockedSearchClient(response) {
   return createSearchClient({

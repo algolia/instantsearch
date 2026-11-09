@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { find } from 'instantsearch-core';
+import { find } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h } from 'preact';
 

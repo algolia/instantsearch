@@ -4,7 +4,7 @@
 
 import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/widgets';
-import { Chat as InstantSearchChat } from 'instantsearch-core';
+import { Chat as InstantSearchChat } from 'instantsearch-core/internal';
 
 import instantsearch from '../index.es';
 import {

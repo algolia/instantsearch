@@ -1,4 +1,4 @@
-import { find, TAG_PLACEHOLDER } from 'instantsearch-core';
+import { find, TAG_PLACEHOLDER } from 'instantsearch-core/internal';
 
 import type { UsePropGetters } from './createAutocompletePropGetters';
 import type { Hooks } from '../../types';

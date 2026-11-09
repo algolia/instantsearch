@@ -1,7 +1,7 @@
 /** @jsx h */
 
-import { readDataAttributes } from 'instantsearch-core';
-import { deserializePayload, warning } from 'instantsearch-core';
+import { readDataAttributes } from 'instantsearch-core/internal';
+import { deserializePayload, warning } from 'instantsearch-core/internal';
 import { h } from 'preact';
 
 import type { InsightsEvent } from 'instantsearch-core';

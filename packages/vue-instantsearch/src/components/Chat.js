@@ -1,10 +1,10 @@
+import { connectChat } from 'instantsearch-core';
 import {
-  connectChat,
   focusAfterReveal,
   getActiveContainerAnimations,
   holdContainerInertUntilReveal,
   restoreContainerInertUntilReveal,
-} from 'instantsearch-core';
+} from 'instantsearch-core/internal';
 import {
   createChatComponent,
   createChatInlineLayoutComponent,

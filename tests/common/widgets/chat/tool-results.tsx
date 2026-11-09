@@ -1,7 +1,7 @@
 /** @jsx React.createElement */
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
-import { Chat } from 'instantsearch-core';
+import { Chat } from 'instantsearch-core/internal';
 import React from 'react';
 
 import { createDefaultWidgetParams, createVueElement, openChat } from './utils';

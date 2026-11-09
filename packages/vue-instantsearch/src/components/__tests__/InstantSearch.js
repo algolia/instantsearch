@@ -3,7 +3,7 @@
  */
 
 import { createAlgoliaSearchClient } from '@instantsearch/mocks';
-import { instantsearch } from 'instantsearch-core';
+import { instantsearch } from 'instantsearch-core/internal';
 
 import { version } from '../../../package.json';
 import { mount, nextTick } from '../../../test/utils';
@@ -12,7 +12,7 @@ import { warn } from '../../util/warn';
 import InstantSearch from '../InstantSearch';
 import '../../../test/utils/sortedHtmlSerializer';
 
-jest.mock('instantsearch-core');
+jest.mock('instantsearch-core/internal');
 jest.mock('../../util/warn');
 
 beforeEach(() => {

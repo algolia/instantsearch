@@ -4,7 +4,10 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "paths": {
-      "instantsearch-core": ["./packages/instantsearch-core/src"]
+      "instantsearch-core": ["./packages/instantsearch-core/src"],
+      "instantsearch-core/internal": [
+        "./packages/instantsearch-core/src/internal"
+      ]
     }
   }
 }

@@ -9,7 +9,7 @@ import algoliasearchHelper from 'algoliasearch-helper';
 import {
   _buildEventPayloadsForHits,
   serializePayload,
-} from 'instantsearch-core';
+} from 'instantsearch-core/internal';
 import { h } from 'preact';
 
 import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';

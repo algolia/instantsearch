@@ -3,11 +3,11 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
+import { createFeedContainer } from 'instantsearch-core';
 import {
   buildWidgetTree,
-  createFeedContainer,
   serializeWidgetParams,
-} from 'instantsearch-core';
+} from 'instantsearch-core/internal';
 
 import instantsearch from '../../..';
 import { hits, index, searchBox } from '../../../widgets';

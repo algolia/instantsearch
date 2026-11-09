@@ -1,10 +1,6 @@
 /** @jsx h */
-import {
-  getPropertyByPath,
-  toArray,
-  warning,
-  getHighlightedParts,
-} from 'instantsearch-core';
+import { getPropertyByPath, getHighlightedParts } from 'instantsearch-core';
+import { toArray, warning } from 'instantsearch-core/internal';
 import { h } from 'preact';
 
 import { ReverseHighlight as ReverseHighlightUiComponent } from '../../components/ReverseHighlight/ReverseHighlight';

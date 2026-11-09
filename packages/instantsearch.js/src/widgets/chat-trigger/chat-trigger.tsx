@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { connectChatTrigger } from 'instantsearch-core';
-import { createDocumentationMessageGenerator } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { createChatToggleButtonComponent } from 'instantsearch-ui-components';
 import { h, Fragment, render } from 'preact';
 

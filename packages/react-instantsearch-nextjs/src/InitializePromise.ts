@@ -1,5 +1,9 @@
 import { getInitialResults } from 'instantsearch-core';
-import { isTwoPassWidget, walkIndex, resetWidgetId } from 'instantsearch-core';
+import {
+  isTwoPassWidget,
+  walkIndex,
+  resetWidgetId,
+} from 'instantsearch-core/internal';
 import { ServerInsertedHTMLContext } from 'next/navigation';
 import { useContext } from 'react';
 import {

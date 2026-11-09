@@ -12,7 +12,19 @@
       "import": "./dist/es/index.js",
       "require": "./dist/cjs/index.js"
     },
+    "./internal": {
+      "types": "./dist/es/internal.d.ts",
+      "import": "./dist/es/internal.js",
+      "require": "./dist/cjs/internal.js"
+    },
     "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "internal": [
+        "dist/es/internal.d.ts"
+      ]
+    }
   },
   "sideEffects": false,
   "license": "MIT",

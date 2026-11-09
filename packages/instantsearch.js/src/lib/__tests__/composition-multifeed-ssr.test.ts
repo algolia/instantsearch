@@ -6,8 +6,8 @@ import {
   createCompositionClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import { hydrateSearchClient } from 'instantsearch-core';
 import { getInitialResults, waitForResults } from 'instantsearch-core';
+import { hydrateSearchClient } from 'instantsearch-core/internal';
 
 import { connectFeeds, connectSearchBox } from '../../connectors';
 import instantsearch from '../../index.es';

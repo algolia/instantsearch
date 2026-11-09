@@ -1,2 +1,5 @@
-export { withInsights, inferInsightsPayload } from 'instantsearch-core';
+export {
+  withInsights,
+  inferInsightsPayload,
+} from 'instantsearch-core/internal';
 export { default as withInsightsListener } from './listener';

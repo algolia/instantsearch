@@ -24,7 +24,7 @@ import {
   createWidgetMixin,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
-jest.unmock('instantsearch-core');
+jest.unmock('instantsearch-core/internal');
 
 const testSetups = {
   async createRefinementListConnectorTests({

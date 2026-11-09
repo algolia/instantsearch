@@ -1,4 +1,4 @@
-import { isTwoPassWidget } from 'instantsearch-core';
+import { isTwoPassWidget } from 'instantsearch-core/internal';
 import { useEffect, useRef } from 'react';
 
 import { dequal } from './dequal';

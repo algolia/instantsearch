@@ -5,14 +5,12 @@ export {
   snippet,
   reverseHighlight,
   reverseSnippet,
-} from 'instantsearch-core';
+} from 'instantsearch-core/internal';
 export type {
   HighlightOptions,
   SnippetOptions,
   ReverseHighlightOptions,
   ReverseSnippetOptions,
-} from 'instantsearch-core';
-export {
-  getInsightsAnonymousUserToken,
-  getInsightsAnonymousUserTokenInternal,
-} from 'instantsearch-core';
+} from 'instantsearch-core/internal';
+export { getInsightsAnonymousUserToken } from 'instantsearch-core';
+export { getInsightsAnonymousUserTokenInternal } from 'instantsearch-core/internal';

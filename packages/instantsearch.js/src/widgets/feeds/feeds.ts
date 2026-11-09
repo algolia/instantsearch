@@ -1,6 +1,6 @@
 import { createFeedContainer } from 'instantsearch-core';
-import { createDocumentationMessageGenerator } from 'instantsearch-core';
-import { suitComponent as component } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 
 import { connectFeeds } from '../../connectors';
 import { getContainerNode } from '../../lib/utils';

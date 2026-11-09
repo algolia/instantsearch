@@ -1,8 +1,8 @@
 import {
   createDocumentationMessageGenerator,
   getWidgetAttribute,
-} from 'instantsearch-core';
-import { suitComponent as component } from 'instantsearch-core';
+} from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 
 import { connectDynamicWidgets } from '../../connectors';
 import { getContainerNode } from '../../lib/utils';

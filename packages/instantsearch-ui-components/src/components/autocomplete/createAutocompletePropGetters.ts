@@ -1,4 +1,4 @@
-import { find } from 'instantsearch-core';
+import { find } from 'instantsearch-core/internal';
 
 import type { ComponentProps, Hooks, MutableRef } from '../../types';
 

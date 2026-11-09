@@ -3,14 +3,16 @@ import {
   connectFeeds,
   connectSearchBox,
   createFeedContainer,
-  find,
   getHighlightedParts,
+} from 'instantsearch-core';
+import {
+  find,
   getPromptSuggestionHits,
   isChatBusy,
   isPromptSuggestion,
   noop,
   openChat,
-} from 'instantsearch-core';
+} from 'instantsearch-core/internal';
 import {
   createAutocompleteComponent,
   createAutocompleteDetachedContainerComponent,

@@ -255,11 +255,8 @@ describe('Exposes correct types', () => {
 test('exposes Chat text component types from the public entry point', () => {
   const fileName = path.join(__dirname, 'chat-message-text-component.ts');
   const source = `
-    import type {
-      ChatMessageBase,
-      ChatStatus,
-      TextUIPart,
-    } from 'instantsearch-core';
+    import type { ChatStatus, TextUIPart } from 'instantsearch-core';
+import type { ChatMessageBase } from 'instantsearch-core/internal';
     import type {
       ChatMessageProps,
       ChatMessageTextComponentProps,
@@ -310,11 +307,8 @@ test('exposes Chat text component types from the public entry point', () => {
 test('exposes Chat reasoning component types from the public entry point', () => {
   const fileName = path.join(__dirname, 'chat-message-reasoning-component.ts');
   const source = `
-    import type {
-      ChatComponentContext,
-      ChatMessageBase,
-      ReasoningUIPart,
-    } from 'instantsearch-core';
+    import type { ChatComponentContext, ReasoningUIPart } from 'instantsearch-core';
+import type { ChatMessageBase } from 'instantsearch-core/internal';
     import type {
       ChatMessageProps,
       ChatMessageReasoningComponentProps,

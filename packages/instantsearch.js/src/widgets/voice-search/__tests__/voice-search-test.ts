@@ -23,7 +23,7 @@ import type { VoiceSearchProps } from '../../../components/VoiceSearch/VoiceSear
 import type { VoiceSearchWidgetParams } from '../voice-search';
 import type { AlgoliaSearchHelper as Helper } from 'algoliasearch-helper';
 import type { Widget } from 'instantsearch-core';
-import type { VoiceSearchHelper } from 'instantsearch-core';
+import type { VoiceSearchHelper } from 'instantsearch-core/internal';
 import type { VNode } from 'preact';
 
 const render = castToJestMock(preactRender);

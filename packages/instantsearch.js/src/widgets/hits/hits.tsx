@@ -3,7 +3,7 @@
 import {
   createDocumentationMessageGenerator,
   warning,
-} from 'instantsearch-core';
+} from 'instantsearch-core/internal';
 import { createHitsComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
