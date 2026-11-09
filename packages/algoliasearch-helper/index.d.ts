@@ -75,7 +75,7 @@ declare namespace algoliasearchHelper {
       event: 'result',
       cb: (res: { results: SearchResults; state: SearchParameters }) => void
     ): this;
-    on(event: 'error', cb: (res: { error: Error }) => void): this;
+    on(event: 'error', cb: (error: Error) => void): this;
     on(event: 'searchQueueEmpty', cb: () => void): this;
 
     /**
@@ -340,7 +340,7 @@ declare namespace algoliasearchHelper {
         };
       }) => void
     ): this;
-    on(event: 'error', cb: (res: { error: Error }) => void): this;
+    on(event: 'error', cb: (error: Error) => void): this;
 
     lastResults: SearchResults | null;
     lastRecommendResults: RecommendResults | null;
