@@ -3,7 +3,6 @@ import algoliasearchHelper from 'algoliasearch-helper';
 
 import {
   createDocumentationMessageGenerator,
-  createDocumentationLink,
   defer,
   hydrateRecommendCache,
   hydrateSearchClient,
@@ -152,17 +151,6 @@ export type InstantSearchOptions<
   insightsClient?: AlgoliaInsightsClient;
   future?: {
     /**
-     * Changes the way `dispose` is used in InstantSearch lifecycle.
-     *
-     * If `false` (by default), each widget unmounting will remove its state as well, even if there are multiple widgets reading that UI State.
-     *
-     * If `true`, each widget unmounting will only remove its own state if it's the last of its type. This allows for dynamically adding and removing widgets without losing their state.
-     *
-     * @default false
-     */
-    // @MAJOR: Remove legacy behaviour
-    preserveSharedStateOnUnmount?: boolean;
-    /**
      * Changes the way root levels of hierarchical facets have their count displayed.
      *
      * If `false` (by default), the count of the refined root level is updated to match the count of the actively refined parent level.
@@ -188,7 +176,6 @@ export type InstantSearchStatus = 'idle' | 'loading' | 'stalled' | 'error';
 export const INSTANTSEARCH_FUTURE_DEFAULTS: Required<
   InstantSearchOptions['future']
 > = {
-  preserveSharedStateOnUnmount: false,
   persistHierarchicalRootCount: false,
 };
 
@@ -307,19 +294,6 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
       throw new Error(
         withUsage('The `insightsClient` option should be a function.')
       );
-    }
-
-    if (__DEV__ && options.future?.preserveSharedStateOnUnmount === undefined) {
-      // eslint-disable-next-line no-console
-      console.info(`Starting from the next major version, InstantSearch will change how widgets state is preserved when they are removed. InstantSearch will keep the state of unmounted widgets to be usable by other widgets with the same attribute.
-
-We recommend setting \`future.preserveSharedStateOnUnmount\` to true to adopt this change today.
-To stay with the current behaviour and remove this warning, set the option to false.
-
-See documentation: ${createDocumentationLink({
-        name: 'instantsearch',
-      })}#widget-param-future
-          `);
     }
 
     this._initialOptions = options as unknown as InstantSearchOptions;

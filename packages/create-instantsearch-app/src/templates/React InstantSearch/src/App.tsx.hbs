@@ -31,8 +31,6 @@ const searchClient = algoliasearch(
   '{{apiKey}}'
 );
 
-const future = { preserveSharedStateOnUnmount: true };
-
 export function App() {
   return (
     <div>
@@ -49,7 +47,7 @@ export function App() {
       </header>
 
       <div className="container">
-        <InstantSearch searchClient={searchClient} indexName="{{indexName}}" future={future} {{#if flags.insights}}insights{{/if}}>
+        <InstantSearch searchClient={searchClient} indexName="{{indexName}}" {{#if flags.insights}}insights{{/if}}>
           <Configure hitsPerPage={8} />
           <div className="search-panel">
             <div className="search-panel__filters">
