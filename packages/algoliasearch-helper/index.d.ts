@@ -300,13 +300,11 @@ declare namespace algoliasearchHelper {
     setState(newState: PlainSearchParameters): this;
 
     overrideStateWithoutTriggeringChangeEvent: AlgoliaSearchHelper['setState'];
-    hasRefinements(facet: string): boolean;
     isExcluded: SearchParameters['isExcludeRefined'];
     hasTag: SearchParameters['isTagRefined'];
     getIndex(): string;
     getPage(): number;
     getTags(): string[];
-    getRefinements(facetName: string): any[];
     getNumericRefinement: SearchParameters['getNumericRefinement'];
     getHierarchicalFacetBreadcrumb: SearchParameters['getHierarchicalFacetBreadcrumb'];
     clearCache(): this;
@@ -1412,17 +1410,6 @@ declare namespace algoliasearchHelper {
      * @return The stats of the facet
      */
     getFacetStats(attribute: string): any;
-
-    /**
-     * Returns all refinements for all filters + tags. It also provides
-     * additional information: count and exhaustiveness for each filter.
-     *
-     * See the [refinement type](#Refinement) for an exhaustive view of the available
-     * data.
-     *
-     * @return all the refinements
-     */
-    getRefinements(): SearchResults.Refinement[];
 
     /** Ordered array of per-feed results, present when results come from a multifeed composition response. */
     feeds?: CompositionSearchResults[];
