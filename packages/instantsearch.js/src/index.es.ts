@@ -1,14 +1,3 @@
-import { deprecate } from 'instantsearch-core';
-
-import {
-  snippet,
-  reverseSnippet,
-  highlight,
-  reverseHighlight,
-  insights,
-  getInsightsAnonymousUserToken,
-} from './helpers';
-import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache/index';
 import InstantSearch from './lib/InstantSearch';
 import version from './lib/version';
 
@@ -20,28 +9,6 @@ type InstantSearchModule = {
     options: InstantSearchOptions<Expand<UiState & TUiState>, TRouteState>
   ): InstantSearch<Expand<UiState & TUiState>, TRouteState>;
   version: string;
-
-  // @major remove these in favour of the exports
-  /** @deprecated import { createInfiniteHitsSessionStorageCache } from 'instantsearch-core' */
-  createInfiniteHitsSessionStorageCache: typeof createInfiniteHitsSessionStorageCache;
-  /** @deprecated import { highlight } from 'instantsearch.js/es/helpers' */
-  highlight: typeof highlight;
-  /** @deprecated import { reverseHighlight } from 'instantsearch.js/es/helpers' */
-  reverseHighlight: typeof reverseHighlight;
-  /** @deprecated import { snippet } from 'instantsearch.js/es/helpers' */
-  snippet: typeof snippet;
-  /** @deprecated import { reverseSnippet } from 'instantsearch.js/es/helpers' */
-  reverseSnippet: typeof reverseSnippet;
-  /**
-   * @deprecated use createInsightsMiddleware
-   * @link https://www.algolia.com/doc/api-reference/widgets/insights/js/
-   */
-  insights: typeof insights;
-  /**
-   * @deprecated use createInsightsMiddleware
-   * @link https://www.algolia.com/doc/api-reference/widgets/insights/js/
-   */
-  getInsightsAnonymousUserToken: typeof getInsightsAnonymousUserToken;
 };
 
 /**
@@ -63,29 +30,6 @@ const instantsearch: InstantSearchModule = (options) =>
   new InstantSearch(options);
 
 instantsearch.version = version;
-
-instantsearch.createInfiniteHitsSessionStorageCache = deprecate(
-  createInfiniteHitsSessionStorageCache,
-  "import { createInfiniteHitsSessionStorageCache } from 'instantsearch-core'"
-);
-instantsearch.highlight = deprecate(
-  highlight,
-  "import { highlight } from 'instantsearch.js/es/helpers'"
-);
-instantsearch.reverseHighlight = deprecate(
-  reverseHighlight,
-  "import { reverseHighlight } from 'instantsearch.js/es/helpers'"
-);
-instantsearch.snippet = deprecate(
-  snippet,
-  "import { snippet } from 'instantsearch.js/es/helpers'"
-);
-instantsearch.reverseSnippet = deprecate(
-  reverseSnippet,
-  "import { reverseSnippet } from 'instantsearch.js/es/helpers'"
-);
-instantsearch.insights = insights;
-instantsearch.getInsightsAnonymousUserToken = getInsightsAnonymousUserToken;
 
 Object.defineProperty(instantsearch, 'widgets', {
   get() {
