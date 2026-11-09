@@ -13,6 +13,7 @@ import userEvent from '@testing-library/user-event';
 import { createInsightsMiddleware } from 'instantsearch-core';
 import { Fragment, h } from 'preact';
 
+import { insights } from '../../../helpers';
 import instantsearch from '../../../index.es';
 import configure from '../../configure/configure';
 import searchBox from '../../search-box/search-box';
@@ -1299,7 +1300,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
             container,
             templates: {
               item: (item) => `
-                <button type='button' ${instantsearch.insights(
+                <button type='button' ${insights(
                   'clickedObjectIDsAfterSearch',
                   {
                     objectIDs: [item.objectID],
