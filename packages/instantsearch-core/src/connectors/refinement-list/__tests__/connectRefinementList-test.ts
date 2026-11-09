@@ -3,6 +3,8 @@
  */
 
 import {
+  createMultiSearchResponse,
+  createSFFVResponse,
   createSingleSearchResponse,
   createSearchClient,
 } from '@instantsearch/mocks';
@@ -1601,26 +1603,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
       const helper = jsHelper(
         createSearchClient({
-          // @ts-ignore v5 does not have this method, but it's easier to have it here. In a future version we can replace this method and its usages with search({ type: 'facet })
-          searchForFacetValues() {
-            return Promise.resolve([
-              {
-                exhaustiveFacetsCount: true,
-                facetHits: [
-                  {
-                    count: 33,
-                    highlighted: `Salvador ${TAG_PLACEHOLDER.highlightPreTag}Da${TAG_PLACEHOLDER.highlightPostTag}li`,
-                    value: 'Salvador Dali',
-                  },
-                  {
-                    count: 9,
-                    highlighted: `${TAG_PLACEHOLDER.highlightPreTag}Da${TAG_PLACEHOLDER.highlightPostTag}vidoff`,
-                    value: 'Davidoff',
-                  },
-                ],
-                processingTimeMS: 1,
-              },
-            ]);
+          search() {
+            return Promise.resolve(
+              createMultiSearchResponse(
+                createSFFVResponse({
+                  facetHits: [
+                    {
+                      count: 33,
+                      highlighted: `Salvador ${TAG_PLACEHOLDER.highlightPreTag}Da${TAG_PLACEHOLDER.highlightPostTag}li`,
+                      value: 'Salvador Dali',
+                    },
+                    {
+                      count: 9,
+                      highlighted: `${TAG_PLACEHOLDER.highlightPreTag}Da${TAG_PLACEHOLDER.highlightPostTag}vidoff`,
+                      value: 'Davidoff',
+                    },
+                  ],
+                  processingTimeMS: 1,
+                })
+              )
+            );
           },
         }),
         '',
@@ -1720,15 +1722,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
       const helper = jsHelper(
         createSearchClient({
-          // @ts-ignore v5 does not have this method, but it's easier to have it here. In a future version we can replace this method and its usages with search({ type: 'facet })
-          searchForFacetValues() {
-            return Promise.resolve([
-              {
-                exhaustiveFacetsCount: true,
-                facetHits: [],
-                processingTimeMS: 1,
-              },
-            ]);
+          search() {
+            return Promise.resolve(
+              createMultiSearchResponse(
+                createSFFVResponse({
+                  facetHits: [],
+                  processingTimeMS: 1,
+                })
+              )
+            );
           },
         }),
         '',
@@ -1802,26 +1804,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
       const helper = jsHelper(
         createSearchClient({
-          // @ts-ignore v5 does not have this method, but it's easier to have it here. In a future version we can replace this method and its usages with search({ type: 'facet })
-          searchForFacetValues() {
-            return Promise.resolve([
-              {
-                exhaustiveFacetsCount: true,
-                facetHits: [
-                  {
-                    count: 33,
-                    highlighted: 'will be transformed',
-                    value: 'will be transformed',
-                  },
-                  {
-                    count: 9,
-                    highlighted: 'will be transformed',
-                    value: 'will be transformed',
-                  },
-                ],
-                processingTimeMS: 1,
-              },
-            ]);
+          search() {
+            return Promise.resolve(
+              createMultiSearchResponse(
+                createSFFVResponse({
+                  facetHits: [
+                    {
+                      count: 33,
+                      highlighted: 'will be transformed',
+                      value: 'will be transformed',
+                    },
+                    {
+                      count: 9,
+                      highlighted: 'will be transformed',
+                      value: 'will be transformed',
+                    },
+                  ],
+                  processingTimeMS: 1,
+                })
+              )
+            );
           },
         }),
         '',
