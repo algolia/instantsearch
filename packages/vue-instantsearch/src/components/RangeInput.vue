@@ -121,17 +121,7 @@ export default {
       return 1 / Math.pow(10, this.precision);
     },
     values() {
-      const [minValue, maxValue] = this.state.start;
-      const { min: minRange, max: maxRange } = this.state.range;
-
-      return {
-        min:
-          minValue !== -Infinity && minValue !== minRange
-            ? minValue
-            : undefined,
-        max:
-          maxValue !== Infinity && maxValue !== maxRange ? maxValue : undefined,
-      };
+      return this.state.currentRefinement;
     },
   },
   methods: {
@@ -143,7 +133,7 @@ export default {
       }
     },
     refine({ min, max }) {
-      this.state.refine([min, max]);
+      this.state.refine({ min, max });
     },
   },
 };

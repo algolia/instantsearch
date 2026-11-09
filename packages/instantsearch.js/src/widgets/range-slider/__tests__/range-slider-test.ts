@@ -36,7 +36,7 @@ jest.mock('preact', () => {
 type SliderProps = {
   max: number;
   min: number;
-  values: [number, number];
+  values: { min: number; max: number };
 };
 
 function createFacetStatsResults({
@@ -387,7 +387,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
           uiState: {},
         });
         helper.setState(state0);
-        refine([stats!.min + 1, stats!.max]);
+        refine({ min: stats!.min + 1, max: stats!.max });
         const state1 = helper.state;
 
         expect(helper.search).toHaveBeenCalledTimes(1);
@@ -409,7 +409,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
           uiState: {},
         });
         helper.setState(state0);
-        refine([stats!.min, stats!.max - 1]);
+        refine({ min: stats!.min, max: stats!.max - 1 });
         const state1 = helper.state;
 
         expect(helper.search).toHaveBeenCalledTimes(1);
@@ -429,7 +429,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
         );
 
         const state0 = helper.state;
-        refine([stats!.min + 1, stats!.max - 1]);
+        refine({ min: stats!.min + 1, max: stats!.max - 1 });
         const state1 = helper.state;
 
         expect(helper.search).toHaveBeenCalledTimes(1);
@@ -457,7 +457,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
 
         const firstRender = render.mock.calls[0][0] as VNode<SliderProps>;
 
-        expect((firstRender.props as SliderProps).values[0]).toBe(5000);
+        expect((firstRender.props as SliderProps).values.min).toBe(5000);
       });
 
       it("expect to clamp the max value to the min range when it's lower than range", () => {
@@ -477,7 +477,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
 
         const firstRender = render.mock.calls[0][0] as VNode<SliderProps>;
 
-        expect((firstRender.props as SliderProps).values[1]).toBe(1);
+        expect((firstRender.props as SliderProps).values.max).toBe(1);
       });
     });
   });

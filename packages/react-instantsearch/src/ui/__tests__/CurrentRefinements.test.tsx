@@ -52,7 +52,7 @@ describe('CurrentRefinements', () => {
             ],
           },
         ]}
-        hasRefinements={true}
+        canRefine={true}
       />
     );
 
