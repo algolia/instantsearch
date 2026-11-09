@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
+const semver = require('semver');
 const walkSync = require('walk-sync');
 
 const { getEarliestLibraryVersion } = require('../src/utils');
@@ -44,10 +45,14 @@ describe('Templates', () => {
           template: templateName,
           // We fetch the earliest supported version in order to not change
           // the test output every time we release a new version of a library.
-          libraryVersion: await getEarliestLibraryVersion({
-            libraryName: templateConfig.libraryName,
-            supportedVersion: templateConfig.supportedVersion,
-          }),
+          // When no published version satisfies the range yet (a template
+          // targeting an unreleased major), fall back to the range's minimum:
+          // it is what this resolves to once that version is published.
+          libraryVersion:
+            (await getEarliestLibraryVersion({
+              libraryName: templateConfig.libraryName,
+              supportedVersion: templateConfig.supportedVersion,
+            })) || semver.minVersion(templateConfig.supportedVersion).version,
           appId: 'appId',
           apiKey: 'apiKey',
           indexName: 'indexName',
