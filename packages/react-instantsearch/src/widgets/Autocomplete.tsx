@@ -1102,6 +1102,9 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
               })
             ) {
               setQuery('');
+              // The chat is the destination, whatever the `submitTarget`.
+              setIsOpen(false);
+              setIsModalOpen(false);
             }
             return;
           }

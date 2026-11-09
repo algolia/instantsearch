@@ -2032,6 +2032,66 @@ export function createOptionsTests(
           )
         ).toEqual([]);
       });
+
+      test('closes the panel when a prompt suggestion opens the chat', async () => {
+        // Keeps the chat's agent request pending.
+        global.fetch = jest.fn(
+          () => new Promise<Response>(() => {})
+        ) as unknown as typeof fetch;
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'prompt_suggestions',
+              hits: [{ objectID: '1', prompt: 'What is the best product?' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'products',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              showPromptSuggestions: { indexName: 'prompt_suggestions' },
+              submitTarget: 'panel',
+              renderChat: true,
+            },
+            react: {
+              showPromptSuggestions: { indexName: 'prompt_suggestions' },
+              submitTarget: 'panel',
+              renderChat: true,
+            },
+            vue: {
+              showPromptSuggestions: { indexName: 'prompt_suggestions' },
+              submitTarget: 'panel',
+              renderChat: true,
+            },
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        await act(async () => {
+          userEvent.click(screen.getByRole('combobox', { name: /submit/i }));
+          await wait(0);
+        });
+
+        await act(async () => {
+          screen.getByText('What is the best product?').click();
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-Chat-container--open')
+        ).toBeInTheDocument();
+        expect(
+          screen.getByRole('combobox', { name: /submit/i })
+        ).toHaveAttribute('aria-expanded', 'false');
+      });
     });
 
     describe('detached mode', () => {
@@ -2198,6 +2258,84 @@ export function createOptionsTests(
           );
         }
       );
+
+      test('closes the modal when a prompt suggestion opens the chat with `submitTarget: panel`', async () => {
+        mockMatchMedia(true);
+        // Keeps the chat's agent request pending.
+        global.fetch = jest.fn(
+          () => new Promise<Response>(() => {})
+        ) as unknown as typeof fetch;
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'prompt_suggestions',
+              hits: [{ objectID: '1', prompt: 'What is the best product?' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'products',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              detachedMediaQuery,
+              showPromptSuggestions: { indexName: 'prompt_suggestions' },
+              submitTarget: 'panel',
+              renderChat: true,
+            },
+            react: {
+              detachedMediaQuery,
+              showPromptSuggestions: { indexName: 'prompt_suggestions' },
+              submitTarget: 'panel',
+              renderChat: true,
+            },
+            vue: {
+              detachedMediaQuery,
+              showPromptSuggestions: { indexName: 'prompt_suggestions' },
+              submitTarget: 'panel',
+              renderChat: true,
+            },
+          },
+        });
+
+        await act(async () => {
+          await wait(150);
+        });
+
+        // For lazy-activation flavors (React), the detached UI only renders
+        // after the input is focused.
+        const preActivationInput = screen.queryByRole('combobox', {
+          name: /submit/i,
+        });
+        if (preActivationInput) {
+          await act(async () => {
+            userEvent.click(preActivationInput);
+            await wait(0);
+          });
+        }
+
+        await act(async () => {
+          userEvent.click(
+            document.querySelector('.ais-AutocompleteDetachedSearchButton')!
+          );
+          await wait(150);
+        });
+
+        await act(async () => {
+          screen.getByText('What is the best product?').click();
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-Chat-container--open')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-AutocompleteDetachedOverlay')
+        ).toBeNull();
+      });
 
       test('renders detached search button and toggles overlay', async () => {
         mockMatchMedia(true);

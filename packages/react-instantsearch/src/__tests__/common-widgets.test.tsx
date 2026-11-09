@@ -441,9 +441,16 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
     );
   },
   createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
+    const { renderChat = false, ...autocompleteWidgetParams } = widgetParams;
+
     render(
       <InstantSearch {...instantSearchOptions}>
-        <Autocomplete {...widgetParams} />
+        <Autocomplete {...autocompleteWidgetParams} />
+        {/*
+          A dedicated id: the `agentId` the chat suites use keys persisted
+          messages in `sessionStorage` that leak across tests in this file.
+        */}
+        {renderChat && <Chat agentId="autocompleteChatAgentId" />}
         <GlobalErrorSwallower />
       </InstantSearch>
     );

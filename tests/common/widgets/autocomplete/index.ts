@@ -13,14 +13,22 @@ import type { AutocompleteWidget } from 'instantsearch.js/src/widgets/autocomple
 import type { AutocompleteProps } from 'react-instantsearch';
 
 type JSBaseWidgetParams = Parameters<AutocompleteWidget>[0];
+/**
+ * Whether the setup also mounts a `chat` widget on the index, for prompt
+ * suggestions to open. `false` by default.
+ */
+type ChatPresenceParams = { renderChat?: boolean };
+
 export type JSAutocompleteWidgetParams = Omit<JSBaseWidgetParams, 'container'> &
-  AutocompleteConnectorParams;
-export type ReactAutocompleteWidgetParams = AutocompleteProps<any>;
+  AutocompleteConnectorParams &
+  ChatPresenceParams;
+export type ReactAutocompleteWidgetParams = AutocompleteProps<any> &
+  ChatPresenceParams;
 
 type AutocompleteWidgetParams = {
   javascript: JSAutocompleteWidgetParams;
   react: ReactAutocompleteWidgetParams;
-  vue: {
+  vue: ChatPresenceParams & {
     requiresSearch?: boolean;
     indices?: Array<Record<string, unknown>>;
     feeds?: Array<Record<string, unknown>>;
