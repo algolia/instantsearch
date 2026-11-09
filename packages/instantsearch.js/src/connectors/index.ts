@@ -170,7 +170,6 @@ export type {
   Range,
 } from 'instantsearch-core';
 export type {
-  RangeBoundaries,
   RangeConnector,
   RangeConnectorParams,
   RangeMax,

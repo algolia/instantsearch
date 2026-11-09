@@ -181,7 +181,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         toggleRefineOnMapMove: expect.any(Function),
         isRefineOnMapMove: expect.any(Function),
         setMapMoveSinceLastRefine: expect.any(Function),
-        hasMapMoveSinceLastRefine: expect.any(Function),
+        hasMapMovedSinceLastRefine: expect.any(Function),
         widgetParams: {},
         instantSearchInstance,
       },
@@ -189,7 +189,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     );
 
     expect(lastRenderArgs(render).isRefineOnMapMove()).toBe(true);
-    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+    expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(false);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
 
     widget.render(
@@ -227,7 +227,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     );
 
     expect(lastRenderArgs(render).isRefineOnMapMove()).toBe(true);
-    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+    expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(false);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
   });
 
@@ -501,13 +501,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     );
 
     expect(render).toHaveBeenCalledTimes(3);
-    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+    expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(false);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
     lastRenderArgs(render).setMapMoveSinceLastRefine();
 
     expect(render).toHaveBeenCalledTimes(4);
-    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
+    expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(true);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
     helper.setQueryParameter('aroundLatLng', '14,16');
@@ -520,7 +520,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     );
 
     expect(render).toHaveBeenCalledTimes(5);
-    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+    expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(false);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
   });
 
@@ -579,13 +579,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     );
 
     expect(render).toHaveBeenCalledTimes(3);
-    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+    expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(false);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
     lastRenderArgs(render).setMapMoveSinceLastRefine();
 
     expect(render).toHaveBeenCalledTimes(4);
-    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
+    expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(true);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
     helper.setQueryParameter('aroundLatLng', '10,12');
@@ -598,7 +598,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     );
 
     expect(render).toHaveBeenCalledTimes(5);
-    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
+    expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(true);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
   });
 
@@ -658,13 +658,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     );
 
     expect(render).toHaveBeenCalledTimes(3);
-    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+    expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(false);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
     lastRenderArgs(render).setMapMoveSinceLastRefine();
 
     expect(render).toHaveBeenCalledTimes(4);
-    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
+    expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(true);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
     helper.setQueryParameter('insideBoundingBox', undefined);
@@ -677,7 +677,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     );
 
     expect(render).toHaveBeenCalledTimes(5);
-    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+    expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(false);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
   });
 
@@ -737,13 +737,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     );
 
     expect(render).toHaveBeenCalledTimes(3);
-    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+    expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(false);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
     lastRenderArgs(render).setMapMoveSinceLastRefine();
 
     expect(render).toHaveBeenCalledTimes(4);
-    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
+    expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(true);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
     // @ts-ignore
@@ -757,7 +757,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     );
 
     expect(render).toHaveBeenCalledTimes(5);
-    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
+    expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(true);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
   });
 
@@ -943,7 +943,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
 
       expect(render).toHaveBeenCalledTimes(1);
-      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
       expect(helper.state.insideBoundingBox).toBe(undefined);
       expect(helper.search).not.toHaveBeenCalled();
@@ -958,7 +958,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
 
       expect(render).toHaveBeenCalledTimes(2);
-      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
       expect(helper.state.insideBoundingBox).toEqual('12,10,40,42');
       expect(helper.search).toHaveBeenCalledTimes(1);
@@ -1004,7 +1004,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
 
       expect(render).toHaveBeenCalledTimes(2);
-      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
       expect(helper.state.insideBoundingBox).toBe(undefined);
       expect(helper.search).not.toHaveBeenCalled();
@@ -1019,7 +1019,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
 
       expect(render).toHaveBeenCalledTimes(3);
-      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
       expect(helper.state.insideBoundingBox).toEqual('12,10,40,42');
       expect(helper.search).toHaveBeenCalledTimes(1);
@@ -1060,7 +1060,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
 
       expect(render).toHaveBeenCalledTimes(1);
-      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
       expect(helper.state.insideBoundingBox).toBe(undefined);
       expect(helper.search).not.toHaveBeenCalled();
@@ -1075,7 +1075,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
 
       expect(render).toHaveBeenCalledTimes(2);
-      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
       expect(helper.state.insideBoundingBox).toEqual('12,10,40,42');
       expect(helper.search).toHaveBeenCalledTimes(1);
@@ -1090,7 +1090,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
 
       expect(render).toHaveBeenCalledTimes(3);
-      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
       expect(helper.state.insideBoundingBox).toBe(undefined);
       expect(helper.search).toHaveBeenCalledTimes(2);
@@ -1136,7 +1136,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
 
       expect(render).toHaveBeenCalledTimes(2);
-      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
       expect(helper.state.insideBoundingBox).toBe(undefined);
       expect(helper.search).not.toHaveBeenCalled();
@@ -1151,7 +1151,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
 
       expect(render).toHaveBeenCalledTimes(3);
-      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
       expect(helper.state.insideBoundingBox).toEqual('12,10,40,42');
       expect(helper.search).toHaveBeenCalledTimes(1);
@@ -1166,7 +1166,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
 
       expect(render).toHaveBeenCalledTimes(4);
-      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
       expect(helper.state.insideBoundingBox).toBe(undefined);
       expect(helper.search).toHaveBeenCalledTimes(2);
@@ -1267,12 +1267,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       widget.init(createInitOptions());
 
       expect(render).toHaveBeenCalledTimes(1);
-      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(false);
 
       lastRenderArgs(render).setMapMoveSinceLastRefine();
 
       expect(render).toHaveBeenCalledTimes(1);
-      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
+      expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(true);
 
       widget.render(
         createRenderOptions({
@@ -1285,7 +1285,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
 
       expect(render).toHaveBeenCalledTimes(2);
-      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
+      expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(true);
       expect(firstRenderArgs(render).setMapMoveSinceLastRefine).toBe(
         lastRenderArgs(render).setMapMoveSinceLastRefine
       );
@@ -1323,12 +1323,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
 
       expect(render).toHaveBeenCalledTimes(2);
-      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(false);
 
       lastRenderArgs(render).setMapMoveSinceLastRefine();
 
       expect(render).toHaveBeenCalledTimes(3);
-      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
+      expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(true);
       expect(firstRenderArgs(render).setMapMoveSinceLastRefine).toBe(
         lastRenderArgs(render).setMapMoveSinceLastRefine
       );
@@ -1366,17 +1366,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
 
       expect(render).toHaveBeenCalledTimes(2);
-      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(false);
 
       lastRenderArgs(render).setMapMoveSinceLastRefine();
 
       expect(render).toHaveBeenCalledTimes(3);
-      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
+      expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(true);
 
       lastRenderArgs(render).setMapMoveSinceLastRefine();
 
       expect(render).toHaveBeenCalledTimes(3);
-      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
+      expect(lastRenderArgs(render).hasMapMovedSinceLastRefine()).toBe(true);
       expect(firstRenderArgs(render).setMapMoveSinceLastRefine).toBe(
         lastRenderArgs(render).setMapMoveSinceLastRefine
       );
@@ -1598,7 +1598,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         currentRefinement: undefined,
         items: [],
         clearMapRefinement: expect.any(Function),
-        hasMapMoveSinceLastRefine: expect.any(Function),
+        hasMapMovedSinceLastRefine: expect.any(Function),
         isRefineOnMapMove: expect.any(Function),
         isRefinedWithMap: expect.any(Function),
         refine: expect.any(Function),
@@ -1635,7 +1635,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         items: [],
         refine: expect.any(Function),
         clearMapRefinement: expect.any(Function),
-        hasMapMoveSinceLastRefine: expect.any(Function),
+        hasMapMovedSinceLastRefine: expect.any(Function),
         isRefineOnMapMove: expect.any(Function),
         isRefinedWithMap: expect.any(Function),
         setMapMoveSinceLastRefine: expect.any(Function),
@@ -1663,7 +1663,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           currentRefinement: undefined,
           items: [],
           clearMapRefinement: expect.any(Function),
-          hasMapMoveSinceLastRefine: expect.any(Function),
+          hasMapMovedSinceLastRefine: expect.any(Function),
           isRefineOnMapMove: expect.any(Function),
           isRefinedWithMap: expect.any(Function),
           refine: expect.any(Function),

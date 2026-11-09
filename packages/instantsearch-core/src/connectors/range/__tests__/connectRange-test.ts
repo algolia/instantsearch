@@ -137,10 +137,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const { range, start, widgetParams } =
+      const { range, currentRefinement, widgetParams } =
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
       expect(range).toEqual({ min: 0, max: 0 });
-      expect(start).toEqual([-Infinity, Infinity]);
+      expect(currentRefinement).toEqual({ min: undefined, max: undefined });
       expect(widgetParams).toEqual({
         attribute,
         precision: 0,
@@ -167,10 +167,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       expect(isFirstRendering).toBe(false);
 
       // should provide good values for the first rendering
-      const { range, start, widgetParams } =
+      const { range, currentRefinement, widgetParams } =
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
       expect(range).toEqual({ min: 10, max: 30 });
-      expect(start).toEqual([-Infinity, Infinity]);
+      expect(currentRefinement).toEqual({ min: undefined, max: undefined });
       expect(widgetParams).toEqual({
         attribute,
         precision: 0,
@@ -260,7 +260,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const renderOptions =
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine } = renderOptions;
-      refine([10, 30]);
+      refine({ min: 10, max: 30 });
       expect(helper.getNumericRefinement('price', '>=')).toEqual([10]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([30]);
       expect(helper.search).toHaveBeenCalledTimes(1);
@@ -286,7 +286,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const renderOptions =
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine } = renderOptions;
-      refine([23, 27]);
+      refine({ min: 23, max: 27 });
       expect(helper.getNumericRefinement('price', '>=')).toEqual([23]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([27]);
       expect(helper.search).toHaveBeenCalledTimes(2);
@@ -317,13 +317,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const renderOptions =
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine } = renderOptions;
-      refine([10, 30]);
+      refine({ min: 10, max: 30 });
 
       expect(helper.getNumericRefinement('price', '>=')).toEqual([10]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([30]);
       expect(helper.search).toHaveBeenCalledTimes(1);
 
-      refine([0, undefined]);
+      refine({ min: 0, max: undefined });
       expect(helper.getNumericRefinement('price', '>=')).toEqual([0]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([500]);
     }
@@ -361,13 +361,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const renderOptions =
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine } = renderOptions;
-      refine([10, 30]);
+      refine({ min: 10, max: 30 });
 
       expect(helper.getNumericRefinement('price', '>=')).toEqual([10]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([30]);
       expect(helper.search).toHaveBeenCalledTimes(1);
 
-      refine([0, undefined]);
+      refine({ min: 0, max: undefined });
       expect(helper.getNumericRefinement('price', '>=')).toEqual([0]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([500]);
     }
@@ -401,17 +401,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine } = renderOptions;
 
-      refine([undefined, 100]);
+      refine({ min: undefined, max: 100 });
       expect(helper.getNumericRefinement('price', '>=')).toEqual(undefined);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([100]);
       expect(helper.search).toHaveBeenCalledTimes(1);
 
-      refine([0, undefined]);
+      refine({ min: 0, max: undefined });
       expect(helper.getNumericRefinement('price', '>=')).toEqual([0]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([]);
       expect(helper.search).toHaveBeenCalledTimes(2);
 
-      refine([0, 100]);
+      refine({ min: 0, max: 100 });
       expect(helper.getNumericRefinement('price', '>=')).toEqual([0]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([100]);
       expect(helper.search).toHaveBeenCalledTimes(3);
@@ -585,7 +585,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
   });
 
-  describe('start', () => {
+  describe('currentRefinement', () => {
     const attribute = 'price';
     const rendering = () => {};
     const createHelper = () => jsHelper(createSearchClient(), '');
@@ -598,7 +598,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         widget.getWidgetSearchParameters(helper.state, { uiState: {} })
       );
 
-      const { start } = widget.getWidgetRenderState(
+      const { currentRefinement } = widget.getWidgetRenderState(
         createRenderOptions({
           results: createFacetStatsResults({
             helper,
@@ -609,7 +609,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      expect(start).toEqual([-Infinity, Infinity]);
+      expect(currentRefinement).toEqual({ min: undefined, max: undefined });
     });
 
     it('expect to return refinement from helper', () => {
@@ -622,7 +622,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper.addNumericRefinement(attribute, '>=', 10);
       helper.addNumericRefinement(attribute, '<=', 100);
 
-      const { start } = widget.getWidgetRenderState(
+      const { currentRefinement } = widget.getWidgetRenderState(
         createRenderOptions({
           helper,
           results: createFacetStatsResults({
@@ -634,7 +634,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      expect(start).toEqual([10, 100]);
+      expect(currentRefinement).toEqual({ min: 10, max: 100 });
     });
 
     it('expect to return float refinement values', () => {
@@ -647,7 +647,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper.addNumericRefinement(attribute, '>=', 10.9);
       helper.addNumericRefinement(attribute, '<=', 99.1);
 
-      const { start } = widget.getWidgetRenderState(
+      const { currentRefinement } = widget.getWidgetRenderState(
         createRenderOptions({
           helper,
           results: createFacetStatsResults({
@@ -659,7 +659,115 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      expect(start).toEqual([10.9, 99.1]);
+      expect(currentRefinement).toEqual({ min: 10.9, max: 99.1 });
+    });
+
+    it('expect to return undefined values when refinement is equal to range', () => {
+      const widget = connectRange(rendering)({ attribute });
+      const helper = createHelper();
+
+      helper.setState(
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
+      );
+      helper.addNumericRefinement(attribute, '>=', 1);
+      helper.addNumericRefinement(attribute, '<=', 4999);
+
+      const { currentRefinement } = widget.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          results: createFacetStatsResults({
+            helper,
+            attribute,
+            min: 1,
+            max: 4999,
+          }),
+        })
+      );
+
+      expect(currentRefinement).toEqual({ min: undefined, max: undefined });
+    });
+
+    it('expect to return undefined values when refinement is equal to bounds', () => {
+      const widget = connectRange(rendering)({ attribute, min: 0, max: 500 });
+      const helper = createHelper();
+
+      helper.setState(
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
+      );
+
+      const { currentRefinement } = widget.getWidgetRenderState(
+        createInitOptions({ helper, state: helper.state })
+      );
+
+      expect(currentRefinement).toEqual({ min: undefined, max: undefined });
+    });
+
+    it('expect to clamp min refinement value to max range', () => {
+      const widget = connectRange(rendering)({ attribute });
+      const helper = createHelper();
+
+      helper.setState(
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
+      );
+      helper.addNumericRefinement(attribute, '>=', 5000);
+      helper.addNumericRefinement(attribute, '<=', 6000);
+
+      const { currentRefinement } = widget.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          results: createFacetStatsResults({
+            helper,
+            attribute,
+            min: 1,
+            max: 4999,
+          }),
+        })
+      );
+
+      expect(currentRefinement.min).toBe(4999);
+    });
+
+    it('expect to clamp max refinement value to min range', () => {
+      const widget = connectRange(rendering)({ attribute });
+      const helper = createHelper();
+
+      helper.setState(
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
+      );
+      helper.addNumericRefinement(attribute, '>=', -50);
+      helper.addNumericRefinement(attribute, '<=', 0);
+
+      const { currentRefinement } = widget.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          results: createFacetStatsResults({
+            helper,
+            attribute,
+            min: 1,
+            max: 4999,
+          }),
+        })
+      );
+
+      expect(currentRefinement.max).toBe(1);
+    });
+
+    it('expect not to clamp refinement before the range is known', () => {
+      const widget = connectRange(rendering)({ attribute });
+      const helper = createHelper();
+
+      helper.setState(
+        widget.getWidgetSearchParameters(helper.state, {
+          uiState: { range: { [attribute]: '100:200' } },
+        })
+      );
+
+      const { range, currentRefinement } = widget.getWidgetRenderState(
+        createInitOptions({ helper, state: helper.state })
+      );
+
+      expect(range).toEqual({ min: 0, max: 0 });
+      expect(currentRefinement).toEqual({ min: 100, max: 200 });
     });
   });
 
@@ -684,7 +792,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         createInitOptions({ helper })
       );
 
-      refine([10, 490]);
+      refine({ min: 10, max: 490 });
 
       expect(helper.state.page).toBe(0);
     });
@@ -699,7 +807,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         createInitOptions({ helper })
       );
 
-      refine([10, 490]);
+      refine({ min: 10, max: 490 });
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
@@ -729,7 +837,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      refine([10, 490]);
+      refine({ min: 10, max: 490 });
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
@@ -760,7 +868,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       );
 
       // @ts-expect-error
-      refine(['10', '490']);
+      refine({ min: '10', max: '490' });
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
@@ -789,7 +897,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       );
 
       // @ts-expect-error
-      refine(['10.50', '490.50']);
+      refine({ min: '10.50', max: '490.50' });
 
       // min is rounded down, max rounded up
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
@@ -818,7 +926,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      refine([10, 490]);
+      refine({ min: 10, max: 490 });
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
@@ -849,7 +957,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      refine([10, 490]);
+      refine({ min: 10, max: 490 });
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
@@ -885,7 +993,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      refine([undefined, 490]);
+      refine({ min: undefined, max: 490 });
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
@@ -918,7 +1026,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      refine([10, undefined]);
+      refine({ min: 10, max: undefined });
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([]);
@@ -952,7 +1060,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       );
 
       // @ts-expect-error
-      refine(['', 490]);
+      refine({ min: '', max: 490 });
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
@@ -986,7 +1094,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       );
 
       // @ts-expect-error
-      refine([10, '']);
+      refine({ min: 10, max: '' });
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([]);
@@ -1018,7 +1126,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      refine([0, 490]);
+      refine({ min: 0, max: 490 });
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
@@ -1050,7 +1158,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      refine([10, 500]);
+      refine({ min: 10, max: 500 });
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([]);
@@ -1085,7 +1193,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      refine([undefined, 490]);
+      refine({ min: undefined, max: 490 });
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
@@ -1118,7 +1226,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      refine([10, undefined]);
+      refine({ min: 10, max: undefined });
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([250]);
@@ -1146,7 +1254,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      refine([0, 490]);
+      refine({ min: 0, max: 490 });
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual(undefined);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual(undefined);
@@ -1174,7 +1282,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      refine([10, 500]);
+      refine({ min: 10, max: 500 });
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual(undefined);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual(undefined);
@@ -1202,7 +1310,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      refine([undefined, undefined]);
+      refine({ min: undefined, max: undefined });
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual(undefined);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual(undefined);
@@ -1233,7 +1341,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         })
       );
 
-      refine([10, 490]);
+      refine({ min: 10, max: 490 });
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
@@ -1261,7 +1369,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       );
 
       // @ts-expect-error
-      refine(['ADASA', 'FFDSFQS']);
+      refine({ min: 'ADASA', max: 'FFDSFQS' });
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual(undefined);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual(undefined);
@@ -1333,7 +1441,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const renderOptions = rendering.mock.calls[0][0];
       const { refine } = renderOptions;
 
-      refine([100, 1000]);
+      refine({ min: 100, max: 1000 });
 
       expect(helper.state).toEqual(
         new SearchParameters({
@@ -1629,7 +1737,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
           canRefine: false,
           refine: expect.any(Function),
           sendEvent: expect.any(Function),
-          start: [0, 1000],
+          currentRefinement: { min: 0, max: 1000 },
           widgetParams: {
             attribute: 'price',
             precision: 0,
@@ -1664,7 +1772,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
           canRefine: true,
           refine: expect.any(Function),
           sendEvent: expect.any(Function),
-          start: [0, 1000],
+          currentRefinement: { min: 0, max: 1000 },
           widgetParams: {
             attribute: 'price',
             precision: 0,
@@ -1708,7 +1816,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         canRefine: false,
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
-        start: [0, 1000],
+        currentRefinement: { min: 0, max: 1000 },
         widgetParams: {
           attribute: 'price',
           precision: 0,
@@ -1740,7 +1848,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         canRefine: true,
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
-        start: [0, 1000],
+        currentRefinement: { min: 0, max: 1000 },
         widgetParams: {
           attribute: 'price',
           precision: 0,
@@ -1784,7 +1892,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         canRefine: false,
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
-        start: [-Infinity, Infinity],
+        currentRefinement: { min: undefined, max: undefined },
         widgetParams: {
           attribute: 'price',
           precision: 0,
@@ -2215,7 +2323,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       expect(renderer).toHaveBeenCalledWith(
         expect.objectContaining({
-          start: [100, 200],
+          currentRefinement: { min: 100, max: 200 },
         }),
         true
       );
@@ -2251,7 +2359,7 @@ describe('insights', () => {
     const firstRenderingOptions =
       rendering.mock.calls[rendering.mock.calls.length - 1][0];
     const { refine } = firstRenderingOptions;
-    refine([10, 30]);
+    refine({ min: 10, max: 30 });
 
     expect(instantSearchInstance.sendEventToInsights).not.toHaveBeenCalled();
   });
