@@ -1642,13 +1642,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       searchForItems('Samsung');
       await wait(0);
 
-      expect(searchClient.searchForFacetValues).toHaveBeenCalledTimes(1);
-      expect(searchClient.searchForFacetValues).toHaveBeenCalledWith(
+      expect(
+        (searchClient.search as jest.Mock).mock.calls.filter(
+          ([requests]) => requests[0].type === 'facet'
+        )
+      ).toHaveLength(1);
+      expect(searchClient.search).toHaveBeenLastCalledWith(
         expect.arrayContaining([
           {
+            type: 'facet',
+            facet: 'brand',
             indexName: 'index',
             params: expect.objectContaining({
-              facetName: 'brand',
               facetQuery: 'Samsung',
               maxFacetHits: 10,
               // Notably: index parameters are included
@@ -1698,13 +1703,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       await wait(0);
 
-      expect(searchClient.searchForFacetValues).toHaveBeenCalledTimes(1);
-      expect(searchClient.searchForFacetValues).toHaveBeenCalledWith(
+      expect(
+        (searchClient.search as jest.Mock).mock.calls.filter(
+          ([requests]) => requests[0].type === 'facet'
+        )
+      ).toHaveLength(1);
+      expect(searchClient.search).toHaveBeenLastCalledWith(
         expect.arrayContaining([
           {
+            type: 'facet',
+            facet: 'brand',
             indexName: 'childIndexName',
             params: expect.objectContaining({
-              facetName: 'brand',
               facetQuery: 'Samsung',
               maxFacetHits: 10,
               // Notably: parent index parameters are included
