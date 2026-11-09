@@ -20871,7 +20871,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"instantsearch-core@npm:0.1.0, instantsearch-core@workspace:packages/instantsearch-core":
+"instantsearch-core@npm:0.1.0, instantsearch-core@npm:^0.1.0, instantsearch-core@workspace:packages/instantsearch-core":
   version: 0.0.0-use.local
   resolution: "instantsearch-core@workspace:packages/instantsearch-core"
   dependencies:
@@ -21010,7 +21010,7 @@ __metadata:
     algoliasearch-helper: "npm:3.30.1"
     hogan.js: "npm:^3.0.2"
     htm: "npm:^3.0.0"
-    instantsearch-core: "npm:0.1.0"
+    instantsearch-core: "npm:^0.1.0"
     instantsearch-ui-components: "npm:0.44.0"
     preact: "npm:^10.10.0"
     qs: "npm:^6.5.1"
