@@ -2,7 +2,7 @@ import {
   connectRatingMenu,
   RatingMenuConnectorParams,
   RatingMenuWidgetDescription,
-} from 'instantsearch.js/es/connectors';
+} from 'instantsearch.js';
 import React from 'react';
 import { useConnector } from 'react-instantsearch';
 

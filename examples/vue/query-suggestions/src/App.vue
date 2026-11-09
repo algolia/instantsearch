@@ -102,7 +102,7 @@
 
 <script>
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import { history } from 'instantsearch.js/es/lib/routers';
+import { historyRouter as history } from 'instantsearch.js';
 
 import 'instantsearch.css/themes/satellite.css';
 import './app.css';

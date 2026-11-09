@@ -1,6 +1,6 @@
 /* eslint complexity: off */
 
-import { history as historyRouter } from 'instantsearch.js/es/lib/routers';
+import { historyRouter } from 'instantsearch.js';
 
 import type { UiState } from 'instantsearch.js';
 

@@ -1,5 +1,7 @@
-import { history } from 'instantsearch.js/es/lib/routers';
-import { simple } from 'instantsearch.js/es/lib/stateMappings';
+import {
+  historyRouter as history,
+  simpleStateMapping as simple,
+} from 'instantsearch.js';
 import React from 'react';
 import {
   Configure,
