@@ -209,7 +209,7 @@ type RendererParams<TItem extends BaseHit> = {
       PreparedTemplateProps<NonNullable<IndexConfig<TItem>['templates']>>
     >;
     isolatedIndex: IndexWidget | undefined;
-    targetIndex: IndexWidget | undefined;
+    parentIndex: IndexWidget | undefined;
     templateProps:
       | PreparedTemplateProps<NonNullable<AutocompleteTemplates>>
       | undefined;
@@ -230,7 +230,7 @@ type RendererParams<TItem extends BaseHit> = {
   | 'placeholder'
   | 'autofocus'
   | 'aiMode'
-  | 'standalone'
+  | 'submitTarget'
 > & {
     showRecent:
       | Exclude<IndicesAutocompleteWidgetParams<TItem>['showRecent'], boolean>
@@ -250,11 +250,11 @@ const createRenderer = <TItem extends BaseHit>(
     if (isFirstRendering) {
       const showRecentObj = rendererParams.showRecent;
       let isolatedIndex = connectorParams.instantSearchInstance.mainIndex;
-      let targetIndex = connectorParams.instantSearchInstance.mainIndex;
-      walkIndex(targetIndex, (childIndex) => {
+      let parentIndex = connectorParams.instantSearchInstance.mainIndex;
+      walkIndex(parentIndex, (childIndex) => {
         if (childIndex.getIndexId() === `ais-autocomplete-${instanceId}`) {
           isolatedIndex = childIndex;
-          targetIndex = childIndex.parent!;
+          parentIndex = childIndex.parent!;
         }
       });
 
@@ -322,7 +322,7 @@ const createRenderer = <TItem extends BaseHit>(
       rendererParams.renderState = {
         indexTemplateProps: [],
         isolatedIndex,
-        targetIndex,
+        parentIndex,
         templateProps: prepareTemplateProps({
           defaultTemplates: {} as unknown as NonNullable<
             typeof rendererParams.templates
@@ -361,7 +361,7 @@ type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
   | 'detachedMediaQuery'
   | 'translations'
   | 'aiMode'
-  | 'standalone'
+  | 'submitTarget'
 > &
   Pick<AutocompleteRenderState, 'indices' | 'refine'> &
   RendererOptions<Partial<AutocompleteWidgetParams<TItem>>>;
@@ -385,26 +385,27 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   detachedMediaQuery,
   translations,
   aiMode,
-  standalone,
+  submitTarget = 'page',
 }: AutocompleteWrapperProps<TItem>) {
-  const { isolatedIndex, targetIndex } = renderState;
+  const { isolatedIndex, parentIndex } = renderState;
+  const submitsToPanel = submitTarget === 'panel';
 
   const searchboxQuery = isolatedIndex?.getHelper()?.state.query;
-  const targetIndexQuery = targetIndex?.getHelper()?.state.query;
+  const parentIndexQuery = parentIndex?.getHelper()?.state.query;
 
   const [localQuery, setLocalQuery] = useState(
-    searchboxQuery !== undefined ? searchboxQuery : (targetIndexQuery ?? '')
+    searchboxQuery !== undefined ? searchboxQuery : (parentIndexQuery ?? '')
   );
 
   useEffect(() => {
     // When the isolated index has a defined query (including ''), use it.
     // Only fall back to the target index query when not yet set (undefined).
     const query =
-      searchboxQuery !== undefined ? searchboxQuery : targetIndexQuery;
+      searchboxQuery !== undefined ? searchboxQuery : parentIndexQuery;
     if (query !== undefined) {
       setLocalQuery(query);
     }
-  }, [searchboxQuery, targetIndexQuery]);
+  }, [searchboxQuery, parentIndexQuery]);
 
   const resolvedDetachedMediaQuery = useMemo(
     () =>
@@ -582,7 +583,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   };
 
   const isSearchPage =
-    targetIndex
+    parentIndex
       ?.getWidgets()
       .some(({ $$type }) =>
         ['ais.hits', 'ais.infiniteHits'].includes($$type)
@@ -591,11 +592,11 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   const onRefine = (query: string) => {
     setLocalQuery(query);
     refineAutocomplete(query);
-    if (!standalone) {
+    if (!submitsToPanel) {
       instantSearchInstance.setUiState((uiState) => ({
         ...uiState,
-        [targetIndex!.getIndexId()]: {
-          ...uiState[targetIndex!.getIndexId()],
+        [parentIndex!.getIndexId()]: {
+          ...uiState[parentIndex!.getIndexId()],
           query,
         },
         [isolatedIndex!.getIndexId()]: { query },
@@ -615,7 +616,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     allIndicesEmpty && recentEmpty && !hasNoResultsTemplate && !templates.panel;
 
   const getChatRenderState = () =>
-    instantSearchInstance.renderState[targetIndex!.getIndexId()]?.chat as
+    instantSearchInstance.renderState[parentIndex!.getIndexId()]?.chat as
       | Partial<ChatRenderState>
       | undefined;
 
@@ -667,12 +668,12 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         }
 
         if (
-          !standalone &&
+          !submitsToPanel &&
           !isSearchPage &&
           typeof getSearchPageURL !== 'undefined'
         ) {
           const indexUiState =
-            instantSearchInstance.getUiState()[targetIndex!.getIndexId()];
+            instantSearchInstance.getUiState()[parentIndex!.getIndexId()];
           window.location.href = getSearchPageURL({ ...indexUiState, query });
           return;
         }
@@ -684,14 +685,14 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     },
     onSubmit: () => {
       // Close the detached modal when form is submitted
-      if (isDetached && !standalone) {
+      if (isDetached && !submitsToPanel) {
         setIsModalOpen(false);
       }
     },
     placeholder,
     isDetached,
     shouldHidePanel: shouldHideEmptyPanel,
-    closeOnSubmit: !standalone,
+    closeOnSubmit: !submitsToPanel,
     autoFocus: autofocus,
   });
 
@@ -1146,12 +1147,15 @@ type BaseAutocompleteWidgetParams<TItem extends BaseHit> = {
   aiMode?: boolean;
 
   /**
-   * When true, selecting an item or submitting only updates the query of the
-   * autocomplete, not the parent index, and the panel stays open.
-   * Items with a URL still navigate, but `getSearchPageURL` is ignored.
-   * @default false
+   * Where a submitted query goes (Enter, or selecting a suggestion or a recent
+   * search):
+   * - `'page'`: the parent index is refined, or `getSearchPageURL` navigates.
+   * - `'panel'`: only the autocomplete's query is updated and the panel stays
+   *   open. `getSearchPageURL` is ignored, but items with a URL still
+   *   navigate and prompt suggestions still open the chat.
+   * @default 'page'
    */
-  standalone?: boolean;
+  submitTarget?: 'page' | 'panel';
 };
 
 export type IndicesAutocompleteWidgetParams<TItem extends BaseHit> =
@@ -1222,7 +1226,7 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
     detachedMediaQuery,
     translations: userTranslations = {},
     aiMode,
-    standalone,
+    submitTarget,
   } = safeWidgetParams;
 
   if (isFeedsMode && indices !== undefined) {
@@ -1488,7 +1492,7 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
     renderState: {
       indexTemplateProps: [],
       isolatedIndex: undefined,
-      targetIndex: undefined,
+      parentIndex: undefined,
       templateProps: undefined,
       RecentSearchComponent: AutocompleteRecentSearch,
       recentSearchHeaderComponent: undefined,
@@ -1496,7 +1500,7 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
     },
     templates,
     aiMode,
-    standalone,
+    submitTarget,
   });
 
   const makeWidget = connectAutocomplete(specializedRenderer, () =>

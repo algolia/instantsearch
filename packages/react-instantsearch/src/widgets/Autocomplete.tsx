@@ -421,12 +421,15 @@ type AutocompleteCommonProps<TItem extends BaseHit> = ComponentProps<'div'> & {
    */
   aiMode?: boolean;
   /**
-   * When true, selecting an item or submitting only updates the query of the
-   * autocomplete, not the parent index, and the panel stays open.
-   * Items with a URL still navigate, but `getSearchPageURL` is ignored.
-   * @default false
+   * Where a submitted query goes (Enter, or selecting a suggestion or a recent
+   * search):
+   * - `'page'`: the parent index is refined, or `getSearchPageURL` navigates.
+   * - `'panel'`: only the autocomplete's query is updated and the panel stays
+   *   open. `getSearchPageURL` is ignored, but items with a URL still
+   *   navigate and prompt suggestions still open the chat.
+   * @default 'page'
    */
-  standalone?: boolean;
+  submitTarget?: 'page' | 'panel';
 };
 
 export type AutocompleteIndicesProps<TItem extends BaseHit> =
@@ -809,7 +812,7 @@ export function Autocomplete<TItem extends BaseHit = BaseHit>(
       panelComponent: _shellUnusedPanelComponent,
       getSearchPageURL: _shellUnusedGetSearchPageURL,
       onSelect: _shellUnusedOnSelect,
-      standalone: _shellUnusedStandalone,
+      submitTarget: _shellUnusedSubmitTarget,
       ...shellRootProps
     } = restProps as Record<string, unknown>;
     const activateWithQueryMirror = () => {
@@ -960,7 +963,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   aiMode,
   domId,
   detached,
-  standalone,
+  submitTarget = 'page',
   ...props
 }: InnerAutocompleteProps<TItem>) {
   const {
@@ -971,7 +974,8 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     transformItems,
     future: { undefinedEmptyQuery: true },
   });
-  const refineParent = standalone ? () => {} : refineSearchBox;
+  const submitsToPanel = submitTarget === 'panel';
+  const refineParent = submitsToPanel ? () => {} : refineSearchBox;
 
   const resolvedQuery =
     currentRefinement !== undefined
@@ -1120,7 +1124,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         }
 
         if (
-          !standalone &&
+          !submitsToPanel &&
           !isSearchPage &&
           typeof getSearchPageURL !== 'undefined'
         ) {
@@ -1132,14 +1136,14 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       }),
     onSubmit: () => {
       // Close the detached modal when form is submitted
-      if (isDetached && !standalone) {
+      if (isDetached && !submitsToPanel) {
         setIsModalOpen(false);
       }
     },
     placeholder,
     isDetached,
     shouldHidePanel: shouldHideEmptyPanel,
-    closeOnSubmit: !standalone,
+    closeOnSubmit: !submitsToPanel,
     autoFocus,
   });
 

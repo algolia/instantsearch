@@ -586,7 +586,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createAutocompleteWidgetTests: {
     act,
     skippedTests: {
-      'keeps a query cleared before the first opening in standalone mode': true,
+      'keeps a query cleared before the first opening when submitting to the panel': true,
     },
   },
   createFilterSuggestionsWidgetTests: { act },

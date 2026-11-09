@@ -1898,7 +1898,7 @@ export function createOptionsTests(
       );
     });
 
-    describe('standalone', () => {
+    describe('submitTarget: panel', () => {
       test('only refines the autocomplete and keeps the panel open when selecting an item', async () => {
         const searchClient = createMockedSearchClient(
           createMultiSearchResponse(
@@ -1922,17 +1922,17 @@ export function createOptionsTests(
             javascript: {
               showQuerySuggestions: { indexName: 'query_suggestions' },
               getSearchPageURL,
-              standalone: true,
+              submitTarget: 'panel',
             },
             react: {
               showQuerySuggestions: { indexName: 'query_suggestions' },
               getSearchPageURL,
-              standalone: true,
+              submitTarget: 'panel',
             },
             vue: {
               showQuerySuggestions: { indexName: 'query_suggestions' },
               getSearchPageUrl: getSearchPageURL,
-              standalone: true,
+              submitTarget: 'panel',
             },
           },
         });
@@ -1988,15 +1988,15 @@ export function createOptionsTests(
           widgetParams: {
             javascript: {
               showQuerySuggestions: { indexName: 'query_suggestions' },
-              standalone: true,
+              submitTarget: 'panel',
             },
             react: {
               showQuerySuggestions: { indexName: 'query_suggestions' },
-              standalone: true,
+              submitTarget: 'panel',
             },
             vue: {
               showQuerySuggestions: { indexName: 'query_suggestions' },
-              standalone: true,
+              submitTarget: 'panel',
             },
           },
         });
@@ -2128,7 +2128,7 @@ export function createOptionsTests(
 
       // React doesn't render the clear button before activation.
       skippableTest(
-        'keeps a query cleared before the first opening in standalone mode',
+        'keeps a query cleared before the first opening when submitting to the panel',
         skippedTests,
         async () => {
           mockMatchMedia(true);
@@ -2152,17 +2152,17 @@ export function createOptionsTests(
               javascript: {
                 detachedMediaQuery,
                 showQuerySuggestions: { indexName: 'query_suggestions' },
-                standalone: true,
+                submitTarget: 'panel',
               },
               react: {
                 detachedMediaQuery,
                 showQuerySuggestions: { indexName: 'query_suggestions' },
-                standalone: true,
+                submitTarget: 'panel',
               },
               vue: {
                 detachedMediaQuery,
                 showQuerySuggestions: { indexName: 'query_suggestions' },
-                standalone: true,
+                submitTarget: 'panel',
               },
             },
           });
