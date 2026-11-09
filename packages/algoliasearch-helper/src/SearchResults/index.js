@@ -531,7 +531,7 @@ function SearchResults(state, results, options) {
 
         self.disjunctiveFacets[position] = {
           name: dfacet,
-          data: mergeNumericMax(dataFromMainRequest, facetResults),
+          data: mergeNumericMax(facetResults, dataFromMainRequest),
           exhaustive: result.exhaustiveFacetsCount,
         };
         assignFacetStats(

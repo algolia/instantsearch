@@ -1014,3 +1014,50 @@ test('does not return empty items', function () {
     },
   ]);
 });
+
+describe('values with the same count', function () {
+  function getNames(refinedBrand) {
+    var state = new SearchParameters({
+      index: 'indexName',
+      disjunctiveFacets: ['brand'],
+      disjunctiveFacetsRefinements: refinedBrand
+        ? { brand: [refinedBrand] }
+        : {},
+    });
+    // the main request is filtered by the refinement, the disjunctive one is not
+    var main = {
+      hits: [],
+      renderingContent: {
+        facetOrdering: {
+          values: { brand: { sortRemainingBy: 'count' } },
+        },
+      },
+      facets: {
+        brand: refinedBrand
+          ? { [refinedBrand]: 110 }
+          : { Canon: 110, Sony: 110, Apple: 90 },
+      },
+    };
+    var disjunctive = {
+      hits: [],
+      facets: { brand: { Canon: 110, Sony: 110, Apple: 90 } },
+    };
+    var results = new SearchResults(
+      state,
+      refinedBrand ? [main, disjunctive] : [main]
+    );
+
+    return results.getFacetValues('brand').map(function (v) {
+      return v.name;
+    });
+  }
+
+  test('keep their order when selecting the first one', function () {
+    expect(getNames(undefined)).toEqual(['Canon', 'Sony', 'Apple']);
+    expect(getNames('Canon')).toEqual(['Canon', 'Sony', 'Apple']);
+  });
+
+  test('keep their order when selecting the second one', function () {
+    expect(getNames('Sony')).toEqual(['Canon', 'Sony', 'Apple']);
+  });
+});
