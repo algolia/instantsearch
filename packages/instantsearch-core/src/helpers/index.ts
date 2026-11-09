@@ -11,9 +11,4 @@ export { default as reverseHighlight } from './reverseHighlight';
 export type * from './reverseHighlight';
 export { default as reverseSnippet } from './reverseSnippet';
 export type * from './reverseSnippet';
-export {
-  default as insights,
-  getUsageSessionId,
-  readDataAttributes,
-  writeDataAttributes,
-} from './insights';
+export { getUsageSessionId } from './insights';

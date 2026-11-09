@@ -12,13 +12,10 @@ export {
   snippet,
   reverseHighlight,
   reverseSnippet,
-  insights,
   getInsightsAnonymousUserToken,
   getInsightsAnonymousUserTokenInternal,
   ANONYMOUS_TOKEN_COOKIE_KEY,
   getUsageSessionId,
-  readDataAttributes,
-  writeDataAttributes,
 } from './helpers';
 export { withInsights, inferInsightsPayload } from './lib/insights';
 export { AbstractChat } from './lib/ai-lite';
@@ -127,7 +124,6 @@ export {
   collectChatRecords,
   createDocumentationMessageGenerator,
   deprecate,
-  deserializePayload,
   endsInsideRootProperty,
   extractWidgetPayload,
   find,
@@ -155,7 +151,6 @@ export {
   resetWidgetId,
   resolveSearchParameters,
   safelyRunOnBrowser,
-  serializePayload,
   serializeWidgetParams,
   startsWith,
   TAG_PLACEHOLDER,

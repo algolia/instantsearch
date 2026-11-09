@@ -1,5 +1,4 @@
 export {
-  insights,
   getUsageSessionId,
   highlight,
   snippet,

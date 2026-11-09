@@ -9,8 +9,6 @@ import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
 import { connectHits } from '../../connectors';
-import { withInsights } from '../../lib/insights';
-import { createInsightsEventHandler } from '../../lib/insights/listener';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 
@@ -48,7 +46,7 @@ const renderer =
     };
     templates: HitsTemplates<THit>;
   }): Renderer<HitsRenderState, Partial<HitsWidgetParams>> =>
-  ({ items, results, insights, sendEvent, banner }, isFirstRendering) => {
+  ({ items, results, sendEvent, banner }, isFirstRendering) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps<HitsTemplates<THit>>({
         defaultTemplates,
@@ -56,8 +54,6 @@ const renderer =
       });
       return;
     }
-
-    const handleInsightsClick = createInsightsEventHandler({ insights });
 
     const emptyComponent: HitsUiComponentProps<Hit>['emptyComponent'] = ({
       ...rootProps
@@ -82,17 +78,7 @@ const renderer =
         {...renderState.templateProps}
         templateKey="item"
         rootTagName="li"
-        rootProps={{
-          ...rootProps,
-          onClick: (event: MouseEvent) => {
-            handleInsightsClick(event);
-            rootProps.onClick();
-          },
-          onAuxClick: (event: MouseEvent) => {
-            handleInsightsClick(event);
-            rootProps.onAuxClick();
-          },
-        }}
+        rootProps={rootProps}
         data={{
           ...hit,
           get __hitIndex() {
@@ -210,7 +196,7 @@ export default (function hits<THit extends NonNullable<object> = BaseHit>(
     templates,
   });
 
-  const makeWidget = withInsights(connectHits)(specializedRenderer, () =>
+  const makeWidget = connectHits(specializedRenderer, () =>
     render(null, containerNode)
   );
 
