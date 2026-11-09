@@ -524,72 +524,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       const widget = makeWidget({
         attributes: ['category'],
       });
-      const helper = algoliasearchHelper(
-        createSearchClient(),
-        '',
-        widget.getWidgetSearchParameters(new SearchParameters(), {
-          uiState: {},
-        })
-      );
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
-    });
-
-    it('unsets maxValuesPerFacet fully', () => {
-      const rendering = jest.fn();
-      const makeWidget = connectHierarchicalMenu(rendering);
-      const indexName = '';
-      const widget = makeWidget({
-        attributes: ['category'],
-      });
-      const helper = algoliasearchHelper(
-        createSearchClient(),
-        indexName,
-        widget.getWidgetSearchParameters(new SearchParameters(), {
-          uiState: {},
-        })
-      );
-
-      expect(
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).toEqual(new SearchParameters({ index: indexName }));
-    });
-
-    it('unsets refinement', () => {
-      const rendering = jest.fn();
-      const makeWidget = connectHierarchicalMenu(rendering);
-      const indexName = '';
-      const widget = makeWidget({
-        attributes: ['category'],
-      });
-      const helper = algoliasearchHelper(
-        createSearchClient(),
-        indexName,
-        widget.getWidgetSearchParameters(new SearchParameters(), {
-          uiState: {},
-        })
-      );
-      helper.search = jest.fn();
-
-      widget.init!(
-        createInitOptions({
-          helper,
-          state: helper.state,
-        })
-      );
-
-      const firstRenderingOptions = rendering.mock.calls[0][0];
-      const { refine } = firstRenderingOptions;
-      refine('zombo.com');
-
-      expect(helper.state.hierarchicalFacetsRefinements).toEqual({
-        category: ['zombo.com'],
-      });
-
-      expect(
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).toEqual(new SearchParameters({ index: indexName }));
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
   });
 

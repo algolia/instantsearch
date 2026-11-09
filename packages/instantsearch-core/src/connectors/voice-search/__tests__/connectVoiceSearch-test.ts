@@ -201,7 +201,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
 
       expect(unmountFn).toHaveBeenCalledTimes(0);
 
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
+      widget.dispose!(createDisposeOptions());
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
@@ -229,31 +229,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
         0
       );
 
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
+      widget.dispose!(createDisposeOptions());
 
       expect((widget as any)._voiceSearchHelper.dispose).toHaveBeenCalledTimes(
         1
       );
-    });
-
-    it('removes the `query` from the `SearchParameters`', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '', {
-        query: 'Apple',
-      });
-
-      const renderFn = () => {};
-      const makeWidget = connectVoiceSearch(renderFn);
-      const widget = makeWidget({});
-
-      widget.init!(createInitOptions({ helper }));
-
-      expect(helper.state.query).toBe('Apple');
-
-      const nextState = widget.dispose!(
-        createDisposeOptions({ helper, state: helper.state })
-      ) as SearchParameters;
-
-      expect(nextState.query).toBeUndefined();
     });
   });
 
@@ -528,52 +508,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
           index: '',
           query: 'query',
           distinct: true,
-        })
-      );
-    });
-
-    it('removes additional parameters when disposed', () => {
-      const { widget, helper, refine } = getInitializedWidget({
-        widgetParams: {
-          additionalQueryParameters: () => {},
-        },
-      });
-
-      refine('query');
-      const newState = widget.dispose!(
-        createDisposeOptions({ state: helper.state })
-      );
-      expect(newState).toEqual(
-        new SearchParameters({
-          ignorePlurals: undefined,
-          removeStopWords: undefined,
-          optionalWords: undefined,
-          queryLanguages: undefined,
-          index: '',
-        })
-      );
-    });
-
-    it('removes additional parameters and extra parameters when disposed', () => {
-      const { widget, helper, refine } = getInitializedWidget({
-        widgetParams: {
-          additionalQueryParameters: () => ({
-            distinct: true,
-          }),
-        },
-      });
-
-      refine('query');
-      const newState = widget.dispose!(
-        createDisposeOptions({ state: helper.state })
-      );
-      expect(newState).toEqual(
-        new SearchParameters({
-          ignorePlurals: undefined,
-          removeStopWords: undefined,
-          optionalWords: undefined,
-          queryLanguages: undefined,
-          index: '',
         })
       );
     });

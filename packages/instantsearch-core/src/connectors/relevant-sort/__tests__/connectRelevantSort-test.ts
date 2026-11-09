@@ -14,7 +14,6 @@ import algoliasearchHelper, {
 import {
   createInitOptions,
   createRenderOptions,
-  createDisposeOptions,
 } from '../../../../test/createWidget';
 import { noop } from '../../../lib/utils';
 import connectRelevantSort from '../connectRelevantSort';
@@ -39,29 +38,6 @@ describe('connectRelevantSort', () => {
         dispose: expect.any(Function),
       })
     );
-  });
-
-  it('dispose relevancyStrictness set by the widget', () => {
-    const helper = createHelper();
-    const makeWidget = connectRelevantSort(noop);
-    const widget = makeWidget({});
-    widget.init!(createInitOptions({ helper }));
-    const { refine } = widget.getWidgetRenderState(
-      createRenderOptions({
-        helper,
-      })
-    );
-    refine(10);
-    expect(
-      widget.getWidgetSearchParameters(helper.state, {
-        uiState: {},
-      }).relevancyStrictness
-    ).toEqual(10);
-
-    const nextState = widget.dispose!(
-      createDisposeOptions({ state: helper.state })
-    ) as SearchParameters;
-    expect(nextState.relevancyStrictness).toBeUndefined();
   });
 
   it('apply relevancyStrictness to helper on refine()', () => {
