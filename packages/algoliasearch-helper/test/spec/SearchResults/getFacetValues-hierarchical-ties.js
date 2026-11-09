@@ -25,7 +25,7 @@ function getRootNames(refinement, mainRoot, rootResponse, persist) {
       hits: [],
       facets: {
         'categories.lvl0': mainRoot,
-        'categories.lvl1': refinement ? { 'sales > IPA': 5 } : {},
+        'categories.lvl1': refinement ? { sales: 5 } : {},
       },
     },
   ];
@@ -35,7 +35,7 @@ function getRootNames(refinement, mainRoot, rootResponse, persist) {
         hits: [],
         facets: {
           'categories.lvl0': rootResponse,
-          'categories.lvl1': { 'sales > IPA': 5 },
+          'categories.lvl1': { sales: 5 },
         },
       },
       { hits: [], facets: { 'categories.lvl0': rootResponse } }
@@ -66,21 +66,27 @@ describe('hierarchical facet values with the same count', function () {
       });
 
       test('keep their order when selecting the second one', function () {
-        expect(
-          getRootNames('sales > IPA', { sales: 20 }, tied, persist)
-        ).toEqual(['beers', 'sales', 'fruits']);
+        expect(getRootNames('sales', { sales: 20 }, tied, persist)).toEqual([
+          'beers',
+          'sales',
+          'fruits',
+        ]);
       });
 
       test('keep their order when the main count is lower', function () {
-        expect(
-          getRootNames('sales > IPA', { sales: 5 }, tied, persist)
-        ).toEqual(['beers', 'sales', 'fruits']);
+        expect(getRootNames('sales', { sales: 5 }, tied, persist)).toEqual([
+          'beers',
+          'sales',
+          'fruits',
+        ]);
       });
 
       test('keep their order when selecting a lower count', function () {
-        expect(
-          getRootNames('fruits > IPA', { fruits: 5 }, tied, persist)
-        ).toEqual(['beers', 'sales', 'fruits']);
+        expect(getRootNames('fruits', { fruits: 5 }, tied, persist)).toEqual([
+          'beers',
+          'sales',
+          'fruits',
+        ]);
       });
     }
   );
@@ -88,7 +94,7 @@ describe('hierarchical facet values with the same count', function () {
   // with persistHierarchicalRootCount: false the refined root is re-added
   // last by defaultsPure, which isn't covered here
   test('keep their order when selecting the first one', function () {
-    expect(getRootNames('beers > IPA', { beers: 20 }, tied, true)).toEqual([
+    expect(getRootNames('beers', { beers: 20 }, tied, true)).toEqual([
       'beers',
       'sales',
       'fruits',
