@@ -54,7 +54,6 @@ export * from './resolveSearchParameters';
 export * from './reverseHighlightedParts';
 export * from './safelyRunOnBrowser';
 export * from './sendChatMessageFeedback';
-export * from './serializer';
 export * from './setIndexHelperState';
 export * from './startsWith';
 export * from './toArray';
