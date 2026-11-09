@@ -39,7 +39,8 @@ Node `20.19.0` (`.nvmrc`). Use Yarn (v4, pinned by `packageManager`).
 
 ```bash
 # Build
-yarn build                      # all packages (lerna)
+yarn build                      # all packages and examples (lerna)
+yarn build:ci                   # packages only, as CI builds them
 yarn lerna run build --scope <pkg>   # single package; swap in build:types for declarations only
 
 # Unit tests (Jest, jsdom)
@@ -59,7 +60,9 @@ yarn type-check                 # tsc + per-package (also :v3 / :v4 for legacy a
 yarn website:examples && E2E_FLAVOR=react E2E_BROWSER=chromium yarn test:e2e
 ```
 
-Packages build with the root's `rollup` and `tsc`, which only scripts started from the root can reach, so build through Lerna as CI does: `yarn workspace <pkg> build` stops at `command not found`, and `instantsearch.js`'s `build:types` exits 0 with stale declarations. `yarn type-check` reads other packages, and public paths like `instantsearch.js/es/…`, from those built declarations: rebuild the packages you changed before type-checking.
+Packages build with the root's `rollup` and `tsc`, which only scripts started from the root can reach, so build through Lerna as CI does: `yarn workspace <pkg> build` stops at `command not found`, and `instantsearch.js`'s `build:types` exits 0 with stale declarations. `yarn type-check` reads other packages, and public paths like `instantsearch.js/es/…`, from those built declarations: rebuild the packages you changed before type-checking, and run `yarn build:ci` after a rebase or a branch switch.
+
+Don't pass `--silent` to `yarn jest`. Some tests count `console.error` calls, and Jest's silent console no longer turns `console.trace` into one, so the "can attach many `render` listeners" test in `instantsearch-core` fails with it.
 
 ## Conventions
 
