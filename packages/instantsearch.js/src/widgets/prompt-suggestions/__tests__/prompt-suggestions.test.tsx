@@ -122,7 +122,7 @@ describe('promptSuggestions', () => {
 
       // The mount check is still pending; unmount so it doesn't fire (and
       // throw) into the next test.
-      widget.dispose!(createDisposeOptions({ helper: search.helper! }));
+      widget.dispose!(createDisposeOptions());
     });
 
     it('does not throw when an `onSuggestionClick` override owns the click', async () => {

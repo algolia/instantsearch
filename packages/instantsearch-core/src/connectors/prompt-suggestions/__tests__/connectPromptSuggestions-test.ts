@@ -744,7 +744,7 @@ describe('connectPromptSuggestions', () => {
       await flush(DEBOUNCE_WAIT);
       expect(global.fetch).toHaveBeenCalledTimes(3);
 
-      widget.dispose!(createDisposeOptions({ helper }));
+      widget.dispose!(createDisposeOptions());
     });
 
     it('does not refetch when the `queryID` is unchanged', async () => {
@@ -901,7 +901,7 @@ describe('connectPromptSuggestions', () => {
       await flush(DEBOUNCE_WAIT);
       expect(global.fetch).toHaveBeenCalledTimes(1);
 
-      widget.dispose!(createDisposeOptions({ helper }));
+      widget.dispose!(createDisposeOptions());
       const callsAfterDispose = renderFn.mock.calls.length;
 
       // The late resolution must not trigger a render into the torn-down tree.
@@ -1540,7 +1540,7 @@ describe('connectPromptSuggestions', () => {
       ).toBeUndefined();
       expect(global.fetch).toHaveBeenCalledTimes(1);
 
-      widget.dispose!(createDisposeOptions({ helper }));
+      widget.dispose!(createDisposeOptions());
     });
   });
 
@@ -1797,7 +1797,7 @@ describe('connectPromptSuggestions', () => {
       expect(lastCall.isChatBusy).toBe(true);
       // dispose() to clear the debounce timer scheduled by render() so it
       // doesn't fire during the next test and pollute fetch call counts.
-      widget.dispose!(createDisposeOptions({ helper: search.helper! }));
+      widget.dispose!(createDisposeOptions());
     });
   });
 });
