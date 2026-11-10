@@ -31,10 +31,6 @@ export type CurrentRefinementsClassNames = {
    */
   list: string;
   /**
-   * Class names to apply to the list element when there are no refinements possible
-   */
-  noRefinementList: string;
-  /**
    * Class names to apply to each refinement
    */
   item: string;
@@ -76,18 +72,7 @@ export function CurrentRefinements({
         props.className
       )}
     >
-      <ul
-        className={cx(
-          'ais-CurrentRefinements-list',
-          classNames.list,
-          /* @MAJOR remove to ensure conformity with InstantSearch.css specs */
-          !canRefine &&
-            cx(
-              'ais-CurrentRefinements-list--noRefinement',
-              classNames.noRefinementList
-            )
-        )}
-      >
+      <ul className={cx('ais-CurrentRefinements-list', classNames.list)}>
         {items.map((item) => (
           <li
             key={[item.indexName, item.label].join('/')}

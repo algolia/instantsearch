@@ -1,22 +1,10 @@
 import { createAlgoliaSearchClient } from '@instantsearch/mocks';
-import {
-  normalizeSnapshot as commonNormalizeSnapshot,
-  wait,
-} from '@instantsearch/testutils';
+import { normalizeSnapshot, wait } from '@instantsearch/testutils';
 import { queryByText } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
 import type { CurrentRefinementsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
-
-function normalizeSnapshot(html: string) {
-  // React InstantSearch adds a noRefinement modifier on the list.
-  // @MAJOR: Remove this once React InstantSearch aligns with spec.
-  return commonNormalizeSnapshot(html).replace(
-    / ais-CurrentRefinements-list--noRefinement/g,
-    ''
-  );
-}
 
 export function createOptionsTests(
   setup: CurrentRefinementsWidgetSetup,
