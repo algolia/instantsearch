@@ -36,13 +36,48 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { warning } from '../utils';
+
 const MAX_PARAMETERS = 1000;
 const MAX_DEPTH = 5;
-// The engine's default `maxValuesPerFacet`. Larger indices stay object keys,
-// so a URL can't make the parser allocate a huge array.
-const MAX_ARRAY_LENGTH = 100;
+// Allows 100 items, the engine's default `maxValuesPerFacet`. Larger indices
+// stay object keys, so a URL can't make the parser allocate a huge array.
+const DEFAULT_ARRAY_LIMIT = 99;
 
 type QueryObject = Record<string, unknown>;
+
+export type ParsedQueryString = {
+  [key: string]:
+    | undefined
+    | string
+    | string[]
+    | ParsedQueryString
+    | ParsedQueryString[];
+};
+
+export type QueryStringStringifyOptions = {
+  /**
+   * Starts the query string with `?`.
+   */
+  addQueryPrefix?: boolean;
+  /**
+   * Writes arrays as `a[0]=b&a[1]=c` (`indices`, the default), `a[]=b&a[]=c`
+   * (`brackets`) or `a=b&a=c` (`repeat`).
+   */
+  arrayFormat?: 'indices' | 'brackets' | 'repeat';
+};
+
+export type QueryStringParseOptions = {
+  /**
+   * Ignores a leading `?`.
+   */
+  ignoreQueryPrefix?: boolean;
+  /**
+   * The largest index read into an array. Larger indices stay object keys.
+   * Defaults to 99, so arrays keep up to 100 items (`qs` defaults to 20).
+   */
+  arrayLimit?: number;
+};
 
 const hasOwn = (object: object, key: PropertyKey): boolean =>
   Object.prototype.hasOwnProperty.call(object, key);
@@ -82,12 +117,43 @@ function decode(value: string): string {
   }
 }
 
+function warnUnsupported(
+  method: 'parse' | 'stringify',
+  supported: boolean,
+  feature: string
+) {
+  warning(
+    supported,
+    `\`qsModule.${method}\` doesn't support ${feature} of \`qs\`. To use it, import \`qs\` in your \`createURL\` and \`parseURL\` functions: \`import qs from 'qs'\`.`
+  );
+}
+
 /**
- * Writes the same query string as `qs.stringify(value)`: nested keys and array
- * indices in brackets, `null` as an empty value, and no `undefined` values or
- * empty arrays and objects.
+ * Writes the same query string as `qs.stringify(value, options)`: nested keys
+ * in brackets, `null` as an empty value, and no `undefined` values or empty
+ * arrays and objects.
  */
-export function stringifyQueryString(value: unknown): string {
+export function stringifyQueryString(
+  value: unknown,
+  options: QueryStringStringifyOptions = {}
+): string {
+  const { addQueryPrefix = false, arrayFormat = 'indices' } = options;
+
+  if (__DEV__) {
+    Object.keys(options).forEach((option) => {
+      warnUnsupported(
+        'stringify',
+        option === 'addQueryPrefix' || option === 'arrayFormat',
+        `the \`${option}\` option`
+      );
+    });
+    warnUnsupported(
+      'stringify',
+      ['indices', 'brackets', 'repeat'].indexOf(arrayFormat) !== -1,
+      `\`arrayFormat: '${arrayFormat}'\``
+    );
+  }
+
   const parameters: string[] = [];
 
   const add = (current: unknown, key: string) => {
@@ -98,7 +164,13 @@ export function stringifyQueryString(value: unknown): string {
       (typeof item === 'object' || typeof item === 'function')
     ) {
       Object.keys(item).forEach((childKey) => {
-        add((item as QueryObject)[childKey], `${key}[${childKey}]`);
+        let childPath = `${key}[${childKey}]`;
+        if (Array.isArray(item) && arrayFormat === 'brackets') {
+          childPath = `${key}[]`;
+        } else if (Array.isArray(item) && arrayFormat === 'repeat') {
+          childPath = key;
+        }
+        add((item as QueryObject)[childKey], childPath);
       });
     } else if (item !== undefined) {
       parameters.push(
@@ -111,7 +183,9 @@ export function stringifyQueryString(value: unknown): string {
     Object.keys(value).forEach((key) => add(value[key], key));
   }
 
-  return parameters.join('&');
+  const queryString = parameters.join('&');
+
+  return addQueryPrefix && queryString ? `?${queryString}` : queryString;
 }
 
 /**
@@ -165,7 +239,7 @@ function splitKey(key: string): string[] | null {
   return segments;
 }
 
-function nest(segments: string[], value: unknown): unknown {
+function nest(segments: string[], value: unknown, arrayLimit: number): unknown {
   return segments.reduceRight<unknown>((leaf, segment) => {
     if (segment === '[]') {
       return ([] as unknown[]).concat(leaf);
@@ -181,7 +255,7 @@ function nest(segments: string[], value: unknown): unknown {
       key !== segment &&
       String(index) === key &&
       index >= 0 &&
-      index < MAX_ARRAY_LENGTH
+      index <= arrayLimit
     ) {
       const array: unknown[] = [];
       array[index] = leaf;
@@ -231,18 +305,18 @@ function merge(target: unknown, source: unknown): unknown {
   return result;
 }
 
-function compact(value: unknown): unknown {
+function compact(value: unknown, arrayLimit: number): unknown {
   if (Array.isArray(value)) {
     const items: unknown[] = [];
     value.forEach((item: unknown) => {
-      items.push(compact(item));
+      items.push(compact(item, arrayLimit));
     });
-    return items.length > MAX_ARRAY_LENGTH ? { ...items } : items;
+    return items.length > arrayLimit + 1 ? { ...items } : items;
   }
 
   if (isContainer(value)) {
     Object.keys(value).forEach((key) => {
-      value[key] = compact(value[key]);
+      value[key] = compact(value[key], arrayLimit);
     });
   }
 
@@ -250,14 +324,30 @@ function compact(value: unknown): unknown {
 }
 
 /**
- * Reads a query string like `qs.parse(search, { arrayLimit: 99 })`, with the
- * same limits on untrusted input: at most 1000 parameters, 5 levels of
- * nesting and 100 items per array, and no `Object.prototype` keys.
+ * Reads a query string like `qs.parse(search, options)`, with the same limits
+ * on untrusted input: at most 1000 parameters, 5 levels of nesting and
+ * `arrayLimit + 1` items per array, and no `Object.prototype` keys.
  */
-export function parseQueryString(search: string): QueryObject {
+export function parseQueryString(
+  search: string,
+  options: QueryStringParseOptions = {}
+): ParsedQueryString {
+  const { ignoreQueryPrefix = false, arrayLimit = DEFAULT_ARRAY_LIMIT } =
+    options;
+
+  if (__DEV__) {
+    Object.keys(options).forEach((option) => {
+      warnUnsupported(
+        'parse',
+        option === 'ignoreQueryPrefix' || option === 'arrayLimit',
+        `the \`${option}\` option`
+      );
+    });
+  }
+
   const values: QueryObject = Object.create(null);
 
-  search
+  (ignoreQueryPrefix ? search.replace(/^\?/, '') : search)
     .replace(/%5B/gi, '[')
     .replace(/%5D/gi, ']')
     .split('&', MAX_PARAMETERS)
@@ -284,9 +374,18 @@ export function parseQueryString(search: string): QueryObject {
   Object.keys(values).forEach((key) => {
     const segments = key ? splitKey(key) : null;
     if (segments) {
-      result = merge(result, nest(segments, values[key]));
+      result = merge(result, nest(segments, values[key], arrayLimit));
     }
   });
 
-  return compact(result) as QueryObject;
+  return compact(result, arrayLimit) as ParsedQueryString;
 }
+
+/**
+ * Passed as `qsModule` to the `createURL` and `parseURL` functions of the
+ * history router.
+ */
+export const queryStringModule = {
+  parse: parseQueryString,
+  stringify: stringifyQueryString,
+};

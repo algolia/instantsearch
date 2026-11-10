@@ -405,7 +405,7 @@ describe('life cycle', () => {
 Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algolia.com/search?query=iphone\`.`);
     });
 
-    test('calls the provided createURL with the route state and the current URL', () => {
+    test('calls the provided createURL with qsModule, the route state and the current URL', () => {
       const currentURL = new URL('https://website.com/search');
       const createURL = jest.fn(() => 'https://website.com/search?query=a');
       const router = historyRouter<UiState>({
@@ -417,6 +417,10 @@ Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algo
       router.createURL({ indexName: { query: 'a' } });
 
       expect(createURL).toHaveBeenCalledWith({
+        qsModule: {
+          parse: expect.any(Function),
+          stringify: expect.any(Function),
+        },
         routeState: { indexName: { query: 'a' } },
         currentURL,
       });
@@ -424,7 +428,7 @@ Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algo
   });
 
   describe('parseURL', () => {
-    test('calls the provided parseURL with the current URL', () => {
+    test('calls the provided parseURL with qsModule and the current URL', () => {
       const currentURL = new URL('https://website.com/search?query=a');
       const parseURL = jest.fn(() => ({ indexName: { query: 'a' } }));
       const router = historyRouter<UiState>({
@@ -434,7 +438,46 @@ Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algo
       });
 
       expect(router.read()).toEqual({ indexName: { query: 'a' } });
-      expect(parseURL).toHaveBeenCalledWith({ currentURL });
+      expect(parseURL).toHaveBeenCalledWith({
+        qsModule: {
+          parse: expect.any(Function),
+          stringify: expect.any(Function),
+        },
+        currentURL,
+      });
+    });
+  });
+
+  describe('qsModule', () => {
+    test('writes and reads the custom URLs of the routing guide', () => {
+      const router = historyRouter<Record<string, unknown>>({
+        createURL({ qsModule, routeState, currentURL }) {
+          const queryString = qsModule.stringify(routeState, {
+            addQueryPrefix: true,
+            arrayFormat: 'repeat',
+          });
+
+          return `${currentURL.origin}${currentURL.pathname}${queryString}`;
+        },
+        parseURL({ qsModule, currentURL }) {
+          return qsModule.parse(currentURL.search.slice(1));
+        },
+        getCurrentURL: () =>
+          new URL(
+            'https://website.com/search?query=iphone%20case&brands=Apple&brands=Samsung'
+          ),
+        cleanUrlOnDispose: true,
+      });
+
+      expect(
+        router.createURL({ query: 'iphone case', brands: ['Apple', 'Samsung'] })
+      ).toBe(
+        'https://website.com/search?query=iphone%20case&brands=Apple&brands=Samsung'
+      );
+      expect(router.read()).toEqual({
+        query: 'iphone case',
+        brands: ['Apple', 'Samsung'],
+      });
     });
   });
 

@@ -1,6 +1,11 @@
 import qs from 'qs';
 
-import { parseQueryString, stringifyQueryString } from '../queryString';
+import { warning } from '../../utils';
+import {
+  parseQueryString,
+  queryStringModule,
+  stringifyQueryString,
+} from '../queryString';
 
 const parseWithQs = (search: string) => qs.parse(search, { arrayLimit: 99 });
 
@@ -75,6 +80,29 @@ describe('stringifyQueryString', () => {
     ).toBe('a=&e=');
   });
 
+  it.each(['indices', 'brackets', 'repeat'] as const)(
+    'writes arrays like qs with arrayFormat: %s',
+    (arrayFormat) => {
+      routeStates.forEach((routeState) => {
+        [false, true].forEach((addQueryPrefix) => {
+          expect(
+            stringifyQueryString(routeState, { arrayFormat, addQueryPrefix })
+          ).toBe(qs.stringify(routeState, { arrayFormat, addQueryPrefix }));
+        });
+      });
+    }
+  );
+
+  it('writes the custom URLs of the routing guide', () => {
+    expect(
+      stringifyQueryString(
+        { query: 'iphone case', page: 2, brands: ['Apple', 'Samsung'] },
+        { addQueryPrefix: true, arrayFormat: 'repeat' }
+      )
+    ).toBe('?query=iphone%20case&page=2&brands=Apple&brands=Samsung');
+    expect(stringifyQueryString({}, { addQueryPrefix: true })).toBe('');
+  });
+
   it('writes dates as ISO strings', () => {
     expect(
       stringifyQueryString({ date: new Date(Date.UTC(2026, 10, 10)) })
@@ -99,6 +127,37 @@ describe('parseQueryString', () => {
       '=empty&[]=a',
     ].forEach((search) => {
       expect(parseQueryString(search)).toStrictEqual(parseWithQs(search));
+    });
+  });
+
+  it.each(['indices', 'brackets', 'repeat'] as const)(
+    'reads the query strings of arrayFormat: %s like qs',
+    (arrayFormat) => {
+      routeStates.forEach((routeState) => {
+        const search = qs.stringify(routeState, {
+          arrayFormat,
+          addQueryPrefix: true,
+        });
+
+        expect(
+          parseQueryString(search, { ignoreQueryPrefix: true })
+        ).toStrictEqual(
+          qs.parse(search, { ignoreQueryPrefix: true, arrayLimit: 99 })
+        );
+      });
+    }
+  );
+
+  it('reads the indices up to arrayLimit into arrays like qs', () => {
+    const search = Array.from(
+      { length: 30 },
+      (_, index) => `brands[${index}]=brand-${index}`
+    ).join('&');
+
+    [0, 5, 20, 29, 99].forEach((arrayLimit) => {
+      expect(parseQueryString(search, { arrayLimit })).toStrictEqual(
+        qs.parse(search, { arrayLimit })
+      );
     });
   });
 
@@ -278,6 +337,14 @@ describe('compared with qs', () => {
       const mutated = mutate(search);
 
       expect(search).toBe(qs.stringify(routeState));
+      [
+        { arrayFormat: pick(['indices', 'brackets', 'repeat'] as const) },
+        { addQueryPrefix: true },
+      ].forEach((options) => {
+        expect(stringifyQueryString(routeState, options)).toBe(
+          qs.stringify(routeState, options)
+        );
+      });
       expect({ search, parsed: parseQueryString(search) }).toStrictEqual({
         search,
         parsed: parseWithQs(search),
@@ -346,5 +413,45 @@ describe('compared with qs', () => {
     }
 
     expect(Object.keys(Object.prototype)).toEqual([]);
+  });
+});
+
+describe('queryStringModule', () => {
+  beforeEach(() => {
+    warning.cache = {};
+  });
+
+  it('warns about the qs options it does not support', () => {
+    expect(() =>
+      // @ts-expect-error `encodeValuesOnly` is not supported
+      queryStringModule.stringify({ a: 'b' }, { encodeValuesOnly: true })
+    ).toWarnDev(
+      "[InstantSearch.js]: `qsModule.stringify` doesn't support the `encodeValuesOnly` option of `qs`. To use it, import `qs` in your `createURL` and `parseURL` functions: `import qs from 'qs'`."
+    );
+    expect(() =>
+      // @ts-expect-error only `indices`, `brackets` and `repeat` are supported
+      queryStringModule.stringify({ a: ['b'] }, { arrayFormat: 'comma' })
+    ).toWarnDev(
+      "[InstantSearch.js]: `qsModule.stringify` doesn't support `arrayFormat: 'comma'` of `qs`. To use it, import `qs` in your `createURL` and `parseURL` functions: `import qs from 'qs'`."
+    );
+    expect(() =>
+      // @ts-expect-error `allowDots` is not supported
+      queryStringModule.parse('a.b=c', { allowDots: true })
+    ).toWarnDev(
+      "[InstantSearch.js]: `qsModule.parse` doesn't support the `allowDots` option of `qs`. To use it, import `qs` in your `createURL` and `parseURL` functions: `import qs from 'qs'`."
+    );
+  });
+
+  it('does not warn about the options it supports', () => {
+    expect(() => {
+      queryStringModule.stringify(
+        { a: ['b'] },
+        { addQueryPrefix: true, arrayFormat: 'repeat' }
+      );
+      queryStringModule.parse('?a=b', {
+        ignoreQueryPrefix: true,
+        arrayLimit: 20,
+      });
+    }).not.toWarnDev();
   });
 });

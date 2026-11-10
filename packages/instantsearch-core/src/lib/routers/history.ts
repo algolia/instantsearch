@@ -1,15 +1,19 @@
 import { safelyRunOnBrowser, warning } from '../utils';
 
-import { parseQueryString, stringifyQueryString } from './queryString';
+import { queryStringModule } from './queryString';
 
 import type { Router, RouterWriteOptions, UiState } from '../../types';
 
 type CreateURL<TRouteState> = (args: {
+  qsModule: typeof queryStringModule;
   routeState: TRouteState;
   currentURL: URL;
 }) => string;
 
-type ParseURL<TRouteState> = (args: { currentURL: URL }) => TRouteState;
+type ParseURL<TRouteState> = (args: {
+  qsModule: typeof queryStringModule;
+  currentURL: URL;
+}) => TRouteState;
 
 export type BrowserHistoryArgs<TRouteState> = {
   windowTitle?: (routeState: TRouteState) => string;
@@ -143,7 +147,10 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    * Reads the URL and returns a syncable UI search state.
    */
   public read(): TRouteState {
-    return this.parseURL({ currentURL: this.getCurrentURL() });
+    return this.parseURL({
+      qsModule: queryStringModule,
+      currentURL: this.getCurrentURL(),
+    });
   }
 
   /**
@@ -230,6 +237,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    */
   public createURL(routeState: TRouteState): string {
     const url = this._createURL({
+      qsModule: queryStringModule,
       routeState,
       currentURL: this.getCurrentURL(),
     });
@@ -308,9 +316,9 @@ Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algo
 }
 
 export default function historyRouter<TRouteState = UiState>({
-  createURL = ({ routeState, currentURL }) => {
+  createURL = ({ qsModule, routeState, currentURL }) => {
     const { protocol, hostname, port = '', pathname, hash } = currentURL;
-    const queryString = stringifyQueryString(routeState);
+    const queryString = qsModule.stringify(routeState);
     const portWithPrefix = port === '' ? '' : `:${port}`;
 
     // We rebuild the origin from its parts rather than reading `currentURL.origin`
@@ -322,10 +330,8 @@ export default function historyRouter<TRouteState = UiState>({
 
     return `${protocol}//${hostname}${portWithPrefix}${pathname}?${queryString}${hash}`;
   },
-  parseURL = ({ currentURL }) => {
-    return parseQueryString(
-      currentURL.search.slice(1)
-    ) as unknown as TRouteState;
+  parseURL = ({ qsModule, currentURL }) => {
+    return qsModule.parse(currentURL.search.slice(1)) as unknown as TRouteState;
   },
   writeDelay = 400,
   windowTitle,

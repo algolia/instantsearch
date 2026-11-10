@@ -1,7 +1,6 @@
 /* eslint complexity: off */
 
 import { history as historyRouter } from 'instantsearch.js/es/lib/routers';
-import qs from 'qs';
 
 import {
   getFallbackHitsPerPageRoutingValue,
@@ -92,7 +91,7 @@ const router = historyRouter<RouteState>({
       .join(' | ');
   },
 
-  createURL({ routeState, currentURL }): string {
+  createURL({ qsModule, routeState, currentURL }): string {
     const { protocol, hostname, port = '', pathname, hash } = currentURL;
     const portWithPrefix = port === '' ? '' : `:${port}`;
     const urlParts = currentURL.href.match(/^(.*?)\/search/);
@@ -151,7 +150,7 @@ const router = historyRouter<RouteState>({
       queryParameters.hitsPerPage = routeState.hitsPerPage;
     }
 
-    const queryString = qs.stringify(queryParameters, {
+    const queryString = qsModule.stringify(queryParameters, {
       addQueryPrefix: true,
       arrayFormat: 'repeat',
     });
@@ -159,12 +158,12 @@ const router = historyRouter<RouteState>({
     return `${baseUrl}/${categoryPath}${queryString}${hash}`;
   },
 
-  parseURL({ currentURL }): RouteState {
+  parseURL({ qsModule, currentURL }): RouteState {
     const pathnameMatches = currentURL.pathname.match(/search\/(.*?)\/?$/);
     const category = getCategoryName(
       (pathnameMatches && pathnameMatches[1]) || ''
     );
-    const queryParameters = qs.parse(currentURL.search.slice(1));
+    const queryParameters = qsModule.parse(currentURL.search.slice(1));
     const {
       query = '',
       page = 1,
