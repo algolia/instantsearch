@@ -8480,13 +8480,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/hogan.js@npm:^3.0.0":
-  version: 3.0.1
-  resolution: "@types/hogan.js@npm:3.0.1"
-  checksum: 10c0/8d2dc2809063852710a559746c8275af97bf5c84be1ad40fe240d8b5c91d266b0f841dc9774b5d1461ea42679b4dfeb4f1865a94995fc61a8e4081d3f11dc266
-  languageName: node
-  linkType: hard
-
 "@types/html-minifier-terser@npm:^5.0.0":
   version: 5.1.2
   resolution: "@types/html-minifier-terser@npm:5.1.2"
@@ -19960,18 +19953,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hogan.js@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "hogan.js@npm:3.0.2"
-  dependencies:
-    mkdirp: "npm:0.3.0"
-    nopt: "npm:1.0.10"
-  bin:
-    hulk: ./bin/hulk
-  checksum: 10c0/fa5c9d2eaf3fa712e72e67cce5e3435a1c5823282b81051514aefdca7d4b706cc4dbef7a34be19ee320c6ebaf3687d5781f12bc0aac04d3d902aa26861493679
-  languageName: node
-  linkType: hard
-
 "hookable@npm:^4.4.1":
   version: 4.4.1
   resolution: "hookable@npm:4.4.1"
@@ -20994,11 +20975,9 @@ __metadata:
     "@swc/helpers": "npm:0.5.18"
     "@types/dom-speech-recognition": "npm:^0.0.1"
     "@types/google.maps": "npm:^3.55.12"
-    "@types/hogan.js": "npm:^3.0.0"
     "@types/qs": "npm:^6.5.3"
     algoliasearch: "npm:5.1.1"
     algoliasearch-helper: "npm:3.30.1"
-    hogan.js: "npm:^3.0.2"
     htm: "npm:^3.0.0"
     instantsearch-core: "npm:0.1.0"
     instantsearch-ui-components: "npm:0.44.0"
@@ -26202,13 +26181,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mkdirp@npm:0.3.0":
-  version: 0.3.0
-  resolution: "mkdirp@npm:0.3.0"
-  checksum: 10c0/cd9e54878490571df79770de1cdceba48ab6682c004616666d23a38315feaf5822d443aeb500ac298a12d7f6f5e11dc05cea3207d500e547d938218bf22d8629
-  languageName: node
-  linkType: hard
-
 "mkdirp@npm:^0.5.0, mkdirp@npm:^0.5.1, mkdirp@npm:^0.5.3, mkdirp@npm:^0.5.6, mkdirp@npm:~0.5.1":
   version: 0.5.6
   resolution: "mkdirp@npm:0.5.6"
@@ -26821,17 +26793,6 @@ __metadata:
     colors: "npm:0.5.x"
     underscore: "npm:~1.4.4"
   checksum: 10c0/2c5ca01e69d8e1225af5df6689aabbb0dd6563ed999e7bd3e4765fad11d4eaeeb71ac3fb5f0e439bdd7bbe681acf464a6638b9ecaa6185aec1b70fca7df87dd7
-  languageName: node
-  linkType: hard
-
-"nopt@npm:1.0.10":
-  version: 1.0.10
-  resolution: "nopt@npm:1.0.10"
-  dependencies:
-    abbrev: "npm:1"
-  bin:
-    nopt: ./bin/nopt.js
-  checksum: 10c0/ddfbd892116a125fd68849ef564dd5b1f0a5ba0dbbf18782e9499e2efad8f4d3790635b47c6b5d3f7e014069e7b3ce5b8112687e9ae093fcd2678188c866fe28
   languageName: node
   linkType: hard
 

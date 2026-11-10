@@ -7,7 +7,7 @@ import {
   Ticks,
   GetHandleProps,
 } from 'react-compound-slider';
-import { Range, RangeBoundaries, useRange } from 'react-instantsearch';
+import { Range, useRange } from 'react-instantsearch';
 
 import './PriceSlider.css';
 import { formatNumber } from '../utils';
@@ -55,16 +55,13 @@ function Handle({
   );
 }
 
-function convertToTicks(start: RangeBoundaries, range: Range): number[] {
+function convertToTicks({ min, max }: Range, range: Range): number[] {
   const domain =
     range.min === 0 && range.max === 0
       ? { min: undefined, max: undefined }
       : range;
 
-  return [
-    start[0] === -Infinity ? domain.min! : start[0]!,
-    start[1] === Infinity ? domain.max! : start[1]!,
-  ];
+  return [min ?? domain.min!, max ?? domain.max!];
 }
 
 export function PriceSlider({
@@ -76,7 +73,7 @@ export function PriceSlider({
   min?: number;
   max?: number;
 }) {
-  const { range, start, refine, canRefine } = useRange(
+  const { range, currentRefinement, refine, canRefine } = useRange(
     {
       attribute,
       min,
@@ -84,16 +81,18 @@ export function PriceSlider({
     },
     { $$widgetType: 'e-commerce.rangeSlider' }
   );
-  const [ticksValues, setTicksValues] = useState(convertToTicks(start, range));
-  const [prevStart, setPrevStart] = useState(start);
+  const [ticksValues, setTicksValues] = useState(
+    convertToTicks(currentRefinement, range)
+  );
+  const [prevRefinement, setPrevRefinement] = useState(currentRefinement);
 
-  if (start !== prevStart) {
-    setTicksValues(convertToTicks(start, range));
-    setPrevStart(start);
+  if (currentRefinement !== prevRefinement) {
+    setTicksValues(convertToTicks(currentRefinement, range));
+    setPrevRefinement(currentRefinement);
   }
 
-  const onChange = (values: readonly number[]) => {
-    refine(values as [number, number]);
+  const onChange = ([newMin, newMax]: readonly number[]) => {
+    refine({ min: newMin, max: newMax });
   };
 
   const onUpdate = (values: readonly number[]) => {
@@ -113,7 +112,10 @@ export function PriceSlider({
       mode={2}
       step={1}
       domain={[range.min!, range.max!]}
-      values={start as number[]}
+      values={[
+        currentRefinement.min ?? range.min!,
+        currentRefinement.max ?? range.max!,
+      ]}
       disabled={!canRefine}
       onChange={onChange}
       onUpdate={onUpdate}

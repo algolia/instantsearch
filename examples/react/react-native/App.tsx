@@ -93,7 +93,6 @@ export default function App() {
                 insightsClient,
                 insightsInitParams: { useCookie: false, userToken: USER_TOKEN },
               }}
-              future={{ preserveSharedStateOnUnmount: true }}
             >
               <Configure
                 attributesToSnippet={['description:20']}

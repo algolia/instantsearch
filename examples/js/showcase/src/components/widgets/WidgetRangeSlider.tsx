@@ -19,13 +19,11 @@ export function WidgetRangeSlider() {
 
     const widget = connectRange(
       (renderState, isFirstRender) => {
-        const { range, start, refine } = renderState;
+        const { range, currentRefinement, refine } = renderState;
         const min = range.min ?? 0;
         const max = range.max ?? 1000;
-        const from =
-          start[0] !== -Infinity && start[0] !== undefined ? start[0] : min;
-        const to =
-          start[1] !== Infinity && start[1] !== undefined ? start[1] : max;
+        const from = currentRefinement.min ?? min;
+        const to = currentRefinement.max ?? max;
 
         if (isFirstRender) {
           const slider = noUiSlider.create(containerRef.current!, {
@@ -40,7 +38,7 @@ export function WidgetRangeSlider() {
 
           slider.on('change', (values) => {
             skipUpdate = true;
-            refine([Number(values[0]), Number(values[1])]);
+            refine({ min: Number(values[0]), max: Number(values[1]) });
           });
 
           sliderRef.current = slider;

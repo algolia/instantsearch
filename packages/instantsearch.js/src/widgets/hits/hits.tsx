@@ -9,8 +9,6 @@ import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
 import { connectHits } from '../../connectors';
-import { withInsights } from '../../lib/insights';
-import { createInsightsEventHandler } from '../../lib/insights/listener';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 
@@ -22,7 +20,7 @@ import type {
   HitsWidgetDescription,
 } from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template, TemplateWithBindEvent } from '../../types';
+import type { Template, TemplateWithSendEvent } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 import type { Hit, WidgetFactory, Renderer, BaseHit } from 'instantsearch-core';
 import type {
@@ -48,31 +46,14 @@ const renderer =
     };
     templates: HitsTemplates<THit>;
   }): Renderer<HitsRenderState, Partial<HitsWidgetParams>> =>
-  (
-    {
-      items,
-      results,
-      instantSearchInstance,
-      insights,
-      bindEvent,
-      sendEvent,
-      banner,
-    },
-    isFirstRendering
-  ) => {
+  ({ items, results, sendEvent, banner }, isFirstRendering) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps<HitsTemplates<THit>>({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;
     }
-
-    const handleInsightsClick = createInsightsEventHandler({
-      insights,
-      sendEvent,
-    });
 
     const emptyComponent: HitsUiComponentProps<Hit>['emptyComponent'] = ({
       ...rootProps
@@ -97,17 +78,7 @@ const renderer =
         {...renderState.templateProps}
         templateKey="item"
         rootTagName="li"
-        rootProps={{
-          ...rootProps,
-          onClick: (event: MouseEvent) => {
-            handleInsightsClick(event);
-            rootProps.onClick();
-          },
-          onAuxClick: (event: MouseEvent) => {
-            handleInsightsClick(event);
-            rootProps.onAuxClick();
-          },
-        }}
+        rootProps={rootProps}
         data={{
           ...hit,
           get __hitIndex() {
@@ -118,7 +89,6 @@ const renderer =
             return index;
           },
         }}
-        bindEvent={bindEvent}
         sendEvent={sendEvent}
       />
     );
@@ -164,7 +134,7 @@ export type HitsTemplates<THit extends NonNullable<object> = BaseHit> =
      *
      * @default ''
      */
-    item: TemplateWithBindEvent<
+    item: TemplateWithSendEvent<
       Hit<THit> & {
         /** @deprecated the index in the hits array, use __position instead, which is the absolute position */
         __hitIndex: number;
@@ -226,7 +196,7 @@ export default (function hits<THit extends NonNullable<object> = BaseHit>(
     templates,
   });
 
-  const makeWidget = withInsights(connectHits)(specializedRenderer, () =>
+  const makeWidget = connectHits(specializedRenderer, () =>
     render(null, containerNode)
   );
 

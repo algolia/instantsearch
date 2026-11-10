@@ -1,5 +1,3 @@
-import { serializePayload } from './serializer';
-
 import type InstantSearch from '../../instantsearch';
 import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 import type { Hit } from '../../types';
@@ -13,15 +11,6 @@ type BuiltInSendEventForHits = (
 ) => void;
 type CustomSendEventForHits = (customPayload: any) => void;
 export type SendEventForHits = BuiltInSendEventForHits & CustomSendEventForHits;
-
-export type BuiltInBindEventForHits = (
-  eventType: string,
-  hits: Hit | Hit[],
-  eventName?: string,
-  additionalData?: Record<string, any>
-) => string;
-export type CustomBindEventForHits = (customPayload: any) => string;
-export type BindEventForHits = BuiltInBindEventForHits & CustomBindEventForHits;
 
 function chunk<TItem>(arr: TItem[], chunkSize: number = 20): TItem[][] {
   const chunks: TItem[][] = [];
@@ -40,7 +29,7 @@ export function _buildEventPayloadsForHits({
 }: {
   widgetType: string;
   helper: AlgoliaSearchHelper;
-  methodName: 'sendEvent' | 'bindEvent';
+  methodName: 'sendEvent';
   args: any[];
   instantSearchInstance: InstantSearch;
 }): InsightsEvent[] {
@@ -195,29 +184,4 @@ export function createSendEventForHits({
     }, 0);
   };
   return sendEventForHits;
-}
-
-export function createBindEventForHits({
-  helper,
-  widgetType,
-  instantSearchInstance,
-}: {
-  helper: AlgoliaSearchHelper;
-  widgetType: string;
-  instantSearchInstance: InstantSearch;
-}): BindEventForHits {
-  const bindEventForHits: BindEventForHits = (...args: any[]) => {
-    const payloads = _buildEventPayloadsForHits({
-      widgetType,
-      helper,
-      methodName: 'bindEvent',
-      args,
-      instantSearchInstance,
-    });
-
-    return payloads.length
-      ? `data-insights-event=${serializePayload(payloads)}`
-      : '';
-  };
-  return bindEventForHits;
 }

@@ -318,8 +318,8 @@ describe('composition multifeed dispatch', function () {
 
     helper.searchWithComposition();
 
-    return errorPromise.then(function (event) {
-      expect(event.error).toBe(searchError);
+    return errorPromise.then(function (error) {
+      expect(error).toBe(searchError);
 
       derivedHelper.detach();
     });

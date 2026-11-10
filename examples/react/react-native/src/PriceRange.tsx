@@ -7,26 +7,23 @@ type PriceRangeProps = UseRangeProps & {
 };
 
 function toInputValue(value: number | undefined): string {
-  if (value === undefined || value === -Infinity || value === Infinity) {
-    return '';
-  }
-  return String(value);
+  return value === undefined ? '' : String(value);
 }
 
 export function PriceRange({ onChange, ...props }: PriceRangeProps) {
-  const { range, start, refine, canRefine } = useRange(props);
+  const { range, currentRefinement, refine, canRefine } = useRange(props);
   const [from, setFrom] = useState<string>('');
   const [to, setTo] = useState<string>('');
-  const [startMin, startMax] = start;
+  const { min: refinedMin, max: refinedMax } = currentRefinement;
 
   // Keep local inputs in sync when the refinement changes elsewhere (e.g.
-  // cleared from the current-refinements chips). `start` is a new array on every
-  // render, so we depend on its primitive bounds rather than the reference to
-  // avoid an update loop.
+  // cleared from the current-refinements chips). `currentRefinement` is a new
+  // object on every render, so we depend on its primitive bounds rather than
+  // the reference to avoid an update loop.
   useEffect(() => {
-    setFrom(toInputValue(startMin));
-    setTo(toInputValue(startMax));
-  }, [startMin, startMax]);
+    setFrom(toInputValue(refinedMin));
+    setTo(toInputValue(refinedMax));
+  }, [refinedMin, refinedMax]);
 
   if (!canRefine) {
     return null;
@@ -35,7 +32,7 @@ export function PriceRange({ onChange, ...props }: PriceRangeProps) {
   function apply() {
     const min = from === '' ? undefined : Number(from);
     const max = to === '' ? undefined : Number(to);
-    refine([min, max]);
+    refine({ min, max });
     onChange?.();
   }
 

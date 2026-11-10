@@ -7,7 +7,6 @@ import { h, render } from 'preact';
 
 import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
 import { connectInfiniteHits } from '../../connectors';
-import { withInsights } from '../../lib/insights';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 
@@ -24,15 +23,9 @@ import type {
   InfiniteHitsWidgetDescription,
 } from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template, TemplateWithBindEvent } from '../../types';
+import type { Template, TemplateWithSendEvent } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
-import type {
-  WidgetFactory,
-  InsightsClient,
-  Renderer,
-  BaseHit,
-  Hit,
-} from 'instantsearch-core';
+import type { WidgetFactory, Renderer, BaseHit, Hit } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',
@@ -116,7 +109,7 @@ export type InfiniteHitsTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * The template to use for each result.
      */
-    item: TemplateWithBindEvent<
+    item: TemplateWithSendEvent<
       Hit<THit> & {
         /** @deprecated the index in the hits array, use __position instead, which is the absolute position */
         __hitIndex: number;
@@ -188,9 +181,6 @@ const renderer =
       showPrevious,
       isFirstPage,
       isLastPage,
-      instantSearchInstance,
-      insights,
-      bindEvent,
       sendEvent,
       banner,
     },
@@ -200,7 +190,6 @@ const renderer =
       renderState.templateProps =
         prepareTemplateProps<InfiniteHitsComponentTemplates>({
           defaultTemplates,
-          templatesConfig: instantSearchInstance.templatesConfig,
           templates: templates as InfiniteHitsComponentTemplates,
         });
       return;
@@ -217,9 +206,7 @@ const renderer =
         templateProps={renderState.templateProps!}
         isFirstPage={isFirstPage}
         isLastPage={isLastPage}
-        insights={insights as InsightsClient}
         sendEvent={sendEvent}
-        bindEvent={bindEvent}
         banner={banner}
       />,
       containerNode
@@ -286,9 +273,8 @@ export default (function infiniteHits<
     renderState: {},
   });
 
-  const makeWidget = withInsights(connectInfiniteHits)(
-    specializedRenderer,
-    () => render(null, containerNode)
+  const makeWidget = connectInfiniteHits(specializedRenderer, () =>
+    render(null, containerNode)
   );
 
   return {

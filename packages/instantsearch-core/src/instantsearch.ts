@@ -3,7 +3,6 @@ import algoliasearchHelper from 'algoliasearch-helper';
 
 import {
   createDocumentationMessageGenerator,
-  createDocumentationLink,
   defer,
   hydrateRecommendCache,
   hydrateSearchClient,
@@ -87,24 +86,15 @@ export type InstantSearchOptions<
    *   indexName: 'indexName',
    *   searchClient: {
    *     search(requests) {
-   *       // fetch response based on requests
+   *       // fetch response based on requests, including the searches for
+   *       // facet values (`type: 'facet'`)
    *       return response;
    *     },
-   *     searchForFacetValues(requests) {
-   *       // fetch response based on requests
-   *       return response;
-   *     }
    *   }
    * });
    * ```
    */
   searchClient: SearchClient | CompositionClient;
-
-  /**
-   * The locale used to display numbers. This will be passed
-   * to `Number.prototype.toLocaleString()`
-   */
-  numberLocale?: string;
 
   /**
    * Function called when the state changes.
@@ -156,37 +146,11 @@ export type InstantSearchOptions<
    * @deprecated This property will be still supported in 4.x releases, but not further. It is replaced by the `insights` middleware. For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/
    */
   insightsClient?: AlgoliaInsightsClient;
-  future?: {
-    /**
-     * Changes the way `dispose` is used in InstantSearch lifecycle.
-     *
-     * If `false` (by default), each widget unmounting will remove its state as well, even if there are multiple widgets reading that UI State.
-     *
-     * If `true`, each widget unmounting will only remove its own state if it's the last of its type. This allows for dynamically adding and removing widgets without losing their state.
-     *
-     * @default false
-     */
-    // @MAJOR: Remove legacy behaviour
-    preserveSharedStateOnUnmount?: boolean;
-    /**
-     * Changes the way root levels of hierarchical facets have their count displayed.
-     *
-     * If `false` (by default), the count of the refined root level is updated to match the count of the actively refined parent level.
-     *
-     * If `true`, the count of the root level stays the same as the count of all children levels.
-     *
-     * @default false
-     */
-    // @MAJOR: Remove legacy behaviour here and in algoliasearch-helper
-    persistHierarchicalRootCount?: boolean;
-  };
-
   /**
-   * @internal Injected by the InstantSearch.js factory to supply Hogan
-   * template helpers (`highlight`, `snippet`, `formatNumber`, …). Not part of
-   * the public API.
+   * Opt-in flags for behaviour that becomes the default in the next major
+   * version. There are none in this version.
    */
-  _internalHelpers?: Record<string, unknown>;
+  future?: Record<string, never>;
 
   /**
    * @internal Injected by each flavor (InstantSearch.js, React, Vue) so usage
@@ -200,10 +164,7 @@ export type InstantSearchStatus = 'idle' | 'loading' | 'stalled' | 'error';
 
 export const INSTANTSEARCH_FUTURE_DEFAULTS: Required<
   InstantSearchOptions['future']
-> = {
-  preserveSharedStateOnUnmount: false,
-  persistHierarchicalRootCount: false,
-};
+> = {};
 
 /**
  * The actual implementation of the InstantSearch. This is
@@ -225,7 +186,6 @@ class InstantSearch<
   public mainHelper: AlgoliaSearchHelper | null;
   public mainIndex: IndexWidget;
   public started: boolean;
-  public templatesConfig: Record<string, unknown>;
   public renderState: RenderState = {};
   public _stalledSearchDelay: number;
   public _searchStalledTimer: any;
@@ -323,19 +283,6 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
       );
     }
 
-    if (__DEV__ && options.future?.preserveSharedStateOnUnmount === undefined) {
-      // eslint-disable-next-line no-console
-      console.info(`Starting from the next major version, InstantSearch will change how widgets state is preserved when they are removed. InstantSearch will keep the state of unmounted widgets to be usable by other widgets with the same attribute.
-
-We recommend setting \`future.preserveSharedStateOnUnmount\` to true to adopt this change today.
-To stay with the current behaviour and remove this warning, set the option to false.
-
-See documentation: ${createDocumentationLink({
-        name: 'instantsearch',
-      })}#widget-param-future
-          `);
-    }
-
     this._initialOptions = options as unknown as InstantSearchOptions;
     this._version = options._internalVersion ?? version;
     this.client = searchClient;
@@ -353,10 +300,6 @@ See documentation: ${createDocumentationLink({
     this.onStateChange = onStateChange;
 
     this.started = false;
-    this.templatesConfig = {
-      helpers: options._internalHelpers ?? {},
-      compileOptions: {},
-    };
 
     this._stalledSearchDelay = stalledSearchDelay;
     this._searchStalledTimer = null;
@@ -507,10 +450,7 @@ See documentation: ${createDocumentationLink({
     // In Vue InstantSearch' hydrate, a main helper gets set before start, so
     // we need to respect this helper as a way to keep all listeners correct.
     const mainHelper =
-      this.mainHelper ||
-      algoliasearchHelper(this.client, this.indexName, undefined, {
-        persistHierarchicalRootCount: this.future.persistHierarchicalRootCount,
-      });
+      this.mainHelper || algoliasearchHelper(this.client, this.indexName);
 
     if (this.compositionID) {
       mainHelper.searchForFacetValues =
@@ -555,7 +495,7 @@ See documentation: ${createDocumentationLink({
 
     // Only the "main" Helper emits the `error` event vs the one for `search`
     // and `results` that are also emitted on the derived one.
-    mainHelper.on('error', ({ error }) => {
+    mainHelper.on('error', (error) => {
       if (!(error instanceof Error)) {
         // typescript lies here, error is in some cases { name: string, message: string }
         const err = error as Record<string, any>;
@@ -564,13 +504,6 @@ See documentation: ${createDocumentationLink({
           return acc;
         }, new Error(err.message));
       }
-      // If an error is emitted, it is re-thrown by events. In previous versions
-      // we emitted {error}, which is thrown as:
-      // "Uncaught, unspecified \"error\" event. ([object Object])"
-      // To avoid breaking changes, we make the error available in both
-      // `error` and `error.error`
-      // @MAJOR emit only error
-      (error as any).error = error;
       this.error = error;
       this.status = 'error';
       this.scheduleRender(!this._hasSearchWidget && !this._hasRecommendWidget);

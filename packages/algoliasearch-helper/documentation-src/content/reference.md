@@ -109,10 +109,6 @@ The values that can be used for filtering are retrieved with the answer from Alg
 
 {{> jsdoc jsdoc/helper/toggleFacetRefinement}}
 
-{{> jsdoc jsdoc/helper/hasRefinements}}
-
-{{> jsdoc jsdoc/helper/getRefinements}}
-
 ### Disjunctive facets
 
 Disjunctive facets are used to filter values from a facetted attribute. The filters set on an attribute are combined using an `or`, hence the disjunctive adjective.
@@ -148,8 +144,6 @@ The values that can be used for filtering are retrieved with the answer from Alg
 {{> jsdoc jsdoc/helper/addDisjunctiveFacetRefinement}}
 
 {{> jsdoc jsdoc/helper/removeDisjunctiveFacetRefinement}}
-
-{{> jsdoc jsdoc/helper/hasRefinements}}
 
 ### Hierarchical facets
 
@@ -379,8 +373,6 @@ The facet exclusions are not a type of facets by themselves, they are conjunctiv
 
 {{> jsdoc jsdoc/helper/toggleFacetExclusion}}
 
-{{> jsdoc jsdoc/helper/hasRefinements}}
-
 {{> jsdoc jsdoc/helper/isExcluded}}
 
 ### Numeric filters
@@ -450,8 +442,6 @@ The SearchResults is the interface to read the results received from Algolia sea
 {{> jsdoc jsdoc/results/getFacetValues}}
 
 {{> jsdoc jsdoc/results/getFacetStats}}
-
-{{> jsdoc jsdoc/results/getRefinements}}
 
 ### Geolocation data
 

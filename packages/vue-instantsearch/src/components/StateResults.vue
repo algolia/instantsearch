@@ -38,7 +38,6 @@ export default {
         const helper = this.getParentIndex().getHelper();
         const state = helper ? helper.state : null;
 
-        // @MAJOR no longer spread this inside `results`
         this.state = {
           results,
           state,
@@ -77,7 +76,7 @@ export default {
   computed: {
     stateResults() {
       const { results, state, status, error } = this.state;
-      return { ...results, results, state, status, error };
+      return { results, state, status, error };
     },
   },
 };

@@ -14,7 +14,7 @@ export type CurrentRefinementsProps = React.ComponentProps<'div'> & {
     > &
       Record<string, unknown>
   >;
-  hasRefinements?: boolean;
+  canRefine?: boolean;
 };
 
 export type CurrentRefinementsClassNames = {
@@ -30,10 +30,6 @@ export type CurrentRefinementsClassNames = {
    * Class names to apply to the list element
    */
   list: string;
-  /**
-   * Class names to apply to the list element when there are no refinements possible
-   */
-  noRefinementList: string;
   /**
    * Class names to apply to each refinement
    */
@@ -59,7 +55,7 @@ export type CurrentRefinementsClassNames = {
 export function CurrentRefinements({
   classNames = {},
   items = [],
-  hasRefinements = false,
+  canRefine = false,
   ...props
 }: CurrentRefinementsProps) {
   return (
@@ -68,7 +64,7 @@ export function CurrentRefinements({
       className={cx(
         'ais-CurrentRefinements',
         classNames.root,
-        !hasRefinements &&
+        !canRefine &&
           cx(
             'ais-CurrentRefinements--noRefinement',
             classNames.noRefinementRoot
@@ -76,18 +72,7 @@ export function CurrentRefinements({
         props.className
       )}
     >
-      <ul
-        className={cx(
-          'ais-CurrentRefinements-list',
-          classNames.list,
-          /* @MAJOR remove to ensure conformity with InstantSearch.css specs */
-          !hasRefinements &&
-            cx(
-              'ais-CurrentRefinements-list--noRefinement',
-              classNames.noRefinementList
-            )
-        )}
-      >
+      <ul className={cx('ais-CurrentRefinements-list', classNames.list)}>
         {items.map((item) => (
           <li
             key={[item.indexName, item.label].join('/')}

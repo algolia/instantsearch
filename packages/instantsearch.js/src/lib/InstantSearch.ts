@@ -3,7 +3,6 @@ import {
   INSTANTSEARCH_FUTURE_DEFAULTS,
 } from 'instantsearch-core/internal';
 
-import createHelpers from './createHelpers';
 import version from './version';
 
 import type {
@@ -22,7 +21,6 @@ class InstantSearch<
   constructor(options: InstantSearchOptions<TUiState, TRouteState>) {
     super({
       ...options,
-      _internalHelpers: createHelpers({ numberLocale: options.numberLocale }),
       _internalVersion: options._internalVersion ?? version,
     });
 

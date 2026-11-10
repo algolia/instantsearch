@@ -36,12 +36,6 @@ type InstantSearchModule = {
   snippet: typeof helpers.snippet;
   /** @deprecated use html tagged templates and the ReverseSnippet component instead */
   reverseSnippet: typeof helpers.reverseSnippet;
-
-  /**
-   * @deprecated use createInsightsMiddleware
-   * @link https://www.algolia.com/doc/api-reference/widgets/insights/js/
-   */
-  insights: typeof helpers.insights;
 };
 
 /**
@@ -78,6 +72,5 @@ instantsearch.highlight = helpers.highlight;
 instantsearch.reverseHighlight = helpers.reverseHighlight;
 instantsearch.snippet = helpers.snippet;
 instantsearch.reverseSnippet = helpers.reverseSnippet;
-instantsearch.insights = helpers.insights;
 
 export default instantsearch;

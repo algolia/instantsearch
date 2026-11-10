@@ -289,8 +289,6 @@ const createRenderer = <TItem extends BaseHit>(
           defaultTemplates: {} as unknown as NonNullable<
             typeof showRecentObj.templates
           >,
-          templatesConfig:
-            connectorParams.instantSearchInstance.templatesConfig,
           templates: showRecentObj.templates,
         });
 
@@ -332,8 +330,6 @@ const createRenderer = <TItem extends BaseHit>(
           defaultTemplates: {} as unknown as NonNullable<
             typeof rendererParams.templates
           >,
-          templatesConfig:
-            connectorParams.instantSearchInstance.templatesConfig,
           templates: rendererParams.templates,
         }),
         RecentSearchComponent,
@@ -750,7 +746,6 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         defaultTemplates: {} as unknown as NonNullable<
           IndexConfig<TItem>['templates']
         >,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates: currentIndexConfig.templates,
       });
     }

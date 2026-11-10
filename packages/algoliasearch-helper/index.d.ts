@@ -75,7 +75,7 @@ declare namespace algoliasearchHelper {
       event: 'result',
       cb: (res: { results: SearchResults; state: SearchParameters }) => void
     ): this;
-    on(event: 'error', cb: (res: { error: Error }) => void): this;
+    on(event: 'error', cb: (error: Error) => void): this;
     on(event: 'searchQueueEmpty', cb: () => void): this;
 
     /**
@@ -300,13 +300,11 @@ declare namespace algoliasearchHelper {
     setState(newState: PlainSearchParameters): this;
 
     overrideStateWithoutTriggeringChangeEvent: AlgoliaSearchHelper['setState'];
-    hasRefinements(facet: string): boolean;
     isExcluded: SearchParameters['isExcludeRefined'];
     hasTag: SearchParameters['isTagRefined'];
     getIndex(): string;
     getPage(): number;
     getTags(): string[];
-    getRefinements(facetName: string): any[];
     getNumericRefinement: SearchParameters['getNumericRefinement'];
     getHierarchicalFacetBreadcrumb: SearchParameters['getHierarchicalFacetBreadcrumb'];
     clearCache(): this;
@@ -340,7 +338,7 @@ declare namespace algoliasearchHelper {
         };
       }) => void
     ): this;
-    on(event: 'error', cb: (res: { error: Error }) => void): this;
+    on(event: 'error', cb: (error: Error) => void): this;
 
     lastResults: SearchResults | null;
     lastRecommendResults: RecommendResults | null;
@@ -1128,7 +1126,6 @@ declare namespace algoliasearchHelper {
      * This is for internal use, e.g., avoiding caching in infinite hits, or delaying the display of these results.
      */
     __isArtificial?: boolean | undefined;
-    persistHierarchicalRootCount?: boolean;
   }
 
   type ISearchResponse<T> = Omit<SearchResponse<T>, 'facets' | 'params'> &
@@ -1413,17 +1410,6 @@ declare namespace algoliasearchHelper {
      * @return The stats of the facet
      */
     getFacetStats(attribute: string): any;
-
-    /**
-     * Returns all refinements for all filters + tags. It also provides
-     * additional information: count and exhaustiveness for each filter.
-     *
-     * See the [refinement type](#Refinement) for an exhaustive view of the available
-     * data.
-     *
-     * @return all the refinements
-     */
-    getRefinements(): SearchResults.Refinement[];
 
     /** Ordered array of per-feed results, present when results come from a multifeed composition response. */
     feeds?: CompositionSearchResults[];
