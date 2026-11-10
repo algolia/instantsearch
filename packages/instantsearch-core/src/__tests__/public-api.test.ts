@@ -10,7 +10,6 @@ import type {
   InstantSearchInstance,
   Middleware,
   Range,
-  RangeBoundaries,
   RatingMenuConnectorParams,
   RatingMenuWidgetDescription,
   Router,
@@ -50,7 +49,6 @@ describe('public API', () => {
       Router,
       InstantSearchInstance,
       Range,
-      RangeBoundaries,
       RatingMenuConnectorParams,
       RatingMenuWidgetDescription,
     ];

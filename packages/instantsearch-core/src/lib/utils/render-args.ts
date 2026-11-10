@@ -23,7 +23,6 @@ export function createInitArgs(
     get renderState() {
       return instantSearchInstance.renderState;
     },
-    templatesConfig: instantSearchInstance.templatesConfig,
     createURL: parent.createURL,
     scopedResults: [],
     status: instantSearchInstance.status,
@@ -50,7 +49,6 @@ export function createRenderArgs(
     get renderState() {
       return instantSearchInstance.renderState;
     },
-    templatesConfig: instantSearchInstance.templatesConfig,
     createURL: parent.createURL,
     status: instantSearchInstance.status,
     error: instantSearchInstance.error,

@@ -22,7 +22,7 @@ type Props = {
   enableClearMapRefinement: boolean;
   isRefineOnMapMove: boolean;
   isRefinedWithMap: boolean;
-  hasMapMoveSinceLastRefine: boolean;
+  hasMapMovedSinceLastRefine: boolean;
   onRefineToggle: (event: Event) => void;
   onRefineClick: (event: MouseEvent) => void;
   onClearClick: (event: MouseEvent) => void;
@@ -36,7 +36,7 @@ const GeoSearchControls = ({
   enableClearMapRefinement,
   isRefineOnMapMove,
   isRefinedWithMap,
-  hasMapMoveSinceLastRefine,
+  hasMapMovedSinceLastRefine,
   onRefineToggle,
   onRefineClick,
   onClearClick,
@@ -47,7 +47,7 @@ const GeoSearchControls = ({
       <div>
         {enableRefineControl && (
           <div className={cssClasses.control}>
-            {isRefineOnMapMove || !hasMapMoveSinceLastRefine ? (
+            {isRefineOnMapMove || !hasMapMovedSinceLastRefine ? (
               <GeoSearchToggle
                 classNameLabel={cx(
                   cssClasses.label,
@@ -66,7 +66,7 @@ const GeoSearchControls = ({
             ) : (
               <GeoSearchButton
                 className={cssClasses.redo}
-                disabled={!hasMapMoveSinceLastRefine}
+                disabled={!hasMapMovedSinceLastRefine}
                 onClick={onRefineClick}
               >
                 <Template
@@ -84,9 +84,9 @@ const GeoSearchControls = ({
             <GeoSearchButton
               className={cx(
                 cssClasses.redo,
-                !hasMapMoveSinceLastRefine && cssClasses.disabledRedo
+                !hasMapMovedSinceLastRefine && cssClasses.disabledRedo
               )}
-              disabled={!hasMapMoveSinceLastRefine}
+              disabled={!hasMapMovedSinceLastRefine}
               onClick={onRefineClick}
             >
               <Template

@@ -28,7 +28,7 @@ See `src/components/Carousel.js` (+ `RelatedProducts.js` which uses it as an opt
 ## Working here
 
 ```bash
-yarn workspace vue-instantsearch build
+yarn lerna run build --scope vue-instantsearch
 yarn jest packages/vue-instantsearch/src/components/__tests__/<Pascal>   # from repo root
 ```
 

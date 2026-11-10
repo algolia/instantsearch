@@ -62,12 +62,7 @@ export type {
   ToolResultSubmissionOptions,
 } from './lib/ai-lite';
 export { getHighlightedParts, getPropertyByPath } from './lib/utils';
-export type {
-  BindEventForHits,
-  BuiltInBindEventForHits,
-  CustomBindEventForHits,
-  SendEventForHits,
-} from './lib/utils';
+export type { SendEventForHits } from './lib/utils';
 export type {
   FacetRefinement,
   NumericRefinement,

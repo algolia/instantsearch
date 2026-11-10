@@ -120,8 +120,6 @@ export type RefinementListRenderState = {
   isFromSearch: boolean;
   /**
    * `true` if a refinement can be applied.
-   * @MAJOR: reconsider how `canRefine` is computed so it both accounts for the
-   * items returned in the main search and in SFFV.
    */
   canRefine: boolean;
   /**
@@ -307,7 +305,7 @@ const connectRefinementList: RefinementListConnector =
                       }),
                       items: normalizedFacetValues,
                       canToggleShowMore: false,
-                      canRefine: true,
+                      canRefine: normalizedFacetValues.length > 0,
                       isFromSearch: true,
                       instantSearchInstance,
                     },

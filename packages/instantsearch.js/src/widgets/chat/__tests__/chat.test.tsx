@@ -351,7 +351,7 @@ describe('chat', () => {
           container,
           agentId: 'test-agent-id',
           disableTriggerValidation: true,
-          templates: { item: (hit) => `<div>${hit.name}</div>` },
+          templates: { item: (hit, { html }) => html`<div>${hit.name}</div>` },
           messages: [
             {
               id: 'assistant-message-id',
@@ -397,7 +397,7 @@ describe('chat', () => {
           container,
           agentId: 'test-agent-id',
           disableTriggerValidation: true,
-          templates: { item: (hit) => `<div>${hit.name}</div>` },
+          templates: { item: (hit, { html }) => html`<div>${hit.name}</div>` },
           messages: [
             {
               id: 'assistant-message-id',
@@ -467,7 +467,7 @@ describe('chat', () => {
           container,
           agentId: 'test-agent-id',
           disableTriggerValidation: true,
-          templates: { item: (hit) => `<div>${hit.name}</div>` },
+          templates: { item: (hit, { html }) => html`<div>${hit.name}</div>` },
           messages: [
             {
               id: 'assistant-message-id',
@@ -930,7 +930,7 @@ describe('chat', () => {
           container,
           agentId: 'test-agent-id',
           templates: {
-            item: (hit) => `<div>${hit.name}</div>`,
+            item: (hit, { html }) => html`<div>${hit.name}</div>`,
             layout: chatInlineLayout(),
           },
         }),

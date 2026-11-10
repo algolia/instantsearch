@@ -124,7 +124,6 @@ const createRenderer =
       onSuggestionClick,
       isChatBusy,
       sendToChat,
-      instantSearchInstance,
     },
     isFirstRendering
   ) => {
@@ -132,7 +131,6 @@ const createRenderer =
       renderState.templateProps =
         prepareTemplateProps<PromptSuggestionsPreparedTemplates>({
           defaultTemplates: {},
-          templatesConfig: instantSearchInstance.templatesConfig,
           templates: templates as Partial<PromptSuggestionsPreparedTemplates>,
         });
       return;

@@ -48,7 +48,6 @@ const renderer =
     {
       value,
       refine,
-      instantSearchInstance,
     }: ToggleRefinementRenderState &
       RendererOptions<ToggleRefinementConnectorParams>,
     isFirstRendering: boolean
@@ -56,7 +55,6 @@ const renderer =
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
 

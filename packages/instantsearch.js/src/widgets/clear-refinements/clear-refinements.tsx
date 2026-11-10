@@ -47,11 +47,10 @@ const renderer =
     ClearRefinementsRenderState,
     Partial<ClearRefinementsWidgetParams>
   > =>
-  ({ refine, canRefine, instantSearchInstance }, isFirstRendering) => {
+  ({ refine, canRefine }, isFirstRendering) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;
@@ -61,7 +60,7 @@ const renderer =
       <ClearRefinements
         refine={refine}
         cssClasses={cssClasses}
-        hasRefinements={canRefine}
+        canRefine={canRefine}
         templateProps={renderState.templateProps!}
       />,
       containerNode
@@ -89,7 +88,7 @@ export type ClearRefinementsTemplates = Partial<{
   /**
    * Template for the content of the button
    */
-  resetLabel: Template<{ hasRefinements: boolean }>;
+  resetLabel: Template<{ canRefine: boolean }>;
 }>;
 
 export type ClearRefinementsWidgetParams = {
