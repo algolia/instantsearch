@@ -2,7 +2,7 @@
   <div v-if="state" :class="suit()">
     <slot
       v-bind="state"
-      :results="state.instantSearchInstance.helper.lastResults"
+      :results="state.instantSearchInstance.mainIndex.getHelper().lastResults"
     >
       <!-- prettier-ignore -->
       <span :class="suit('text')"

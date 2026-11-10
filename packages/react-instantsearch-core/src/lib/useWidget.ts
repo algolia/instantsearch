@@ -105,7 +105,7 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
     // If we made a second request because of two-pass widgets, we need to
     // wait for the second result — except for the two-pass widgets themselves
     // which need to render their children after the first result.
-    if (!isTwoPassWidget(widget) && search.helper?.lastResults) {
+    if (!isTwoPassWidget(widget) && search.mainIndex.getHelper()?.lastResults) {
       use(waitForResultsRef.current);
     }
   }
