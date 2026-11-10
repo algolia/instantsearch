@@ -12,7 +12,6 @@ import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
-  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
@@ -1026,8 +1025,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
   describe('dispose', () => {
     it('calls the unmount function', () => {
-      const helper = algoliasearchHelper({} as SearchClient, '', {});
-
       const renderFn = (): void => {};
       const unmountFn = jest.fn();
       const makeWidget = connectInfiniteHits(renderFn, unmountFn);
@@ -1035,42 +1032,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
       expect(unmountFn).toHaveBeenCalledTimes(0);
 
-      widget.dispose(createDisposeOptions({ helper, state: helper.state }));
+      widget.dispose();
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
 
     it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper({} as SearchClient, '', {});
-
       const renderFn = (): void => {};
       const makeWidget = connectInfiniteHits(renderFn);
       const widget = makeWidget({});
 
-      expect(() =>
-        widget.dispose(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
-    });
-
-    it('removes the `page` from the `SearchParameters`', () => {
-      const helper = algoliasearchHelper({} as SearchClient, '', {
-        page: 5,
-      });
-
-      const renderFn = (): void => {};
-      const makeWidget = connectInfiniteHits(renderFn);
-      const widget = makeWidget({});
-
-      expect(helper.state.page).toBe(5);
-
-      const nextState = widget.dispose(
-        createDisposeOptions({
-          helper,
-          state: helper.state,
-        })
-      );
-
-      expect(nextState.page).toBeUndefined();
+      expect(() => widget.dispose()).not.toThrow();
     });
   });
 

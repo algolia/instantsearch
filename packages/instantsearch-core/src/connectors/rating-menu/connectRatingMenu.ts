@@ -422,10 +422,8 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
         };
       },
 
-      dispose({ state }) {
+      dispose() {
         unmountFn();
-
-        return state.removeNumericRefinement(attribute);
       },
 
       getWidgetUiState(uiState, { searchParameters }) {

@@ -149,9 +149,8 @@ export default (function connectTrendingFacets<
         };
       },
 
-      dispose({ recommendState }) {
+      dispose() {
         unmountFn();
-        return recommendState.removeParams(this.$$id!);
       },
 
       getWidgetParameters(state) {

@@ -244,23 +244,8 @@ const connectSortBy: SortByConnector = function connectSortBy(
         );
       },
 
-      dispose({ state }) {
+      dispose() {
         unmountFn();
-
-        // Clear sortBy parameter if it was set
-        if (connectorState.isUsingComposition && state.sortBy) {
-          state = state.setQueryParameter('sortBy' as any, undefined);
-        }
-
-        // Restore initial index if changed
-        if (
-          connectorState.initialValue &&
-          state.index !== connectorState.initialValue
-        ) {
-          return state.setIndex(connectorState.initialValue);
-        }
-
-        return state;
       },
 
       getRenderState(renderState, renderOptions) {

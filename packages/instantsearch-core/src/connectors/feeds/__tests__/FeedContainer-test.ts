@@ -261,7 +261,7 @@ describe('FeedContainer', () => {
       expect(widget.dispose).toHaveBeenCalled();
     });
 
-    it('removeWidgets chains dispose state through children', () => {
+    it('removeWidgets disposes the widgets with the container as parent', () => {
       const instantSearchInstance = createInstantSearch();
       const parent = index({ indexName: 'test' });
       parent.getHelper = () => instantSearchInstance.helper!;
@@ -272,54 +272,76 @@ describe('FeedContainer', () => {
         instantSearchInstance
       );
 
-      const initialState = instantSearchInstance.helper!.state;
-      const stateAfterFirst = new SearchParameters({ index: 'after-first' });
-      const stateAfterSecond = new SearchParameters({ index: 'after-second' });
-
-      const widget1 = createWidget({
-        dispose: jest.fn(() => stateAfterFirst),
-      });
-      const widget2 = createWidget({
-        dispose: jest.fn(() => stateAfterSecond),
-      });
-
-      container.addWidgets([widget1, widget2]);
-      container.removeWidgets([widget1, widget2]);
-
-      expect(widget1.dispose).toHaveBeenCalledWith(
-        expect.objectContaining({ state: initialState })
-      );
-      expect(widget2.dispose).toHaveBeenCalledWith(
-        expect.objectContaining({ state: stateAfterFirst })
-      );
-    });
-
-    it('removeWidgets applies cleaned state to the helper', () => {
-      const instantSearchInstance = createInstantSearch();
-      const parent = index({ indexName: 'test' });
-      parent.getHelper = () => instantSearchInstance.helper!;
-
-      const container = createFeedContainer(
-        'products',
-        parent,
-        instantSearchInstance
-      );
-
-      const cleanedState =
-        instantSearchInstance.helper!.state.setQueryParameter(
-          'disjunctiveFacets',
-          []
-        );
-      const widget = createWidget({
-        dispose: jest.fn(() => cleanedState),
-      });
-
+      const widget = createWidget();
       container.addWidgets([widget]);
-      const setStateSpy = jest.spyOn(instantSearchInstance.helper!, 'setState');
-
       container.removeWidgets([widget]);
 
-      expect(setStateSpy).toHaveBeenCalledWith(cleanedState);
+      expect(widget.dispose).toHaveBeenCalledWith({ parent: container });
+    });
+
+    it('removeWidgets drops the search parameters of the removed widgets', () => {
+      const instantSearchInstance = createInstantSearch();
+      const parent = index({ indexName: 'test' });
+      parent.getHelper = () => instantSearchInstance.helper!;
+
+      const container = createFeedContainer(
+        'products',
+        parent,
+        instantSearchInstance
+      );
+      const brand = connectRefinementList(() => {})({ attribute: 'brand' });
+      const categories = connectRefinementList(() => {})({
+        attribute: 'categories',
+      });
+
+      container.init({} as any);
+      container.addWidgets([brand, categories]);
+      instantSearchInstance.helper!.addDisjunctiveFacetRefinement(
+        'categories',
+        'Phone'
+      );
+
+      container.removeWidgets([brand]);
+
+      expect(instantSearchInstance.helper!.state.disjunctiveFacets).toEqual([
+        'categories',
+      ]);
+      expect(
+        instantSearchInstance.helper!.state.disjunctiveFacetsRefinements
+      ).toEqual({ categories: ['Phone'] });
+    });
+
+    it('removeWidgets keeps the search parameters of the other feed containers', () => {
+      const instantSearchInstance = createInstantSearch();
+      const parent = index({ indexName: 'test' });
+      parent.getHelper = () => instantSearchInstance.helper!;
+
+      const container = createFeedContainer(
+        'products',
+        parent,
+        instantSearchInstance
+      );
+      const otherContainer = createFeedContainer(
+        'articles',
+        parent,
+        instantSearchInstance
+      );
+      parent.addWidgets([container, otherContainer]);
+      const brand = connectRefinementList(() => {})({ attribute: 'brand' });
+      const categories = connectRefinementList(() => {})({
+        attribute: 'categories',
+      });
+
+      container.init({} as any);
+      otherContainer.init({} as any);
+      container.addWidgets([brand]);
+      otherContainer.addWidgets([categories]);
+
+      container.removeWidgets([brand]);
+
+      expect(instantSearchInstance.helper!.state.disjunctiveFacets).toEqual([
+        'categories',
+      ]);
     });
 
     it('addWidgets inits widgets only after container init', () => {
@@ -550,8 +572,8 @@ describe('FeedContainer', () => {
 
       container.dispose();
 
-      expect(widget1.dispose).toHaveBeenCalled();
-      expect(widget2.dispose).toHaveBeenCalled();
+      expect(widget1.dispose).toHaveBeenCalledWith({ parent: container });
+      expect(widget2.dispose).toHaveBeenCalledWith({ parent: container });
       expect(container.getWidgets()).toEqual([]);
     });
   });
@@ -674,36 +696,6 @@ describe('FeedContainer', () => {
       expect(result).toEqual({
         refinementList: { brand: ['Apple'] },
       });
-    });
-  });
-
-  describe('dispose return value', () => {
-    it('returns cleaned state after chaining through children', () => {
-      const instantSearchInstance = createInstantSearch();
-      const parent = index({ indexName: 'test' });
-      parent.getHelper = () => instantSearchInstance.helper!;
-
-      const container = createFeedContainer(
-        'products',
-        parent,
-        instantSearchInstance
-      );
-
-      const cleanedState = new SearchParameters({ index: 'cleaned' });
-      const widget = createWidget({
-        dispose: jest.fn(() => cleanedState),
-      });
-
-      container.addWidgets([widget]);
-
-      const result = container.dispose({
-        helper: instantSearchInstance.helper!,
-        state: instantSearchInstance.helper!.state,
-        recommendState: instantSearchInstance.helper!.recommendState,
-        parent: container,
-      });
-
-      expect(result).toBe(cleanedState);
     });
   });
 

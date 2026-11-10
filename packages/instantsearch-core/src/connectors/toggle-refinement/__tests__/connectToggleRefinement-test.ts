@@ -322,13 +322,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     const widget = makeWidget({
       attribute,
     });
-    const config = widget.getWidgetSearchParameters(new SearchParameters({}), {
-      uiState: {},
-    });
-    const helper = jsHelper(createSearchClient(), '', config);
-    expect(() =>
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-    ).not.toThrow();
+    expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
   });
 
   it('Provides a function to add/remove a facet value', () => {
@@ -845,55 +839,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       const render = jest.fn();
       const unmount = jest.fn();
       const makeWidget = connectToggleRefinement(render, unmount);
-      const helper = jsHelper(createSearchClient(), '', {});
-      helper.search = jest.fn();
 
       const attribute = 'freeShipping';
       const widget = makeWidget({
         attribute,
       });
 
-      widget.dispose!(createDisposeOptions({ state: helper.state }));
+      widget.dispose!(createDisposeOptions());
 
       expect(unmount).toHaveBeenCalledTimes(1);
-    });
-
-    test('resets the state', () => {
-      const render = jest.fn();
-      const makeWidget = connectToggleRefinement(render);
-      const indexName = 'indexName';
-      const helper = jsHelper(createSearchClient(), indexName, {
-        disjunctiveFacets: ['freeShipping'],
-        disjunctiveFacetsRefinements: {
-          freeShipping: ['true'],
-        },
-      });
-      helper.search = jest.fn();
-
-      const attribute = 'freeShipping';
-      const widget = makeWidget({
-        attribute,
-      });
-
-      expect(helper.state).toEqual(
-        new SearchParameters({
-          index: indexName,
-          disjunctiveFacets: ['freeShipping'],
-          disjunctiveFacetsRefinements: {
-            freeShipping: ['true'],
-          },
-        })
-      );
-
-      const nextState = widget.dispose!(
-        createDisposeOptions({ state: helper.state })
-      );
-
-      expect(nextState).toEqual(
-        new SearchParameters({
-          index: indexName,
-        })
-      );
     });
   });
 

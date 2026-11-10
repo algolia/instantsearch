@@ -308,8 +308,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
 
   describe('dispose', () => {
     it('calls the unmount function', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '');
-
       const renderFn = () => {};
       const unmountFn = jest.fn();
       const makeWidget = connectPagination(renderFn, unmountFn);
@@ -317,44 +315,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
 
       expect(unmountFn).toHaveBeenCalledTimes(0);
 
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
+      widget.dispose!(createDisposeOptions());
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
 
     it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '');
-
       const renderFn = () => {};
       const makeWidget = connectPagination(renderFn);
       const widget = makeWidget({});
 
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
-    });
-
-    it('removes the `page` from the `SearchParameters`', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '', {
-        page: 5,
-      });
-
-      const renderFn = () => {};
-      const makeWidget = connectPagination(renderFn);
-      const widget = makeWidget({});
-
-      expect(helper.state.page).toBe(5);
-
-      const nextState = widget.dispose!(
-        createDisposeOptions({ helper, state: helper.state })
-      );
-
-      // error used for typescript
-      if (!nextState) {
-        throw new Error('expect state to be returned');
-      }
-
-      expect((nextState as SearchParameters).page).toBeUndefined();
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
   });
 

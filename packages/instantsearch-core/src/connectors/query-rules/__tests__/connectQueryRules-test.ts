@@ -200,7 +200,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         })
       );
 
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
+      widget.dispose!(createDisposeOptions());
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
@@ -218,9 +218,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         })
       );
 
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
   });
 
@@ -925,65 +923,6 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
         ]);
       });
 
-      test('reinitializes the rule contexts on dispose', () => {
-        const helper = createFakeHelper({
-          disjunctiveFacets: ['brand'],
-          ruleContexts: ['initial-rule'],
-        });
-        const { makeWidget } = createWidget();
-        const widget = makeWidget({
-          trackedFilters: {
-            brand: (values) => values,
-          },
-        });
-
-        widget.init!(
-          createInitOptions({
-            helper,
-            state: helper.state,
-          })
-        );
-
-        helper.setState({
-          ...helper.state,
-          disjunctiveFacetsRefinements: {
-            brand: ['Samsung', 'Apple'],
-          },
-        });
-
-        widget.render!(
-          createRenderOptions({
-            helper,
-            state: helper.state,
-            results: new SearchResults(helper.state, [
-              createSingleSearchResponse(),
-              createSingleSearchResponse({
-                facets: {
-                  brand: {
-                    Samsung: 100,
-                    Apple: 100,
-                  },
-                },
-              }),
-            ]),
-          })
-        );
-
-        expect(helper.state.ruleContexts).toEqual([
-          'initial-rule',
-          'ais-brand-Samsung',
-          'ais-brand-Apple',
-        ]);
-
-        const nextState = widget.dispose!(
-          createDisposeOptions({ helper, state: helper.state })
-        );
-
-        expect((nextState as SearchParameters).ruleContexts).toEqual([
-          'initial-rule',
-        ]);
-      });
-
       test('preserves rule contexts added by other widgets after init', () => {
         const helper = createFakeHelper({
           disjunctiveFacets: ['brand'],
@@ -1042,14 +981,6 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
         });
 
         expect(helper.state.ruleContexts).toEqual(['other-widget']);
-
-        const nextState = widget.dispose!(
-          createDisposeOptions({ helper, state: helper.state })
-        );
-
-        expect((nextState as SearchParameters).ruleContexts).toEqual([
-          'other-widget',
-        ]);
       });
 
       test('stops tracking filters after dispose', () => {
@@ -1080,7 +1011,7 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
         expect(brandFilterSpy).toHaveBeenCalledTimes(1);
         expect(brandFilterSpy).toHaveBeenCalledWith(['Samsung']);
 
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
+        widget.dispose!(createDisposeOptions());
 
         helper.setState({
           disjunctiveFacetsRefinements: {

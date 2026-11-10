@@ -667,9 +667,6 @@ You may want to add another entry to the \`items\` option with this value.`);
 
   describe('dispose', () => {
     it('calls the unmount function', () => {
-      const searchClient = createSearchClient();
-      const helper = algoliasearchHelper(searchClient, '');
-
       const renderFn = () => {};
       const unmountFn = jest.fn();
       const makeWidget = connectHitsPerPage(renderFn, unmountFn);
@@ -682,15 +679,12 @@ You may want to add another entry to the \`items\` option with this value.`);
 
       expect(unmountFn).toHaveBeenCalledTimes(0);
 
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
+      widget.dispose!(createDisposeOptions());
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
 
     it('does not throw without the unmount function', () => {
-      const searchClient = createSearchClient();
-      const helper = algoliasearchHelper(searchClient, '');
-
       const renderFn = () => {};
       const makeWidget = connectHitsPerPage(renderFn);
       const widget = makeWidget({
@@ -700,37 +694,7 @@ You may want to add another entry to the \`items\` option with this value.`);
         ],
       });
 
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
-    });
-
-    it('removes `hitsPerPage` from the `SearchParameters`', () => {
-      const searchClient = createSearchClient();
-      const helper = algoliasearchHelper(searchClient, '', {
-        hitsPerPage: 5,
-      });
-
-      const renderFn = () => {};
-      const unmountFn = jest.fn();
-      const makeWidget = connectHitsPerPage(renderFn, unmountFn);
-      const widget = makeWidget({
-        items: [
-          { value: 3, label: '3 items per page', default: true },
-          { value: 10, label: '10 items per page' },
-        ],
-      });
-
-      expect(helper.state.hitsPerPage).toBe(5);
-
-      const nextState = widget.dispose!(
-        createDisposeOptions({
-          helper,
-          state: helper.state,
-        })
-      ) as SearchParameters;
-
-      expect(nextState.hitsPerPage).toBeUndefined();
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
   });
 

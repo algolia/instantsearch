@@ -12,7 +12,6 @@ import type {
   IndexUiState,
   Widget,
   IndexWidget,
-  DisposeOptions,
   RenderOptions,
 } from '../../types';
 import type {
@@ -34,6 +33,56 @@ function reduceChildrenUiState(
         ? widget.getWidgetUiState(state, widgetUiStateOptions)
         : state,
     uiState
+  );
+}
+
+function getFeedContainers(
+  parentIndex: IndexWidget,
+  container: IndexWidget
+): IndexWidget[] {
+  const feedContainers = parentIndex
+    .getWidgets()
+    .filter(
+      (widget): widget is IndexWidget => widget.$$type === 'ais.feedContainer'
+    );
+
+  return feedContainers.includes(container)
+    ? feedContainers
+    : feedContainers.concat(container);
+}
+
+function getParentUiState(
+  parentIndex: IndexWidget,
+  feedContainers: IndexWidget[],
+  helper: AlgoliaSearchHelper
+): IndexUiState {
+  return feedContainers.reduce<IndexUiState>(
+    (uiState, feedContainer) =>
+      reduceChildrenUiState(feedContainer.getWidgets(), uiState, {
+        searchParameters: helper.state,
+        helper,
+      }),
+    parentIndex.getWidgetUiState<UiState>({})[parentIndex.getIndexId()] || {}
+  );
+}
+
+// Feed containers share the parent helper, but the parent index doesn't read
+// the search parameters of their children. They're computed again here from
+// the parent widgets and the children of the given feed containers.
+function getParentSearchParameters(
+  parentIndex: IndexWidget,
+  feedContainers: IndexWidget[],
+  uiState: IndexUiState
+): SearchParameters {
+  return feedContainers.reduce(
+    (state, feedContainer) =>
+      feedContainer.getWidgetSearchParameters(state, { uiState }),
+    parentIndex.getWidgetSearchParameters(
+      new algoliasearchHelper.SearchParameters({
+        index: parentIndex.getIndexName(),
+      }),
+      { uiState }
+    )
   );
 }
 
@@ -156,33 +205,22 @@ export function createFeedContainer(
         return container;
       }
 
-      // Chain through children's dispose so widgets clean up the
-      // SearchParameters they declared (e.g. RefinementList removes its
-      // disjunctiveFacet) instead of leaving them stale on the parent helper.
-      let cleanedState: SearchParameters = helper.state;
-
       flatWidgets.forEach((widget) => {
-        if (widget.dispose) {
-          const next = widget.dispose({
-            helper,
-            state: cleanedState,
-            recommendState: helper.recommendState,
-            parent: container,
-          });
-
-          if (next instanceof algoliasearchHelper.RecommendParameters) {
-            // ignore — FeedContainer doesn't manage recommend state
-          } else if (next) {
-            cleanedState = next;
-          }
-        }
+        widget.dispose?.({ parent: container });
       });
 
       localWidgets = localWidgets.filter((w) => !flatWidgets.includes(w));
 
-      if (cleanedState !== helper.state) {
-        helper.setState(cleanedState);
-      }
+      // The search parameters are computed again without the removed widgets,
+      // so that the ones they declared don't stay on the parent helper.
+      const feedContainers = getFeedContainers(parentIndex, container);
+      helper.setState(
+        getParentSearchParameters(
+          parentIndex,
+          feedContainers,
+          getParentUiState(parentIndex, feedContainers, helper)
+        )
+      );
 
       return container;
     },
@@ -253,34 +291,17 @@ export function createFeedContainer(
       });
     },
 
-    dispose(disposeOptions?: DisposeOptions) {
+    dispose() {
       const helper = parentIndex.getHelper();
-
-      // Chain through children's dispose to return a cleaned state
-      // (e.g. RefinementList.dispose removes its disjunctiveFacet declaration).
-      // This mirrors how the index widget's removeWidgets chains dispose calls.
-      let cleanedState = disposeOptions?.state ?? helper?.state;
 
       localWidgets.forEach((widget) => {
         if (widget.dispose && helper) {
-          const next = widget.dispose({
-            helper,
-            state: cleanedState!,
-            recommendState: helper.recommendState,
-            parent: container,
-          });
-
-          if (next instanceof algoliasearchHelper.RecommendParameters) {
-            // ignore — FeedContainer doesn't manage recommend state
-          } else if (next) {
-            cleanedState = next;
-          }
+          widget.dispose({ parent: container });
         }
       });
 
       localWidgets = [];
       initialized = false;
-      return cleanedState;
     },
 
     getWidgetUiState<TUiState extends UiState = UiState>(
@@ -337,24 +358,20 @@ export function createFeedContainer(
         return container;
       }
 
-      // We still dispose the previous widget, for its side effects and so that
-      // it drops the search parameters it declared on the parent helper.
-      let cleanedState = helper.state;
-      if (previousWidget.dispose) {
-        const next = previousWidget.dispose({
-          helper,
-          state: cleanedState,
-          recommendState: helper.recommendState,
-          parent: container,
-        });
+      // We still dispose the previous widget, for its side effects.
+      previousWidget.dispose?.({ parent: container });
 
-        if (
-          next &&
-          !(next instanceof algoliasearchHelper.RecommendParameters)
-        ) {
-          cleanedState = next;
-        }
-      }
+      // The search parameters of the parent widgets and of the other feed
+      // containers, which this container's children are applied on.
+      const otherFeedContainers = getFeedContainers(
+        parentIndex,
+        container
+      ).filter((feedContainer) => feedContainer !== container);
+      const initialState = getParentSearchParameters(
+        parentIndex,
+        otherFeedContainers,
+        getParentUiState(parentIndex, otherFeedContainers, helper)
+      );
 
       // We hand the previous `uiState` over to the children, then read the
       // `uiState` back from them, so that state no mounted child claims anymore
@@ -363,7 +380,7 @@ export function createFeedContainer(
         localWidgets,
         {},
         {
-          searchParameters: container.getWidgetSearchParameters(cleanedState, {
+          searchParameters: container.getWidgetSearchParameters(initialState, {
             uiState: previousUiState,
           }),
           helper,
@@ -372,7 +389,7 @@ export function createFeedContainer(
 
       // The search parameters are then computed again from that narrowed
       // `uiState`, so that they can't hold state the `uiState` doesn't describe.
-      const newState = container.getWidgetSearchParameters(cleanedState, {
+      const newState = container.getWidgetSearchParameters(initialState, {
         uiState: narrowedUiState,
       });
 

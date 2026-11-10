@@ -43,9 +43,6 @@ export type RenderOptions = SharedRenderOptions & {
 };
 
 export type DisposeOptions = {
-  helper: Helper;
-  state: SearchParameters;
-  recommendState: RecommendParameters;
   parent: IndexWidget;
 };
 
@@ -217,12 +214,11 @@ type RequiredWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
    */
   render?: (options: RenderOptions) => void;
   /**
-   * Called when this widget is unmounted. Used to remove refinements set by
-   * during this widget's initialization and life time.
+   * Called when this widget is unmounted. Used to remove listeners and
+   * rendering. The parent index computes the search parameters again from the
+   * widgets that remain.
    */
-  dispose?: (
-    options: DisposeOptions
-  ) => SearchParameters | RecommendParameters | void;
+  dispose?: (options: DisposeOptions) => void;
 };
 
 type RequiredWidgetType<TWidgetDescription extends WidgetDescription> = {

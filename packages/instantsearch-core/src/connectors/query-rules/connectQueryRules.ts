@@ -270,21 +270,12 @@ const connectQueryRules: QueryRulesConnector = function connectQueryRules(
         };
       },
 
-      dispose({ helper, state }) {
+      dispose() {
         unmount();
 
         if (hasTrackedFilters) {
-          helper.removeListener('change', onHelperChange);
-
-          return state.setQueryParameter(
-            'ruleContexts',
-            (state.ruleContexts || []).filter(
-              (ruleContext) => !tracker.ownedRuleContexts.includes(ruleContext)
-            )
-          );
+          tracker.helper.removeListener('change', onHelperChange);
         }
-
-        return state;
       },
     };
   };
