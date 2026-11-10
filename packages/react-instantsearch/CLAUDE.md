@@ -13,8 +13,8 @@ So adding/changing a React widget often touches `react-instantsearch-core` (hook
 ## Working here
 
 ```bash
-yarn workspace react-instantsearch build
-yarn workspace react-instantsearch-core build
+yarn lerna run build --scope react-instantsearch
+yarn lerna run build --scope react-instantsearch-core
 yarn jest packages/react-instantsearch/src/widgets/__tests__/<Pascal>   # from repo root
 ```
 

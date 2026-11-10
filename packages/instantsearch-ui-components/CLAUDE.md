@@ -38,7 +38,7 @@ export function createHitsComponent({ createElement, Fragment }: Renderer) {
 ## Working here
 
 ```bash
-yarn workspace instantsearch-ui-components build       # tsc/rollup + build:types
+yarn lerna run build --scope instantsearch-ui-components   # tsc/rollup + build:types
 yarn jest packages/instantsearch-ui-components/src/components/__tests__/<Name>   # from repo root
 ```
 
