@@ -20862,7 +20862,7 @@ __metadata:
     "@types/qs": "npm:^6.5.3"
     algoliasearch-helper: "npm:3.30.1"
     preact: "npm:^10.10.0"
-    qs: "npm:^6.5.1"
+    qs: "npm:6.9.7"
     search-insights: "npm:^2.17.2"
   languageName: unknown
   linkType: soft
@@ -20985,14 +20985,12 @@ __metadata:
     "@swc/helpers": "npm:0.5.18"
     "@types/dom-speech-recognition": "npm:^0.0.1"
     "@types/google.maps": "npm:^3.55.12"
-    "@types/qs": "npm:^6.5.3"
     algoliasearch: "npm:5.1.1"
     algoliasearch-helper: "npm:3.30.1"
     htm: "npm:^3.0.0"
     instantsearch-core: "npm:0.1.0"
     instantsearch-ui-components: "npm:0.44.0"
     preact: "npm:^10.10.0"
-    qs: "npm:^6.5.1"
     react: "npm:>= 0.14.0"
     search-insights: "npm:^2.17.2"
   peerDependencies:
