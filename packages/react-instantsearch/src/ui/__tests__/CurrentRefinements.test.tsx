@@ -20,7 +20,7 @@ describe('CurrentRefinements', () => {
           class="ais-CurrentRefinements ais-CurrentRefinements--noRefinement"
         >
           <ul
-            class="ais-CurrentRefinements-list ais-CurrentRefinements-list--noRefinement"
+            class="ais-CurrentRefinements-list"
           />
         </div>
       </div>
@@ -141,7 +141,6 @@ describe('CurrentRefinements', () => {
         root: 'ROOT',
         noRefinementRoot: 'NOREFINEMENTROOT',
         list: 'LIST',
-        noRefinementList: 'NOREFINEMENTLIST',
         item: 'ITEM',
         label: 'LABEL',
         category: 'CATEGORY',
@@ -159,7 +158,7 @@ describe('CurrentRefinements', () => {
             class="ais-CurrentRefinements ROOT ais-CurrentRefinements--noRefinement NOREFINEMENTROOT MyCustomCurrentRefinements"
           >
             <ul
-              class="ais-CurrentRefinements-list LIST ais-CurrentRefinements-list--noRefinement NOREFINEMENTLIST"
+              class="ais-CurrentRefinements-list LIST"
             />
           </div>
         </div>
@@ -193,7 +192,7 @@ describe('CurrentRefinements', () => {
             class="ais-CurrentRefinements ROOT ais-CurrentRefinements--noRefinement NOREFINEMENTROOT MyCustomCurrentRefinements"
           >
             <ul
-              class="ais-CurrentRefinements-list LIST ais-CurrentRefinements-list--noRefinement NOREFINEMENTLIST"
+              class="ais-CurrentRefinements-list LIST"
             >
               <li
                 class="ais-CurrentRefinements-item ITEM"
