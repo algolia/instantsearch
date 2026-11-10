@@ -1,5 +1,16 @@
 import * as instantsearchModule from '../index.es';
 
+import type {
+  HitsCSSClasses,
+  HitsTemplates,
+  HitsWidgetParams,
+  SearchBoxCSSClasses,
+  SearchBoxTemplates,
+  SearchBoxWidgetParams,
+  StatsTemplates,
+  QueryRuleCustomDataTemplates,
+} from '../index.es';
+
 const { instantsearch, version } = instantsearchModule;
 
 describe('index.es', () => {
@@ -48,5 +59,32 @@ describe('index.es', () => {
     ].forEach((name) => {
       expect(instantsearchModule).not.toHaveProperty(name);
     });
+  });
+
+  it('exports the public widget types from the root', () => {
+    // Type-only: this fails to compile when a widget type is not exported.
+    const searchBox: SearchBoxWidgetParams = { container: '#search-box' };
+    const searchBoxTemplates: SearchBoxTemplates = {};
+    const searchBoxCSSClasses: SearchBoxCSSClasses = { root: 'root' };
+    const hits: HitsWidgetParams = { container: '#hits' };
+    const hitsTemplates: HitsTemplates = {};
+    const hitsCSSClasses: HitsCSSClasses = { root: 'root' };
+    const statsTemplates: StatsTemplates = {};
+    const queryRuleCustomDataTemplates: QueryRuleCustomDataTemplates = {};
+
+    expect([
+      searchBox,
+      searchBoxTemplates,
+      searchBoxCSSClasses,
+      hits,
+      hitsTemplates,
+      hitsCSSClasses,
+      statsTemplates,
+      queryRuleCustomDataTemplates,
+    ]).toHaveLength(8);
+  });
+
+  it('does not leak the widgets internal defaultTemplates', () => {
+    expect(instantsearchModule).not.toHaveProperty('defaultTemplates');
   });
 });
