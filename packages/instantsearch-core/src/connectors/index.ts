@@ -28,14 +28,10 @@ export { default as connectHierarchicalMenu } from './hierarchical-menu/connectH
 export type * from './hierarchical-menu/connectHierarchicalMenu';
 export { default as connectHits } from './hits/connectHits';
 export type * from './hits/connectHits';
-export { default as connectHitsWithInsights } from './hits/connectHitsWithInsights';
-export type * from './hits/connectHitsWithInsights';
 export { default as connectHitsPerPage } from './hits-per-page/connectHitsPerPage';
 export type * from './hits-per-page/connectHitsPerPage';
 export { default as connectInfiniteHits } from './infinite-hits/connectInfiniteHits';
 export type * from './infinite-hits/connectInfiniteHits';
-export { default as connectInfiniteHitsWithInsights } from './infinite-hits/connectInfiniteHitsWithInsights';
-export type * from './infinite-hits/connectInfiniteHitsWithInsights';
 export { default as connectLookingSimilar } from './looking-similar/connectLookingSimilar';
 export type * from './looking-similar/connectLookingSimilar';
 export { default as connectMenu } from './menu/connectMenu';

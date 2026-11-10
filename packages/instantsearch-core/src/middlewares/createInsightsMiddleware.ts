@@ -57,7 +57,6 @@ const ALGOLIA_INSIGHTS_SRC = `https://cdn.jsdelivr.net/npm/search-insights@${ALG
 // they carry credentials or end-user data. Everything else is reported as-is.
 const SENSITIVE_OPTIONS = [
   'searchClient',
-  'insightsClient',
   'initialUiState',
   '_internalVersion',
 ] as const;
