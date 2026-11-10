@@ -1,5 +1,4 @@
 import * as connectors from './connectors/index';
-import * as helpers from './helpers/index';
 import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache/index';
 import InstantSearch from './lib/InstantSearch';
 import * as routers from './lib/routers/index';
@@ -27,7 +26,6 @@ type InstantSearchModule = {
   templates: typeof templates;
 
   createInfiniteHitsSessionStorageCache: typeof createInfiniteHitsSessionStorageCache;
-
 };
 
 /**
