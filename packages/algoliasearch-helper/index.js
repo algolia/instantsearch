@@ -1,6 +1,7 @@
 'use strict';
 
 var AlgoliaSearchHelper = require('./src/algoliasearch.helper');
+var EventEmitter = require('./src/EventEmitter');
 var RecommendParameters = require('./src/RecommendParameters');
 var RecommendResults = require('./src/RecommendResults');
 var SearchParameters = require('./src/SearchParameters');
@@ -55,6 +56,13 @@ algoliasearchHelper.version = require('./src/version');
  * @type {AlgoliaSearchHelper}
  */
 algoliasearchHelper.AlgoliaSearchHelper = AlgoliaSearchHelper;
+
+/**
+ * Constructor for the event emitter the helpers inherit from.
+ * @member module:algoliasearchHelper.EventEmitter
+ * @type {EventEmitter}
+ */
+algoliasearchHelper.EventEmitter = EventEmitter;
 
 /**
  * Constructor for the object containing all the parameters of the search.
