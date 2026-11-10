@@ -406,7 +406,7 @@ describe('InstantSearch', () => {
     expect(search.insightsClient).toBe(insightsClient);
   });
 
-  it("exposes helper's last results", async () => {
+  it("exposes the main index helper's last results", async () => {
     const searchClient = createSearchClient();
 
     const search = new InstantSearch({
@@ -422,8 +422,8 @@ describe('InstantSearch', () => {
 
     await wait(0);
 
-    // could be null if we don't pretend the main helper is the one who searched
-    expect(search.helper!.lastResults).not.toBe(null);
+    // could be null if we don't pretend the main index helper is the one who searched
+    expect(search.mainIndex.getHelper()!.lastResults).not.toBe(null);
   });
 
   describe('insights middleware', () => {
@@ -895,9 +895,9 @@ describe('start', () => {
 
     await wait(0);
 
-    expect(
-      search.mainHelper!.searchOnlyWithDerivedHelpers
-    ).toHaveBeenCalledTimes(1);
+    expect(search.helper!.searchOnlyWithDerivedHelpers).toHaveBeenCalledTimes(
+      1
+    );
   });
 
   it('forwards the `initialUiState` to the main index', () => {
@@ -1138,7 +1138,7 @@ describe('start', () => {
     `);
   });
 
-  it('keeps a mainHelper already set on the instance (Vue SSR)', () => {
+  it('keeps a helper already set on the instance (Vue SSR)', () => {
     const searchClient = createSearchClient();
     const instance = new InstantSearch({
       indexName: 'indexName',
@@ -1147,17 +1147,17 @@ describe('start', () => {
 
     const helper = algoliasearchHelper(searchClient, '');
 
-    // explicitly setting the mainHelper before start is used to force render to
+    // explicitly setting the helper before start is used to force render to
     // happen before the results of the first search are done. We need to make
     // sure no extra helper is created, as that can cause certain things (like routing)
     // to be listening to the wrong helper.
-    instance.mainHelper = helper;
+    instance.helper = helper;
 
-    expect(instance.mainHelper).toBe(helper);
+    expect(instance.helper).toBe(helper);
 
     instance.start();
 
-    expect(instance.mainHelper).toBe(helper);
+    expect(instance.helper).toBe(helper);
   });
 
   it('no query for root if indexName is not given', async () => {
@@ -1257,7 +1257,7 @@ describe('dispose', () => {
     await wait(0);
 
     // Simulate a search
-    search.mainHelper!.search();
+    search.helper!.search();
 
     search.dispose();
 
@@ -1330,7 +1330,7 @@ describe('dispose', () => {
 
     search.start();
 
-    const mainHelper = search.mainHelper!;
+    const mainHelper = search.helper!;
 
     mainHelper.on('searchQueueEmpty', onEventName);
 
@@ -1375,7 +1375,7 @@ describe('dispose', () => {
     expect(onRender).toHaveBeenCalledTimes(2);
   });
 
-  it('removes the Helpers references', () => {
+  it('removes the helper reference', () => {
     const search = new InstantSearch({
       indexName: 'indexName',
       searchClient: createSearchClient(),
@@ -1383,17 +1383,14 @@ describe('dispose', () => {
 
     search.start();
 
-    expect(search.mainHelper).not.toBe(null);
     expect(search.helper).not.toBe(null);
 
     search.dispose();
 
-    expect(search.mainHelper).toBe(null);
     expect(search.helper).toBe(null);
 
     search.start();
 
-    expect(search.mainHelper).not.toBe(null);
     expect(search.helper).not.toBe(null);
   });
 
@@ -1418,7 +1415,7 @@ describe('scheduleSearch', () => {
 
     search.start();
 
-    const mainHelperSearch = jest.spyOn(search.mainHelper!, 'search');
+    const mainHelperSearch = jest.spyOn(search.helper!, 'search');
 
     search.scheduleSearch();
 
@@ -1439,7 +1436,7 @@ describe('scheduleSearch', () => {
 
     search.start();
 
-    const mainHelperSearch = jest.spyOn(search.mainHelper!, 'search');
+    const mainHelperSearch = jest.spyOn(search.helper!, 'search');
 
     search.scheduleSearch();
     search.scheduleSearch();
@@ -1657,7 +1654,7 @@ describe('scheduleRender', () => {
 
     expect(search.status).toBe('error');
 
-    search.mainHelper!.search();
+    search.helper!.search();
     expect(search.status).toBe('loading');
 
     searches[1].resolver();
@@ -1694,7 +1691,7 @@ describe('scheduleStalledRender', () => {
     castToJestMock(widget.render!).mockReset();
 
     // Trigger a new search
-    search.mainHelper!.search();
+    search.helper!.search();
 
     // search starts
     await wait(0);
@@ -1732,10 +1729,10 @@ describe('scheduleStalledRender', () => {
     castToJestMock(widget.render!).mockClear();
 
     // Trigger multiple searches
-    search.mainHelper!.search();
-    search.mainHelper!.search();
-    search.mainHelper!.search();
-    search.mainHelper!.search();
+    search.helper!.search();
+    search.helper!.search();
+    search.helper!.search();
+    search.helper!.search();
 
     await wait(0);
 
@@ -1783,7 +1780,7 @@ describe('scheduleStalledRender', () => {
     );
 
     // Trigger a new search
-    search.mainHelper!.search();
+    search.helper!.search();
 
     expect(widget.render).toHaveBeenCalledTimes(1);
     castToJestMock(widget.render!).mockClear();

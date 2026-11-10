@@ -150,7 +150,7 @@ it('Allows a change in `index-name`', async () => {
     indexName: 'doggie_bowl',
   });
 
-  const helper = wrapper.vm.instantSearchInstance.helper;
+  const helper = wrapper.vm.instantSearchInstance.mainIndex.getHelper();
 
   expect(helper.setIndex).toHaveBeenCalledTimes(1);
   expect(helper.setIndex).toHaveBeenCalledWith('doggie_bowl');

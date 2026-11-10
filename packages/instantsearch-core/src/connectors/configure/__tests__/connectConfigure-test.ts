@@ -236,7 +236,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
         params: expect.not.objectContaining({ analytics: true }),
       },
     ]);
-    expect(search.helper!.state.clickAnalytics).toBe(true);
+    expect(search.mainIndex.getHelper()!.state.clickAnalytics).toBe(true);
   });
 
   describe('getRenderState', () => {

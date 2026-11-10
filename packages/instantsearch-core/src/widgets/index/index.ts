@@ -832,10 +832,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       localParent = parent;
       localUiState = uiState[indexId] || {};
 
-      // The `mainHelper` is already defined at this point. The instance is created
+      // The `searchHelper` is already defined at this point. The instance is created
       // inside InstantSearch at the `start` method, which occurs before the `init`
       // step.
-      const mainHelper = instantSearchInstance.mainHelper!;
+      const searchHelper = instantSearchInstance.helper!;
       const parameters = getLocalWidgetsSearchParameters(localWidgets, {
         uiState: localUiState,
         initialSearchParameters: new algoliasearchHelper.SearchParameters({
@@ -855,7 +855,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // `searchClient`. Only the "main" Helper created at the `InstantSearch`
       // level is aware of the client.
       helper = algoliasearchHelper(
-        mainHelper.getClient(),
+        searchHelper.getClient(),
         parameters.index,
         parameters
       );
@@ -882,14 +882,14 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
           // We don't trigger a search when controlled because it becomes the
           // responsibility of `setUiState`.
-          return mainHelper;
+          return searchHelper;
         }
 
-        return mainHelper.search();
+        return searchHelper.search();
       };
 
       helper.searchWithoutTriggeringOnStateChange = () => {
-        return mainHelper.search();
+        return searchHelper.search();
       };
 
       // We use the same pattern for the `searchForFacetValues`.
@@ -900,11 +900,11 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         userState
       ) => {
         const state = mergeSearchParameters(
-          mainHelper.state,
+          searchHelper.state,
           ...resolveSearchParameters(this)
         ).setQueryParameters(userState!);
 
-        return mainHelper.searchForFacetValues(
+        return searchHelper.searchForFacetValues(
           facetName,
           facetValue,
           maxFacetHits,
@@ -917,18 +917,18 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         : algoliasearchHelper({} as SearchClient, '__empty_index__', {});
       const derivingHelper = isolated
         ? isolatedHelper
-        : nearestIsolatedHelper(parent, mainHelper);
+        : nearestIsolatedHelper(parent, searchHelper);
 
       derivedHelper = derivingHelper.derive(
         () =>
           mergeSearchParameters(
-            mainHelper.state,
+            searchHelper.state,
             ...resolveSearchParameters(this)
           ),
         () =>
           addInsightsToRecommendParameters(
             this.getHelper()!.recommendState,
-            mainHelper.state
+            searchHelper.state
           )
       );
 
@@ -987,7 +987,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         instantSearchInstance.scheduleRender();
 
         // the derived helper is the one which actually searches, but the helper
-        // which is exposed e.g. via instance.helper, doesn't search, and thus
+        // which is exposed e.g. via mainIndex.getHelper(), doesn't search, and thus
         // does not have access to lastResults, which it used to in pre-federated
         // search behavior.
         helper!.lastResults = results;
@@ -1003,7 +1003,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         instantSearchInstance.scheduleRender();
 
         // the derived helper is the one which actually searches, but the helper
-        // which is exposed e.g. via instance.helper, doesn't search, and thus
+        // which is exposed e.g. via mainIndex.getHelper(), doesn't search, and thus
         // does not have access to lastRecommendResults.
         helper!.lastRecommendResults = recommend.results;
       });
@@ -1081,7 +1081,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         restoredForError = undefined;
       } else if (
         instantSearchInstance.error !== restoredForError &&
-        !instantSearchInstance.mainHelper!.hasPendingRequests() &&
+        !instantSearchInstance.helper!.hasPendingRequests() &&
         lastValidSearchParameters
       ) {
         restoredForError = instantSearchInstance.error;
@@ -1226,11 +1226,11 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 export default index;
 
 /**
- * Walk up the parent chain to find the closest isolated index, or fall back to mainHelper
+ * Walk up the parent chain to find the closest isolated index, or fall back to searchHelper
  */
 function nearestIsolatedHelper(
   current: IndexWidget | null,
-  mainHelper: Helper
+  searchHelper: Helper
 ): Helper {
   while (current) {
     if (current._isolated) {
@@ -1238,5 +1238,5 @@ function nearestIsolatedHelper(
     }
     current = current.getParent();
   }
-  return mainHelper;
+  return searchHelper;
 }
