@@ -206,7 +206,7 @@ describe('menuSelect', () => {
 
       search.start();
 
-      expect(search.helper!.state).toEqual(
+      expect(search.mainIndex.getHelper()!.state).toEqual(
         new SearchParameters({
           index: 'test',
           ...TAG_PLACEHOLDER,
@@ -217,7 +217,7 @@ describe('menuSelect', () => {
 
       await wait(0);
 
-      expect(search.helper!.state).toEqual(
+      expect(search.mainIndex.getHelper()!.state).toEqual(
         new SearchParameters({
           index: 'test',
           ...TAG_PLACEHOLDER,
@@ -233,7 +233,7 @@ describe('menuSelect', () => {
 
       expect(render).toHaveBeenCalledTimes(2);
       expect(render).toHaveBeenLastCalledWith(null, container);
-      expect(search.helper!.state).toEqual(
+      expect(search.mainIndex.getHelper()!.state).toEqual(
         new SearchParameters({ index: 'test', ...TAG_PLACEHOLDER })
       );
     });

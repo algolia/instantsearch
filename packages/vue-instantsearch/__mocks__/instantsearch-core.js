@@ -26,6 +26,7 @@ const fakeInstantSearch = jest.fn(
       throw new Error('need indexName or compositionID to be a string');
     }
 
+    const mainIndexHelper = new Helper();
     const instantsearchInstance = {
       _stalledSearchDelay: stalledSearchDelay || 200,
       routing: new RoutingManager(routing),
@@ -40,6 +41,9 @@ const fakeInstantSearch = jest.fn(
       mainIndex: {
         $$type: 'ais.index',
         _widgets: [],
+        getHelper() {
+          return mainIndexHelper;
+        },
         addWidgets(widgets) {
           this._widgets.push(...widgets);
         },
