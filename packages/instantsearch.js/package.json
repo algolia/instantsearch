@@ -30,13 +30,11 @@
     "@swc/helpers": "0.5.18",
     "@types/dom-speech-recognition": "^0.0.1",
     "@types/google.maps": "^3.55.12",
-    "@types/qs": "^6.5.3",
     "algoliasearch-helper": "3.30.2",
     "htm": "^3.0.0",
     "instantsearch-core": "0.1.0",
     "instantsearch-ui-components": "0.46.0",
     "preact": "^10.10.0",
-    "qs": "^6.5.1",
     "react": ">= 0.14.0",
     "search-insights": "^2.17.2"
   },
