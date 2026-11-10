@@ -421,24 +421,6 @@ Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algo
         currentURL,
       });
     });
-
-    test('writes the route state in the query string by default', () => {
-      const router = historyRouter<UiState>({
-        getCurrentURL: () => new URL('https://website.com/search#results'),
-        cleanUrlOnDispose: true,
-      });
-
-      expect(
-        router.createURL({
-          indexName: {
-            query: 'iphone case',
-            refinementList: { brand: ['Apple', 'Samsung'] },
-          },
-        })
-      ).toBe(
-        'https://website.com/search?indexName%5Bquery%5D=iphone%20case&indexName%5BrefinementList%5D%5Bbrand%5D%5B0%5D=Apple&indexName%5BrefinementList%5D%5Bbrand%5D%5B1%5D=Samsung#results'
-      );
-    });
   });
 
   describe('parseURL', () => {
@@ -454,21 +436,67 @@ Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algo
       expect(router.read()).toEqual({ indexName: { query: 'a' } });
       expect(parseURL).toHaveBeenCalledWith({ currentURL });
     });
+  });
 
-    test('reads the route state from the query string by default', () => {
+  describe('URLs of InstantSearch.js v4', () => {
+    // Keep this URL as the v4.122.0 history router wrote it with `qs`: v4
+    // links, bookmarks and indexed pages have to keep working.
+    const v4URL =
+      'https://website.com/search?instant_search%5Bquery%5D=iphone%20case%20%26%20%22cover%22&instant_search%5Bpage%5D=2&instant_search%5BhitsPerPage%5D=16&instant_search%5BsortBy%5D=instant_search_price_asc&instant_search%5BrefinementList%5D%5Bbrand%5D%5B0%5D=Apple&instant_search%5BrefinementList%5D%5Bbrand%5D%5B1%5D=Samsung&instant_search%5BhierarchicalMenu%5D%5BhierarchicalCategories.lvl0%5D%5B0%5D=Audio%20%3E%20Headphones&instant_search%5Brange%5D%5Bprice%5D=10%3A100&instant_search%5Btoggle%5D%5Bfree_shipping%5D=true&instant_search_articles%5Bquery%5D=Gr%C3%B6%C3%9Fe%20%E5%90%8D%E5%89%8D%20%F0%9F%99%82#results';
+
+    test('writes the same URL as v4', () => {
       const router = historyRouter<UiState>({
-        getCurrentURL: () =>
-          new URL(
-            'https://website.com/search?indexName%5Bquery%5D=iphone+case&indexName%5BrefinementList%5D%5Bbrand%5D%5B0%5D=Apple'
-          ),
+        getCurrentURL: () => new URL('https://website.com/search#results'),
         cleanUrlOnDispose: true,
       });
 
-      expect(router.read()).toEqual({
-        indexName: {
-          query: 'iphone case',
-          refinementList: { brand: ['Apple'] },
-        },
+      expect(
+        router.createURL({
+          instant_search: {
+            query: 'iphone case & "cover"',
+            page: 2,
+            hitsPerPage: 16,
+            sortBy: 'instant_search_price_asc',
+            refinementList: { brand: ['Apple', 'Samsung'] },
+            hierarchicalMenu: {
+              'hierarchicalCategories.lvl0': ['Audio > Headphones'],
+            },
+            range: { price: '10:100' },
+            toggle: { free_shipping: true },
+          },
+          instant_search_articles: { query: 'Größe 名前 🙂' },
+        })
+      ).toBe(v4URL);
+    });
+
+    test('reads the URL like v4, also once its brackets, spaces and escapes are rewritten', () => {
+      const rewrittenV4URL = v4URL
+        .replace(/%5B/g, '[')
+        .replace(/%5D/g, ']')
+        .replace(/%20/g, '+')
+        .replace(/%[0-9A-F]{2}/g, (escape) => escape.toLowerCase());
+
+      [v4URL, rewrittenV4URL].forEach((url) => {
+        const router = historyRouter<UiState>({
+          getCurrentURL: () => new URL(url),
+          cleanUrlOnDispose: true,
+        });
+
+        expect(router.read()).toEqual({
+          instant_search: {
+            query: 'iphone case & "cover"',
+            page: '2',
+            hitsPerPage: '16',
+            sortBy: 'instant_search_price_asc',
+            refinementList: { brand: ['Apple', 'Samsung'] },
+            hierarchicalMenu: {
+              'hierarchicalCategories.lvl0': ['Audio > Headphones'],
+            },
+            range: { price: '10:100' },
+            toggle: { free_shipping: 'true' },
+          },
+          instant_search_articles: { query: 'Größe 名前 🙂' },
+        });
       });
     });
   });
