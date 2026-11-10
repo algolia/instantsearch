@@ -15,10 +15,14 @@ const widget = {
 };
 
 helper.addFacetRefinement('brand', 'Apple').toggleFacetRefinement('brand', 'Samsung');
+// TODO(instantsearch v5): `helper.hasRefinements` was removed, use `helper.state.isFacetRefined`, `isDisjunctiveFacetRefined`, `isHierarchicalFacetRefined`, `isExcludeRefined` or `isNumericRefined` instead.
+const hasBrand = helper.hasRefinements('brand');
 
 function render({ hasMapMovedSinceLastRefine, canRefine }) {
   return !hasMapMovedSinceLastRefine() && canRefine;
 }
+
+const hitsPerPage = connectHitsPerPage(renderSort);
 
 function renderSort(renderOptions) {
   if (!renderOptions.canRefine) return 'none';

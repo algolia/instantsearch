@@ -15,10 +15,13 @@ const widget = {
 };
 
 helper.addRefine('brand', 'Apple').toggleRefine('brand', 'Samsung');
+const hasBrand = helper.hasRefinements('brand');
 
 function render({ hasMapMoveSinceLastRefine, hasRefinements }) {
   return !hasMapMoveSinceLastRefine() && hasRefinements;
 }
+
+const hitsPerPage = connectHitsPerPage(renderSort);
 
 function renderSort(renderOptions) {
   if (renderOptions.hasNoResults) return 'none';

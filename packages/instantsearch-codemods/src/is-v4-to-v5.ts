@@ -16,8 +16,6 @@ const IDENTIFIER_RENAMES: Record<string, string> = {
   EXPERIMENTAL_isolated: 'isolated',
   getWidgetState: 'getWidgetUiState',
   hasMapMoveSinceLastRefine: 'hasMapMovedSinceLastRefine',
-  // `hasRefinements` and `canRefine` have the same meaning
-  hasRefinements: 'canRefine',
   // helper methods
   addDisjunctiveRefine: 'addDisjunctiveFacetRefinement',
   removeDisjunctiveRefine: 'removeDisjunctiveFacetRefinement',
@@ -44,6 +42,13 @@ const REMOVED_EXPORTS =
   /^(places|answers|analytics|filterSuggestions|connectAnswers|connectFilterSuggestions|useFilterSuggestions|FilterSuggestions|EXPERIMENTAL_[cC]onfigureRelatedItems|connectConfigureRelatedItems|DisplayResultsToolType|ChatEmptyProps)$/;
 
 const REMOVED_WIDGETS = ['places', 'answers', 'analytics', 'filterSuggestions'];
+
+/**
+ * Connectors that dropped `hasNoResults` in favor of `canRefine`. The Stats
+ * template data still has `hasNoResults` (`nbHits === 0`), so it is left alone.
+ */
+const HAS_NO_RESULTS_CONNECTORS =
+  /(HitsPerPage|NumericMenu|RatingMenu|hitsPerPage|numericMenu|ratingMenu)/;
 
 const todo = (text: string) => `TODO(instantsearch v5): ${text}`;
 
@@ -143,32 +148,55 @@ export default function transform(
   rename(root.find(j.Identifier));
   rename(root.find(j.JSXIdentifier));
 
+  // `hasRefinements` is only renamed in connector render state (to
+  // `canRefine`). The helper method was removed and has no direct replacement.
+  const isHelperCall = (path: any) =>
+    path.parent.node.type === 'MemberExpression' &&
+    path.parent.node.property === path.node &&
+    !path.parent.node.computed &&
+    path.parent.parent.node.type === 'CallExpression' &&
+    path.parent.parent.node.callee === path.parent.node;
+  root.find(j.Identifier, { name: 'hasRefinements' }).forEach((path: any) => {
+    if (isHelperCall(path)) {
+      addComment(
+        enclosingStatement(path),
+        '`helper.hasRefinements` was removed, use `helper.state.isFacetRefined`, `isDisjunctiveFacetRefined`, `isHierarchicalFacetRefined`, `isExcludeRefined` or `isNumericRefined` instead.'
+      );
+    } else {
+      path.node.name = 'canRefine';
+    }
+  });
+
   // ---------------------------------------------------------------------------
   // 2. hasNoResults -> !canRefine (the meaning is inverted, so no plain rename)
   // ---------------------------------------------------------------------------
-  root
-    .find(j.MemberExpression, {
-      property: { type: 'Identifier', name: 'hasNoResults' },
-      computed: false,
-    })
-    .forEach((path) => {
-      const canRefine = j.memberExpression(
-        path.node.object,
-        j.identifier('canRefine')
-      );
-      const parent: any = path.parent.node;
-      if (parent.type === 'UnaryExpression' && parent.operator === '!') {
-        j(path.parent).replaceWith(canRefine);
-      } else {
-        j(path).replaceWith(j.unaryExpression('!', canRefine));
+  if (HAS_NO_RESULTS_CONNECTORS.test(file.source)) {
+    root
+      .find(j.MemberExpression, {
+        property: { type: 'Identifier', name: 'hasNoResults' },
+        computed: false,
+      })
+      .forEach((path) => {
+        const canRefine = j.memberExpression(
+          path.node.object,
+          j.identifier('canRefine')
+        );
+        const parent: any = path.parent.node;
+        if (parent.type === 'UnaryExpression' && parent.operator === '!') {
+          j(path.parent).replaceWith(canRefine);
+        } else {
+          j(path).replaceWith(j.unaryExpression('!', canRefine));
+        }
+      });
+    findProperties(root.find(j.ObjectPattern), 'hasNoResults').forEach(
+      (path) => {
+        addComment(
+          path.node,
+          '`hasNoResults` is replaced by `canRefine`, which has the opposite meaning (`hasNoResults === !canRefine`).'
+        );
       }
-    });
-  findProperties(root.find(j.ObjectPattern), 'hasNoResults').forEach((path) => {
-    addComment(
-      path.node,
-      '`hasNoResults` is replaced by `canRefine`, which has the opposite meaning (`hasNoResults === !canRefine`).'
     );
-  });
+  }
 
   // ---------------------------------------------------------------------------
   // 3. hits -> items for useHits / useInfiniteHits

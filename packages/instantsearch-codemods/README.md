@@ -39,9 +39,9 @@ npx @codeshift/cli --packages 'instantsearch-codemods#ris-v6-to-v7' <path>
 
 Migrates InstantSearch.js, React InstantSearch and Vue InstantSearch code from v4 to v5. It transforms JavaScript and TypeScript files (`.js`, `.jsx`, `.ts`, `.tsx`), not `.vue` files. It will:
 
-- Rename removed `EXPERIMENTAL_*` APIs (`EXPERIMENTAL_autocomplete`, `EXPERIMENTAL_dynamicWidgets`, `EXPERIMENTAL_use`, `EXPERIMENTAL_isolated`) and other renamed APIs (`getWidgetState`, `hasMapMoveSinceLastRefine`, `hasRefinements`, deprecated helper methods like `addRefine`)
+- Rename removed `EXPERIMENTAL_*` APIs (`EXPERIMENTAL_autocomplete`, `EXPERIMENTAL_dynamicWidgets`, `EXPERIMENTAL_use`, `EXPERIMENTAL_isolated`) and other renamed APIs (`getWidgetState`, `hasMapMoveSinceLastRefine`, `hasRefinements` in connector render state, deprecated helper methods like `addRefine`)
 - Replace `addWidget`/`removeWidget` with `addWidgets`/`removeWidgets`
-- Replace `hasNoResults` with `!canRefine` and `hits` with `items` for `useHits`/`useInfiniteHits`
+- Replace `hasNoResults` with `!canRefine` (only in files using the `hitsPerPage`, `numericMenu` or `ratingMenu` connectors, since Stats templates still have it) and `hits` with `items` for `useHits`/`useInfiniteHits`
 - Replace `instantsearch.highlight`, `snippet`, `reverseHighlight`, `reverseSnippet` (and friends) with imports
 - Rename `getLocation` to `getCurrentURL` and `location` to `currentURL` in custom routers
 - Pass `cleanUrlOnDispose: true` to history routers, to keep the v4 behavior, with a TODO comment to adopt the new default
