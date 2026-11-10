@@ -13,7 +13,6 @@ export {
   ANONYMOUS_TOKEN_COOKIE_KEY,
   getUsageSessionId,
 } from './helpers';
-export { withInsights, inferInsightsPayload } from './lib/insights';
 export { AbstractChat } from './lib/ai-lite';
 export {
   DefaultChatTransport,

@@ -29,7 +29,6 @@ export const createInstantSearch = (
       this.started = false;
     },
     refresh: jest.fn(),
-    insightsClient: null,
     middleware: [],
     renderState: {},
     scheduleStalledRender: defer(jest.fn()),
