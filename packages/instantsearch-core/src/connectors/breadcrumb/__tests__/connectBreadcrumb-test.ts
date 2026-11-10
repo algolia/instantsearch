@@ -1328,41 +1328,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
 
   describe('dispose', () => {
     it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '');
-
       const renderFn = () => {};
       const makeWidget = connectBreadcrumb(renderFn);
       const widget = makeWidget({ attributes: ['category'] });
 
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
-    });
-
-    it('does not remove refinement', () => {
-      const renderFn = () => {};
-      const makeWidget = connectBreadcrumb(renderFn);
-      const widget = makeWidget({ attributes: ['category'] });
-
-      const helper = algoliasearchHelper(createSearchClient(), '', {
-        hierarchicalFacetsRefinements: {
-          category: ['boxes'],
-        },
-      });
-      helper.search = jest.fn();
-
-      widget.init!(
-        createInitOptions({
-          helper,
-          state: helper.state,
-        })
-      );
-
-      const newState = widget.dispose!(
-        createDisposeOptions({ helper, state: helper.state })
-      );
-
-      expect(newState).toBeUndefined();
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
   });
 });

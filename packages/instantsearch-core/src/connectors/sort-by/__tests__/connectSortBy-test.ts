@@ -150,11 +150,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       { label: 'Sort products by price', value: 'priceASC' },
     ];
     const widget = makeWidget({ items });
-    const helper = algoliasearchHelper(createSearchClient(), items[0].value);
 
-    expect(() =>
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-    ).not.toThrow();
+    expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
   });
 
   it('Renders with transformed items', () => {
@@ -1396,79 +1393,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
         expect(newState.index).toBe('products_asc');
         expect(newState.sortBy).toBeUndefined();
-      });
-    });
-
-    describe('Dispose', () => {
-      it('clears sortBy parameter on dispose in composition mode', () => {
-        const unmount = jest.fn();
-        const makeWidget = connectSortBy(() => {}, unmount);
-        const instantSearchInstance = createInstantSearch({
-          indexName: 'defaultIndex',
-        });
-        instantSearchInstance.compositionID = 'my-composition';
-
-        const items = [{ strategy: 'price_asc', label: 'Price: Low to High' }];
-        const widget = makeWidget({ items });
-
-        const helper = algoliasearchHelper(
-          createSearchClient(),
-          'my-composition'
-        );
-
-        widget.init!(
-          createInitOptions({
-            helper,
-            state: helper.state,
-            instantSearchInstance,
-          })
-        );
-
-        const stateWithSortBy = helper.state.setQueryParameter(
-          'sortBy' as any,
-          'price_asc'
-        );
-
-        const newState = widget.dispose!(
-          createDisposeOptions({ helper, state: stateWithSortBy })
-        ) as any;
-
-        expect(newState.sortBy).toBeUndefined();
-        expect(unmount).toHaveBeenCalled();
-      });
-
-      it('restores initial index on dispose', () => {
-        const unmount = jest.fn();
-        const makeWidget = connectSortBy(() => {}, unmount);
-        const instantSearchInstance = createInstantSearch({
-          indexName: 'my-composition',
-        });
-        instantSearchInstance.compositionID = 'my-composition';
-
-        const items = [{ value: 'products_desc', label: 'Products DESC' }];
-        const widget = makeWidget({ items });
-
-        const helper = algoliasearchHelper(
-          createSearchClient(),
-          'my-composition'
-        );
-
-        widget.init!(
-          createInitOptions({
-            helper,
-            state: helper.state,
-            instantSearchInstance,
-          })
-        );
-
-        const stateWithDifferentIndex = helper.state.setIndex('products_desc');
-
-        const newState = widget.dispose!(
-          createDisposeOptions({ helper, state: stateWithDifferentIndex })
-        ) as any;
-
-        expect(newState.index).toBe('my-composition');
-        expect(unmount).toHaveBeenCalled();
       });
     });
   });

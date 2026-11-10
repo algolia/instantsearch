@@ -228,12 +228,8 @@ const connectMenu: MenuConnector = function connectMenu(
         );
       },
 
-      dispose({ state }) {
+      dispose() {
         unmountFn();
-
-        return state
-          .removeHierarchicalFacet(attribute)
-          .setQueryParameter('maxValuesPerFacet', undefined);
       },
 
       getRenderState(renderState, renderOptions) {

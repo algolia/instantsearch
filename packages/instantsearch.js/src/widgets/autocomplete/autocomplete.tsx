@@ -1598,7 +1598,6 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
         parentRef = undefined;
         instanceRef = null;
         activated = false;
-        return undefined;
       },
     };
   }
