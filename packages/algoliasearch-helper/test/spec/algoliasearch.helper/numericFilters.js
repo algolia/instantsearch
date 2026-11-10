@@ -100,10 +100,10 @@ test('Should remove all the numeric values for a single operator if remove is ca
   expect(helper.state.numericRefinements.attribute['>']).toEqual([]);
   expect(helper.state.numericRefinements.attribute['<']).toEqual([4]);
 
-  expect(helper.getRefinements('attribute')).toEqual([
-    { type: 'numeric', operator: '>', value: [] },
-    { type: 'numeric', operator: '<', value: [4] },
-  ]);
+  expect(helper.state.numericRefinements.attribute).toEqual({
+    '>': [],
+    '<': [4],
+  });
 });
 
 test('Should remove all the numeric values for an attribute if remove is called with one argument', function () {
@@ -121,27 +121,18 @@ test('Should remove all the numeric values for an attribute if remove is called 
     '>': [],
     '<': [],
   });
-
-  expect(helper.getRefinements('attribute')).toEqual([
-    {
-      operator: '>',
-      type: 'numeric',
-      value: [],
-    },
-    {
-      operator: '<',
-      type: 'numeric',
-      value: [],
-    },
-  ]);
 });
 
-test('Should be able to get if an attribute has numeric filter with hasRefinements', function () {
+test('Should be able to get if an attribute has numeric filter', function () {
   var helper = algoliasearchHelper(fakeClient, null, null);
 
-  expect(helper.hasRefinements('attribute')).toBeFalsy();
+  expect(helper.state.numericRefinements).toEqual({});
   helper.addNumericRefinement('attribute', '=', 42);
-  expect(helper.hasRefinements('attribute')).toBeTruthy();
+  expect(helper.state.numericRefinements).toEqual({
+    attribute: {
+      '=': [42],
+    },
+  });
 });
 
 test('Should be able to remove the value even if it was a string used as a number', function () {

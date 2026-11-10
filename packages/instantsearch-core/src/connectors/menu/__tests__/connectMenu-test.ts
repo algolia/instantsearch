@@ -260,9 +260,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     const firstRenderingOptions = rendering.mock.calls[0][0];
     const { refine } = firstRenderingOptions;
     refine('value');
-    expect(helper.hasRefinements('category')).toBe(false);
+    expect(helper.state.isHierarchicalFacetRefined('category')).toBe(false);
     refine('value');
-    expect(helper.hasRefinements('category')).toBe(true);
+    expect(helper.state.isHierarchicalFacetRefined('category')).toBe(true);
 
     widget.render!(
       createRenderOptions({
@@ -279,9 +279,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     const secondRenderingOptions = rendering.mock.calls[1][0];
     const { refine: renderRefine } = secondRenderingOptions;
     renderRefine('value');
-    expect(helper.hasRefinements('category')).toBe(false);
+    expect(helper.state.isHierarchicalFacetRefined('category')).toBe(false);
     renderRefine('value');
-    expect(helper.hasRefinements('category')).toBe(true);
+    expect(helper.state.isHierarchicalFacetRefined('category')).toBe(true);
   });
 
   it('provides the correct facet values', () => {
@@ -1691,7 +1691,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
         1
       );
-      expect(helper.hasRefinements('category')).toBe(true);
+      expect(helper.state.isHierarchicalFacetRefined('category')).toBe(true);
 
       refine('value');
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
