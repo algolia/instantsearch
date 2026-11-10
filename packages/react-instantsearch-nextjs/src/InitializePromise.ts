@@ -73,12 +73,13 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
   resetWidgetId();
 
   const waitForResults = () =>
-    new Promise<void>((resolve) => {
+    new Promise<void>((resolve, reject) => {
       let searchReceived = false;
       let recommendReceived = false;
       let settled = false;
-      const derivedHelper = search.helper!.derivedHelpers[0];
-      const settle = () => {
+      const helper = search.helper!;
+      const derivedHelper = helper.derivedHelpers[0];
+      const settle = (error?: Error) => {
         if (settled) {
           return;
         }
@@ -86,7 +87,20 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
         if (resolveWaitForResultsRef) {
           resolveWaitForResultsRef.current = null;
         }
-        resolve();
+        derivedHelper.removeListener('result', onResult);
+        derivedHelper.removeListener('recommend:result', onRecommendResult);
+        helper.removeListener('error', onError);
+        search.removeListener('error', onError);
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      };
+      // A failed search or Recommend request never emits a result, so the
+      // promise would stay pending.
+      const onError = (error: Error) => {
+        settle(error);
       };
       const onResult = () => {
         searchReceived = true;
@@ -103,14 +117,14 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
 
       if (resolveWaitForResultsRef) {
         resolveWaitForResultsRef.current = () => {
-          derivedHelper.removeListener('result', onResult);
-          derivedHelper.removeListener('recommend:result', onRecommendResult);
           settle();
         };
       }
 
       derivedHelper.once('result', onResult);
       derivedHelper.once('recommend:result', onRecommendResult);
+      helper.on('error', onError);
+      search.on('error', onError);
     });
 
   const injectInitialResults = () => {

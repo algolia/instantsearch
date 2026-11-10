@@ -202,6 +202,40 @@ test('it waits for recommend only if there are only recommend widgets', async ()
   expect(client.getRecommendations).toHaveBeenCalledTimes(1);
 });
 
+test('it rejects when the search fails', async () => {
+  const ref: { current: PromiseWithState<void> | null } = { current: null };
+  const error = new Error('search failed');
+
+  await expect(
+    renderComponent({
+      ref,
+      children: <SearchBox />,
+      searchClient: createSearchClient({
+        search: jest.fn().mockRejectedValue(error),
+      }),
+    })
+  ).rejects.toBe(error);
+
+  expect(ref.current!.status).toBe('rejected');
+});
+
+test('it rejects when recommend fails', async () => {
+  const ref: { current: PromiseWithState<void> | null } = { current: null };
+  const error = new Error('recommend failed');
+
+  await expect(
+    renderComponent({
+      ref,
+      children: <TrendingItems />,
+      searchClient: createSearchClient({
+        getRecommendations: jest.fn().mockRejectedValue(error),
+      }),
+    })
+  ).rejects.toBe(error);
+
+  expect(ref.current!.status).toBe('rejected');
+});
+
 test('it resolves without a request when no widget requires a search', async () => {
   const ref: { current: PromiseWithState<void> | null } = { current: null };
   const insertedHTML = jest.fn();
