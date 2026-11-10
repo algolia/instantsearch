@@ -30,6 +30,8 @@
     "examples/js/e-commerce-umd/public/packages",
     // The showcase example uses Preact with its own tsconfig and JSX transform.
     "examples/js/showcase",
-    "packages/create-instantsearch-app/src/templates/**/*"
+    "packages/create-instantsearch-app/src/templates/**/*",
+    // Codemod fixtures are intentionally written against the old API.
+    "packages/instantsearch-codemods/__testfixtures__"
   ]
 }
