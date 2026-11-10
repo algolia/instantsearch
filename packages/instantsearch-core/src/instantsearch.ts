@@ -23,7 +23,6 @@ import { index as indexWidget } from './widgets';
 
 import type { InsightsEvent, InsightsProps, RouterProps } from './middlewares';
 import type {
-  InsightsClient as AlgoliaInsightsClient,
   SearchClient,
   Widget,
   IndexWidget,
@@ -140,13 +139,6 @@ export type InstantSearchOptions<
   insights?: InsightsProps | boolean;
 
   /**
-   * the instance of search-insights to use for sending insights events inside
-   * widgets like `hits`.
-   *
-   * @deprecated This property will be still supported in 4.x releases, but not further. It is replaced by the `insights` middleware. For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/
-   */
-  insightsClient?: AlgoliaInsightsClient;
-  /**
    * Opt-in flags for behaviour that becomes the default in the next major
    * version. There are none in this version.
    */
@@ -178,7 +170,6 @@ class InstantSearch<
   public client: InstantSearchOptions['searchClient'];
   public indexName: string;
   public compositionID?: string;
-  public insightsClient: AlgoliaInsightsClient | null;
   public onStateChange: InstantSearchOptions<TUiState>['onStateChange'] | null =
     null;
   public future: NonNullable<InstantSearchOptions<TUiState>['future']>;
@@ -240,7 +231,6 @@ class InstantSearch<
       insights = undefined,
       stalledSearchDelay = 200,
       searchClient = null,
-      insightsClient = null,
       onStateChange = null,
       future = {
         ...INSTANTSEARCH_FUTURE_DEFAULTS,
@@ -269,24 +259,10 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       ).addAlgoliaAgent(`instantsearch-core (${version})`);
     }
 
-    warning(
-      insightsClient === null,
-      `\`insightsClient\` property has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`insights\` middleware.
-
-For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/`
-    );
-
-    if (insightsClient && typeof insightsClient !== 'function') {
-      throw new Error(
-        withUsage('The `insightsClient` option should be a function.')
-      );
-    }
-
     this._initialOptions = options as unknown as InstantSearchOptions;
     this._version = options._internalVersion ?? version;
     this.client = searchClient;
     this.future = future;
-    this.insightsClient = insightsClient;
     this.indexName = indexName;
     this.compositionID = compositionID;
     this.helper = null;
