@@ -676,19 +676,9 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         return this;
       }
 
-      // We still dispose the previous widget, for its side effects. Only the
-      // recommend state it returns is kept: like in `removeWidgets`, the search
-      // parameters are computed again from the `uiState`.
-      const disposedState = previousWidget.dispose({
-        helper: helper!,
-        state: helper!.state,
-        recommendState: helper!.recommendState,
-        parent: this,
-      });
-      const cleanedRecommendState =
-        disposedState instanceof algoliasearchHelper.RecommendParameters
-          ? disposedState
-          : helper!.recommendState;
+      // We still dispose the previous widget, for its side effects. Like in
+      // `removeWidgets`, the parameters are computed again from the `uiState`.
+      previousWidget.dispose({ parent: this });
 
       const initialSearchParameters = new algoliasearchHelper.SearchParameters({
         index: this.getIndexName(),
@@ -721,7 +711,8 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         state: newState,
         recommendState: getLocalWidgetsRecommendParameters(localWidgets, {
           uiState: localUiState,
-          initialRecommendParameters: cleanedRecommendState,
+          initialRecommendParameters:
+            new algoliasearchHelper.RecommendParameters(),
         }),
         _uiState: localUiState,
       });
@@ -789,29 +780,8 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       recomputeLocalRequestDependencies();
 
       if (localInstantSearchInstance && Boolean(flatWidgets.length)) {
-        const { cleanedRecommendState } = flatWidgets.reduce(
-          (states, widget) => {
-            // the `dispose` method exists at this point we already assert it
-            const next = widget.dispose!({
-              helper: helper!,
-              state: states.cleanedSearchState,
-              recommendState: states.cleanedRecommendState,
-              parent: this,
-            });
-
-            if (next instanceof algoliasearchHelper.RecommendParameters) {
-              states.cleanedRecommendState = next;
-            } else if (next) {
-              states.cleanedSearchState = next;
-            }
-
-            return states;
-          },
-          {
-            cleanedSearchState: helper!.state,
-            cleanedRecommendState: helper!.recommendState,
-          }
-        );
+        // the `dispose` method exists at this point we already assert it
+        flatWidgets.forEach((widget) => widget.dispose!({ parent: this }));
 
         const newState = applyFeedsSearchParameters(
           localWidgets,
@@ -830,7 +800,14 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         });
 
         helper!.setState(newState);
-        helper!.recommendState = cleanedRecommendState;
+        helper!.recommendState = getLocalWidgetsRecommendParameters(
+          localWidgets,
+          {
+            uiState: localUiState,
+            initialRecommendParameters:
+              new algoliasearchHelper.RecommendParameters(),
+          }
+        );
 
         if (localWidgets.length) {
           if (isolated) {
@@ -1173,17 +1150,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       localWidgets.forEach((widget) => {
         if (widget.dispose && helper) {
           // The dispose function is always called once the instance is started
-          // (it's an effect of `removeWidgets`). The index is initialized and
-          // the Helper is available. We don't care about the return value of
-          // `dispose` because the index is removed. We can't call `removeWidgets`
+          // (it's an effect of `removeWidgets`). We can't call `removeWidgets`
           // because we want to keep the widgets on the instance, to allow idempotent
           // operations on `add` & `remove`.
-          widget.dispose({
-            helper,
-            state: helper.state,
-            recommendState: helper.recommendState,
-            parent: this,
-          });
+          widget.dispose({ parent: this });
         }
       });
 

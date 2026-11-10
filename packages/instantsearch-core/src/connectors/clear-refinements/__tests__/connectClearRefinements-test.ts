@@ -128,14 +128,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper(createSearchClient(), 'indexName');
       const rendering = () => {};
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({});
 
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
 
     describe('getRenderState', () => {
