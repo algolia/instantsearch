@@ -10,9 +10,9 @@
           {
             "group": [
               "instantsearch.js",
-              "instantsearch.js/*",
+              "instantsearch.js/**",
               "instantsearch-core",
-              "instantsearch-core/*"
+              "instantsearch-core/**"
             ],
             "message": "Import from `vue-instantsearch` (or `vue-instantsearch/vue3`) instead."
           }

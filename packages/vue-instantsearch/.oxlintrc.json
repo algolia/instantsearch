@@ -10,7 +10,7 @@
       {
         "patterns": [
           {
-            "group": ["instantsearch.js", "instantsearch.js/*"],
+            "group": ["instantsearch.js", "instantsearch.js/**"],
             "message": "vue-instantsearch is backed by `instantsearch-core`; it must not depend on `instantsearch.js`."
           }
         ]
