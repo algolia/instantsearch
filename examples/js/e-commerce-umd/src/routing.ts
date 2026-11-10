@@ -1,5 +1,7 @@
 /* eslint complexity: off */
 
+import qs from 'qs';
+
 import {
   getFallbackHitsPerPageRoutingValue,
   getFallbackSortByRoutingValue,
@@ -89,7 +91,7 @@ const router = window.instantsearch.routers.history<RouteState>({
       .join(' | ');
   },
 
-  createURL({ qsModule, routeState, currentURL }): string {
+  createURL({ routeState, currentURL }): string {
     const { protocol, hostname, port = '', pathname, hash } = currentURL;
     const portWithPrefix = port === '' ? '' : `:${port}`;
     const urlParts = currentURL.href.match(/^(.*?)\/search/);
@@ -148,7 +150,7 @@ const router = window.instantsearch.routers.history<RouteState>({
       queryParameters.hitsPerPage = routeState.hitsPerPage;
     }
 
-    const queryString = qsModule.stringify(queryParameters, {
+    const queryString = qs.stringify(queryParameters, {
       addQueryPrefix: true,
       arrayFormat: 'repeat',
     });
@@ -156,12 +158,12 @@ const router = window.instantsearch.routers.history<RouteState>({
     return `${baseUrl}/${categoryPath}${queryString}${hash}`;
   },
 
-  parseURL({ qsModule, currentURL }): RouteState {
+  parseURL({ currentURL }): RouteState {
     const pathnameMatches = currentURL.pathname.match(/search\/(.*?)\/?$/);
     const category = getCategoryName(
       (pathnameMatches && pathnameMatches[1]) || ''
     );
-    const queryParameters = qsModule.parse(currentURL.search.slice(1));
+    const queryParameters = qs.parse(currentURL.search.slice(1));
     const {
       query = '',
       page = 1,

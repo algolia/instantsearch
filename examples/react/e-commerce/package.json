@@ -15,6 +15,7 @@
     "instantsearch-ui-components": "0.44.0",
     "instantsearch.css": "8.25.0",
     "instantsearch.js": "4.121.0",
+    "qs": "6.9.7",
     "react": "19.0.0",
     "react-compound-slider": "3.4.0",
     "react-dom": "19.0.0",
@@ -22,6 +23,7 @@
     "react-instantsearch-core": "7.53.0"
   },
   "devDependencies": {
+    "@types/qs": "^6.5.3",
     "@types/react": "19.0.3",
     "@vitejs/plugin-react": "4.2.1",
     "typescript": "5.5.2",

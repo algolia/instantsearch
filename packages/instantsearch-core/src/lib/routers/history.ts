@@ -1,19 +1,15 @@
-import qs from 'qs';
-
 import { safelyRunOnBrowser, warning } from '../utils';
+
+import { parseQueryString, stringifyQueryString } from './queryString';
 
 import type { Router, RouterWriteOptions, UiState } from '../../types';
 
 type CreateURL<TRouteState> = (args: {
-  qsModule: typeof qs;
   routeState: TRouteState;
   currentURL: URL;
 }) => string;
 
-type ParseURL<TRouteState> = (args: {
-  qsModule: typeof qs;
-  currentURL: URL;
-}) => TRouteState;
+type ParseURL<TRouteState> = (args: { currentURL: URL }) => TRouteState;
 
 export type BrowserHistoryArgs<TRouteState> = {
   windowTitle?: (routeState: TRouteState) => string;
@@ -147,7 +143,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    * Reads the URL and returns a syncable UI search state.
    */
   public read(): TRouteState {
-    return this.parseURL({ qsModule: qs, currentURL: this.getCurrentURL() });
+    return this.parseURL({ currentURL: this.getCurrentURL() });
   }
 
   /**
@@ -234,7 +230,6 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    */
   public createURL(routeState: TRouteState): string {
     const url = this._createURL({
-      qsModule: qs,
       routeState,
       currentURL: this.getCurrentURL(),
     });
@@ -313,9 +308,9 @@ Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algo
 }
 
 export default function historyRouter<TRouteState = UiState>({
-  createURL = ({ qsModule, routeState, currentURL }) => {
+  createURL = ({ routeState, currentURL }) => {
     const { protocol, hostname, port = '', pathname, hash } = currentURL;
-    const queryString = qsModule.stringify(routeState);
+    const queryString = stringifyQueryString(routeState);
     const portWithPrefix = port === '' ? '' : `:${port}`;
 
     // We rebuild the origin from its parts rather than reading `currentURL.origin`
@@ -327,20 +322,10 @@ export default function historyRouter<TRouteState = UiState>({
 
     return `${protocol}//${hostname}${portWithPrefix}${pathname}?${queryString}${hash}`;
   },
-  parseURL = ({ qsModule, currentURL }) => {
-    // `qs` by default converts arrays with more than 20 items to an object.
-    // We want to avoid this because the data structure manipulated can therefore vary.
-    // Setting the limit to `100` seems a good number because the engine's default is 100
-    // (it can go up to 1000 but it is very unlikely to select more than 100 items in the UI).
-    //
-    // Using an `arrayLimit` of `n` allows `n + 1` items.
-    //
-    // See:
-    //   - https://github.com/ljharb/qs#parsing-arrays
-    //   - https://www.algolia.com/doc/api-reference/api-parameters/maxValuesPerFacet/
-    return qsModule.parse(currentURL.search.slice(1), {
-      arrayLimit: 99,
-    }) as unknown as TRouteState;
+  parseURL = ({ currentURL }) => {
+    return parseQueryString(
+      currentURL.search.slice(1)
+    ) as unknown as TRouteState;
   },
   writeDelay = 400,
   windowTitle,

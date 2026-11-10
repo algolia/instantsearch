@@ -404,5 +404,72 @@ describe('life cycle', () => {
         .toWarnDev(`[InstantSearch.js]: The URL returned by the \`createURL\` function is invalid.
 Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algolia.com/search?query=iphone\`.`);
     });
+
+    test('calls the provided createURL with the route state and the current URL', () => {
+      const currentURL = new URL('https://website.com/search');
+      const createURL = jest.fn(() => 'https://website.com/search?query=a');
+      const router = historyRouter<UiState>({
+        createURL,
+        getCurrentURL: () => currentURL,
+        cleanUrlOnDispose: true,
+      });
+
+      router.createURL({ indexName: { query: 'a' } });
+
+      expect(createURL).toHaveBeenCalledWith({
+        routeState: { indexName: { query: 'a' } },
+        currentURL,
+      });
+    });
+
+    test('writes the route state in the query string by default', () => {
+      const router = historyRouter<UiState>({
+        getCurrentURL: () => new URL('https://website.com/search#results'),
+        cleanUrlOnDispose: true,
+      });
+
+      expect(
+        router.createURL({
+          indexName: {
+            query: 'iphone case',
+            refinementList: { brand: ['Apple', 'Samsung'] },
+          },
+        })
+      ).toBe(
+        'https://website.com/search?indexName%5Bquery%5D=iphone%20case&indexName%5BrefinementList%5D%5Bbrand%5D%5B0%5D=Apple&indexName%5BrefinementList%5D%5Bbrand%5D%5B1%5D=Samsung#results'
+      );
+    });
+  });
+
+  describe('parseURL', () => {
+    test('calls the provided parseURL with the current URL', () => {
+      const currentURL = new URL('https://website.com/search?query=a');
+      const parseURL = jest.fn(() => ({ indexName: { query: 'a' } }));
+      const router = historyRouter<UiState>({
+        parseURL,
+        getCurrentURL: () => currentURL,
+        cleanUrlOnDispose: true,
+      });
+
+      expect(router.read()).toEqual({ indexName: { query: 'a' } });
+      expect(parseURL).toHaveBeenCalledWith({ currentURL });
+    });
+
+    test('reads the route state from the query string by default', () => {
+      const router = historyRouter<UiState>({
+        getCurrentURL: () =>
+          new URL(
+            'https://website.com/search?indexName%5Bquery%5D=iphone+case&indexName%5BrefinementList%5D%5Bbrand%5D%5B0%5D=Apple'
+          ),
+        cleanUrlOnDispose: true,
+      });
+
+      expect(router.read()).toEqual({
+        indexName: {
+          query: 'iphone case',
+          refinementList: { brand: ['Apple'] },
+        },
+      });
+    });
   });
 });
