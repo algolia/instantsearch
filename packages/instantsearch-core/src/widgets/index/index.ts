@@ -269,6 +269,30 @@ function getLocalWidgetsSearchParameters(
   }, initialState);
 }
 
+// Feed containers share the helper of their parent index, but their children
+// aren't part of its `uiState`. Their state is read from that helper, before
+// the parent computes its search parameters again.
+function applyFeedsSearchParameters(
+  widgets: Array<Widget | IndexWidget>,
+  searchParameters: SearchParameters,
+  helper: Helper
+): SearchParameters {
+  return widgets
+    .filter(
+      (widget): widget is IndexWidget => widget.$$type === 'ais.feedContainer'
+    )
+    .reduce<SearchParameters>(
+      (state, feedContainer) =>
+        feedContainer.getWidgetSearchParameters(state, {
+          uiState: getLocalWidgetsUiState(feedContainer.getWidgets(), {
+            searchParameters: helper.state,
+            helper,
+          }),
+        }),
+      searchParameters
+    );
+}
+
 function getLocalWidgetsRecommendParameters(
   widgets: Array<Widget | IndexWidget>,
   widgetRecommendParametersOptions: LocalWidgetRecommendParametersOptions
@@ -684,10 +708,14 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
       // The search parameters are then computed again from that narrowed
       // `uiState`, so that they can't hold state the `uiState` doesn't describe.
-      const newState = getLocalWidgetsSearchParameters(localWidgets, {
-        uiState: localUiState,
-        initialSearchParameters,
-      });
+      const newState = applyFeedsSearchParameters(
+        localWidgets,
+        getLocalWidgetsSearchParameters(localWidgets, {
+          uiState: localUiState,
+          initialSearchParameters,
+        }),
+        helper!
+      );
 
       privateHelperSetState(helper!, {
         state: newState,
@@ -785,12 +813,16 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           }
         );
 
-        const newState = getLocalWidgetsSearchParameters(localWidgets, {
-          uiState: localUiState,
-          initialSearchParameters: new algoliasearchHelper.SearchParameters({
-            index: this.getIndexName(),
+        const newState = applyFeedsSearchParameters(
+          localWidgets,
+          getLocalWidgetsSearchParameters(localWidgets, {
+            uiState: localUiState,
+            initialSearchParameters: new algoliasearchHelper.SearchParameters({
+              index: this.getIndexName(),
+            }),
           }),
-        });
+          helper!
+        );
 
         localUiState = getLocalWidgetsUiState(localWidgets, {
           searchParameters: newState,
