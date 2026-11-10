@@ -4309,7 +4309,7 @@ data: [DONE]`,
 
       expect(search.status).toBe('idle');
 
-      search.mainHelper!.search();
+      search.helper!.search();
       await wait(0);
       searches[1].rejecter(new Error('SERVER_ERROR'));
       await errorEvent;
@@ -4340,7 +4340,7 @@ data: [DONE]`,
       searches[0].resolver();
       await wait(0);
 
-      search.mainHelper!.search();
+      search.helper!.search();
       await wait(0);
       searches[1].rejecter(new Error('SERVER_ERROR'));
       await errorEvent;
@@ -4371,7 +4371,7 @@ data: [DONE]`,
       searches[0].resolver();
       await wait(0);
 
-      search.mainHelper!.search();
+      search.helper!.search();
       await wait(0);
       searches[1].rejecter(new Error('SERVER_ERROR'));
       await errorEvent;
