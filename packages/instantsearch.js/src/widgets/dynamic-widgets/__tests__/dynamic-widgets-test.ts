@@ -185,7 +185,7 @@ describe('dynamicWidgets()', () => {
       indexWidget.init(createInitOptions({ instantSearchInstance }));
 
       // set results to the relevant index, so it renders all children
-      instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults =
+      instantSearchInstance.helper!.derivedHelpers[0].lastResults =
         new SearchResults(
           indexWidget.getWidgetSearchParameters(new SearchParameters(), {
             uiState: {},
@@ -450,7 +450,7 @@ describe('dynamicWidgets()', () => {
       indexWidget.init(createInitOptions({ instantSearchInstance }));
 
       // set results to the relevant index, so it renders all children
-      instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults =
+      instantSearchInstance.helper!.derivedHelpers[0].lastResults =
         new SearchResults(
           indexWidget.getWidgetSearchParameters(new SearchParameters(), {
             uiState: {},
