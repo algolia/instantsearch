@@ -14,8 +14,7 @@
     "test:unit": "jest",
     "test:watch": "jest --watch",
     "test:v3": "yarn run test",
-    "version": "./scripts/update-version.js",
-    "prepare": "patch-package"
+    "version": "./scripts/update-version.js"
   },
   "author": {
     "name": "Algolia Inc.",
@@ -40,7 +39,7 @@
     "jest-watch-typeahead": "0.3.0",
     "jsdoc-to-markdown": "8.0.0",
     "metalsmith": "2.5.1",
-    "metalsmith-in-place": "1.4.4",
+    "metalsmith-in-place": "patch:metalsmith-in-place@npm%3A1.4.4#~/.yarn/patches/metalsmith-in-place-npm-1.4.4-24eba2145a.patch",
     "metalsmith-layouts": "1.8.1",
     "metalsmith-markdown": "1.3.0",
     "metalsmith-metallic": "1.0.0",

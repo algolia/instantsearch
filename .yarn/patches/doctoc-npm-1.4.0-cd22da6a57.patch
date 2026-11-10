@@ -1,7 +1,7 @@
-diff --git a/node_modules/doctoc/lib/transform.js b/node_modules/doctoc/lib/transform.js
-index 5b1370d..07be5c4 100644
---- a/node_modules/doctoc/lib/transform.js
-+++ b/node_modules/doctoc/lib/transform.js
+diff --git a/lib/transform.js b/lib/transform.js
+index 5b1370d1b8aaffaf558260784deebeff4dfc1fdd..07be5c48ae520f4f12df66fc5ea22c4ebc509cbf 100644
+--- a/lib/transform.js
++++ b/lib/transform.js
 @@ -139,7 +139,7 @@ exports = module.exports = function transform(content, mode, maxHeaderLevel, tit
  
    var toc =
