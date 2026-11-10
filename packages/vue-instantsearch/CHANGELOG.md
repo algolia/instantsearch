@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.33.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.32.0...vue-instantsearch@4.33.0) (2026-11-10)
+
+
+### Features
+
+* **autocomplete:** add submitTarget option to keep queries in the autocomplete [FX-4090] ([#7372](https://github.com/algolia/instantsearch/issues/7372)) ([8a54a31](https://github.com/algolia/instantsearch/commit/8a54a31f58abae4e4bc835fd4e382ea01e49c6d6))
+
+
+
+
+
 # [4.32.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.31.0...vue-instantsearch@4.32.0) (2026-11-03)
 
 
