@@ -82,12 +82,8 @@ export const createDisposeOptions = (
   args: Partial<DisposeOptions> = {}
 ): DisposeOptions => {
   const instantSearchInstance = createInstantSearch();
-  const helper = args.helper || instantSearchInstance.helper!;
 
   return {
-    helper,
-    state: helper.state,
-    recommendState: helper.recommendState,
     parent: instantSearchInstance.mainIndex,
     ...args,
   };

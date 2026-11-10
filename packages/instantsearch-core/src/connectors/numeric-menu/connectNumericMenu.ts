@@ -206,9 +206,8 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
         );
       },
 
-      dispose({ state }) {
+      dispose() {
         unmountFn();
-        return state.removeNumericRefinement(attribute);
       },
 
       getWidgetUiState(uiState, { searchParameters }) {

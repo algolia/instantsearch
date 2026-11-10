@@ -1,5 +1,4 @@
 import type { AutocompleteWidgetDescription } from '../connectors/autocomplete/connectAutocomplete';
-import type { ConfigureWidgetDescription } from '../connectors/configure/connectConfigure';
 import type { GeoSearchWidgetDescription } from '../connectors/geo-search/connectGeoSearch';
 import type { HierarchicalMenuWidgetDescription } from '../connectors/hierarchical-menu/connectHierarchicalMenu';
 import type { HitsPerPageWidgetDescription } from '../connectors/hits-per-page/connectHitsPerPage';
@@ -17,7 +16,6 @@ import type { ToggleRefinementWidgetDescription } from '../connectors/toggle-ref
 import type { VoiceSearchWidgetDescription } from '../connectors/voice-search/connectVoiceSearch';
 
 type ConnectorUiStates = AutocompleteWidgetDescription['indexUiState'] &
-  ConfigureWidgetDescription['indexUiState'] &
   GeoSearchWidgetDescription['indexUiState'] &
   HierarchicalMenuWidgetDescription['indexUiState'] &
   HitsPerPageWidgetDescription['indexUiState'] &

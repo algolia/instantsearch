@@ -396,7 +396,7 @@ search.addWidgets([
 
       expect(unmount).toHaveBeenCalledTimes(0);
 
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
+      widget.dispose!(createDisposeOptions());
 
       expect(unmount).toHaveBeenCalledTimes(1);
     });
@@ -411,30 +411,7 @@ search.addWidgets([
 
       widget.init!(createInitOptions({ helper }));
 
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
-    });
-
-    it('removes the `query` from the `SearchParameters`', () => {
-      const searchClient = createSearchClient();
-      const helper = algoliasearchHelper(searchClient, '', {
-        query: 'Apple',
-      });
-
-      const render = jest.fn();
-      const makeWidget = connectAutocomplete(render);
-      const widget = makeWidget({});
-
-      widget.init!(createInitOptions({ helper }));
-
-      expect(helper.state.query).toBe('Apple');
-
-      const nextState = widget.dispose!(
-        createDisposeOptions({ helper, state: helper.state })
-      ) as SearchParameters;
-
-      expect(nextState.query).toBeUndefined();
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
   });
 

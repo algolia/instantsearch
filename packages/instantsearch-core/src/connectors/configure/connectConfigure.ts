@@ -66,9 +66,6 @@ export type ConfigureWidgetDescription = {
       ConfigureConnectorParams
     >;
   };
-  indexUiState: {
-    configure: PlainSearchParameters;
-  };
 };
 
 export type ConfigureConnector = Connector<
@@ -139,10 +136,8 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
         );
       },
 
-      dispose({ state }) {
+      dispose() {
         unmountFn();
-
-        return getInitialSearchParameters(state, widgetParams);
       },
 
       getRenderState(renderState, renderOptions) {
@@ -177,24 +172,19 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
         };
       },
 
-      getWidgetSearchParameters(state, { uiState }) {
+      getWidgetSearchParameters(state) {
         return mergeSearchParameters(
           state,
-          new algoliasearchHelper.SearchParameters({
-            ...uiState.configure,
-            ...widgetParams.searchParameters,
-          })
+          new algoliasearchHelper.SearchParameters(
+            widgetParams.searchParameters
+          )
         );
       },
 
       getWidgetUiState(uiState) {
-        return {
-          ...uiState,
-          configure: {
-            ...uiState.configure,
-            ...widgetParams.searchParameters,
-          },
-        };
+        // The parameters can't be told apart between several `configure`
+        // widgets once merged in the `uiState`, so they stay out of it.
+        return uiState;
       },
     };
   };

@@ -589,8 +589,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
   describe('dispose', () => {
     it('calls the unmount function', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '');
-
       const renderFn = () => {};
       const unmountFn = jest.fn();
       const makeWidget = connectSearchBox(renderFn, unmountFn);
@@ -598,42 +596,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
       expect(unmountFn).toHaveBeenCalledTimes(0);
 
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
+      widget.dispose!(createDisposeOptions());
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
 
     it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '');
-
       const renderFn = () => {};
       const makeWidget = connectSearchBox(renderFn);
       const widget = makeWidget({});
 
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
-    });
-
-    it('removes the `query` from the `SearchParameters`', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '', {
-        query: 'Apple',
-      });
-
-      const renderFn = () => {};
-      const makeWidget = connectSearchBox(renderFn);
-      const widget = makeWidget({});
-
-      expect(helper.state.query).toBe('Apple');
-
-      const nextState = widget.dispose!(
-        createDisposeOptions({
-          helper,
-          state: helper.state,
-        })
-      ) as SearchParameters;
-
-      expect(nextState.query).toBeUndefined();
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
   });
 

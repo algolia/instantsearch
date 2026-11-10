@@ -291,11 +291,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
       expect(mainIndex.getWidgetUiState({})).toMatchInlineSnapshot(`
         {
-          "hello": {
-            "configure": {
-              "hitsPerPage": 100,
-            },
-          },
+          "hello": {},
         }
       `);
 
@@ -988,11 +984,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
         expect(mainIndex.getWidgetUiState({})).toMatchInlineSnapshot(`
           {
-            "hello": {
-              "configure": {
-                "hitsPerPage": 100,
-              },
-            },
+            "hello": {},
           }
         `);
 

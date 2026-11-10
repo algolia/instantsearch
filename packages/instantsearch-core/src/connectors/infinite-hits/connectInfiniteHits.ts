@@ -418,10 +418,8 @@ export default (function connectInfiniteHits<
         };
       },
 
-      dispose({ state }) {
+      dispose() {
         unmountFn();
-
-        return state.setQueryParameter('page', undefined);
       },
 
       getWidgetUiState(uiState, { searchParameters }) {

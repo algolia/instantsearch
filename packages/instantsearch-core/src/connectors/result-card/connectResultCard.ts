@@ -28,7 +28,6 @@ import type { ChatReferer, UIMessage } from '../../lib/chat';
 import type { SendEventForHits } from '../../lib/utils';
 import type {
   Connector,
-  DisposeOptions,
   Hit,
   IndexRenderState,
   InitOptions,
@@ -553,20 +552,12 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
         renderOutward(renderOptions);
       },
 
-      dispose(disposeOptions: DisposeOptions) {
+      dispose() {
         disposed = true;
         cancelPendingRequest();
         stopGeneration();
         chatWidget.dispose();
         unmountFn();
-
-        const remaining = (disposeOptions.state.ruleContexts || []).filter(
-          (context) => context !== ruleContext
-        );
-        return disposeOptions.state.setQueryParameter(
-          'ruleContexts',
-          remaining.length > 0 ? remaining : undefined
-        );
       },
 
       getWidgetSearchParameters(state) {

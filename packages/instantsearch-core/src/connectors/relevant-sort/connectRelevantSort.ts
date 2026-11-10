@@ -84,10 +84,8 @@ const connectRelevantSort: RelevantSortConnector = function connectRelevantSort(
         );
       },
 
-      dispose({ state }) {
+      dispose() {
         unmountFn();
-
-        return state.setQueryParameter('relevancyStrictness', undefined);
       },
 
       getRenderState(renderState, renderOptions) {

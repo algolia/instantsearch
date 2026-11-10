@@ -124,7 +124,7 @@ describe('connectResultCard', () => {
     // For tests that leave a debounced request pending: the timer would
     // otherwise fire into the next test's fetch mock.
     const disposeWidget = () => {
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
+      widget.dispose!(createDisposeOptions());
     };
 
     return {
@@ -193,6 +193,14 @@ describe('connectResultCard', () => {
         })
       );
     });
+
+    it('calls the unmount function on dispose', () => {
+      const { disposeWidget, unmountFn } = setup();
+
+      disposeWidget();
+
+      expect(unmountFn).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('rule context', () => {
@@ -238,33 +246,6 @@ describe('connectResultCard', () => {
       }).toWarnDev(
         '[InstantSearch.js]: The search already carries 10 `ruleContexts`. The Result Card context "agent-studio-result-card-my-agent" was appended anyway, but Algolia only applies the first 10.'
       );
-    });
-
-    it('removes only its own context on dispose', () => {
-      const { widget, unmountFn } = setup();
-      const helper = algoliasearchHelper(createSearchClient(), '', {
-        ruleContexts: ['other', 'agent-studio-result-card-my-agent'],
-      });
-
-      const state = widget.dispose!(
-        createDisposeOptions({ helper, state: helper.state })
-      ) as ReturnType<typeof helper.state.setQueryParameter>;
-
-      expect(state.ruleContexts).toEqual(['other']);
-      expect(unmountFn).toHaveBeenCalledTimes(1);
-    });
-
-    it('unsets ruleContexts on dispose when it was the only one', () => {
-      const { widget } = setup();
-      const helper = algoliasearchHelper(createSearchClient(), '', {
-        ruleContexts: ['agent-studio-result-card-my-agent'],
-      });
-
-      const state = widget.dispose!(
-        createDisposeOptions({ helper, state: helper.state })
-      ) as ReturnType<typeof helper.state.setQueryParameter>;
-
-      expect(state.ruleContexts).toBeUndefined();
     });
   });
 

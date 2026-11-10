@@ -15,7 +15,6 @@ import algoliasearchHelper, {
 
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
-  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
@@ -1384,32 +1383,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
   });
 
   describe('dispose', () => {
-    it('expect reset insideBoundingBox', () => {
+    it('calls the unmount function', () => {
       const render = jest.fn();
       const unmount = jest.fn();
 
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch({});
-      const helper = createFakeHelper();
 
-      // @ts-ignore
-      helper.setQueryParameter('insideBoundingBox', '10,12,12,14');
-
-      const expectation = new SearchParameters({ index: '' });
-
-      const actual = widget.dispose(
-        createDisposeOptions({ state: helper.state })
-      );
+      widget.dispose();
 
       expect(unmount).toHaveBeenCalled();
-      expect(actual).toEqual(expectation);
     });
 
     it('does not throw without the unmount function', () => {
       const render = () => {};
       const customGeoSearch = connectGeoSearch(render);
       const widget = customGeoSearch({});
-      expect(() => widget.dispose(createDisposeOptions())).not.toThrow();
+      expect(() => widget.dispose()).not.toThrow();
     });
   });
 

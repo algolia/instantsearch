@@ -316,68 +316,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
 
   describe('dispose', () => {
     it('does not throw without the unmount function', () => {
-      const { widget, helper } = getInitializedWidget();
+      const { widget } = getInitializedWidget();
 
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
 
     test('calls the unmount function', () => {
       const unmount = jest.fn();
-      const { widget, helper } = getInitializedWidget({}, unmount);
+      const { widget } = getInitializedWidget({}, unmount);
 
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
+      widget.dispose!(createDisposeOptions());
 
       expect(unmount).toHaveBeenCalledTimes(1);
-    });
-
-    test('resets the state', () => {
-      const render = jest.fn();
-      const makeWidget = connectRatingMenu(render);
-      const indexName = 'indexName';
-      const attribute = 'grade';
-      const helper = jsHelper(createSearchClient(), indexName, {
-        disjunctiveFacets: [attribute],
-        numericRefinements: {
-          [attribute]: {
-            '>=': [4],
-          },
-        },
-      });
-      helper.search = jest.fn();
-
-      const widget = makeWidget({
-        attribute,
-      });
-
-      expect(helper.state).toEqual(
-        new SearchParameters({
-          index: indexName,
-          disjunctiveFacets: [attribute],
-          numericRefinements: {
-            grade: {
-              '>=': [4],
-            },
-          },
-        })
-      );
-
-      const nextState = widget.dispose!(
-        createDisposeOptions({ helper, state: helper.state })
-      );
-
-      expect(nextState).toEqual(
-        new SearchParameters({
-          index: indexName,
-          disjunctiveFacets: [attribute],
-          numericRefinements: {
-            grade: {
-              '>=': [],
-            },
-          },
-        })
-      );
     });
   });
 

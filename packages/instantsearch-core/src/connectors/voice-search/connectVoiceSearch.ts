@@ -169,34 +169,10 @@ const connectVoiceSearch: VoiceSearchConnector = function connectVoiceSearch(
         };
       },
 
-      dispose({ state }) {
+      dispose() {
         (this as any)._voiceSearchHelper.dispose();
 
         unmountFn();
-
-        let newState = state;
-        if (typeof additionalQueryParameters === 'function') {
-          const additional = additionalQueryParameters({ query: '' });
-          const toReset = additional
-            ? (
-                Object.keys(additional) as Array<keyof PlainSearchParameters>
-              ).reduce<PlainSearchParameters>((acc, current) => {
-                // @ts-ignore search parameters is typed as readonly in v4
-                acc[current] = undefined;
-                return acc;
-              }, {})
-            : {};
-          newState = state.setQueryParameters({
-            // @ts-ignore (queryLanguages is not added to algoliasearch v3)
-            queryLanguages: undefined,
-            ignorePlurals: undefined,
-            removeStopWords: undefined,
-            optionalWords: undefined,
-            ...toReset,
-          });
-        }
-
-        return newState.setQueryParameter('query', undefined);
       },
 
       getWidgetUiState(uiState, { searchParameters }) {

@@ -356,10 +356,8 @@ const panel: PanelWidget = (panelWidgetParams) => {
         render(null, containerNode);
 
         if (typeof widget.dispose === 'function') {
-          return widget.dispose.call(this, ...args);
+          widget.dispose.call(this, ...args);
         }
-
-        return undefined;
       },
     } as AugmentedWidget<typeof widgetFactory>;
   };

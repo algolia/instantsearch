@@ -25,30 +25,6 @@ describe('simpleStateMapping', () => {
       });
     });
 
-    it('removes configure', () => {
-      const stateMapping = simpleStateMapping();
-      const actual = stateMapping.stateToRoute({
-        indexName: {
-          query: 'zamboni',
-          refinementList: {
-            color: ['red'],
-          },
-          configure: {
-            advancedSyntax: false,
-          },
-        },
-      });
-
-      expect(actual).toEqual({
-        indexName: {
-          query: 'zamboni',
-          refinementList: {
-            color: ['red'],
-          },
-        },
-      });
-    });
-
     it('passes non-UiState through', () => {
       const stateMapping = simpleStateMapping();
       const actual = stateMapping.stateToRoute({
@@ -82,30 +58,6 @@ describe('simpleStateMapping', () => {
           query: 'zamboni',
           refinementList: {
             color: ['red'],
-          },
-        },
-      });
-
-      expect(actual).toEqual({
-        indexName: {
-          query: 'zamboni',
-          refinementList: {
-            color: ['red'],
-          },
-        },
-      });
-    });
-
-    it('removes configure', () => {
-      const stateMapping = simpleStateMapping();
-      const actual = stateMapping.routeToState({
-        indexName: {
-          query: 'zamboni',
-          refinementList: {
-            color: ['red'],
-          },
-          configure: {
-            advancedSyntax: false,
           },
         },
       });
