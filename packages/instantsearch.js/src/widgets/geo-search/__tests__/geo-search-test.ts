@@ -13,7 +13,6 @@ import { render as preactRender } from 'preact';
 
 import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
 import {
-  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../../instantsearch-core/test/createWidget';
@@ -398,12 +397,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
     expect(render).toHaveBeenCalledTimes(1);
 
-    widget.dispose(
-      createDisposeOptions({
-        helper,
-        state: helper.state,
-      })
-    );
+    widget.dispose();
 
     expect(render).toHaveBeenCalledTimes(2);
     expect(render).toHaveBeenCalledWith(null, container);

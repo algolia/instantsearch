@@ -1636,7 +1636,6 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
         instanceRef = null;
         activated = false;
         pendingQuery = undefined;
-        return undefined;
       },
     };
   }

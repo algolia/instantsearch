@@ -196,9 +196,8 @@ export default (function connectFrequentlyBoughtTogether<
         };
       },
 
-      dispose({ recommendState }) {
+      dispose() {
         unmountFn();
-        return recommendState.removeParams(this.$$id!);
       },
 
       getWidgetParameters(state) {

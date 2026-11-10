@@ -286,10 +286,8 @@ search.addWidgets([
         );
       },
 
-      dispose({ state }) {
+      dispose() {
         unmountFn();
-
-        return state.setQueryParameter('query', undefined);
       },
     };
   };

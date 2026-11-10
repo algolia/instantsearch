@@ -843,11 +843,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       ],
     });
 
-    const helper = jsHelper(createSearchClient(), '');
-
-    expect(() =>
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-    ).not.toThrow();
+    expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
   });
 
   describe('getWidgetUiState', () => {
