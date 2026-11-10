@@ -366,7 +366,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             helper: instance.getHelper(),
             state: instance.getHelper()!.state,
             renderState: expect.any(Object),
-            templatesConfig: instantSearchInstance.templatesConfig,
             createURL: expect.any(Function),
             scopedResults: [],
             status: instantSearchInstance.status,
@@ -423,7 +422,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             helper: instance.getHelper(),
             state: instance.getHelper()!.state,
             renderState: expect.any(Object),
-            templatesConfig: instantSearchInstance.templatesConfig,
             createURL: expect.any(Function),
             scopedResults: [],
             status: instantSearchInstance.status,
@@ -659,11 +657,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           hitsPerPage: 5,
         });
 
-        instance.addWidgets([
-          configureTopLevel,
-          configureSubLevel,
-          virtualSearchBox({}),
-        ]);
+        const searchBox = virtualSearchBox({});
+
+        instance.addWidgets([configureTopLevel, configureSubLevel, searchBox]);
 
         instance.init(
           createIndexInitOptions({
@@ -685,13 +681,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           })
         );
 
-        instance.removeWidgets([configureSubLevel]);
+        instance.removeWidgets([searchBox]);
 
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
             index: 'indexName',
             ...TAG_PLACEHOLDER,
-            query: 'Apple iPhone',
+            hitsPerPage: 5,
             distinct: true,
           })
         );
@@ -704,115 +700,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         ).toHaveBeenCalledTimes(2);
       });
 
-      it('cleans shared refinements when `preserveSharedStateOnUnmount` is unset', () => {
+      it('preserves refinements shared with a remaining widget', () => {
         const instance = index({ indexName: 'indexName' });
         const instantSearchInstance = createInstantSearch();
-
-        const refinementList1 = virtualRefinementList({
-          attribute: 'brand',
-        });
-
-        const refinementList2 = virtualRefinementList({
-          attribute: 'brand',
-        });
-
-        instance.addWidgets([refinementList1, refinementList2]);
-
-        instance.init(
-          createIndexInitOptions({
-            instantSearchInstance,
-            parent: null,
-          })
-        );
-
-        // Simulate a state change
-        instance.getHelper()!.addDisjunctiveFacetRefinement('brand', 'Apple');
-
-        expect(instance.getHelper()!.state).toEqual(
-          new SearchParameters({
-            index: 'indexName',
-            ...TAG_PLACEHOLDER,
-            maxValuesPerFacet: 10,
-            disjunctiveFacets: ['brand'],
-            disjunctiveFacetsRefinements: {
-              brand: ['Apple'],
-            },
-          })
-        );
-
-        instance.removeWidgets([refinementList2]);
-
-        expect(instance.getHelper()!.state).toEqual(
-          new SearchParameters({
-            index: 'indexName',
-            ...TAG_PLACEHOLDER,
-            maxValuesPerFacet: 10,
-            disjunctiveFacets: ['brand'],
-            disjunctiveFacetsRefinements: {
-              brand: [],
-            },
-          })
-        );
-      });
-
-      it('cleans shared refinements when `preserveSharedStateOnUnmount` is false', () => {
-        const instance = index({ indexName: 'indexName' });
-        const instantSearchInstance = createInstantSearch({
-          future: { preserveSharedStateOnUnmount: false },
-        });
-
-        const refinementList1 = virtualRefinementList({
-          attribute: 'brand',
-        });
-
-        const refinementList2 = virtualRefinementList({
-          attribute: 'brand',
-        });
-
-        instance.addWidgets([refinementList1, refinementList2]);
-
-        instance.init(
-          createIndexInitOptions({
-            instantSearchInstance,
-            parent: null,
-          })
-        );
-
-        // Simulate a state change
-        instance.getHelper()!.addDisjunctiveFacetRefinement('brand', 'Apple');
-
-        expect(instance.getHelper()!.state).toEqual(
-          new SearchParameters({
-            index: 'indexName',
-            ...TAG_PLACEHOLDER,
-            maxValuesPerFacet: 10,
-            disjunctiveFacets: ['brand'],
-            disjunctiveFacetsRefinements: {
-              brand: ['Apple'],
-            },
-          })
-        );
-
-        instance.removeWidgets([refinementList2]);
-
-        expect(instance.getHelper()!.state).toEqual(
-          new SearchParameters({
-            index: 'indexName',
-            ...TAG_PLACEHOLDER,
-            maxValuesPerFacet: 10,
-            disjunctiveFacets: ['brand'],
-            disjunctiveFacetsRefinements: {
-              brand: [],
-            },
-          })
-        );
-      });
-
-      it('preserves shared refinements when `preserveSharedStateOnUnmount` is true', () => {
-        const instance = index({ indexName: 'indexName' });
-        const instantSearchInstance = createInstantSearch({
-          future: { preserveSharedStateOnUnmount: true },
-        });
 
         const refinementList1 = virtualRefinementList({
           attribute: 'brand',
@@ -880,13 +770,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           expect(widget.dispose).toHaveBeenCalledTimes(0);
         });
 
+        const stateBefore = instance.getHelper()!.state;
+
         instance.removeWidgets(widgets);
 
         widgets.forEach((widget) => {
           expect(widget.dispose).toHaveBeenCalledTimes(1);
           expect(widget.dispose).toHaveBeenCalledWith({
             helper: instance.getHelper(),
-            state: instance.getHelper()!.state,
+            state: stateBefore,
             recommendState: instance.getHelper()!.recommendState,
             parent: instance,
           });
@@ -1750,13 +1642,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       searchForItems('Samsung');
       await wait(0);
 
-      expect(searchClient.searchForFacetValues).toHaveBeenCalledTimes(1);
-      expect(searchClient.searchForFacetValues).toHaveBeenCalledWith(
+      expect(
+        (searchClient.search as jest.Mock).mock.calls.filter(
+          ([requests]) => requests[0].type === 'facet'
+        )
+      ).toHaveLength(1);
+      expect(searchClient.search).toHaveBeenLastCalledWith(
         expect.arrayContaining([
           {
+            type: 'facet',
+            facet: 'brand',
             indexName: 'index',
             params: expect.objectContaining({
-              facetName: 'brand',
               facetQuery: 'Samsung',
               maxFacetHits: 10,
               // Notably: index parameters are included
@@ -1806,13 +1703,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       await wait(0);
 
-      expect(searchClient.searchForFacetValues).toHaveBeenCalledTimes(1);
-      expect(searchClient.searchForFacetValues).toHaveBeenCalledWith(
+      expect(
+        (searchClient.search as jest.Mock).mock.calls.filter(
+          ([requests]) => requests[0].type === 'facet'
+        )
+      ).toHaveLength(1);
+      expect(searchClient.search).toHaveBeenLastCalledWith(
         expect.arrayContaining([
           {
+            type: 'facet',
+            facet: 'brand',
             indexName: 'childIndexName',
             params: expect.objectContaining({
-              facetName: 'brand',
               facetQuery: 'Samsung',
               maxFacetHits: 10,
               // Notably: parent index parameters are included
@@ -1902,7 +1804,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           helper: instance.getHelper(),
           state: instance.getHelper()!.state,
           renderState: expect.any(Object),
-          templatesConfig: instantSearchInstance.templatesConfig,
           createURL: expect.any(Function),
           scopedResults: [],
           status: instantSearchInstance.status,
@@ -2968,7 +2869,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           parent: expect.anything(),
           instantSearchInstance,
           renderState: expect.anything(),
-          templatesConfig: instantSearchInstance.templatesConfig,
           createURL: expect.any(Function),
           scopedResults: [],
           status: instantSearchInstance.status,
@@ -3095,7 +2995,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           state: expect.any(algoliasearchHelper.SearchParameters),
           renderState: expect.any(Object),
           helper: instance.getHelper(),
-          templatesConfig: instantSearchInstance.templatesConfig,
           createURL: expect.any(Function),
           status: instantSearchInstance.status,
         });
@@ -3800,7 +3699,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         nbPages: 1,
         page: 0,
         params: '',
-        persistHierarchicalRootCount: false,
         processingTimeMS: 0,
         query: 'iphone',
       };

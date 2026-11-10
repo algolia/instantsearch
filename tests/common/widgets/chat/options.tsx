@@ -1290,7 +1290,8 @@ export function createOptionsTests(
                 [SearchIndexToolType]: {
                   streamInput: true,
                   templates: {
-                    layout: '<div id="tool-content">streaming...</div>',
+                    layout: (_, { html }) =>
+                      html`<div id="tool-content">streaming...</div>`,
                   },
                 },
               },
@@ -1715,8 +1716,10 @@ export function createOptionsTests(
               tools: {
                 hello: {
                   templates: {
-                    layout:
-                      '<div id="tool-content">The message said hello!</div>',
+                    layout: (_, { html }) =>
+                      html`<div id="tool-content">
+                        The message said hello!
+                      </div>`,
                   },
                 },
               },
@@ -1793,8 +1796,10 @@ export function createOptionsTests(
                 hello: {
                   shouldRender,
                   templates: {
-                    layout:
-                      '<div id="tool-content">The message said hello!</div>',
+                    layout: (_, { html }) =>
+                      html`<div id="tool-content">
+                        The message said hello!
+                      </div>`,
                   },
                 },
               },
@@ -1892,12 +1897,14 @@ export function createOptionsTests(
                 hello: {
                   matchesToolName,
                   templates: {
-                    layout: '<div id="tool-content">Hello!</div>',
+                    layout: (_, { html }) =>
+                      html`<div id="tool-content">Hello!</div>`,
                   },
                 },
                 goodbye: {
                   templates: {
-                    layout: '<div id="other-tool-content">Goodbye!</div>',
+                    layout: (_, { html }) =>
+                      html`<div id="other-tool-content">Goodbye!</div>`,
                   },
                 },
               },
@@ -1989,8 +1996,10 @@ export function createOptionsTests(
                 hello: {
                   shouldRender,
                   templates: {
-                    layout:
-                      '<div id="tool-content">The message said hello!</div>',
+                    layout: (_, { html }) =>
+                      html`<div id="tool-content">
+                        The message said hello!
+                      </div>`,
                   },
                 },
               },
@@ -2065,7 +2074,8 @@ export function createOptionsTests(
                 hello: {
                   ...tool,
                   templates: {
-                    layout: '<div id="tool-content">streaming...</div>',
+                    layout: (_, { html }) =>
+                      html`<div id="tool-content">streaming...</div>`,
                   },
                 },
               },
@@ -2163,8 +2173,10 @@ export function createOptionsTests(
               tools: {
                 [SearchIndexToolType]: {
                   templates: {
-                    layout:
-                      '<div id="tool-content">The message said hello!</div>',
+                    layout: (_, { html }) =>
+                      html`<div id="tool-content">
+                        The message said hello!
+                      </div>`,
                   },
                 },
               },
@@ -3375,7 +3387,8 @@ export function createOptionsTests(
                 tools: {
                   [SearchIndexToolType]: {
                     templates: {
-                      layout: '<div id="tool-content">custom search</div>',
+                      layout: (_, { html }) =>
+                        html`<div id="tool-content">custom search</div>`,
                     },
                   },
                 },
@@ -3500,7 +3513,8 @@ export function createOptionsTests(
                 tools: {
                   [toolType]: {
                     templates: {
-                      layout: '<div id="custom-display">custom display</div>',
+                      layout: (_, { html }) =>
+                        html`<div id="custom-display">custom display</div>`,
                     },
                   },
                 },
@@ -3681,7 +3695,8 @@ export function createOptionsTests(
                   [toolType]: {
                     streamInput: false,
                     templates: {
-                      layout: '<div id="custom-display">custom display</div>',
+                      layout: (_, { html }) =>
+                        html`<div id="custom-display">custom display</div>`,
                     },
                   },
                 },

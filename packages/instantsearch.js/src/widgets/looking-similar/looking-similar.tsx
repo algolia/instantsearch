@@ -10,7 +10,7 @@ import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template, TemplateWithBindEvent } from '../../types';
+import type { Template, TemplateWithSendEvent } from '../../types';
 import type {
   LookingSimilarWidgetDescription,
   LookingSimilarConnectorParams,
@@ -61,7 +61,6 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
         defaultTemplates: {} as unknown as Required<
           LookingSimilarTemplates<THit>
         >,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;
@@ -184,7 +183,7 @@ export type LookingSimilarTemplates<
   /**
    * Template to use for each result. This template will receive an object containing a single record.
    */
-  item: TemplateWithBindEvent<Hit<THit>>;
+  item: TemplateWithSendEvent<Hit<THit>>;
 
   /**
    * Template to use to wrap all items.

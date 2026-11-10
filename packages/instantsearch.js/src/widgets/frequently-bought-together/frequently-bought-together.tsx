@@ -10,7 +10,7 @@ import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template, TemplateWithBindEvent } from '../../types';
+import type { Template, TemplateWithSendEvent } from '../../types';
 import type {
   FrequentlyBoughtTogetherWidgetDescription,
   FrequentlyBoughtTogetherConnectorParams,
@@ -62,7 +62,6 @@ const renderer =
         defaultTemplates: {} as unknown as Required<
           FrequentlyBoughtTogetherTemplates<THit>
         >,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;
@@ -186,7 +185,7 @@ export type FrequentlyBoughtTogetherTemplates<
   /**
    * Template to use for each result. This template will receive an object containing a single record.
    */
-  item: TemplateWithBindEvent<Hit<THit>>;
+  item: TemplateWithSendEvent<Hit<THit>>;
 
   /**
    * Template to use to wrap all items.

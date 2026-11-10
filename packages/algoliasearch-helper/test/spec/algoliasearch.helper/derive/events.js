@@ -7,9 +7,6 @@ function makeFakeClient() {
     search: jest.fn(function () {
       return new Promise(function () {});
     }),
-    searchForFacetValues: jest.fn(function () {
-      return new Promise(function () {});
-    }),
     getRecommendations: jest.fn(function () {
       return new Promise(function () {});
     }),

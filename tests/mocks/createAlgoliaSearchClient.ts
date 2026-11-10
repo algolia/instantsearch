@@ -23,12 +23,7 @@ type OverrideKeys<TTarget, TOptions> =
 
 export type MockSearchClient = OverrideKeys<
   SearchClient,
-  SearchClient extends { searchForFacetValues: (...args: any[]) => any }
-    ? {
-        search: jest.Mock<any, any>;
-        searchForFacetValues: jest.Mock<any, any>;
-      }
-    : { search: jest.Mock<any, any> }
+  { search: jest.Mock<any, any> }
 >;
 
 export function createAlgoliaSearchClient<
@@ -146,16 +141,15 @@ export function createAlgoliaSearchClient<
       Promise.resolve(
         createMultiSearchResponse(
           ...requests.map((request) =>
-            createSingleSearchResponse({
-              index: request.indexName,
-              params: getParams(version, request.params || {}),
-            })
+            request.type === 'facet'
+              ? createSFFVResponse()
+              : createSingleSearchResponse({
+                  index: request.indexName,
+                  params: getParams(version, request.params || {}),
+                })
           )
         )
       )
-    ),
-    searchForFacetValues: jest.fn(() =>
-      Promise.resolve([createSFFVResponse()])
     ),
     ...options,
   } as SearchClient as OverrideKeys<MockSearchClient, TOptions>;

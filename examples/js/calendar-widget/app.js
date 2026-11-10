@@ -54,7 +54,7 @@ const calendarRange = connectRange((options, isFirstRendering) => {
       const end = new Date(this.end_date).getTime();
       const actualEnd = start === end ? end + ONE_DAY_IN_MS - 1 : end;
 
-      refine([start, actualEnd]);
+      refine({ min: start, max: actualEnd });
     },
     // Some good parameters based on our dataset:
     start_date: new Date(),

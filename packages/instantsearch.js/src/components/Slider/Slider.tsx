@@ -13,16 +13,16 @@ import type {
   RangeSliderCssClasses,
   RangeSliderWidgetParams,
 } from '../../widgets/range-slider/range-slider';
-import type { RangeBoundaries } from 'instantsearch-core';
+import type { Range } from 'instantsearch-core';
 
 export type RangeSliderComponentCSSClasses =
   ComponentCSSClasses<RangeSliderCssClasses>;
 
 export type SliderProps = {
-  refine: (values: RangeBoundaries) => void;
+  refine: (values: Range) => void;
   min?: number;
   max?: number;
-  values: RangeBoundaries;
+  values: Range;
   pips?: boolean;
   step?: number;
   tooltips?: RangeSliderWidgetParams['tooltips'];
@@ -34,9 +34,9 @@ class Slider extends Component<SliderProps> {
     return this.props.min! >= this.props.max!;
   }
 
-  private handleChange = ({ values }: { values: RangeBoundaries }) => {
+  private handleChange = ({ values: [min, max] }: { values: number[] }) => {
     if (!this.isDisabled) {
-      this.props.refine(values);
+      this.props.refine({ min, max });
     }
   };
 
@@ -131,7 +131,12 @@ class Slider extends Component<SliderProps> {
           pitPoints={pitPoints}
           snap={true}
           snapPoints={snapPoints}
-          values={(this.isDisabled ? [min, max] : values) as [number, number]}
+          values={
+            (this.isDisabled ? [min, max] : [values.min, values.max]) as [
+              number,
+              number,
+            ]
+          }
           disabled={this.isDisabled}
         />
       </div>

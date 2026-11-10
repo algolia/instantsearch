@@ -8,7 +8,7 @@ import {
 
 import type InstantSearch from '../../instantsearch';
 import type { SendEventForFacet } from '../../lib/utils';
-import type { Connector, WidgetRenderState } from '../../types';
+import type { Connector, Expand, WidgetRenderState } from '../../types';
 import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator(
@@ -21,8 +21,6 @@ const $$type = 'ais.range';
 export type RangeMin = number | undefined;
 export type RangeMax = number | undefined;
 
-// @MAJOR: potentially we should consolidate these types
-export type RangeBoundaries = [RangeMin, RangeMax];
 export type Range = {
   min: RangeMin;
   max: RangeMax;
@@ -31,11 +29,10 @@ export type Range = {
 export type RangeRenderState = {
   /**
    * Sets a range to filter the results on. Both values
-   * are optional, and will default to the higher and lower bounds. You can use `undefined` to remove a
-   * previously set bound or to set an infinite bound.
-   * @param rangeValue tuple of [min, max] bounds
+   * are optional, and will default to the higher and lower bounds. You can use `undefined` to remove a previously set bound.
+   * @param rangeValue object with min and max bounds
    */
-  refine: (rangeValue: RangeBoundaries) => void;
+  refine: (rangeValue: Expand<Partial<Range>>) => void;
 
   /**
    * Indicates whether this widget can be refined
@@ -53,9 +50,10 @@ export type RangeRenderState = {
   range: Range;
 
   /**
-   * Current refinement of the search
+   * Current refinement of the search. A bound is `undefined` when it isn't
+   * refined or when it's equal to the range bound.
    */
-  start: RangeBoundaries;
+  currentRefinement: Range;
 
   /**
    * Transform for the rendering `from` and/or `to` values.
@@ -290,20 +288,27 @@ const connectRange: RangeConnector = function connectRange(
     }
 
     function _getCurrentRefinement(
-      helper: AlgoliaSearchHelper
-    ): RangeBoundaries {
+      helper: AlgoliaSearchHelper,
+      range: Range
+    ): Range {
       const [minValue] = helper.getNumericRefinement(attribute, '>=') || [];
 
       const [maxValue] = helper.getNumericRefinement(attribute, '<=') || [];
 
-      const min = isFiniteNumber(minValue) ? minValue : -Infinity;
-      const max = isFiniteNumber(maxValue) ? maxValue : Infinity;
+      const min =
+        isFiniteNumber(minValue) && minValue !== range.min
+          ? Math.min(minValue, range.max ?? Infinity)
+          : undefined;
+      const max =
+        isFiniteNumber(maxValue) && maxValue !== range.max
+          ? Math.max(maxValue, range.min ?? -Infinity)
+          : undefined;
 
-      return [min, max];
+      return { min, max };
     }
 
     function _refine(helper: AlgoliaSearchHelper, currentRange: Range) {
-      return ([nextMin, nextMax]: RangeBoundaries = [undefined, undefined]) => {
+      return ({ min: nextMin, max: nextMax }: Partial<Range> = {}) => {
         const refinedState = getRefinedState(
           helper,
           currentRange,
@@ -361,7 +366,16 @@ const connectRange: RangeConnector = function connectRange(
         };
 
         const currentRange = _getCurrentRange(stats);
-        const start = _getCurrentRefinement(helper);
+        // `currentRange` falls back to 0 when there are no stats (e.g. before
+        // the first results), which would wrongly clamp the refinement.
+        const currentRefinement = _getCurrentRefinement(
+          helper,
+          toPrecision({
+            min: isFiniteNumber(minBound) ? minBound : stats.min,
+            max: isFiniteNumber(maxBound) ? maxBound : stats.max,
+            precision,
+          })
+        );
 
         let refine: ReturnType<typeof _refine>;
 
@@ -387,7 +401,7 @@ const connectRange: RangeConnector = function connectRange(
             ...widgetParams,
             precision,
           },
-          start,
+          currentRefinement,
         };
       },
 

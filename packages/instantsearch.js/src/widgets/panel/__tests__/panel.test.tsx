@@ -91,11 +91,6 @@ describe('panel', () => {
         collapseButtonLabel: ({ collapsed }: { collapsed: boolean }) =>
           collapsed ? 'Développer' : 'Réduire',
       },
-      {
-        type: 'string',
-        collapseButtonLabel:
-          '{{#collapsed}}Développer{{/collapsed}}{{^collapsed}}Réduire{{/collapsed}}',
-      },
     ])(
       'renders a $type collapse button label template',
       async ({ collapseButtonLabel }) => {
@@ -180,14 +175,7 @@ describe('panel', () => {
         }),
       ]);
 
-      // @MAJOR Once Hogan.js and string-based templates are removed,
-      // `search.start()` can be moved to the test body and the following
-      // assertion can go away.
-      expect(async () => {
-        search.start();
-
-        await wait(0);
-      }).not.toWarnDev();
+      search.start();
 
       await wait(0);
 

@@ -15,7 +15,7 @@ SSR integration for the **App Router** (RSC + streaming). Peer-deps `next` + `re
 ## Working here
 
 ```bash
-yarn workspace react-instantsearch-nextjs build
+yarn lerna run build --scope react-instantsearch-nextjs
 yarn jest packages/react-instantsearch-nextjs/src/__tests__/<name>   # unit tests, from repo root
 yarn workspace react-instantsearch-nextjs test:e2e                   # Playwright (App Router)
 ```
