@@ -109,7 +109,7 @@ export default function transform(
       );
     const declared = new Set<string>();
     root.find(j.ImportSpecifier).forEach((path) => {
-      declared.add((path.node.local || path.node.imported).name as string);
+      declared.add((path.node.local || path.node.imported).name);
     });
     const missing = names.filter((name) => !declared.has(name));
     if (missing.length === 0) return;
