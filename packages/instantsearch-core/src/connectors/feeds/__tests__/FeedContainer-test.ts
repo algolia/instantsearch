@@ -2,11 +2,13 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
+import { createSearchClient } from '@instantsearch/mocks';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import { createWidget } from '../../../../test/createWidget';
 import { connectPagination, connectRefinementList } from '../../../connectors';
+import { instantsearch } from '../../../instantsearch';
 import { index } from '../../../widgets';
 import { createFeedContainer } from '../FeedContainer';
 
@@ -702,6 +704,61 @@ describe('FeedContainer', () => {
       });
 
       expect(result).toBe(cleanedState);
+    });
+  });
+
+  describe('parent index', () => {
+    function setup() {
+      const search = instantsearch({
+        indexName: 'test',
+        searchClient: createSearchClient(),
+      });
+      const pagination = connectPagination(() => {})({});
+      search.addWidgets([pagination]);
+      search.start();
+
+      const parent = search.mainIndex;
+      const container = createFeedContainer('products', parent, search);
+      parent.addWidgets([container]);
+      container.addWidgets([
+        connectRefinementList(() => {})({ attribute: 'brand' }),
+      ]);
+      parent.getHelper()!.addDisjunctiveFacetRefinement('brand', 'Apple');
+
+      return { parent, pagination, container };
+    }
+
+    it('removeWidgets keeps the search parameters of the feed children', () => {
+      const { parent, pagination } = setup();
+
+      parent.removeWidgets([pagination]);
+
+      expect(parent.getHelper()!.state.disjunctiveFacets).toEqual(['brand']);
+      expect(parent.getHelper()!.state.disjunctiveFacetsRefinements).toEqual({
+        brand: ['Apple'],
+      });
+    });
+
+    it('removeWidgets drops the search parameters of a removed feed container', () => {
+      const { parent, container } = setup();
+
+      parent.removeWidgets([container]);
+
+      expect(parent.getHelper()!.state.disjunctiveFacets).toEqual([]);
+      expect(parent.getHelper()!.state.disjunctiveFacetsRefinements).toEqual(
+        {}
+      );
+    });
+
+    it('updateWidget keeps the search parameters of the feed children', () => {
+      const { parent, pagination } = setup();
+
+      parent.updateWidget(pagination, connectPagination(() => {})({}));
+
+      expect(parent.getHelper()!.state.disjunctiveFacets).toEqual(['brand']);
+      expect(parent.getHelper()!.state.disjunctiveFacetsRefinements).toEqual({
+        brand: ['Apple'],
+      });
     });
   });
 });
