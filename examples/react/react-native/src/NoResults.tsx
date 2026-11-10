@@ -6,11 +6,9 @@ import {
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export function NoResults() {
-  const { results } = useInstantSearch();
   const { canRefine: canClear, refine: clear } = useClearRefinements();
 
-  const hasRefinements = results.getRefinements().length > 0;
-  const description = hasRefinements
+  const description = canClear
     ? 'Try to reset your applied filters.'
     : 'Please try another query.';
 
