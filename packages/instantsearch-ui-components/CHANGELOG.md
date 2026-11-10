@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.46.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.45.0...instantsearch-ui-components@0.46.0) (2026-11-10)
+
+
+### Bug Fixes
+
+* **chat:** keep the place when scrolling up with the keyboard while a reply streams [FX-4080] ([#7336](https://github.com/algolia/instantsearch/issues/7336)) ([913e83b](https://github.com/algolia/instantsearch/commit/913e83b453ba6ca183da4fc6ab45f225cfa21b5f))
+* **chat:** type provider metadata as JSON so messages fit AI SDK types [FX-4077] ([#7352](https://github.com/algolia/instantsearch/issues/7352)) ([d5fd7bb](https://github.com/algolia/instantsearch/commit/d5fd7bb282f394bc9ce4ccd7a4f5e1b429dd9417))
+
+
+### Features
+
+* **autocomplete:** add submitTarget option to keep queries in the autocomplete [FX-4090] ([#7372](https://github.com/algolia/instantsearch/issues/7372)) ([8a54a31](https://github.com/algolia/instantsearch/commit/8a54a31f58abae4e4bc835fd4e382ea01e49c6d6))
+
+
+
+
+
 # [0.45.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.44.0...instantsearch-ui-components@0.45.0) (2026-11-03)
 
 

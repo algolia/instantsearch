@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.123.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.122.0...instantsearch.js@4.123.0) (2026-11-10)
+
+
+### Bug Fixes
+
+* **chat:** type provider metadata as JSON so messages fit AI SDK types [FX-4077] ([#7352](https://github.com/algolia/instantsearch/issues/7352)) ([d5fd7bb](https://github.com/algolia/instantsearch/commit/d5fd7bb282f394bc9ce4ccd7a4f5e1b429dd9417))
+* **chat:** wait for the server's result before answering an unknown tool [FX-4079] ([#7350](https://github.com/algolia/instantsearch/issues/7350)) ([99feebb](https://github.com/algolia/instantsearch/commit/99feebbb77a0f34d1f1427d4aad934000af00d08))
+* **recommend:** attribute merged hits to their source queryID ([#7361](https://github.com/algolia/instantsearch/issues/7361)) ([b3bc839](https://github.com/algolia/instantsearch/commit/b3bc8399c7c246dc4bfcb10c63faf2f8f40acbf0))
+
+
+### Features
+
+* **autocomplete:** add submitTarget option to keep queries in the autocomplete [FX-4090] ([#7372](https://github.com/algolia/instantsearch/issues/7372)) ([8a54a31](https://github.com/algolia/instantsearch/commit/8a54a31f58abae4e4bc835fd4e382ea01e49c6d6))
+
+
+
+
+
 # [4.122.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.121.0...instantsearch.js@4.122.0) (2026-11-03)
 
 

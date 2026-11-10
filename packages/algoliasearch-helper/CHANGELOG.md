@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.30.2](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.30.1...algoliasearch-helper@3.30.2) (2026-11-10)
+
+
+### Bug Fixes
+
+* **facets:** keep facet value order when refining a tied value ([#7382](https://github.com/algolia/instantsearch/issues/7382)) ([56d84d9](https://github.com/algolia/instantsearch/commit/56d84d9fd4fdc8909bf38a23b14c9f1455bf73c1))
+* **recommend:** attribute merged hits to their source queryID ([#7361](https://github.com/algolia/instantsearch/issues/7361)) ([b3bc839](https://github.com/algolia/instantsearch/commit/b3bc8399c7c246dc4bfcb10c63faf2f8f40acbf0))
+* **recommend:** exclude the input objectIDs from merged results ([#7364](https://github.com/algolia/instantsearch/issues/7364)) ([c5721c4](https://github.com/algolia/instantsearch/commit/c5721c4fdacb0e886c42de8c041fce2c2e0218e8)), closes [#6620](https://github.com/algolia/instantsearch/issues/6620)
+
+
+
+
+
 ## [3.30.1](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.30.0...algoliasearch-helper@3.30.1) (2026-10-26)
 
 
