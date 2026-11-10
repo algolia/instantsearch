@@ -16,7 +16,7 @@ const defaultRange = {
 };
 
 const defaultState = {
-  start: [0, 1000],
+  currentRefinement: { min: undefined, max: undefined },
   range: defaultRange,
   canRefine: true,
   refine: () => {},

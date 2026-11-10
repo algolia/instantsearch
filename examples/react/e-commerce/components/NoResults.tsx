@@ -1,13 +1,12 @@
 import React from 'react';
-import { useInstantSearch } from 'react-instantsearch';
+import { useClearRefinements } from 'react-instantsearch';
 
 import { ClearFilters } from './ClearFilters';
 
 export function NoResults() {
-  const { results } = useInstantSearch();
+  const { canRefine } = useClearRefinements();
 
-  const hasRefinements = results.getRefinements().length > 0;
-  const description = hasRefinements
+  const description = canRefine
     ? 'Try to reset your applied filters.'
     : 'Please try another query.';
 

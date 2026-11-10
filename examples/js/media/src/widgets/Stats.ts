@@ -1,9 +1,10 @@
-import { connectHits } from 'instantsearch.js/es/connectors';
+import { connectCurrentRefinements } from 'instantsearch.js/es/connectors';
 
 import { formatNumber, getDateRangeFromTimestamp } from '../utils';
 
-const statsWidget = connectHits<{ container: string }>(
-  ({ results, widgetParams }) => {
+const statsWidget = connectCurrentRefinements<{ container: string }>(
+  ({ instantSearchInstance, items, widgetParams }) => {
+    const results = instantSearchInstance.mainIndex.getResults();
     if (!results) {
       return;
     }
@@ -16,18 +17,15 @@ const statsWidget = connectHits<{ container: string }>(
 
     const resultsStats = `${formatNumber(nbHits)} articles`;
 
-    const stringRefinements = results
-      .getRefinements()
+    const currentRefinements = items.flatMap((item) => item.refinements);
+    const stringRefinements = currentRefinements
       .filter((refinement) => refinement.type !== 'numeric')
-      .filter((refinement) => refinement.attributeName !== 'categories')
-      .map((refinement) => refinement.name);
+      .filter((refinement) => refinement.attribute !== 'categories')
+      .map((refinement) => refinement.label);
     const dateRefinement = getDateRangeFromTimestamp(
-      results
-        .getRefinements()
-        .filter(
-          (refinement) => refinement.attributeName === 'created_at_timestamp'
-        )
-        .map((refinement) => refinement.numericValue)
+      currentRefinements
+        .filter((refinement) => refinement.attribute === 'created_at_timestamp')
+        .map((refinement) => Number(refinement.value))
     );
 
     const refinements = [...stringRefinements, dateRefinement]

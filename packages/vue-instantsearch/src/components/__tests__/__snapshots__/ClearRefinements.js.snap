@@ -32,9 +32,7 @@ exports[`custom default render renders correctly without refinement 1`] = `
 
 exports[`custom resetLabel render renders correctly with a custom reset label 1`] = `
 <div class="ais-ClearRefinements">
-  <button class="ais-ClearRefinements-button"
-          type="reset"
-  >
+  <button class="ais-ClearRefinements-button">
     <span>
       Remove the refinements
     </span>
@@ -44,9 +42,7 @@ exports[`custom resetLabel render renders correctly with a custom reset label 1`
 
 exports[`default render renders correctly 1`] = `
 <div class="ais-ClearRefinements">
-  <button class="ais-ClearRefinements-button"
-          type="reset"
-  >
+  <button class="ais-ClearRefinements-button">
     Clear refinements
   </button>
 </div>
@@ -56,7 +52,6 @@ exports[`default render renders correctly without refinements 1`] = `
 <div class="ais-ClearRefinements">
   <button class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
           disabled="disabled"
-          type="reset"
   >
     Clear refinements
   </button>

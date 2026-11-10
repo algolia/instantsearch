@@ -5,7 +5,6 @@ var EventEmitter = require('@algolia/events');
 var DerivedHelper = require('./DerivedHelper');
 var escapeFacetValue = require('./functions/escapeFacetValue').escapeFacetValue;
 var inherits = require('./functions/inherits');
-var objectHasKeys = require('./functions/objectHasKeys');
 var RecommendParameters = require('./RecommendParameters');
 var RecommendResults = require('./RecommendResults');
 var requestBuilder = require('./requestBuilder');
@@ -78,10 +77,9 @@ var version = require('./version');
  * Event triggered when Algolia sends back an error. For example, if an unknown parameter is
  * used, the error can be caught using this event.
  * @event AlgoliaSearchHelper#event:error
- * @property {object} event
- * @property {Error} event.error the error returned by the Algolia.
+ * @property {Error} error the error returned by the Algolia.
  * @example
- * helper.on('error', function(event) {
+ * helper.on('error', function(error) {
  *   console.log('Houston we got a problem.');
  * });
  */
@@ -290,18 +288,9 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function (
   maxFacetHits,
   userState
 ) {
-  var clientHasSFFV =
-    typeof this.client.searchForFacetValues === 'function' &&
-    // v5 has a wrong sffv signature
-    typeof this.client.searchForFacets !== 'function';
-  var clientHasInitIndex = typeof this.client.initIndex === 'function';
-  if (
-    !clientHasSFFV &&
-    !clientHasInitIndex &&
-    typeof this.client.search !== 'function'
-  ) {
+  if (typeof this.client.search !== 'function') {
     throw new Error(
-      'search for facet values (searchable) was called, but this client does not have a function client.searchForFacetValues or client.initIndex(index).searchForFacetValues'
+      'search for facet values (searchable) was called, but this client does not have a function client.search'
     );
   }
 
@@ -317,34 +306,14 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function (
   this._currentNbQueries++;
   // eslint-disable-next-line consistent-this
   var self = this;
-  var searchForFacetValuesPromise;
-  // newer algoliasearch ^3.27.1 - ~4.0.0
-  if (clientHasSFFV) {
-    searchForFacetValuesPromise = this.client.searchForFacetValues([
-      { indexName: state.index, params: algoliaQuery },
-    ]);
-    // algoliasearch < 3.27.1
-  } else if (clientHasInitIndex) {
-    searchForFacetValuesPromise = this.client
-      .initIndex(state.index)
-      .searchForFacetValues(algoliaQuery);
-    // algoliasearch ~5.0.0
-  } else {
-    // @MAJOR only use client.search
-    delete algoliaQuery.facetName;
-    searchForFacetValuesPromise = this.client
-      .search([
-        {
-          type: 'facet',
-          facet: facet,
-          indexName: state.index,
-          params: algoliaQuery,
-        },
-      ])
-      .then(function processResponse(response) {
-        return response.results[0];
-      });
-  }
+  var searchForFacetValuesPromise = this.client.search([
+    {
+      type: 'facet',
+      facet: facet,
+      indexName: state.index,
+      params: algoliaQuery,
+    },
+  ]);
 
   this.emit('searchForFacetValues', {
     state: state,
@@ -363,11 +332,11 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function (
     [];
 
   return searchForFacetValuesPromise.then(
-    function addIsRefined(content) {
+    function addIsRefined(response) {
       self._currentNbQueries--;
       if (self._currentNbQueries === 0) self.emit('searchQueueEmpty');
 
-      content = Array.isArray(content) ? content[0] : content;
+      var content = response.results[0];
 
       content.facetHits = content.facetHits.reduce(function (acc, f) {
         if (hide.indexOf(f.value) > -1) {
@@ -1138,48 +1107,6 @@ AlgoliaSearchHelper.prototype.overrideStateWithoutTriggeringChangeEvent =
   };
 
 /**
- * Check if an attribute has any numeric, conjunctive, disjunctive or hierarchical filters.
- * @param {string} attribute the name of the attribute
- * @return {boolean} true if the attribute is filtered by at least one value
- * @example
- * // hasRefinements works with numeric, conjunctive, disjunctive and hierarchical filters
- * helper.hasRefinements('price'); // false
- * helper.addNumericRefinement('price', '>', 100);
- * helper.hasRefinements('price'); // true
- *
- * helper.hasRefinements('color'); // false
- * helper.addFacetRefinement('color', 'blue');
- * helper.hasRefinements('color'); // true
- *
- * helper.hasRefinements('material'); // false
- * helper.addDisjunctiveFacetRefinement('material', 'plastic');
- * helper.hasRefinements('material'); // true
- *
- * helper.hasRefinements('categories'); // false
- * helper.toggleFacetRefinement('categories', 'kitchen > knife');
- * helper.hasRefinements('categories'); // true
- *
- */
-AlgoliaSearchHelper.prototype.hasRefinements = function (attribute) {
-  if (objectHasKeys(this.state.getNumericRefinements(attribute))) {
-    return true;
-  } else if (this.state.isConjunctiveFacet(attribute)) {
-    return this.state.isFacetRefined(attribute);
-  } else if (this.state.isDisjunctiveFacet(attribute)) {
-    return this.state.isDisjunctiveFacetRefined(attribute);
-  } else if (this.state.isHierarchicalFacet(attribute)) {
-    return this.state.isHierarchicalFacetRefined(attribute);
-  }
-
-  // there's currently no way to know that the user did call `addNumericRefinement` at some point
-  // thus we cannot distinguish if there once was a numeric refinement that was cleared
-  // so we will return false in every other situations to be consistent
-  // while what we should do here is throw because we did not find the attribute in any type
-  // of refinement
-  return false;
-};
-
-/**
  * Check if a value is excluded for a specific faceted attribute. If the value
  * is omitted then the function checks if there is any excluding refinements.
  *
@@ -1237,98 +1164,6 @@ AlgoliaSearchHelper.prototype.getPage = function () {
  */
 AlgoliaSearchHelper.prototype.getTags = function () {
   return this.state.tagRefinements;
-};
-
-/**
- * Get the list of refinements for a given attribute. This method works with
- * conjunctive, disjunctive, excluding and numerical filters.
- *
- * See also SearchResults#getRefinements
- *
- * @param {string} facetName attribute name used for faceting
- * @return {Array.<FacetRefinement|NumericRefinement>} All Refinement are objects that contain a value, and
- * a type. Numeric also contains an operator.
- * @example
- * helper.addNumericRefinement('price', '>', 100);
- * helper.getRefinements('price');
- * // [
- * //   {
- * //     "value": [
- * //       100
- * //     ],
- * //     "operator": ">",
- * //     "type": "numeric"
- * //   }
- * // ]
- * @example
- * helper.addFacetRefinement('color', 'blue');
- * helper.addFacetExclusion('color', 'red');
- * helper.getRefinements('color');
- * // [
- * //   {
- * //     "value": "blue",
- * //     "type": "conjunctive"
- * //   },
- * //   {
- * //     "value": "red",
- * //     "type": "exclude"
- * //   }
- * // ]
- * @example
- * helper.addDisjunctiveFacetRefinement('material', 'plastic');
- * // [
- * //   {
- * //     "value": "plastic",
- * //     "type": "disjunctive"
- * //   }
- * // ]
- */
-AlgoliaSearchHelper.prototype.getRefinements = function (facetName) {
-  var refinements = [];
-
-  if (this.state.isConjunctiveFacet(facetName)) {
-    var conjRefinements = this.state.getConjunctiveRefinements(facetName);
-
-    conjRefinements.forEach(function (r) {
-      refinements.push({
-        value: r,
-        type: 'conjunctive',
-      });
-    });
-
-    var excludeRefinements = this.state.getExcludeRefinements(facetName);
-
-    excludeRefinements.forEach(function (r) {
-      refinements.push({
-        value: r,
-        type: 'exclude',
-      });
-    });
-  } else if (this.state.isDisjunctiveFacet(facetName)) {
-    var disjunctiveRefinements =
-      this.state.getDisjunctiveRefinements(facetName);
-
-    disjunctiveRefinements.forEach(function (r) {
-      refinements.push({
-        value: r,
-        type: 'disjunctive',
-      });
-    });
-  }
-
-  var numericRefinements = this.state.getNumericRefinements(facetName);
-
-  Object.keys(numericRefinements).forEach(function (operator) {
-    var value = numericRefinements[operator];
-
-    refinements.push({
-      value: value,
-      operator: operator,
-      type: 'numeric',
-    });
-  });
-
-  return refinements;
 };
 
 /**
@@ -1460,9 +1295,7 @@ AlgoliaSearchHelper.prototype._search = function (options) {
       .catch(this._dispatchAlgoliaError.bind(this, queryId));
   } catch (error) {
     // If we reach this part, we're in an internal error state
-    this.emit('error', {
-      error: error,
-    });
+    this.emit('error', error);
   }
 
   return undefined;
@@ -1524,9 +1357,7 @@ AlgoliaSearchHelper.prototype._runComposition = function () {
       .catch(this._dispatchAlgoliaError.bind(this, queryId));
   } catch (error) {
     // If we reach this part, we're in an internal error state
-    this.emit('error', {
-      error: error,
-    });
+    this.emit('error', error);
   }
 
   return undefined;
@@ -1615,9 +1446,7 @@ AlgoliaSearchHelper.prototype._recommend = function () {
       .catch(this._dispatchRecommendError.bind(this, queryId));
   } catch (error) {
     // If we reach this part, we're in an internal error state
-    this.emit('error', {
-      error: error,
-    });
+    this.emit('error', error);
   }
 
   return;
@@ -1801,9 +1630,7 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaError = function (
   this._currentNbQueries -= queryId - this._lastQueryIdReceived;
   this._lastQueryIdReceived = queryId;
 
-  this.emit('error', {
-    error: error,
-  });
+  this.emit('error', error);
 
   if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
 };
@@ -1821,9 +1648,7 @@ AlgoliaSearchHelper.prototype._dispatchRecommendError = function (
     queryId - this._lastRecommendQueryIdReceived;
   this._lastRecommendQueryIdReceived = queryId;
 
-  this.emit('error', {
-    error: error,
-  });
+  this.emit('error', error);
 
   if (this._currentNbRecommendQueries === 0) this.emit('recommendQueueEmpty');
 };

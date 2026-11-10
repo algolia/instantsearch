@@ -1,4 +1,3 @@
-<!-- @MAJOR remove `type="reset"` -->
 <template>
   <div v-if="state" :class="suit()">
     <slot
@@ -7,7 +6,6 @@
       :createURL="state.createURL"
     >
       <button
-        type="reset"
         :class="[suit('button'), !canRefine && suit('button', 'disabled')]"
         :disabled="!canRefine"
         @click.prevent="state.refine"
