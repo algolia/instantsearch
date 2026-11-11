@@ -33,4 +33,5 @@ yarn jest packages/vue-instantsearch/src/components/__tests__/<Pascal>   # from 
 ```
 
 - Vue 2/3 dual support: run `./scripts/prepare-vue3.js` (root `yarn prepare-vue3`) when switching the working tree to Vue 3. Don't assume one Vue version — changes must work for both.
+- `rollup.config.mjs` writes a `package.json` into each `vue2|vue3/{es,cjs}` folder. esbuild, webpack and Rollup's node-resolve read `sideEffects` from the nearest `package.json`, so it overrides the root one: keep it `false`, or unused widgets stay in apps' bundles (`test/module/*/is-tree-shakable.mjs` checks it).
 - Cross-flavor behavior lives in `tests/common/widgets/<name>/`; register it in this package's `common-widgets.test.*`.
