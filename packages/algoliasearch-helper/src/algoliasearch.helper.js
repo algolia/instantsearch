@@ -1576,11 +1576,23 @@ AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
       cache[id] = firstResult;
       return;
     }
+    var inputObjectIDs = [];
+    states.forEach(function (s) {
+      s.state.params.forEach(function (param) {
+        // `id` is a key of `idsMap`, so it's a string even when `$$id` isn't.
+        if (String(param.$$id) === id && param.objectID != null) {
+          inputObjectIDs.push(String(param.objectID));
+        }
+      });
+    });
     cache[id] = Object.assign({}, firstResult, {
       hits: sortAndMergeRecommendations(
-        ids,
+        inputObjectIDs,
         indices.map(function (idx) {
           return content.results[idx].hits;
+        }),
+        indices.map(function (idx) {
+          return content.results[idx].queryID;
         })
       ),
     });

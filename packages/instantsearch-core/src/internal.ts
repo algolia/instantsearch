@@ -6,15 +6,10 @@ export { default as InstantSearch } from './instantsearch';
 export { instantsearch } from './instantsearch';
 export { INSTANTSEARCH_FUTURE_DEFAULTS } from './instantsearch';
 export {
-  highlight,
-  snippet,
-  reverseHighlight,
-  reverseSnippet,
   getInsightsAnonymousUserTokenInternal,
   ANONYMOUS_TOKEN_COOKIE_KEY,
   getUsageSessionId,
 } from './helpers';
-export { withInsights, inferInsightsPayload } from './lib/insights';
 export {
   Chat,
   ChatState,
@@ -105,10 +100,4 @@ export type {
   ChatToolMessage,
   WidgetMetadata,
 } from './lib/utils';
-export type {
-  HighlightOptions,
-  SnippetOptions,
-  ReverseHighlightOptions,
-  ReverseSnippetOptions,
-} from './helpers';
 export { component as suitComponent } from './lib/suit';

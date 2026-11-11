@@ -5,7 +5,7 @@ import {
   TAG_PLACEHOLDER,
   createSendEventForHits,
   addAbsolutePosition,
-  addQueryID,
+  addMissingQueryID,
 } from '../../lib/utils';
 
 import type { SendEventForHits } from '../../lib/utils';
@@ -172,7 +172,7 @@ export default (function connectRelatedProducts<
           1
         );
 
-        const itemsWithAbsolutePositionAndQueryID = addQueryID(
+        const itemsWithAbsolutePositionAndQueryID = addMissingQueryID(
           itemsWithAbsolutePosition,
           results.queryID
         );
@@ -191,9 +191,8 @@ export default (function connectRelatedProducts<
         };
       },
 
-      dispose({ recommendState }) {
+      dispose() {
         unmountFn();
-        return recommendState.removeParams(this.$$id!);
       },
 
       getWidgetParameters(state) {

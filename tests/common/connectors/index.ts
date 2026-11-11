@@ -14,3 +14,4 @@ export * from './trending-items';
 export * from './trending-facets';
 export * from './looking-similar';
 export * from './chat';
+export * from './compare';

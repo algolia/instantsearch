@@ -1,11 +1,4 @@
-import type { StateMapping, IndexUiState, UiState } from '../../types';
-
-function getIndexStateWithoutConfigure<TIndexUiState extends IndexUiState>(
-  uiState: TIndexUiState
-): TIndexUiState {
-  const { configure, ...trackedUiState } = uiState;
-  return trackedUiState as TIndexUiState;
-}
+import type { StateMapping, UiState } from '../../types';
 
 export default function singleIndexStateMapping<
   TUiState extends UiState = UiState,
@@ -15,11 +8,11 @@ export default function singleIndexStateMapping<
   return {
     $$type: 'ais.singleIndex',
     stateToRoute(uiState) {
-      return getIndexStateWithoutConfigure(uiState[indexName] || {});
+      return uiState[indexName] || {};
     },
     routeToState(routeState = {} as TUiState[typeof indexName]) {
       return {
-        [indexName]: getIndexStateWithoutConfigure(routeState),
+        [indexName]: routeState,
       } as unknown as TUiState;
     },
   };

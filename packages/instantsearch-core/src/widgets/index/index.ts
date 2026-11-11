@@ -269,6 +269,30 @@ function getLocalWidgetsSearchParameters(
   }, initialState);
 }
 
+// Feed containers share the helper of their parent index, but their children
+// aren't part of its `uiState`. Their state is read from that helper, before
+// the parent computes its search parameters again.
+function applyFeedsSearchParameters(
+  widgets: Array<Widget | IndexWidget>,
+  searchParameters: SearchParameters,
+  helper: Helper
+): SearchParameters {
+  return widgets
+    .filter(
+      (widget): widget is IndexWidget => widget.$$type === 'ais.feedContainer'
+    )
+    .reduce<SearchParameters>(
+      (state, feedContainer) =>
+        feedContainer.getWidgetSearchParameters(state, {
+          uiState: getLocalWidgetsUiState(feedContainer.getWidgets(), {
+            searchParameters: helper.state,
+            helper,
+          }),
+        }),
+      searchParameters
+    );
+}
+
 function getLocalWidgetsRecommendParameters(
   widgets: Array<Widget | IndexWidget>,
   widgetRecommendParametersOptions: LocalWidgetRecommendParametersOptions
@@ -652,19 +676,9 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         return this;
       }
 
-      // We still dispose the previous widget, for its side effects. Only the
-      // recommend state it returns is kept: like in `removeWidgets`, the search
-      // parameters are computed again from the `uiState`.
-      const disposedState = previousWidget.dispose({
-        helper: helper!,
-        state: helper!.state,
-        recommendState: helper!.recommendState,
-        parent: this,
-      });
-      const cleanedRecommendState =
-        disposedState instanceof algoliasearchHelper.RecommendParameters
-          ? disposedState
-          : helper!.recommendState;
+      // We still dispose the previous widget, for its side effects. Like in
+      // `removeWidgets`, the parameters are computed again from the `uiState`.
+      previousWidget.dispose({ parent: this });
 
       const initialSearchParameters = new algoliasearchHelper.SearchParameters({
         index: this.getIndexName(),
@@ -684,16 +698,21 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
       // The search parameters are then computed again from that narrowed
       // `uiState`, so that they can't hold state the `uiState` doesn't describe.
-      const newState = getLocalWidgetsSearchParameters(localWidgets, {
-        uiState: localUiState,
-        initialSearchParameters,
-      });
+      const newState = applyFeedsSearchParameters(
+        localWidgets,
+        getLocalWidgetsSearchParameters(localWidgets, {
+          uiState: localUiState,
+          initialSearchParameters,
+        }),
+        helper!
+      );
 
       privateHelperSetState(helper!, {
         state: newState,
         recommendState: getLocalWidgetsRecommendParameters(localWidgets, {
           uiState: localUiState,
-          initialRecommendParameters: cleanedRecommendState,
+          initialRecommendParameters:
+            new algoliasearchHelper.RecommendParameters(),
         }),
         _uiState: localUiState,
       });
@@ -761,36 +780,19 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       recomputeLocalRequestDependencies();
 
       if (localInstantSearchInstance && Boolean(flatWidgets.length)) {
-        const { cleanedRecommendState } = flatWidgets.reduce(
-          (states, widget) => {
-            // the `dispose` method exists at this point we already assert it
-            const next = widget.dispose!({
-              helper: helper!,
-              state: states.cleanedSearchState,
-              recommendState: states.cleanedRecommendState,
-              parent: this,
-            });
+        // the `dispose` method exists at this point we already assert it
+        flatWidgets.forEach((widget) => widget.dispose!({ parent: this }));
 
-            if (next instanceof algoliasearchHelper.RecommendParameters) {
-              states.cleanedRecommendState = next;
-            } else if (next) {
-              states.cleanedSearchState = next;
-            }
-
-            return states;
-          },
-          {
-            cleanedSearchState: helper!.state,
-            cleanedRecommendState: helper!.recommendState,
-          }
-        );
-
-        const newState = getLocalWidgetsSearchParameters(localWidgets, {
-          uiState: localUiState,
-          initialSearchParameters: new algoliasearchHelper.SearchParameters({
-            index: this.getIndexName(),
+        const newState = applyFeedsSearchParameters(
+          localWidgets,
+          getLocalWidgetsSearchParameters(localWidgets, {
+            uiState: localUiState,
+            initialSearchParameters: new algoliasearchHelper.SearchParameters({
+              index: this.getIndexName(),
+            }),
           }),
-        });
+          helper!
+        );
 
         localUiState = getLocalWidgetsUiState(localWidgets, {
           searchParameters: newState,
@@ -798,7 +800,14 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         });
 
         helper!.setState(newState);
-        helper!.recommendState = cleanedRecommendState;
+        helper!.recommendState = getLocalWidgetsRecommendParameters(
+          localWidgets,
+          {
+            uiState: localUiState,
+            initialRecommendParameters:
+              new algoliasearchHelper.RecommendParameters(),
+          }
+        );
 
         if (localWidgets.length) {
           if (isolated) {
@@ -823,10 +832,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       localParent = parent;
       localUiState = uiState[indexId] || {};
 
-      // The `mainHelper` is already defined at this point. The instance is created
+      // The `searchHelper` is already defined at this point. The instance is created
       // inside InstantSearch at the `start` method, which occurs before the `init`
       // step.
-      const mainHelper = instantSearchInstance.mainHelper!;
+      const searchHelper = instantSearchInstance.helper!;
       const parameters = getLocalWidgetsSearchParameters(localWidgets, {
         uiState: localUiState,
         initialSearchParameters: new algoliasearchHelper.SearchParameters({
@@ -846,7 +855,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // `searchClient`. Only the "main" Helper created at the `InstantSearch`
       // level is aware of the client.
       helper = algoliasearchHelper(
-        mainHelper.getClient(),
+        searchHelper.getClient(),
         parameters.index,
         parameters
       );
@@ -873,14 +882,14 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
           // We don't trigger a search when controlled because it becomes the
           // responsibility of `setUiState`.
-          return mainHelper;
+          return searchHelper;
         }
 
-        return mainHelper.search();
+        return searchHelper.search();
       };
 
       helper.searchWithoutTriggeringOnStateChange = () => {
-        return mainHelper.search();
+        return searchHelper.search();
       };
 
       // We use the same pattern for the `searchForFacetValues`.
@@ -891,11 +900,11 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         userState
       ) => {
         const state = mergeSearchParameters(
-          mainHelper.state,
+          searchHelper.state,
           ...resolveSearchParameters(this)
         ).setQueryParameters(userState!);
 
-        return mainHelper.searchForFacetValues(
+        return searchHelper.searchForFacetValues(
           facetName,
           facetValue,
           maxFacetHits,
@@ -908,18 +917,18 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         : algoliasearchHelper({} as SearchClient, '__empty_index__', {});
       const derivingHelper = isolated
         ? isolatedHelper
-        : nearestIsolatedHelper(parent, mainHelper);
+        : nearestIsolatedHelper(parent, searchHelper);
 
       derivedHelper = derivingHelper.derive(
         () =>
           mergeSearchParameters(
-            mainHelper.state,
+            searchHelper.state,
             ...resolveSearchParameters(this)
           ),
         () =>
           addInsightsToRecommendParameters(
             this.getHelper()!.recommendState,
-            mainHelper.state
+            searchHelper.state
           )
       );
 
@@ -978,7 +987,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         instantSearchInstance.scheduleRender();
 
         // the derived helper is the one which actually searches, but the helper
-        // which is exposed e.g. via instance.helper, doesn't search, and thus
+        // which is exposed e.g. via mainIndex.getHelper(), doesn't search, and thus
         // does not have access to lastResults, which it used to in pre-federated
         // search behavior.
         helper!.lastResults = results;
@@ -994,7 +1003,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         instantSearchInstance.scheduleRender();
 
         // the derived helper is the one which actually searches, but the helper
-        // which is exposed e.g. via instance.helper, doesn't search, and thus
+        // which is exposed e.g. via mainIndex.getHelper(), doesn't search, and thus
         // does not have access to lastRecommendResults.
         helper!.lastRecommendResults = recommend.results;
       });
@@ -1072,7 +1081,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         restoredForError = undefined;
       } else if (
         instantSearchInstance.error !== restoredForError &&
-        !instantSearchInstance.mainHelper!.hasPendingRequests() &&
+        !instantSearchInstance.helper!.hasPendingRequests() &&
         lastValidSearchParameters
       ) {
         restoredForError = instantSearchInstance.error;
@@ -1141,17 +1150,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       localWidgets.forEach((widget) => {
         if (widget.dispose && helper) {
           // The dispose function is always called once the instance is started
-          // (it's an effect of `removeWidgets`). The index is initialized and
-          // the Helper is available. We don't care about the return value of
-          // `dispose` because the index is removed. We can't call `removeWidgets`
+          // (it's an effect of `removeWidgets`). We can't call `removeWidgets`
           // because we want to keep the widgets on the instance, to allow idempotent
           // operations on `add` & `remove`.
-          widget.dispose({
-            helper,
-            state: helper.state,
-            recommendState: helper.recommendState,
-            parent: this,
-          });
+          widget.dispose({ parent: this });
         }
       });
 
@@ -1224,11 +1226,11 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 export default index;
 
 /**
- * Walk up the parent chain to find the closest isolated index, or fall back to mainHelper
+ * Walk up the parent chain to find the closest isolated index, or fall back to searchHelper
  */
 function nearestIsolatedHelper(
   current: IndexWidget | null,
-  mainHelper: Helper
+  searchHelper: Helper
 ): Helper {
   while (current) {
     if (current._isolated) {
@@ -1236,5 +1238,5 @@ function nearestIsolatedHelper(
     }
     current = current.getParent();
   }
-  return mainHelper;
+  return searchHelper;
 }

@@ -28,7 +28,6 @@ import type { ChatReferer, UIMessage } from '../../lib/chat';
 import type { SendEventForHits } from '../../lib/utils';
 import type {
   Connector,
-  DisposeOptions,
   Hit,
   IndexRenderState,
   InitOptions,
@@ -279,10 +278,8 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
       type: 'resultCard',
       disableTriggerValidation: true,
       // The agent runs its built-in tools server-side and streams their
-      // output. Registering them without `onToolCall` keeps that output; an
-      // unknown tool is answered with "No tool implemented", which drops the
-      // hits the chat's grouped-results needs after the handoff. Same set as
-      // the `chat` widget's defaults.
+      // output, which the chat's grouped-results needs after the handoff.
+      // Same set as the `chat` widget's defaults.
       tools: {
         [SearchIndexToolType]: {},
         [RecommendToolType]: {},
@@ -555,20 +552,12 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
         renderOutward(renderOptions);
       },
 
-      dispose(disposeOptions: DisposeOptions) {
+      dispose() {
         disposed = true;
         cancelPendingRequest();
         stopGeneration();
         chatWidget.dispose();
         unmountFn();
-
-        const remaining = (disposeOptions.state.ruleContexts || []).filter(
-          (context) => context !== ruleContext
-        );
-        return disposeOptions.state.setQueryParameter(
-          'ruleContexts',
-          remaining.length > 0 ? remaining : undefined
-        );
       },
 
       getWidgetSearchParameters(state) {

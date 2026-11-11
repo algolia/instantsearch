@@ -39,9 +39,6 @@ import type { Widget } from 'instantsearch-core';
 describe('index', () => {
   const createSearchBox = (args: Partial<Widget> = {}): Widget =>
     createWidget({
-      dispose: jest.fn(({ state }) => {
-        return state.setQueryParameter('query', undefined);
-      }),
       getWidgetUiState: jest.fn((uiState, { searchParameters }) => {
         if (!searchParameters.query) {
           return uiState;
@@ -60,9 +57,6 @@ describe('index', () => {
 
   const createPagination = (args: Partial<Widget> = {}): Widget =>
     createWidget({
-      dispose: jest.fn(({ state }) => {
-        return state.setQueryParameter('page', undefined);
-      }),
       getWidgetUiState: jest.fn((uiState, { searchParameters }) => {
         if (!searchParameters.page) {
           return uiState;
@@ -84,31 +78,8 @@ describe('index', () => {
     args: Partial<Widget> = {}
   ): Widget =>
     createWidget({
-      dispose: jest.fn(({ state }) => {
-        return state.setQueryParameters(
-          Object.keys(params).reduce(
-            (acc, key) => ({
-              ...acc,
-              [key]: undefined,
-            }),
-            {}
-          )
-        );
-      }),
-      getWidgetUiState(uiState) {
-        return {
-          ...uiState,
-          configure: {
-            ...uiState.configure,
-            ...params,
-          },
-        };
-      },
-      getWidgetSearchParameters(searchParameters, { uiState }) {
-        return searchParameters.setQueryParameters({
-          ...uiState.configure,
-          ...params,
-        });
+      getWidgetSearchParameters(searchParameters) {
+        return searchParameters.setQueryParameters(params);
       },
       ...args,
     });
@@ -123,9 +94,6 @@ describe('index', () => {
           $$id: this.$$id!,
           objectID: 'abc',
         });
-      },
-      dispose({ recommendState }) {
-        return recommendState.removeParams(this.$$id!);
       },
       ...args,
     } as Widget) as unknown as Widget & { $$id: number };
@@ -770,16 +738,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           expect(widget.dispose).toHaveBeenCalledTimes(0);
         });
 
-        const stateBefore = instance.getHelper()!.state;
-
         instance.removeWidgets(widgets);
 
         widgets.forEach((widget) => {
           expect(widget.dispose).toHaveBeenCalledTimes(1);
           expect(widget.dispose).toHaveBeenCalledWith({
-            helper: instance.getHelper(),
-            state: stateBefore,
-            recommendState: instance.getHelper()!.recommendState,
             parent: instance,
           });
         });
@@ -1316,7 +1279,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const instance = index({ indexName: 'indexName' });
       const mainHelper = algoliasearchHelper({} as any, '', {});
       const instantSearchInstance = createInstantSearch({
-        mainHelper,
+        helper: mainHelper,
       });
 
       const search = jest.spyOn(mainHelper, 'search').mockImplementation();
@@ -1339,7 +1302,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const searchClient = createSearchClient();
       const mainHelper = algoliasearchHelper(searchClient, '', {});
       const instantSearchInstance = createInstantSearch({
-        mainHelper,
+        helper: mainHelper,
       });
 
       instance.addWidgets([
@@ -1383,7 +1346,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const searchClient = createSearchClient();
       const mainHelper = algoliasearchHelper(searchClient, '', {});
       const instantSearchInstance = createInstantSearch({
-        mainHelper,
+        helper: mainHelper,
       });
 
       instance.init(
@@ -1413,7 +1376,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const searchClient = createSearchClient();
       const mainHelper = algoliasearchHelper(searchClient, '', {});
       const instantSearchInstance = createInstantSearch({
-        mainHelper,
+        helper: mainHelper,
       });
 
       instance.addWidgets([
@@ -1484,7 +1447,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const searchClient = createSearchClient();
       const mainHelper = algoliasearchHelper(searchClient, '', {});
       const instantSearchInstance = createInstantSearch({
-        mainHelper,
+        helper: mainHelper,
       });
 
       instance.addWidgets([
@@ -1522,7 +1485,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const searchClient = createSearchClient();
       const mainHelper = algoliasearchHelper(searchClient, '', {});
       const instantSearchInstance = createInstantSearch({
-        mainHelper,
+        helper: mainHelper,
       });
 
       level0.addWidgets([
@@ -1820,7 +1783,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         const searchClient = createSearchClient();
         const mainHelper = algoliasearchHelper(searchClient, '', {});
         const instantSearchInstance = createInstantSearch({
-          mainHelper,
+          helper: mainHelper,
         });
 
         level0.addWidgets([
@@ -2031,7 +1994,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         const searchClient = createSearchClient();
         const mainHelper = algoliasearchHelper(searchClient, '', {});
         const instantSearchInstance = createInstantSearch({
-          mainHelper,
+          helper: mainHelper,
         });
 
         level0.addWidgets([
@@ -2158,7 +2121,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         const searchClient = createSearchClient();
         const mainHelper = algoliasearchHelper(searchClient, '', {});
         const instantSearchInstance = createInstantSearch({
-          mainHelper,
+          helper: mainHelper,
         });
 
         level0.addWidgets([
@@ -2300,17 +2263,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             parent: null,
             uiState: {
               topLevelIndexName: {
-                configure: {
-                  hitsPerPage: 5,
-                },
+                hitsPerPage: 5,
                 refinementList: {
                   brand: ['Apple'],
                 },
               },
               subLevelIndexName: {
-                configure: {
-                  hitsPerPage: 2,
-                },
+                hitsPerPage: 2,
                 menu: {
                   categories: 'Phone',
                 },
@@ -2324,17 +2283,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
         expect(topLevelInstance.getWidgetUiState({})).toEqual({
           topLevelIndexName: {
-            configure: {
-              hitsPerPage: 5,
-            },
+            hitsPerPage: 5,
             refinementList: {
               brand: ['Apple'],
             },
           },
           subLevelIndexName: {
-            configure: {
-              hitsPerPage: 2,
-            },
+            hitsPerPage: 2,
             menu: {
               categories: 'Phone',
             },
@@ -2643,7 +2598,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const searchClient = createSearchClient();
       const mainHelper = algoliasearchHelper(searchClient, '', {});
       const instantSearchInstance = createInstantSearch({
-        mainHelper,
+        helper: mainHelper,
         _initialUiState: {
           level0IndexName: {
             query: 'something',
@@ -2677,9 +2632,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       expect(instantSearchInstance.mainIndex.getWidgetUiState({})).toEqual({
         indexName: {},
         level0IndexName: {
-          configure: {
-            distinct: false,
-          },
           query: 'something',
         },
       });
@@ -2814,7 +2766,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const searchIndex = index({ indexName: 'indexName' });
       const searchClient = createSearchClient();
       const mainHelper = algoliasearchHelper(searchClient, 'indexName', {});
-      const instantSearchInstance = createInstantSearch({ mainHelper });
+      const instantSearchInstance = createInstantSearch({ helper: mainHelper });
       const searchBox = createSearchBox({
         dependsOn: 'search',
         getRenderState: jest.fn((renderState, { helper, status }) => {
@@ -2928,7 +2880,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
         const mainHelper = algoliasearchHelper(createSearchClient(), '');
 
-        const instantSearchInstance = createInstantSearch({ mainHelper });
+        const instantSearchInstance = createInstantSearch({
+          helper: mainHelper,
+        });
 
         expect(instance.getHelper()).toBe(null);
 
@@ -3293,7 +3247,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       });
       const mainHelper = algoliasearchHelper(searchClient, '', {});
       const instantSearchInstance = createInstantSearch({
-        mainHelper,
+        helper: mainHelper,
       });
 
       const fbt = createFrequentlyBoughtTogether({
@@ -3350,22 +3304,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(widget.dispose).toHaveBeenCalledTimes(0);
       });
 
-      // Save the Helper to be able to simulate the search
-      const helper = instance.getHelper();
-
-      instance.dispose(
-        createDisposeOptions({
-          helper: instantSearchInstance.helper!,
-          state: instantSearchInstance.helper!.state,
-        })
-      );
+      instance.dispose(createDisposeOptions());
 
       widgets.forEach((widget) => {
         expect(widget.dispose).toHaveBeenCalledTimes(1);
         expect(widget.dispose).toHaveBeenCalledWith({
-          state: helper!.state,
-          recommendState: helper!.recommendState,
-          helper,
           parent: instance,
         });
       });
@@ -3478,7 +3421,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const searchClient = createSearchClient();
       const mainHelper = algoliasearchHelper(searchClient, '', {});
       const instantSearchInstance = createInstantSearch({
-        mainHelper,
+        helper: mainHelper,
       });
 
       instance.init(

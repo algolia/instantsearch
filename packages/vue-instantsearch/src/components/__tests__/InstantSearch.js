@@ -21,12 +21,10 @@ beforeEach(() => {
 
 it('passes props to InstantSearch.js', () => {
   const searchClient = {};
-  const insightsClient = jest.fn();
 
   mount(InstantSearch, {
     propsData: {
       searchClient,
-      insightsClient,
       indexName: 'something',
       routing: {
         router: {},
@@ -43,7 +41,6 @@ it('passes props to InstantSearch.js', () => {
       stateMapping: {},
     },
     searchClient,
-    insightsClient,
     stalledSearchDelay: 250,
     _internalVersion: version,
   });
@@ -150,7 +147,7 @@ it('Allows a change in `index-name`', async () => {
     indexName: 'doggie_bowl',
   });
 
-  const helper = wrapper.vm.instantSearchInstance.helper;
+  const helper = wrapper.vm.instantSearchInstance.mainIndex.getHelper();
 
   expect(helper.setIndex).toHaveBeenCalledTimes(1);
   expect(helper.setIndex).toHaveBeenCalledWith('doggie_bowl');

@@ -121,14 +121,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
     });
 
     it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {});
       const rendering = () => {};
       const customCurrentRefinements = connectCurrentRefinements(rendering);
       const widget = customCurrentRefinements({});
 
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
 
     describe('getRenderState', () => {

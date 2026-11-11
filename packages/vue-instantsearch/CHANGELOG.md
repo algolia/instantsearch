@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.33.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.32.0...vue-instantsearch@4.33.0) (2026-11-10)
+
+
+### Features
+
+* **autocomplete:** add submitTarget option to keep queries in the autocomplete [FX-4090] ([#7372](https://github.com/algolia/instantsearch/issues/7372)) ([8a54a31](https://github.com/algolia/instantsearch/commit/8a54a31f58abae4e4bc835fd4e382ea01e49c6d6))
+
+
+
+
+
+# [4.32.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.31.0...vue-instantsearch@4.32.0) (2026-11-03)
+
+
+### Bug Fixes
+
+* **chat:** keep the Vue Chat widget when the parent re-renders with inline props ([#7328](https://github.com/algolia/instantsearch/issues/7328)) ([794bad6](https://github.com/algolia/instantsearch/commit/794bad6f737f6095727faf1219c85c8cec7c197f))
+* **vue:** read the latest chat input when submitting from a custom prompt ([#7344](https://github.com/algolia/instantsearch/issues/7344)) ([0e42793](https://github.com/algolia/instantsearch/commit/0e42793347c0d73f46cd966245e6c69bef0eb91d))
+
+
+### Features
+
+* **chat:** add accessible names to the launcher and carousel buttons ([#7332](https://github.com/algolia/instantsearch/issues/7332)) ([7780406](https://github.com/algolia/instantsearch/commit/7780406c56c96b1d2287a38b5e26dce9229da720))
+* **vue:** add CompareBar and ResultCard, with common tests [FX-4089] ([#7340](https://github.com/algolia/instantsearch/issues/7340)) ([1598f50](https://github.com/algolia/instantsearch/commit/1598f5096266c4c8ad7e9ff92da7892ddb664f6d))
+
+
+
+
+
 # [4.31.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.30.1...vue-instantsearch@4.31.0) (2026-10-26)
 
 

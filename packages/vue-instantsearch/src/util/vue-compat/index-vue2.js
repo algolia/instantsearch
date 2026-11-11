@@ -102,8 +102,13 @@ export function augmentReactCreateElement(createElement) {
       } else if (name === 'ref') {
         bindMutableRef(data, value);
       } else if (isEventProp(name, value)) {
-        // onKeyDown -> keydown, onClick -> click, onFocus -> focus
-        data.on[name.slice(2).toLowerCase()] = value;
+        // onKeyDown -> keydown, onClick -> click, onFocus -> focus,
+        // onFocusCapture -> !focus (Vue 2's capture modifier)
+        const isCapture = isCaptureEventProp(name);
+        const eventName = name
+          .slice(2, isCapture ? -CAPTURE_SUFFIX.length : undefined)
+          .toLowerCase();
+        data.on[isCapture ? `!${eventName}` : eventName] = value;
       } else if (name === 'value' || name === 'checked') {
         // Controlled form fields from shared TSX (e.g. `<input value={query} />`
         // in AutocompleteSearch). In Vue 2, `attrs.value` sets only the initial
@@ -132,6 +137,12 @@ export function renderReactCompat(fn) {
   return function (createElement) {
     return fn.call(this, augmentReactCreateElement(createElement));
   };
+}
+
+const CAPTURE_SUFFIX = 'Capture';
+
+function isCaptureEventProp(name) {
+  return name.slice(-CAPTURE_SUFFIX.length) === CAPTURE_SUFFIX;
 }
 
 function isEventProp(name, value) {

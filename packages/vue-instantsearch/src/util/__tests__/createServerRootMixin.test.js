@@ -291,11 +291,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
       expect(mainIndex.getWidgetUiState({})).toMatchInlineSnapshot(`
         {
-          "hello": {
-            "configure": {
-              "hitsPerPage": 100,
-            },
-          },
+          "hello": {},
         }
       `);
 
@@ -988,11 +984,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
         expect(mainIndex.getWidgetUiState({})).toMatchInlineSnapshot(`
           {
-            "hello": {
-              "configure": {
-                "hitsPerPage": 100,
-              },
-            },
+            "hello": {},
           }
         `);
 
@@ -1099,7 +1091,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       expect(instantsearch.mainIndex.getHelper()).not.toBeNull();
     });
 
-    it('sets helper & mainHelper', () => {
+    it('sets the helper', () => {
       const serialized = createSerializedState();
 
       const app = {
@@ -1126,14 +1118,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       } = mount(app);
 
       expect(instantsearch.helper).toBe(null);
-      expect(instantsearch.mainHelper).toBe(null);
 
       instantsearch.hydrate({
         hello: serialized,
       });
 
       expect(instantsearch.helper).toEqual(expect.any(AlgoliaSearchHelper));
-      expect(instantsearch.mainHelper).toEqual(expect.any(AlgoliaSearchHelper));
     });
   });
 

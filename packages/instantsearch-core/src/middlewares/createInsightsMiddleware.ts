@@ -57,7 +57,6 @@ const ALGOLIA_INSIGHTS_SRC = `https://cdn.jsdelivr.net/npm/search-insights@${ALG
 // they carry credentials or end-user data. Everything else is reported as-is.
 const SENSITIVE_OPTIONS = [
   'searchClient',
-  'insightsClient',
   'initialUiState',
   '_internalVersion',
 ] as const;
@@ -209,7 +208,7 @@ export function createInsightsMiddleware<
       started() {
         insightsClient('addAlgoliaAgent', 'insights-middleware');
 
-        helper = instantSearchInstance.mainHelper!;
+        helper = instantSearchInstance.helper!;
 
         const { queue: queueAtStart } = insightsClient;
 
@@ -369,7 +368,7 @@ export function createInsightsMiddleware<
 
         const viewedObjectIDs = new Set<string>();
         let lastQueryId: string | undefined;
-        instantSearchInstance.mainHelper!.derivedHelpers[0].on(
+        instantSearchInstance.helper!.derivedHelpers[0].on(
           'result',
           ({ results }) => {
             if (
@@ -539,7 +538,7 @@ function getInitialParameters(
     instantSearchInstance._initialResults?.[instantSearchInstance.indexName]
       ?.state || {};
 
-  const stateFromHelper = instantSearchInstance.mainHelper!.state;
+  const stateFromHelper = instantSearchInstance.helper!.state;
 
   return {
     userToken: stateFromInitialResults.userToken || stateFromHelper.userToken,

@@ -134,10 +134,8 @@ const connectPagination: PaginationConnector = function connectPagination(
         );
       },
 
-      dispose({ state }) {
+      dispose() {
         unmountFn();
-
-        return state.setQueryParameter('page', undefined);
       },
 
       getWidgetUiState(uiState, { searchParameters }) {
