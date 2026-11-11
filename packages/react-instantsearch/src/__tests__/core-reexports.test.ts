@@ -69,8 +69,6 @@ describe('instantsearch-core re-exports', () => {
     expect(coreNames.filter(isConnector).filter((name) => !coveredByHook(name)))
       .toMatchInlineSnapshot(`
       [
-        "connectHitsWithInsights",
-        "connectInfiniteHitsWithInsights",
         "connectRatingMenu",
         "connectRelevantSort",
         "connectTasks",

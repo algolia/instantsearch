@@ -5,8 +5,6 @@
 // exports a name that is neither listed here nor covered by a hook.
 export {
   // Connectors without a hook
-  connectHitsWithInsights,
-  connectInfiniteHitsWithInsights,
   connectRatingMenu,
   connectRelevantSort,
   connectTasks,

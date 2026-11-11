@@ -4,8 +4,9 @@ plans/
 # Dependencies
 node_modules/
 
-# Yarn — commit the release binary, ignore the rest
+# Yarn — commit the release binary and patches, ignore the rest
 .yarn/*
+!.yarn/patches
 !.yarn/releases
 
 # Build output

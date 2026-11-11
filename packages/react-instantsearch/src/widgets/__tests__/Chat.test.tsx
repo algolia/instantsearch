@@ -120,6 +120,41 @@ describe('Chat', () => {
     jest.restoreAllMocks();
   });
 
+  test('does not warn about changing functions when itemComponent is inline', async () => {
+    const warn = getConsoleWarnMock();
+    warn.mockClear();
+
+    const { rerender } = render(
+      <InstantSearch searchClient={searchClient} indexName="indexName">
+        <Chat
+          agentId="test-agent-id"
+          disableTriggerValidation={true}
+          requiresSearch={false}
+          itemComponent={() => <div />}
+        />
+      </InstantSearch>
+    );
+    await act(async () => {
+      await wait(0);
+    });
+    rerender(
+      <InstantSearch searchClient={searchClient} indexName="indexName">
+        <Chat
+          agentId="test-agent-id"
+          disableTriggerValidation={true}
+          requiresSearch={false}
+          itemComponent={() => <div />}
+        />
+      </InstantSearch>
+    );
+
+    expect(
+      warn.mock.calls.filter(([message]) =>
+        String(message).includes('prop of useChat changed')
+      )
+    ).toHaveLength(0);
+  });
+
   test('focuses only for explicit open transitions', async () => {
     sessionStorage.setItem('instantsearch-chat-open-state-chat', 'true');
     const externalButton = document.createElement('button');

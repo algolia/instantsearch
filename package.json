@@ -35,7 +35,7 @@
     "test:e2e:playwright": "yarn workspace @instantsearch/e2e-tests test:playwright",
     "test:v3": "lerna run test:v3",
     "release": "shipjs prepare",
-    "postinstall": "lerna run prepare && patch-package",
+    "postinstall": "lerna run prepare",
     "prepare-vue3": "./scripts/prepare-vue3.js",
     "watch:es": "lerna run watch:es --parallel --stream --ignore='example-*' --ignore='create-instantsearch-app'"
   },
@@ -77,7 +77,7 @@
     "algoliasearch-v4": "npm:algoliasearch@4.23.2",
     "algoliasearch-v5": "npm:algoliasearch@5.1.1",
     "babel-jest": "27.4.6",
-    "doctoc": "1.4.0",
+    "doctoc": "patch:doctoc@npm%3A1.4.0#~/.yarn/patches/doctoc-npm-1.4.0-cd22da6a57.patch",
     "enzyme": "3.11.0",
     "eslint-plugin-import": "^2.32.0",
     "jest": "27.4.7",
@@ -88,7 +88,6 @@
     "jest-watch-typeahead": "1.0.0",
     "jsdom-global": "3.0.2",
     "lerna": "9.0.7",
-    "patch-package": "6.2.2",
     "prop-types": "15.6.2",
     "react": "19.0.0",
     "react-dom": "19.0.0",
@@ -113,7 +112,8 @@
     "babel-loader": "8.2.2",
     "qs": "6.9.7",
     "baseline-browser-mapping": "2.9.19",
-    "express": "4.22.1"
+    "express": "4.22.1",
+    "sigstore@npm:^4.0.0": "patch:sigstore@npm%3A4.1.1#~/.yarn/patches/sigstore-npm-4.1.1-9ab7be1c91.patch"
   },
   "packageManager": "yarn@4.17.1+sha512.ccbfabf7d7b6b32075088be9386fb9a2e00bb6887ef07fa56effabc890a56d53da1ccc4128d62db245fcbd3961b236d75335bdf7d5320ed6eafb7588b7ad4697"
 }

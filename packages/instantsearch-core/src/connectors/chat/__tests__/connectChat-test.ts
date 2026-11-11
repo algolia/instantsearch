@@ -1504,32 +1504,137 @@ describe('connectChat', () => {
       expect(getChatRenderState().messages).toEqual([]);
     });
 
-    it('keeps the development diagnostic for an unknown tool', async () => {
+    it('warns about an unknown tool the server leaves to the client', async () => {
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValueOnce(
+          chatStream([
+            { type: 'start', messageId: 'assistant-1' },
+            {
+              type: 'tool-input-available',
+              toolName: 'missingTool',
+              toolCallId: 'call-1',
+              input: {},
+            },
+            { type: 'finish' },
+          ])
+        )
+        .mockResolvedValueOnce(
+          chatStream([
+            { type: 'start', messageId: 'assistant-2' },
+            { type: 'finish' },
+          ])
+        );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        persistence: false,
+        transport: { fetch: fetchMock },
+      } as ChatConnectorParams);
+
+      await expect(() =>
+        widget.chatInstance.sendMessage({ text: 'use a missing tool' })
+      ).toWarnDev(
+        '[InstantSearch.js]: No tool implementation found for "missingTool" and the server returned no result for it. Please provide a tool implementation in the `tools` prop.'
+      );
+      await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+
+      expect(widget.chatInstance.status).toBe('ready');
+      expect(widget.chatInstance.error).toBeUndefined();
+      expect(
+        widget.chatInstance.messages.find(
+          (message) => message.id === 'assistant-1'
+        )?.parts
+      ).toMatchObject([
+        {
+          toolCallId: 'call-1',
+          state: 'output-available',
+          output: 'No tool implemented for "missingTool".',
+        },
+      ]);
+    });
+
+    it('leaves an unknown tool pending when the response fails before the server answers it', async () => {
+      const fetchMock = jest.fn().mockResolvedValueOnce(
+        chatStream([
+          { type: 'start', messageId: 'assistant-1' },
+          {
+            type: 'tool-input-available',
+            toolName: 'check_inventory',
+            toolCallId: 'call-1',
+            input: { sku: 'A1' },
+          },
+          { type: 'error', errorText: 'The agent failed.' },
+        ])
+      );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        persistence: false,
+        transport: { fetch: fetchMock },
+      } as ChatConnectorParams);
+
+      await expect(() =>
+        widget.chatInstance.sendMessage({ text: 'is it in stock?' })
+      ).not.toWarnDev();
+      await wait(0);
+
+      expect(widget.chatInstance.status).toBe('error');
+      expect(
+        widget.chatInstance.messages.find(
+          (message) => message.id === 'assistant-1'
+        )?.parts
+      ).toMatchObject([{ toolCallId: 'call-1', state: 'input-available' }]);
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('keeps the result of a tool the server runs itself', async () => {
+      // Agent Studio streams the call, its output and the closing text in one
+      // turn, without flagging the call `providerExecuted`.
       const fetchMock = jest.fn().mockResolvedValue(
         chatStream([
           { type: 'start', messageId: 'assistant-1' },
           {
             type: 'tool-input-available',
-            toolName: 'missingTool',
+            toolName: 'check_inventory',
             toolCallId: 'call-1',
-            input: {},
+            input: { sku: 'A1' },
           },
+          {
+            type: 'tool-output-available',
+            toolName: 'check_inventory',
+            toolCallId: 'call-1',
+            output: { inStock: true },
+          },
+          { type: 'text-start', id: 'text-1' },
+          { type: 'text-delta', id: 'text-1', delta: 'It is in stock.' },
+          { type: 'text-end', id: 'text-1' },
           { type: 'finish' },
         ])
       );
       const { widget } = getInitializedWidget({
         agentId: undefined,
+        persistence: false,
         transport: { fetch: fetchMock },
       } as ChatConnectorParams);
 
-      await widget.chatInstance.sendMessage({ text: 'use a missing tool' });
+      await expect(() =>
+        widget.chatInstance.sendMessage({ text: 'is it in stock?' })
+      ).not.toWarnDev();
+      await wait(0);
 
-      expect(widget.chatInstance.status).toBe('error');
-      expect(widget.chatInstance.error).toEqual(
-        new Error(
-          'No tool implementation found for "missingTool". Please provide a tool implementation in the `tools` prop.'
-        )
-      );
+      expect(widget.chatInstance.status).toBe('ready');
+      expect(widget.chatInstance.error).toBeUndefined();
+      expect(
+        widget.chatInstance.messages.find(
+          (message) => message.id === 'assistant-1'
+        )?.parts
+      ).toMatchObject([
+        {
+          toolCallId: 'call-1',
+          state: 'output-available',
+          output: { inStock: true },
+        },
+        { type: 'text', text: 'It is in stock.' },
+      ]);
       expect(fetchMock).toHaveBeenCalledTimes(1);
     });
 
@@ -4309,7 +4414,7 @@ data: [DONE]`,
 
       expect(search.status).toBe('idle');
 
-      search.mainHelper!.search();
+      search.helper!.search();
       await wait(0);
       searches[1].rejecter(new Error('SERVER_ERROR'));
       await errorEvent;
@@ -4340,7 +4445,7 @@ data: [DONE]`,
       searches[0].resolver();
       await wait(0);
 
-      search.mainHelper!.search();
+      search.helper!.search();
       await wait(0);
       searches[1].rejecter(new Error('SERVER_ERROR'));
       await errorEvent;
@@ -4371,7 +4476,7 @@ data: [DONE]`,
       searches[0].resolver();
       await wait(0);
 
-      search.mainHelper!.search();
+      search.helper!.search();
       await wait(0);
       searches[1].rejecter(new Error('SERVER_ERROR'));
       await errorEvent;
