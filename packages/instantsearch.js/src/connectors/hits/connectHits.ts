@@ -20,6 +20,7 @@ import type {
   Unmounter,
   Renderer,
   IndexRenderState,
+  InitOptions,
 } from '../../types';
 import type { Banner, SearchResults } from 'algoliasearch-helper';
 
@@ -109,7 +110,8 @@ export default (function connectHits<TWidgetParams>(
     return {
       $$type: 'ais.hits',
 
-      init(initOptions) {
+      // Type is explicitly redefined, to avoid having the TWidgetParams type in the definition
+      init(initOptions: InitOptions<HitsWidgetDescription<THit>>) {
         renderFn(
           {
             ...this.getWidgetRenderState(initOptions),
