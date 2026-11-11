@@ -1805,7 +1805,7 @@ exports[`Templates InstantSearch.js File content: index.html 1`] = `
     </div>
   </div>
 
-  <script src=\\"https://cdn.jsdelivr.net/npm/algoliasearch@4.10.5/dist/algoliasearch-lite.umd.js\\"></script>
+  <script src=\\"https://cdn.jsdelivr.net/npm/algoliasearch@5/dist/lite/builds/browser.umd.js\\"></script>
   <script src=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@3.0.0\\"></script>
   <script src=\\"./src/app.js\\"></script>
 </body>
@@ -1903,7 +1903,8 @@ exports[`Templates InstantSearch.js File content: src/app.css 1`] = `
 `;
 
 exports[`Templates InstantSearch.js File content: src/app.js 1`] = `
-"const { algoliasearch, instantsearch } = window;
+"const { liteClient: algoliasearch } = window['algoliasearch/lite'];
+const { instantsearch } = window;
 
 const searchClient = algoliasearch('appId', 'apiKey');
 
@@ -1972,12 +1973,14 @@ search.start();"
 `;
 
 exports[`Templates InstantSearch.js File content: src/global.d.ts 1`] = `
-"import algoliasearch from 'algoliasearch/lite';
+"import { liteClient } from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js/dist/instantsearch.production.min';
 
 declare global {
   interface Window {
-    algoliasearch: typeof algoliasearch;
+    'algoliasearch/lite': {
+      liteClient: typeof liteClient;
+    };
     instantsearch: typeof instantsearch;
   }
 }"
