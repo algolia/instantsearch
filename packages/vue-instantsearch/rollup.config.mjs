@@ -184,7 +184,7 @@ function outputs(vueVersion) {
         },
       }),
       createTerserPlugin({ sourceMap: false }),
-      createPackageJsonPlugin({ type: 'commonjs', sideEffects: true }),
+      createPackageJsonPlugin({ type: 'commonjs', sideEffects: false }),
     ],
   };
 
@@ -211,7 +211,7 @@ function outputs(vueVersion) {
 export default InstantSearch;
 export * from './src/instantsearch.js';`
       ),
-      createPackageJsonPlugin({ type: 'module', sideEffects: true }),
+      createPackageJsonPlugin({ type: 'module', sideEffects: false }),
     ],
   };
 

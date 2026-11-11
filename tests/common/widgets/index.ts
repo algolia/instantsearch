@@ -29,3 +29,4 @@ export * from './chat';
 export * from './autocomplete';
 export * from './prompt-suggestions';
 export * from './result-card';
+export * from './compare-bar';

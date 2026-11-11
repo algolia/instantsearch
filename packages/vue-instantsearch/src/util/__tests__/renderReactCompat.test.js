@@ -38,6 +38,29 @@ describe('renderReactCompat', () => {
     });
   });
 
+  describe('events', () => {
+    it('listens in the capture phase for `on*Capture` handlers', () => {
+      const calls = [];
+      const wrapper = mountReact((h) =>
+        h(
+          'div',
+          {
+            onFocusCapture: (event) => calls.push(['capture', event.target]),
+            onFocus: () => calls.push(['bubble']),
+          },
+          h('button', {})
+        )
+      );
+
+      const button = wrapper.find('button').element;
+      // `focus` does not bubble: only a capture listener on an ancestor sees
+      // it.
+      button.dispatchEvent(new FocusEvent('focus'));
+
+      expect(calls).toEqual([['capture', button]]);
+    });
+  });
+
   describe('refs', () => {
     it('calls callback refs with the element on mount and null on unmount', async () => {
       const calls = [];

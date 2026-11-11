@@ -90,6 +90,20 @@ function isAllowedInterfaceName(name) {
   return isPascalCase(name) && !/^I[A-Z]/.test(name);
 }
 
+const reactExportsAfter17 = new Set([
+  'use',
+  'useActionState',
+  'useDeferredValue',
+  'useEffectEvent',
+  'useId',
+  'useInsertionEffect',
+  'useOptimistic',
+  'useSyncExternalStore',
+  'useTransition',
+  'startTransition',
+  'cache',
+]);
+
 const plugin = {
   meta: {
     name: 'instantsearch',
@@ -492,6 +506,69 @@ const plugin = {
                 });
                 return;
               }
+            }
+          },
+        };
+      },
+    },
+    'no-static-react-exports': {
+      meta: {
+        docs: {
+          description:
+            'Disallow statically reading React exports that are missing from React 16 and 17.',
+        },
+        messages: {
+          forbidden:
+            '`{{name}}` does not exist in every supported React version, and bundlers such as webpack 5 fail the build when a statically linked export is missing. Read it from the default import (`import React from "react"`) instead.',
+        },
+        schema: [],
+        type: 'problem',
+      },
+      create(context) {
+        const namespaces = new Set();
+
+        return {
+          ImportDeclaration(node) {
+            if (node.source.value !== 'react') {
+              return;
+            }
+
+            for (const specifier of node.specifiers) {
+              if (specifier.type === 'ImportNamespaceSpecifier') {
+                namespaces.add(specifier.local.name);
+              } else if (
+                specifier.type === 'ImportSpecifier' &&
+                node.importKind !== 'type' &&
+                specifier.importKind !== 'type' &&
+                reactExportsAfter17.has(specifier.imported.name)
+              ) {
+                context.report({
+                  messageId: 'forbidden',
+                  data: { name: specifier.imported.name },
+                  node: specifier,
+                });
+              }
+            }
+          },
+          MemberExpression(node) {
+            if (
+              node.object.type !== 'Identifier' ||
+              !namespaces.has(node.object.name)
+            ) {
+              return;
+            }
+
+            // Bundlers resolve `React.useId` and `React['useId']` alike.
+            const name = node.computed
+              ? node.property.type === 'Literal' && node.property.value
+              : node.property.type === 'Identifier' && node.property.name;
+
+            if (reactExportsAfter17.has(name)) {
+              context.report({
+                messageId: 'forbidden',
+                data: { name },
+                node,
+              });
             }
           },
         };
