@@ -159,3 +159,45 @@ test('filters out input objectIDs', () => {
       ]
     `);
 });
+
+test('keeps the queryID of the response each hit comes from', () => {
+  const result = sortAndMergeRecommendations(
+    [],
+    [
+      [{ objectID: 'a' }, { objectID: 'b' }],
+      [{ objectID: 'c' }, { objectID: 'a' }],
+    ],
+    ['q1', 'q2']
+  );
+
+  expect(result).toEqual([
+    { objectID: 'a', __queryID: 'q1' },
+    { objectID: 'c', __queryID: 'q2' },
+    { objectID: 'b', __queryID: 'q1' },
+  ]);
+});
+
+test('does not mutate the hits of the responses', () => {
+  const firstResponseHits = [{ objectID: 'a' }];
+
+  sortAndMergeRecommendations(
+    [],
+    [firstResponseHits, [{ objectID: 'b' }]],
+    ['q1', 'q2']
+  );
+
+  expect(firstResponseHits).toEqual([{ objectID: 'a' }]);
+});
+
+test('leaves hits untouched when responses have no queryID', () => {
+  const result = sortAndMergeRecommendations(
+    [],
+    [[{ objectID: 'a' }], [{ objectID: 'b' }]],
+    [undefined, undefined]
+  );
+
+  expect(result).toHaveLength(2);
+  result.forEach((hit) => {
+    expect(hit).not.toHaveProperty('__queryID');
+  });
+});

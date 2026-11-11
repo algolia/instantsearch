@@ -13,7 +13,9 @@ const makeState = (nbHits) => ({
   nbSortedHits: nbHits,
   areHitsSorted: false,
   processingTimeMS: 10,
-  instantSearchInstance: { helper: { lastResults: {} } },
+  instantSearchInstance: {
+    mainIndex: { getHelper: () => ({ lastResults: {} }) },
+  },
 });
 
 describe('AisStats', () => {

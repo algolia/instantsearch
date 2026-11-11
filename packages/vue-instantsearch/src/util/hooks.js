@@ -39,12 +39,20 @@ export function createHooksStore(scheduleRender) {
   let cursor = 0;
   const storeId = (lastStoreId++).toString(36);
   let idCounter = 0;
-  // Effects whose deps changed during the current render, flushed post-commit.
+  // Effects whose deps changed since the last flush. Not reset per render: a
+  // state change during the patch (e.g. from a callback ref) renders again
+  // before `mounted`/`updated` flushes, and the first render's effects must
+  // still run.
   let pendingEffects = [];
+
+  function scheduleEffect(cell) {
+    if (pendingEffects.indexOf(cell) === -1) {
+      pendingEffects.push(cell);
+    }
+  }
 
   function beginRender() {
     cursor = 0;
-    pendingEffects = [];
   }
 
   function endRender() {
@@ -74,21 +82,26 @@ export function createHooksStore(scheduleRender) {
   const useState = (initialState) => {
     const index = cursor++;
     if (cells[index] === undefined) {
-      cells[index] = {
+      const created = {
         value:
           typeof initialState === 'function' ? initialState() : initialState,
       };
+      // Stable like React's: a setter used as a callback `ref` would otherwise
+      // be a new ref on every render, which the Vue 2 adapter resets to `null`
+      // and sets again, re-rendering forever.
+      created.setState = (next) => {
+        const nextValue =
+          typeof next === 'function' ? next(created.value) : next;
+        if (Object.is(nextValue, created.value)) {
+          return;
+        }
+        created.value = nextValue;
+        scheduleRender();
+      };
+      cells[index] = created;
     }
     const cell = cells[index];
-    const setState = (next) => {
-      const nextValue = typeof next === 'function' ? next(cell.value) : next;
-      if (Object.is(nextValue, cell.value)) {
-        return;
-      }
-      cell.value = nextValue;
-      scheduleRender();
-    };
-    return [cell.value, setState];
+    return [cell.value, cell.setState];
   };
 
   const useRef = (initialValue) => {
@@ -126,11 +139,11 @@ export function createHooksStore(scheduleRender) {
     if (cell === undefined) {
       const created = { effect, deps, cleanup: undefined };
       cells[index] = created;
-      pendingEffects.push(created);
+      scheduleEffect(created);
     } else if (deps === undefined || !areDepsEqual(cell.deps, deps)) {
       cell.effect = effect;
       cell.deps = deps;
-      pendingEffects.push(cell);
+      scheduleEffect(cell);
     }
   };
 

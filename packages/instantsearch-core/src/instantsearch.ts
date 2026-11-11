@@ -23,7 +23,6 @@ import { index as indexWidget } from './widgets';
 
 import type { InsightsEvent, InsightsProps, RouterProps } from './middlewares';
 import type {
-  InsightsClient as AlgoliaInsightsClient,
   SearchClient,
   Widget,
   IndexWidget,
@@ -140,13 +139,6 @@ export type InstantSearchOptions<
   insights?: InsightsProps | boolean;
 
   /**
-   * the instance of search-insights to use for sending insights events inside
-   * widgets like `hits`.
-   *
-   * @deprecated This property will be still supported in 4.x releases, but not further. It is replaced by the `insights` middleware. For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/
-   */
-  insightsClient?: AlgoliaInsightsClient;
-  /**
    * Opt-in flags for behaviour that becomes the default in the next major
    * version. There are none in this version.
    */
@@ -178,12 +170,10 @@ class InstantSearch<
   public client: InstantSearchOptions['searchClient'];
   public indexName: string;
   public compositionID?: string;
-  public insightsClient: AlgoliaInsightsClient | null;
   public onStateChange: InstantSearchOptions<TUiState>['onStateChange'] | null =
     null;
   public future: NonNullable<InstantSearchOptions<TUiState>['future']>;
   public helper: AlgoliaSearchHelper | null;
-  public mainHelper: AlgoliaSearchHelper | null;
   public mainIndex: IndexWidget;
   public started: boolean;
   public renderState: RenderState = {};
@@ -241,7 +231,6 @@ class InstantSearch<
       insights = undefined,
       stalledSearchDelay = 200,
       searchClient = null,
-      insightsClient = null,
       onStateChange = null,
       future = {
         ...INSTANTSEARCH_FUTURE_DEFAULTS,
@@ -270,28 +259,13 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       ).addAlgoliaAgent(`instantsearch-core (${version})`);
     }
 
-    warning(
-      insightsClient === null,
-      `\`insightsClient\` property has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`insights\` middleware.
-
-For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/`
-    );
-
-    if (insightsClient && typeof insightsClient !== 'function') {
-      throw new Error(
-        withUsage('The `insightsClient` option should be a function.')
-      );
-    }
-
     this._initialOptions = options as unknown as InstantSearchOptions;
     this._version = options._internalVersion ?? version;
     this.client = searchClient;
     this.future = future;
-    this.insightsClient = insightsClient;
     this.indexName = indexName;
     this.compositionID = compositionID;
     this.helper = null;
-    this.mainHelper = null;
     this.mainIndex = indexWidget({
       // we use an index widget to render compositions
       // this only works because there's only one composition index allow for now
@@ -447,17 +421,17 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
     // This Helper is used for the queries, we don't care about its state. The
     // states are managed at the `index` level. We use this Helper to create
     // DerivedHelper scoped into the `index` widgets.
-    // In Vue InstantSearch' hydrate, a main helper gets set before start, so
+    // In Vue InstantSearch' hydrate, the helper gets set before start, so
     // we need to respect this helper as a way to keep all listeners correct.
-    const mainHelper =
-      this.mainHelper || algoliasearchHelper(this.client, this.indexName);
+    const helper =
+      this.helper || algoliasearchHelper(this.client, this.indexName);
 
     if (this.compositionID) {
-      mainHelper.searchForFacetValues =
-        mainHelper.searchForCompositionFacetValues.bind(mainHelper);
+      helper.searchForFacetValues =
+        helper.searchForCompositionFacetValues.bind(helper);
     }
 
-    mainHelper.search = () => {
+    helper.search = () => {
       const hasSearchOrRecommendWidget =
         this._hasSearchWidget || this._hasRecommendWidget;
 
@@ -480,22 +454,22 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
       // is impacted.
       if (this._hasSearchWidget) {
         if (this.compositionID) {
-          mainHelper.searchWithComposition();
+          helper.searchWithComposition();
         } else {
-          mainHelper.searchOnlyWithDerivedHelpers();
+          helper.searchOnlyWithDerivedHelpers();
         }
       }
 
       if (this._hasRecommendWidget) {
-        mainHelper.recommend();
+        helper.recommend();
       }
 
-      return mainHelper;
+      return helper;
     };
 
     // Only the "main" Helper emits the `error` event vs the one for `search`
     // and `results` that are also emitted on the derived one.
-    mainHelper.on('error', (error) => {
+    helper.on('error', (error) => {
       if (!(error instanceof Error)) {
         // typescript lies here, error is in some cases { name: string, message: string }
         const err = error as Record<string, any>;
@@ -512,7 +486,7 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
       this.emit('error', error);
     });
 
-    this.mainHelper = mainHelper;
+    this.helper = helper;
 
     this.middleware.forEach(({ instance }) => {
       instance.subscribe();
@@ -526,7 +500,7 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
 
     if (this._initialResults) {
       hydrateSearchClient(this.client, this._initialResults);
-      hydrateRecommendCache(this.mainHelper, this._initialResults);
+      hydrateRecommendCache(this.helper, this._initialResults);
 
       const originalScheduleSearch = this.scheduleSearch;
       // We don't schedule a first search when initial results are provided
@@ -565,10 +539,6 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
       this.scheduleSearch();
     }
 
-    // Keep the previous reference for legacy purpose, some pattern use
-    // the direct Helper access `search.helper` (e.g multi-index).
-    this.helper = this.mainIndex.getHelper();
-
     // track we started the search if we add more widgets,
     // to init them directly after add
     this.started = true;
@@ -581,7 +551,7 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
     // added when `insights` is unset and the initial results possess `queryID`.
     // Any user-provided middleware will be added later and override this one.
     if (typeof this._insights === 'undefined') {
-      mainHelper.derivedHelpers[0].once('result', () => {
+      helper.derivedHelpers[0].once('result', () => {
         const hasAutomaticInsights = this.mainIndex
           .getScopedResults()
           .some(({ results }) => results?._automaticInsights);
@@ -617,8 +587,7 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
     // The helper needs to be reset to perform the next search from a fresh state.
     // If not reset, it would use the state stored before calling `dispose()`.
     this.removeAllListeners();
-    this.mainHelper?.removeAllListeners();
-    this.mainHelper = null;
+    this.helper?.removeAllListeners();
     this.helper = null;
 
     this.middleware.forEach(({ instance }) => {
@@ -632,13 +601,13 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
 
   public scheduleSearch = defer(() => {
     if (this.started) {
-      this.mainHelper!.search();
+      this.helper!.search();
     }
   });
 
   public scheduleRender = defer(
     (shouldResetStatus: boolean = true) => {
-      if (!this.mainHelper?.hasPendingRequests()) {
+      if (!this.helper?.hasPendingRequests()) {
         clearTimeout(this._searchStalledTimer);
         this._searchStalledTimer = null;
 
@@ -686,7 +655,7 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
     callOnStateChange: boolean = true,
     onApply?: (notifiedUiState: TUiState) => void
   ): void {
-    if (!this.mainHelper) {
+    if (!this.helper) {
       throw new Error(
         withUsage('The `start` method needs to be called before `setUiState`.')
       );
@@ -779,13 +748,13 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
   }
 
   public refresh() {
-    if (!this.mainHelper) {
+    if (!this.helper) {
       throw new Error(
         withUsage('The `start` method needs to be called before `refresh`.')
       );
     }
 
-    this.mainHelper.clearCache().search();
+    this.helper.clearCache().search();
   }
 }
 

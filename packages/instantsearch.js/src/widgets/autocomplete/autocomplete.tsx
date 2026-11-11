@@ -215,7 +215,7 @@ type RendererParams<TItem extends BaseHit> = {
       PreparedTemplateProps<NonNullable<IndexConfig<TItem>['templates']>>
     >;
     isolatedIndex: IndexWidget | undefined;
-    targetIndex: IndexWidget | undefined;
+    parentIndex: IndexWidget | undefined;
     templateProps:
       | PreparedTemplateProps<NonNullable<AutocompleteTemplates>>
       | undefined;
@@ -236,6 +236,7 @@ type RendererParams<TItem extends BaseHit> = {
   | 'placeholder'
   | 'autofocus'
   | 'aiMode'
+  | 'submitTarget'
 > & {
     showRecent:
       | Exclude<IndicesAutocompleteWidgetParams<TItem>['showRecent'], boolean>
@@ -255,11 +256,11 @@ const createRenderer = <TItem extends BaseHit>(
     if (isFirstRendering) {
       const showRecentObj = rendererParams.showRecent;
       let isolatedIndex = connectorParams.instantSearchInstance.mainIndex;
-      let targetIndex = connectorParams.instantSearchInstance.mainIndex;
-      walkIndex(targetIndex, (childIndex) => {
+      let parentIndex = connectorParams.instantSearchInstance.mainIndex;
+      walkIndex(parentIndex, (childIndex) => {
         if (childIndex.getIndexId() === `ais-autocomplete-${instanceId}`) {
           isolatedIndex = childIndex;
-          targetIndex = childIndex.parent!;
+          parentIndex = childIndex.parent!;
         }
       });
 
@@ -325,7 +326,7 @@ const createRenderer = <TItem extends BaseHit>(
       rendererParams.renderState = {
         indexTemplateProps: [],
         isolatedIndex,
-        targetIndex,
+        parentIndex,
         templateProps: prepareTemplateProps({
           defaultTemplates: {} as unknown as NonNullable<
             typeof rendererParams.templates
@@ -362,6 +363,7 @@ type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
   | 'detachedMediaQuery'
   | 'translations'
   | 'aiMode'
+  | 'submitTarget'
 > &
   Pick<AutocompleteRenderState, 'indices' | 'refine'> &
   RendererOptions<Partial<AutocompleteWidgetParams<TItem>>>;
@@ -385,25 +387,27 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   detachedMediaQuery,
   translations,
   aiMode,
+  submitTarget = 'page',
 }: AutocompleteWrapperProps<TItem>) {
-  const { isolatedIndex, targetIndex } = renderState;
+  const { isolatedIndex, parentIndex } = renderState;
+  const submitsToPanel = submitTarget === 'panel';
 
   const searchboxQuery = isolatedIndex?.getHelper()?.state.query;
-  const targetIndexQuery = targetIndex?.getHelper()?.state.query;
+  const parentIndexQuery = parentIndex?.getHelper()?.state.query;
 
   const [localQuery, setLocalQuery] = useState(
-    searchboxQuery !== undefined ? searchboxQuery : (targetIndexQuery ?? '')
+    searchboxQuery !== undefined ? searchboxQuery : (parentIndexQuery ?? '')
   );
 
   useEffect(() => {
     // When the isolated index has a defined query (including ''), use it.
     // Only fall back to the target index query when not yet set (undefined).
     const query =
-      searchboxQuery !== undefined ? searchboxQuery : targetIndexQuery;
+      searchboxQuery !== undefined ? searchboxQuery : parentIndexQuery;
     if (query !== undefined) {
       setLocalQuery(query);
     }
-  }, [searchboxQuery, targetIndexQuery]);
+  }, [searchboxQuery, parentIndexQuery]);
 
   const resolvedDetachedMediaQuery = useMemo(
     () =>
@@ -581,7 +585,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   };
 
   const isSearchPage =
-    targetIndex
+    parentIndex
       ?.getWidgets()
       .some(({ $$type }) =>
         ['ais.hits', 'ais.infiniteHits'].includes($$type)
@@ -590,14 +594,16 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   const onRefine = (query: string) => {
     setLocalQuery(query);
     refineAutocomplete(query);
-    instantSearchInstance.setUiState((uiState) => ({
-      ...uiState,
-      [targetIndex!.getIndexId()]: {
-        ...uiState[targetIndex!.getIndexId()],
-        query,
-      },
-      [isolatedIndex!.getIndexId()]: { query },
-    }));
+    if (!submitsToPanel) {
+      instantSearchInstance.setUiState((uiState) => ({
+        ...uiState,
+        [parentIndex!.getIndexId()]: {
+          ...uiState[parentIndex!.getIndexId()],
+          query,
+        },
+        [isolatedIndex!.getIndexId()]: { query },
+      }));
+    }
     query.length > 0 && storage.onAdd(query);
   };
 
@@ -612,7 +618,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     allIndicesEmpty && recentEmpty && !hasNoResultsTemplate && !templates.panel;
 
   const getChatRenderState = () =>
-    instantSearchInstance.renderState[targetIndex!.getIndexId()]?.chat as
+    instantSearchInstance.renderState[parentIndex!.getIndexId()]?.chat as
       | Partial<ChatRenderState>
       | undefined;
 
@@ -642,6 +648,9 @@ function AutocompleteWrapper<TItem extends BaseHit>({
               })
             ) {
               setQuery('');
+              // The chat is the destination, whatever the `submitTarget`.
+              setIsOpen(false);
+              setIsModalOpen(false);
             }
             return;
           }
@@ -663,9 +672,13 @@ function AutocompleteWrapper<TItem extends BaseHit>({
           return;
         }
 
-        if (!isSearchPage && typeof getSearchPageURL !== 'undefined') {
+        if (
+          !submitsToPanel &&
+          !isSearchPage &&
+          typeof getSearchPageURL !== 'undefined'
+        ) {
           const indexUiState =
-            instantSearchInstance.getUiState()[targetIndex!.getIndexId()];
+            instantSearchInstance.getUiState()[parentIndex!.getIndexId()];
           window.location.href = getSearchPageURL({ ...indexUiState, query });
           return;
         }
@@ -677,13 +690,14 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     },
     onSubmit: () => {
       // Close the detached modal when form is submitted
-      if (isDetached) {
+      if (isDetached && !submitsToPanel) {
         setIsModalOpen(false);
       }
     },
     placeholder,
     isDetached,
     shouldHidePanel: shouldHideEmptyPanel,
+    closeOnSubmit: !submitsToPanel,
     autoFocus: autofocus,
   });
 
@@ -1135,6 +1149,17 @@ type BaseAutocompleteWidgetParams<TItem extends BaseHit> = {
    * Requires a Chat widget on the same index.
    */
   aiMode?: boolean;
+
+  /**
+   * Where a submitted query goes (Enter, or selecting a suggestion or a recent
+   * search):
+   * - `'page'`: the parent index is refined, or `getSearchPageURL` navigates.
+   * - `'panel'`: only the autocomplete's query is updated and the panel stays
+   *   open. `getSearchPageURL` is ignored, but items with a URL still
+   *   navigate and prompt suggestions still open the chat.
+   * @default 'page'
+   */
+  submitTarget?: 'page' | 'panel';
 };
 
 export type IndicesAutocompleteWidgetParams<TItem extends BaseHit> =
@@ -1204,6 +1229,7 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
     detachedMediaQuery,
     translations: userTranslations = {},
     aiMode,
+    submitTarget,
   } = safeWidgetParams;
 
   if (isFeedsMode && indices !== undefined) {
@@ -1427,6 +1453,9 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
   let parentRef: IndexWidget | null | undefined;
   let instanceRef: InstantSearch | null = null;
   let activated = false;
+  // A query refined before activation (e.g. clearing the detached search
+  // button), which takes precedence over the parent query.
+  let pendingQuery: string | undefined;
 
   const activate = () => {
     if (activated || !parentRef || !isolatedTree || !instanceRef) return;
@@ -1436,9 +1465,14 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
     // parent's own state hasn't changed; cancel it so only the isolated tree
     // searches on activation.
     instanceRef.scheduleSearch.cancel();
-    const parentQuery = parentRef.getHelper()?.state.query;
-    if (parentQuery) {
-      isolatedTree.getHelper()?.setQuery(parentQuery);
+    if (pendingQuery !== undefined) {
+      isolatedTree.getHelper()?.setQuery(pendingQuery);
+      pendingQuery = undefined;
+    } else {
+      const parentQuery = parentRef.getHelper()?.state.query;
+      if (parentQuery) {
+        isolatedTree.getHelper()?.setQuery(parentQuery);
+      }
     }
     isolatedTree.scheduleLocalSearch();
   };
@@ -1461,7 +1495,7 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
     renderState: {
       indexTemplateProps: [],
       isolatedIndex: undefined,
-      targetIndex: undefined,
+      parentIndex: undefined,
       templateProps: undefined,
       RecentSearchComponent: AutocompleteRecentSearch,
       recentSearchHeaderComponent: undefined,
@@ -1469,6 +1503,7 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
     },
     templates,
     aiMode,
+    submitTarget,
   });
 
   const makeWidget = connectAutocomplete(specializedRenderer, () =>
@@ -1586,7 +1621,9 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
         parentRef = parent;
         instanceRef = instantSearchInstance;
         isolatedTree = buildTree(instantSearchInstance);
-        renderShell(specializedRenderer, instantSearchInstance);
+        renderShell(specializedRenderer, instantSearchInstance, (query) => {
+          pendingQuery = query;
+        });
       },
       render() {},
       dispose({ parent }) {
@@ -1598,6 +1635,7 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
         parentRef = undefined;
         instanceRef = null;
         activated = false;
+        pendingQuery = undefined;
       },
     };
   }
@@ -1608,13 +1646,14 @@ function renderShell<TItem extends BaseHit>(
     AutocompleteRenderState,
     Partial<AutocompleteWidgetParams<TItem>>
   >,
-  instantSearchInstance: InstantSearch
+  instantSearchInstance: InstantSearch,
+  refine: AutocompleteRenderState['refine']
 ) {
   renderer(
     {
       instantSearchInstance,
       indices: [],
-      refine: noop,
+      refine,
       currentRefinement: '',
       widgetParams: {},
     } as AutocompleteRenderState &

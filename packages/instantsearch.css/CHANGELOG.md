@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.25.1](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.25.0...instantsearch.css@8.25.1) (2026-11-03)
+
+
+### Bug Fixes
+
+* **chat:** scroll wide tables and code inside the message [FX-4057] ([#7331](https://github.com/algolia/instantsearch/issues/7331)) ([9905a80](https://github.com/algolia/instantsearch/commit/9905a806e07342552e92abbc39e31e1fa80d5ffe))
+
+
+
+
+
 # [8.25.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.24.1...instantsearch.css@8.25.0) (2026-10-26)
 
 

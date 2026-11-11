@@ -8,6 +8,7 @@ import React from 'react';
 
 import {
   InstantSearch,
+  useCompare,
   RefinementList,
   HierarchicalMenu,
   Breadcrumb,
@@ -37,6 +38,7 @@ import {
   PromptSuggestions,
   ResultCard,
   Autocomplete,
+  CompareBar,
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -438,9 +440,16 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
     );
   },
   createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
+    const { renderChat = false, ...autocompleteWidgetParams } = widgetParams;
+
     render(
       <InstantSearch {...instantSearchOptions}>
-        <Autocomplete {...widgetParams} />
+        <Autocomplete {...autocompleteWidgetParams} />
+        {/*
+          A dedicated id: the `agentId` the chat suites use keys persisted
+          messages in `sessionStorage` that leak across tests in this file.
+        */}
+        {renderChat && <Chat agentId="autocompleteChatAgentId" />}
         <GlobalErrorSwallower />
       </InstantSearch>
     );
@@ -474,6 +483,48 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
       <InstantSearch {...instantSearchOptions}>
         <ResultCard {...resultCardWidgetParams} />
         {renderChat && <Chat agentId={resultCardWidgetParams.agentId} />}
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
+  createCompareBarWidgetTests({ instantSearchOptions, widgetParams }) {
+    // The bar hands the comparison to a <Chat> on the same index, so the
+    // default setup renders both. A sibling `useCompare` consumer renders a
+    // toggle per product, the way a per-hit "Compare" button would.
+    const {
+      renderChat = true,
+      products = [],
+      ...compareBarWidgetParams
+    } = widgetParams;
+
+    function CompareToggles() {
+      const { isSelected, toggleItem } = useCompare({
+        configurationId: compareBarWidgetParams.configurationId,
+      });
+
+      return (
+        <>
+          {products.map((product) => (
+            <button
+              key={product.objectID}
+              data-testid={`CompareToggle-${product.objectID}`}
+              aria-pressed={isSelected(product.objectID)}
+              onClick={() => toggleItem(product)}
+            />
+          ))}
+        </>
+      );
+    }
+
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <CompareToggles />
+        <CompareBar {...compareBarWidgetParams} />
+        {/*
+          A dedicated id: the `agentId` the chat suites use keys persisted
+          messages in `sessionStorage` that leak across tests in this file.
+        */}
+        {renderChat && <Chat agentId="compareBarChatAgentId" />}
         <GlobalErrorSwallower />
       </InstantSearch>
     );
@@ -530,8 +581,14 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createChatWidgetTests: {
     act,
   },
-  createAutocompleteWidgetTests: { act },
+  createAutocompleteWidgetTests: {
+    act,
+    skippedTests: {
+      'keeps a query cleared before the first opening when submitting to the panel': true,
+    },
+  },
   createPromptSuggestionsWidgetTests: { act },
+  createCompareBarWidgetTests: { act },
   createResultCardWidgetTests: { act },
 };
 

@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.55.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.54.0...react-instantsearch@7.55.0) (2026-11-10)
+
+
+### Bug Fixes
+
+* **chat:** warn when useChat function props change on every render [FX-4078] ([#7334](https://github.com/algolia/instantsearch/issues/7334)) ([6281ad3](https://github.com/algolia/instantsearch/commit/6281ad33c9c318412852c04c550e15bfef49be83))
+* **recommend:** attribute merged hits to their source queryID ([#7361](https://github.com/algolia/instantsearch/issues/7361)) ([b3bc839](https://github.com/algolia/instantsearch/commit/b3bc8399c7c246dc4bfcb10c63faf2f8f40acbf0))
+
+
+### Features
+
+* **autocomplete:** add submitTarget option to keep queries in the autocomplete [FX-4090] ([#7372](https://github.com/algolia/instantsearch/issues/7372)) ([8a54a31](https://github.com/algolia/instantsearch/commit/8a54a31f58abae4e4bc835fd4e382ea01e49c6d6))
+
+
+
+
+
+# [7.54.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.53.0...react-instantsearch@7.54.0) (2026-11-03)
+
+
+### Features
+
+* **chat:** add accessible names to the launcher and carousel buttons ([#7332](https://github.com/algolia/instantsearch/issues/7332)) ([7780406](https://github.com/algolia/instantsearch/commit/7780406c56c96b1d2287a38b5e26dce9229da720))
+* **vue:** add CompareBar and ResultCard, with common tests [FX-4089] ([#7340](https://github.com/algolia/instantsearch/issues/7340)) ([1598f50](https://github.com/algolia/instantsearch/commit/1598f5096266c4c8ad7e9ff92da7892ddb664f6d))
+
+
+
+
+
 # [7.53.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.52.0...react-instantsearch@7.53.0) (2026-10-26)
 
 

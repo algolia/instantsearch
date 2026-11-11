@@ -317,6 +317,34 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
     });
   });
 
+  describe('interleaved text and reasoning parts', () => {
+    it.each(['text', 'reasoning'] as const)(
+      'routes %s deltas and ends to the part with the matching id',
+      async (type) => {
+        const { chat, state } = createTestSetup({
+          chunks: [
+            startChunk(),
+            { type: `${type}-start`, id: 'a' },
+            { type: `${type}-start`, id: 'b' },
+            { type: `${type}-delta`, id: 'a', delta: 'A1 ' },
+            { type: `${type}-delta`, id: 'b', delta: 'B1 ' },
+            { type: `${type}-end`, id: 'b' },
+            { type: `${type}-delta`, id: 'a', delta: 'A2' },
+            { type: `${type}-end`, id: 'a' },
+            finishChunk(),
+          ] as UIMessageChunk[],
+        });
+
+        await chat.sendMessage({ text: 'hi' });
+
+        expect(messageById(state, 'msg-1').parts).toEqual([
+          expect.objectContaining({ type, text: 'A1 A2', state: 'done' }),
+          expect.objectContaining({ type, text: 'B1 ', state: 'done' }),
+        ]);
+      }
+    );
+  });
+
   describe('tool-input lifecycle (existing chunks)', () => {
     it('settles when onToolCall returns addToolResult and commits the output', async () => {
       let chat!: TestChat;

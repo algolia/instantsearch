@@ -1,7 +1,7 @@
 'use strict';
 
 var find = require('../functions/find');
-var flat = require('../functions/flat');
+var findIndex = require('../functions/findIndex');
 
 function getAverageIndices(indexTracker, nrOfObjs) {
   var avgIndices = [];
@@ -21,7 +21,7 @@ function getAverageIndices(indexTracker, nrOfObjs) {
   });
 }
 
-function sortAndMergeRecommendations(objectIDs, results) {
+function sortAndMergeRecommendations(objectIDs, results, queryIDs) {
   var indexTracker = {};
 
   results.forEach(function (hits) {
@@ -45,10 +45,24 @@ function sortAndMergeRecommendations(objectIDs, results) {
     orderedHits,
     avgIndexRef
   ) {
-    var result = find(flat(results), function (hit) {
+    var resultIndex = findIndex(results, function (hits) {
+      return Boolean(
+        find(hits, function (hit) {
+          return hit.objectID === avgIndexRef.objectID;
+        })
+      );
+    });
+    if (resultIndex === -1) return orderedHits;
+
+    var result = find(results[resultIndex], function (hit) {
       return hit.objectID === avgIndexRef.objectID;
     });
-    return result ? orderedHits.concat(result) : orderedHits;
+    var queryID = queryIDs && queryIDs[resultIndex];
+
+    // Copied so the cached response isn't mutated.
+    return orderedHits.concat(
+      queryID ? Object.assign({}, result, { __queryID: queryID }) : result
+    );
   }, []);
 
   return finalOrder;

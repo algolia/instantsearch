@@ -102,7 +102,7 @@ it('should assign properties that shadow those on `Object.prototype`', function 
   });
 });
 
-it('should keep the keys order with facets', function () {
+it('should keep the keys order of the last source with facets', function () {
   var actual = mergeNumericMax(
     {},
     {
@@ -114,7 +114,43 @@ it('should keep the keys order with facets', function () {
       Apple: 386,
     }
   );
-  expect(Object.keys(actual)).toEqual(['Insignia™', 'Samsung', 'Apple']);
+  expect(Object.keys(actual)).toEqual(['Apple', 'Insignia™', 'Samsung']);
+});
+
+it('should not move an existing key when the values are equal or higher', function () {
+  var equal = mergeNumericMax({ Canon: 110 }, { Canon: 110, Sony: 110 });
+  expect(Object.keys(equal)).toEqual(['Canon', 'Sony']);
+
+  var higher = mergeNumericMax({ Sony: 120 }, { Canon: 110, Sony: 100 });
+  expect(higher).toEqual({ Canon: 110, Sony: 120 });
+  expect(Object.keys(higher)).toEqual(['Canon', 'Sony']);
+});
+
+it('should keep keys with a count of 0', function () {
+  expect(mergeNumericMax({ a: 0 }, { b: 0 })).toEqual({ a: 0, b: 0 });
+});
+
+it('should add keys that only exist in earlier sources after the last source keys', function () {
+  var actual = mergeNumericMax({ a: 1, c: 3 }, { b: 2, a: 1 });
+  expect(actual).toEqual({ a: 1, b: 2, c: 3 });
+  expect(Object.keys(actual)).toEqual(['b', 'a', 'c']);
+});
+
+it('should keep the higher value whichever source has it', function () {
+  expect(mergeNumericMax({ a: 5 }, { a: 2 })).toEqual({ a: 5 });
+  expect(mergeNumericMax({ a: 2 }, { a: 5 })).toEqual({ a: 5 });
+});
+
+it('should not mutate the sources', function () {
+  var first = { a: 1 };
+  var second = { a: 2, b: 3 };
+  mergeNumericMax(first, second);
+  expect(first).toEqual({ a: 1 });
+  expect(second).toEqual({ a: 2, b: 3 });
+});
+
+it('should return an empty object without sources', function () {
+  expect(mergeNumericMax()).toEqual({});
 });
 
 it('does not pollute the prototype', () => {

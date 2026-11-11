@@ -4446,12 +4446,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@instantsearch/mocks@npm:1.129.0, @instantsearch/mocks@workspace:tests/mocks":
+"@instantsearch/mocks@npm:1.131.0, @instantsearch/mocks@workspace:tests/mocks":
   version: 0.0.0-use.local
   resolution: "@instantsearch/mocks@workspace:tests/mocks"
   dependencies:
-    algoliasearch-helper: "npm:3.30.1"
-    instantsearch.js: "npm:4.121.0"
+    algoliasearch-helper: "npm:3.30.2"
+    instantsearch.js: "npm:4.123.0"
   languageName: unknown
   linkType: soft
 
@@ -4461,21 +4461,21 @@ __metadata:
   dependencies:
     "@types/node": "npm:18.11.13"
     astro: "npm:4.0.4"
-    instantsearch.css: "npm:8.25.0"
+    instantsearch.css: "npm:8.25.1"
     sass: "npm:1.56.2"
   languageName: unknown
   linkType: soft
 
-"@instantsearch/tests@npm:1.129.0, @instantsearch/tests@workspace:tests/common":
+"@instantsearch/tests@npm:1.131.0, @instantsearch/tests@workspace:tests/common":
   version: 0.0.0-use.local
   resolution: "@instantsearch/tests@workspace:tests/common"
   dependencies:
     instantsearch-core: "npm:0.1.0"
-    instantsearch.js: "npm:4.121.0"
+    instantsearch.js: "npm:4.123.0"
   languageName: unknown
   linkType: soft
 
-"@instantsearch/testutils@npm:1.118.0, @instantsearch/testutils@workspace:tests/utils":
+"@instantsearch/testutils@npm:1.120.0, @instantsearch/testutils@workspace:tests/utils":
   version: 0.0.0-use.local
   resolution: "@instantsearch/testutils@workspace:tests/utils"
   dependencies:
@@ -4484,8 +4484,8 @@ __metadata:
     enzyme-adapter-preact-pure: "npm:2.2.0"
     enzyme-to-json: "npm:3.6.2"
     instantsearch-core: "npm:0.1.0"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.js: "npm:4.121.0"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.js: "npm:4.123.0"
     jest-serializer-html: "npm:7.1.0"
     preact: "npm:^10.10.0"
   languageName: unknown
@@ -9997,7 +9997,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@yarnpkg/lockfile@npm:1.1.0, @yarnpkg/lockfile@npm:^1.1.0":
+"@yarnpkg/lockfile@npm:1.1.0":
   version: 1.1.0
   resolution: "@yarnpkg/lockfile@npm:1.1.0"
   checksum: 10c0/0bfa50a3d756623d1f3409bc23f225a1d069424dbc77c6fd2f14fb377390cd57ec703dc70286e081c564be9051ead9ba85d81d66a3e68eeb6eb506d4e0c0fbda
@@ -10357,7 +10357,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"algoliasearch-helper@npm:3.30.1, algoliasearch-helper@workspace:packages/algoliasearch-helper":
+"algoliasearch-helper@npm:3.30.2, algoliasearch-helper@workspace:packages/algoliasearch-helper":
   version: 0.0.0-use.local
   resolution: "algoliasearch-helper@workspace:packages/algoliasearch-helper"
   dependencies:
@@ -10367,7 +10367,7 @@ __metadata:
     jest-watch-typeahead: "npm:0.3.0"
     jsdoc-to-markdown: "npm:8.0.0"
     metalsmith: "npm:2.5.1"
-    metalsmith-in-place: "npm:1.4.4"
+    metalsmith-in-place: "patch:metalsmith-in-place@npm%3A1.4.4#~/.yarn/patches/metalsmith-in-place-npm-1.4.4-24eba2145a.patch"
     metalsmith-layouts: "npm:1.8.1"
     metalsmith-markdown: "npm:1.3.0"
     metalsmith-metallic: "npm:1.0.0"
@@ -14201,7 +14201,7 @@ __metadata:
   resolution: "create-instantsearch-app@workspace:packages/create-instantsearch-app"
   dependencies:
     "@algolia/client-common": "npm:5.1.1"
-    "@instantsearch/testutils": "npm:1.118.0"
+    "@instantsearch/testutils": "npm:1.120.0"
     "@metalsmith/in-place": "npm:4.6.0"
     "@metalsmith/remove": "npm:1.3.0"
     algoliasearch: "npm:5.1.1"
@@ -15548,6 +15548,22 @@ __metadata:
   bin:
     doctoc: doctoc.js
   checksum: 10c0/e3fdf8ef3b99770dc584b4bd1661590211f0fa03d0c64dd2538d6b91e8c9f75fbbdbd18362f4a0abf1eb7150a6b7fbc534de6f19d8c8e8df7aa88131f067b394
+  languageName: node
+  linkType: hard
+
+"doctoc@patch:doctoc@npm%3A1.4.0#~/.yarn/patches/doctoc-npm-1.4.0-cd22da6a57.patch":
+  version: 1.4.0
+  resolution: "doctoc@patch:doctoc@npm%3A1.4.0#~/.yarn/patches/doctoc-npm-1.4.0-cd22da6a57.patch::version=1.4.0&hash=665ef7"
+  dependencies:
+    "@textlint/markdown-to-ast": "npm:~6.0.9"
+    anchor-markdown-header: "npm:^0.5.5"
+    htmlparser2: "npm:~3.9.2"
+    minimist: "npm:~1.2.0"
+    underscore: "npm:~1.8.3"
+    update-section: "npm:^0.3.0"
+  bin:
+    doctoc: doctoc.js
+  checksum: 10c0/28b8237aeadcd3ce1ef5cff8b432edb85098a1793baa5d718cc153168d0fdb54a3404227a18ae13bdc8565d52e5c67be56e0da3ece329f22756856536b95465e
   languageName: node
   linkType: hard
 
@@ -17053,10 +17069,10 @@ __metadata:
   resolution: "example-instantsearch-calendar-widget@workspace:examples/js/calendar-widget"
   dependencies:
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    algoliasearch-helper: "npm:3.30.2"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     vite: "npm:5.0.7"
     vite-plugin-commonjs: "npm:0.10.0"
   languageName: unknown
@@ -17067,10 +17083,10 @@ __metadata:
   resolution: "example-instantsearch-default-theme@workspace:examples/js/default-theme"
   dependencies:
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    algoliasearch-helper: "npm:3.30.2"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     vite: "npm:5.0.7"
     vite-plugin-commonjs: "npm:0.10.0"
   languageName: unknown
@@ -17081,8 +17097,8 @@ __metadata:
   resolution: "example-instantsearch-ecommerce-umd@workspace:examples/js/e-commerce-umd"
   dependencies:
     algoliasearch: "npm:5.1.1"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     vite: "npm:5.0.7"
     vite-plugin-commonjs: "npm:0.10.0"
   languageName: unknown
@@ -17093,10 +17109,10 @@ __metadata:
   resolution: "example-instantsearch-ecommerce@workspace:examples/js/e-commerce"
   dependencies:
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    algoliasearch-helper: "npm:3.30.2"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     vite: "npm:5.0.7"
     vite-plugin-commonjs: "npm:0.10.0"
   languageName: unknown
@@ -17107,10 +17123,10 @@ __metadata:
   resolution: "example-instantsearch-getting-started@workspace:examples/js/getting-started"
   dependencies:
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    algoliasearch-helper: "npm:3.30.2"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     vite: "npm:5.0.7"
     vite-plugin-commonjs: "npm:0.10.0"
   languageName: unknown
@@ -17121,12 +17137,12 @@ __metadata:
   resolution: "example-instantsearch-media@workspace:examples/js/media"
   dependencies:
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
+    algoliasearch-helper: "npm:3.30.2"
     date-fns: "npm:2.25.0"
     htm: "npm:^3.0.0"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     vite: "npm:5.0.7"
     vite-plugin-commonjs: "npm:0.10.0"
   languageName: unknown
@@ -17137,10 +17153,10 @@ __metadata:
   resolution: "example-instantsearch-query-suggestions@workspace:examples/js/query-suggestions"
   dependencies:
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    algoliasearch-helper: "npm:3.30.2"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     vite: "npm:5.0.7"
     vite-plugin-commonjs: "npm:0.10.0"
   languageName: unknown
@@ -17155,11 +17171,11 @@ __metadata:
     "@tailwindcss/vite": "npm:4.1.3"
     "@types/google.maps": "npm:3.58.1"
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
+    algoliasearch-helper: "npm:3.30.2"
     instantsearch-core: "npm:0.1.0"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     lucide-preact: "npm:1.7.0"
     nouislider: "npm:15.8.1"
     preact: "npm:10.29.0"
@@ -17174,10 +17190,10 @@ __metadata:
   resolution: "example-instantsearch-tourism@workspace:examples/js/tourism"
   dependencies:
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    algoliasearch-helper: "npm:3.30.2"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     vite: "npm:5.0.7"
     vite-plugin-commonjs: "npm:0.10.0"
   languageName: unknown
@@ -17190,14 +17206,14 @@ __metadata:
     "@types/react": "npm:19.0.3"
     "@vitejs/plugin-react": "npm:4.2.1"
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    algoliasearch-helper: "npm:3.30.2"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     react: "npm:19.0.0"
     react-dom: "npm:19.0.0"
-    react-instantsearch: "npm:7.53.0"
-    react-instantsearch-core: "npm:7.53.0"
+    react-instantsearch: "npm:7.55.0"
+    react-instantsearch-core: "npm:7.55.0"
     typescript: "npm:5.5.2"
     vite: "npm:5.0.7"
     vite-plugin-commonjs: "npm:0.10.0"
@@ -17211,15 +17227,15 @@ __metadata:
     "@types/react": "npm:19.0.3"
     "@vitejs/plugin-react": "npm:4.2.1"
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    algoliasearch-helper: "npm:3.30.2"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     react: "npm:19.0.0"
     react-compound-slider: "npm:3.4.0"
     react-dom: "npm:19.0.0"
-    react-instantsearch: "npm:7.53.0"
-    react-instantsearch-core: "npm:7.53.0"
+    react-instantsearch: "npm:7.55.0"
+    react-instantsearch-core: "npm:7.55.0"
     typescript: "npm:5.5.2"
     vite: "npm:5.0.7"
     vite-plugin-commonjs: "npm:0.10.0"
@@ -17233,14 +17249,14 @@ __metadata:
     "@types/react": "npm:19.0.3"
     "@vitejs/plugin-react": "npm:4.2.1"
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    algoliasearch-helper: "npm:3.30.2"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     react: "npm:19.0.0"
     react-dom: "npm:19.0.0"
-    react-instantsearch: "npm:7.53.0"
-    react-instantsearch-core: "npm:7.53.0"
+    react-instantsearch: "npm:7.55.0"
+    react-instantsearch-core: "npm:7.55.0"
     typescript: "npm:5.5.2"
     vite: "npm:5.0.7"
     vite-plugin-commonjs: "npm:0.10.0"
@@ -17254,18 +17270,18 @@ __metadata:
     "@types/node": "npm:17.0.40"
     "@types/react": "npm:19.0.3"
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
+    algoliasearch-helper: "npm:3.30.2"
     eslint: "npm:^9.0.0"
     eslint-config-next: "npm:16.0.7"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     next: "npm:16.0.7"
     react: "npm:19.0.0"
     react-dom: "npm:19.0.0"
-    react-instantsearch: "npm:7.53.0"
-    react-instantsearch-core: "npm:7.53.0"
-    react-instantsearch-nextjs: "npm:1.4.14"
+    react-instantsearch: "npm:7.55.0"
+    react-instantsearch-core: "npm:7.55.0"
+    react-instantsearch-nextjs: "npm:1.4.16"
     typescript: "npm:5.5.2"
   languageName: unknown
   linkType: soft
@@ -17279,13 +17295,13 @@ __metadata:
     algoliasearch: "npm:5.1.1"
     eslint: "npm:^9.0.0"
     eslint-config-next: "npm:16.0.7"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     next: "npm:16.0.7"
     react: "npm:19.0.0"
     react-dom: "npm:19.0.0"
-    react-instantsearch: "npm:7.53.0"
-    react-instantsearch-router-nextjs: "npm:7.53.0"
+    react-instantsearch: "npm:7.55.0"
+    react-instantsearch-router-nextjs: "npm:7.55.0"
     typescript: "npm:5.5.2"
   languageName: unknown
   linkType: soft
@@ -17297,18 +17313,18 @@ __metadata:
     "@types/node": "npm:17.0.40"
     "@types/react": "npm:19.0.3"
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
+    algoliasearch-helper: "npm:3.30.2"
     eslint: "npm:^9.0.0"
     eslint-config-next: "npm:16.0.7"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     next: "npm:16.0.7"
     react: "npm:19.0.0"
     react-dom: "npm:19.0.0"
-    react-instantsearch: "npm:7.53.0"
-    react-instantsearch-core: "npm:7.53.0"
-    react-instantsearch-router-nextjs: "npm:7.53.0"
+    react-instantsearch: "npm:7.55.0"
+    react-instantsearch-core: "npm:7.55.0"
+    react-instantsearch-router-nextjs: "npm:7.55.0"
     typescript: "npm:5.5.2"
   languageName: unknown
   linkType: soft
@@ -17320,14 +17336,14 @@ __metadata:
     "@types/react": "npm:19.0.3"
     "@vitejs/plugin-react": "npm:4.2.1"
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    algoliasearch-helper: "npm:3.30.2"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     react: "npm:19.0.0"
     react-dom: "npm:19.0.0"
-    react-instantsearch: "npm:7.53.0"
-    react-instantsearch-core: "npm:7.53.0"
+    react-instantsearch: "npm:7.55.0"
+    react-instantsearch-core: "npm:7.55.0"
     typescript: "npm:5.5.2"
     vite: "npm:5.0.7"
     vite-plugin-commonjs: "npm:0.10.0"
@@ -17345,10 +17361,10 @@ __metadata:
     expo: "npm:~53.0.0"
     expo-status-bar: "npm:~2.2.3"
     instantsearch-core: "npm:0.1.0"
-    instantsearch.js: "npm:4.121.0"
+    instantsearch.js: "npm:4.123.0"
     react: "npm:19.0.0"
     react-dom: "npm:19.0.0"
-    react-instantsearch-core: "npm:7.53.0"
+    react-instantsearch-core: "npm:7.55.0"
     react-native: "npm:0.79.6"
     react-native-safe-area-context: "npm:5.4.0"
     react-native-web: "npm:~0.20.0"
@@ -17362,14 +17378,14 @@ __metadata:
   dependencies:
     "@vitejs/plugin-react": "npm:4.2.1"
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
+    algoliasearch-helper: "npm:3.30.2"
     express: "npm:4.17.1"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.js: "npm:4.121.0"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.js: "npm:4.123.0"
     react: "npm:19.0.0"
     react-dom: "npm:19.0.0"
-    react-instantsearch: "npm:7.53.0"
-    react-instantsearch-core: "npm:7.53.0"
+    react-instantsearch: "npm:7.55.0"
+    react-instantsearch-core: "npm:7.55.0"
     vite: "npm:5.0.7"
   languageName: unknown
   linkType: soft
@@ -17380,14 +17396,14 @@ __metadata:
   dependencies:
     "@vitejs/plugin-vue2": "npm:2.3.1"
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    algoliasearch-helper: "npm:3.30.2"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     vite: "npm:5.0.7"
     vite-plugin-commonjs: "npm:0.10.0"
     vue: "npm:2.7.14"
-    vue-instantsearch: "npm:4.31.0"
+    vue-instantsearch: "npm:4.33.0"
     vue-template-compiler: "npm:2.7.14"
   languageName: unknown
   linkType: soft
@@ -17398,14 +17414,14 @@ __metadata:
   dependencies:
     "@vitejs/plugin-vue2": "npm:2.3.1"
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    algoliasearch-helper: "npm:3.30.2"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     vite: "npm:5.0.7"
     vite-plugin-commonjs: "npm:0.10.0"
     vue: "npm:2.7.14"
-    vue-instantsearch: "npm:4.31.0"
+    vue-instantsearch: "npm:4.33.0"
     vue-slider-component: "npm:3.0.32"
     vue-template-compiler: "npm:2.7.14"
   languageName: unknown
@@ -17417,14 +17433,14 @@ __metadata:
   dependencies:
     "@vitejs/plugin-vue2": "npm:2.3.1"
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    algoliasearch-helper: "npm:3.30.2"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     vite: "npm:5.0.7"
     vite-plugin-commonjs: "npm:0.10.0"
     vue: "npm:2.7.14"
-    vue-instantsearch: "npm:4.31.0"
+    vue-instantsearch: "npm:4.33.0"
     vue-template-compiler: "npm:2.7.14"
   languageName: unknown
   linkType: soft
@@ -17435,14 +17451,14 @@ __metadata:
   dependencies:
     "@vitejs/plugin-vue2": "npm:2.3.1"
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    algoliasearch-helper: "npm:3.30.2"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     vite: "npm:5.0.7"
     vite-plugin-commonjs: "npm:0.10.0"
     vue: "npm:2.7.14"
-    vue-instantsearch: "npm:4.31.0"
+    vue-instantsearch: "npm:4.33.0"
     vue-template-compiler: "npm:2.7.14"
   languageName: unknown
   linkType: soft
@@ -17452,14 +17468,14 @@ __metadata:
   resolution: "example-vue-instantsearch-nuxt@workspace:examples/vue/nuxt"
   dependencies:
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
+    algoliasearch-helper: "npm:3.30.2"
     cross-env: "npm:^5.2.0"
     css-loader: "npm:^4.3.0"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     nuxt: "npm:^2.4.5"
-    vue-instantsearch: "npm:4.31.0"
+    vue-instantsearch: "npm:4.33.0"
     vue-server-renderer: "npm:2.7.14"
   languageName: unknown
   linkType: soft
@@ -17470,14 +17486,14 @@ __metadata:
   dependencies:
     "@vitejs/plugin-vue2": "npm:2.3.1"
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    algoliasearch-helper: "npm:3.30.2"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     vite: "npm:5.0.7"
     vite-plugin-commonjs: "npm:0.10.0"
     vue: "npm:2.7.14"
-    vue-instantsearch: "npm:4.31.0"
+    vue-instantsearch: "npm:4.33.0"
     vue-template-compiler: "npm:2.7.14"
   languageName: unknown
   linkType: soft
@@ -17490,13 +17506,13 @@ __metadata:
     "@vue/cli-plugin-babel": "npm:^3.4.1"
     "@vue/cli-service": "npm:^3.4.1"
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.css: "npm:8.25.0"
-    instantsearch.js: "npm:4.121.0"
+    algoliasearch-helper: "npm:3.30.2"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.css: "npm:8.25.1"
+    instantsearch.js: "npm:4.123.0"
     qs: "npm:6.9.7"
     vue: "npm:2.7.14"
-    vue-instantsearch: "npm:4.31.0"
+    vue-instantsearch: "npm:4.33.0"
     vue-router: "npm:^3.0.2"
     vue-server-renderer: "npm:2.7.14"
     vue-template-compiler: "npm:2.7.14"
@@ -18368,16 +18384,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"find-yarn-workspace-root@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "find-yarn-workspace-root@npm:1.2.1"
-  dependencies:
-    fs-extra: "npm:^4.0.3"
-    micromatch: "npm:^3.1.4"
-  checksum: 10c0/c406e4d30a87eccd85e2ca283be813426941d8e7933c389184a8587e75a00b9a1352a8111c81e1988d88ceeb88d1a3372d113846d386126e98b39094fddb752e
-  languageName: node
-  linkType: hard
-
 "flat-cache@npm:^3.0.4":
   version: 3.0.4
   resolution: "flat-cache@npm:3.0.4"
@@ -18631,17 +18637,6 @@ __metadata:
     jsonfile: "npm:^6.0.1"
     universalify: "npm:^2.0.0"
   checksum: 10c0/984924ff4104e3e9f351b658a864bf3b354b2c90429f57aec0acd12d92c4e6b762cbacacdffb4e745b280adce882e1f980c485d9f02c453f769ab4e7fc646ce3
-  languageName: node
-  linkType: hard
-
-"fs-extra@npm:^4.0.3":
-  version: 4.0.3
-  resolution: "fs-extra@npm:4.0.3"
-  dependencies:
-    graceful-fs: "npm:^4.1.2"
-    jsonfile: "npm:^4.0.0"
-    universalify: "npm:^0.1.0"
-  checksum: 10c0/b34344de77adaccb294e6dc116e8b247ae0a4da45b79749814893549e6f15e3baace2998db06a966a9f8d5a39b6b2d8e51543bd0a565a8927c37d6373dfd20b9
   languageName: node
   linkType: hard
 
@@ -20860,14 +20855,14 @@ __metadata:
     "@swc/helpers": "npm:0.5.18"
     "@types/dom-speech-recognition": "npm:^0.0.1"
     "@types/qs": "npm:^6.5.3"
-    algoliasearch-helper: "npm:3.30.1"
+    algoliasearch-helper: "npm:3.30.2"
     preact: "npm:^10.10.0"
-    qs: "npm:^6.5.1"
+    qs: "npm:6.9.7"
     search-insights: "npm:^2.17.2"
   languageName: unknown
   linkType: soft
 
-"instantsearch-ui-components@npm:0.44.0, instantsearch-ui-components@workspace:packages/instantsearch-ui-components":
+"instantsearch-ui-components@npm:0.46.0, instantsearch-ui-components@workspace:packages/instantsearch-ui-components":
   version: 0.0.0-use.local
   resolution: "instantsearch-ui-components@workspace:packages/instantsearch-ui-components"
   dependencies:
@@ -20917,7 +20912,7 @@ __metadata:
     algoliasearch-v4: "npm:algoliasearch@4.23.2"
     algoliasearch-v5: "npm:algoliasearch@5.1.1"
     babel-jest: "npm:27.4.6"
-    doctoc: "npm:1.4.0"
+    doctoc: "patch:doctoc@npm%3A1.4.0#~/.yarn/patches/doctoc-npm-1.4.0-cd22da6a57.patch"
     enzyme: "npm:3.11.0"
     eslint-plugin-import: "npm:^2.32.0"
     jest: "npm:27.4.7"
@@ -20931,7 +20926,6 @@ __metadata:
     oxfmt: "npm:0.51.0"
     oxlint: "npm:1.55.0"
     oxlint-tsgolint: "npm:0.17.0"
-    patch-package: "npm:6.2.2"
     prop-types: "npm:15.6.2"
     react: "npm:19.0.0"
     react-dom: "npm:19.0.0"
@@ -20953,7 +20947,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"instantsearch.css@npm:8.25.0, instantsearch.css@workspace:packages/instantsearch.css":
+"instantsearch.css@npm:8.25.1, instantsearch.css@workspace:packages/instantsearch.css":
   version: 0.0.0-use.local
   resolution: "instantsearch.css@workspace:packages/instantsearch.css"
   dependencies:
@@ -20974,25 +20968,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"instantsearch.js@npm:4.121.0, instantsearch.js@workspace:packages/instantsearch.js":
+"instantsearch.js@npm:4.123.0, instantsearch.js@workspace:packages/instantsearch.js":
   version: 0.0.0-use.local
   resolution: "instantsearch.js@workspace:packages/instantsearch.js"
   dependencies:
     "@algolia/events": "npm:^4.0.1"
-    "@instantsearch/mocks": "npm:1.129.0"
-    "@instantsearch/tests": "npm:1.129.0"
-    "@instantsearch/testutils": "npm:1.118.0"
+    "@instantsearch/mocks": "npm:1.131.0"
+    "@instantsearch/tests": "npm:1.131.0"
+    "@instantsearch/testutils": "npm:1.120.0"
     "@swc/helpers": "npm:0.5.18"
     "@types/dom-speech-recognition": "npm:^0.0.1"
     "@types/google.maps": "npm:^3.55.12"
-    "@types/qs": "npm:^6.5.3"
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
+    algoliasearch-helper: "npm:3.30.2"
     htm: "npm:^3.0.0"
     instantsearch-core: "npm:^0.1.0"
-    instantsearch-ui-components: "npm:0.44.0"
+    instantsearch-ui-components: "npm:0.46.0"
     preact: "npm:^10.10.0"
-    qs: "npm:^6.5.1"
     react: "npm:>= 0.14.0"
     search-insights: "npm:^2.17.2"
   peerDependencies:
@@ -23455,15 +23447,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"klaw-sync@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "klaw-sync@npm:6.0.0"
-  dependencies:
-    graceful-fs: "npm:^4.1.11"
-  checksum: 10c0/00d8e4c48d0d699b743b3b028e807295ea0b225caf6179f51029e19783a93ad8bb9bccde617d169659fbe99559d73fb35f796214de031d0023c26b906cecd70a
-  languageName: node
-  linkType: hard
-
 "klaw@npm:^3.0.0":
   version: 3.0.0
   resolution: "klaw@npm:3.0.0"
@@ -25080,6 +25063,22 @@ __metadata:
     lodash.omit: "npm:^4.0.2"
     multimatch: "npm:^2.0.0"
   checksum: 10c0/de7e5fddfaaabcbb34088790712cf08e7b6e631cb52f107eb8ac99f9af60ae7f82de8446ee78c67210649d511bd60b65f6b232f545e2e358de4eddb5cb8ed1a9
+  languageName: node
+  linkType: hard
+
+"metalsmith-in-place@patch:metalsmith-in-place@npm%3A1.4.4#~/.yarn/patches/metalsmith-in-place-npm-1.4.4-24eba2145a.patch":
+  version: 1.4.4
+  resolution: "metalsmith-in-place@patch:metalsmith-in-place@npm%3A1.4.4#~/.yarn/patches/metalsmith-in-place-npm-1.4.4-24eba2145a.patch::version=1.4.4&hash=4f972e"
+  dependencies:
+    async: "npm:^1.4.2"
+    consolidate: "npm:^0.14.0"
+    debug: "npm:^2.2.0"
+    extend: "npm:^3.0.0"
+    fs-readdir-recursive: "npm:^1.0.0"
+    is-utf8: "npm:^0.2.0"
+    lodash.omit: "npm:^4.0.2"
+    multimatch: "npm:^2.0.0"
+  checksum: 10c0/7f8e079c20e63cdfcc5217d4a7411291b85885bc225aadf73c5052e3d029b10cbf354aeee57a45d71eddcb5eae6f306d3939019882785ed9f93e0f9df4e150fe
   languageName: node
   linkType: hard
 
@@ -28553,28 +28552,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"patch-package@npm:6.2.2":
-  version: 6.2.2
-  resolution: "patch-package@npm:6.2.2"
-  dependencies:
-    "@yarnpkg/lockfile": "npm:^1.1.0"
-    chalk: "npm:^2.4.2"
-    cross-spawn: "npm:^6.0.5"
-    find-yarn-workspace-root: "npm:^1.2.1"
-    fs-extra: "npm:^7.0.1"
-    is-ci: "npm:^2.0.0"
-    klaw-sync: "npm:^6.0.0"
-    minimist: "npm:^1.2.0"
-    rimraf: "npm:^2.6.3"
-    semver: "npm:^5.6.0"
-    slash: "npm:^2.0.0"
-    tmp: "npm:^0.0.33"
-  bin:
-    patch-package: index.js
-  checksum: 10c0/61bee7746266c15f13de5c8f9ed4b1b2f20d2897a1b292cd5dd7b63fbdc98c5c9acf1fa8c3bb49621ae955e49f9dede314f7fe859ad82056ad93e54ba81ec993
-  languageName: node
-  linkType: hard
-
 "path-browserify@npm:0.0.1":
   version: 0.0.1
   resolution: "path-browserify@npm:0.0.1"
@@ -31460,13 +31437,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-instantsearch-core@npm:7.53.0, react-instantsearch-core@workspace:packages/react-instantsearch-core":
+"react-instantsearch-core@npm:7.55.0, react-instantsearch-core@workspace:packages/react-instantsearch-core":
   version: 0.0.0-use.local
   resolution: "react-instantsearch-core@workspace:packages/react-instantsearch-core"
   dependencies:
     "@swc/helpers": "npm:0.5.18"
     "@types/use-sync-external-store": "npm:0.0.3"
-    algoliasearch-helper: "npm:3.30.1"
+    algoliasearch-helper: "npm:3.30.2"
     instantsearch-core: "npm:0.1.0"
     react-instantsearch-core-v6: "npm:react-instantsearch-core@6.40.4"
     use-sync-external-store: "npm:^1.0.0"
@@ -31476,7 +31453,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"react-instantsearch-nextjs@npm:1.4.14, react-instantsearch-nextjs@workspace:packages/react-instantsearch-nextjs":
+"react-instantsearch-nextjs@npm:1.4.16, react-instantsearch-nextjs@workspace:packages/react-instantsearch-nextjs":
   version: 0.0.0-use.local
   resolution: "react-instantsearch-nextjs@workspace:packages/react-instantsearch-nextjs"
   dependencies:
@@ -31484,7 +31461,7 @@ __metadata:
     "@swc/helpers": "npm:0.5.18"
     instantsearch-core: "npm:0.1.0"
     next: "npm:16.0.7"
-    react-instantsearch-core: "npm:7.53.0"
+    react-instantsearch-core: "npm:7.55.0"
     start-server-and-test: "npm:1.15.3"
     ts-node: "npm:8.4.1"
   peerDependencies:
@@ -31493,27 +31470,27 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"react-instantsearch-router-nextjs@npm:7.53.0, react-instantsearch-router-nextjs@workspace:packages/react-instantsearch-router-nextjs":
+"react-instantsearch-router-nextjs@npm:7.55.0, react-instantsearch-router-nextjs@workspace:packages/react-instantsearch-router-nextjs":
   version: 0.0.0-use.local
   resolution: "react-instantsearch-router-nextjs@workspace:packages/react-instantsearch-router-nextjs"
   dependencies:
     "@playwright/test": "npm:1.49.1"
     "@swc/helpers": "npm:0.5.18"
     instantsearch-core: "npm:0.1.0"
-    react-instantsearch-core: "npm:7.53.0"
+    react-instantsearch-core: "npm:7.55.0"
   peerDependencies:
     next: ">= 9 < 17"
   languageName: unknown
   linkType: soft
 
-"react-instantsearch@npm:7.53.0, react-instantsearch@workspace:packages/react-instantsearch":
+"react-instantsearch@npm:7.55.0, react-instantsearch@workspace:packages/react-instantsearch":
   version: 0.0.0-use.local
   resolution: "react-instantsearch@workspace:packages/react-instantsearch"
   dependencies:
     "@swc/helpers": "npm:0.5.18"
     instantsearch-core: "npm:0.1.0"
-    instantsearch-ui-components: "npm:0.44.0"
-    react-instantsearch-core: "npm:7.53.0"
+    instantsearch-ui-components: "npm:0.46.0"
+    react-instantsearch-core: "npm:7.55.0"
   peerDependencies:
     algoliasearch: ">= 3.1 < 6"
     react: ">= 16.8.0 < 20"
@@ -33793,7 +33770,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sigstore@npm:^4.0.0":
+"sigstore@npm:4.1.1":
   version: 4.1.1
   resolution: "sigstore@npm:4.1.1"
   dependencies:
@@ -33804,6 +33781,20 @@ __metadata:
     "@sigstore/tuf": "npm:^4.0.2"
     "@sigstore/verify": "npm:^3.1.1"
   checksum: 10c0/8ebe0c2a7cb3cf9ed9fb775636ab2ae364cbdea9360ea256ab003d83b83dd5eeda8dd899cffcd3853fe711425c481fab2a74246772d75e3ecb9a9483f6700289
+  languageName: node
+  linkType: hard
+
+"sigstore@patch:sigstore@npm%3A4.1.1#~/.yarn/patches/sigstore-npm-4.1.1-9ab7be1c91.patch":
+  version: 4.1.1
+  resolution: "sigstore@patch:sigstore@npm%3A4.1.1#~/.yarn/patches/sigstore-npm-4.1.1-9ab7be1c91.patch::version=4.1.1&hash=cdbf08"
+  dependencies:
+    "@sigstore/bundle": "npm:^4.0.0"
+    "@sigstore/core": "npm:^3.2.1"
+    "@sigstore/protobuf-specs": "npm:^0.5.0"
+    "@sigstore/sign": "npm:^4.1.1"
+    "@sigstore/tuf": "npm:^4.0.2"
+    "@sigstore/verify": "npm:^3.1.1"
+  checksum: 10c0/c44dc62bd25cace0815e66007f434a36bcaa90d63a54e2d1f4ccc193b72e79ef4e2f07692cff83513425e476a6435a0c7cd4e50600c72fa7e2e60f0bc77f301c
   languageName: node
   linkType: hard
 
@@ -37774,7 +37765,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-instantsearch@npm:4.31.0, vue-instantsearch@workspace:packages/vue-instantsearch":
+"vue-instantsearch@npm:4.33.0, vue-instantsearch@workspace:packages/vue-instantsearch":
   version: 0.0.0-use.local
   resolution: "vue-instantsearch@workspace:packages/vue-instantsearch"
   dependencies:
@@ -37784,11 +37775,11 @@ __metadata:
     "@vue/test-utils": "npm:1.3.0"
     "@vue/test-utils2": "npm:@vue/test-utils@2.0.0-rc.11"
     algoliasearch: "npm:5.1.1"
-    algoliasearch-helper: "npm:3.30.1"
+    algoliasearch-helper: "npm:3.30.2"
     babel-preset-vue: "npm:2.0.2"
     instantsearch-core: "npm:0.1.0"
-    instantsearch-ui-components: "npm:0.44.0"
-    instantsearch.js: "npm:4.121.0"
+    instantsearch-ui-components: "npm:0.46.0"
+    instantsearch.js: "npm:4.123.0"
     mitt: "npm:^2.1.0"
     rollup-plugin-vue2: "npm:rollup-plugin-vue@4.3.2"
     rollup-plugin-vue3: "npm:rollup-plugin-vue@6.0.0"

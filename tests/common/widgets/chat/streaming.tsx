@@ -158,5 +158,59 @@ export function createStreamingTests(
       // Without memoization this grows by one carousel render per delta.
       expect(itemRenders - baseline).toBe(0);
     });
+
+    test('shows no half-written markdown while a reply streams', async () => {
+      const searchClient = createSearchClient();
+      const textMessage = (text: string, state: 'streaming' | 'done') => ({
+        id: 'm1',
+        role: 'assistant' as const,
+        parts: [{ type: 'text' as const, text, state }],
+      });
+      const chat = new Chat({
+        messages: [
+          textMessage(
+            'Try the **Nike Air Max or [the docs](https://www.alg',
+            'streaming'
+          ),
+        ],
+      } as any);
+
+      await setup({
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: {
+          javascript: createDefaultWidgetParams(chat),
+          react: createDefaultWidgetParams(chat),
+          vue: createDefaultWidgetParams(chat),
+        },
+      });
+
+      await openChat(act);
+
+      const content = () => document.querySelector('.ais-ChatMessage-message')!;
+
+      expect(content().querySelector('a')).toBeNull();
+      expect(content().querySelector('strong')).toHaveTextContent(
+        /^Nike Air Max or the docs$/
+      );
+      expect(content()).toHaveTextContent(/^Try the Nike Air Max or the docs$/);
+
+      await act(async () => {
+        chat.messages = [
+          textMessage(
+            'Try the **Nike Air Max** or [the docs](https://www.algolia.com/doc/).',
+            'done'
+          ),
+        ];
+        await wait(0);
+      });
+
+      expect(content().querySelector('a')).toHaveAttribute(
+        'href',
+        'https://www.algolia.com/doc/'
+      );
+      expect(content()).toHaveTextContent(
+        /^Try the Nike Air Max or the docs\.$/
+      );
+    });
   });
 }

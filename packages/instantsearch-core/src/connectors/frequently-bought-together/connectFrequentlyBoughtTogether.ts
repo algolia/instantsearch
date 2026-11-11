@@ -5,7 +5,7 @@ import {
   TAG_PLACEHOLDER,
   createSendEventForHits,
   addAbsolutePosition,
-  addQueryID,
+  addMissingQueryID,
 } from '../../lib/utils';
 
 import type { SendEventForHits } from '../../lib/utils';
@@ -177,7 +177,7 @@ export default (function connectFrequentlyBoughtTogether<
           1
         );
 
-        const itemsWithAbsolutePositionAndQueryID = addQueryID(
+        const itemsWithAbsolutePositionAndQueryID = addMissingQueryID(
           itemsWithAbsolutePosition,
           results.queryID
         );

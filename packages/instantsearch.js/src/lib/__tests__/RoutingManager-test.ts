@@ -6,7 +6,6 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import { historyRouter } from 'instantsearch-core';
 import { connectHitsPerPage, connectSearchBox } from 'instantsearch-core';
-import qs from 'qs';
 
 import { createWidget } from '../../../../instantsearch-core/test/createWidget';
 import { instantsearch } from '../../index.es';
@@ -476,13 +475,7 @@ describe('RoutingManager', () => {
       });
 
       const router = historyRouter<IndexUiState>();
-      // @ts-expect-error: This method is considered private but we still use it
-      // in the test after the TypeScript migration.
-      // In a next refactor, we can consider changing this test implementation.
-      const parsedUrl = router.parseURL({
-        qsModule: qs,
-        currentURL: new URL(window.location.href),
-      });
+      const parsedUrl = router.read();
 
       expect(parsedUrl.refinementList!.brand).toBeInstanceOf(Array);
       expect(parsedUrl).toMatchInlineSnapshot(`
@@ -523,13 +516,7 @@ describe('RoutingManager', () => {
       });
 
       const router = historyRouter<IndexUiState>();
-      // @ts-expect-error: This method is considered private but we still use it
-      // in the test after the TypeScript migration.
-      // In a next refactor, we can consider changing this test implementation.
-      const parsedUrl = router.parseURL({
-        qsModule: qs,
-        currentURL: new URL(window.location.href),
-      });
+      const parsedUrl = router.read();
 
       expect(parsedUrl.refinementList!.brand).toBeInstanceOf(Array);
     });

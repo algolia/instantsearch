@@ -1,6 +1,8 @@
 /** @jsx React.createElement */
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
+import { waitFor } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
 import { Chat } from 'instantsearch-core/internal';
 import React from 'react';
 
@@ -8,7 +10,17 @@ import { createDefaultWidgetParams, createVueElement, openChat } from './utils';
 
 import type { ChatWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
-import type { ClientSideToolTemplateData } from 'instantsearch.js';
+import type {
+  ClientSideToolTemplateData,
+  UIMessageChunk,
+} from 'instantsearch.js';
+
+function chunksToResponse(chunks: UIMessageChunk[]): Response {
+  return new Response(
+    `${chunks.map((chunk) => `data: ${JSON.stringify(chunk)}\n\n`).join('')}data: [DONE]\n\n`,
+    { headers: { 'Content-Type': 'text/event-stream' } }
+  );
+}
 
 export function createToolResultTests(
   setup: ChatWidgetSetup,
@@ -136,6 +148,73 @@ export function createToolResultTests(
           output: { settled: 'second' },
         },
       ]);
+    });
+
+    test('shows the reply when the server runs a tool the chat has no entry for', async () => {
+      const searchClient = createSearchClient();
+      // Agent Studio streams the call, its output and the closing text in one
+      // turn, without flagging the call `providerExecuted`.
+      const fetchMock = jest.fn(() =>
+        Promise.resolve(
+          chunksToResponse([
+            { type: 'start', messageId: 'assistant-1' },
+            {
+              type: 'tool-input-available',
+              toolName: 'check_inventory',
+              toolCallId: 'call-1',
+              input: { sku: 'A1' },
+            },
+            {
+              type: 'tool-output-available',
+              toolName: 'check_inventory',
+              toolCallId: 'call-1',
+              output: { inStock: true },
+            },
+            { type: 'text-start', id: 'text-1' },
+            { type: 'text-delta', id: 'text-1', delta: 'It is in stock.' },
+            { type: 'text-end', id: 'text-1' },
+            { type: 'finish' },
+          ])
+        )
+      );
+      const transport = { api: '/api', fetch: fetchMock };
+
+      await setup({
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: {
+          javascript: { transport, persistence: false },
+          react: { transport, persistence: false },
+          vue: { transport, persistence: false },
+        },
+      });
+
+      await openChat(act);
+
+      userEvent.type(
+        document.querySelector('.ais-ChatPrompt-textarea')!,
+        'Is it in stock?'
+      );
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      userEvent.click(document.querySelector('.ais-ChatPrompt-submit')!);
+
+      await waitFor(() => {
+        expect(
+          document.querySelector('.ais-ChatMessages')!.textContent
+        ).toContain('It is in stock.');
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(
+        document.querySelector('.ais-ChatMessageError')
+      ).not.toBeInTheDocument();
+      expect(fetchMock).toHaveBeenCalledTimes(1);
     });
   });
 }
