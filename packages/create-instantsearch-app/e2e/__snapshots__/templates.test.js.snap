@@ -1806,7 +1806,7 @@ exports[`Templates InstantSearch.js File content: index.html 1`] = `
   </div>
 
   <script src=\\"https://cdn.jsdelivr.net/npm/algoliasearch@5/dist/lite/builds/browser.umd.js\\"></script>
-  <script src=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@3.0.0\\"></script>
+  <script src=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@4.73.1\\"></script>
   <script src=\\"./src/app.js\\"></script>
 </body>
 
@@ -1825,7 +1825,7 @@ exports[`Templates InstantSearch.js File content: package.json 1`] = `
     \\"lint:fix\\": \\"eslint . --fix && prettier --write .\\"
   },
   \\"partialDependencies\\": {
-    \\"instantsearch.js\\": \\"3.0.0\\"
+    \\"instantsearch.js\\": \\"4.73.1\\"
   }
 }"
 `;

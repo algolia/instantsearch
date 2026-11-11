@@ -88,7 +88,7 @@ describe('Tasks', () => {
 
       const app = createInstantSearchApp('/tmp/test-app', {
         template: 'InstantSearch.js',
-        libraryVersion: '3.0.0',
+        libraryVersion: '4.73.1',
       });
 
       await app.create();
@@ -99,7 +99,7 @@ describe('Tasks', () => {
         name: 'test-app',
         template: path.resolve('src/templates/InstantSearch.js'),
         installation: true,
-        libraryVersion: '3.0.0',
+        libraryVersion: '4.73.1',
         silent: false,
       });
     });
