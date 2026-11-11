@@ -7,7 +7,8 @@ import { fileURLToPath } from 'url';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import { rollup } from 'rollup';
 import Vue from 'vue';
-import 'vue-instantsearch/vue2/es/index.js';
+
+import '../../../vue2/es/index.js';
 
 assert.deepStrictEqual(
   Object.keys(Vue.options.components).filter((name) => name.startsWith('Ais')),
