@@ -1,15 +1,3 @@
-export {
-  getUsageSessionId,
-  highlight,
-  snippet,
-  reverseHighlight,
-  reverseSnippet,
-} from 'instantsearch-core/internal';
-export type {
-  HighlightOptions,
-  SnippetOptions,
-  ReverseHighlightOptions,
-  ReverseSnippetOptions,
-} from 'instantsearch-core/internal';
+export { getUsageSessionId } from 'instantsearch-core/internal';
 export { getInsightsAnonymousUserToken } from 'instantsearch-core';
 export { getInsightsAnonymousUserTokenInternal } from 'instantsearch-core/internal';

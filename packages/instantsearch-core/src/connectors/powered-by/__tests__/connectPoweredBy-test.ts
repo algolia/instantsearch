@@ -2,9 +2,6 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { createSearchClient } from '@instantsearch/mocks';
-import jsHelper from 'algoliasearch-helper';
-
 import {
   createDisposeOptions,
   createInitOptions,
@@ -121,10 +118,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
     const rendering = () => {};
     const makeWidget = connectPoweredBy(rendering);
     const widget = makeWidget({});
-    const helper = jsHelper(createSearchClient(), '');
-    expect(() =>
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-    ).not.toThrow();
+    expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
   });
 
   describe('getWidgetRenderState', () => {

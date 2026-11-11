@@ -1,5 +1,4 @@
 import * as connectors from './connectors/index';
-import * as helpers from './helpers/index';
 import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache/index';
 import InstantSearch from './lib/InstantSearch';
 import * as routers from './lib/routers/index';
@@ -27,15 +26,6 @@ type InstantSearchModule = {
   templates: typeof templates;
 
   createInfiniteHitsSessionStorageCache: typeof createInfiniteHitsSessionStorageCache;
-
-  /** @deprecated use html tagged templates and the Highlight component instead */
-  highlight: typeof helpers.highlight;
-  /** @deprecated use html tagged templates and the ReverseHighlight component instead */
-  reverseHighlight: typeof helpers.reverseHighlight;
-  /** @deprecated use html tagged templates and the Snippet component instead */
-  snippet: typeof helpers.snippet;
-  /** @deprecated use html tagged templates and the ReverseSnippet component instead */
-  reverseSnippet: typeof helpers.reverseSnippet;
 };
 
 /**
@@ -68,9 +58,5 @@ instantsearch.templates = templates;
 
 instantsearch.createInfiniteHitsSessionStorageCache =
   createInfiniteHitsSessionStorageCache;
-instantsearch.highlight = helpers.highlight;
-instantsearch.reverseHighlight = helpers.reverseHighlight;
-instantsearch.snippet = helpers.snippet;
-instantsearch.reverseSnippet = helpers.reverseSnippet;
 
 export default instantsearch;
