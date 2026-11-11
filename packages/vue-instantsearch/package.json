@@ -19,8 +19,7 @@
   "version": "4.33.0",
   "files": [
     "vue2",
-    "vue3",
-    "src"
+    "vue3"
   ],
   "main": "vue2/cjs",
   "module": "vue2/es",
@@ -29,8 +28,8 @@
   "scripts": {
     "prebuild": "rm -rf vue2 vue3",
     "build": "rollup -c rollup.config.mjs",
-    "test:exports": "node ./test/module/vue2/is-es-module.mjs && node ./test/module/vue2/is-cjs-module.cjs",
-    "test:exports:vue3": "node ./test/module/vue3/is-es-module.mjs && node ./test/module/vue3/is-cjs-module.cjs",
+    "test:exports": "node ./test/module/vue2/is-es-module.mjs && node ./test/module/vue2/is-cjs-module.cjs && node ./test/module/vue2/is-tree-shakable.mjs",
+    "test:exports:vue3": "node ./test/module/vue3/is-es-module.mjs && node ./test/module/vue3/is-cjs-module.cjs && node ./test/module/vue3/is-tree-shakable.mjs",
     "watch:es": "yarn --silent build --watch"
   },
   "dependencies": {
