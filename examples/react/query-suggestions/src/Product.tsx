@@ -7,15 +7,20 @@ import {
   InstantSearch,
   RelatedProducts,
   Carousel,
+  Chat,
 } from 'react-instantsearch';
+
+import { PromptSuggestions } from './PromptSuggestions';
 
 import './App.css';
 import 'instantsearch.css/themes/satellite.css';
 
-const searchClient = algoliasearch(
-  'latency',
-  '6be0576ff61c053d5f9a3225e2a90f76'
-);
+const APP_ID = 'latency';
+const API_KEY = '6be0576ff61c053d5f9a3225e2a90f76';
+const CHAT_AGENT_ID = 'eedef238-5468-470d-bc37-f99fa741bd25';
+const SUGGESTIONS_AGENT_ID = '46520bcb-1f38-4ceb-9511-af5648089e4b';
+
+const searchClient = algoliasearch(APP_ID, API_KEY);
 
 export function Product({ pid }: { pid: string }) {
   return (
@@ -53,6 +58,11 @@ export function Product({ pid }: { pid: string }) {
             limit={6}
             layoutComponent={Carousel}
           />
+          <Chat
+            agentId={CHAT_AGENT_ID}
+            feedback={true}
+            itemComponent={ItemComponent}
+          />
         </InstantSearch>
       </div>
     </>
@@ -71,6 +81,12 @@ function HitComponent({ hit }: { hit: HitType }) {
       <img src={hit.image} />
       <div>
         <h1>{hit.name}</h1>
+        <PromptSuggestions
+          hit={hit}
+          agentId={SUGGESTIONS_AGENT_ID}
+          appId={APP_ID}
+          apiKey={API_KEY}
+        />
         <p>{hit.description}</p>
       </div>
     </article>
