@@ -654,7 +654,6 @@ export function createOptionsTests(
             ],
             searchParameters: {
               userToken: 'user-123',
-              // @ts-ignore `enableRules` was introduced after algoliasearch v3.
               enableRules: false,
               hitsPerPage: 10,
             },
@@ -675,7 +674,6 @@ export function createOptionsTests(
             ],
             searchParameters: {
               userToken: 'user-123',
-              // @ts-ignore `enableRules` was introduced after algoliasearch v3.
               enableRules: false,
               hitsPerPage: 10,
             },

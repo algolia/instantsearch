@@ -123,11 +123,6 @@ export function createAlgoliaSearchClient<
       }),
       ...options,
     };
-  } else {
-    options = {
-      _ua: 'Algolia for JavaScript (test)',
-      ...options,
-    };
   }
 
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -162,10 +157,6 @@ function getParams(version: string, params: Record<string, any>) {
   if (version.startsWith('4.')) {
     const Transporter = require('@algolia/transporter');
     return Transporter.serializeQueryParameters(params);
-  }
-
-  if (version.startsWith('3.')) {
-    return (algoliasearch('appid', 'apikey') as any)._getSearchParams(params);
   }
 
   return 'wrong version, no params';

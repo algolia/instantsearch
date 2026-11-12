@@ -10,7 +10,7 @@ var SearchResults = require('./src/SearchResults');
  * The algoliasearchHelper module is the function that will let its
  * contains everything needed to use the Algoliasearch
  * Helper. It is a also a function that instanciate the helper.
- * To use the helper, you also need the Algolia JS client v3.
+ * To use the helper, you also need the Algolia JS client v4 or v5.
  * @example
  * //using the UMD build
  * var client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');

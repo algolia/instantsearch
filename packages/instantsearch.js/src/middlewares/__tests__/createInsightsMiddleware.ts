@@ -49,6 +49,8 @@ describe('insights', () => {
           'x-algolia-api-key': 'myApiKey',
         },
       },
+      // v4 clients have no top-level `appId`
+      appId: undefined,
     });
   });
 
@@ -98,6 +100,8 @@ describe('insights', () => {
             'x-algolia-api-key': 'my-api-key',
           },
         },
+        // v4 clients have no top-level `appId`
+        appId: undefined,
       }),
       insights: false,
       indexName,

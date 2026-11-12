@@ -16,8 +16,6 @@ export function getAppIdAndApiKey(
     const appId = headers[APP_ID] || queryParameters[APP_ID];
     const apiKey = headers[API_KEY] || queryParameters[API_KEY];
     return [appId, apiKey];
-  } else {
-    // searchClient v3
-    return [searchClient.applicationID, searchClient.apiKey];
   }
+  return [undefined, undefined];
 }
