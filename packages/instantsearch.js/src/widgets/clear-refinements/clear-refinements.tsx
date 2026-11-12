@@ -1,11 +1,10 @@
 /** @jsx h */
 
 import { createDocumentationMessageGenerator } from 'instantsearch-core';
-import { suitComponent as component } from 'instantsearch-core';
-import { cx } from 'instantsearch-ui-components';
-import { h, render } from 'preact';
+import { createClearRefinementsComponent } from 'instantsearch-ui-components';
+import { Fragment, h, render } from 'preact';
 
-import ClearRefinements from '../../components/ClearRefinements/ClearRefinements';
+import Template from '../../components/Template/Template';
 import { connectClearRefinements } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
@@ -13,59 +12,22 @@ import { getContainerNode } from '../../lib/utils';
 import defaultTemplates from './defaultTemplates';
 
 import type {
-  ClearRefinementsComponentCSSClasses,
-  ClearRefinementsComponentTemplates,
-} from '../../components/ClearRefinements/ClearRefinements';
-import type {
   ClearRefinementsConnectorParams,
   ClearRefinementsRenderState,
   ClearRefinementsWidgetDescription,
 } from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template } from '../../types';
+import type { Template as TemplateType } from '../../types';
 import type { WidgetFactory, Renderer } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'clear-refinements',
 });
-const suit = component('ClearRefinements');
 
-const renderer =
-  ({
-    containerNode,
-    cssClasses,
-    renderState,
-    templates,
-  }: {
-    containerNode: HTMLElement;
-    cssClasses: ClearRefinementsComponentCSSClasses;
-    renderState: {
-      templateProps?: PreparedTemplateProps<ClearRefinementsComponentTemplates>;
-    };
-    templates: ClearRefinementsTemplates;
-  }): Renderer<
-    ClearRefinementsRenderState,
-    Partial<ClearRefinementsWidgetParams>
-  > =>
-  ({ refine, canRefine }, isFirstRendering) => {
-    if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
-        defaultTemplates,
-        templates,
-      });
-      return;
-    }
-
-    render(
-      <ClearRefinements
-        refine={refine}
-        cssClasses={cssClasses}
-        canRefine={canRefine}
-        templateProps={renderState.templateProps!}
-      />,
-      containerNode
-    );
-  };
+const ClearRefinements = createClearRefinementsComponent({
+  createElement: h,
+  Fragment,
+});
 
 export type ClearRefinementsCSSClasses = Partial<{
   /**
@@ -88,7 +50,7 @@ export type ClearRefinementsTemplates = Partial<{
   /**
    * Template for the content of the button
    */
-  resetLabel: Template<{ canRefine: boolean }>;
+  resetLabel: TemplateType<{ canRefine: boolean }>;
 }>;
 
 export type ClearRefinementsWidgetParams = {
@@ -114,6 +76,46 @@ export type ClearRefinementsWidget = WidgetFactory<
   ClearRefinementsWidgetParams
 >;
 
+const renderer =
+  ({
+    containerNode,
+    classNames,
+    renderState,
+  }: {
+    containerNode: HTMLElement;
+    classNames: ClearRefinementsCSSClasses;
+    renderState: {
+      templateProps?: PreparedTemplateProps<
+        Required<ClearRefinementsTemplates>
+      >;
+    };
+  }): Renderer<
+    ClearRefinementsRenderState,
+    Partial<ClearRefinementsWidgetParams>
+  > =>
+  ({ refine, canRefine }, isFirstRendering) => {
+    if (isFirstRendering) {
+      return;
+    }
+
+    render(
+      <ClearRefinements
+        canRefine={canRefine}
+        onClick={refine}
+        classNames={classNames}
+        resetLabelComponent={({ canRefine }) => (
+          <Template
+            {...renderState.templateProps!}
+            rootTagName="fragment"
+            templateKey="resetLabel"
+            data={{ canRefine }}
+          />
+        )}
+      />,
+      containerNode
+    );
+  };
+
 const clearRefinements: ClearRefinementsWidget = (widgetParams) => {
   const {
     container,
@@ -130,32 +132,39 @@ const clearRefinements: ClearRefinementsWidget = (widgetParams) => {
 
   const containerNode = getContainerNode(container);
 
-  const cssClasses = {
-    root: cx(suit(), userCssClasses.root),
-    button: cx(suit({ descendantName: 'button' }), userCssClasses.button),
-    disabledButton: cx(
-      suit({ descendantName: 'button', modifierName: 'disabled' }),
-      userCssClasses.disabledButton
-    ),
+  const classNames: ClearRefinementsCSSClasses = {
+    root: userCssClasses.root,
+    button: userCssClasses.button,
+    disabledButton: userCssClasses.disabledButton,
+  };
+
+  const renderState: {
+    templateProps?: PreparedTemplateProps<Required<ClearRefinementsTemplates>>;
+  } = {
+    templateProps: prepareTemplateProps({
+      defaultTemplates,
+      templates,
+    }),
   };
 
   const specializedRenderer = renderer({
     containerNode,
-    cssClasses,
-    renderState: {},
-    templates,
+    classNames,
+    renderState,
   });
 
   const makeWidget = connectClearRefinements(specializedRenderer, () =>
     render(null, containerNode)
   );
 
+  const widget = makeWidget({
+    includedAttributes,
+    excludedAttributes,
+    transformItems,
+  });
+
   return {
-    ...makeWidget({
-      includedAttributes,
-      excludedAttributes,
-      transformItems,
-    }),
+    ...widget,
     $$widgetType: 'ais.clearRefinements',
   };
 };

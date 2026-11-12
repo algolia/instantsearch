@@ -1,11 +1,10 @@
 /** @jsx h */
 
 import { createDocumentationMessageGenerator } from 'instantsearch-core';
-import { suitComponent as component } from 'instantsearch-core';
-import { cx } from 'instantsearch-ui-components';
-import { h, render } from 'preact';
+import { createToggleRefinementComponent } from 'instantsearch-ui-components';
+import { Fragment, h, render } from 'preact';
 
-import ToggleRefinement from '../../components/ToggleRefinement/ToggleRefinement';
+import Template from '../../components/Template/Template';
 import { connectToggleRefinement } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
@@ -13,64 +12,22 @@ import { getContainerNode } from '../../lib/utils';
 import defaultTemplates from './defaultTemplates';
 
 import type {
-  ToggleRefinementComponentCSSClasses,
-  ToggleRefinementComponentTemplates,
-} from '../../components/ToggleRefinement/ToggleRefinement';
-import type {
   ToggleRefinementConnectorParams,
   ToggleRefinementWidgetDescription,
   ToggleRefinementRenderState,
 } from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template } from '../../types';
+import type { Template as TemplateType } from '../../types';
 import type { RendererOptions, WidgetFactory } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'toggle-refinement',
 });
-const suit = component('ToggleRefinement');
 
-const renderer =
-  ({
-    containerNode,
-    cssClasses,
-    renderState,
-    templates,
-  }: {
-    containerNode: HTMLElement;
-    cssClasses: ToggleRefinementComponentCSSClasses;
-    renderState: {
-      templateProps?: PreparedTemplateProps<ToggleRefinementComponentTemplates>;
-    };
-    templates: ToggleRefinementTemplates;
-  }) =>
-  (
-    {
-      value,
-      refine,
-    }: ToggleRefinementRenderState &
-      RendererOptions<ToggleRefinementConnectorParams>,
-    isFirstRendering: boolean
-  ) => {
-    if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
-        defaultTemplates,
-        templates,
-      });
-
-      return;
-    }
-
-    render(
-      <ToggleRefinement
-        cssClasses={cssClasses}
-        currentRefinement={value}
-        templateProps={renderState.templateProps!}
-        refine={refine}
-      />,
-      containerNode
-    );
-  };
+const ToggleRefinement = createToggleRefinementComponent({
+  createElement: h,
+  Fragment,
+});
 
 export type ToggleRefinementCSSClasses = Partial<{
   /**
@@ -95,7 +52,7 @@ export type ToggleRefinementTemplates = Partial<{
   /**
    * the text that describes the toggle action
    */
-  labelText: Template<ToggleRefinementRenderState['value']>;
+  labelText: TemplateType<ToggleRefinementRenderState['value']>;
 }>;
 
 export type ToggleRefinementWidgetParams = {
@@ -152,21 +109,22 @@ const toggleRefinement: ToggleRefinementWidget = function toggleRefinement(
 
   const containerNode = getContainerNode(container);
 
-  const cssClasses = {
-    root: cx(suit(), userCssClasses.root),
-    label: cx(suit({ descendantName: 'label' }), userCssClasses.label),
-    checkbox: cx(suit({ descendantName: 'checkbox' }), userCssClasses.checkbox),
-    labelText: cx(
-      suit({ descendantName: 'labelText' }),
-      userCssClasses.labelText
-    ),
+  const classNames: ToggleRefinementCSSClasses = {
+    root: userCssClasses.root,
+    label: userCssClasses.label,
+    checkbox: userCssClasses.checkbox,
+    labelText: userCssClasses.labelText,
   };
+
+  const templateProps = prepareTemplateProps({
+    defaultTemplates,
+    templates,
+  });
 
   const specializedRenderer = renderer({
     containerNode,
-    cssClasses,
-    renderState: {},
-    templates,
+    classNames,
+    templateProps,
   });
 
   const makeWidget = connectToggleRefinement(specializedRenderer, () =>
@@ -178,5 +136,46 @@ const toggleRefinement: ToggleRefinementWidget = function toggleRefinement(
     $$widgetType: 'ais.toggleRefinement',
   };
 };
+
+const renderer =
+  ({
+    containerNode,
+    classNames,
+    templateProps,
+  }: {
+    containerNode: HTMLElement;
+    classNames: ToggleRefinementCSSClasses;
+    templateProps: PreparedTemplateProps<Required<ToggleRefinementTemplates>>;
+  }) =>
+  (
+    {
+      value,
+      refine,
+    }: ToggleRefinementRenderState &
+      RendererOptions<ToggleRefinementConnectorParams>,
+    isFirstRendering: boolean
+  ) => {
+    if (isFirstRendering) {
+      return;
+    }
+
+    render(
+      <ToggleRefinement
+        classNames={classNames}
+        checked={value.isRefined}
+        labelTextComponent={({ value }) => (
+          <Template
+            {...templateProps}
+            rootTagName="fragment"
+            templateKey="labelText"
+            data={value}
+          />
+        )}
+        onChange={(isChecked) => refine({ isRefined: !isChecked })}
+        value={value}
+      />,
+      containerNode
+    );
+  };
 
 export default toggleRefinement;

@@ -1,6 +1,6 @@
-import type { ToggleRefinementComponentTemplates } from '../../components/ToggleRefinement/ToggleRefinement';
+import type { ToggleRefinementTemplates } from './toggle-refinement';
 
-const defaultTemplates: ToggleRefinementComponentTemplates = {
+const defaultTemplates: Required<ToggleRefinementTemplates> = {
   labelText({ name }) {
     return name;
   },
