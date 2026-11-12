@@ -1,6 +1,8 @@
 /** @jsx createElement */
 import { cx } from '../lib';
 
+import { createDefaultHitComponent } from './DefaultHit';
+
 import type { ComponentProps, Renderer, SendEventForHits } from '../types';
 import type { Banner } from 'algoliasearch-helper';
 
@@ -48,16 +50,22 @@ function createDefaultBannerComponent({ createElement }: Renderer) {
   };
 }
 
+export type HitsItemComponentProps<THit> = {
+  hit: THit;
+  index: number;
+  className: string;
+  onClick: () => void;
+  onAuxClick: () => void;
+  key?: string | number;
+};
+
 export type HitsProps<THit> = ComponentProps<'div'> & {
   hits: THit[];
-  itemComponent: (props: {
-    hit: THit;
-    index: number;
-    className: string;
-    onClick: () => void;
-    onAuxClick: () => void;
-    key?: string | number;
-  }) => JSX.Element;
+  /**
+   * Component to render each hit, including its `<li>` root.
+   * Defaults to a list item rendering the hit as JSON.
+   */
+  itemComponent?: (props: HitsItemComponentProps<THit>) => JSX.Element;
   sendEvent: SendEventForHits;
   classNames?: Partial<HitsClassNames>;
   emptyComponent?: (props: { className?: string }) => JSX.Element;
@@ -104,12 +112,25 @@ export function createHitsComponent({ createElement, Fragment }: Renderer) {
     createElement,
     Fragment,
   });
+  const DefaultHit = createDefaultHitComponent({ createElement, Fragment });
+
+  function DefaultItemComponent<THit extends Hit>({
+    hit,
+    index: _index,
+    ...rootProps
+  }: HitsItemComponentProps<THit>) {
+    return (
+      <li {...rootProps}>
+        <DefaultHit hit={hit} />
+      </li>
+    );
+  }
 
   return function Hits<THit extends Hit>(userProps: HitsProps<THit>) {
     const {
       classNames = {},
       hits,
-      itemComponent: ItemComponent,
+      itemComponent: ItemComponent = DefaultItemComponent,
       sendEvent,
       emptyComponent: EmptyComponent,
       banner,

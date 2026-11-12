@@ -67,8 +67,6 @@ const renderer =
       />
     );
 
-    // @MAJOR: Move default hit component back to the UI library
-    // once flavour specificities are erased
     const itemComponent: HitsUiComponentProps<Hit>['itemComponent'] = ({
       hit,
       index,
@@ -107,7 +105,7 @@ const renderer =
     render(
       <Hits
         hits={items}
-        itemComponent={itemComponent}
+        itemComponent={templates.item === undefined ? undefined : itemComponent}
         sendEvent={sendEvent}
         classNames={cssClasses}
         emptyComponent={emptyComponent}
@@ -132,7 +130,7 @@ export type HitsTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * Template to use for each result. This template will receive an object containing a single record.
      *
-     * @default ''
+     * When not provided, each hit is rendered as JSON.
      */
     item: TemplateWithSendEvent<
       Hit<THit> & {
