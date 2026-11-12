@@ -10,11 +10,12 @@ import { createComparisonTableTool } from '../chat/tools';
 jest.unmock('instantsearch-core');
 
 /**
- * The grounded comparison-table tool (`algolia_display_results` v2
- * `markdownTable` path), mirroring react-instantsearch's
- * `ComparisonTableTool.grounding.test.tsx`: the agent supplies only the
- * objectIDs and the attribute KEYS — every cell is hydrated from the chat
- * records store, so the model cannot type (and cannot hallucinate) a value.
+ * The grounded comparison-table tool's `markdownTable` path: the agent
+ * supplies only the objectIDs and the attribute KEYS — every cell is
+ * hydrated from the chat records store, so the model cannot type (and cannot
+ * hallucinate) a value. The renderer reads the message's output block, so the
+ * tool key it is registered under is irrelevant here; the legacy
+ * `algolia_display_results` key is used as in the eval study's wire shape.
  */
 const buildComparisonContext = (searchHits, table) => {
   const message = {
