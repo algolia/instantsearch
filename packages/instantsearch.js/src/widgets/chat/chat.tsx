@@ -89,6 +89,7 @@ export {
   CompareProductsToolType,
   GroupedResultsToolType,
 };
+export { createComparisonTableTool } from './comparison-table-tool';
 
 // Legacy name of the grouped-results tool, still emitted by agents configured
 // before the rename.
