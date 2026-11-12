@@ -1,5 +1,4 @@
 import type InstantSearch from '../instantsearch';
-import type { InsightsClient } from './insights';
 import type { Hit } from './results';
 import type { UnknownWidgetParams, Widget, WidgetDescription } from './widget';
 import type { SearchResults } from 'algoliasearch-helper';
@@ -30,11 +29,6 @@ export type RendererOptions<TWidgetParams> = {
    * of the given transform items function.
    */
   hits?: Hit[];
-
-  /**
-   * The current insights client, if any.
-   */
-  insights?: InsightsClient;
 };
 
 /**
