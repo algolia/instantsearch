@@ -4472,6 +4472,8 @@ __metadata:
   dependencies:
     instantsearch-core: "npm:0.1.0"
     instantsearch.js: "npm:4.123.0"
+    react-instantsearch: "npm:7.55.0"
+    vue-instantsearch: "npm:4.33.0"
   languageName: unknown
   linkType: soft
 
