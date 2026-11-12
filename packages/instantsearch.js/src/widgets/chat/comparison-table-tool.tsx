@@ -8,7 +8,7 @@ import type { ClientSideToolComponentProps } from 'instantsearch-core';
 import type { ComparisonTableTranslations } from 'instantsearch-ui-components';
 
 /**
- * Grounded comparison-table tool (`algolia_display_results` v2
+ * Grounded comparison-table tool (the `algolia_compare_products` tool's v2
  * `markdownTable` path) — Preact flavor.
  *
  * The agent emits a v2 `markdownTable` display block that names only the
@@ -18,9 +18,9 @@ import type { ComparisonTableTranslations } from 'instantsearch-ui-components';
  * (and therefore cannot hallucinate) a price or spec. See
  * `instantsearch-ui-components` `ComparisonTableTool` for the contract.
  *
- * Register it over the default grouped-results rendering (or a dedicated key)
- * through the chat widget's `tools` option to have comparison answers
- * rendered as a grounded table.
+ * Register it under the tool key the agent emits the block for (by default
+ * `CompareProductsToolType`) through the chat widget's `tools` option to have
+ * comparison answers rendered as a grounded table.
  */
 export function createComparisonTableTool(
   translations?: Partial<ComparisonTableTranslations>
