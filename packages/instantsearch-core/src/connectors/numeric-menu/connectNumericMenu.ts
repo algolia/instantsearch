@@ -1,7 +1,6 @@
 import {
   checkRendering,
   createDocumentationMessageGenerator,
-  isFiniteNumber,
   noop,
 } from '../../lib/utils';
 
@@ -266,11 +265,11 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
 
         const [min, max] = value.split(':').map(parseFloat);
 
-        const withMinRefinement = isFiniteNumber(min)
+        const withMinRefinement = Number.isFinite(min)
           ? withoutRefinements.addNumericRefinement(attribute, '>=', min)
           : withoutRefinements;
 
-        const withMaxRefinement = isFiniteNumber(max)
+        const withMaxRefinement = Number.isFinite(max)
           ? withMinRefinement.addNumericRefinement(attribute, '<=', max)
           : withMinRefinement;
 

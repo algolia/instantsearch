@@ -1,8 +1,6 @@
 import {
   checkRendering,
   createDocumentationMessageGenerator,
-  isFiniteNumber,
-  find,
   noop,
 } from '../../lib/utils';
 
@@ -17,6 +15,10 @@ const withUsage = createDocumentationMessageGenerator(
 );
 
 const $$type = 'ais.range';
+
+// `Number.isFinite` is not a type guard, so wrap it to keep narrowing.
+const isFiniteNumber = (value: unknown): value is number =>
+  Number.isFinite(value);
 
 export type RangeMin = number | undefined;
 export type RangeMax = number | undefined;
@@ -356,8 +358,7 @@ const connectRange: RangeConnector = function connectRange(
 
       getWidgetRenderState({ results, helper, instantSearchInstance }) {
         const facetsFromResults = (results && results.disjunctiveFacets) || [];
-        const facet = find(
-          facetsFromResults,
+        const facet = facetsFromResults.find(
           (facetResult) => facetResult.name === attribute
         );
         const stats = (facet && facet.stats) || {
