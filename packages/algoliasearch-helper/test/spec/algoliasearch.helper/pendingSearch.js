@@ -5,39 +5,6 @@ algoliasearch = algoliasearch.algoliasearch || algoliasearch;
 
 var algoliasearchHelper = require('../../../index');
 
-test('When searchOnce with promises, hasPendingRequests is true', function (done) {
-  var testData = require('../../datasets/SearchParameters/search.dataset')();
-  var client = algoliasearch('dsf', 'dsfdf');
-
-  var triggerCb;
-  client.search = function () {
-    return new Promise(function (resolve) {
-      triggerCb = function () {
-        resolve(testData.response);
-      };
-    });
-  };
-
-  var helper = algoliasearchHelper(client, 'test_hotels-node');
-  var countNoMoreSearch = 0;
-  helper.on('searchQueueEmpty', function () {
-    countNoMoreSearch += 1;
-  });
-
-  expect(helper.hasPendingRequests()).toBe(false);
-
-  helper.searchOnce(helper.state).then(function () {
-    expect(helper.hasPendingRequests()).toBe(false);
-    expect(countNoMoreSearch).toBe(1);
-    done();
-  });
-
-  expect(helper.hasPendingRequests()).toBe(true);
-  expect(countNoMoreSearch).toBe(0);
-
-  triggerCb();
-});
-
 test('When searchForFacetValues, hasPendingRequests is true', function (done) {
   var client = algoliasearch('dsf', 'dsfdf');
 
@@ -153,18 +120,8 @@ test('When helper.search() and one request is discarded, hasPendingRequests is t
     expect(countNoMoreSearch).toBe(0);
   });
 
-  helper
-    .searchOnce({})
-    .then(function () {
-      expect(helper.hasPendingRequests()).toBe(false);
-      expect(countNoMoreSearch).toBe(1);
-    })
-    .catch(done);
-
   // The third search returns from Algolia
   triggerCbs[2]();
-  // The searchOnce should not be impacted
-  triggerCbs[3]();
   triggerCbs[0]();
   // this will be ignored and it won't change anything
 

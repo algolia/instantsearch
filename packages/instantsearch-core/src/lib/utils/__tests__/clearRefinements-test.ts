@@ -12,7 +12,7 @@ const initHelperWithRefinements = () => {
 
   helper.toggleFacetRefinement('conjFacet', 'value');
   helper.toggleFacetRefinement('disjFacet', 'otherValue');
-  helper.toggleTag('taG');
+  helper.state = helper.state.addTagRefinement('taG');
 
   helper.setQuery('a query');
 

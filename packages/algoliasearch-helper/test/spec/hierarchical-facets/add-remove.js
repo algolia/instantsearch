@@ -20,7 +20,7 @@ test('hierarchical facets: add a facet -> set page to 0, trigger change', functi
   }).setPage(2);
 
   helper.once('change', function () {
-    expect(helper.getPage()).toBe(0);
+    expect(helper.state.page).toBe(0);
     expect(helper.getHierarchicalFacetBreadcrumb('categories')).toEqual([
       'men',
     ]);
@@ -49,7 +49,7 @@ test('hierarchical facets: remove a facet -> set page to 0, trigger change', fun
     .addHierarchicalFacetRefinement('categories', 'men');
 
   helper.once('change', function () {
-    expect(helper.getPage()).toBe(0);
+    expect(helper.state.page).toBe(0);
     expect(helper.getHierarchicalFacetBreadcrumb('categories')).toEqual([]);
   });
 

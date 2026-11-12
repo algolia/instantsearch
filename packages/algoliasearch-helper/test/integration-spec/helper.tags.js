@@ -44,19 +44,25 @@ test('[INT][TAGS]Test tags operations on the helper and their results on the alg
     if (calls === 1) {
       expect(results.hits.length).toBe(4);
       expect(results.hits.map(hitsToParsedID).sort()).toEqual([0, 1, 2, 3]);
-      helper.addTag('t1').search();
+      helper.state = helper.state.addTagRefinement('t1');
+      helper.search();
     }
 
     if (calls === 2) {
       expect(results.hits.length).toBe(2);
       expect(results.hits.map(hitsToParsedID).sort()).toEqual([0, 1]);
-      helper.addTag('t2').search();
+      helper.state = helper.state.addTagRefinement('t2');
+      helper.search();
     }
 
     if (calls === 3) {
       expect(results.hits.length).toBe(1);
       expect(results.hits.map(hitsToParsedID).sort()).toEqual([0]);
-      helper.removeTag('t2').toggleTag('t3').toggleTag('t1').search();
+      helper.state = helper.state
+        .removeTagRefinement('t2')
+        .addTagRefinement('t3')
+        .removeTagRefinement('t1');
+      helper.search();
     }
 
     if (calls === 4) {

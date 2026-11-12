@@ -518,58 +518,6 @@ SearchParameters.prototype = {
     });
   },
   /**
-   * Facets setter
-   * The facets are the simple facets, used for conjunctive (and) faceting.
-   * @method
-   * @param {string[]} facets all the attributes of the algolia records used for conjunctive faceting
-   * @return {SearchParameters} new instance
-   */
-  setFacets: function setFacets(facets) {
-    return this.setQueryParameters({
-      facets: facets,
-    });
-  },
-  /**
-   * Disjunctive facets setter
-   * Change the list of disjunctive (or) facets the helper chan handle.
-   * @method
-   * @param {string[]} facets all the attributes of the algolia records used for disjunctive faceting
-   * @return {SearchParameters} new instance
-   */
-  setDisjunctiveFacets: function setDisjunctiveFacets(facets) {
-    return this.setQueryParameters({
-      disjunctiveFacets: facets,
-    });
-  },
-  /**
-   * HitsPerPage setter
-   * Hits per page represents the number of hits retrieved for this query
-   * @method
-   * @param {number} n number of hits retrieved per page of results
-   * @return {SearchParameters} new instance
-   */
-  setHitsPerPage: function setHitsPerPage(n) {
-    if (this.hitsPerPage === n) return this;
-
-    return this.setQueryParameters({
-      hitsPerPage: n,
-    });
-  },
-  /**
-   * typoTolerance setter
-   * Set the value of typoTolerance
-   * @method
-   * @param {string} typoTolerance new value of typoTolerance ("true", "false", "min" or "strict")
-   * @return {SearchParameters} new instance
-   */
-  setTypoTolerance: function setTypoTolerance(typoTolerance) {
-    if (this.typoTolerance === typoTolerance) return this;
-
-    return this.setQueryParameters({
-      typoTolerance: typoTolerance,
-    });
-  },
-  /**
    * Add a numeric filter for a given attribute
    * When value is an array, they are combined with OR
    * When value is a single value, it will combined with AND
@@ -639,17 +587,6 @@ SearchParameters.prototype = {
     // we send an array but we currently do not support multiple
     // hierarchicalRefinements for a hierarchicalFacet
     return this.hierarchicalFacetsRefinements[facetName] || [];
-  },
-  /**
-   * Get the list of exclude refinements for a single facet
-   * @param {string} facetName name of the attribute used for faceting
-   * @return {string[]} list of refinements
-   */
-  getExcludeRefinements: function (facetName) {
-    if (!this.isConjunctiveFacet(facetName)) {
-      return [];
-    }
-    return this.facetsExcludes[facetName] || [];
   },
 
   /**
@@ -853,31 +790,6 @@ SearchParameters.prototype = {
     });
   },
   /**
-   * Exclude a value from a "normal" facet
-   * @method
-   * @param {string} facet attribute to apply the exclusion on
-   * @param {string} value value of the attribute (will be converted to string)
-   * @return {SearchParameters} new instance
-   */
-  addExcludeRefinement: function addExcludeRefinement(facet, value) {
-    if (!this.isConjunctiveFacet(facet)) {
-      throw new Error(
-        facet +
-          ' is not defined in the facets attribute of the helper configuration'
-      );
-    }
-    if (RefinementList.isRefined(this.facetsExcludes, facet, value))
-      return this;
-
-    return this.setQueryParameters({
-      facetsExcludes: RefinementList.addRefinement(
-        this.facetsExcludes,
-        facet,
-        value
-      ),
-    });
-  },
-  /**
    * Adds a refinement on a disjunctive facet.
    * @method
    * @param {string} facet attribute to apply the faceting on
@@ -921,42 +833,6 @@ SearchParameters.prototype = {
     };
 
     return this.setQueryParameters(modification);
-  },
-  /**
-   * Remove a facet from the facets attribute of the helper configuration, if it
-   * is present.
-   * @method
-   * @param {string} facet facet name to remove
-   * @return {SearchParameters} new instance
-   */
-  removeFacet: function removeFacet(facet) {
-    if (!this.isConjunctiveFacet(facet)) {
-      return this;
-    }
-
-    return this.clearRefinements(facet).setQueryParameters({
-      facets: this.facets.filter(function (f) {
-        return f !== facet;
-      }),
-    });
-  },
-  /**
-   * Remove a disjunctive facet from the disjunctiveFacets attribute of the
-   * helper configuration, if it is present.
-   * @method
-   * @param {string} facet disjunctive facet name to remove
-   * @return {SearchParameters} new instance
-   */
-  removeDisjunctiveFacet: function removeDisjunctiveFacet(facet) {
-    if (!this.isDisjunctiveFacet(facet)) {
-      return this;
-    }
-
-    return this.clearRefinements(facet).setQueryParameters({
-      disjunctiveFacets: this.disjunctiveFacets.filter(function (f) {
-        return f !== facet;
-      }),
-    });
   },
   /**
    * Remove a hierarchical facet from the hierarchicalFacets attribute of the
@@ -1280,19 +1156,6 @@ SearchParameters.prototype = {
     });
   },
   /**
-   * Switch the tag refinement
-   * @method
-   * @param {string} tag the tag to remove or add
-   * @return {SearchParameters} new instance
-   */
-  toggleTagRefinement: function toggleTagRefinement(tag) {
-    if (this.isTagRefined(tag)) {
-      return this.removeTagRefinement(tag);
-    }
-
-    return this.addTagRefinement(tag);
-  },
-  /**
    * Test if the facet name is from one of the disjunctive facets
    * @method
    * @param {string} facet facet name to test
@@ -1480,18 +1343,6 @@ SearchParameters.prototype = {
         return self.hierarchicalFacetsRefinements[facet].length > 0;
       })
     ).sort();
-  },
-  /**
-   * Returned the list of all disjunctive facets not refined
-   * @method
-   * @return {string[]} returns the list of facets that are not refined
-   */
-  getUnrefinedDisjunctiveFacets: function () {
-    var refinedFacets = this.getRefinedDisjunctiveFacets();
-
-    return this.disjunctiveFacets.filter(function (f) {
-      return refinedFacets.indexOf(f) === -1;
-    });
   },
 
   managedParameters: [

@@ -42,7 +42,7 @@ describe('getRefinements', () => {
   });
 
   it('should retrieve one tag', () => {
-    helper.addTag('tag1');
+    helper.state = helper.state.addTagRefinement('tag1');
 
     expect(getRefinements(results, helper.state)).toEqual([
       { type: 'tag', attribute: '_tags', name: 'tag1' },
@@ -50,7 +50,9 @@ describe('getRefinements', () => {
   });
 
   it('should retrieve multiple tags', () => {
-    helper.addTag('tag1').addTag('tag2');
+    helper.state = helper.state
+      .addTagRefinement('tag1')
+      .addTagRefinement('tag2');
 
     expect(getRefinements(results, helper.state)).toEqual([
       { type: 'tag', attribute: '_tags', name: 'tag1' },
@@ -193,7 +195,10 @@ describe('getRefinements', () => {
   });
 
   it('should retrieve one facetExclude', () => {
-    helper.toggleFacetExclusion('facet1', 'facet1exclude1');
+    helper.state = helper.state.toggleExcludeFacetRefinement(
+      'facet1',
+      'facet1exclude1'
+    );
 
     expect(getRefinements(results, helper.state)).toEqual([
       {
@@ -206,9 +211,9 @@ describe('getRefinements', () => {
   });
 
   it('should retrieve multiple facetsExcludes on one facet', () => {
-    helper
-      .toggleFacetExclusion('facet1', 'facet1exclude1')
-      .toggleFacetExclusion('facet1', 'facet1exclude2');
+    helper.state = helper.state
+      .toggleExcludeFacetRefinement('facet1', 'facet1exclude1')
+      .toggleExcludeFacetRefinement('facet1', 'facet1exclude2');
 
     expect(getRefinements(results, helper.state)).toEqual([
       {
@@ -227,10 +232,10 @@ describe('getRefinements', () => {
   });
 
   it('should retrieve multiple facetsExcludes on multiple facets', () => {
-    helper
-      .toggleFacetExclusion('facet1', 'facet1exclude1')
-      .toggleFacetExclusion('facet1', 'facet1exclude2')
-      .toggleFacetExclusion('facet2', 'facet2exclude1');
+    helper.state = helper.state
+      .toggleExcludeFacetRefinement('facet1', 'facet1exclude1')
+      .toggleExcludeFacetRefinement('facet1', 'facet1exclude2')
+      .toggleExcludeFacetRefinement('facet2', 'facet2exclude1');
 
     expect(getRefinements(results, helper.state)).toEqual([
       {

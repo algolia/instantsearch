@@ -110,18 +110,18 @@ test('[Exclude] Facets should be resilient to user attempt to use numbers', func
     disjunctiveFacets: ['facet2'],
   });
 
-  helper.addFacetExclusion('facet1', 42);
-  expect(helper.isExcluded('facet1', 42)).toBe(true);
-  expect(helper.isExcluded('facet1', '42')).toBe(true);
+  helper.setState(helper.state.toggleExcludeFacetRefinement('facet1', 42));
+  expect(helper.state.isExcludeRefined('facet1', 42)).toBe(true);
+  expect(helper.state.isExcludeRefined('facet1', '42')).toBe(true);
 
   var stateWithFacet1Without42 = helper.state;
 
-  helper.removeFacetExclusion('facet1', '42');
-  expect(helper.isExcluded('facet1', '42')).toBe(false);
+  helper.setState(helper.state.removeExcludeRefinement('facet1', '42'));
+  expect(helper.state.isExcludeRefined('facet1', '42')).toBe(false);
 
   helper.setState(stateWithFacet1Without42);
-  helper.removeFacetExclusion('facet1', 42);
-  expect(helper.isExcluded('facet1', 42)).toBe(false);
+  helper.setState(helper.state.removeExcludeRefinement('facet1', 42));
+  expect(helper.state.isExcludeRefined('facet1', 42)).toBe(false);
 });
 
 test('[Disjunctive] Facets should be resilient to user attempt to use numbers', function () {

@@ -122,15 +122,10 @@ describe('recommend()', () => {
     var helper = algoliasearchHelper(client, 'indexName', {});
 
     helper.addFrequentlyBoughtTogether({ $$id: 1 });
-    helper.removeFrequentlyBoughtTogether(1);
     helper.addRelatedProducts({ $$id: 2 });
-    helper.removeRelatedProducts(2);
     helper.addTrendingItems({ $$id: 3 });
-    helper.removeTrendingItems(3);
     helper.addTrendingFacets({ $$id: 4 });
-    helper.removeTrendingFacets(4);
     helper.addLookingSimilar({ $$id: 5 });
-    helper.removeLookingSimilar(5);
 
     expect(client.getRecommendations).not.toHaveBeenCalled();
 

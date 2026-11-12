@@ -23,8 +23,7 @@ function fixture() {
     .toggleFacetRefinement('facet2', '0')
     .toggleFacetRefinement('disjunctiveFacet1', '0')
     .toggleFacetRefinement('disjunctiveFacet2', '0')
-    .toggleFacetExclusion('excluded1', '0')
-    .toggleFacetExclusion('excluded2', '0')
+    .setQueryParameter('facetsExcludes', { excluded1: ['0'], excluded2: ['0'] })
     .addHierarchicalFacetRefinement('hierarchy1', '0')
     .addHierarchicalFacetRefinement('hierarchy2', '0')
     .addNumericRefinement('numeric1', '>=', '0')
@@ -79,7 +78,11 @@ test('Clearing the same field from multiple elements should remove it everywhere
 
   helper
     .addNumericRefinement('facet1', '>=', '10')
-    .toggleFacetExclusion('facet1', 'value');
+    .setQueryParameter('facetsExcludes', {
+      excluded1: ['0'],
+      excluded2: ['0'],
+      facet1: ['value'],
+    });
 
   expect(helper.state.facetsRefinements.facet1).toEqual(['0']);
   expect(helper.state.numericRefinements.facet1).toEqual({ '>=': [10] });

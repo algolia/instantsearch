@@ -59,9 +59,4 @@ describe.each([
     expect(helper.recommendState.params).toHaveLength(1);
     expect(helper.recommendState.params).toEqual([{ $$id: '1', model }]);
   });
-
-  test(`remove${method} removes the parameters by $$id`, () => {
-    helper[`remove${method}`](params.$$id);
-    expect(helper.recommendState.params).toHaveLength(0);
-  });
 });

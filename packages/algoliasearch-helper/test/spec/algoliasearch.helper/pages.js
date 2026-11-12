@@ -7,11 +7,11 @@ var fakeClient = {};
 test('setChange should change the current page', function () {
   var helper = algoliasearchHelper(fakeClient, null, null);
 
-  expect(helper.getPage()).toBeUndefined();
+  expect(helper.state.page).toBeUndefined();
 
   helper.setPage(3);
 
-  expect(helper.getPage()).toBe(3);
+  expect(helper.state.page).toBe(3);
 });
 
 test('setPage should throw an error when the page is below 0', function () {
@@ -34,8 +34,8 @@ test('pages should be reset if the mutation might change the number of pages', f
     ['addNumericRefinement', 'facet', '>', '2'],
     ['removeNumericRefinement', 'facet', '>'],
 
-    ['addFacetExclusion', 'facet1', 'val2'],
-    ['removeFacetExclusion', 'facet1', 'val2'],
+    ['setQueryParameter', 'facetsExcludes', { facet1: ['val2'] }],
+    ['setQueryParameter', 'facetsExcludes', {}],
 
     ['addFacetRefinement', 'f2', 'val'],
     ['removeFacetRefinement', 'f2', 'val'],
@@ -44,14 +44,14 @@ test('pages should be reset if the mutation might change the number of pages', f
     ['removeDisjunctiveFacetRefinement', 'f1', 'val'],
 
     ['toggleFacetRefinement', 'f1', 'v1'],
-    ['toggleFacetExclusion', 'facet1', '55'],
+    ['setQueryParameter', 'facetsExcludes', { facet1: ['55'] }],
   ].forEach(function ([fn, ...args]) {
     helper.setPage(10);
 
-    expect(helper.getPage()).toBe(10);
+    expect(helper.state.page).toBe(10);
 
     helper[fn](...args);
 
-    expect(helper.getPage()).toBe(0);
+    expect(helper.state.page).toBe(0);
   });
 });

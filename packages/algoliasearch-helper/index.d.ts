@@ -82,10 +82,6 @@ declare namespace algoliasearchHelper {
       }) => void
     ): this;
     on(
-      event: 'searchOnce',
-      cb: (res: { state: SearchParameters }) => void
-    ): this;
-    on(
       event: 'result',
       cb: (res: { results: SearchResults; state: SearchParameters }) => void
     ): this;
@@ -127,33 +123,6 @@ declare namespace algoliasearchHelper {
      * for the hits
      */
     getQuery(): SearchOptions;
-
-    /**
-     * Start a search using a modified version of the current state. This method does
-     * not trigger the helper lifecycle and does not modify the state kept internally
-     * by the helper. This second aspect means that the next search call will be the
-     * same as a search call before calling searchOnce.
-     * @param options can contain all the parameters that can be set to SearchParameters
-     * plus the index
-     * @return a promise containing an object with two keys :
-     *  - content with a SearchResults
-     *  - state with the state used for the query as a SearchParameters
-     * @example
-     * // Changing the number of records returned per page to 1
-     * var state1 = helper.searchOnce({hitsPerPage: 1})
-     *                 .then(promiseHandler);
-     *
-     * function promiseHandler(res) {
-     *   // res contains
-     *   // {
-     *   //   content : SearchResults
-     *   //   state   : SearchParameters (the one used for this specific search)
-     *   // }
-     * }
-     */
-    searchOnce(
-      options: PlainSearchParameters
-    ): Promise<{ content: SearchResults; state: SearchParameters }>;
 
     /**
      * Search for facet values based on an query and the name of a faceted attribute. This
@@ -263,8 +232,6 @@ declare namespace algoliasearchHelper {
       value?: number | number[]
     ): this;
     addFacetRefinement(facet: string, value: string): this;
-    addFacetExclusion(facet: string, value: string): this;
-    addTag(tag: string): this;
     addFrequentlyBoughtTogether(
       params: RecommendParametersWithId<FrequentlyBoughtTogetherQuery>
     ): this;
@@ -288,16 +255,7 @@ declare namespace algoliasearchHelper {
     removeDisjunctiveFacetRefinement(facet: string, value?: string): this;
     removeHierarchicalFacetRefinement(facet: string): this;
     removeFacetRefinement(facet: string, value?: string): this;
-    removeFacetExclusion(facet: string, value: string): this;
-    removeTag(value: string): this;
-    removeFrequentlyBoughtTogether(id: number): this;
-    removeRelatedProducts(id: number): this;
-    removeTrendingItems(id: number): this;
-    removeTrendingFacets(id: number): this;
-    removeLookingSimilar(id: number): this;
-    toggleFacetExclusion(facet: string, value: string): this;
     toggleFacetRefinement(facet: string, value: string): this;
-    toggleTag(tag: string): this;
     setPage(page: number): this;
     setQueryParameter<SearchParameter extends keyof PlainSearchParameters>(
       parameter: SearchParameter,
@@ -314,11 +272,7 @@ declare namespace algoliasearchHelper {
     setState(newState: PlainSearchParameters): this;
 
     overrideStateWithoutTriggeringChangeEvent: AlgoliaSearchHelper['setState'];
-    isExcluded: SearchParameters['isExcludeRefined'];
-    hasTag: SearchParameters['isTagRefined'];
     getIndex(): string;
-    getPage(): number;
-    getTags(): string[];
     getNumericRefinement: SearchParameters['getNumericRefinement'];
     getHierarchicalFacetBreadcrumb: SearchParameters['getHierarchicalFacetBreadcrumb'];
     clearCache(): this;
@@ -524,7 +478,6 @@ declare namespace algoliasearchHelper {
       value: string
     ): SearchParameters;
     /* Exclude a value from a "normal" facet */
-    addExcludeRefinement(facet: string, value: string): SearchParameters;
     /* Add a facet to the facets attribute of the helper configuration, if it isn't already present. */
     addFacet(facet: string): SearchParameters;
     /* Add a refinement on a "normal" facet */
@@ -550,7 +503,6 @@ declare namespace algoliasearchHelper {
     clearTags(): SearchParameters;
     getConjunctiveRefinements(facetName: string): string[];
     getDisjunctiveRefinements(facetName: string): string[];
-    getExcludeRefinements(facetName: string): string[];
     getHierarchicalFacetBreadcrumb(facetName: string): string[];
     getHierarchicalFacetByName(hierarchicalFacetName: string): any;
     getHierarchicalRefinement(facetName: string): string[];
@@ -562,7 +514,6 @@ declare namespace algoliasearchHelper {
     getQueryParams(): SearchOptions;
     getRefinedDisjunctiveFacets(facet: string, value: any): string[];
     getRefinedHierarchicalFacets(facet: string, value: any): string[];
-    getUnrefinedDisjunctiveFacets(): string[];
     isConjunctiveFacet(facet: string): boolean;
     isDisjunctiveFacetRefined(facet: string, value?: string): boolean;
     isDisjunctiveFacet(facet: string): boolean;
@@ -578,9 +529,7 @@ declare namespace algoliasearchHelper {
     isTagRefined(tag: string): boolean;
     static make(newParameters: PlainSearchParameters): SearchParameters;
     removeExcludeRefinement(facet: string, value: string): SearchParameters;
-    removeFacet(facet: string): SearchParameters;
     removeFacetRefinement(facet: string, value?: string): SearchParameters;
-    removeDisjunctiveFacet(facet: string): SearchParameters;
     removeDisjunctiveFacetRefinement(
       facet: string,
       value?: string
@@ -594,9 +543,6 @@ declare namespace algoliasearchHelper {
     ): SearchParameters;
     removeTagRefinement(tag: string): SearchParameters;
     resetPage(): SearchParameters;
-    setDisjunctiveFacets(facets: string[]): SearchParameters;
-    setFacets(facets: string[]): SearchParameters;
-    setHitsPerPage(n: number): SearchParameters;
     setIndex(index: string): SearchParameters;
     setPage(newPage: number): SearchParameters;
     setQueryParameters(params: PlainSearchParameters): SearchParameters;
@@ -605,7 +551,6 @@ declare namespace algoliasearchHelper {
       value: PlainSearchParameters[SearchParameter]
     ): SearchParameters;
     setQuery(newQuery: string): SearchParameters;
-    setTypoTolerance(typoTolerance: string): SearchParameters;
     toggleDisjunctiveFacetRefinement(
       facet: string,
       value: any
@@ -620,7 +565,6 @@ declare namespace algoliasearchHelper {
       value: any
     ): SearchParameters;
     toggleFacetRefinement(facet: string, value: any): SearchParameters;
-    toggleTagRefinement(tag: string): SearchParameters;
     static validate(
       currentState: SearchParameters,
       parameters: PlainSearchParameters
@@ -1413,7 +1357,6 @@ declare namespace algoliasearchHelper {
      * @param attribute name of the faceted attribute
      * @return The stats of the facet
      */
-    getFacetStats(attribute: string): any;
 
     /** Ordered array of per-feed results, present when results come from a multifeed composition response. */
     feeds?: CompositionSearchResults[];

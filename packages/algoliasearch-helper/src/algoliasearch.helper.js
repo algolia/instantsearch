@@ -192,60 +192,6 @@ AlgoliaSearchHelper.prototype.getQuery = function () {
   return requestBuilder._getHitsSearchParams(state);
 };
 
-/**
- * Start a search using a modified version of the current state. This method does
- * not trigger the helper lifecycle and does not modify the state kept internally
- * by the helper. This second aspect means that the next search call will be the
- * same as a search call before calling searchOnce.
- * @param {object} options can contain all the parameters that can be set to SearchParameters
- * plus the index
- * @return {promise} a promise containing an object with two keys :
- *  - content with a SearchResults
- *  - state with the state used for the query as a SearchParameters
- * @example
- * // Changing the number of records returned per page to 1
- * var state1 = helper.searchOnce({hitsPerPage: 1})
- *                 .then(promiseHandler);
- *
- * function promiseHandler(res) {
- *   // res contains
- *   // {
- *   //   content : SearchResults
- *   //   state   : SearchParameters (the one used for this specific search)
- *   // }
- * }
- */
-AlgoliaSearchHelper.prototype.searchOnce = function (options) {
-  var tempState = !options
-    ? this.state
-    : this.state.setQueryParameters(options);
-  var queries = requestBuilder._getQueries(tempState.index, tempState);
-  // eslint-disable-next-line consistent-this
-  var self = this;
-
-  this._currentNbQueries++;
-
-  this.emit('searchOnce', {
-    state: tempState,
-  });
-
-  return this.client.search(queries).then(
-    function (content) {
-      self._currentNbQueries--;
-      if (self._currentNbQueries === 0) self.emit('searchQueueEmpty');
-      return {
-        content: new SearchResults(tempState, content.results),
-        state: tempState,
-        _originalResponse: content,
-      };
-    },
-    function (e) {
-      self._currentNbQueries--;
-      if (self._currentNbQueries === 0) self.emit('searchQueueEmpty');
-      throw e;
-    }
-  );
-};
 
 /**
  * Structure of each result when using
@@ -598,44 +544,7 @@ AlgoliaSearchHelper.prototype.addFacetRefinement = function (facet, value) {
   return this;
 };
 
-/**
- * Adds a an exclusion filter to a faceted attribute with the `value` provided. If the
- * filter is already set, it doesn't change the filters.
- *
- * This method resets the current page to 0.
- * @param  {string} facet the facet to refine
- * @param  {string} value the associated value (will be converted to string)
- * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
- * @fires change
- * @chainable
- */
-AlgoliaSearchHelper.prototype.addFacetExclusion = function (facet, value) {
-  this._change({
-    state: this.state.resetPage().addExcludeRefinement(facet, value),
-    isPageReset: true,
-  });
 
-  return this;
-};
-
-/**
- * Adds a tag filter with the `tag` provided. If the
- * filter is already set, it doesn't change the filters.
- *
- * This method resets the current page to 0.
- * @param {string} tag the tag to add to the filter
- * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
- * @fires change
- * @chainable
- */
-AlgoliaSearchHelper.prototype.addTag = function (tag) {
-  this._change({
-    state: this.state.resetPage().addTagRefinement(tag),
-    isPageReset: true,
-  });
-
-  return this;
-};
 
 /**
  * Adds a "frequently bought together" recommendation query.
@@ -820,147 +729,13 @@ AlgoliaSearchHelper.prototype.removeFacetRefinement = function (facet, value) {
   return this;
 };
 
-/**
- * Removes an exclusion filter to a faceted attribute with the `value` provided. If the
- * filter is not set, it doesn't change the filters.
- *
- * If the value is omitted, then this method will remove all the filters for the
- * attribute.
- *
- * This method resets the current page to 0.
- * @param  {string} facet the facet to refine
- * @param  {string} [value] the associated value
- * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
- * @fires change
- * @chainable
- */
-AlgoliaSearchHelper.prototype.removeFacetExclusion = function (facet, value) {
-  this._change({
-    state: this.state.resetPage().removeExcludeRefinement(facet, value),
-    isPageReset: true,
-  });
 
-  return this;
-};
 
-/**
- * Removes a tag filter with the `tag` provided. If the
- * filter is not set, it doesn't change the filters.
- *
- * This method resets the current page to 0.
- * @param {string} tag tag to remove from the filter
- * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
- * @fires change
- * @chainable
- */
-AlgoliaSearchHelper.prototype.removeTag = function (tag) {
-  this._change({
-    state: this.state.resetPage().removeTagRefinement(tag),
-    isPageReset: true,
-  });
 
-  return this;
-};
 
-/**
- * Removes a "frequently bought together" recommendation query.
- *
- * @param {number} id identifier of the recommendation widget
- * @returns {AlgoliaSearchHelper} Method is chainable, it returns itself
- * @fires change
- * @chainable
- */
-AlgoliaSearchHelper.prototype.removeFrequentlyBoughtTogether = function (id) {
-  this._recommendChange({
-    state: this.recommendState.removeParams(id),
-  });
 
-  return this;
-};
 
-/**
- * Removes a "related products" recommendation query.
- *
- * @param {number} id identifier of the recommendation widget
- * @returns {AlgoliaSearchHelper} Method is chainable, it returns itself
- * @fires change
- * @chainable
- */
-AlgoliaSearchHelper.prototype.removeRelatedProducts = function (id) {
-  this._recommendChange({
-    state: this.recommendState.removeParams(id),
-  });
 
-  return this;
-};
-
-/**
- * Removes a "trending items" recommendation query.
- *
- * @param {number} id identifier of the recommendation widget
- * @returns {AlgoliaSearchHelper} Method is chainable, it returns itself
- * @fires change
- * @chainable
- */
-AlgoliaSearchHelper.prototype.removeTrendingItems = function (id) {
-  this._recommendChange({
-    state: this.recommendState.removeParams(id),
-  });
-
-  return this;
-};
-
-/**
- * Removes a "trending facets" recommendation query.
- *
- * @param {number} id identifier of the recommendation widget
- * @returns {AlgoliaSearchHelper} Method is chainable, it returns itself
- * @fires change
- * @chainable
- */
-AlgoliaSearchHelper.prototype.removeTrendingFacets = function (id) {
-  this._recommendChange({
-    state: this.recommendState.removeParams(id),
-  });
-
-  return this;
-};
-
-/**
- * Removes a "looking similar" recommendation query.
- *
- * @param {number} id identifier of the recommendation widget
- * @returns {AlgoliaSearchHelper} Method is chainable, it returns itself
- * @fires change
- * @chainable
- */
-AlgoliaSearchHelper.prototype.removeLookingSimilar = function (id) {
-  this._recommendChange({
-    state: this.recommendState.removeParams(id),
-  });
-
-  return this;
-};
-
-/**
- * Adds or removes an exclusion filter to a faceted attribute with the `value` provided. If
- * the value is set then it removes it, otherwise it adds the filter.
- *
- * This method resets the current page to 0.
- * @param  {string} facet the facet to refine
- * @param  {string} value the associated value
- * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
- * @fires change
- * @chainable
- */
-AlgoliaSearchHelper.prototype.toggleFacetExclusion = function (facet, value) {
-  this._change({
-    state: this.state.resetPage().toggleExcludeFacetRefinement(facet, value),
-    isPageReset: true,
-  });
-
-  return this;
-};
 
 /**
  * Adds or removes a filter to a faceted attribute with the `value` provided. If
@@ -985,24 +760,6 @@ AlgoliaSearchHelper.prototype.toggleFacetRefinement = function (facet, value) {
   return this;
 };
 
-/**
- * Adds or removes a tag filter with the `value` provided. If
- * the value is set then it removes it, otherwise it adds the filter.
- *
- * This method resets the current page to 0.
- * @param {string} tag tag to remove or add
- * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
- * @fires change
- * @chainable
- */
-AlgoliaSearchHelper.prototype.toggleTag = function (tag) {
-  this._change({
-    state: this.state.resetPage().toggleTagRefinement(tag),
-    isPageReset: true,
-  });
-
-  return this;
-};
 
 /**
  * Updates the current page.
@@ -1105,37 +862,7 @@ AlgoliaSearchHelper.prototype.overrideStateWithoutTriggeringChangeEvent =
     return this;
   };
 
-/**
- * Check if a value is excluded for a specific faceted attribute. If the value
- * is omitted then the function checks if there is any excluding refinements.
- *
- * @param  {string}  facet name of the attribute for used for faceting
- * @param  {string}  [value] optional value. If passed will test that this value
- * is filtering the given facet.
- * @return {boolean} true if refined
- * @example
- * helper.isExcludeRefined('color'); // false
- * helper.isExcludeRefined('color', 'blue') // false
- * helper.isExcludeRefined('color', 'red') // false
- *
- * helper.addFacetExclusion('color', 'red');
- *
- * helper.isExcludeRefined('color'); // true
- * helper.isExcludeRefined('color', 'blue') // false
- * helper.isExcludeRefined('color', 'red') // true
- */
-AlgoliaSearchHelper.prototype.isExcluded = function (facet, value) {
-  return this.state.isExcludeRefined(facet, value);
-};
 
-/**
- * Check if the string is a currently filtering tag.
- * @param {string} tag tag to check
- * @return {boolean} true if the tag is currently refined
- */
-AlgoliaSearchHelper.prototype.hasTag = function (tag) {
-  return this.state.isTagRefined(tag);
-};
 
 /**
  * Get the name of the currently used index.
@@ -1148,22 +875,7 @@ AlgoliaSearchHelper.prototype.getIndex = function () {
   return this.state.index;
 };
 
-/**
- * Get the currently selected page
- * @return {number} the current page
- */
-AlgoliaSearchHelper.prototype.getPage = function () {
-  return this.state.page;
-};
 
-/**
- * Get all the tags currently set to filters the results.
- *
- * @return {string[]} The list of tags currently set.
- */
-AlgoliaSearchHelper.prototype.getTags = function () {
-  return this.state.tagRefinements;
-};
 
 /**
  * Return the current refinement for the (attribute, operator)
@@ -1664,18 +1376,6 @@ AlgoliaSearchHelper.prototype._dispatchRecommendError = function (
   if (this._currentNbRecommendQueries === 0) this.emit('recommendQueueEmpty');
 };
 
-/**
- * Test if there are some disjunctive refinements on the facet
- * @private
- * @param {string} facet the attribute to test
- * @return {boolean} true if there are refinements on this attribute
- */
-AlgoliaSearchHelper.prototype._hasDisjunctiveRefinements = function (facet) {
-  return (
-    this.state.disjunctiveRefinements[facet] &&
-    this.state.disjunctiveRefinements[facet].length > 0
-  );
-};
 
 AlgoliaSearchHelper.prototype._change = function (event) {
   var state = event.state;

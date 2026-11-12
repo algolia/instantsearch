@@ -2,20 +2,20 @@
 
 var SearchParameters = require('../../../src/SearchParameters');
 
-test('[No changes] setHitsPerPage', function () {
+test("[No changes] setQueryParameter('hitsPerPage')", function () {
   var state = SearchParameters.make({
     hitsPerPage: 2,
   });
 
-  expect(state.setHitsPerPage(2)).toBe(state);
+  expect(state.setQueryParameter('hitsPerPage', 2)).toBe(state);
 });
 
-test('[No changes] setTypoTolerance', function () {
+test("[No changes] setQueryParameter('typoTolerance')", function () {
   var state = SearchParameters.make({
     typoTolerance: true,
   });
 
-  expect(state.setTypoTolerance(true)).toBe(state);
+  expect(state.setQueryParameter('typoTolerance', true)).toBe(state);
 });
 
 test('[No changes] setPage', function () {
@@ -40,22 +40,10 @@ test('[No changes] addFacet', function () {
   expect(state.addFacet('facet')).toBe(state);
 });
 
-test('[No changes] removeFacet', function () {
-  var state = SearchParameters.make({});
-
-  expect(state.removeFacet('facet')).toBe(state);
-});
-
 test('[No changes] addDisjunctiveFacet', function () {
   var state = SearchParameters.make({}).addDisjunctiveFacet('facet');
 
   expect(state.addDisjunctiveFacet('facet')).toBe(state);
-});
-
-test('[No changes] removeDisjunctiveFacet', function () {
-  var state = SearchParameters.make({});
-
-  expect(state.removeDisjunctiveFacet('facet')).toBe(state);
 });
 
 test('[No changes] removeHierarchicalFacet', function () {

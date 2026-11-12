@@ -113,11 +113,13 @@ test('Change events should be emitted as soon as the state change, but search sh
   expect(changeEventCount).toBe(4);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.addFacetExclusion('tower', 'Empire State Building');
+  helper.setQueryParameter('facetsExcludes', {
+    tower: ['Empire State Building'],
+  });
   expect(changeEventCount).toBe(5);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.removeFacetExclusion('tower', 'Empire State Building');
+  helper.setQueryParameter('facetsExcludes', {});
   expect(changeEventCount).toBe(6);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
@@ -168,7 +170,7 @@ test('Change events should only be emitted for meaningful changes', function () 
   expect(changeEventCount).toBe(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.addFacetExclusion('tower', 'Empire State Building');
+  helper.setQueryParameter('facetsExcludes', helper.state.facetsExcludes);
   expect(changeEventCount).toBe(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
@@ -193,7 +195,7 @@ test('Change events should only be emitted for meaningful changes', function () 
   expect(changeEventCount).toBe(1);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.removeFacetExclusion('tower', 'Empire State Building');
+  helper.setQueryParameter('facetsExcludes', helper.state.facetsExcludes);
   expect(changeEventCount).toBe(1);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
@@ -232,11 +234,13 @@ test('search event should be emitted once when the search is triggered and befor
   expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.addFacetExclusion('tower', 'Empire State Building');
+  helper.setQueryParameter('facetsExcludes', {
+    tower: ['Empire State Building'],
+  });
   expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.removeFacetExclusion('tower', 'Empire State Building');
+  helper.setQueryParameter('facetsExcludes', {});
   expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
@@ -254,29 +258,6 @@ test('search event should be emitted once when the search is triggered and befor
     state: helper.state,
     results: null,
   });
-  expect(fakeClient.search).toHaveBeenCalledTimes(1);
-});
-
-test('searchOnce event should be emitted once when the search is triggered using searchOnce and before the request is sent', function () {
-  var searchedOnce = jest.fn();
-  var fakeClient = makeFakeClient();
-  var helper = algoliaSearchHelper(fakeClient, 'Index', {
-    disjunctiveFacets: ['city'],
-    facets: ['tower'],
-  });
-
-  helper.on('searchOnce', searchedOnce);
-
-  expect(searchedOnce).toHaveBeenCalledTimes(0);
-  expect(fakeClient.search).toHaveBeenCalledTimes(0);
-
-  helper.searchOnce({});
-
-  expect(searchedOnce).toHaveBeenCalledTimes(1);
-  expect(searchedOnce).toHaveBeenLastCalledWith({
-    state: helper.state,
-  });
-
   expect(fakeClient.search).toHaveBeenCalledTimes(1);
 });
 

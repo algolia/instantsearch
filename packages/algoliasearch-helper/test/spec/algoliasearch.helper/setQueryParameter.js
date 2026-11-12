@@ -12,10 +12,10 @@ test('setChange should change the current state', function () {
     changed = true;
   });
 
-  expect(helper.getPage()).toBeUndefined();
+  expect(helper.state.page).toBeUndefined();
   expect(changed).toBe(false);
   helper.setQueryParameter('page', 22);
-  expect(helper.getPage()).toBe(22);
+  expect(helper.state.page).toBe(22);
   expect(changed).toBe(true);
 });
 
@@ -28,10 +28,10 @@ test('setChange should not change the current state: no real modification', func
     changed = true;
   });
 
-  expect(helper.getPage()).toBe(0);
+  expect(helper.state.page).toBe(0);
   expect(changed).toBe(false);
   helper.setQueryParameter('page', 0);
-  expect(helper.getPage()).toBe(0);
+  expect(helper.state.page).toBe(0);
   expect(changed).toBe(false);
   expect(helper.state).toBe(initialState);
 });

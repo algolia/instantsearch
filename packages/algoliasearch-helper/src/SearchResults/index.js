@@ -921,37 +921,10 @@ SearchResults.prototype.getFacetValues = function (attribute, opts) {
   );
 };
 
-/**
- * Returns the facet stats if attribute is defined and the facet contains some.
- * Otherwise returns undefined.
- * @param {string} attribute name of the faceted attribute
- * @return {object} The stats of the facet
- */
-SearchResults.prototype.getFacetStats = function (attribute) {
-  if (this._state.isConjunctiveFacet(attribute)) {
-    return getFacetStatsIfAvailable(this.facets, attribute);
-  } else if (this._state.isDisjunctiveFacet(attribute)) {
-    return getFacetStatsIfAvailable(this.disjunctiveFacets, attribute);
-  }
-
-  return undefined;
-};
 
 /**
  * @typedef {Object} FacetListItem
  * @property {string} name
  */
-
-/**
- * @param {FacetListItem[]} facetList (has more items, but enough for here)
- * @param {string} facetName The attribute to look for
- * @return {object|undefined} The stats of the facet
- */
-function getFacetStatsIfAvailable(facetList, facetName) {
-  var data = find(facetList, function (facet) {
-    return facet.name === facetName;
-  });
-  return data && data.stats;
-}
 
 module.exports = SearchResults;
