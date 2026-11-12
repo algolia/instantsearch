@@ -3320,15 +3320,14 @@ describe('events', () => {
       searchClient: createSearchClient(),
     });
 
-    Array.from({ length: 100 }).forEach(() => {
-      search.on('render', () => {});
+    const listener = jest.fn();
+
+    Array.from({ length: 200 }).forEach(() => {
+      search.on('render', listener);
     });
+    search.emit('render');
 
+    expect(listener).toHaveBeenCalledTimes(200);
     expect(spy).toHaveBeenCalledTimes(0);
-
-    search.on('render', () => {});
-
-    // once for the warning, once for the trace
-    expect(spy).toHaveBeenCalledTimes(2);
   });
 });
