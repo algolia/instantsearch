@@ -19,10 +19,6 @@ function renderPiece(h, piece) {
 }
 
 /**
- * Vue equivalent of react-instantsearch's `ChatInlineLayout` and
- * instantsearch.js's `templates.chatInlineLayout`: the always-visible chat
- * layout around the `createChatInlineLayoutComponent` factory.
- *
  * This is also the markup `ais-chat` renders for `layout="inline"`; the
  * component is exported so a custom chat can reuse it as a `layoutComponent`.
  */

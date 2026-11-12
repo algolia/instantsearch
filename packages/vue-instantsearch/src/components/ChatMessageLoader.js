@@ -4,14 +4,13 @@ import { createSuitMixin } from '../mixins/suit';
 import { renderReactCompat } from '../util/vue-compat';
 
 /**
- * Vue equivalent of react-instantsearch's `ChatMessageLoader` and
- * instantsearch.js's `templates.chatMessageLoader`: the shared streaming
- * skeleton (`ais-ChatMessageLoader`) around the
- * `createChatMessageLoaderComponent` factory.
+ * Streaming skeleton shown while the chat is working (`ais-ChatMessageLoader`):
+ * a spinner and placeholder message lines.
  *
  * Use it as the chat's `loaderComponent` / `loader` slot to restyle the
- * loading row (the chat hands it the turn context through `context`, which
- * custom loaders read — the default markup ignores it).
+ * loading row. The chat hands it the turn context through `context`, which
+ * custom loaders read — the default markup ignores it. Set the `inline` prop
+ * to drop the message chrome when rendering inside a streaming message.
  */
 export default {
   name: 'AisChatMessageLoader',
