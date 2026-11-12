@@ -1,9 +1,10 @@
-import { cx } from 'instantsearch-ui-components';
-import React from 'react';
+import { createDefaultHitComponent, cx } from 'instantsearch-ui-components';
+import React, { createElement, Fragment } from 'react';
 
 import type { Banner } from 'algoliasearch-helper';
 import type { Hit } from 'instantsearch-core';
 import type { SendEventForHits } from 'instantsearch-core';
+import type { Pragma } from 'instantsearch-ui-components';
 
 export type InfiniteHitsProps<THit> = React.ComponentProps<'div'> & {
   hits: THit[];
@@ -79,13 +80,10 @@ export type InfiniteHitsTranslations = {
   showMoreButtonText: string;
 };
 
-function DefaultHitComponent({ hit }: { hit: Hit }) {
-  return (
-    <div style={{ wordBreak: 'break-all' }}>
-      {JSON.stringify(hit).slice(0, 100)}…
-    </div>
-  );
-}
+const DefaultHitComponent = createDefaultHitComponent({
+  createElement: createElement as Pragma,
+  Fragment,
+});
 
 type BannerProps = {
   banner: Banner;

@@ -24,6 +24,7 @@ export * from './chat/tools/createGroundedComparisonTable';
 export * from './chat/tools/GroupedResultsTool';
 export * from './chat/types';
 export * from './CompareBar';
+export * from './DefaultHit';
 export * from './FrequentlyBoughtTogether';
 export * from './Highlight';
 export * from './Hits';
