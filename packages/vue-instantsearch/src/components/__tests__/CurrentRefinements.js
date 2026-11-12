@@ -90,6 +90,7 @@ describe('custom render', () => {
   it('gives all relevant info to scoped slot', () => {
     __setState({
       items,
+      canRefine: true,
       createURL: jest.fn(
         ({ attributeName, computedLabel }) =>
           `?${attributeName}=${computedLabel}`
@@ -111,6 +112,7 @@ describe('custom render', () => {
   it('has same amount of items', () => {
     __setState({
       items,
+      canRefine: true,
       createURL: jest.fn(
         ({ attributeName, computedLabel }) =>
           `?${attributeName}=${computedLabel}`
@@ -132,6 +134,7 @@ describe('custom render', () => {
   it('item slot gives all relevant info to scoped slot', () => {
     __setState({
       items,
+      canRefine: true,
       createURL: jest.fn(
         ({ attributeName, computedLabel }) =>
           `?${attributeName}=${computedLabel}`
@@ -153,6 +156,7 @@ describe('custom render', () => {
   it('item slot has same amount of items', () => {
     __setState({
       items,
+      canRefine: true,
       createURL: jest.fn(
         ({ attributeName, computedLabel }) =>
           `?${attributeName}=${computedLabel}`
@@ -174,6 +178,7 @@ describe('custom render', () => {
   it('refinement slot has same amount of items', () => {
     __setState({
       items,
+      canRefine: true,
       createURL: jest.fn(
         ({ attributeName, computedLabel }) =>
           `?${attributeName}=${computedLabel}`
