@@ -27,7 +27,6 @@ This module is the companion of the [algolia/algoliasearch-client-javascript](ht
 - [Features](#features)
 - [Examples](#examples)
   - [Vanilla JavaScript](#vanilla-javascript)
-  - [AngularJS module](#angularjs-module)
 - [Helper cheatsheet](#helper-cheatsheet)
   - [Add the helper in your project](#add-the-helper-in-your-project)
   - [Regular `<script>` tag](#regular-script-tag)
@@ -88,42 +87,6 @@ helper.search();
 ```
 
 See more examples in the [examples folder](examples/)
-
-### AngularJS module
-
-```js
-<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.angular.js"></script>
-<script src="dist/algoliasearch.helper.min.js"></script>
-
-<script type="text/javascript">
-angular.module('searchApp', ['ngSanitize', 'algoliasearch'])
-.controller('searchController', ['$scope', '$sce', 'algolia', function($scope, $sce, algolia) {
-  var algolia = algolia.Client('applicationId', 'apiKey');
-  $scope.q = '';
-  $scope.content = null;
-  $scope.helper = algoliasearchHelper(algolia, 'indexName', {
-    facets: ['type', 'shipping'],
-    disjunctiveFacets: ['category', 'manufacturer'],
-    hitsPerPage: 5,
-  });
-  $scope.helper.on('result', function(event) {
-    $scope.$apply(function() {
-      $scope.content = event.results;
-    });
-  });
-  $scope.toggleRefine = function($event, facet, value) {
-    $event.preventDefault();
-    $scope.helper.toggleFacetRefinement(facet, value).search();
-  };
-  $scope.$watch('q', function(q) {
-    $scope.helper.setQuery(q).search();
-  });
-  $scope.helper.search();
-}]);
-</script>
-```
-
-You can see the full [Angular example here](https://codepen.io/Algolia/pen/PzZobK)
 
 ## Helper cheatsheet
 

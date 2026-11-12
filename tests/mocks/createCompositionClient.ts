@@ -14,7 +14,7 @@ export const createCompositionClient = <T extends Record<string, unknown>>(
   searchForFacetValues: jest.fn(() =>
     Promise.resolve({ results: [createSFFVResponse()] })
   ),
-  applicationID: 'appId',
+  appId: 'appId',
   apiKey: 'apiKey',
   ...args,
 });

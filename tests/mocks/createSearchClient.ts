@@ -25,7 +25,7 @@ export const createSearchClient = (
     )
   ),
   // @ts-ignore this allows us to test insights initialization without warning
-  applicationID: 'appId',
+  appId: 'appId',
   apiKey: 'apiKey',
   ...args,
 });
