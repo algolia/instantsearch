@@ -9,8 +9,7 @@ import type {
 
 /**
  * Shared presentational component for chat comparison tables. Used by the
- * builtin `algolia_compare_products` tool (`CompareProductsTool`) and the
- * `algolia_display_results` markdownTable path (`ComparisonTableTool`).
+ * builtin `algolia_compare_products` tool (`CompareProductsTool`).
  *
  * Layout: the compared products run across the top (one column each, rendered
  * with the same item component as the search results so the comparison reads
@@ -76,28 +75,6 @@ export function formatCellValue(value: unknown): string | undefined {
     return undefined;
   }
   return String(value);
-}
-
-/**
- * Builds criteria rows by reading attribute keys off the records: the
- * attribute-based contract, where the agent names only keys and the table
- * reads every value from the catalog record.
- */
-export function criteriaFromAttributes(
-  objectIDs: string[],
-  attributes: string[],
-  records: Pick<ChatRecordsStore, 'get'> | undefined,
-  labels?: string[]
-): ComparisonCriterion[] {
-  // `labels` is model-authored and only trusted when it labels EVERY
-  // attribute; a shorter list would shift labels onto the wrong rows.
-  const rowLabels =
-    labels && labels.length === attributes.length ? labels : undefined;
-
-  return attributes.map((attribute, index) => ({
-    label: rowLabels?.[index] ?? attribute,
-    values: objectIDs.map((objectID) => records?.get(objectID)?.[attribute]),
-  }));
 }
 
 export type GroundedComparisonTableProps<
