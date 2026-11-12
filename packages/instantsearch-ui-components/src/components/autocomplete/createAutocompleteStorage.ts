@@ -1,4 +1,4 @@
-import { find, TAG_PLACEHOLDER } from 'instantsearch-core/internal';
+import { TAG_PLACEHOLDER } from 'instantsearch-core/internal';
 
 import type { UsePropGetters } from './createAutocompletePropGetters';
 import type { Hooks } from '../../types';
@@ -70,8 +70,7 @@ export function createAutocompleteStorage({
               ...index,
               hits: index.hits.filter(
                 (hit) =>
-                  !find(
-                    storageHits,
+                  !storageHits.find(
                     (storageHit) => storageHit.query === hit.query
                   )
               ),

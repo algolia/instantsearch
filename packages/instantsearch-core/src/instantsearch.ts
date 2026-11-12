@@ -1,4 +1,3 @@
-import EventEmitter from '@algolia/events';
 import algoliasearchHelper from 'algoliasearch-helper';
 
 import {
@@ -163,10 +162,9 @@ export const INSTANTSEARCH_FUTURE_DEFAULTS: Required<
  * created using the `instantsearch` factory function.
  * It emits the 'render' event every time a search is done
  */
-class InstantSearch<
-  TUiState extends UiState = UiState,
-  TRouteState = TUiState,
-> extends EventEmitter {
+class InstantSearch<TUiState extends UiState = UiState, TRouteState = TUiState>
+  extends algoliasearchHelper.EventEmitter
+{
   public client: InstantSearchOptions['searchClient'];
   public indexName: string;
   public compositionID?: string;
@@ -219,9 +217,6 @@ class InstantSearch<
 
   public constructor(options: InstantSearchOptions<TUiState, TRouteState>) {
     super();
-
-    // prevent `render` event listening from causing a warning
-    this.setMaxListeners(100);
 
     const {
       indexName = '',

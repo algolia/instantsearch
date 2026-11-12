@@ -115,7 +115,7 @@ To run this project, you will need:
 - Node.js ≥ 20 (current stable version) – [nvm](https://github.com/creationix/nvm#install-script) is recommended
 - [Yarn](https://yarnpkg.com)
 
-Install with a plain `yarn` and keep install scripts enabled. The root `postinstall` runs package preparation and applies patches. The v3, v4, and v5 `algoliasearch` dependencies are declared in the root `package.json` and resolved through the root `yarn.lock`; they no longer need separate dependency containers.
+Install with a plain `yarn` and keep install scripts enabled. The root `postinstall` runs package preparation and applies patches. The v4 and v5 `algoliasearch` dependencies are declared in the root `package.json` and resolved through the root `yarn.lock`; they no longer need separate dependency containers.
 
 ## Launch the dev environment
 
@@ -384,11 +384,11 @@ To ensure typing is correct in the latest version of InstantSearch.js, you can r
 yarn type-check
 ```
 
-Since we still support `algoliasearch@3`, you should also type check against v3.x.
+Since we still support `algoliasearch@4`, you should also type check against v4.x.
 
 ```sh
-./scripts/legacy/downgrade-algoliasearch-dependency.js
-yarn type-check:v3
+./scripts/legacy/downgrade-algoliasearch-v4.js
+yarn type-check:v4
 ```
 
 ## Linting

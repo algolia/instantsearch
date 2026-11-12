@@ -1,7 +1,6 @@
 import {
   checkRendering,
   createDocumentationMessageGenerator,
-  find,
   warning,
   noop,
 } from '../../lib/utils';
@@ -214,8 +213,7 @@ const connectSortBy: SortByConnector = function connectSortBy(
 
         const widgetRenderState = this.getWidgetRenderState(initOptions);
         const currentIndex = widgetRenderState.currentRefinement;
-        const isCurrentIndexInItems = find(
-          items,
+        const isCurrentIndexInItems = items.find(
           (item) => getItemValue(item) === currentIndex
         );
 

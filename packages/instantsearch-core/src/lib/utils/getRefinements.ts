@@ -1,5 +1,4 @@
 import { unescapeFacetValue, escapeFacetValue } from './escapeFacetValue';
-import { find } from './find';
 
 import type { SearchParameters, SearchResults } from 'algoliasearch-helper';
 
@@ -64,10 +63,11 @@ function getRefinement(
     name,
     escapedValue: escapeFacetValue(name),
   };
-  let facet: any = find<SearchResults.Facet | SearchResults.HierarchicalFacet>(
-    resultsFacets,
-    (resultsFacet) => resultsFacet.name === attribute
-  );
+  let facet: any = (
+    resultsFacets as Array<
+      SearchResults.Facet | SearchResults.HierarchicalFacet
+    >
+  ).find((resultsFacet) => resultsFacet.name === attribute);
   let count: number;
 
   if (type === 'hierarchical') {
@@ -83,10 +83,9 @@ function getRefinement(
       facet =
         facet &&
         facet.data &&
-        find(
-          Object.keys(facet.data).map(getFacetRefinement(facet.data)),
-          (refinement) => refinement.name === nameParts[i]
-        );
+        Object.keys(facet.data)
+          .map(getFacetRefinement(facet.data))
+          .find((refinement) => refinement.name === nameParts[i]);
     }
 
     count = facet && facet.count;

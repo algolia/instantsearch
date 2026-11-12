@@ -10,7 +10,6 @@ import {
 } from 'instantsearch-core/internal';
 import {
   createDocumentationMessageGenerator,
-  find,
   noop,
   warn,
   walkIndex,
@@ -525,8 +524,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       showRecent
         ? autocompleteIndex.hits.filter(
             (suggestionHit) =>
-              !find(
-                storageHits,
+              !storageHits.find(
                 (storageHit) => storageHit.query === suggestionHit.query
               )
           )
@@ -746,8 +744,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   }
 
   indicesForPanel.forEach(({ indexId, indexName, hits }, i) => {
-    const currentIndexConfig = find(
-      indicesConfig,
+    const currentIndexConfig = indicesConfig.find(
       (config) => config.indexName === indexName
     );
 
@@ -824,7 +821,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
           __indexName: indexName,
         }))}
         getItemProps={getItemProps}
-        sendEvent={find(indices, (idx) => idx.indexId === indexId)?.sendEvent}
+        sendEvent={indices.find((idx) => idx.indexId === indexId)?.sendEvent}
         classNames={currentIndexConfig.cssClasses}
       />
     );
