@@ -2177,7 +2177,7 @@ yarn add @algolia/instantsearch-widget-date-picker
 ### Usage
 
 \`\`\`js
-import instantsearch from 'instantsearch.js';
+import { instantsearch } from 'instantsearch.js';
 import algoliasearch from 'algoliasearch/lite';
 import { datePicker } from '@algolia/instantsearch-widget-date-picker';
 
