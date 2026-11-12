@@ -56,7 +56,7 @@ yarn test                       # everything (slow)
 yarn lint:changed               # lint only changed files — use this while iterating
 yarn lint:fix                   # auto-fix
 yarn format                     # format the repo; yarn format:check only reports
-yarn type-check                 # tsc + per-package (also :v3 / :v4 for legacy algoliasearch)
+yarn type-check                 # tsc + per-package (also :v4 for legacy algoliasearch)
 
 # E2E — see .claude/rules/e2e.md (Playwright). Examples must be built first:
 yarn website:examples && E2E_FLAVOR=react E2E_BROWSER=chromium yarn test:e2e

@@ -6,7 +6,6 @@ import {
   getHighlightedParts,
 } from 'instantsearch-core';
 import {
-  find,
   getPromptSuggestionHits,
   isChatBusy,
   isPromptSuggestion,
@@ -761,8 +760,7 @@ export default {
           autocompleteIndex.indexName === querySuggestionsKey && showRecent
             ? autocompleteIndex.hits.filter(
                 (suggestionHit) =>
-                  !find(
-                    storageHits,
+                  !storageHits.find(
                     (storageHit) => storageHit.query === suggestionHit.query
                   )
               )
@@ -999,8 +997,7 @@ export default {
       }
 
       indicesForPanel.forEach(({ indexId, indexName, hits }) => {
-        const currentIndexConfig = find(
-          indicesConfig,
+        const currentIndexConfig = indicesConfig.find(
           (config) => config.indexName === indexName
         );
 
@@ -1074,7 +1071,7 @@ export default {
               : undefined,
           items: hits.map((item) => ({ ...item, __indexName: indexName })),
           getItemProps,
-          sendEvent: find(indices, (idx) => idx.indexId === indexId)?.sendEvent,
+          sendEvent: indices.find((idx) => idx.indexId === indexId)?.sendEvent,
           classNames: currentIndexConfig.classNames,
         });
       });

@@ -114,14 +114,6 @@ This version uses types provided by both `algoliasearch` and `@algolia/client-se
 yarn add algoliasearch@4 @algolia/client-search
 ```
 
-#### `algoliasearch` v3.x
-
-```bash
-yarn add @types/algoliasearch@3
-```
-
-> v3.x is deprecated and will soon no longer be supported.
-
 ## Documentation
 
 The documentation is available on the [Algolia website](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/).
