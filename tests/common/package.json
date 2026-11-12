@@ -5,6 +5,8 @@
   "description": "Common tests for all InstantSearch flavors.",
   "dependencies": {
     "instantsearch-core": "0.1.0",
-    "instantsearch.js": "4.123.0"
+    "instantsearch.js": "4.123.0",
+    "react-instantsearch": "7.55.0",
+    "vue-instantsearch": "4.33.0"
   }
 }
