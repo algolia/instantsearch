@@ -1,4 +1,5 @@
-const { algoliasearch, instantsearch } = window;
+const { liteClient: algoliasearch } = window['algoliasearch/lite'];
+const { instantsearch } = window;
 {{#if flags.autocomplete}}
 const { autocomplete } = window['@algolia/autocomplete-js'];
 const { createLocalStorageRecentSearchesPlugin } = window[
