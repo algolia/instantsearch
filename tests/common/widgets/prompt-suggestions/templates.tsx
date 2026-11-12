@@ -2,6 +2,8 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import React from 'react';
 
+import { createVueElement } from '../chat/utils';
+
 import type { PromptSuggestionsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 import type { MockSearchClient } from '@instantsearch/mocks';
@@ -92,7 +94,18 @@ export function createTemplatesTests(
               </div>
             ),
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            scopedSlots: {
+              layout: ({ suggestions }) =>
+                createVueElement(
+                  'div',
+                  { class: 'custom-layout' },
+                  `Custom layout: ${suggestions.join(', ')}`
+                ),
+            },
+          },
         },
       });
 
@@ -144,7 +157,20 @@ export function createTemplatesTests(
               </div>
             ),
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            scopedSlots: {
+              layout: ({ suggestions }) =>
+                createVueElement(
+                  'div',
+                  { class: 'html-layout' },
+                  suggestions.map((suggestion) =>
+                    createVueElement('button', { type: 'button' }, suggestion)
+                  )
+                ),
+            },
+          },
         },
       });
 
@@ -178,7 +204,13 @@ export function createTemplatesTests(
             configurationId: 'prompt-suggestions',
             headerComponent: () => <div>Ask me anything</div>,
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            scopedSlots: {
+              header: () => createVueElement('div', {}, 'Ask me anything'),
+            },
+          },
         },
       });
 
@@ -213,7 +245,11 @@ export function createTemplatesTests(
             configurationId: 'prompt-suggestions',
             translations: { headerTitle: 'Ideas' },
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            translations: { headerTitle: 'Ideas' },
+          },
         },
       });
 
@@ -243,7 +279,11 @@ export function createTemplatesTests(
             configurationId: 'prompt-suggestions',
             headerComponent: false,
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            headerComponent: false,
+          },
         },
       });
 
