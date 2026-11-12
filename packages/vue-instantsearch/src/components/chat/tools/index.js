@@ -10,6 +10,7 @@ import {
 } from 'instantsearch-core';
 
 import { createCompareProductsTool } from './CompareProductsTool';
+import { createComparisonTableTool } from './ComparisonTableTool';
 import { createGroupedResultsTool } from './GroupedResultsTool';
 import { createCarouselTool } from './SearchIndexTool';
 
@@ -20,6 +21,7 @@ const LEGACY_GROUPED_RESULTS_TOOL_TYPE = 'algolia_display_results';
 export {
   createCarouselTool,
   createCompareProductsTool,
+  createComparisonTableTool,
   createGroupedResultsTool,
 };
 
