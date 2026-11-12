@@ -4,9 +4,8 @@ import { createSuitMixin } from '../mixins/suit';
 import { renderReactCompat } from '../util/vue-compat';
 
 /**
- * Vue equivalent of react-instantsearch's `ChatGreeting` and
- * instantsearch.js's `templates.chatGreeting`: the shared empty-screen markup
- * (`ais-ChatGreeting`) around the `createChatGreetingComponent` factory.
+ * Empty-screen markup for the chat (`ais-ChatGreeting`): an optional banner,
+ * a heading and a subheading.
  *
  * Use it as the chat's `emptyComponent` / `empty` slot, or render it
  * standalone above the conversation.

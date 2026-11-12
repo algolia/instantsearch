@@ -19,10 +19,8 @@ function renderPiece(h, piece) {
 }
 
 /**
- * Vue equivalent of react-instantsearch's `ChatSidePanelLayout` and
- * instantsearch.js's `templates.chatSidepanelLayout`: the side-panel chat
- * layout (which shifts a page element's margin while open) around the
- * `createChatSidePanelLayoutComponent` factory.
+ * The side-panel chat layout: a panel docked to the side of the viewport,
+ * shifting a page element's margin while open (see the `parentElement` prop).
  *
  * This is also the markup `ais-chat` renders for `layout="sidePanel"`; the
  * component is exported so a custom chat can reuse it as a `layoutComponent`.
