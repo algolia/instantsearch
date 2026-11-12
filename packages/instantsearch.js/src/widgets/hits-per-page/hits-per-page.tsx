@@ -1,10 +1,7 @@
 /** @jsx h */
 
 import { connectHitsPerPage } from 'instantsearch-core';
-import {
-  createDocumentationMessageGenerator,
-  find,
-} from 'instantsearch-core/internal';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
@@ -37,7 +34,7 @@ const renderer =
     if (isFirstRendering) return;
 
     const { value: currentValue } =
-      find(items, ({ isRefined }) => isRefined) || {};
+      items.find(({ isRefined }) => isRefined) || {};
 
     render(
       <div className={cssClasses.root}>

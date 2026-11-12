@@ -10212,13 +10212,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"agentkeepalive@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "agentkeepalive@npm:2.2.0"
-  checksum: 10c0/851e86d880f207beb536b74cde8274db01520cb9d066d64f73c26c3acc49f83e1886c53f88e7dcf22da17a83b754bcfe23c0b0e500b6c7c9a85f999ac439c53f
-  languageName: node
-  linkType: hard
-
 "aggregate-error@npm:^3.0.0":
   version: 3.1.0
   resolution: "aggregate-error@npm:3.1.0"
@@ -10361,7 +10354,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "algoliasearch-helper@workspace:packages/algoliasearch-helper"
   dependencies:
-    "@algolia/events": "npm:^4.0.1"
     "@metalsmith/sass": "npm:1.4.0"
     handlebars: "npm:4.1.0"
     jest-watch-typeahead: "npm:0.3.0"
@@ -10373,32 +10365,9 @@ __metadata:
     metalsmith-metallic: "npm:1.0.0"
     pug: "npm:2.0.3"
   peerDependencies:
-    algoliasearch: ">= 3.1 < 6"
+    algoliasearch: ">= 4 < 6"
   languageName: unknown
   linkType: soft
-
-"algoliasearch-v3@npm:algoliasearch@3.35.0":
-  version: 3.35.0
-  resolution: "algoliasearch@npm:3.35.0"
-  dependencies:
-    agentkeepalive: "npm:^2.2.0"
-    debug: "npm:^2.6.9"
-    envify: "npm:^4.0.0"
-    es6-promise: "npm:^4.1.0"
-    events: "npm:^1.1.0"
-    foreach: "npm:^2.0.5"
-    global: "npm:^4.3.2"
-    inherits: "npm:^2.0.1"
-    isarray: "npm:^2.0.1"
-    load-script: "npm:^1.0.0"
-    object-keys: "npm:^1.0.11"
-    querystring-es3: "npm:^0.2.1"
-    reduce: "npm:^1.0.1"
-    semver: "npm:^5.1.0"
-    tunnel-agent: "npm:^0.6.0"
-  checksum: 10c0/32b8dbc7344a5310591a1318a6b031e4022fd8976e1ee7c52a7b04c11a28065f7c2c237b0c241f77377cb95f2be2e8d55125c9e3a1aa4bc2c0625e2caa708e17
-  languageName: node
-  linkType: hard
 
 "algoliasearch-v4@npm:algoliasearch@4.23.2":
   version: 4.23.2
@@ -15658,13 +15627,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dom-walk@npm:^0.1.0":
-  version: 0.1.1
-  resolution: "dom-walk@npm:0.1.1"
-  checksum: 10c0/83883c513aca3475758edb2945ecb38df1f18458acd51c46d096c146dea15de251e2bd1132b2ff7525cb8c07f17b912ec0ad501924947835d7d51244f13eb166
-  languageName: node
-  linkType: hard
-
 "domain-browser@npm:^1.1.1":
   version: 1.2.0
   resolution: "domain-browser@npm:1.2.0"
@@ -16139,18 +16101,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"envify@npm:^4.0.0":
-  version: 4.1.0
-  resolution: "envify@npm:4.1.0"
-  dependencies:
-    esprima: "npm:^4.0.0"
-    through: "npm:~2.3.4"
-  bin:
-    envify: bin/envify
-  checksum: 10c0/d6699e34318f9e11d7064d40b5b6a5eec73fa41f962cc89a9181805716a1d34d71df0b526fea7b80da22bf3d50f38283ff48165444bc269554737d79cff48355
-  languageName: node
-  linkType: hard
-
 "envinfo@npm:7.13.0":
   version: 7.13.0
   resolution: "envinfo@npm:7.13.0"
@@ -16414,13 +16364,6 @@ __metadata:
     is-date-object: "npm:^1.0.5"
     is-symbol: "npm:^1.0.4"
   checksum: 10c0/c7e87467abb0b438639baa8139f701a06537d2b9bc758f23e8622c3b42fd0fdb5bde0f535686119e446dd9d5e4c0f238af4e14960f4771877cf818d023f6730b
-  languageName: node
-  linkType: hard
-
-"es6-promise@npm:^4.1.0":
-  version: 4.2.6
-  resolution: "es6-promise@npm:4.2.6"
-  checksum: 10c0/bf0a197a0d04190f72dc89b6e96ec1e3762d7dc0693b1a12225128350bf4e7ad0afeac294f1945373c7d0ea591caeab950d7e3e6ecfb46e7b286420d629cbc28
   languageName: node
   linkType: hard
 
@@ -17022,13 +16965,6 @@ __metadata:
   version: 5.0.1
   resolution: "eventemitter3@npm:5.0.1"
   checksum: 10c0/4ba5c00c506e6c786b4d6262cfbce90ddc14c10d4667e5c83ae993c9de88aa856033994dd2b35b83e8dc1170e224e66a319fa80adc4c32adcd2379bbc75da814
-  languageName: node
-  linkType: hard
-
-"events@npm:^1.1.0":
-  version: 1.1.1
-  resolution: "events@npm:1.1.1"
-  checksum: 10c0/29ba5a4c7d03dd2f4a2d3d9d4dfd8332225256f666cd69f490975d2eff8d7c73f1fb4872877b2c1f3b485e8fb42462153d65e5a21ea994eb928c3bec9e0c826e
   languageName: node
   linkType: hard
 
@@ -18484,13 +18420,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"foreach@npm:^2.0.5":
-  version: 2.0.5
-  resolution: "foreach@npm:2.0.5"
-  checksum: 10c0/63a99bf2528dd709e243f99865221eee8e94f19e0d996673363b954f0555a6eb1f5bac253e53644b1f6d7d05c118e46eda9e9528a3520a37b75164c8138f5207
-  languageName: node
-  linkType: hard
-
 "foreground-child@npm:^3.1.0, foreground-child@npm:^3.3.1":
   version: 3.3.1
   resolution: "foreground-child@npm:3.3.1"
@@ -19314,16 +19243,6 @@ __metadata:
     kind-of: "npm:^6.0.2"
     which: "npm:^1.3.1"
   checksum: 10c0/510f489fb68d1cc7060f276541709a0ee6d41356ef852de48f7906c648ac223082a1cc8fce86725ca6c0e032bcdc1189ae77b4744a624b29c34a9d0ece498269
-  languageName: node
-  linkType: hard
-
-"global@npm:^4.3.2":
-  version: 4.4.0
-  resolution: "global@npm:4.4.0"
-  dependencies:
-    min-document: "npm:^2.19.0"
-    process: "npm:^0.11.10"
-  checksum: 10c0/4a467aec6602c00a7c5685f310574ab04e289ad7f894f0f01c9c5763562b82f4b92d1e381ce6c5bbb12173e2a9f759c1b63dda6370cfb199970267e14d90aa91
   languageName: node
   linkType: hard
 
@@ -20851,7 +20770,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "instantsearch-core@workspace:packages/instantsearch-core"
   dependencies:
-    "@algolia/events": "npm:^4.0.1"
     "@swc/helpers": "npm:0.5.18"
     "@types/dom-speech-recognition": "npm:^0.0.1"
     "@types/qs": "npm:^6.5.3"
@@ -20908,7 +20826,6 @@ __metadata:
     "@vue/vue2-jest": "npm:27"
     "@vue/vue3-jest": "npm:27"
     algoliasearch: "npm:5.1.1"
-    algoliasearch-v3: "npm:algoliasearch@3.35.0"
     algoliasearch-v4: "npm:algoliasearch@4.23.2"
     algoliasearch-v5: "npm:algoliasearch@5.1.1"
     babel-jest: "npm:27.4.6"
@@ -20972,7 +20889,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "instantsearch.js@workspace:packages/instantsearch.js"
   dependencies:
-    "@algolia/events": "npm:^4.0.1"
     "@instantsearch/mocks": "npm:1.131.0"
     "@instantsearch/tests": "npm:1.131.0"
     "@instantsearch/testutils": "npm:1.120.0"
@@ -20988,7 +20904,7 @@ __metadata:
     react: "npm:>= 0.14.0"
     search-insights: "npm:^2.17.2"
   peerDependencies:
-    algoliasearch: ">= 3.1 < 6"
+    algoliasearch: ">= 4 < 6"
   languageName: unknown
   linkType: soft
 
@@ -21927,7 +21843,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"isarray@npm:^2.0.1, isarray@npm:^2.0.5":
+"isarray@npm:^2.0.5":
   version: 2.0.5
   resolution: "isarray@npm:2.0.5"
   checksum: 10c0/4199f14a7a13da2177c66c31080008b7124331956f47bca57dd0b6ea9f11687aa25e565a2c7a2b519bc86988d10398e3049a1f5df13c9f6b7664154690ae79fd
@@ -24011,13 +23927,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"load-script@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "load-script@npm:1.0.0"
-  checksum: 10c0/9919c777fe83f8a3a917f65c9c3ab186ad8b194248c57f413ef6e610194abc8484d123a6838d77ab33e5fa1a05a676b5dfe779c38cfe602bdd27c239423d0acd
-  languageName: node
-  linkType: hard
-
 "load-yaml-file@npm:^0.2.0":
   version: 0.2.0
   resolution: "load-yaml-file@npm:0.2.0"
@@ -25846,15 +25755,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"min-document@npm:^2.19.0":
-  version: 2.19.0
-  resolution: "min-document@npm:2.19.0"
-  dependencies:
-    dom-walk: "npm:^0.1.0"
-  checksum: 10c0/783724da716fc73a51c171865d7b29bf2b855518573f82ef61c40d214f6898d7b91b5c5419e4d22693cdb78d4615873ebc3b37d7639d3dd00ca283e5a07c7af9
-  languageName: node
-  linkType: hard
-
 "min-indent@npm:^1.0.0":
   version: 1.0.1
   resolution: "min-indent@npm:1.0.1"
@@ -27494,7 +27394,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"object-keys@npm:^1.0.11, object-keys@npm:^1.1.0, object-keys@npm:^1.1.1":
+"object-keys@npm:^1.1.1":
   version: 1.1.1
   resolution: "object-keys@npm:1.1.1"
   checksum: 10c0/b11f7ccdbc6d406d1f186cdadb9d54738e347b2692a14439ca5ac70c225fa6db46db809711b78589866d47b25fc3e8dee0b4c722ac751e11180f9380e3d8601d
@@ -31235,7 +31135,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"querystring-es3@npm:^0.2.0, querystring-es3@npm:^0.2.1":
+"querystring-es3@npm:^0.2.0":
   version: 0.2.1
   resolution: "querystring-es3@npm:0.2.1"
   checksum: 10c0/476938c1adb45c141f024fccd2ffd919a3746e79ed444d00e670aad68532977b793889648980e7ca7ff5ffc7bfece623118d0fbadcaf217495eeb7059ae51580
@@ -31448,7 +31348,7 @@ __metadata:
     react-instantsearch-core-v6: "npm:react-instantsearch-core@6.40.4"
     use-sync-external-store: "npm:^1.0.0"
   peerDependencies:
-    algoliasearch: ">= 3.1 < 6"
+    algoliasearch: ">= 4 < 6"
     react: ">= 16.8.0 < 20"
   languageName: unknown
   linkType: soft
@@ -31492,7 +31392,7 @@ __metadata:
     instantsearch-ui-components: "npm:0.46.0"
     react-instantsearch-core: "npm:7.55.0"
   peerDependencies:
-    algoliasearch: ">= 3.1 < 6"
+    algoliasearch: ">= 4 < 6"
     react: ">= 16.8.0 < 20"
     react-dom: ">= 16.8.0 < 20"
   languageName: unknown
@@ -31859,15 +31759,6 @@ __metadata:
   dependencies:
     test-value: "npm:^2.0.0"
   checksum: 10c0/25832300e7ac3b44611d71b7ad3670c9a9454ace245773678099a7ee89e3d1f1549e049b3e63f097b0c68fa224af501b7a3964f057d362131277c23fcb743de9
-  languageName: node
-  linkType: hard
-
-"reduce@npm:^1.0.1":
-  version: 1.0.2
-  resolution: "reduce@npm:1.0.2"
-  dependencies:
-    object-keys: "npm:^1.1.0"
-  checksum: 10c0/5b925190a855372c968c09133e5bb238814e9c4540f936aaac4aee4cc362e1017ca8193545bc8ebf36407acdeee614caf6cb057c8de595f978030cd103ceab66
   languageName: node
   linkType: hard
 
@@ -33156,7 +33047,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:2 || 3 || 4 || 5, semver@npm:^5.1.0, semver@npm:^5.3.0, semver@npm:^5.4.1, semver@npm:^5.5.0, semver@npm:^5.6.0":
+"semver@npm:2 || 3 || 4 || 5, semver@npm:^5.3.0, semver@npm:^5.4.1, semver@npm:^5.5.0, semver@npm:^5.6.0":
   version: 5.7.1
   resolution: "semver@npm:5.7.1"
   bin:
@@ -35843,7 +35734,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"through@npm:2, through@npm:2.3.8, through@npm:>=2.2.7 <3, through@npm:^2.3.6, through@npm:~2.3, through@npm:~2.3.1, through@npm:~2.3.4":
+"through@npm:2, through@npm:2.3.8, through@npm:>=2.2.7 <3, through@npm:^2.3.6, through@npm:~2.3, through@npm:~2.3.1":
   version: 2.3.8
   resolution: "through@npm:2.3.8"
   checksum: 10c0/4b09f3774099de0d4df26d95c5821a62faee32c7e96fb1f4ebd54a2d7c11c57fe88b0a0d49cf375de5fee5ae6bf4eb56dbbf29d07366864e2ee805349970d3cc
@@ -37794,7 +37685,7 @@ __metadata:
     vuex4: "npm:vuex@4.0.0"
   peerDependencies:
     "@vue/server-renderer": ^3.1.2
-    algoliasearch: ">= 3.32.0 < 6"
+    algoliasearch: ">= 4 < 6"
     vue: ^2.6.0 || >=3.0.0-rc.0
     vue-server-renderer: ^2.6.11
   peerDependenciesMeta:

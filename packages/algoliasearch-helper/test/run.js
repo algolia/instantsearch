@@ -45,14 +45,10 @@ jest.runCLI(dynamicJestConfig, projectsRootPaths).then(function (response) {
       if (!originalDeleteIndex) {
         return client.initIndex(deleteIndexName).delete();
       }
-      if (!client.initIndex) {
-        return originalDeleteIndex({ indexName: deleteIndexName });
-      }
-      return originalDeleteIndex(deleteIndexName);
+      return originalDeleteIndex({ indexName: deleteIndexName });
     };
-    client.listIndexes = client.listIndexes || client.listIndices;
 
-    client.listIndexes().then((content) => {
+    client.listIndices().then((content) => {
       content.items
         .map((i) => i.name)
         .filter((n) => n.indexOf('_circle-algoliasearch-helper') !== -1)

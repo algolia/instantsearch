@@ -65,7 +65,6 @@ export const createInstantSearch = (
     on: jest.fn(),
     once: jest.fn(),
     removeAllListeners: jest.fn(),
-    setMaxListeners: jest.fn(),
     listeners: jest.fn(),
     emit: jest.fn(),
     listenerCount: jest.fn(),

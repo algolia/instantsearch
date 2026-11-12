@@ -1,5 +1,3 @@
-import EventEmitter from '@algolia/events';
-
 // eslint-disable-next-line typescript/consistent-type-imports
 import type {
   FrequentlyBoughtTogetherQuery,
@@ -23,7 +21,7 @@ import type {
  * The algoliasearchHelper module is the function that will let its
  * contains everything needed to use the Algoliasearch
  * Helper. It is a also a function that instantiate the helper.
- * To use the helper, you also need the Algolia JS client v3.
+ * To use the helper, you also need the Algolia JS client v4 or v5.
  * @param client an AlgoliaSearch client
  * @param index the name of the index to query
  * @param opts
@@ -38,6 +36,22 @@ declare function algoliasearchHelper(
 
 declare namespace algoliasearchHelper {
   export const version: string;
+
+  export type Listener = (...args: any[]) => void;
+
+  /**
+   * A minimal version of Node's EventEmitter.
+   */
+  export class EventEmitter {
+    emit(type: string | number, ...args: any[]): boolean;
+    addListener(type: string | number, listener: Listener): this;
+    on(type: string | number, listener: Listener): this;
+    once(type: string | number, listener: Listener): this;
+    removeListener(type: string | number, listener: Listener): this;
+    removeAllListeners(type?: string | number): this;
+    listeners(type: string | number): Listener[];
+    listenerCount(type: string | number): number;
+  }
 
   export class AlgoliaSearchHelper extends EventEmitter {
     state: SearchParameters;
@@ -465,7 +479,7 @@ declare namespace algoliasearchHelper {
       [facet: string]: SearchParameters.FacetList;
     };
 
-    // types missing in @types/algoliasearch, so duplicated from v4
+    // redeclared to stay narrower than the v4 client types
     ruleContexts?: string[];
     optionalFilters?: Array<string | string[]>;
     queryLanguages?: SupportedLanguage[];

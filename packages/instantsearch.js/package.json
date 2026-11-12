@@ -38,7 +38,6 @@
     "scripts/transforms"
   ],
   "dependencies": {
-    "@algolia/events": "^4.0.1",
     "@swc/helpers": "0.5.18",
     "@types/dom-speech-recognition": "^0.0.1",
     "@types/google.maps": "^3.55.12",
@@ -51,7 +50,7 @@
     "search-insights": "^2.17.2"
   },
   "peerDependencies": {
-    "algoliasearch": ">= 3.1 < 6"
+    "algoliasearch": ">= 4 < 6"
   },
   "scripts": {
     "build": "BABEL_ENV=es,rollup BUILD_FORMAT=esm rollup -c rollup.config.mjs && BABEL_ENV=rollup BUILD_FORMAT=cjs rollup -c rollup.config.mjs && BABEL_ENV=rollup BUILD_FORMAT=umd rollup -c rollup.config.mjs && yarn build:types",

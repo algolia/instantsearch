@@ -9,7 +9,6 @@ import {
   serializeWidgetParams,
   getAlgoliaAgent,
   getAppIdAndApiKey,
-  find,
   now,
   omit,
   safelyRunOnBrowser,
@@ -150,7 +149,10 @@ export function createInsightsMiddleware<
       [queuedUserToken, queuedInitParams] = ['setUserToken', 'init'].map(
         (key) => {
           const [, value] =
-            find(queue.slice().reverse(), ([method]) => method === key) || [];
+            queue
+              .slice()
+              .reverse()
+              .find(([method]) => method === key) || [];
 
           return value as any as NonNullable<typeof value>;
         }
@@ -216,10 +218,10 @@ export function createInsightsMiddleware<
           [queuedUserToken, queuedInitParams] = ['setUserToken', 'init'].map(
             (key) => {
               const [, value] =
-                find(
-                  queueAtStart.slice().reverse(),
-                  ([method]) => method === key
-                ) || [];
+                queueAtStart
+                  .slice()
+                  .reverse()
+                  .find(([method]) => method === key) || [];
 
               return value;
             }

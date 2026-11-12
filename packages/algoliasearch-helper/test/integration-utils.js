@@ -20,12 +20,8 @@ function setup(indexName, fn) {
     if (!originalDeleteIndex) {
       return client.initIndex(deleteIndexName).delete();
     }
-    if (!hasInitIndex) {
-      return originalDeleteIndex({ indexName: deleteIndexName });
-    }
-    return originalDeleteIndex(deleteIndexName);
+    return originalDeleteIndex({ indexName: deleteIndexName });
   };
-  client.listIndexes = client.listIndexes || client.listIndices;
   client.initIndex =
     client.initIndex ||
     function (initIndexName) {
@@ -68,7 +64,7 @@ function setup(indexName, fn) {
           };
         });
     };
-  index.clearIndex = index.clearIndex || index.clearObjects;
+  index.clearIndex = index.clearObjects;
 
   // Ensure we go into the right integration branches (and client stays v5)
   client.initIndex = hasInitIndex ? client.initIndex : undefined;
