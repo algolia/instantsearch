@@ -2,7 +2,6 @@ import {
   checkRendering,
   escapeFacetValue,
   createDocumentationMessageGenerator,
-  find,
   noop,
   toArray,
   warning,
@@ -348,8 +347,7 @@ const connectToggleRefinement: ToggleRefinementConnector =
 
             const onData = on
               .map((v) =>
-                find(
-                  allFacetValues,
+                allFacetValues.find(
                   ({ escapedValue }) =>
                     escapedValue === escapeFacetValue(String(v))
                 )
@@ -359,8 +357,7 @@ const connectToggleRefinement: ToggleRefinementConnector =
             const offData = hasAnOffValue
               ? offValue
                   .map((v) =>
-                    find(
-                      allFacetValues,
+                    allFacetValues.find(
                       ({ escapedValue }) =>
                         escapedValue === escapeFacetValue(String(v))
                     )
