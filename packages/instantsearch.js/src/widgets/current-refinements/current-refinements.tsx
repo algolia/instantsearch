@@ -2,11 +2,9 @@
 
 import { connectCurrentRefinements } from 'instantsearch-core';
 import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
-import { suitComponent as component } from 'instantsearch-core/internal';
-import { cx } from 'instantsearch-ui-components';
-import { h, render } from 'preact';
+import { createCurrentRefinementsComponent } from 'instantsearch-ui-components';
+import { Fragment, h, render } from 'preact';
 
-import CurrentRefinements from '../../components/CurrentRefinements/CurrentRefinements';
 import { getContainerNode } from '../../lib/utils';
 
 import type { ComponentCSSClasses } from '../../types';
@@ -74,7 +72,11 @@ export type CurrentRefinementsWidgetParams = {
 const withUsage = createDocumentationMessageGenerator({
   name: 'current-refinements',
 });
-const suit = component('CurrentRefinements');
+
+const CurrentRefinements = createCurrentRefinementsComponent({
+  createElement: h,
+  Fragment,
+});
 
 const renderer: Renderer<
   CurrentRefinementsRenderState,
@@ -84,14 +86,14 @@ const renderer: Renderer<
     return;
   }
 
-  const { container, cssClasses } = widgetParams as {
+  const { container, classNames } = widgetParams as {
     container: HTMLElement;
-    cssClasses: ComponentCSSClasses<CurrentRefinementsCSSClasses>;
+    classNames: CurrentRefinementsCSSClasses;
   };
 
   render(
     <CurrentRefinements
-      cssClasses={cssClasses}
+      classNames={classNames}
       items={items}
       canRefine={canRefine}
     />,
@@ -122,35 +124,27 @@ const currentRefinements: CurrentRefinementsWidget =
     }
 
     const containerNode = getContainerNode(container);
-    const cssClasses: CurrentRefinementsCSSClasses = {
-      root: cx(suit(), userCssClasses.root),
-      noRefinementRoot: cx(
-        suit({ modifierName: 'noRefinement' }),
-        userCssClasses.noRefinementRoot
-      ),
-      list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
-      item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
-      label: cx(suit({ descendantName: 'label' }), userCssClasses.label),
-      category: cx(
-        suit({ descendantName: 'category' }),
-        userCssClasses.category
-      ),
-      categoryLabel: cx(
-        suit({ descendantName: 'categoryLabel' }),
-        userCssClasses.categoryLabel
-      ),
-      delete: cx(suit({ descendantName: 'delete' }), userCssClasses.delete),
+    const classNames: CurrentRefinementsCSSClasses = {
+      root: userCssClasses.root,
+      noRefinementRoot: userCssClasses.noRefinementRoot,
+      list: userCssClasses.list,
+      item: userCssClasses.item,
+      label: userCssClasses.label,
+      category: userCssClasses.category,
+      categoryLabel: userCssClasses.categoryLabel,
+      delete: userCssClasses.delete,
     };
 
-    const makeWidget =
-      connectCurrentRefinements<CurrentRefinementsWidgetParams>(renderer, () =>
-        render(null, containerNode)
-      );
+    const makeWidget = connectCurrentRefinements<
+      CurrentRefinementsWidgetParams & {
+        classNames: CurrentRefinementsCSSClasses;
+      }
+    >(renderer, () => render(null, containerNode));
 
     return {
       ...makeWidget({
         container: containerNode,
-        cssClasses,
+        classNames,
         includedAttributes,
         excludedAttributes,
         transformItems,
