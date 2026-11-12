@@ -1,5 +1,3 @@
-import { find } from 'instantsearch-core';
-
 import type { ComponentProps, Hooks, MutableRef } from '../../types';
 
 type BaseHit = Record<string, unknown>;
@@ -341,8 +339,7 @@ function buildItems<TItem extends BaseHit>({
   >();
 
   for (let i = 0; i < indices.length; i++) {
-    const currentIndexConfig = find(
-      indicesConfig,
+    const currentIndexConfig = indicesConfig.find(
       (config) => config.indexName === indices[i].indexName
     );
 

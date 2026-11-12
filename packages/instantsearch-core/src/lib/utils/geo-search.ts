@@ -1,5 +1,3 @@
-import { isFiniteNumber } from './isFiniteNumber';
-
 const latLngRegExp = /^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)$/;
 
 export function aroundLatLngToPosition(value: string) {
@@ -24,7 +22,7 @@ function isValidBoundingBox(
 ): coordinates is [number, number, number, number] {
   return (
     coordinates.length === 4 &&
-    coordinates.every((coordinate) => isFiniteNumber(coordinate))
+    coordinates.every((coordinate) => Number.isFinite(coordinate))
   );
 }
 

@@ -1,8 +1,5 @@
 'use strict';
 
-var find = require('../functions/find');
-var findIndex = require('../functions/findIndex');
-
 function getAverageIndices(indexTracker, nrOfObjs) {
   var avgIndices = [];
 
@@ -45,16 +42,16 @@ function sortAndMergeRecommendations(objectIDs, results, queryIDs) {
     orderedHits,
     avgIndexRef
   ) {
-    var resultIndex = findIndex(results, function (hits) {
+    var resultIndex = results.findIndex(function (hits) {
       return Boolean(
-        find(hits, function (hit) {
+        hits.find(function (hit) {
           return hit.objectID === avgIndexRef.objectID;
         })
       );
     });
     if (resultIndex === -1) return orderedHits;
 
-    var result = find(results[resultIndex], function (hit) {
+    var result = results[resultIndex].find(function (hit) {
       return hit.objectID === avgIndexRef.objectID;
     });
     var queryID = queryIDs && queryIDs[resultIndex];

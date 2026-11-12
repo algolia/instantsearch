@@ -121,7 +121,6 @@ export {
   deprecate,
   endsInsideRootProperty,
   extractWidgetPayload,
-  find,
   findTool,
   getAppIdAndApiKey,
   getHighlightedParts,
