@@ -56,8 +56,8 @@ function getReactExportNames(): string[] {
 }
 
 /**
- * Vue exports its widgets as `Ais*` components plus a few shared factories
- * (`createComparisonTableTool`); the mixin/server helpers are framework glue.
+ * Vue exports its widgets as `Ais*` components; the mixin/server helpers are
+ * framework glue.
  */
 const VUE_FRAMEWORK_GLUE = [
   'createSuitMixin',
@@ -187,7 +187,6 @@ describe('export parity across flavors', () => {
       'chatinlinelayout',
       'chatsidepanellayout',
       'promptsuggestions',
-      'createcomparisontabletool',
     ];
 
     const missing: string[] = [];

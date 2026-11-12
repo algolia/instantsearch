@@ -4,7 +4,6 @@ export * from './Chat';
 export * from './PromptSuggestions';
 export * from './ResultCard';
 export * from './ChatTrigger';
-export { createComparisonTableTool } from './chat/tools/ComparisonTableTool';
 export * from './CompareBar';
 export * from './ClearRefinements';
 export * from './CurrentRefinements';

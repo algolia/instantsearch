@@ -29,7 +29,6 @@ export { default as AisChatOverlayLayout } from './components/ChatOverlayLayout'
 export { default as AisChatInlineLayout } from './components/ChatInlineLayout';
 export { default as AisChatSidePanelLayout } from './components/ChatSidePanelLayout';
 export { default as AisPromptSuggestions } from './components/PromptSuggestions';
-export { createComparisonTableTool } from './components/chat/tools';
 export { default as AisCarousel } from './components/Carousel';
 export { default as AisCompareBar } from './components/CompareBar';
 export { default as AisResultCard } from './components/ResultCard';
