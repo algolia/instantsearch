@@ -16,7 +16,7 @@ The vanilla JS flavor: widgets, templates, the JS `instantsearch()` entry and a 
 ## Working here
 
 ```bash
-yarn workspace instantsearch.js build      # rollup → esm + cjs + umd + .d.ts
+yarn lerna run build --scope instantsearch.js      # rollup → esm + cjs + umd + .d.ts
 yarn workspace instantsearch.js test:exports   # the published entry resolves (ESM + CJS) and hides es/ and cjs/
 yarn jest packages/instantsearch-core/src/connectors/<name>   # run one connector's tests (from repo root)
 ```
