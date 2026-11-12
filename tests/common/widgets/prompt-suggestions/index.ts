@@ -26,10 +26,26 @@ export type JSPromptSuggestionsWidgetParams = Omit<
 export type ReactPromptSuggestionsWidgetParams = PromptSuggestionsProps &
   ChatPresenceParams;
 
+/**
+ * Scoped slots for the Vue widget: `layout` owns the full markup, `header`
+ * replaces the default header.
+ */
+type PromptSuggestionsScopedSlots = {
+  layout?: (props: { suggestions: string[] }) => unknown;
+  header?: (props: unknown) => unknown;
+};
+
 type PromptSuggestionsWidgetParams = {
   javascript: JSPromptSuggestionsWidgetParams;
   react: ReactPromptSuggestionsWidgetParams;
-  vue: Record<string, never>;
+  /**
+   * The Vue widget takes the same props as the React one (`agentId`,
+   * `transport`, `onSuggestionClick`, …), plus `scopedSlots` for custom
+   * rendering.
+   */
+  vue?: ReactPromptSuggestionsWidgetParams & {
+    scopedSlots?: PromptSuggestionsScopedSlots;
+  };
 };
 
 declare module '../../common' {

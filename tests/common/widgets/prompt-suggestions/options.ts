@@ -81,28 +81,37 @@ function mockAgentFetch(suggestions: string[] = SUGGESTIONS) {
 
 export function createOptionsTests(
   setup: PromptSuggestionsWidgetSetup,
-  { act }: Required<TestOptions>
+  { act, flavor }: Required<TestOptions>
 ) {
   describe('options', () => {
-    test('throws without agentId or transport', () => {
-      const searchClient = createSearchClient({});
+    // Vue mounts widgets in a lifecycle hook, and Vue's error handling
+    // reports errors thrown there (console.error) instead of rethrowing them
+    // to the caller, so the misconfiguration surfaces as a logged error
+    // rather than a synchronous throw. The connector still refuses to mount
+    // the widget.
+    (flavor === 'vue' ? test.skip : test)(
+      'throws without agentId or transport',
+      () => {
+        const searchClient = createSearchClient({});
 
-      expect(() =>
-        setup({
-          instantSearchOptions: {
-            indexName: 'indexName',
-            searchClient,
-          },
-          widgetParams: {
-            javascript: {} as any,
-            react: {} as any,
-            vue: {},
-          },
-        })
-      ).toThrow(
-        'The `agentId` option is required unless a custom `transport` is provided.'
-      );
-    });
+        expect(() =>
+          setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              javascript: {} as any,
+              react: {} as any,
+              // Intentionally empty: the widget must throw without an agent.
+              vue: {} as any,
+            },
+          })
+        ).toThrow(
+          'The `agentId` option is required unless a custom `transport` is provided.'
+        );
+      }
+    );
 
     test('renders the suggestion pills returned by the agent', async () => {
       const searchClient = createResultsClient([
@@ -122,7 +131,10 @@ export function createOptionsTests(
             agentId: 'test-agent-id',
             configurationId: 'prompt-suggestions',
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
         },
       });
 
@@ -175,7 +187,10 @@ export function createOptionsTests(
             agentId: 'test-agent-id',
             configurationId: 'prompt-suggestions',
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
         },
       });
 
@@ -224,7 +239,10 @@ export function createOptionsTests(
             agentId: 'test-agent-id',
             configurationId: 'prompt-suggestions',
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
         },
       });
 
@@ -259,7 +277,10 @@ export function createOptionsTests(
             agentId: 'test-agent-id',
             configurationId: 'prompt-suggestions',
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
         },
       });
 
@@ -291,7 +312,7 @@ export function createOptionsTests(
         widgetParams: {
           javascript: { transport, configurationId: 'prompt-suggestions' },
           react: { transport, configurationId: 'prompt-suggestions' },
-          vue: {},
+          vue: { transport, configurationId: 'prompt-suggestions' },
         },
       });
 
@@ -342,7 +363,11 @@ export function createOptionsTests(
             transport,
             configurationId: 'prompt-suggestions',
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            transport,
+            configurationId: 'prompt-suggestions',
+          },
         },
       });
 
@@ -387,7 +412,11 @@ export function createOptionsTests(
             configurationId: 'prompt-suggestions',
             context,
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            context,
+          },
         },
       });
 
@@ -426,7 +455,10 @@ export function createOptionsTests(
             agentId: 'test-agent-id',
             configurationId: 'prompt-suggestions',
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
         },
       });
 
@@ -458,7 +490,11 @@ export function createOptionsTests(
             configurationId: 'prompt-suggestions',
             context,
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            context,
+          },
         },
       });
 
@@ -491,7 +527,7 @@ export function createOptionsTests(
         widgetParams: {
           javascript: { agentId: 'test-agent-id' },
           react: { agentId: 'test-agent-id' },
-          vue: {},
+          vue: { agentId: 'test-agent-id' },
         },
       });
 
@@ -525,7 +561,10 @@ export function createOptionsTests(
             agentId: 'test-agent-id',
             configurationId: 'my_custom_task',
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'my_custom_task',
+          },
         },
       });
 
@@ -565,7 +604,11 @@ export function createOptionsTests(
             configurationId: 'prompt-suggestions',
             transformItems,
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            transformItems,
+          },
         },
       });
 
@@ -605,7 +648,12 @@ export function createOptionsTests(
             onSuggestionClick,
             renderChat: false,
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            onSuggestionClick,
+            renderChat: false,
+          },
         },
       });
 
