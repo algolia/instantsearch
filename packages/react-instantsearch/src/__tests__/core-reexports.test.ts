@@ -29,31 +29,15 @@ import type * as TypesFromReactInstantSearchCore from 'react-instantsearch-core'
 // users get the React version, not core's.
 const SHADOWED_BY_REACT: string[] = [];
 
-const isConnector = (name: string) => /^connect[A-Z]/.test(name);
-const hookOf = (connector: string) => `use${connector.slice('connect'.length)}`;
-
-const reactCoreExports = reactInstantSearchCore as Record<string, unknown>;
-
-// A connector that has a matching hook (`connectSearchBox` → `useSearchBox`)
-// is not re-exported: React users use the hook.
-const coveredByHook = (name: string) =>
-  isConnector(name) && typeof reactCoreExports[hookOf(name)] === 'function';
-
 const coreNames = Object.keys(core).filter(
   (name) => !SHADOWED_BY_REACT.includes(name)
 );
-const droppedConnectors = coreNames.filter(coveredByHook);
-const reExportedNames = coreNames.filter((name) => !coveredByHook(name));
-
-const packages = [
-  ['react-instantsearch', reactInstantSearch],
-  ['react-instantsearch-core', reactInstantSearchCore],
-] as const;
 
 describe('instantsearch-core re-exports', () => {
   test('core exposes runtime names to re-export', () => {
-    expect(reExportedNames).toEqual(
+    expect(coreNames).toEqual(
       expect.arrayContaining([
+        'connectSearchBox',
         'connectRatingMenu',
         'historyRouter',
         'simpleStateMapping',
@@ -63,63 +47,26 @@ describe('instantsearch-core re-exports', () => {
     );
   });
 
-  test('the connectors without a hook are the expected ones', () => {
-    // A new connector in core fails here until it gets a React hook (then it is
-    // dropped from the re-exports) or is added to this list on purpose.
-    expect(coreNames.filter(isConnector).filter((name) => !coveredByHook(name)))
-      .toMatchInlineSnapshot(`
-      [
-        "connectRatingMenu",
-        "connectRelevantSort",
-        "connectTasks",
-        "connectVoiceSearch",
-      ]
-    `);
+  test.each([
+    ['react-instantsearch', reactInstantSearch],
+    ['react-instantsearch-core', reactInstantSearchCore],
+  ])('%s re-exports every runtime name of instantsearch-core', (_, pkg) => {
+    const missing = coreNames.filter((name) => !(name in pkg));
+
+    expect(missing).toEqual([]);
   });
 
-  test.each(packages)(
-    '%s re-exports every runtime name of core that has no hook',
-    (_, pkg) => {
-      const missing = reExportedNames.filter((name) => !(name in pkg));
+  test.each([
+    ['react-instantsearch', reactInstantSearch],
+    ['react-instantsearch-core', reactInstantSearchCore],
+  ])('%s re-exports the same values as instantsearch-core', (_, pkg) => {
+    const different = coreNames.filter(
+      (name) =>
+        (pkg as Record<string, unknown>)[name] !==
+        (core as Record<string, unknown>)[name]
+    );
 
-      expect(missing).toEqual([]);
-    }
-  );
-
-  test.each(packages)(
-    '%s re-exports the same values as instantsearch-core',
-    (_, pkg) => {
-      const different = reExportedNames.filter(
-        (name) =>
-          (pkg as Record<string, unknown>)[name] !==
-          (core as Record<string, unknown>)[name]
-      );
-
-      expect(different).toEqual([]);
-    }
-  );
-
-  test.each(packages)(
-    '%s does not re-export the connectors that have a hook',
-    (_, pkg) => {
-      expect(droppedConnectors.length).toBeGreaterThan(0);
-
-      const exported = droppedConnectors.filter((name) => name in pkg);
-
-      expect(exported).toEqual([]);
-    }
-  );
-
-  test('every connector of core is covered by a hook or re-exported', () => {
-    const unclassified = coreNames
-      .filter(isConnector)
-      .filter(
-        (name) =>
-          !coveredByHook(name) &&
-          reactCoreExports[name] !== (core as Record<string, unknown>)[name]
-      );
-
-    expect(unclassified).toEqual([]);
+    expect(different).toEqual([]);
   });
 
   test('React exports win over colliding core names', () => {
