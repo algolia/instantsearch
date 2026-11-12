@@ -36,6 +36,7 @@ describe('PoweredBy', () => {
           >
             <svg
               class="ais-PoweredBy-logo"
+              style="height: 1.2em; width: auto;"
               viewBox="0 0 572 64"
             >
               <path
@@ -71,6 +72,7 @@ describe('PoweredBy', () => {
           >
             <svg
               class="ais-PoweredBy-logo"
+              style="height: 1.2em; width: auto;"
               viewBox="0 0 572 64"
             >
               <path
