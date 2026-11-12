@@ -1,39 +1,11 @@
-<template>
-  <div
-    v-if="state"
-    :class="[suit(), !state.canRefine && suit('', 'noRefinement')]"
-  >
-    <slot
-      :value="state.value"
-      :can-refine="state.canRefine"
-      :refine="state.refine"
-      :createURL="state.createURL"
-      :send-event="state.sendEvent"
-    >
-      <label :class="suit('label')">
-        <input
-          :class="suit('checkbox')"
-          type="checkbox"
-          :name="state.value.name"
-          :value="on"
-          :checked="state.value.isRefined"
-          @change="state.refine(state.value)"
-        />
-        <span :class="suit('labelText')">{{ label || state.value.name }}</span>
-        <span v-if="state.value.count !== null" :class="suit('count')">{{
-          state.value.count.toLocaleString()
-        }}</span>
-      </label>
-    </slot>
-  </div>
-</template>
-
 <script>
 import { connectToggleRefinement } from 'instantsearch-core';
+import { createToggleRefinementComponent } from 'instantsearch-ui-components';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
+import { Fragment, getScopedSlot, renderReactCompat } from '../util/vue-compat';
 
 export default {
   name: 'AisToggleRefinement',
@@ -78,5 +50,52 @@ export default {
       };
     },
   },
+  render: renderReactCompat(function (h) {
+    if (!this.state) {
+      return null;
+    }
+
+    const defaultSlot = getScopedSlot(this, 'default');
+    if (defaultSlot) {
+      return h(
+        'div',
+        {
+          className: [
+            this.suit(),
+            !this.state.canRefine && this.suit('', 'noRefinement'),
+          ],
+        },
+        [
+          defaultSlot({
+            value: this.state.value,
+            canRefine: this.state.canRefine,
+            refine: this.state.refine,
+            createURL: this.state.createURL,
+            sendEvent: this.state.sendEvent,
+          }),
+        ]
+      );
+    }
+
+    const ToggleRefinement = createToggleRefinementComponent({
+      createElement: h,
+      Fragment,
+    });
+
+    return h(ToggleRefinement, {
+      classNames: this.classNames && {
+        root: this.classNames['ais-ToggleRefinement'],
+        label: this.classNames['ais-ToggleRefinement-label'],
+        checkbox: this.classNames['ais-ToggleRefinement-checkbox'],
+        labelText: this.classNames['ais-ToggleRefinement-labelText'],
+        count: this.classNames['ais-ToggleRefinement-count'],
+      },
+      checked: this.state.value.isRefined,
+      label: this.label || this.state.value.name,
+      count: this.state.value.count,
+      value: this.state.value,
+      onChange: (isChecked) => this.state.refine({ isRefined: !isChecked }),
+    });
+  }),
 };
 </script>
