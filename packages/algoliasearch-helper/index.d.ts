@@ -1,5 +1,3 @@
-import EventEmitter from '@algolia/events';
-
 // eslint-disable-next-line typescript/consistent-type-imports
 import type {
   FrequentlyBoughtTogetherQuery,
@@ -38,6 +36,22 @@ declare function algoliasearchHelper(
 
 declare namespace algoliasearchHelper {
   export const version: string;
+
+  export type Listener = (...args: any[]) => void;
+
+  /**
+   * A minimal version of Node's EventEmitter.
+   */
+  export class EventEmitter {
+    emit(type: string | number, ...args: any[]): boolean;
+    addListener(type: string | number, listener: Listener): this;
+    on(type: string | number, listener: Listener): this;
+    once(type: string | number, listener: Listener): this;
+    removeListener(type: string | number, listener: Listener): this;
+    removeAllListeners(type?: string | number): this;
+    listeners(type: string | number): Listener[];
+    listenerCount(type: string | number): number;
+  }
 
   export class AlgoliaSearchHelper extends EventEmitter {
     state: SearchParameters;

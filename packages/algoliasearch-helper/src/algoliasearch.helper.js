@@ -1,8 +1,7 @@
 'use strict';
 
-var EventEmitter = require('@algolia/events');
-
 var DerivedHelper = require('./DerivedHelper');
+var EventEmitter = require('./EventEmitter');
 var escapeFacetValue = require('./functions/escapeFacetValue').escapeFacetValue;
 var inherits = require('./functions/inherits');
 var RecommendParameters = require('./RecommendParameters');
