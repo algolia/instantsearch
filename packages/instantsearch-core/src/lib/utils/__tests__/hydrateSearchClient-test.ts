@@ -1,4 +1,3 @@
-import algoliasearchV3 from 'algoliasearch-v3';
 import algoliasearchV4 from 'algoliasearch-v4';
 import { liteClient as algoliasearchV5 } from 'algoliasearch-v5/lite';
 
@@ -9,8 +8,6 @@ import type { SearchClient, InitialResults } from '../../../types';
 describe('hydrateSearchClient', () => {
   let client: SearchClient & {
     _cacheHydrated?: boolean;
-    _useCache?: boolean;
-    cache?: Record<string, string>;
   };
   const initialResults = {
     instant_search: {
@@ -27,16 +24,8 @@ describe('hydrateSearchClient', () => {
     expect(client._cacheHydrated).not.toBeDefined();
   });
 
-  it('should not hydrate the client if the cache is disabled', () => {
-    client = { _useCache: false } as unknown as SearchClient;
-
-    hydrateSearchClient(client, initialResults);
-
-    expect(client._cacheHydrated).not.toBeDefined();
-  });
-
-  it('should not hydrate the client if `addAlgoliaAgent` is missing', () => {
-    client = { addAlgoliaAgent: undefined } as unknown as SearchClient;
+  it('should not hydrate a client without a transporter', () => {
+    client = { search: jest.fn() } as unknown as SearchClient;
 
     hydrateSearchClient(client, initialResults);
 
@@ -64,51 +53,6 @@ describe('hydrateSearchClient', () => {
     );
     expect(client._cacheHydrated).toBe(true);
     expect(client.search).toBeDefined();
-  });
-
-  it('should populate the cache for < v4 if there is no transporter object', () => {
-    client = {
-      addAlgoliaAgent: jest.fn(),
-      search: jest.fn(),
-      _useCache: true,
-    } as unknown as SearchClient;
-
-    hydrateSearchClient(client, initialResults);
-
-    expect(client.cache).toBeDefined();
-  });
-
-  it('should prefer compositionFeedsResults for each index slice in the < v4 cache', () => {
-    client = {
-      addAlgoliaAgent: jest.fn(),
-      search: jest.fn(),
-      _useCache: true,
-    } as unknown as SearchClient;
-
-    const rawA = {
-      index: 'instant_search',
-      params: 'a',
-      nbHits: 1,
-      feedID: 'x',
-    };
-    const rawB = {
-      index: 'instant_search',
-      params: 'b',
-      nbHits: 2,
-      feedID: 'y',
-    };
-
-    hydrateSearchClient(client, {
-      instant_search: {
-        results: [rawA],
-        state: { index: 'instant_search' },
-        compositionFeedsResults: [rawA, rawB],
-      },
-    } as unknown as InitialResults);
-
-    const cachePayload = Object.values(client.cache!)[0];
-    const parsed = JSON.parse(cachePayload);
-    expect(parsed.results).toEqual([[rawA, rawB]]);
   });
 
   it('should use request params by default', () => {
@@ -308,18 +252,5 @@ describe('hydrateSearchClient', () => {
     await searchClient.search([{ indexName: 'another', params: {} }]);
 
     expect(send).toHaveBeenCalled();
-  });
-
-  it('should not throw if search requires to be bound (v3)', async () => {
-    const searchClient: any = algoliasearchV3('appId', 'apiKey');
-    searchClient._request = jest
-      .fn()
-      .mockResolvedValue({ body: { status: 200 } });
-
-    hydrateSearchClient(searchClient, initialResults);
-
-    await searchClient.search([{ indexName: 'another', params: {} }]);
-
-    expect(searchClient._request).toHaveBeenCalled();
   });
 });

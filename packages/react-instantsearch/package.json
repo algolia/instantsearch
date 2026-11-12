@@ -50,7 +50,7 @@
     "react-instantsearch-core": "7.55.0"
   },
   "peerDependencies": {
-    "algoliasearch": ">= 3.1 < 6",
+    "algoliasearch": ">= 4 < 6",
     "react": ">= 16.8.0 < 20",
     "react-dom": ">= 16.8.0 < 20"
   }

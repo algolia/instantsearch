@@ -149,7 +149,7 @@ describe('connectFrequentlyBoughtTogether', () => {
         getRecommendations: jest.fn((requests) =>
           Promise.resolve(
             createRecommendResponse(
-              // @ts-ignore `getRecommendations` isn't typed in v3
+              // @ts-ignore trending facets queries have no `objectID`
               requests.map((request: { objectID?: string }) =>
                 createSingleSearchResponse(
                   request.objectID === '1'
