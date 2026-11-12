@@ -19,13 +19,12 @@ const connectorProps = [
 ];
 
 /**
- * Vue equivalent of react-instantsearch's `PromptSuggestions` and
- * instantsearch.js's `promptSuggestions` widget: the backend-generated prompt
- * pills rendered with the shared `createPromptSuggestionsComponent` factory.
+ * Backend-generated prompt suggestions rendered as clickable pills.
  *
  * A clicked suggestion is handed to the `ais-chat` widget on the same index,
  * unless `onSuggestionClick` overrides the behavior (it receives the prompt
- * and a `sendToChat` helper to fall through to the default).
+ * and a `sendToChat` helper to fall through to the default after running
+ * custom logic).
  *
  * Customize with the `layout` scoped slot / `layoutComponent` prop (owns the
  * full markup) or the `header` scoped slot / `headerComponent` prop (replaces

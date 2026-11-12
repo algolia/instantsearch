@@ -21,9 +21,8 @@ function renderPiece(h, piece) {
 }
 
 /**
- * Vue equivalent of react-instantsearch's `ChatOverlayLayout` and
- * instantsearch.js's `templates.chatOverlayLayout`: the floating-panel chat
- * layout around the `createChatOverlayLayoutComponent` factory.
+ * The floating-panel chat layout: the header, messages and prompt stack in a
+ * panel that slides in when `open`.
  *
  * This is also the markup `ais-chat` renders for its default `overlay`
  * layout; the component is exported so a custom chat can reuse it, e.g. as a
