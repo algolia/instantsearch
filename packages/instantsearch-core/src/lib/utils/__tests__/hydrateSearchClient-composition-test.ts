@@ -10,8 +10,6 @@ const setupCompositionClient = () => {
   const search: CompositionClient['search'] = jest.fn();
   const client: CompositionClient & {
     _cacheHydrated?: boolean;
-    _useCache?: boolean;
-    cache?: Record<string, string>;
   } = createCompositionClient({
     transporter: { responsesCache: { set: setCache, get: getCache } },
     addAlgoliaAgent: jest.fn(),

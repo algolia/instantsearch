@@ -61,7 +61,6 @@ export {
   deprecate,
   endsInsideRootProperty,
   extractWidgetPayload,
-  find,
   findTool,
   getAppIdAndApiKey,
   getJsonCursor,

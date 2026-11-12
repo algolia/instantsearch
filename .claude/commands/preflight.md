@@ -11,7 +11,7 @@ Run the InstantSearch pre-push checks against the **current changes** and report
 
 2. **Lint the changed files:** `yarn lint:changed`. If it fails, show the violations; offer `yarn lint:fix` for auto-fixable ones (note that oxlint bans `for-in`/`for-of`/`async` and implicit `any` in library code — those need manual fixes).
 
-3. **Type-check:** `yarn type-check`. If any touched code interacts with the legacy algoliasearch versions, also run `yarn type-check:v3` / `yarn type-check:v4`.
+3. **Type-check:** `yarn type-check`. If any touched code interacts with the legacy algoliasearch version, also run `yarn type-check:v4`.
 
 4. **Run the relevant tests** — not the whole suite. Map changed files to their `yarn jest <path>` (e.g. a connector → `yarn jest packages/instantsearch.js/src/connectors/<name>`; a React widget → its `__tests__` path). If a connector's cross-flavor behavior changed, include the matching `tests/common/` path.
 
@@ -22,7 +22,7 @@ Run the InstantSearch pre-push checks against the **current changes** and report
 Report a short checklist:
 
 - ✅/❌ lint:changed
-- ✅/❌ type-check (+ v3/v4 if run)
+- ✅/❌ type-check (+ v4 if run)
 - ✅/❌ tests (list the paths run)
 - ✅/❌ commit message
 
