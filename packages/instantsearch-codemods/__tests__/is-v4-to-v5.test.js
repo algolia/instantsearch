@@ -10,3 +10,4 @@ define(__dirname, 'src/is-v4-to-v5', null, 'is-v4-to-v5/todos', {
 });
 define(__dirname, 'src/is-v4-to-v5', null, 'is-v4-to-v5/vue-autocomplete');
 define(__dirname, 'src/is-v4-to-v5', null, 'is-v4-to-v5/vue-autocomplete-old');
+define(__dirname, 'src/is-v4-to-v5', null, 'is-v4-to-v5/vue-autocomplete-both');
