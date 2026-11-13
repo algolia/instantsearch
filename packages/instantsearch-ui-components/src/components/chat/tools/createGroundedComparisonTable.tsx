@@ -9,8 +9,9 @@ import type { ChatRecord, ChatRecordsStore } from 'instantsearch-core';
 
 /**
  * Shared presentational component for chat comparison tables. Used by the
- * builtin `algolia_compare_products` tool (`CompareProductsTool`) and the
- * `algolia_display_results` markdownTable path (`ComparisonTableTool`).
+ * builtin `algolia_compare_products` tool's model-authored table
+ * (`CompareProductsTool`) and its grounded v2 `markdownTable` path
+ * (`ComparisonTableTool`).
  *
  * Layout: the compared products run across the top (one column each, rendered
  * with the same item component as the search results so the comparison reads

@@ -11,7 +11,7 @@ import type { Renderer } from '../../../types';
 import type { ClientSideToolComponentProps } from 'instantsearch-core';
 
 /**
- * Grounded comparison-table renderer for `algolia_display_results` outputs.
+ * Grounded comparison-table renderer for the `algolia_compare_products` tool.
  *
  * The agent emits a v2 `markdownTable` display block that names only the
  * product objectIDs and the attribute *keys* to compare — never the values.

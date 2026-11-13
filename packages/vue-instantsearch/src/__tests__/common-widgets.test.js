@@ -38,12 +38,46 @@ import {
   AisTrendingFacets,
   AisChat,
   AisChatTrigger,
+  AisPromptSuggestions,
   AisCompareBar,
   AisResultCard,
 } from '../instantsearch';
-import { renderCompat } from '../util/vue-compat';
+import { isVue3, renderCompat } from '../util/vue-compat';
 
 jest.unmock('instantsearch-core');
+
+// The setups below only clear the DOM between tests, so a mounted app keeps
+// running afterwards: a connector with scheduled work (e.g. the prompt
+// suggestions' debounced fetch) can then fire into the *next* test and hit
+// its mocks. Track every mounted app and dispose it after each test.
+const mountedApps = [];
+
+const trackMountApp = (...args) => {
+  const app = mountApp(...args);
+  mountedApps.push(app);
+  return app;
+};
+
+const trackMountAppOrThrow = (...args) => {
+  const app = mountAppOrThrow(...args);
+  mountedApps.push(app);
+  return app;
+};
+
+afterEach(() => {
+  while (mountedApps.length) {
+    const app = mountedApps.pop();
+    try {
+      if (isVue3) {
+        app.$.appContext.app.unmount();
+      } else {
+        app.$destroy();
+      }
+    } catch (error) {
+      // The app is already gone; nothing to dispose.
+    }
+  }
+});
 
 /**
  * prevent rethrowing InstantSearch errors, so tests can be asserted.
@@ -64,7 +98,7 @@ const testSetups = {
     instantSearchOptions,
     widgetParams,
   }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -82,7 +116,7 @@ const testSetups = {
     instantSearchOptions,
     widgetParams,
   }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -102,7 +136,7 @@ const testSetups = {
     // eslint-disable-next-line no-unused-vars
     const { transformItems, ...hierarchicalWidgetParams } = widgetParams;
 
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -118,7 +152,7 @@ const testSetups = {
     await nextTick();
   },
   async createMenuWidgetTests({ instantSearchOptions, widgetParams }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -133,7 +167,7 @@ const testSetups = {
     await nextTick();
   },
   async createPaginationWidgetTests({ instantSearchOptions, widgetParams }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -148,7 +182,7 @@ const testSetups = {
     await nextTick();
   },
   async createInfiniteHitsWidgetTests({ instantSearchOptions, widgetParams }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -229,7 +263,7 @@ const testSetups = {
     await nextTick();
   },
   async createHitsWidgetTests({ instantSearchOptions, widgetParams }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -310,7 +344,7 @@ const testSetups = {
     await nextTick();
   },
   async createRangeInputWidgetTests({ instantSearchOptions, widgetParams }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -328,7 +362,7 @@ const testSetups = {
     throw new Error('RangeSlider is not supported in Vue InstantSearch');
   },
   createInstantSearchWidgetTests({ instantSearchOptions }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -352,7 +386,7 @@ const testSetups = {
     };
   },
   async createHitsPerPageWidgetTests({ instantSearchOptions, widgetParams }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -374,7 +408,7 @@ const testSetups = {
       instantSearchOptions.initialUiState?.indexName.refinementList || {}
     );
 
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -396,7 +430,7 @@ const testSetups = {
     instantSearchOptions,
     widgetParams,
   }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h('form', {}, [
@@ -428,7 +462,7 @@ const testSetups = {
     await nextTick();
   },
   async createRatingMenuWidgetTests({ instantSearchOptions, widgetParams }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -443,7 +477,7 @@ const testSetups = {
     await nextTick();
   },
   async createNumericMenuWidgetTests({ instantSearchOptions, widgetParams }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -461,7 +495,7 @@ const testSetups = {
     instantSearchOptions,
     widgetParams,
   }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -476,7 +510,7 @@ const testSetups = {
     await nextTick();
   },
   async createSearchBoxWidgetTests({ instantSearchOptions, widgetParams }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -491,7 +525,7 @@ const testSetups = {
     await nextTick();
   },
   async createSortByWidgetTests({ instantSearchOptions, widgetParams }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -506,7 +540,7 @@ const testSetups = {
     await nextTick();
   },
   async createStatsWidgetTests({ instantSearchOptions, widgetParams }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h('div', {}, [
@@ -527,7 +561,7 @@ const testSetups = {
     instantSearchOptions,
     widgetParams,
   }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -545,7 +579,7 @@ const testSetups = {
     instantSearchOptions,
     widgetParams,
   }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -560,7 +594,7 @@ const testSetups = {
     await nextTick();
   },
   async createTrendingItemsWidgetTests({ instantSearchOptions, widgetParams }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -578,7 +612,7 @@ const testSetups = {
     instantSearchOptions,
     widgetParams,
   }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -596,7 +630,7 @@ const testSetups = {
     instantSearchOptions,
     widgetParams,
   }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -611,7 +645,7 @@ const testSetups = {
     await nextTick();
   },
   createPoweredByWidgetTests({ instantSearchOptions, widgetParams }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -628,7 +662,7 @@ const testSetups = {
     };
   },
   async createMenuSelectWidgetTests({ instantSearchOptions, widgetParams }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -643,7 +677,7 @@ const testSetups = {
     await nextTick();
   },
   createDynamicWidgetsWidgetTests({ instantSearchOptions, widgetParams }) {
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -675,7 +709,7 @@ const testSetups = {
       ...chatWidgetParams
     } = widgetParams;
 
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -715,7 +749,7 @@ const testSetups = {
   async createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
     const { slots = {}, renderChat = false, ...props } = widgetParams;
 
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -734,8 +768,48 @@ const testSetups = {
 
     await nextTick();
   },
-  createPromptSuggestionsWidgetTests() {
-    throw new Error('PromptSuggestions is not supported in Vue InstantSearch');
+  async createPromptSuggestionsWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    // The widget hands clicked suggestions to a `chat` on the same index, and
+    // errors without one, so the default setup mounts both. `renderChat: false`
+    // is how a test asks for the unconfigured page. `scopedSlots` becomes the
+    // component's scoped slots rather than a prop.
+    const {
+      renderChat = true,
+      scopedSlots,
+      ...promptSuggestionsWidgetParams
+    } = widgetParams;
+
+    trackMountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(
+              AisPromptSuggestions,
+              {
+                key: 'prompt-suggestions',
+                props: promptSuggestionsWidgetParams,
+                scopedSlots,
+              },
+              []
+            ),
+            // A dedicated id: the `agentId` the chat suites use keys persisted
+            // messages in `sessionStorage` that leak across tests in this file.
+            renderChat &&
+              h(AisChat, {
+                key: 'chat',
+                props: { agentId: 'promptSuggestionsChatAgentId' },
+              }),
+            h(GlobalErrorSwallower, { key: 'errors' }),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
   },
   async createCompareBarWidgetTests({ instantSearchOptions, widgetParams }) {
     // The bar hands the comparison to an `ais-chat` on the same index, so the
@@ -775,7 +849,7 @@ const testSetups = {
       }),
     };
 
-    mountApp(
+    trackMountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -800,7 +874,7 @@ const testSetups = {
     // a test asks for the unconfigured page.
     const { renderChat = true, slots = {}, ...props } = widgetParams;
 
-    mountAppOrThrow(
+    trackMountAppOrThrow(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
@@ -866,7 +940,12 @@ const testOptions = {
   },
   createAutocompleteWidgetTests: undefined,
   createPromptSuggestionsWidgetTests: {
-    skippedTests: { 'PromptSuggestions widget common tests': true },
+    // Vue batches DOM updates, so flush them after each step the shared tests
+    // wrap in `act`.
+    act: async (callback) => {
+      await callback();
+      await nextTick();
+    },
   },
   createResultCardWidgetTests: {
     // Vue batches DOM updates, so flush them after each step the shared tests

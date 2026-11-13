@@ -4,6 +4,7 @@ import {
 } from 'instantsearch-ui-components';
 
 import { createHooksMixin } from '../mixins/hooks';
+import { createSuitMixin } from '../mixins/suit';
 import { Fragment, renderReactCompat } from '../util/vue-compat';
 
 /**
@@ -21,7 +22,7 @@ import { Fragment, renderReactCompat } from '../util/vue-compat';
  */
 export default {
   name: 'AisCarousel',
-  mixins: [createHooksMixin()],
+  mixins: [createHooksMixin(), createSuitMixin({ name: 'Carousel' })],
   props: {
     items: {
       type: Array,
