@@ -22,9 +22,11 @@ export type HitsPerPageClassNames = {
 
 export type HitsPerPageItem = {
   /**
-   * The number of hits per page
+   * The number of hits per page. The empty string is the blank option
+   * inserted by the connector when the configured value is absent from
+   * `items`; selecting it clears `hitsPerPage`.
    */
-  value: number;
+  value: number | '';
   /**
    * The label of the option to display
    */
@@ -46,13 +48,17 @@ export type HitsPerPageProps = Omit<ComponentProps<'div'>, 'onChange'> & {
    */
   items: HitsPerPageItem[];
   /**
-   * The current number of hits per page
+   * The current number of hits per page. The empty string is the blank
+   * option inserted by the connector when the configured value is absent
+   * from `items`.
    */
-  currentValue?: number;
+  currentValue?: number | '';
   /**
-   * Called with the next number of hits per page
+   * Called with the next number of hits per page. The empty string is the
+   * sentinel used by the connector for the blank option shown when the
+   * configured value is absent from `items`; it clears `hitsPerPage`.
    */
-  onChange?: (value: number) => void;
+  onChange?: (value: number | '') => void;
 };
 
 export function createHitsPerPageComponent({
@@ -81,7 +87,9 @@ export function createHitsPerPageComponent({
         options={items}
         value={currentValue}
         onChange={(value) => {
-          onChange?.(Number(value));
+          // The blank option (`value: ''`) is the connector's sentinel for
+          // clearing `hitsPerPage`; converting it to a number would send `0`.
+          onChange?.(value === '' ? value : Number(value));
         }}
       />
     );

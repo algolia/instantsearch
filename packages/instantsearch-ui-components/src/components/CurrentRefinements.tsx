@@ -133,6 +133,13 @@ function createItemKey({
   return [attribute, type, value, operator].filter(Boolean).join(':');
 }
 
+function createGroupKey(item: CurrentRefinementsItem): string {
+  // The index id disambiguates scoped indices searching the same index.
+  return [item.indexId ?? item.indexName, item.attribute, item.label]
+    .filter(Boolean)
+    .join('/');
+}
+
 export function createCurrentRefinementsComponent({ createElement }: Renderer) {
   function DefaultRefinement({
     item,
@@ -192,12 +199,7 @@ export function createCurrentRefinementsComponent({ createElement }: Renderer) {
     key?: string | number;
   }) {
     return (
-      <li
-        key={[item.indexName, item.attribute, item.label]
-          .filter(Boolean)
-          .join('/')}
-        className={className}
-      >
+      <li key={createGroupKey(item)} className={className}>
         <span className={cx('ais-CurrentRefinements-label', classNames.label)}>
           {capitalize(item.label)}:{' '}
         </span>
@@ -260,9 +262,7 @@ export function createCurrentRefinementsComponent({ createElement }: Renderer) {
               'ais-CurrentRefinements-item',
               classNames.item
             );
-            const key = [item.indexName, item.attribute, item.label]
-              .filter(Boolean)
-              .join('/');
+            const key = createGroupKey(item);
 
             return ItemComponent ? (
               <ItemComponent key={key} item={item} className={className} />
