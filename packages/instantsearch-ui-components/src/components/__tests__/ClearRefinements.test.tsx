@@ -34,6 +34,7 @@ describe('ClearRefinements', () => {
         >
           <button
             class="ais-ClearRefinements-button"
+            type="button"
           >
             Clear refinements
           </button>
@@ -81,6 +82,7 @@ describe('ClearRefinements', () => {
           <button
             class="ais-ClearRefinements-button BUTTON ais-ClearRefinements-button--disabled DISABLED"
             disabled=""
+            type="button"
           >
             Clear refinements
           </button>
@@ -107,6 +109,7 @@ describe('ClearRefinements', () => {
     expect(container.querySelector('button')).toMatchInlineSnapshot(`
       <button
         class="ais-ClearRefinements-button"
+        type="button"
       >
         <span>
           custom (

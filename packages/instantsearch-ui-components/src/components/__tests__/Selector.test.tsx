@@ -200,4 +200,21 @@ describe('HitsPerPage', () => {
     });
     expect(props.onChange).toHaveBeenCalledWith(12);
   });
+
+  test('passes the blank-option sentinel through to `onChange`', () => {
+    const props = {
+      items: [
+        { value: 6, label: '6 per page' },
+        { value: '' as const, label: '' },
+      ],
+      currentValue: 6,
+      onChange: jest.fn(),
+    };
+    const { container } = render(<HitsPerPage {...props} />);
+
+    fireEvent.change(container.querySelector('select')!, {
+      target: { value: '' },
+    });
+    expect(props.onChange).toHaveBeenCalledWith('');
+  });
 });
