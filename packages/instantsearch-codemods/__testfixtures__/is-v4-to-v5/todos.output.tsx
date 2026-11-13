@@ -1,5 +1,7 @@
 // TODO(instantsearch v5): `places`, `analytics` no longer exist in v5, see the migration guide.
 import { places, analytics } from 'instantsearch.js/es/widgets';
+// TODO(instantsearch v5): `getInsightsAnonymousUserToken` no longer exists in v5, see the migration guide.
+import { getInsightsAnonymousUserToken } from 'instantsearch.js/es/helpers';
 import type { Hit } from 'instantsearch.js';
 import type { ToggleRefinementConnector } from 'instantsearch.js/es/connectors/toggle-refinement/connectToggleRefinement';
 import { useRange, useSearchBox } from 'react-instantsearch';

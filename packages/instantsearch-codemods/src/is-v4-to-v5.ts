@@ -33,13 +33,12 @@ const INSTANTSEARCH_MOVED_HELPERS: Record<string, string> = {
   reverseHighlight: 'instantsearch.js/es/helpers',
   snippet: 'instantsearch.js/es/helpers',
   reverseSnippet: 'instantsearch.js/es/helpers',
-  getInsightsAnonymousUserToken: 'instantsearch.js/es/helpers',
   createInfiniteHitsSessionStorageCache: 'instantsearch-core',
 };
 
 /** Exports that no longer exist in v5. */
 const REMOVED_EXPORTS =
-  /^(places|answers|analytics|filterSuggestions|connectAnswers|connectFilterSuggestions|useFilterSuggestions|FilterSuggestions|EXPERIMENTAL_[cC]onfigureRelatedItems|connectConfigureRelatedItems|DisplayResultsToolType|ChatEmptyProps)$/;
+  /^(places|answers|analytics|filterSuggestions|connectAnswers|connectFilterSuggestions|useFilterSuggestions|FilterSuggestions|EXPERIMENTAL_[cC]onfigureRelatedItems|connectConfigureRelatedItems|DisplayResultsToolType|ChatEmptyProps|getInsightsAnonymousUserToken)$/;
 
 const REMOVED_WIDGETS = ['places', 'answers', 'analytics', 'filterSuggestions'];
 
@@ -317,6 +316,18 @@ export default function transform(
       addComment(
         enclosingStatement(path),
         '`instantsearch.insights` is removed, use `createInsightsMiddleware` and `instantSearchInstance.use(...)`.'
+      );
+    });
+  root
+    .find(j.MemberExpression, {
+      object: { type: 'Identifier', name: 'instantsearch' },
+      property: { type: 'Identifier', name: 'getInsightsAnonymousUserToken' },
+      computed: false,
+    })
+    .forEach((path) => {
+      addComment(
+        enclosingStatement(path),
+        "`instantsearch.getInsightsAnonymousUserToken` is removed, the `insights` middleware sets the anonymous user token. To read it, use `aa('getUserToken', null, (error, userToken) => {})` from `search-insights`."
       );
     });
 
