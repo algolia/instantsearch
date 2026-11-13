@@ -42,6 +42,7 @@ export function createOptionsTests(
         >
           <button
             class="ais-ClearRefinements-button"
+            type="button"
           >
             Clear refinements
           </button>
@@ -80,6 +81,7 @@ export function createOptionsTests(
           <button
             class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
             disabled=""
+            type="button"
           >
             Clear refinements
           </button>
@@ -123,6 +125,7 @@ export function createOptionsTests(
         >
           <button
             class="ais-ClearRefinements-button"
+            type="button"
           >
             Clear refinements
           </button>
@@ -155,6 +158,7 @@ export function createOptionsTests(
           <button
             class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
             disabled=""
+            type="button"
           >
             Clear refinements
           </button>
@@ -205,6 +209,7 @@ export function createOptionsTests(
         >
           <button
             class="ais-ClearRefinements-button"
+            type="button"
           >
             Clear refinements
           </button>
@@ -240,6 +245,7 @@ export function createOptionsTests(
           <button
             class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
             disabled=""
+            type="button"
           >
             Clear refinements
           </button>
@@ -286,6 +292,7 @@ export function createOptionsTests(
         >
           <button
             class="ais-ClearRefinements-button"
+            type="button"
           >
             Clear refinements
           </button>
@@ -321,6 +328,7 @@ export function createOptionsTests(
           <button
             class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
             disabled=""
+            type="button"
           >
             Clear refinements
           </button>
@@ -367,6 +375,7 @@ export function createOptionsTests(
         >
           <button
             class="ais-ClearRefinements-button"
+            type="button"
           >
             Clear refinements
           </button>
@@ -402,6 +411,7 @@ export function createOptionsTests(
           <button
             class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
             disabled=""
+            type="button"
           >
             Clear refinements
           </button>
