@@ -13,4 +13,4 @@ yarn
 yarn dev
 ```
 
-The autocomplete uses `<ais-experimental-autocomplete>`. Selecting a prompt suggestion hands the query off to `<ais-chat>`, opened with `<ais-chat-trigger>`.
+The autocomplete uses `<ais-autocomplete>`. Selecting a prompt suggestion hands the query off to `<ais-chat>`, opened with `<ais-chat-trigger>`.

@@ -161,8 +161,6 @@ describe('DOM component', () => {
       } else if (name === 'AisChatTrigger') {
         // Renders the shared ChatToggleButton markup.
         expect(suitClass).toBe(`ais-ChatToggleButton`);
-      } else if (name === 'AisExperimentalAutocomplete') {
-        expect(suitClass).toBe(`ais-Autocomplete`);
       } else {
         expect(suitClass).toBe(`ais-${name.substr(3)}`);
       }
@@ -176,12 +174,8 @@ describe('installed widget', () => {
       ({ name }) => nonWidgetComponents.includes(name) === false
     )
   )('sets widgetType $name', ({ name, widget }) => {
-    if (name === 'AisExperimentalAutocomplete') {
-      expect(widget.$$widgetType).toBe('ais.autocomplete');
-    } else {
-      expect(widget.$$widgetType).toBe(
-        `ais.${name[3].toLowerCase()}${name.substr(4)}`
-      );
-    }
+    expect(widget.$$widgetType).toBe(
+      `ais.${name[3].toLowerCase()}${name.substr(4)}`
+    );
   });
 });

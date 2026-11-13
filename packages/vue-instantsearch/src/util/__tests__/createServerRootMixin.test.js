@@ -16,7 +16,7 @@ import Vuex from 'vuex';
 import { createStore } from 'vuex4';
 
 import { mount, createSSRApp } from '../../../test/utils';
-import Autocomplete from '../../components/Autocomplete.vue';
+import Autocomplete from '../../components/Autocomplete';
 import Configure from '../../components/Configure';
 import Index from '../../components/Index';
 import InstantSearchSsr from '../../components/InstantSearchSsr';
