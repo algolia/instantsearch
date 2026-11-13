@@ -45,7 +45,7 @@ Migrates InstantSearch.js, React InstantSearch and Vue InstantSearch code from v
 - Replace `instantsearch.highlight`, `snippet`, `reverseHighlight`, `reverseSnippet` (and friends) with imports
 - Rename `getLocation` to `getCurrentURL` and `location` to `currentURL` in custom routers
 - Pass `cleanUrlOnDispose: true` to history routers, to keep the v4 behavior, with a TODO comment to adopt the new default
-- Add TODO comments where a manual change is needed (`searchFunction`, `isSearchStalled`, `escapeHTML`, range `start`, removed widgets, `routing: true`, `getInsightsAnonymousUserToken`, spelling out the replacement to use)
+- Add TODO comments where a manual change is needed (`searchFunction`, `isSearchStalled`, `escapeHTML`, range `start`, removed widgets, `routing: true`, `getInsightsAnonymousUserToken`, `__hitIndex`, spelling out the replacement to use)
 
 `.vue` files are not transformed, so Vue templates and script blocks (for example the `has-no-results` slot prop and `search-function` prop) need manual changes.
 

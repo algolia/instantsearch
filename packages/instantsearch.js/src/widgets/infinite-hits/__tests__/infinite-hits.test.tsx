@@ -894,6 +894,34 @@ describe('infiniteHits', () => {
       `);
     });
 
+    test('provides `__position` but no `__hitIndex` to each item', async () => {
+      const container = document.createElement('div');
+      const searchClient = createMockedSearchClient();
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+
+      search.addWidgets([
+        infiniteHits({
+          container,
+          templates: {
+            item(hit, { html }) {
+              return html`${hit.__position} ${String('__hitIndex' in hit)}`;
+            },
+          },
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(
+        [...container.querySelectorAll('.ais-InfiniteHits-item')].map(
+          (item) => item.textContent
+        )
+      ).toEqual(['1 false', '2 false']);
+    });
+
     type CustomHit = { name: string; description: string };
 
     function createMockedSearchClient(
@@ -1110,7 +1138,6 @@ describe('infiniteHits', () => {
         eventType: 'click',
         hits: [
           {
-            __hitIndex: 0,
             __position: 1,
             objectID: '1',
             name: 'Name 1',
@@ -1170,7 +1197,6 @@ describe('infiniteHits', () => {
         eventType: 'conversion',
         hits: [
           {
-            __hitIndex: 1,
             __position: 2,
             objectID: '2',
             name: 'Name 2',
