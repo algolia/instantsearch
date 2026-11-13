@@ -37,9 +37,12 @@ export type ClearRefinementsProps = ComponentProps<'div'> & {
   onClick?: () => void;
   translations?: ClearRefinementsTranslations;
   /**
-   * Overrides the content of the button
+   * Overrides the content of the button.
+   * Returning `null` omits the button entirely — the JS flavor's
+   * `templates.resetLabel` used to own the button and disappears from the
+   * DOM when the template resolves to `null`.
    */
-  resetLabelComponent?: (props: { canRefine: boolean }) => JSX.Element;
+  resetLabelComponent?: (props: { canRefine: boolean }) => JSX.Element | null;
 };
 
 export function createClearRefinementsComponent({ createElement }: Renderer) {
@@ -49,9 +52,30 @@ export function createClearRefinementsComponent({ createElement }: Renderer) {
       canRefine = false,
       onClick,
       translations,
-      resetLabelComponent: ResetLabelComponent,
+      resetLabelComponent,
       ...props
     } = userProps;
+
+    // Called rather than mounted: the override is a plain render function in
+    // every flavor (JS template adapter, Vue scoped slot) and calling it lets
+    // a `null` result suppress the button, as it did when the template owned
+    // the button markup.
+    const resetLabel = resetLabelComponent
+      ? resetLabelComponent({ canRefine })
+      : (translations?.resetButtonText ?? 'Clear refinements');
+
+    if (resetLabel === null) {
+      return (
+        <div
+          {...props}
+          className={cx(
+            'ais-ClearRefinements',
+            classNames.root,
+            props.className
+          )}
+        />
+      );
+    }
 
     return (
       <div
@@ -72,11 +96,7 @@ export function createClearRefinementsComponent({ createElement }: Renderer) {
               )
           )}
         >
-          {ResetLabelComponent ? (
-            <ResetLabelComponent canRefine={canRefine} />
-          ) : (
-            (translations?.resetButtonText ?? 'Clear refinements')
-          )}
+          {resetLabel}
         </button>
       </div>
     );
