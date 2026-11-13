@@ -8,7 +8,7 @@ import {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import { TAG_PLACEHOLDER } from 'instantsearch-core';
+import { TAG_PLACEHOLDER } from 'instantsearch-core/internal';
 import VueI18n from 'vue-i18n';
 import { createI18n } from 'vue-i18n-vue3';
 import Router from 'vue-router';
@@ -27,7 +27,7 @@ import { createFakeClient } from '../testutils/client';
 import { createSerializedState } from '../testutils/helper';
 import { isVue3, isVue2, Vue2, renderCompat } from '../vue-compat';
 
-jest.unmock('instantsearch-core');
+jest.unmock('instantsearch-core/internal');
 
 function renderToString(app) {
   if (isVue3) {

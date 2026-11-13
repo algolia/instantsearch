@@ -5,9 +5,9 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import { fireEvent, screen } from '@testing-library/dom';
-import { openChat } from 'instantsearch-core';
-import { warning } from 'instantsearch-core';
 import { createInsightsMiddleware } from 'instantsearch-core';
+import { openChat } from 'instantsearch-core/internal';
+import { warning } from 'instantsearch-core/internal';
 
 import instantsearch from '../../../index.es';
 import { chatInlineLayout } from '../../../templates';

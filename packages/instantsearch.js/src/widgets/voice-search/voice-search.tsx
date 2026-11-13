@@ -1,7 +1,7 @@
 /** @jsx h */
 
-import { createDocumentationMessageGenerator } from 'instantsearch-core';
-import { suitComponent as component } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
@@ -23,7 +23,7 @@ import type {
 import type { Template } from '../../types';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type { WidgetFactory, Renderer } from 'instantsearch-core';
-import type { CreateVoiceSearchHelper } from 'instantsearch-core';
+import type { CreateVoiceSearchHelper } from 'instantsearch-core/internal';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'voice-search' });
 const suit = component('VoiceSearch');

@@ -4,7 +4,7 @@
 
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { collectChatRecords } from 'instantsearch-core';
+import { collectChatRecords } from 'instantsearch-core/internal';
 import React from 'react';
 
 import { createGroupedResultsTool } from '../GroupedResultsTool';

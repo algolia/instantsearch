@@ -13,7 +13,7 @@ import { castToJestMock } from '@instantsearch/testutils';
 import { wait } from '@instantsearch/testutils/wait';
 import { fireEvent } from '@testing-library/dom';
 import { createInsightsMiddleware } from 'instantsearch-core';
-import { TAG_PLACEHOLDER, warning } from 'instantsearch-core';
+import { TAG_PLACEHOLDER, warning } from 'instantsearch-core/internal';
 
 import { createInstantSearch } from '../../../../instantsearch-core/test/createInstantSearch';
 import { connectRelatedProducts, connectSearchBox } from '../../connectors';

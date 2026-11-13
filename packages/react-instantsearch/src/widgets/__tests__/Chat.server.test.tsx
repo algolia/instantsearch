@@ -3,7 +3,7 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
-import { Chat as ChatInstance } from 'instantsearch-core';
+import { Chat as ChatInstance } from 'instantsearch-core/internal';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import {

@@ -1,4 +1,4 @@
-import { isIndexWidget } from 'instantsearch-core';
+import { isIndexWidget } from 'instantsearch-core/internal';
 import { useEffect, useState } from 'react';
 
 import { getIndexSearchResults } from './getIndexSearchResults';

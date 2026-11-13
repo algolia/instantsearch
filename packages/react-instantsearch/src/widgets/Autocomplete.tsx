@@ -4,7 +4,7 @@ import {
   isPromptSuggestion,
   openChat,
   warn,
-} from 'instantsearch-core';
+} from 'instantsearch-core/internal';
 import {
   createAutocompleteComponent,
   createAutocompleteDetachedContainerComponent,

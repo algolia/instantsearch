@@ -1,7 +1,7 @@
 import {
   InstantSearch,
   INSTANTSEARCH_FUTURE_DEFAULTS,
-} from 'instantsearch-core';
+} from 'instantsearch-core/internal';
 import { useCallback, useRef, version as ReactVersion } from 'react';
 import { useSyncExternalStore } from 'use-sync-external-store/shim';
 

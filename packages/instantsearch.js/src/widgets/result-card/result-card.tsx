@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { connectResultCard } from 'instantsearch-core';
-import { createDocumentationMessageGenerator } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { createResultCardComponent } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 import { useEffect, useState } from 'preact/hooks';

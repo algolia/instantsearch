@@ -1,8 +1,5 @@
-import {
-  instantsearch,
-  waitForResults,
-  getInitialResults,
-} from 'instantsearch-core';
+import { waitForResults, getInitialResults } from 'instantsearch-core';
+import { instantsearch } from 'instantsearch-core/internal';
 
 import { version } from '../../package.json'; // rollup does pick only what needed from json
 

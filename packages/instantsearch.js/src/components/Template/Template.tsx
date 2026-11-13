@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { isEqual } from 'instantsearch-core';
+import { isEqual } from 'instantsearch-core/internal';
 import { h, Component, Fragment } from 'preact';
 
 import { renderTemplate } from '../../lib/templating';

@@ -2,7 +2,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import { within } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
-import { Chat } from 'instantsearch-core';
+import { Chat } from 'instantsearch-core/internal';
 
 import { openChat } from './utils';
 

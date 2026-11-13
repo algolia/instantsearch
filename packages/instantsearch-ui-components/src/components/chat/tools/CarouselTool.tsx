@@ -1,10 +1,10 @@
 /** @jsx createElement */
 
-import { addAbsolutePosition, addQueryID } from 'instantsearch-core';
+import { addAbsolutePosition, addQueryID } from 'instantsearch-core/internal';
 import {
   getApplyFiltersParamsFromToolInput,
   getResolvedSearchParams,
-} from 'instantsearch-core';
+} from 'instantsearch-core/internal';
 
 import { createButtonComponent } from '../../Button';
 import { createCarouselComponent, generateCarouselId } from '../../Carousel';

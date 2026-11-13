@@ -3,8 +3,8 @@
  */
 /** @jsx createElement */
 import { act, render, screen } from '@testing-library/preact';
-import { getTextContent } from 'instantsearch-core';
-import * as chatUtils from 'instantsearch-core';
+import { getTextContent } from 'instantsearch-core/internal';
+import * as chatUtils from 'instantsearch-core/internal';
 import { Fragment, createElement } from 'preact';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 
@@ -16,13 +16,11 @@ import type {
   ChatMessageTextComponentProps,
 } from '../ChatMessage';
 import type { ChatMessageErrorProps } from '../ChatMessageError';
-import type {
-  ChatComponentPropsWithContext,
-  ChatMessageBase,
-} from 'instantsearch-core';
+import type { ChatComponentPropsWithContext } from 'instantsearch-core';
+import type { ChatMessageBase } from 'instantsearch-core/internal';
 
-jest.mock('instantsearch-core', () => {
-  const actual = jest.requireActual('instantsearch-core');
+jest.mock('instantsearch-core/internal', () => {
+  const actual = jest.requireActual('instantsearch-core/internal');
   return {
     ...actual,
     isReasoningPartActive: jest.fn(actual.isReasoningPartActive),

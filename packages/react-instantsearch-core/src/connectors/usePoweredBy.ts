@@ -1,4 +1,4 @@
-import { safelyRunOnBrowser } from 'instantsearch-core';
+import { safelyRunOnBrowser } from 'instantsearch-core/internal';
 
 import type { PoweredByRenderState } from 'instantsearch-core';
 

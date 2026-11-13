@@ -1,7 +1,7 @@
 import {
   InstantSearch as CoreInstantSearch,
   INSTANTSEARCH_FUTURE_DEFAULTS,
-} from 'instantsearch-core';
+} from 'instantsearch-core/internal';
 
 import version from './version';
 

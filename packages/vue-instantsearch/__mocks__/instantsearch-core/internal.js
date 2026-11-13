@@ -1,7 +1,7 @@
 /* eslint-disable import/no-commonjs */
 const isPlainObject = require('lodash/isPlainObject');
 
-const actual = jest.requireActual('instantsearch-core');
+const actual = jest.requireActual('instantsearch-core/internal');
 
 class RoutingManager {
   constructor(routing) {

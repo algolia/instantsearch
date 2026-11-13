@@ -1,1 +1,1 @@
-export { capitalize } from 'instantsearch-core';
+export { capitalize } from 'instantsearch-core/internal';

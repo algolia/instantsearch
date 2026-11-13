@@ -9,7 +9,7 @@ import type {
   VoiceSearchCSSClasses,
   VoiceSearchTemplates,
 } from '../../widgets/voice-search/voice-search';
-import type { VoiceListeningState } from 'instantsearch-core';
+import type { VoiceListeningState } from 'instantsearch-core/internal';
 
 export type VoiceSearchComponentCSSClasses =
   ComponentCSSClasses<VoiceSearchCSSClasses>;

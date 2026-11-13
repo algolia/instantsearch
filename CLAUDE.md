@@ -6,7 +6,8 @@ Search UI libraries for Algolia across three flavors (vanilla JS, React, Vue), s
 
 | Package | What it is |
 | --- | --- |
-| `packages/instantsearch.js` | **Core.** Vanilla JS library. **All connectors live here** (`src/connectors/`) and are shared by every flavor. |
+| `packages/instantsearch-core` | **Core.** Connectors (`src/connectors/`), the runtime, routers, state mappings, middlewares and shared types, shared by every flavor. Its root (`instantsearch-core`) is the user-facing API that each flavor re-exports; `instantsearch-core/internal` holds helpers for the first-party flavors only (no semver guarantee, never import it outside `packages/*/src`). Users import from their flavor package, not from core. |
+| `packages/instantsearch.js` | Vanilla JS flavor: widgets, templates and the JS `InstantSearch` class on top of core. |
 | `packages/react-instantsearch-core` | Headless React: hooks (`useSearchBox`, …) that wrap connectors. Framework-agnostic (web/RN). |
 | `packages/react-instantsearch` | React DOM widgets = hooks + UI from `instantsearch-ui-components`. |
 | `packages/vue-instantsearch` | Vue 2/3 components wrapping connectors. |
@@ -16,7 +17,7 @@ Search UI libraries for Algolia across three flavors (vanilla JS, React, Vue), s
 | `packages/react-instantsearch-nextjs` / `-router-nextjs` | Next.js App Router / Pages Router integrations. |
 | `packages/create-instantsearch-app`, `instantsearch-cli`, `instantsearch-codemods` | Scaffolding / CLI / migration tooling. |
 
-Architecture in one line: **connector (logic, in instantsearch.js) → flavor wrapper (JS widget / React hook+component / Vue component) → shared UI components**. Change behavior in the connector; change markup in the UI layer.
+Architecture in one line: **connector (logic, in instantsearch-core) → flavor wrapper (JS widget / React hook+component / Vue component) → shared UI components**. Change behavior in the connector; change markup in the UI layer.
 
 ## Where work goes (per layer)
 
@@ -24,7 +25,8 @@ Because behavior lives in the connector and the flavors only wrap it, most chang
 
 | Work in… | Package |
 | --- | --- |
-| Connectors, JS widgets, runtime (`src/lib`), legacy Preact components (`src/components`), types | `packages/instantsearch.js` |
+| Connectors, runtime, routers, state mappings, middlewares, shared types | `packages/instantsearch-core` (public → `src/index.ts`, flavor-only helpers → `src/internal.ts`) |
+| JS widgets, legacy Preact components (`src/components`) | `packages/instantsearch.js` |
 | Shared framework-agnostic markup / `ais-*` classes | `packages/instantsearch-ui-components` |
 | React widgets/hooks + Next.js integrations | `react-instantsearch` / `react-instantsearch-core` / `*-nextjs` |
 | Vue components (Vue 2 **and** 3) | `vue-instantsearch` |

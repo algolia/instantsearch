@@ -4,7 +4,7 @@ import {
   wait,
 } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
-import { TAG_PLACEHOLDER } from 'instantsearch-core';
+import { TAG_PLACEHOLDER } from 'instantsearch-core/internal';
 
 import type { ToggleRefinementWidgetSetup } from '.';
 import type { TestOptions } from '../../common';

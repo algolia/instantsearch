@@ -3,7 +3,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import { waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
-import { Chat } from 'instantsearch-core';
+import { Chat } from 'instantsearch-core/internal';
 import React from 'react';
 
 import { createDefaultWidgetParams, createVueElement, openChat } from './utils';

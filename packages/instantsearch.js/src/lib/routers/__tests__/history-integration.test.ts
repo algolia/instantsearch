@@ -4,7 +4,7 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
-import { simple as simpleStateMapping } from 'instantsearch-core';
+import { simpleStateMapping } from 'instantsearch-core';
 import { historyRouter } from 'instantsearch-core';
 
 import { connectPagination, connectSearchBox } from '../../../connectors';

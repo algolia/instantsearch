@@ -2,7 +2,7 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { getWidgetAttribute } from 'instantsearch-core';
+import { getWidgetAttribute } from 'instantsearch-core/internal';
 
 import { createInitOptions } from '../../../../../instantsearch-core/test/createWidget';
 import { connectRefinementList } from '../../../connectors';

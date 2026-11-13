@@ -1,6 +1,6 @@
 /** @jsx createElement */
 
-import { getJsonCursor } from 'instantsearch-core';
+import { getJsonCursor } from 'instantsearch-core/internal';
 
 import type { Hooks, RecordWithObjectID, Renderer } from '../../../types';
 import type { ClientSideToolComponentProps } from 'instantsearch-core';

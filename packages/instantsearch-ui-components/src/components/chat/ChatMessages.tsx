@@ -6,12 +6,12 @@ import {
   hasTextContent,
   isPartText,
   isPartTool,
-} from 'instantsearch-core';
+} from 'instantsearch-core/internal';
 import {
   findLastProgressPart,
   isReasoningPartActive,
   isSilentUserMessage,
-} from 'instantsearch-core';
+} from 'instantsearch-core/internal';
 
 import { cx } from '../../lib';
 import { createButtonComponent } from '../Button';
@@ -51,9 +51,9 @@ import type {
   ChatLoaderContext,
   ChatLoaderPhase,
   ChatLoaderPosition,
-  ChatMessageBase,
   ChatStatus,
 } from 'instantsearch-core';
+import type { ChatMessageBase } from 'instantsearch-core/internal';
 
 export type ChatMessagesTranslations = {
   /**

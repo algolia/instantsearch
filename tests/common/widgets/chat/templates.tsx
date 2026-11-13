@@ -1,5 +1,5 @@
 import { createSearchClient } from '@instantsearch/mocks';
-import { Chat } from 'instantsearch-core';
+import { Chat } from 'instantsearch-core/internal';
 import React from 'react';
 
 import {

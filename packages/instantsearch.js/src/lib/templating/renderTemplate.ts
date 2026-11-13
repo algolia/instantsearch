@@ -1,5 +1,5 @@
 import { html } from 'htm/preact';
-import { warning } from 'instantsearch-core';
+import { warning } from 'instantsearch-core/internal';
 
 import {
   Highlight,

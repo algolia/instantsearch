@@ -8,8 +8,8 @@
  * mid-delta identifier reach `input` looking complete.
  */
 import { render, screen } from '@testing-library/react';
-import { Chat } from 'instantsearch-core';
-import { collectChatRecords } from 'instantsearch-core';
+import { Chat } from 'instantsearch-core/internal';
+import { collectChatRecords } from 'instantsearch-core/internal';
 import React from 'react';
 
 import { createDefaultTools } from '../../../Chat';
