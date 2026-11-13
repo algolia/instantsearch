@@ -4,9 +4,8 @@ import { createDocumentationMessageGenerator } from 'instantsearch-core';
 import { createToggleRefinementComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
-import Template from '../../components/Template/Template';
 import { connectToggleRefinement } from '../../connectors';
-import { prepareTemplateProps } from '../../lib/templating';
+import { prepareTemplateProps, renderTemplate } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
@@ -147,17 +146,26 @@ const renderer = ({
   classNames: ToggleRefinementCSSClasses;
   templateProps: PreparedTemplateProps<Required<ToggleRefinementTemplates>>;
 }) => {
-  // Created once per widget instance so Preact doesn't remount the template
-  // subtree on every render; the changing data (`value`) comes in through
-  // the props.
-  const labelTextComponent = ({ value }: { value: ToggleRefinementValue }) => (
-    <Template
-      {...templateProps}
-      rootTagName="fragment"
-      templateKey="labelText"
-      data={value}
-    />
-  );
+  // Created once per widget instance so the changing data (`value`) comes in
+  // through the arguments. The `ais-ToggleRefinement-labelText` span used to
+  // be the `Template`'s root: returning `null` from `templates.labelText`
+  // removed it from the DOM. Resolving the template here (rather than
+  // mounting `Template` as the span's content) keeps that behavior — the
+  // factory omits the span when this returns `null`.
+  const labelTextComponent = ({ value }: { value: ToggleRefinementValue }) => {
+    const content = renderTemplate({
+      templates: templateProps.templates,
+      templateKey: 'labelText',
+      data: value,
+    });
+
+    if (content === null) {
+      return null;
+    }
+
+    // An empty string renders an empty span rather than an empty text node
+    return <Fragment>{content === '' ? null : content}</Fragment>;
+  };
 
   return (
     {

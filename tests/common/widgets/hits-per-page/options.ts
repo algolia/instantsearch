@@ -276,5 +276,51 @@ export function createOptionsTests(
         screen.getByRole<HTMLOptionElement>('option', { name: '20' }).selected
       ).toBe(false);
     });
+
+    test('supplies the blank option when routing to a value absent from `items`', async () => {
+      const searchClient = createSearchClient({});
+
+      const { setHitsPerPage } = await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          items: [
+            { label: '10', value: 10, default: true },
+            { label: '20', value: 20 },
+          ],
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const select = document.querySelector(
+        '.ais-HitsPerPage-select'
+      ) as HTMLSelectElement;
+
+      // The configured value matches an item, so the connector never inserted
+      // its blank option.
+      expect(select.value).toBe('10');
+      expect(select.options).toHaveLength(2);
+
+      await act(async () => {
+        userEvent.selectOptions(select, ['20']);
+        await wait(0);
+      });
+      expect(select.value).toBe('20');
+
+      // Routing to a value absent from `items` must still select a blank
+      // option — supplied by the widget here — rather than leave the select
+      // uncontrolled with the stale "20".
+      await act(async () => {
+        setHitsPerPage(7);
+        await wait(0);
+      });
+
+      expect(select.value).toBe('');
+    });
   });
 }

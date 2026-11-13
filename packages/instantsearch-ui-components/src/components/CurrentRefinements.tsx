@@ -129,15 +129,41 @@ function createItemKey({
   value,
   type,
   operator,
+  label,
 }: CurrentRefinementsRefinement): string {
-  return [attribute, type, value, operator].filter(Boolean).join(':');
+  // All identity fields are optional in the public type; the required label
+  // is the fallback so sibling refinements like `{label: 'Apple'}` and
+  // `{label: 'Samsung'}` never collapse onto the same key. Falsy-but-valid
+  // values (`0`, `''`, `false`) must serialize, hence the explicit filter
+  // instead of `filter(Boolean)`.
+  return [attribute, type, value ?? label, operator]
+    .filter((part) => part !== undefined && part !== null)
+    .join(':');
 }
 
 function createGroupKey(item: CurrentRefinementsItem): string {
   // The index id disambiguates scoped indices searching the same index.
   return [item.indexId ?? item.indexName, item.attribute, item.label]
-    .filter(Boolean)
+    .filter((part) => part !== undefined && part !== null)
     .join('/');
+}
+
+function createGroupKeys(items: CurrentRefinementsItem[]): string[] {
+  const metadataKeys = items.map(createGroupKey);
+  const counts = new Map<string, number>();
+  metadataKeys.forEach((key) => {
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  });
+
+  // Groups can share metadata when `transformItems` splits an attribute into
+  // sibling groups (e.g. a numeric attribute rendered as several groups with
+  // the same label). Those siblings need a discriminator to reconcile
+  // distinctly, but only they do: adding the position to every key would
+  // re-key unaffected groups when a preceding group disappears and remount
+  // their DOM.
+  return metadataKeys.map((key, index) =>
+    counts.get(key) === 1 ? key : `${key}/${index}`
+  );
 }
 
 export function createCurrentRefinementsComponent({ createElement }: Renderer) {
@@ -190,16 +216,19 @@ export function createCurrentRefinementsComponent({ createElement }: Renderer) {
     className,
     classNames,
     refinementComponent,
+    groupKey,
   }: {
     item: CurrentRefinementsItem;
     className: string;
     classNames: Partial<CurrentRefinementsClassNames>;
     refinementComponent?: CurrentRefinementsProps['refinementComponent'];
+    // The group key from the list, carrying the position discriminator.
+    groupKey?: string;
     // The rendering key, stripped by the renderer before the props reach us.
     key?: string | number;
   }) {
     return (
-      <li key={createGroupKey(item)} className={className}>
+      <li key={groupKey ?? createGroupKey(item)} className={className}>
         <span className={cx('ais-CurrentRefinements-label', classNames.label)}>
           {capitalize(item.label)}:{' '}
         </span>
@@ -242,6 +271,8 @@ export function createCurrentRefinementsComponent({ createElement }: Renderer) {
       ...props
     } = userProps;
 
+    const groupKeys = createGroupKeys(items);
+
     return (
       <div
         {...props}
@@ -257,18 +288,19 @@ export function createCurrentRefinementsComponent({ createElement }: Renderer) {
         )}
       >
         <ul className={cx('ais-CurrentRefinements-list', classNames.list)}>
-          {items.map((item) => {
+          {items.map((item, index) => {
             const className = cx(
               'ais-CurrentRefinements-item',
               classNames.item
             );
-            const key = createGroupKey(item);
+            const key = groupKeys[index];
 
             return ItemComponent ? (
               <ItemComponent key={key} item={item} className={className} />
             ) : (
               <DefaultItem
                 key={key}
+                groupKey={key}
                 item={item}
                 className={className}
                 classNames={classNames}

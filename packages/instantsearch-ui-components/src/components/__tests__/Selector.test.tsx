@@ -279,4 +279,30 @@ describe('HitsPerPage', () => {
     );
     expect(select.value).toBe('');
   });
+
+  test('supplies a blank option when the current value matches no item', () => {
+    // The connector only inserts the blank option at init, so starting from a
+    // matching value and routing to an absent one must still keep the select
+    // controlled: the factory adds the blank option itself.
+    const items = [
+      { value: 10, label: '10 per page' },
+      { value: 20, label: '20 per page' },
+    ];
+    const { container, rerender } = render(
+      <HitsPerPage items={items} currentValue={10} onChange={jest.fn()} />
+    );
+    const select = container.querySelector('select')!;
+    expect(select.options).toHaveLength(2);
+    expect(select.value).toBe('10');
+
+    rerender(
+      <HitsPerPage
+        items={items}
+        currentValue={undefined}
+        onChange={jest.fn()}
+      />
+    );
+    expect(select.options).toHaveLength(3);
+    expect(select.value).toBe('');
+  });
 });

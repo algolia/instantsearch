@@ -64,9 +64,14 @@ export type ToggleRefinementProps = Omit<ComponentProps<'div'>, 'onChange'> & {
    */
   value?: ToggleRefinementValue;
   /**
-   * Overrides the content of the label text
+   * Overrides the content of the label text.
+   * Returning `null` omits the `ais-ToggleRefinement-labelText` element
+   * entirely — the JS flavor's `templates.labelText` used to own that span
+   * and disappears from the DOM when the template resolves to `null`.
    */
-  labelTextComponent?: (props: { value: ToggleRefinementValue }) => JSX.Element;
+  labelTextComponent?: (props: {
+    value: ToggleRefinementValue;
+  }) => JSX.Element | null;
 };
 
 export function createToggleRefinementComponent({ createElement }: Renderer) {
@@ -77,10 +82,16 @@ export function createToggleRefinementComponent({ createElement }: Renderer) {
       onChange,
       label,
       count,
-      labelTextComponent: LabelTextComponent,
+      labelTextComponent,
       value,
       ...props
     } = userProps;
+
+    // Called rather than mounted so a `null` result can suppress the label
+    // text element, as it did when the JS `Template` owned that markup.
+    const labelText = labelTextComponent
+      ? labelTextComponent({ value: value! })
+      : label;
 
     return (
       <div
@@ -97,14 +108,16 @@ export function createToggleRefinementComponent({ createElement }: Renderer) {
             }}
           />
 
-          <span
-            className={cx(
-              'ais-ToggleRefinement-labelText',
-              classNames.labelText
-            )}
-          >
-            {LabelTextComponent ? <LabelTextComponent value={value!} /> : label}
-          </span>
+          {labelText === null ? undefined : (
+            <span
+              className={cx(
+                'ais-ToggleRefinement-labelText',
+                classNames.labelText
+              )}
+            >
+              {labelText}
+            </span>
+          )}
           {count !== undefined && count !== null && (
             <span
               className={cx('ais-ToggleRefinement-count', classNames.count)}
