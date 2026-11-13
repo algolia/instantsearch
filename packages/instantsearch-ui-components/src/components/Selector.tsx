@@ -65,6 +65,19 @@ export function createSelectorComponent({ createElement }: Renderer) {
       ...props
     } = userProps;
 
+    const stringValue = value === undefined ? undefined : `${value}`;
+    // Some consumers (e.g. HitsPerPage) insert a blank option with value `''`
+    // as the "no refinement" sentinel. Select it explicitly when nothing else
+    // matches: passing `undefined` instead makes the select uncontrolled in
+    // React, which keeps a stale selection visible after e.g. routing.
+    const matchesAnOption = options.some(
+      (option) => `${option.value}` === stringValue
+    );
+    const selectValue =
+      !matchesAnOption && options.some((option) => option.value === '')
+        ? ''
+        : stringValue;
+
     return (
       <div {...props} className={cx(classNames.root, props.className)}>
         <select
@@ -72,7 +85,7 @@ export function createSelectorComponent({ createElement }: Renderer) {
           onChange={(event) => {
             onChange?.((event.target as HTMLSelectElement).value);
           }}
-          value={value === undefined ? undefined : `${value}`}
+          value={selectValue}
           aria-label={ariaLabel}
         >
           {options.map((option) => (
