@@ -6,7 +6,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import { h } from 'preact';
 
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import toggleRefinement from '../toggle-refinement';
 
 beforeEach(() => {

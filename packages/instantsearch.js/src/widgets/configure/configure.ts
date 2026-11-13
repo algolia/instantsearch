@@ -1,11 +1,10 @@
+import { connectConfigure } from 'instantsearch-core';
 import { noop } from 'instantsearch-core/internal';
-
-import { connectConfigure } from '../../connectors';
 
 import type {
   ConfigureConnectorParams,
   ConfigureWidgetDescription,
-} from '../../connectors';
+} from 'instantsearch-core';
 import type { Widget } from 'instantsearch-core';
 
 /**

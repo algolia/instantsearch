@@ -16,7 +16,7 @@ import {
 } from '@testing-library/dom';
 import { h } from 'preact';
 
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import numericMenu from '../numeric-menu';
 
 beforeEach(() => {

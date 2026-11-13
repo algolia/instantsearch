@@ -1,5 +1,6 @@
 /** @jsx h */
 
+import { connectHits } from 'instantsearch-core';
 import {
   createDocumentationMessageGenerator,
   warning,
@@ -8,20 +9,19 @@ import { createHitsComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import { connectHits } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template, TemplateWithSendEvent } from '../../types';
+import type { SearchResults } from 'algoliasearch-helper';
 import type {
   HitsConnectorParams,
   HitsRenderState,
   HitsWidgetDescription,
-} from '../../connectors';
-import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template, TemplateWithSendEvent } from '../../types';
-import type { SearchResults } from 'algoliasearch-helper';
+} from 'instantsearch-core';
 import type { Hit, WidgetFactory, Renderer, BaseHit } from 'instantsearch-core';
 import type {
   HitsClassNames as HitsUiComponentClassNames,

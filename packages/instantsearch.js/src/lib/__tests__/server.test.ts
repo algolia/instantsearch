@@ -6,14 +6,14 @@ import {
 } from '@instantsearch/mocks';
 import { SearchParameters } from 'algoliasearch-helper';
 import { getInitialResults, waitForResults } from 'instantsearch-core';
-import { TAG_PLACEHOLDER } from 'instantsearch-core/internal';
-
 import {
   connectConfigure,
   connectHierarchicalMenu,
   connectSearchBox,
-} from '../../connectors';
-import instantsearch from '../../index.es';
+} from 'instantsearch-core';
+import { TAG_PLACEHOLDER } from 'instantsearch-core/internal';
+
+import { instantsearch } from '../../index.es';
 import { index } from '../../widgets';
 
 describe('waitForResults', () => {

@@ -9,8 +9,8 @@ import {
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import { wait } from '@instantsearch/testutils/wait';
 import originalHelper from 'algoliasearch-helper';
+import { connectSearchBox } from 'instantsearch-core';
 
-import { connectSearchBox } from '../../connectors';
 import { index, configure } from '../../widgets';
 import InstantSearch from '../InstantSearch';
 

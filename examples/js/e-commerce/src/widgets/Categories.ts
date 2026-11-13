@@ -1,4 +1,4 @@
-import { panel, hierarchicalMenu } from 'instantsearch.js/es/widgets';
+import { hierarchicalMenu, panel } from 'instantsearch.js';
 
 import { collapseButtonText } from '../templates/panel';
 

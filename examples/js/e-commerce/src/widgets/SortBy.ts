@@ -1,5 +1,4 @@
-import { sortBy as sortByWidget } from 'instantsearch.js/es/widgets';
-
+import { sortBy as sortByWidget } from 'instantsearch.js';
 const items = [
   {
     label: 'Featured',

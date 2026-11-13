@@ -1,5 +1,4 @@
-import { numericMenu, panel } from 'instantsearch.js/es/widgets';
-import { PanelTemplates } from 'instantsearch.js/es/widgets/panel/panel';
+import { PanelTemplates, numericMenu, panel } from 'instantsearch.js';
 
 import { DATE_RANGES } from '../utils';
 

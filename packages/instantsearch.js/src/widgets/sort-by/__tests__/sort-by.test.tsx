@@ -5,7 +5,7 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import sortBy from '../sort-by';
 
 beforeEach(() => {

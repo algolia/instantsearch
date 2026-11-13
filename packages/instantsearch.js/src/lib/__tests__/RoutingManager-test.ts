@@ -5,10 +5,10 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import { historyRouter } from 'instantsearch-core';
+import { connectHitsPerPage, connectSearchBox } from 'instantsearch-core';
 
-import instantsearch from '../..';
 import { createWidget } from '../../../../instantsearch-core/test/createWidget';
-import { connectHitsPerPage, connectSearchBox } from '../../connectors';
+import { instantsearch } from '../../index.es';
 
 import type {
   Router,

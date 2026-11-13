@@ -8,7 +8,7 @@ import { openChat } from './utils';
 
 import type { ChatWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
-import type { UIMessage } from 'instantsearch-core';
+import type { UIMessage } from 'instantsearch.js';
 
 export function createPersistenceTests(
   setup: ChatWidgetSetup,

@@ -10,7 +10,7 @@ import {
 import { wait } from '@instantsearch/testutils/wait';
 import { walkIndex } from 'instantsearch-core/internal';
 
-import instantsearch from '../../..';
+import { instantsearch } from '../../../index.es';
 import { autocomplete } from '../autocomplete';
 
 describe('autocomplete()', () => {

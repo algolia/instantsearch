@@ -1,4 +1,4 @@
-import { clearRefinements } from 'instantsearch.js/es/widgets';
+import { clearRefinements } from 'instantsearch.js';
 
 import { useWidget } from '../../hooks/useWidget';
 

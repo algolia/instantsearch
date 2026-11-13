@@ -1,4 +1,4 @@
-import { refinementList } from 'instantsearch.js/es/widgets';
+import { refinementList } from 'instantsearch.js';
 
 import { useWidget } from '../../hooks/useWidget';
 

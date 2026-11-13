@@ -1,5 +1,4 @@
-import { hitsPerPage as hitsPerPageWidget } from 'instantsearch.js/es/widgets';
-
+import { hitsPerPage as hitsPerPageWidget } from 'instantsearch.js';
 const items = [
   {
     label: '16 hits per page',

@@ -16,7 +16,7 @@ import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type {
   InfiniteHitsCache,
   InfiniteHitsCachedHits,
-} from 'instantsearch-core';
+} from 'instantsearch.js';
 import type { BaseHit, SearchResponse } from 'instantsearch.js';
 
 function normalizeSnapshot(html: string) {

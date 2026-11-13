@@ -7,7 +7,7 @@ import { createDefaultWidgetParams, openChat } from './utils';
 
 import type { ChatWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
-import type { UIMessageChunk } from 'instantsearch-core';
+import type { UIMessageChunk } from 'instantsearch.js';
 
 function chunksToStream(
   chunks: UIMessageChunk[]

@@ -1,5 +1,5 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import instantsearch from 'instantsearch.js';
+import { instantsearch } from 'instantsearch.js';
 import { useRef, useEffect, useState } from 'preact/hooks';
 
 import { ChatLayoutSwitcher } from '../components/ChatLayoutSwitcher';
@@ -19,7 +19,7 @@ import { WidgetSwitcher } from '../components/WidgetSwitcher';
 import { ChatLayoutContext } from '../context/chatLayout';
 import { SearchContext } from '../context/search';
 
-import type { ChatRenderState } from 'instantsearch-core';
+import type { ChatRenderState } from 'instantsearch.js';
 
 const algoliaClient = algoliasearch(
   'latency',

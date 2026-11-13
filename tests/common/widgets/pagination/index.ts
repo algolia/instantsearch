@@ -5,7 +5,7 @@ import { createOptimisticUiTests } from './optimistic-ui';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { PaginationWidget } from 'instantsearch.js/es/widgets/pagination/pagination';
+import type { PaginationWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<PaginationWidget>[0];
 export type PaginationWidgetSetup = TestSetup<{

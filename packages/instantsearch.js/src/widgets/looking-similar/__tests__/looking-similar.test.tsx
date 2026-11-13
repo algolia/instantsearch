@@ -6,7 +6,7 @@ import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { wait } from '@instantsearch/testutils';
 import { h } from 'preact';
 
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import { carousel } from '../../../templates';
 import lookingSimilar from '../looking-similar';
 

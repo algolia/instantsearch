@@ -12,7 +12,7 @@ import { createToolRetryTests } from './tool-retry';
 import { createTranslationsTests } from './translations';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { ChatWidget } from 'instantsearch.js/es/widgets/chat/chat';
+import type { ChatWidget } from 'instantsearch.js';
 import type { ChatProps } from 'react-instantsearch';
 
 type JSBaseWidgetParams = Parameters<ChatWidget>[0];

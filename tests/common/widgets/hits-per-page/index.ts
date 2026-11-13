@@ -4,7 +4,7 @@ import { createLinksTests } from './links';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { HitsPerPageWidget } from 'instantsearch.js/es/widgets/hits-per-page/hits-per-page';
+import type { HitsPerPageWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<HitsPerPageWidget>[0];
 export type HitsPerPageWidgetSetup = TestSetup<{

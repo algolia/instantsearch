@@ -10,7 +10,7 @@ import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import { wait } from '@instantsearch/testutils/wait';
 import { h } from 'preact';
 
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import trendingFacets from '../trending-facets';
 
 function createTrendingFacetsSearchClient() {

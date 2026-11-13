@@ -4,7 +4,7 @@ import { createLinksTests } from './links';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { SearchBoxWidget } from 'instantsearch.js/es/widgets/search-box/search-box';
+import type { SearchBoxWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<SearchBoxWidget>[0];
 export type SearchBoxWidgetSetup = TestSetup<{

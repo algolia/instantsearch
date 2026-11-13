@@ -4,7 +4,7 @@ import { createLinksTests } from './links';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { RelatedProductsWidget } from 'instantsearch.js/es/widgets/related-products/related-products';
+import type { RelatedProductsWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<RelatedProductsWidget>[0];
 export type RelatedProductsWidgetSetup = TestSetup<{

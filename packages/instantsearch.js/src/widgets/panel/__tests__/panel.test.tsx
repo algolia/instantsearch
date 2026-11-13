@@ -12,7 +12,7 @@ import { within } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { h } from 'preact';
 
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import stats from '../../stats/stats';
 import panel from '../panel';
 

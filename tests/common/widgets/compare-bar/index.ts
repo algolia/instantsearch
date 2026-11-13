@@ -4,8 +4,10 @@ import { createOptionsTests } from './options';
 import { createTemplatesTests } from './templates';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { CompareItem } from 'instantsearch-core';
-import type { CompareBarWidgetParams as JSBaseWidgetParams } from 'instantsearch.js/es/widgets/compare-bar/compare-bar';
+import type {
+  CompareItem,
+  CompareBarWidgetParams as JSBaseWidgetParams,
+} from 'instantsearch.js';
 import type { CompareBarProps } from 'react-instantsearch';
 
 /**

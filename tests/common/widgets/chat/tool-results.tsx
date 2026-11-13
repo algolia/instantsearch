@@ -10,8 +10,10 @@ import { createDefaultWidgetParams, createVueElement, openChat } from './utils';
 
 import type { ChatWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
-import type { UIMessageChunk } from 'instantsearch-core';
-import type { ClientSideToolTemplateData } from 'instantsearch.js/es/widgets/chat/chat';
+import type {
+  ClientSideToolTemplateData,
+  UIMessageChunk,
+} from 'instantsearch.js';
 
 function chunksToResponse(chunks: UIMessageChunk[]): Response {
   return new Response(

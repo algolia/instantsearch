@@ -3,7 +3,7 @@ import { fakeAct } from '../../common';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { ChatConnectorParams } from 'instantsearch-core';
+import type { ChatConnectorParams } from 'instantsearch.js';
 
 export type ChatConnectorSetup = TestSetup<{
   widgetParams: ChatConnectorParams;

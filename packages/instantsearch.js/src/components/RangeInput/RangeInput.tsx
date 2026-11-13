@@ -5,12 +5,12 @@ import { h, Component } from 'preact';
 
 import Template from '../Template/Template';
 
-import type { Range, RangeRenderState } from '../../connectors';
 import type { ComponentCSSClasses } from '../../types';
 import type {
   RangeInputCSSClasses,
   RangeInputTemplates,
 } from '../../widgets/range-input/range-input';
+import type { Range, RangeRenderState } from 'instantsearch-core';
 
 export type RangeInputComponentCSSClasses =
   ComponentCSSClasses<RangeInputCSSClasses>;
