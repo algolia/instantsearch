@@ -4,7 +4,7 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import { act, render, screen, waitFor } from '@testing-library/react';
-import { Chat } from 'instantsearch-core';
+import { Chat } from 'instantsearch-core/internal';
 import React from 'react';
 
 import { InstantSearch } from '../../components/InstantSearch';

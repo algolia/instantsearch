@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { isSpecialClick, isEqual } from 'instantsearch-core';
+import { isSpecialClick, isEqual } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, createRef, Component } from 'preact';
 

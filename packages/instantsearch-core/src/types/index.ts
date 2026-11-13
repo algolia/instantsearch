@@ -2,6 +2,7 @@ export * from './algoliasearch';
 export * from './connector';
 export * from './insights';
 export type { default as InstantSearch } from '../instantsearch';
+export type { default as InstantSearchInstance } from '../instantsearch';
 export type {
   InstantSearchOptions,
   InstantSearchStatus,

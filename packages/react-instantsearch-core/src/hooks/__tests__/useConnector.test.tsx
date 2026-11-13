@@ -17,8 +17,8 @@ import {
   connectHits,
   connectPagination,
   connectRefinementList,
-  TAG_PLACEHOLDER,
 } from 'instantsearch-core';
+import { TAG_PLACEHOLDER } from 'instantsearch-core/internal';
 import React, { StrictMode, useState } from 'react';
 
 import { Index } from '../../components/Index';

@@ -1,4 +1,4 @@
-import { history as history } from 'instantsearch-core';
+import { historyRouter as history } from 'instantsearch-core';
 
 import { stripLocaleFromUrl } from './utils/stripLocaleFromUrl';
 

@@ -4,8 +4,11 @@ import {
   findTool,
   startsWith,
   type ChatRecordsStore,
-} from 'instantsearch-core';
-import { isPartTextEmpty, isReasoningPartActive } from 'instantsearch-core';
+} from 'instantsearch-core/internal';
+import {
+  isPartTextEmpty,
+  isReasoningPartActive,
+} from 'instantsearch-core/internal';
 
 import { cx } from '../../lib';
 import { compiler } from '../../lib/markdown-to-jsx';
@@ -31,13 +34,15 @@ import type {
   AddToolResultWithOutput,
   ChatComponentContext,
   ChatComponentPropsWithContext,
-  ChatMessageBase,
   ChatStatus,
-  ChatToolMessage,
   ClientSideToolContext,
   ReasoningUIPart,
   TextUIPart,
 } from 'instantsearch-core';
+import type {
+  ChatMessageBase,
+  ChatToolMessage,
+} from 'instantsearch-core/internal';
 
 type MessageScopedClientSideTool = ClientSideTool & {
   '~addToolResultForMessage'?: (

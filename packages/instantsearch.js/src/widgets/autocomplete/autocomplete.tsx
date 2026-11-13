@@ -1,21 +1,21 @@
 /** @jsx h */
 
+import { type ChatRenderState } from 'instantsearch-core';
+import { createFeedContainer } from 'instantsearch-core';
 import {
   getPromptSuggestionHits,
   isChatBusy,
   isPromptSuggestion,
   openChat,
-  type ChatRenderState,
-} from 'instantsearch-core';
-import { createFeedContainer } from 'instantsearch-core';
+} from 'instantsearch-core/internal';
 import {
   createDocumentationMessageGenerator,
   noop,
   warn,
   walkIndex,
-} from 'instantsearch-core';
-import { index } from 'instantsearch-core';
-import { suitComponent as component } from 'instantsearch-core';
+} from 'instantsearch-core/internal';
+import { index } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import {
   createAutocompleteComponent,
   createAutocompleteDetachedContainerComponent,

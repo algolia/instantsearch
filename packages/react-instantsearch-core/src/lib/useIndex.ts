@@ -1,4 +1,4 @@
-import { index as index } from 'instantsearch-core';
+import { index as index } from 'instantsearch-core/internal';
 import { useMemo } from 'react';
 
 import { useForceUpdate } from './useForceUpdate';

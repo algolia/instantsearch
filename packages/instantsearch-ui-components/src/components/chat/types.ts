@@ -1,11 +1,11 @@
 import type { ComponentProps } from '../../types';
 import type {
   AbstractChat,
-  ChatState,
   ClientSideToolComponentProps,
   ClientSideTool as CoreClientSideTool,
   UIMessage,
 } from 'instantsearch-core';
+import type { ChatState } from 'instantsearch-core/internal';
 
 export type ClientSideToolComponent = (
   props: ClientSideToolComponentProps

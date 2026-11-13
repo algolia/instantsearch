@@ -1,4 +1,4 @@
-import { simple as simpleStateMapping } from '..';
+import { simpleStateMapping } from '..';
 
 import type { UiState } from '../../../types';
 

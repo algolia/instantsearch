@@ -1,1 +1,1 @@
-export { history } from 'instantsearch-core';
+export { historyRouter as history } from 'instantsearch-core';

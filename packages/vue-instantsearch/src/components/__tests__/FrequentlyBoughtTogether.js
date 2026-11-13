@@ -8,7 +8,7 @@ import { mount, nextTick } from '../../../test/utils';
 import FrequentlyBoughtTogether from '../FrequentlyBoughtTogether';
 import InstantSearch from '../InstantSearch';
 
-jest.unmock('instantsearch-core');
+jest.unmock('instantsearch-core/internal');
 
 const wait = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms));
 

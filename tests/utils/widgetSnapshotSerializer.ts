@@ -1,4 +1,4 @@
-import { getWidgetAttribute, isIndexWidget } from 'instantsearch-core';
+import { getWidgetAttribute, isIndexWidget } from 'instantsearch-core/internal';
 
 import { createInitOptions } from '../../packages/instantsearch-core/test/createWidget';
 

@@ -5,7 +5,7 @@ import type {
   RecordWithObjectID,
   Renderer,
 } from '../../../types';
-import type { ChatRecord, ChatRecordsStore } from 'instantsearch-core';
+import type { ChatRecord, ChatRecordsStore } from 'instantsearch-core/internal';
 
 /**
  * Shared presentational component for chat comparison tables. Used by the

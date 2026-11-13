@@ -1,6 +1,9 @@
 /** @jsx createElement */
 
-import { endsInsideRootProperty, getJsonCursor } from 'instantsearch-core';
+import {
+  endsInsideRootProperty,
+  getJsonCursor,
+} from 'instantsearch-core/internal';
 
 import {
   createGroundedComparisonTableComponent,

@@ -4,7 +4,7 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import { render, waitFor } from '@testing-library/react';
-import { history as historyRouter } from 'instantsearch-core';
+import { historyRouter } from 'instantsearch-core';
 import React, { useEffect } from 'react';
 import { InstantSearch, SearchBox, useSearchBox } from 'react-instantsearch';
 

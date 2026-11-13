@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { isSpecialClick } from 'instantsearch-core';
+import { isSpecialClick } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h } from 'preact';
 

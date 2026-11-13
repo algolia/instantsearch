@@ -15,7 +15,7 @@ import algoliasearchHelper, {
   RecommendParameters,
   RecommendResults,
 } from 'algoliasearch-helper';
-import { TAG_PLACEHOLDER, index } from 'instantsearch-core';
+import { TAG_PLACEHOLDER, index } from 'instantsearch-core/internal';
 
 import { castToJestMock } from '../../../../../../tests/utils';
 import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';

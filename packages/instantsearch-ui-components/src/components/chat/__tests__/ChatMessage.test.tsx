@@ -15,11 +15,8 @@ import {
 } from '../ChatMessage';
 
 import type { ClientSideTool } from '../types';
-import type {
-  AddToolResult,
-  ChatMessageBase,
-  ChatComponentContext,
-} from 'instantsearch-core';
+import type { AddToolResult, ChatComponentContext } from 'instantsearch-core';
+import type { ChatMessageBase } from 'instantsearch-core/internal';
 
 const ChatMessage = createChatMessageComponent({
   createElement,

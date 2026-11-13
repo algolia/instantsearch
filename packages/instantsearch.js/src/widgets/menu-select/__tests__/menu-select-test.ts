@@ -9,7 +9,7 @@ import {
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import { wait } from '@instantsearch/testutils/wait';
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
-import { TAG_PLACEHOLDER } from 'instantsearch-core';
+import { TAG_PLACEHOLDER } from 'instantsearch-core/internal';
 import { render as preactRender } from 'preact';
 
 import instantsearch from '../../../index.es';

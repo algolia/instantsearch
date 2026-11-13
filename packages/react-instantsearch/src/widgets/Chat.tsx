@@ -11,7 +11,7 @@ import {
   holdContainerInertUntilReveal,
   restoreContainerInertUntilReveal,
   shouldSearchToolRenderResults,
-} from 'instantsearch-core';
+} from 'instantsearch-core/internal';
 import { createChatComponent } from 'instantsearch-ui-components';
 import React, {
   createElement,
@@ -47,7 +47,7 @@ import type {
   UserClientSideTool,
   UserClientSideTools,
 } from 'instantsearch-core';
-import type { ContainerAnimationSnapshot } from 'instantsearch-core';
+import type { ContainerAnimationSnapshot } from 'instantsearch-core/internal';
 import type {
   Pragma,
   ChatProps as ChatUiProps,

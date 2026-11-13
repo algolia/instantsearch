@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { connectPromptSuggestions } from 'instantsearch-core';
-import { createDocumentationMessageGenerator } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { createPromptSuggestionsComponent } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 

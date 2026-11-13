@@ -1,4 +1,4 @@
-import { safelyRunOnBrowser } from 'instantsearch-core';
+import { safelyRunOnBrowser } from 'instantsearch-core/internal';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   InstantSearch,

@@ -3,8 +3,8 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
-import { noop, warning } from 'instantsearch-core';
 import { historyRouter } from 'instantsearch-core';
+import { noop, warning } from 'instantsearch-core/internal';
 
 import instantsearch from '../../..';
 import { simple } from '../../stateMappings';

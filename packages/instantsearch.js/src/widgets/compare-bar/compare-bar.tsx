@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { connectCompare } from 'instantsearch-core';
-import { createDocumentationMessageGenerator } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { createCompareBarComponent } from 'instantsearch-ui-components';
 import { h, Fragment, render } from 'preact';
 

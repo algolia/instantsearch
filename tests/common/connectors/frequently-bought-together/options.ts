@@ -6,7 +6,7 @@ import {
 import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
-import { TAG_PLACEHOLDER } from 'instantsearch-core';
+import { TAG_PLACEHOLDER } from 'instantsearch-core/internal';
 
 import { skippableDescribe } from '../../common';
 

@@ -1,4 +1,7 @@
-import { createDocumentationMessageGenerator, noop } from 'instantsearch-core';
+import {
+  createDocumentationMessageGenerator,
+  noop,
+} from 'instantsearch-core/internal';
 
 import { connectQueryRules } from '../../connectors';
 
