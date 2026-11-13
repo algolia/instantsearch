@@ -37,6 +37,7 @@ describe('ClearRefinements', () => {
         >
           <button
             class="ais-ClearRefinements-button"
+            type="button"
           >
             Clear refinements
           </button>
@@ -60,6 +61,7 @@ describe('ClearRefinements', () => {
         >
           <button
             class="ais-ClearRefinements-button"
+            type="button"
           >
             Reset filters
           </button>
@@ -125,6 +127,7 @@ describe('ClearRefinements', () => {
           <button
             class="ais-ClearRefinements-button BUTTON ais-ClearRefinements-button--disabled DISABLEDBUTTON"
             disabled=""
+            type="button"
           >
             Clear refinements
           </button>
