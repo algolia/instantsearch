@@ -1,4 +1,4 @@
-export { default as AisAutocomplete } from './components/Autocomplete.vue';
+export { default as AisAutocomplete } from './components/Autocomplete';
 export { default as AisBreadcrumb } from './components/Breadcrumb.vue';
 export { default as AisClearRefinements } from './components/ClearRefinements.vue';
 export { default as AisConfigure } from './components/Configure';
@@ -40,5 +40,4 @@ export { default as AisToggleRefinement } from './components/ToggleRefinement.vu
 export { default as AisVoiceSearch } from './components/VoiceSearch.vue';
 export { default as AisRelevantSort } from './components/RelevantSort.vue';
 export { default as AisDynamicWidgets } from './components/DynamicWidgets';
-export { default as AisExperimentalAutocomplete } from './components/ExperimentalAutocomplete';
 export { default as AisFeeds } from './components/Feeds';

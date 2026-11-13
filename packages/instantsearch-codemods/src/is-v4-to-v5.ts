@@ -14,6 +14,8 @@ const IDENTIFIER_RENAMES: Record<string, string> = {
   EXPERIMENTAL_DynamicWidgets: 'DynamicWidgets',
   EXPERIMENTAL_use: 'use',
   EXPERIMENTAL_isolated: 'isolated',
+  // Vue InstantSearch
+  AisExperimentalAutocomplete: 'AisAutocomplete',
   getWidgetState: 'getWidgetUiState',
   hasMapMoveSinceLastRefine: 'hasMapMovedSinceLastRefine',
   // helper methods
@@ -155,6 +157,28 @@ export default function transform(
       root.get().node.program.body.unshift(declaration);
     }
   };
+
+  // ---------------------------------------------------------------------------
+  // 0. Vue: the old renderless `AisAutocomplete` is gone. The name now belongs
+  // to the former `AisExperimentalAutocomplete`, so this has to run before the
+  // rename below, and a plain rename can't be applied to it.
+  // ---------------------------------------------------------------------------
+  root
+    .find(j.ImportDeclaration)
+    .filter((path) => /vue-instantsearch/.test(String(path.node.source.value)))
+    .forEach((path) => {
+      (path.node.specifiers || []).forEach((specifier: any) => {
+        if (
+          specifier.type === 'ImportSpecifier' &&
+          specifier.imported.name === 'AisAutocomplete'
+        ) {
+          addComment(
+            path.node,
+            '`AisAutocomplete` (`<ais-autocomplete>`) is now the full autocomplete UI, formerly `AisExperimentalAutocomplete`. The renderless slot wrapper (`refine`, `currentRefinement`, `indices`) was removed: build it with `connectAutocomplete` and `createWidgetMixin` instead. If you meant the new component, there is nothing to change.'
+          );
+        }
+      });
+    });
 
   // ---------------------------------------------------------------------------
   // 1. One-to-one renames

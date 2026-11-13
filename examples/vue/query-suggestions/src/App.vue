@@ -31,7 +31,7 @@
           </div>
 
           <div class="search-panel__results">
-            <ais-experimental-autocomplete
+            <ais-autocomplete
               detached-media-query="(max-width: 1024px)"
               placeholder="Search for products"
               :indices="indices"
@@ -64,7 +64,7 @@
                 <span class="ais-AutocompleteIndexHeaderTitle">Ask AI</span>
                 <span class="ais-AutocompleteIndexHeaderLine" />
               </template>
-            </ais-experimental-autocomplete>
+            </ais-autocomplete>
 
             <ais-hits>
               <template #item="{ item }">
