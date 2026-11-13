@@ -57,7 +57,6 @@ export const publicRuntimeExports = [
   'getComparisonPlaceholderMessage',
   'getHighlightedParts',
   'getInitialResults',
-  'getInsightsAnonymousUserToken',
   'getPropertyByPath',
   'getResultCardRuleContext',
   'historyRouter',
