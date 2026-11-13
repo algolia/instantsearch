@@ -30,8 +30,8 @@ test('[INT][SEARCHONCE] Should be able to search once with custom parameters wit
   var state0 = helper.state;
 
   var calls = 1;
-  helper.on('error', function (event) {
-    done(event.error);
+  helper.on('error', function (error) {
+    done(error);
   });
 
   helper.on('result', function (event) {
@@ -46,39 +46,45 @@ test('[INT][SEARCHONCE] Should be able to search once with custom parameters wit
   });
 
   var state1 = state0.setFacets(['facet']).addFacetRefinement('facet', 'f1');
-  helper.searchOnce(state1).then(function (res) {
-    expect(helper.state).toBe(state0);
-    expect(res.state).toEqual(state1);
-    expect(res.content.hits.length).toBe(2);
-    expect(
-      res.content.hits.find(function (hit) {
-        return hit.objectID === '2';
-      })
-    ).toBeTruthy();
-    expect(
-      res.content.hits.find(function (hit) {
-        return hit.objectID === '1';
-      })
-    ).toBeTruthy();
-    calls++;
-    var state2 = state0.setFacets(['facet']).addFacetRefinement('facet', 'f2');
-    helper.searchOnce(state2, function (err, c, s) {
-      expect(err).toBe(null);
+  helper
+    .searchOnce(state1)
+    .then(function (res) {
       expect(helper.state).toBe(state0);
-      expect(s).toEqual(state2);
-      expect(c.hits.length).toBe(2);
+      expect(res.state).toEqual(state1);
+      expect(res.content.hits.length).toBe(2);
       expect(
-        c.hits.find(function (hit) {
+        res.content.hits.find(function (hit) {
+          return hit.objectID === '2';
+        })
+      ).toBeTruthy();
+      expect(
+        res.content.hits.find(function (hit) {
           return hit.objectID === '1';
         })
       ).toBeTruthy();
-      expect(
-        c.hits.find(function (hit) {
-          return hit.objectID === '3';
-        })
-      ).toBeTruthy();
       calls++;
-      helper.search();
-    });
-  });
+      var state2 = state0
+        .setFacets(['facet'])
+        .addFacetRefinement('facet', 'f2');
+      return helper.searchOnce(state2).then(function (res2) {
+        var c = res2.content;
+        var s = res2.state;
+        expect(helper.state).toBe(state0);
+        expect(s).toEqual(state2);
+        expect(c.hits.length).toBe(2);
+        expect(
+          c.hits.find(function (hit) {
+            return hit.objectID === '1';
+          })
+        ).toBeTruthy();
+        expect(
+          c.hits.find(function (hit) {
+            return hit.objectID === '3';
+          })
+        ).toBeTruthy();
+        calls++;
+        helper.search();
+      });
+    })
+    .catch(done);
 });

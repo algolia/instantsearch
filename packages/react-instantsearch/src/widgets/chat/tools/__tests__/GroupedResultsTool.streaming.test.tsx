@@ -7,20 +7,19 @@
  * because it is partial-JSON repair closing an open string literal that lets a
  * mid-delta identifier reach `input` looking complete.
  */
-import { chatToolProps } from '@instantsearch/testutils';
 import { render, screen } from '@testing-library/react';
-import { collectChatRecords } from 'instantsearch-ui-components';
-import { Chat } from 'instantsearch.js/es/lib/chat';
+import { Chat } from 'instantsearch-core/internal';
+import { collectChatRecords } from 'instantsearch-core/internal';
 import React from 'react';
 
 import { createDefaultTools } from '../../../Chat';
 
+import type { UIMessageChunk } from 'instantsearch-core';
+import type { UIMessage } from 'instantsearch-core';
 import type {
   ChatComponentContext,
   ClientSideToolComponentProps,
-} from 'instantsearch-ui-components';
-import type { UIMessageChunk } from 'instantsearch.js/es/lib/ai-lite';
-import type { UIMessage } from 'instantsearch.js/es/lib/chat';
+} from 'instantsearch-core';
 
 type TestResult = { objectID: string; name?: string; __position: number };
 
@@ -116,7 +115,7 @@ function renderFrame(part: ClientSideToolComponentProps['context']['message']) {
 
   const { unmount } = render(
     <LayoutComponent
-      {...chatToolProps({
+      context={{
         messages,
         status: 'streaming',
         isClearing: false,
@@ -134,7 +133,7 @@ function renderFrame(part: ClientSideToolComponentProps['context']['message']) {
         addToolResult: jest.fn(),
         setIndexUiState: jest.fn(),
         sendEvent: jest.fn(),
-      })}
+      }}
     />
   );
   const visible = HITS.filter((hit) =>

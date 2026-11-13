@@ -1,16 +1,14 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import RangeInput from '../../components/RangeInput/RangeInput';
-import connectRange from '../../connectors/range/connectRange';
-import { component } from '../../lib/suit';
+import { connectRange } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import type {
   RangeInputComponentCSSClasses,
@@ -20,9 +18,10 @@ import type {
   RangeConnectorParams,
   RangeRenderState,
   RangeWidgetDescription,
-} from '../../connectors/range/connectRange';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Renderer, Template, WidgetFactory } from '../../types';
+import type { Template } from '../../types';
+import type { Renderer, WidgetFactory } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'range-input' });
 const suit = component('RangeInput');
@@ -134,37 +133,25 @@ const renderer =
     };
     templates: RangeInputTemplates;
   }): Renderer<RangeRenderState, Partial<RangeInputWidgetParams>> =>
-  (
-    { refine, range, start, widgetParams, instantSearchInstance },
-    isFirstRendering
-  ) => {
+  ({ refine, range, currentRefinement, widgetParams }, isFirstRendering) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;
     }
 
     const { min: rangeMin, max: rangeMax } = range;
-    const [minValue, maxValue] = start;
 
     const step = 1 / Math.pow(10, widgetParams.precision || 0);
-
-    const values = {
-      min:
-        minValue !== -Infinity && minValue !== rangeMin ? minValue : undefined,
-      max:
-        maxValue !== Infinity && maxValue !== rangeMax ? maxValue : undefined,
-    };
 
     render(
       <RangeInput
         min={rangeMin}
         max={rangeMax}
         step={step}
-        values={values}
+        values={currentRefinement}
         cssClasses={cssClasses}
         refine={refine}
         templateProps={renderState.templateProps!}

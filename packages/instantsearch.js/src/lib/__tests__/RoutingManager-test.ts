@@ -4,14 +4,18 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
-import qs from 'qs';
+import { historyRouter } from 'instantsearch-core';
 
 import instantsearch from '../..';
-import { createWidget } from '../../../test/createWidget';
+import { createWidget } from '../../../../instantsearch-core/test/createWidget';
 import { connectHitsPerPage, connectSearchBox } from '../../connectors';
-import historyRouter from '../routers/history';
 
-import type { Router, UiState, StateMapping, IndexUiState } from '../../types';
+import type {
+  Router,
+  UiState,
+  StateMapping,
+  IndexUiState,
+} from 'instantsearch-core';
 import type { JSDOM } from 'jsdom';
 
 declare const jsdom: JSDOM;
@@ -183,68 +187,6 @@ describe('RoutingManager', () => {
       });
     });
 
-    test('should apply state mapping on differences after searchFunction', async () => {
-      const searchClient = createSearchClient();
-
-      const router = createFakeRouter({
-        write: jest.fn(),
-      });
-
-      const stateMapping = createFakeStateMapping({
-        stateToRoute(uiState) {
-          return Object.keys(uiState).reduce((state, indexId) => {
-            const indexState = uiState[indexId];
-
-            return {
-              ...state,
-              [indexId]: {
-                query: indexState.query && indexState.query.toUpperCase(),
-              },
-            };
-          }, {});
-        },
-      });
-
-      const search = instantsearch({
-        indexName: 'indexName',
-        searchFunction: (helper) => {
-          helper.setQuery('test').search();
-        },
-        searchClient,
-        routing: {
-          stateMapping,
-          router,
-        },
-      });
-
-      search.addWidgets([
-        createWidget({
-          getWidgetUiState(uiState, { searchParameters }) {
-            return {
-              ...uiState,
-              query: searchParameters.query,
-            };
-          },
-          getWidgetSearchParameters: jest.fn(
-            (searchParameters) => searchParameters
-          ),
-        }),
-      ]);
-
-      search.start();
-
-      await wait(0);
-      // initialization is done at this point
-
-      expect(search.mainIndex.getHelper()!.state.query).toEqual('test');
-
-      expect(router.write).toHaveBeenLastCalledWith({
-        indexName: {
-          query: 'TEST',
-        },
-      });
-    });
-
     test('should keep the UI state up to date on state changes', async () => {
       const searchClient = createSearchClient();
       const stateMapping = createFakeStateMapping({});
@@ -285,55 +227,6 @@ describe('RoutingManager', () => {
       });
 
       await wait(0);
-
-      // Trigger change
-      search.removeWidgets([fakeHitsPerPage]);
-
-      await wait(0);
-
-      // The UI state hasn't changed so `router.write` wasn't called a second
-      // time
-      expect(router.write).toHaveBeenCalledTimes(1);
-    });
-
-    test('should keep the UI state up to date on first render', async () => {
-      const searchClient = createSearchClient();
-      const stateMapping = createFakeStateMapping({});
-      const router = createFakeRouter({
-        write: jest.fn(),
-      });
-
-      const search = instantsearch({
-        indexName: 'indexName',
-        searchFunction(helper) {
-          // Force the value of the query
-          helper.setQuery('Apple iPhone').search();
-        },
-        searchClient,
-        routing: {
-          router,
-          stateMapping,
-        },
-      });
-
-      const fakeSearchBox = connectSearchBox(() => {})({});
-      const fakeHitsPerPage = connectHitsPerPage(() => {})({
-        items: [{ default: true, value: 1, label: 'one' }],
-      });
-
-      search.addWidgets([fakeSearchBox, fakeHitsPerPage]);
-
-      // Trigger the call to `searchFunction` -> Apple iPhone
-      search.start();
-
-      await wait(0);
-
-      expect(router.write).toHaveBeenCalledTimes(1);
-      expect(router.write).toHaveBeenLastCalledWith({
-        indexName: {
-          query: 'Apple iPhone',
-        },
-      });
 
       // Trigger change
       search.removeWidgets([fakeHitsPerPage]);
@@ -582,13 +475,7 @@ describe('RoutingManager', () => {
       });
 
       const router = historyRouter<IndexUiState>();
-      // @ts-expect-error: This method is considered private but we still use it
-      // in the test after the TypeScript migration.
-      // In a next refactor, we can consider changing this test implementation.
-      const parsedUrl = router.parseURL({
-        qsModule: qs,
-        location: window.location,
-      });
+      const parsedUrl = router.read();
 
       expect(parsedUrl.refinementList!.brand).toBeInstanceOf(Array);
       expect(parsedUrl).toMatchInlineSnapshot(`
@@ -629,13 +516,7 @@ describe('RoutingManager', () => {
       });
 
       const router = historyRouter<IndexUiState>();
-      // @ts-expect-error: This method is considered private but we still use it
-      // in the test after the TypeScript migration.
-      // In a next refactor, we can consider changing this test implementation.
-      const parsedUrl = router.parseURL({
-        qsModule: qs,
-        location: window.location,
-      });
+      const parsedUrl = router.read();
 
       expect(parsedUrl.refinementList!.brand).toBeInstanceOf(Array);
     });

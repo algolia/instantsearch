@@ -1,15 +1,11 @@
-import {
-  getHighlightedParts,
-  getPropertyByPath,
-  unescape,
-} from 'instantsearch.js/es/lib/utils';
+import { getHighlightedParts, getPropertyByPath } from 'instantsearch-core';
 import React from 'react';
 
 import { ReverseHighlight as ReverseHighlightUiComponent } from '../ui/ReverseHighlight';
 
 import type { PartialKeys } from '../types';
 import type { ReverseHighlightProps as ReverseHighlightUiComponentProps } from '../ui/ReverseHighlight';
-import type { BaseHit, Hit } from 'instantsearch.js';
+import type { BaseHit, Hit } from 'instantsearch-core';
 
 export type ReverseHighlightProps<THit extends Hit<BaseHit>> = {
   hit: THit;
@@ -32,7 +28,7 @@ export function ReverseHighlight<THit extends Hit<BaseHit>>({
   const properties = Array.isArray(property) ? property : [property];
 
   const parts = properties.map((singleValue) =>
-    getHighlightedParts(unescape(singleValue.value || '')).map(
+    getHighlightedParts(singleValue.value || '').map(
       ({ isHighlighted, ...rest }) => ({
         ...rest,
         isHighlighted: !isHighlighted,

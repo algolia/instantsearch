@@ -9,6 +9,7 @@ import {
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import { wait } from '@instantsearch/testutils/wait';
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
+import { TAG_PLACEHOLDER } from 'instantsearch-core/internal';
 import { render as preactRender } from 'preact';
 
 import instantsearch from '../../../index.es';
@@ -86,55 +87,40 @@ describe('menuSelect', () => {
       const firstRender = render.mock.calls[0][0] as VNode;
 
       expect(firstRender.props).toMatchInlineSnapshot(`
-  {
-    "cssClasses": {
-      "noRefinementRoot": "ais-MenuSelect--noRefinement",
-      "option": "ais-MenuSelect-option",
-      "root": "ais-MenuSelect",
-      "select": "ais-MenuSelect-select",
-    },
-    "items": [
-      {
-        "count": 2,
-        "data": null,
-        "exhaustive": true,
-        "isRefined": false,
-        "label": "bar",
-        "value": "bar",
-      },
-      {
-        "count": 1,
-        "data": null,
-        "exhaustive": true,
-        "isRefined": false,
-        "label": "foo",
-        "value": "foo",
-      },
-    ],
-    "refine": [Function],
-    "templateProps": {
-      "templates": {
-        "defaultOption": [Function],
-        "item": [Function],
-      },
-      "templatesConfig": {
-        "compileOptions": {},
-        "helpers": {
-          "formatNumber": [Function],
-          "highlight": [Function],
-          "insights": [Function],
-          "reverseHighlight": [Function],
-          "reverseSnippet": [Function],
-          "snippet": [Function],
-        },
-      },
-      "useCustomCompileOptions": {
-        "defaultOption": false,
-        "item": false,
-      },
-    },
-  }
-  `);
+        {
+          "cssClasses": {
+            "noRefinementRoot": "ais-MenuSelect--noRefinement",
+            "option": "ais-MenuSelect-option",
+            "root": "ais-MenuSelect",
+            "select": "ais-MenuSelect-select",
+          },
+          "items": [
+            {
+              "count": 2,
+              "data": null,
+              "exhaustive": true,
+              "isRefined": false,
+              "label": "bar",
+              "value": "bar",
+            },
+            {
+              "count": 1,
+              "data": null,
+              "exhaustive": true,
+              "isRefined": false,
+              "label": "foo",
+              "value": "foo",
+            },
+          ],
+          "refine": [Function],
+          "templateProps": {
+            "templates": {
+              "defaultOption": [Function],
+              "item": [Function],
+            },
+          },
+        }
+      `);
     });
 
     it('renders transformed items correctly', async () => {
@@ -159,57 +145,42 @@ describe('menuSelect', () => {
       const firstRender = render.mock.calls[0][0] as VNode;
 
       expect(firstRender.props).toMatchInlineSnapshot(`
-  {
-    "cssClasses": {
-      "noRefinementRoot": "ais-MenuSelect--noRefinement",
-      "option": "ais-MenuSelect-option",
-      "root": "ais-MenuSelect",
-      "select": "ais-MenuSelect-select",
-    },
-    "items": [
-      {
-        "count": 2,
-        "data": null,
-        "exhaustive": true,
-        "isRefined": false,
-        "label": "bar",
-        "transformed": true,
-        "value": "bar",
-      },
-      {
-        "count": 1,
-        "data": null,
-        "exhaustive": true,
-        "isRefined": false,
-        "label": "foo",
-        "transformed": true,
-        "value": "foo",
-      },
-    ],
-    "refine": [Function],
-    "templateProps": {
-      "templates": {
-        "defaultOption": [Function],
-        "item": [Function],
-      },
-      "templatesConfig": {
-        "compileOptions": {},
-        "helpers": {
-          "formatNumber": [Function],
-          "highlight": [Function],
-          "insights": [Function],
-          "reverseHighlight": [Function],
-          "reverseSnippet": [Function],
-          "snippet": [Function],
-        },
-      },
-      "useCustomCompileOptions": {
-        "defaultOption": false,
-        "item": false,
-      },
-    },
-  }
-  `);
+        {
+          "cssClasses": {
+            "noRefinementRoot": "ais-MenuSelect--noRefinement",
+            "option": "ais-MenuSelect-option",
+            "root": "ais-MenuSelect",
+            "select": "ais-MenuSelect-select",
+          },
+          "items": [
+            {
+              "count": 2,
+              "data": null,
+              "exhaustive": true,
+              "isRefined": false,
+              "label": "bar",
+              "transformed": true,
+              "value": "bar",
+            },
+            {
+              "count": 1,
+              "data": null,
+              "exhaustive": true,
+              "isRefined": false,
+              "label": "foo",
+              "transformed": true,
+              "value": "foo",
+            },
+          ],
+          "refine": [Function],
+          "templateProps": {
+            "templates": {
+              "defaultOption": [Function],
+              "item": [Function],
+            },
+          },
+        }
+      `);
     });
   });
 
@@ -235,9 +206,10 @@ describe('menuSelect', () => {
 
       search.start();
 
-      expect(search.helper!.state).toEqual(
+      expect(search.mainIndex.getHelper()!.state).toEqual(
         new SearchParameters({
           index: 'test',
+          ...TAG_PLACEHOLDER,
         })
       );
 
@@ -245,9 +217,10 @@ describe('menuSelect', () => {
 
       await wait(0);
 
-      expect(search.helper!.state).toEqual(
+      expect(search.mainIndex.getHelper()!.state).toEqual(
         new SearchParameters({
           index: 'test',
+          ...TAG_PLACEHOLDER,
           hierarchicalFacets: [{ attributes: ['test'], name: 'test' }],
           hierarchicalFacetsRefinements: { test: [] },
           maxValuesPerFacet: 10,
@@ -260,8 +233,8 @@ describe('menuSelect', () => {
 
       expect(render).toHaveBeenCalledTimes(2);
       expect(render).toHaveBeenLastCalledWith(null, container);
-      expect(search.helper!.state).toEqual(
-        new SearchParameters({ index: 'test' })
+      expect(search.mainIndex.getHelper()!.state).toEqual(
+        new SearchParameters({ index: 'test', ...TAG_PLACEHOLDER })
       );
     });
   });

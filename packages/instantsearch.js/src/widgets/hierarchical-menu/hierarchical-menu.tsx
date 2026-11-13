@@ -1,16 +1,14 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import RefinementList from '../../components/RefinementList/RefinementList';
-import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
-import { component } from '../../lib/suit';
+import { connectHierarchicalMenu } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
@@ -19,16 +17,15 @@ import type {
   HierarchicalMenuConnectorParams,
   HierarchicalMenuRenderState,
   HierarchicalMenuWidgetDescription,
-} from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template, ComponentCSSClasses } from '../../types';
 import type {
   TransformItems,
-  Template,
   WidgetFactory,
   RendererOptions,
   SortBy,
-  ComponentCSSClasses,
-} from '../../types';
+} from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hierarchical-menu',
@@ -206,7 +203,6 @@ const renderer =
       createURL,
       items,
       refine,
-      instantSearchInstance,
       isShowingMore,
       toggleShowMore,
       canToggleShowMore,
@@ -217,7 +213,6 @@ const renderer =
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;

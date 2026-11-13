@@ -1,7 +1,7 @@
 import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { normalizeSnapshot } from '@instantsearch/testutils';
 import { wait } from '@testing-library/user-event/dist/utils';
-import { TAG_PLACEHOLDER } from 'instantsearch.js/es/lib/utils';
+import { TAG_PLACEHOLDER } from 'instantsearch-core/internal';
 
 import type { FrequentlyBoughtTogetherWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
@@ -171,7 +171,6 @@ export function createOptionsTests(
           },
           threshold: 80,
           limit: 3,
-          escapeHTML: false,
         },
       });
 
@@ -184,9 +183,11 @@ export function createOptionsTests(
           objectID: 'objectID',
           queryParameters: {
             query: 'regular query',
+            ...TAG_PLACEHOLDER,
           },
           fallbackParameters: {
             query: 'fallback query',
+            ...TAG_PLACEHOLDER,
           },
           threshold: 80,
           maxRecommendations: 3,
@@ -194,7 +195,7 @@ export function createOptionsTests(
       ]);
     });
 
-    test('escapes html entities when `escapeHTML` is true', async () => {
+    test('does not escape html entities', async () => {
       const searchClient = createRecommendSearchClient();
       let recommendItems: Parameters<
         NonNullable<
@@ -216,7 +217,6 @@ export function createOptionsTests(
             recommendItems = items;
             return items;
           },
-          escapeHTML: true,
         },
       });
 
@@ -236,7 +236,7 @@ export function createOptionsTests(
       expect(recommendItems[0]._highlightResult!.name).toEqual({
         matchLevel: 'none',
         matchedWords: [],
-        value: '&lt;em&gt;Moschino Love&lt;/em&gt; – Shoulder bag',
+        value: '<em>Moschino Love</em> – Shoulder bag',
       });
     });
   });

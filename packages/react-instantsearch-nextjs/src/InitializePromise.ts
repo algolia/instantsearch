@@ -1,9 +1,9 @@
-import { getInitialResults } from 'instantsearch.js/es/lib/server';
+import { getInitialResults } from 'instantsearch-core';
 import {
   isTwoPassWidget,
   walkIndex,
   resetWidgetId,
-} from 'instantsearch.js/es/lib/utils';
+} from 'instantsearch-core/internal';
 import { ServerInsertedHTMLContext } from 'next/navigation';
 import { useContext } from 'react';
 import {
@@ -19,7 +19,7 @@ import type {
   SearchOptions,
   CompositionClient,
   SearchClient,
-} from 'instantsearch.js';
+} from 'instantsearch-core';
 
 type InitializePromiseProps = {
   /**
@@ -57,16 +57,16 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
   let requestParamsList: SearchOptions[];
 
   if (search.compositionID) {
-    search.mainHelper!.setClient({
-      ...search.mainHelper!.getClient(),
+    search.helper!.setClient({
+      ...search.helper!.getClient(),
       search(query) {
         requestParamsList = [query.requestBody.params];
         return (search.client as CompositionClient).search(query);
       },
     } as CompositionClient);
   } else {
-    search.mainHelper!.setClient({
-      ...search.mainHelper!.getClient(),
+    search.helper!.setClient({
+      ...search.helper!.getClient(),
       search(queries) {
         requestParamsList = queries.map(({ params }) => params);
         return (search.client as SearchClient).search(queries);
@@ -81,7 +81,7 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
       let searchReceived = false;
       let recommendReceived = false;
       let settled = false;
-      const derivedHelper = search.mainHelper!.derivedHelpers[0];
+      const derivedHelper = search.helper!.derivedHelpers[0];
       const settle = () => {
         if (settled) {
           return;

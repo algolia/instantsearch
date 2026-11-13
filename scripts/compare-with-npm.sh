@@ -53,6 +53,7 @@ PACKAGES=(
   "instantsearch.js:packages/instantsearch.js:mixed"
   "algoliasearch-helper:packages/algoliasearch-helper:yes"
   "instantsearch.css:packages/instantsearch.css:no"
+  "instantsearch-core:packages/instantsearch-core:yes"
   "instantsearch-ui-components:packages/instantsearch-ui-components:yes"
   "instantsearch-codemods:packages/instantsearch-codemods:yes"
   "create-instantsearch-app:packages/create-instantsearch-app:no"

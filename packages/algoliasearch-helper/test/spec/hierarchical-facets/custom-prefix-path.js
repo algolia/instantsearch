@@ -22,7 +22,7 @@ test('hierarchical facets: custom prefix path', function (done) {
     ],
   });
 
-  helper.toggleRefine('categories', 'beers | Belgian');
+  helper.toggleFacetRefinement('categories', 'beers | Belgian');
 
   var algoliaResponse = {
     results: [

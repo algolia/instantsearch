@@ -1,18 +1,21 @@
-import { shouldSearchToolRenderResults } from 'instantsearch-ui-components';
 import {
-  SearchIndexToolType,
-  RecommendToolType,
-  DisplayResultsToolType,
-  GroupedResultsToolType,
   CompareProductsToolType,
+  GroupedResultsToolType,
   MemorizeToolType,
   MemorySearchToolType,
   PonderToolType,
-} from 'instantsearch.js/es/lib/chat';
+  RecommendToolType,
+  SearchIndexToolType,
+  shouldSearchToolRenderResults,
+} from 'instantsearch-core/internal';
 
 import { createCompareProductsTool } from './CompareProductsTool';
 import { createGroupedResultsTool } from './GroupedResultsTool';
 import { createCarouselTool } from './SearchIndexTool';
+
+// Legacy name of the grouped-results tool, still emitted by agents configured
+// before the rename.
+const LEGACY_GROUPED_RESULTS_TOOL_TYPE = 'algolia_display_results';
 
 export {
   createCarouselTool,
@@ -45,7 +48,7 @@ export function createDefaultTools(getItemComponent, getSearchPageURL) {
     ),
     [GroupedResultsToolType]: groupedResultsTool,
     // Agents configured before the rename still emit the legacy tool name.
-    [DisplayResultsToolType]: groupedResultsTool,
+    [LEGACY_GROUPED_RESULTS_TOOL_TYPE]: groupedResultsTool,
     [CompareProductsToolType]: createCompareProductsTool(getItemComponent),
     [MemorizeToolType]: {},
     [MemorySearchToolType]: {},

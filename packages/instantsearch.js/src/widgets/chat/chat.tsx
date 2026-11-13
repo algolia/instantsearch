@@ -1,68 +1,63 @@
 /** @jsx h */
 
+import { connectChat } from 'instantsearch-core';
 import {
-  createChatComponent,
+  CompareProductsToolType,
   findTool,
+  focusAfterReveal,
+  getActiveContainerAnimations,
+  GroupedResultsToolType,
+  holdContainerInertUntilReveal,
+  MemorizeToolType,
+  MemorySearchToolType,
+  PonderToolType,
+  RecommendToolType,
+  restoreContainerInertUntilReveal,
+  SearchIndexToolType,
   shouldSearchToolRenderResults,
-} from 'instantsearch-ui-components';
+} from 'instantsearch-core/internal';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { createChatComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 import { useCallback, useEffect, useMemo, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectChat from '../../connectors/chat/connectChat';
-import {
-  SearchIndexToolType,
-  RecommendToolType,
-  MemorizeToolType,
-  MemorySearchToolType,
-  PonderToolType,
-  DisplayResultsToolType,
-  CompareProductsToolType,
-  GroupedResultsToolType,
-} from '../../lib/chat';
-import {
-  focusAfterReveal,
-  getActiveContainerAnimations,
-  holdContainerInertUntilReveal,
-  restoreContainerInertUntilReveal,
-} from '../../lib/chat/focusAfterReveal';
 import { prepareTemplateProps } from '../../lib/templating';
 import { useStickToBottom } from '../../lib/useStickToBottom';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import { createCompareProductsTool } from './compare-products-tool';
 import { createGroupedResultsTool } from './grouped-results-tool';
 import { createCarouselTool } from './search-index-tool';
 
 import type { TemplateProps } from '../../components/Template/Template';
-import type {
-  ChatRenderState,
-  ChatConnectorParams,
-  ChatWidgetDescription,
-} from '../../connectors/chat/connectChat';
 import type { PreparedTemplateProps } from '../../lib/templating';
+import type { TemplateWithSendEvent, Template, Templates } from '../../types';
 import type {
   WidgetFactory,
   Renderer,
   Hit,
-  TemplateWithBindEvent,
   BaseHit,
-  Template,
   IndexUiState,
   IndexWidget,
-} from '../../types';
+} from 'instantsearch-core';
+import type {
+  ChatConnectorParams,
+  ChatRenderState,
+  ChatStatus,
+  ChatWidgetDescription,
+  ClientSideToolComponentProps,
+  ClientSideTools,
+  UIMessage,
+  UserClientSideTool,
+} from 'instantsearch-core';
+import type { ChatComponentPropsWithContext } from 'instantsearch-core';
 import type {
   ChatClassNames,
-  ChatComponentPropsWithContext,
-  ChatEmptyProps,
   ChatHeaderProps,
   ChatHeaderTranslations,
   ChatLayoutOwnProps,
   ChatMessageActionProps,
-  ChatMessageBase,
   ChatMessageErrorProps,
   ChatMessageLoaderPropsWithContext,
   ChatMessageProps,
@@ -72,11 +67,7 @@ import type {
   ChatMessagesTranslations,
   ChatPromptProps,
   ChatPromptTranslations,
-  ChatStatus,
-  ClientSideToolComponentProps,
-  ClientSideTools,
   RecordWithObjectID,
-  UserClientSideTool,
 } from 'instantsearch-ui-components';
 import type { ComponentProps } from 'preact';
 
@@ -93,11 +84,13 @@ const Chat = createChatComponent({
 export {
   SearchIndexToolType,
   RecommendToolType,
-  // eslint-disable-next-line typescript/no-deprecated
-  DisplayResultsToolType,
   CompareProductsToolType,
   GroupedResultsToolType,
 };
+
+// Legacy name of the grouped-results tool, still emitted by agents configured
+// before the rename.
+const LEGACY_GROUPED_RESULTS_TOOL_TYPE = 'algolia_display_results';
 
 function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   return Object.fromEntries(
@@ -168,8 +161,7 @@ function createDefaultTools<
     [RecommendToolType]: createCarouselTool(false, templates, getSearchPageURL),
     [GroupedResultsToolType]: groupedResultsTool,
     // Agents configured before the rename still emit the legacy tool name.
-    // eslint-disable-next-line typescript/no-deprecated
-    [DisplayResultsToolType]: groupedResultsTool,
+    [LEGACY_GROUPED_RESULTS_TOOL_TYPE]: groupedResultsTool,
     [CompareProductsToolType]: createCompareProductsTool(
       // The default `item` template dumps the record as JSON; without a custom
       // one, the product headers show the record's name instead.
@@ -186,7 +178,7 @@ type ChatWrapperProps = {
   cssClasses: ChatCSSClasses;
   chatOpen: boolean;
   setChatOpen: (open: boolean) => void;
-  chatMessages: ChatMessageBase[];
+  chatMessages: UIMessage[];
   indexUiState: IndexUiState;
   setIndexUiState: IndexWidget['setIndexUiState'];
   chatStatus: ChatStatus;
@@ -218,9 +210,7 @@ type ChatWrapperProps = {
         ) => JSX.Element)
       | undefined;
     emptyComponent:
-      // The deprecated root props are still passed alongside `context`.
-      // eslint-disable-next-line typescript/no-deprecated
-      | ((props: ChatComponentPropsWithContext<ChatEmptyProps>) => JSX.Element)
+      | ((props: ChatComponentPropsWithContext) => JSX.Element)
       | undefined;
     loaderPosition: ChatMessagesProps['loaderPosition'];
     shouldShowLoader: ChatMessagesProps['shouldShowLoader'];
@@ -421,7 +411,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   containerNode: HTMLElement;
   cssClasses: ChatCSSClasses;
   renderState: {
-    templateProps?: PreparedTemplateProps<ChatTemplates<THit>>;
+    templateProps?: PreparedTemplateProps<Templates>;
   };
   templates: ChatTemplates<THit>;
   tools: UserClientSideToolsWithTemplate;
@@ -441,7 +431,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   // textarea focus) on every keystroke. Create them once and read the latest
   // `PreparedTemplateProps` from mutable refs updated per render.
   type TemplateRef = {
-    current: PreparedTemplateProps<ChatTemplates<THit>> | undefined;
+    current: PreparedTemplateProps<Templates> | undefined;
   };
   const makeTemplateRef = (): TemplateRef => ({ current: undefined });
   const headerTemplateRef = makeTemplateRef();
@@ -473,7 +463,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   ): (props?: TProps) => JSX.Element {
     return (props?: TProps) => (
       <TemplateComponent
-        {...(templateRef.current as PreparedTemplateProps<ChatTemplates<THit>>)}
+        {...(templateRef.current as PreparedTemplateProps<Templates>)}
         templateKey={templateKey}
         rootTagName={rootTagName}
         data={props as unknown as Record<string, unknown>}
@@ -522,11 +512,11 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       >(messagesTemplateRef, 'error', 'div')
     : undefined;
   const stableMessagesEmptyComponent = templates.empty
-    ? createStableTemplateComponent<
-        // The deprecated root props are still passed alongside `context`.
-        // eslint-disable-next-line typescript/no-deprecated
-        ChatComponentPropsWithContext<ChatEmptyProps>
-      >(emptyTemplateRef, 'empty', 'div')
+    ? createStableTemplateComponent<ChatComponentPropsWithContext>(
+        emptyTemplateRef,
+        'empty',
+        'div'
+      )
     : undefined;
   const stableAssistantMessageLeadingComponent = templates.assistantMessage
     ?.leading
@@ -645,9 +635,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         } = layoutProps;
         return (
           <TemplateComponent
-            {...(layoutTemplateRef.current as PreparedTemplateProps<
-              ChatTemplates<THit>
-            >)}
+            {...(layoutTemplateRef.current as PreparedTemplateProps<Templates>)}
             templateKey="layout"
             rootTagName="fragment"
             data={{
@@ -668,7 +656,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     const {
       indexUiState,
       input,
-      instantSearchInstance,
       messages,
       open,
       sendMessage,
@@ -695,7 +682,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates: {} as unknown as ChatTemplates<THit>,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;
@@ -746,9 +732,8 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['header']>
       >,
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates: templates.header,
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    });
     const headerTranslations: Partial<ChatHeaderTranslations> =
       getDefinedProperties({
         title: templates.header?.titleText,
@@ -762,23 +747,20 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['messages']>
       >,
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates: templates.messages,
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    });
     loaderTemplateRef.current = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<Pick<ChatTemplates<THit>, 'loader'>>
       >,
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates: { loader: templates.loader },
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    });
     emptyTemplateRef.current = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<Pick<ChatTemplates<THit>, 'empty'>>
       >,
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates: { empty: templates.empty },
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    });
     const messagesTranslations: Partial<ChatMessagesTranslations> =
       getDefinedProperties({
         scrollToBottomLabel: templates.messages?.scrollToBottomLabelText,
@@ -796,9 +778,8 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['assistantMessage']>
       >,
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates: templates.assistantMessage,
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    });
 
     const messageTranslations = getDefinedProperties({
       actionsLabel: templates.message?.actionsLabelText,
@@ -811,17 +792,15 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['userMessage']>
       >,
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates: templates.userMessage,
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    });
 
     promptTemplateRef.current = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['prompt']>
       >,
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates: templates.prompt,
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    });
     const promptTranslations: Partial<ChatPromptTranslations> =
       getDefinedProperties({
         textareaLabel: templates.prompt?.textareaLabelText,
@@ -836,9 +815,8 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       defaultTemplates: {} as unknown as NonNullable<
         Required<Pick<ChatTemplates<THit>, 'layout'>>
       >,
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates: { layout: templates.layout },
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    });
 
     state.subscribe(rerender);
 
@@ -959,7 +937,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
 export type ClientSideToolTemplateData = ClientSideToolComponentProps;
 
 export type UserClientSideToolTemplates = Partial<{
-  layout: TemplateWithBindEvent<ClientSideToolTemplateData>;
+  layout: TemplateWithSendEvent<ClientSideToolTemplateData>;
 }>;
 
 type UserClientSideToolWithTemplate = Omit<
@@ -999,7 +977,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * Template to use for each result. This template will receive an object containing a single record.
      */
-    item: TemplateWithBindEvent<Hit<THit>>;
+    item: TemplateWithSendEvent<Hit<THit>>;
 
     /**
      * Custom loader template for the chat widget.
@@ -1090,9 +1068,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Announced to screen readers once a reply is complete. Receives the
        * reply, so it can announce its text or a summary of it.
        */
-      responseCompleteStatusText?: (context: {
-        message: ChatMessageBase;
-      }) => string;
+      responseCompleteStatusText?: (context: { message: UIMessage }) => string;
       /**
        * Announced to screen readers when the chat ends in an error
        */
@@ -1211,16 +1187,14 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     actions: Template<
       ChatComponentPropsWithContext<{
         actions: ChatMessageActionProps[];
-        message: ChatMessageBase;
+        message: UIMessage;
       }>
     >;
 
     /**
      * Template to use for the empty screen shown when there are no messages
      */
-    // The deprecated root props are still passed alongside `context`.
-    // eslint-disable-next-line typescript/no-deprecated
-    empty?: Template<ChatComponentPropsWithContext<ChatEmptyProps>>;
+    empty?: Template<ChatComponentPropsWithContext>;
 
     /**
      * Template to use for prompt suggestions.

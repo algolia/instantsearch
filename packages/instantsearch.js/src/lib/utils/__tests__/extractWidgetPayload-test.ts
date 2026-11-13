@@ -3,14 +3,14 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
+import { createFeedContainer } from 'instantsearch-core';
+import { extractWidgetPayload } from 'instantsearch-core/internal';
 
 import instantsearch from '../../..';
-import { createFeedContainer } from '../../../connectors/feeds/FeedContainer';
 import { hits, index, searchBox } from '../../../widgets';
-import { extractWidgetPayload } from '../extractWidgetPayload';
 
-import type { Widget } from '../../../types';
-import type { WidgetMetadata } from '../extractWidgetPayload';
+import type { Widget } from 'instantsearch-core';
+import type { WidgetMetadata } from 'instantsearch-core/internal';
 
 describe('extractWidgetPayload', () => {
   it('recurses into ais.index widgets', () => {

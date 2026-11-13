@@ -7,11 +7,11 @@ import {
   createSingleSearchResponse,
   defaultRenderingContent,
 } from '@instantsearch/mocks';
-import connectAutocomplete from 'instantsearch.js/es/connectors/autocomplete/connectAutocomplete';
+import { connectAutocomplete } from 'instantsearch-core';
 import React, { version as ReactVersion } from 'react';
 import { renderToString } from 'react-dom/server';
 import {
-  EXPERIMENTAL_Autocomplete,
+  Autocomplete,
   Hits,
   RefinementList,
   TrendingItems,
@@ -30,7 +30,7 @@ import {
 import { getServerState } from '../getServerState';
 
 import type { MockSearchClient } from '@instantsearch/mocks';
-import type { Hit as AlgoliaHit } from 'instantsearch.js';
+import type { Hit as AlgoliaHit } from 'instantsearch-core';
 import type {
   InstantSearchServerState,
   InstantSearchProps,
@@ -56,7 +56,7 @@ function AutocompleteWithoutSearch() {
 
 function RequestFreeAutocomplete() {
   return (
-    <EXPERIMENTAL_Autocomplete
+    <Autocomplete
       autoFocus
       requiresSearch={false}
       indices={[
@@ -71,7 +71,7 @@ function RequestFreeAutocomplete() {
 
 function RequestFreeFeedsAutocomplete() {
   return (
-    <EXPERIMENTAL_Autocomplete
+    <Autocomplete
       autoFocus
       requiresSearch={false}
       feeds={[

@@ -1,9 +1,9 @@
-import { Hit as AlgoliaHit } from 'instantsearch.js';
+import React, { Fragment } from 'react';
 import {
   getHighlightedParts,
   getPropertyByPath,
-} from 'instantsearch.js/es/lib/utils';
-import React, { Fragment } from 'react';
+  Hit as AlgoliaHit,
+} from 'react-instantsearch-core';
 import { StyleSheet, Text } from 'react-native';
 
 type SnippetPartProps = {

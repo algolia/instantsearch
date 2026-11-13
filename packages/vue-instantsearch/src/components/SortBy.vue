@@ -2,7 +2,6 @@
   <div :class="suit()" v-if="state">
     <slot
       :items="state.options"
-      :has-no-results="state.hasNoResults"
       :refine="state.refine"
       :current-refinement="state.currentRefinement"
       :can-refine="state.canRefine"
@@ -27,7 +26,7 @@
 </template>
 
 <script>
-import { connectSortBy } from 'instantsearch.js/es/connectors/index';
+import { connectSortBy } from 'instantsearch-core';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';

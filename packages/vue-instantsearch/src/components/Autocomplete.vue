@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { connectAutocomplete } from 'instantsearch.js/es/connectors/index';
+import { connectAutocomplete } from 'instantsearch-core';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
@@ -39,11 +39,6 @@ export default {
     createSuitMixin({ name: 'Autocomplete' }),
   ],
   props: {
-    escapeHTML: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
     requiresSearch: {
       type: Boolean,
       required: false,
@@ -53,7 +48,6 @@ export default {
   computed: {
     widgetParams() {
       return {
-        escapeHTML: this.escapeHTML,
         requiresSearch: this.requiresSearch,
       };
     },

@@ -7,9 +7,12 @@
   "module": "dist/es/index.js",
   "type": "module",
   "exports": {
-    "types": "./dist/es/index.d.ts",
-    "require": "./dist/cjs/index.js",
-    "default": "./dist/es/index.js"
+    ".": {
+      "types": "./dist/es/index.d.ts",
+      "require": "./dist/cjs/index.js",
+      "default": "./dist/es/index.js"
+    },
+    "./package.json": "./package.json"
   },
   "sideEffects": false,
   "license": "MIT",
@@ -42,12 +45,11 @@
     "build:types": "tsc -p ./tsconfig.declaration.json --outDir ./dist/es",
     "test:exports": "node ./__tests__/module/is-es-module.mjs && node ./__tests__/module/is-cjs-module.cjs",
     "test:e2e": "playwright test",
-    "test:e2e:saucelabs": "playwright test",
     "watch:es": "BABEL_ENV=es,rollup BUILD_FORMAT=esm rollup -c rollup.config.mjs --watch"
   },
   "dependencies": {
     "@swc/helpers": "0.5.18",
-    "instantsearch.js": "4.123.0",
+    "instantsearch-core": "^0.1.0",
     "react-instantsearch-core": "7.55.0"
   },
   "devDependencies": {

@@ -1,4 +1,3 @@
-<!-- @MAJOR remove `type="reset"` -->
 <template>
   <div v-if="state" :class="suit()">
     <slot
@@ -7,7 +6,6 @@
       :createURL="state.createURL"
     >
       <button
-        type="reset"
         :class="[suit('button'), !canRefine && suit('button', 'disabled')]"
         :disabled="!canRefine"
         @click.prevent="state.refine"
@@ -19,7 +17,7 @@
 </template>
 
 <script>
-import { connectClearRefinements } from 'instantsearch.js/es/connectors/index';
+import { connectClearRefinements } from 'instantsearch-core';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
@@ -62,7 +60,7 @@ export default {
       };
     },
     canRefine() {
-      return this.state.hasRefinements;
+      return this.state.canRefine;
     },
   },
 };

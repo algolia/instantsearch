@@ -1,12 +1,17 @@
 /** @jsx createElement */
-import { cx, startsWith } from '../../lib';
-import { compiler } from '../../lib/markdown-to-jsx';
 import {
+  collectChatRecords,
   findTool,
+  startsWith,
+  type ChatRecordsStore,
+} from 'instantsearch-core/internal';
+import {
   isPartTextEmpty,
   isReasoningPartActive,
-} from '../../lib/utils/chat';
-import { collectChatRecords } from '../../lib/utils/chatRecords';
+} from 'instantsearch-core/internal';
+
+import { cx } from '../../lib';
+import { compiler } from '../../lib/markdown-to-jsx';
 import { createButtonComponent } from '../Button';
 
 import {
@@ -17,51 +22,27 @@ import {
 } from './ChatMessageReasoning';
 import { MenuIcon, ReloadIcon } from './icons';
 
-import type {
-  AddToolResult,
-  AddToolResultWithOutput,
-  ChatComponentContext,
-  ChatComponentPropsWithContext,
-  ChatMessageBase,
-  ChatStatus,
-  ChatToolMessage,
-  ClientSideTool,
-  ClientSideToolContext,
-  ClientSideTools,
-  ReasoningUIPart,
-  TextUIPart,
-} from './types';
-import type { ChatRecordsStore } from '../../lib/utils/chatRecords';
+import type { ClientSideTool } from './types';
 import type {
   ComponentProps,
   Renderer,
   SendEventForHits,
   VNode,
 } from '../../types';
-
-/**
- * The root-level props tool layout components received before everything moved
- * under `context`. Passed alongside `context` so components written against the
- * previous API keep working. Remove together with
- * `DeprecatedClientSideToolRootProps` in the next major.
- */
-function getDeprecatedToolRootProps<TMessage extends ChatMessageBase>(
-  context: ClientSideToolContext<TMessage>
-) {
-  return {
-    message: context.message,
-    messages: context.messages,
-    records: context.records,
-    insightsEventContext: context.insightsEventContext,
-    status: context.status,
-    indexUiState: context.indexUiState,
-    setIndexUiState: context.setIndexUiState,
-    onClose: context.onClose,
-    addToolResult: context.addToolResult,
-    applyFilters: context.applyFilters,
-    sendEvent: context.sendEvent,
-  };
-}
+import type {
+  AddToolResult,
+  AddToolResultWithOutput,
+  ChatComponentContext,
+  ChatComponentPropsWithContext,
+  ChatStatus,
+  ClientSideToolContext,
+  ReasoningUIPart,
+  TextUIPart,
+} from 'instantsearch-core';
+import type {
+  ChatMessageBase,
+  ChatToolMessage,
+} from 'instantsearch-core/internal';
 
 type MessageScopedClientSideTool = ClientSideTool & {
   '~addToolResultForMessage'?: (
@@ -259,21 +240,6 @@ export type ChatMessageProps<
    */
   messages?: TMessage[];
   /**
-   * @deprecated Read `context.status` instead. Overrides `context.status` when
-   * provided, for callers written against the previous API.
-   */
-  status?: ChatStatus;
-  /**
-   * @deprecated Read `context.tools` instead. Overrides `context.tools` when
-   * provided, for callers written against the previous API.
-   */
-  tools?: ClientSideTools;
-  /**
-   * @deprecated Read `context.onClose` instead. Overrides `context.onClose`
-   * when provided, for callers written against the previous API.
-   */
-  onClose?: () => void;
-  /**
    * Optional suggestions element
    */
   suggestionsElement?: VNode;
@@ -347,28 +313,16 @@ export function createChatMessageComponent({
       showReasoning = true,
       parseMarkdown = true,
       messages: ownMessages,
-      /* eslint-disable typescript/no-deprecated -- reading the
-         deprecated aliases is the point: they are resolved into `context`
-         below so callers on the previous API keep working. */
-      status: ownStatus,
-      tools: ownTools,
-      onClose: ownOnClose,
-      /* eslint-enable typescript/no-deprecated */
       context: sharedContext,
       ...props
     } = userProps;
 
-    // Root-level overrides win over the shared context, so a caller can scope
-    // these to a single message. `messages` is supported going forward; the
-    // other three are deprecated aliases kept for callers written against the
-    // pre-`context` API. Resolving them into one object up front means every
-    // consumer below (tools, actions, text) reads consistent values.
+    // A root-level `messages` wins over the shared context, so a caller can
+    // scope it to a single message. Resolving it into one object up front means
+    // every consumer below (tools, actions, text) reads consistent values.
     const context: ChatComponentContext<TMessage> = {
       ...sharedContext,
       messages: ownMessages ?? sharedContext.messages,
-      status: ownStatus ?? sharedContext.status,
-      tools: ownTools ?? sharedContext.tools,
-      onClose: ownOnClose ?? sharedContext.onClose,
     };
     const { messages, status, tools } = context;
 
@@ -692,10 +646,7 @@ export function createChatMessageComponent({
               key={`${message.id}-${index}`}
               className="ais-ChatMessage-tool"
             >
-              <ToolLayoutComponent
-                {...getDeprecatedToolRootProps(toolContext)}
-                context={toolContext}
-              />
+              <ToolLayoutComponent context={toolContext} />
             </div>
           );
         }

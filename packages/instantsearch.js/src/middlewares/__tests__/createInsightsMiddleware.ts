@@ -12,18 +12,18 @@ import {
 import { castToJestMock } from '@instantsearch/testutils';
 import { wait } from '@instantsearch/testutils/wait';
 import { fireEvent } from '@testing-library/dom';
+import { createInsightsMiddleware } from 'instantsearch-core';
+import { TAG_PLACEHOLDER, warning } from 'instantsearch-core/internal';
 
-import { createInsightsMiddleware } from '..';
-import { createInstantSearch } from '../../../test/createInstantSearch';
+import { createInstantSearch } from '../../../../instantsearch-core/test/createInstantSearch';
 import { connectRelatedProducts, connectSearchBox } from '../../connectors';
 import instantsearch from '../../index.es';
 import { history } from '../../lib/routers';
-import { warning } from '../../lib/utils';
 import { dynamicWidgets, hits, refinementList } from '../../widgets';
 
-import type { InsightsProps } from '..';
 import type { SearchClient } from '../../index.es';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
+import type { InsightsProps } from 'instantsearch-core';
 import type { JSDOM } from 'jsdom';
 
 declare const jsdom: JSDOM;
@@ -49,6 +49,8 @@ describe('insights', () => {
           'x-algolia-api-key': 'myApiKey',
         },
       },
+      // v4 clients have no top-level `appId`
+      appId: undefined,
     });
   });
 
@@ -74,8 +76,7 @@ describe('insights', () => {
     }
 
     const getUserToken = () =>
-      (instantSearchInstance.mainHelper!.state as PlainSearchParameters)
-        .userToken;
+      (instantSearchInstance.helper!.state as PlainSearchParameters).userToken;
 
     return {
       analytics,
@@ -99,17 +100,18 @@ describe('insights', () => {
             'x-algolia-api-key': 'my-api-key',
           },
         },
+        // v4 clients have no top-level `appId`
+        appId: undefined,
       }),
       insights: false,
       indexName,
     });
     instantSearchInstance.start();
 
-    const helper = instantSearchInstance.mainHelper!;
+    const helper = instantSearchInstance.helper!;
 
     const getUserToken = () =>
-      (instantSearchInstance.mainHelper!.state as PlainSearchParameters)
-        .userToken;
+      (instantSearchInstance.helper!.state as PlainSearchParameters).userToken;
 
     return {
       analytics,
@@ -454,7 +456,7 @@ describe('insights', () => {
           insightsClient,
         })
       );
-      expect(instantSearchInstance.mainHelper!.state.clickAnalytics).toBe(true);
+      expect(instantSearchInstance.helper!.state.clickAnalytics).toBe(true);
     });
 
     it('applies clickAnalytics if $$automatic: false', () => {
@@ -465,7 +467,7 @@ describe('insights', () => {
           $$automatic: false,
         })
       );
-      expect(instantSearchInstance.mainHelper!.state.clickAnalytics).toBe(true);
+      expect(instantSearchInstance.helper!.state.clickAnalytics).toBe(true);
     });
 
     it('does not apply clickAnalytics if $$automatic: true', () => {
@@ -486,9 +488,9 @@ describe('insights', () => {
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
-      instantSearchInstance.mainHelper!.setPage(100);
+      instantSearchInstance.helper!.setPage(100);
       middleware.subscribe();
-      expect(instantSearchInstance.mainHelper!.state.page).toBe(100);
+      expect(instantSearchInstance.helper!.state.page).toBe(100);
     });
 
     it('adds user agent', () => {
@@ -681,7 +683,7 @@ describe('insights', () => {
 
       insightsClient('setUserToken', 'abc');
       instantSearchInstance.start();
-      instantSearchInstance.mainHelper!.setPage(100);
+      instantSearchInstance.helper!.setPage(100);
 
       instantSearchInstance.use(
         createInsightsMiddleware({
@@ -689,7 +691,7 @@ describe('insights', () => {
         })
       );
 
-      expect(instantSearchInstance.mainHelper!.state.page).toBe(100);
+      expect(instantSearchInstance.helper!.state.page).toBe(100);
       expect(getUserToken()).toEqual('abc');
     });
 
@@ -713,7 +715,7 @@ describe('insights', () => {
         createTestEnvironment({ started: false });
 
       instantSearchInstance.start();
-      instantSearchInstance.mainHelper!.setPage(100);
+      instantSearchInstance.helper!.setPage(100);
 
       instantSearchInstance.use(
         createInsightsMiddleware({
@@ -725,7 +727,7 @@ describe('insights', () => {
 
       await wait(0);
 
-      expect(instantSearchInstance.mainHelper!.state.page).toEqual(100);
+      expect(instantSearchInstance.helper!.state.page).toEqual(100);
       expect(getUserToken()).toEqual('def');
     });
 
@@ -779,6 +781,7 @@ describe('insights', () => {
         {
           indexName: 'my-index',
           params: {
+            ...TAG_PLACEHOLDER,
             clickAnalytics: true,
             query: '',
             userToken: getUserToken(),
@@ -823,6 +826,7 @@ describe('insights', () => {
         {
           indexName: 'my-index',
           params: {
+            ...TAG_PLACEHOLDER,
             query: '',
           },
         },
@@ -842,6 +846,7 @@ describe('insights', () => {
         {
           indexName: 'my-index',
           params: {
+            ...TAG_PLACEHOLDER,
             clickAnalytics: true,
             query: '',
             userToken: getUserToken(),
@@ -868,6 +873,7 @@ describe('insights', () => {
         {
           indexName: 'my-index',
           params: {
+            ...TAG_PLACEHOLDER,
             clickAnalytics: true,
             query: '',
             userToken: getUserToken(),
@@ -1717,7 +1723,7 @@ describe('insights', () => {
         },
       });
 
-      instantSearchInstance.mainHelper!.derivedHelpers[0].emit('result', {
+      instantSearchInstance.helper!.derivedHelpers[0].emit('result', {
         results: { queryId: '2' },
       });
 
@@ -1912,7 +1918,7 @@ describe('insights', () => {
 
     instantSearchInstance
       .helper!.setState({
-        ...instantSearchInstance.mainHelper!.state,
+        ...instantSearchInstance.helper!.state,
         query: 'test',
       })
       .search();
@@ -1988,6 +1994,50 @@ describe('insights', () => {
       expect(rootParamNames).not.toContain('searchClient');
       expect(rootParamNames).not.toContain('insightsClient');
       expect(rootParamNames).not.toContain('initialUiState');
+    });
+
+    it('reports the flavor version passed to the instance', async () => {
+      const { insightsClient } = createInsights();
+      const instantSearchInstance = instantsearch({
+        searchClient: searchClientWithCredentials,
+        indexName: 'my-index',
+        _internalVersion: '9.9.9',
+      });
+
+      instantSearchInstance.use(createInsightsMiddleware({ insightsClient }));
+      instantSearchInstance.start();
+      await wait(0);
+
+      const [, payload] = castToJestMock(insightsClient).mock.calls.find(
+        ([method]) => method === 'sendEvents'
+      )!;
+      const [event] = payload as Array<{
+        version: string;
+        widgets: Array<{ params: Array<{ name: string }> }>;
+      }>;
+
+      expect(event.version).toBe('9.9.9');
+      expect(event.widgets[0].params.map((p) => p.name)).not.toContain(
+        '_internalVersion'
+      );
+    });
+
+    it('defaults to the instantsearch.js version', async () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment({
+        started: false,
+      });
+
+      instantSearchInstance.use(createInsightsMiddleware({ insightsClient }));
+      instantSearchInstance.start();
+      await wait(0);
+
+      const [, payload] = castToJestMock(insightsClient).mock.calls.find(
+        ([method]) => method === 'sendEvents'
+      )!;
+
+      expect((payload as Array<{ version: string }>)[0].version).toBe(
+        instantsearch.version
+      );
     });
   });
 });

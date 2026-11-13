@@ -1911,7 +1911,6 @@ const searchClient = algoliasearch('appId', 'apiKey');
 const search = instantsearch({
   indexName: 'indexName',
   searchClient,
-  future: { preserveSharedStateOnUnmount: true },
   insights: true,
 });
 
@@ -2879,8 +2878,7 @@ exports[`Templates InstantSearch.js widget File content: package.json 1`] = `
     \\"last 2 chrome versions\\",
     \\"last 2 firefox versions\\",
     \\"last 2 edge versions\\",
-    \\"last 2 safari versions\\",
-    \\"IE 11\\"
+    \\"last 2 safari versions\\"
   ],
   \\"partialDependencies\\": {}
 }"
@@ -4028,7 +4026,7 @@ exports[`Templates React InstantSearch File content: package.json 1`] = `
     \\"start\\": \\"parcel index.html\\"
   },
   \\"partialDependencies\\": {
-    \\"react-instantsearch\\": \\"7.0.0\\"
+    \\"react-instantsearch\\": \\"8.0.0\\"
   }
 }"
 `;
@@ -4132,13 +4130,11 @@ import {
 
 import { Panel } from './Panel';
 
-import type { Hit } from 'instantsearch.js';
+import type { Hit } from 'react-instantsearch';
 
 import './App.css';
 
 const searchClient = algoliasearch('appId', 'apiKey');
-
-const future = { preserveSharedStateOnUnmount: true };
 
 export function App() {
   return (
@@ -4159,7 +4155,6 @@ export function App() {
         <InstantSearch
           searchClient={searchClient}
           indexName=\\"indexName\\"
-          future={future}
           insights
         >
           <Configure hitsPerPage={8} />
@@ -4293,8 +4288,6 @@ const searchClient = algoliasearch(
   'apiKey'
 );
 
-const future = { preserveSharedStateOnUnmount: true };
-
 export default function App() {
   const listRef = useRef<FlatList<ProductHit>>(null);
 
@@ -4306,7 +4299,6 @@ export default function App() {
           <InstantSearch
             searchClient={searchClient}
             indexName=\\"indexName\\"
-            future={future}
           >
             <SearchBox
               onChange={() =>
@@ -4436,17 +4428,17 @@ exports[`Templates React InstantSearch Native File content: package.json 1`] = `
     \\"web\\": \\"expo start --web\\"
   },
   \\"partialDependencies\\": {
-    \\"react-instantsearch-core\\": \\"7.0.0\\"
+    \\"react-instantsearch-core\\": \\"8.0.0\\"
   }
 }"
 `;
 
 exports[`Templates React InstantSearch Native File content: src/Highlight.tsx 1`] = `
-"import { Hit as AlgoliaHit } from 'instantsearch.js';
-import {
+"import {
   getHighlightedParts,
   getPropertyByPath,
-} from 'instantsearch.js/es/lib/utils';
+  Hit as AlgoliaHit,
+} from 'react-instantsearch-core';
 import React, { Fragment } from 'react';
 import { StyleSheet, Text } from 'react-native';
 
@@ -4526,9 +4518,9 @@ const styles = StyleSheet.create({
 `;
 
 exports[`Templates React InstantSearch Native File content: src/InfiniteHits.tsx 1`] = `
-"import { Hit as AlgoliaHit } from 'instantsearch.js';
-import React from 'react';
+"import React from 'react';
 import {
+  Hit as AlgoliaHit,
   useInfiniteHits,
   UseInfiniteHitsProps,
 } from 'react-instantsearch-core';
@@ -4662,7 +4654,7 @@ exports[`Templates React InstantSearch Native File content: tsconfig.json 1`] = 
 `;
 
 exports[`Templates React InstantSearch Native File content: types/ProductHit.ts 1`] = `
-"import { Hit as AlgoliaHit } from 'instantsearch.js';
+"import { Hit as AlgoliaHit } from 'react-instantsearch-core';
 
 export type ProductHit = AlgoliaHit<{
   brand: string;
@@ -4813,7 +4805,7 @@ exports[`Templates Vue InstantSearch File content: package.json 1`] = `
   \\"browserslist\\": [
     \\"> 1%\\",
     \\"last 2 versions\\",
-    \\"not ie <= 8\\"
+    \\"not dead\\"
   ],
   \\"partialDependencies\\": {
     \\"vue-instantsearch\\": \\"3.0.0\\"
@@ -5179,7 +5171,6 @@ exports[`Templates Vue InstantSearch with Vue 3 File content: src/App.vue 1`] = 
       <ais-instant-search
         :search-client=\\"searchClient\\"
         index-name=\\"indexName\\"
-        :future=\\"future\\"
         insights
       >
         <ais-configure :hits-per-page.camel=\\"8\\" />
@@ -5234,7 +5225,6 @@ export default {
   data() {
     return {
       searchClient: algoliasearch('appId', 'apiKey'),
-      future: { preserveSharedStateOnUnmount: true },
     };
   },
 };

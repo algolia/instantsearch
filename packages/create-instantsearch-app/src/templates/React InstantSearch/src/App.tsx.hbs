@@ -22,7 +22,7 @@ import {
 
 import { Panel } from './Panel';
 
-import type { Hit } from 'instantsearch.js';
+import type { Hit } from 'react-instantsearch';
 
 import './App.css';
 
@@ -30,8 +30,6 @@ const searchClient = algoliasearch(
   '{{appId}}',
   '{{apiKey}}'
 );
-
-const future = { preserveSharedStateOnUnmount: true };
 
 export function App() {
   return (
@@ -49,7 +47,7 @@ export function App() {
       </header>
 
       <div className="container">
-        <InstantSearch searchClient={searchClient} indexName="{{indexName}}" future={future} {{#if flags.insights}}insights{{/if}}>
+        <InstantSearch searchClient={searchClient} indexName="{{indexName}}" {{#if flags.insights}}insights{{/if}}>
           <Configure hitsPerPage={8} />
           <div className="search-panel">
             <div className="search-panel__filters">

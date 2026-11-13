@@ -1,4 +1,4 @@
-import { find } from '../../lib';
+import { TAG_PLACEHOLDER } from 'instantsearch-core/internal';
 
 import type { UsePropGetters } from './createAutocompletePropGetters';
 import type { Hooks } from '../../types';
@@ -70,8 +70,7 @@ export function createAutocompleteStorage({
               ...index,
               hits: index.hits.filter(
                 (hit) =>
-                  !find(
-                    storageHits,
+                  !storageHits.find(
                     (storageHit) => storageHit.query === hit.query
                   )
               ),
@@ -130,7 +129,7 @@ function getHighlightedAttribute({
       value: item.query.replace(
         new RegExp(query.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&'), 'gi'),
         (match) => {
-          return `<mark>${match}</mark>`;
+          return `${TAG_PLACEHOLDER.highlightPreTag}${match}${TAG_PLACEHOLDER.highlightPostTag}`;
         }
       ),
     },

@@ -4,7 +4,7 @@ import { useInfiniteHits } from 'react-instantsearch-core';
 import { InfiniteHits as InfiniteHitsUiComponent } from '../ui/InfiniteHits';
 
 import type { InfiniteHitsProps as InfiniteHitsUiComponentProps } from '../ui/InfiniteHits';
-import type { BaseHit, Hit } from 'instantsearch.js';
+import type { BaseHit, Hit } from 'instantsearch-core';
 import type { UseInfiniteHitsProps } from 'react-instantsearch-core';
 
 type UiProps<THit extends BaseHit = BaseHit> = Pick<
@@ -43,7 +43,6 @@ export type InfiniteHitsProps<THit extends BaseHit = BaseHit> = Omit<
 export function InfiniteHits<THit extends BaseHit = BaseHit>({
   showPrevious: shouldShowPrevious = true,
   cache,
-  escapeHTML,
   transformItems,
   translations,
   bannerComponent: BannerComponent,
@@ -58,7 +57,7 @@ export function InfiniteHits<THit extends BaseHit = BaseHit>({
     isFirstPage,
     isLastPage,
   } = useInfiniteHits<THit>(
-    { cache, escapeHTML, showPrevious: shouldShowPrevious, transformItems },
+    { cache, showPrevious: shouldShowPrevious, transformItems },
     { $$widgetType: 'ais.infiniteHits' }
   );
 

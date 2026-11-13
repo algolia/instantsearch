@@ -7,9 +7,12 @@
   "module": "dist/es/index.js",
   "type": "module",
   "exports": {
-    "types": "./dist/es/index.d.ts",
-    "require": "./dist/cjs/index.js",
-    "default": "./dist/es/index.js"
+    ".": {
+      "types": "./dist/es/index.d.ts",
+      "require": "./dist/cjs/index.js",
+      "default": "./dist/es/index.js"
+    },
+    "./package.json": "./package.json"
   },
   "sideEffects": false,
   "license": "MIT",
@@ -44,6 +47,7 @@
     "watch:es": "rollup -c rollup.config.mjs --watch"
   },
   "dependencies": {
-    "@swc/helpers": "0.5.18"
+    "@swc/helpers": "0.5.18",
+    "instantsearch-core": "0.1.0"
   }
 }

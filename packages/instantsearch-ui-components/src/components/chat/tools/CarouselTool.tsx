@@ -1,10 +1,11 @@
 /** @jsx createElement */
 
+import { addAbsolutePosition, addQueryID } from 'instantsearch-core/internal';
 import {
   getApplyFiltersParamsFromToolInput,
   getResolvedSearchParams,
-} from '../../../lib/utils/chat';
-import { addAbsolutePosition, addQueryID } from '../../../lib/utils/hits';
+} from 'instantsearch-core/internal';
+
 import { createButtonComponent } from '../../Button';
 import { createCarouselComponent, generateCarouselId } from '../../Carousel';
 import { ArrowRightIcon, ChevronLeftIcon, ChevronRightIcon } from '../icons';
@@ -14,12 +15,12 @@ import type {
   CarouselProps,
   HeaderComponentProps as CarouselHeaderComponentProps,
 } from '../../Carousel';
+import type { SearchParameters } from 'algoliasearch-helper';
 import type {
   ClientSideToolComponentProps,
   ResolvedSearchParams,
   SearchToolInput,
-} from '../types';
-import type { SearchParameters } from 'algoliasearch-helper';
+} from 'instantsearch-core';
 
 type HeaderProps = {
   showViewAll: boolean;

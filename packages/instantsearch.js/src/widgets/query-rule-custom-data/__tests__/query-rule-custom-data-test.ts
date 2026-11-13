@@ -10,7 +10,7 @@ import { render as preactRender } from 'preact';
 import {
   createDisposeOptions,
   createInitOptions,
-} from '../../../../test/createWidget';
+} from '../../../../../instantsearch-core/test/createWidget';
 import queryRuleCustomData from '../query-rule-custom-data';
 
 import type { QueryRuleCustomDataProps } from '../../../components/QueryRuleCustomData/QueryRuleCustomData';
@@ -208,12 +208,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
 
         expect(render).toHaveBeenCalledTimes(1);
 
-        widget.dispose!(
-          createDisposeOptions({
-            helper,
-            state: helper.state,
-          })
-        );
+        widget.dispose!(createDisposeOptions());
 
         expect(render).toHaveBeenCalledTimes(2);
         expect(render).toHaveBeenCalledWith(null, container);

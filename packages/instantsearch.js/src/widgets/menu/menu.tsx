@@ -1,16 +1,14 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import RefinementList from '../../components/RefinementList/RefinementList';
-import connectMenu from '../../connectors/menu/connectMenu';
-import { component } from '../../lib/suit';
+import { connectMenu } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
@@ -18,14 +16,10 @@ import type {
   MenuConnectorParams,
   MenuRenderState,
   MenuWidgetDescription,
-} from '../../connectors/menu/connectMenu';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type {
-  ComponentCSSClasses,
-  RendererOptions,
-  Template,
-  WidgetFactory,
-} from '../../types';
+import type { ComponentCSSClasses, Template } from '../../types';
+import type { RendererOptions, WidgetFactory } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'menu' });
 const suit = component('Menu');
@@ -75,7 +69,7 @@ export type MenuCSSClasses = Partial<{
 
 export type MenuTemplates = Partial<{
   /**
-   * Item template. The string template gets the same values as the function.
+   * Item template.
    */
   item: Template<{
     count: number;
@@ -133,7 +127,6 @@ const renderer =
       refine,
       items,
       createURL,
-      instantSearchInstance,
       isShowingMore,
       toggleShowMore,
       canToggleShowMore,
@@ -143,7 +136,6 @@ const renderer =
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;

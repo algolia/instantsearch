@@ -1,14 +1,9 @@
 /** @jsx h */
+import { getPropertyByPath, getHighlightedParts } from 'instantsearch-core';
+import { toArray, warning } from 'instantsearch-core/internal';
 import { h } from 'preact';
 
 import { Snippet as SnippetUiComponent } from '../../components/Snippet/Snippet';
-import {
-  getPropertyByPath,
-  unescape,
-  toArray,
-  warning,
-  getHighlightedParts,
-} from '../../lib/utils';
 
 import type { SnippetProps as SnippetUiComponentProps } from '../../components/Snippet/Snippet';
 import type {
@@ -16,7 +11,7 @@ import type {
   Hit,
   HitAttributeSnippetResult,
   PartialKeys,
-} from '../../types';
+} from 'instantsearch-core';
 
 export type SnippetProps<THit extends Hit<BaseHit>> = {
   hit: THit;
@@ -46,9 +41,7 @@ See: https://alg.li/highlighting
 `
   );
 
-  const parts = properties.map(({ value }) =>
-    getHighlightedParts(unescape(value || ''))
-  );
+  const parts = properties.map(({ value }) => getHighlightedParts(value || ''));
 
   return (
     <SnippetUiComponent {...props} parts={parts} classNames={cssClasses} />

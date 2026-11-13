@@ -33,7 +33,6 @@ export function TrendingFacets({
   limit,
   threshold,
   fallbackParameters,
-  escapeHTML,
   transformItems,
   itemComponent,
   headerComponent,
@@ -47,7 +46,6 @@ export function TrendingFacets({
       limit,
       threshold,
       fallbackParameters,
-      escapeHTML,
       transformItems,
     },
     { $$widgetType: 'ais.trendingFacets' }

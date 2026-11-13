@@ -1,16 +1,14 @@
 /** @jsx h */
 
+import { isChatBusy, openChat } from 'instantsearch-core/internal';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import SearchBox from '../../components/SearchBox/SearchBox';
-import connectSearchBox from '../../connectors/search-box/connectSearchBox';
-import { isChatBusy, openChat } from '../../lib/chat';
-import { component } from '../../lib/suit';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { connectSearchBox } from '../../connectors';
+import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
@@ -18,13 +16,14 @@ import type {
   SearchBoxComponentCSSClasses,
   SearchBoxComponentTemplates,
 } from '../../components/SearchBox/SearchBox';
-import type { ChatRenderState } from '../../connectors/chat/connectChat';
 import type {
   SearchBoxConnectorParams,
   SearchBoxRenderState,
   SearchBoxWidgetDescription,
-} from '../../connectors/search-box/connectSearchBox';
-import type { WidgetFactory, Template, RendererOptions } from '../../types';
+} from '../../connectors';
+import type { Template } from '../../types';
+import type { WidgetFactory, RendererOptions } from 'instantsearch-core';
+import type { ChatRenderState } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'search-box' });
 const suit = component('SearchBox');
@@ -32,20 +31,19 @@ const aiModeSuit = component('AiModeButton');
 
 export type SearchBoxTemplates = Partial<{
   /**
-   * Template used for displaying the submit button. Can accept a function or a Hogan string.
+   * Template used for displaying the submit button.
    */
   submit: Template<{ cssClasses: SearchBoxComponentCSSClasses }>;
   /**
-   * Template used for displaying the reset button. Can accept a function or a Hogan string.
+   * Template used for displaying the reset button.
    */
   reset: Template<{ cssClasses: SearchBoxComponentCSSClasses }>;
   /**
-   * Template used for displaying the loading indicator. Can accept a function or a Hogan string.
+   * Template used for displaying the loading indicator.
    */
   loadingIndicator: Template<{ cssClasses: SearchBoxComponentCSSClasses }>;
   /**
    * Template used for displaying the AI mode button content (icon and label).
-   * Can accept a function or a Hogan string.
    */
   aiMode: Template<{ cssClasses: SearchBoxComponentCSSClasses }>;
 }>;
@@ -204,7 +202,6 @@ const renderer =
   ({
     refine,
     query,
-    isSearchStalled,
     instantSearchInstance,
   }: SearchBoxRenderState & RendererOptions<SearchBoxConnectorParams>) => {
     const getChatRenderState = () => {
@@ -245,7 +242,7 @@ const renderer =
         showLoadingIndicator={showLoadingIndicator}
         submitTitle={submitTitle}
         resetTitle={resetTitle}
-        isSearchStalled={isSearchStalled}
+        isSearchStalled={instantSearchInstance.status === 'stalled'}
         cssClasses={cssClasses}
         onAiModeClick={onAiModeClick}
         aiModeButtonDisabled={aiModeButtonDisabled}

@@ -1,31 +1,28 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { createLookingSimilarComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectLookingSimilar from '../../connectors/looking-similar/connectLookingSimilar';
+import { connectLookingSimilar } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import type {
   LookingSimilarWidgetDescription,
   LookingSimilarConnectorParams,
   LookingSimilarRenderState,
-} from '../../connectors/looking-similar/connectLookingSimilar';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template, TemplateWithSendEvent } from '../../types';
 import type {
-  Template,
   WidgetFactory,
   Renderer,
   BaseHit,
   RecommendResponse,
   Hit,
-  TemplateWithBindEvent,
-} from '../../types';
+} from 'instantsearch-core';
 import type {
   RecommendClassNames,
   LookingSimilarProps as LookingSimilarUiProps,
@@ -64,7 +61,6 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
         defaultTemplates: {} as unknown as Required<
           LookingSimilarTemplates<THit>
         >,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;
@@ -187,7 +183,7 @@ export type LookingSimilarTemplates<
   /**
    * Template to use for each result. This template will receive an object containing a single record.
    */
-  item: TemplateWithBindEvent<Hit<THit>>;
+  item: TemplateWithSendEvent<Hit<THit>>;
 
   /**
    * Template to use to wrap all items.
@@ -243,7 +239,6 @@ export default (function lookingSimilar<
     queryParameters,
     fallbackParameters,
     threshold,
-    escapeHTML,
     transformItems,
     templates = {},
     cssClasses = {},
@@ -272,7 +267,6 @@ export default (function lookingSimilar<
       queryParameters,
       fallbackParameters,
       threshold,
-      escapeHTML,
       transformItems,
     }),
     $$widgetType: 'ais.lookingSimilar',

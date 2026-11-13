@@ -19,29 +19,47 @@
   "version": "4.33.0",
   "files": [
     "vue2",
-    "vue3",
-    "src"
+    "vue3"
   ],
   "main": "vue2/cjs",
   "module": "vue2/es",
+  "exports": {
+    ".": {
+      "import": "./vue2/es/index.js",
+      "require": "./vue2/cjs/index.js"
+    },
+    "./vue2": {
+      "import": "./vue2/es/index.js",
+      "require": "./vue2/cjs/index.js"
+    },
+    "./vue3": {
+      "import": "./vue3/es/index.js",
+      "require": "./vue3/cjs/index.js"
+    },
+    "./vue2/es": "./vue2/es/index.js",
+    "./vue3/es": "./vue3/es/index.js",
+    "./vue2/es/src/widgets.js": "./vue2/es/src/widgets.js",
+    "./vue3/es/src/widgets.js": "./vue3/es/src/widgets.js",
+    "./package.json": "./package.json"
+  },
   "sideEffects": false,
   "repository": "https://github.com/algolia/instantsearch",
   "scripts": {
     "prebuild": "rm -rf vue2 vue3",
     "build": "rollup -c rollup.config.mjs",
-    "test:exports": "node ./test/module/vue2/is-es-module.mjs && node ./test/module/vue2/is-cjs-module.cjs",
-    "test:exports:vue3": "node ./test/module/vue3/is-es-module.mjs && node ./test/module/vue3/is-cjs-module.cjs",
+    "test:exports": "node ./test/module/vue2/is-es-module.mjs && node ./test/module/vue2/is-cjs-module.cjs && node ./test/module/vue2/is-tree-shakable.mjs",
+    "test:exports:vue3": "node ./test/module/vue3/is-es-module.mjs && node ./test/module/vue3/is-cjs-module.cjs && node ./test/module/vue3/is-tree-shakable.mjs",
     "watch:es": "yarn --silent build --watch"
   },
   "dependencies": {
     "@swc/helpers": "0.5.18",
+    "instantsearch-core": "^0.1.0",
     "instantsearch-ui-components": "0.46.0",
-    "instantsearch.js": "4.123.0",
     "mitt": "^2.1.0"
   },
   "peerDependencies": {
     "@vue/server-renderer": "^3.1.2",
-    "algoliasearch": ">= 3.32.0 < 6",
+    "algoliasearch": ">= 4 < 6",
     "vue": "^2.6.0 || >=3.0.0-rc.0",
     "vue-server-renderer": "^2.6.11"
   },

@@ -3,14 +3,14 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
-import { Chat } from 'instantsearch.js/es/lib/chat';
+import { Chat } from 'instantsearch-core/internal';
 
 import { mount, nextTick } from '../../../test/utils';
 import ChatComponent from '../Chat';
 import ChatTrigger from '../ChatTrigger';
 import InstantSearch from '../InstantSearch';
 
-jest.unmock('instantsearch.js/es');
+jest.unmock('instantsearch-core/internal');
 
 const wait = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms));
 

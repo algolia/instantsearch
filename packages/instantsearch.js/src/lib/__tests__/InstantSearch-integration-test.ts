@@ -6,54 +6,13 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { castToJestMock } from '@instantsearch/testutils';
 import { wait } from '@instantsearch/testutils/wait';
-import { getByText, fireEvent } from '@testing-library/dom';
+import { fireEvent } from '@testing-library/dom';
 
-import { connectConfigure, connectSearchBox } from '../../connectors';
+import { connectSearchBox } from '../../connectors';
 import instantsearch from '../../index.es';
-import { configure, frequentlyBoughtTogether, searchBox } from '../../widgets';
+import { frequentlyBoughtTogether, searchBox } from '../../widgets';
 
-import type { MiddlewareDefinition } from '../../types';
-
-describe('configure', () => {
-  it('provides up-to-date uiState to onStateChange', () => {
-    const container = document.createElement('div');
-    const onStateChange = jest.fn();
-    const search = instantsearch({
-      indexName: 'instant_search',
-      searchClient: createSearchClient(),
-      onStateChange({ uiState, setUiState }) {
-        onStateChange(uiState);
-        setUiState(uiState);
-      },
-    });
-    const customComp = connectConfigure(({ refine }, isFirstRendering) => {
-      if (isFirstRendering) {
-        const button = document.createElement('button');
-        button.setAttribute('type', 'button');
-        button.textContent = 'click me';
-        container.appendChild(button);
-        container.querySelector('button')!.addEventListener('click', () => {
-          refine({ hitsPerPage: 4 });
-        });
-      }
-    });
-    search.addWidgets([
-      configure({
-        hitsPerPage: 10,
-      }),
-      customComp({ searchParameters: {} }),
-    ]);
-
-    search.start();
-    expect(onStateChange).not.toHaveBeenCalled();
-
-    fireEvent.click(getByText(container, 'click me'));
-    expect(onStateChange).toHaveBeenCalledTimes(1);
-    expect(onStateChange).toHaveBeenCalledWith({
-      instant_search: { configure: { hitsPerPage: 4 } },
-    });
-  });
-});
+import type { MiddlewareDefinition } from 'instantsearch-core';
 
 describe('middleware', () => {
   it("runs middlewares' onStateChange when uiState changes", async () => {
@@ -145,14 +104,12 @@ describe('errors', () => {
 
     search.addWidgets([virtualSearchBox({})]);
 
-    expect.assertions(4);
+    expect.assertions(3);
 
     search.on('error', (error) => {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe('test!');
-
-      expect(error.error).toBeInstanceOf(Error);
-      expect(error.error.message).toBe('test!');
+      expect(error).not.toHaveProperty('error');
     });
 
     search.start();
@@ -195,6 +152,8 @@ describe('network requests', () => {
           {
             "indexName": "indexName",
             "params": {
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
               "query": "",
             },
           },
@@ -267,6 +226,8 @@ describe('network requests', () => {
           {
             "indexName": "indexName",
             "params": {
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
               "query": "",
             },
           },
@@ -341,6 +302,8 @@ describe('network requests', () => {
             "indexName": "indexName",
             "params": {
               "clickAnalytics": true,
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
               "query": "",
               "userToken": "cookie-key",
             },
@@ -419,6 +382,8 @@ describe('network requests', () => {
             "indexName": "indexName",
             "params": {
               "clickAnalytics": true,
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
               "query": "",
               "userToken": "cookie-key",
             },
@@ -496,6 +461,8 @@ describe('network requests', () => {
             "indexName": "indexName",
             "params": {
               "clickAnalytics": true,
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
               "query": "",
               "userToken": "cookie-key",
             },
@@ -574,6 +541,8 @@ describe('network requests', () => {
             "indexName": "indexName",
             "params": {
               "clickAnalytics": true,
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
               "query": "",
               "userToken": "cookie-key",
             },
@@ -627,6 +596,8 @@ describe('network requests', () => {
           {
             "indexName": "indexName",
             "params": {
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
               "query": "",
             },
           },

@@ -28,20 +28,6 @@ it('accepts a showBanner prop', () => {
   expect(wrapper.vm.widgetParams.showBanner).toBe(true);
 });
 
-it('accepts an escapeHTML prop', () => {
-  __setState({
-    ...defaultState,
-  });
-
-  const wrapper = mount(Hits, {
-    propsData: {
-      escapeHTML: true,
-    },
-  });
-
-  expect(wrapper.vm.widgetParams.escapeHTML).toBe(true);
-});
-
 it('exposes banner prop to the banner slot', () => {
   __setState({
     ...defaultState,
@@ -71,65 +57,6 @@ it('exposes banner prop to the banner slot', () => {
   );
   const img = wrapper.find('img');
   expect(img.attributes('src')).toBe('https://via.placeholder.com/550x250');
-});
-
-it('exposes insights prop to the default slot', async () => {
-  const insights = jest.fn();
-  __setState({
-    ...defaultState,
-    insights,
-  });
-
-  const wrapper = mount({
-    components: { Hits },
-    template: `
-      <Hits>
-        <template v-slot="{ items, insights }">
-          <ul>
-            <li v-for="(item, itemIndex) in items" >
-
-              <button :id="'add-to-cart-' + item.objectID" @click="insights('clickedObjectIDsAfterSearch', {eventName: 'Add to cart', objectIDs: [item.objectID]})">
-                Add to cart
-              </button>
-            </li>
-          </ul>
-        </template>
-      </Hits>
-    `,
-  });
-  await wrapper.find('#add-to-cart-two').trigger('click');
-  expect(insights).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
-    eventName: 'Add to cart',
-    objectIDs: ['two'],
-  });
-});
-
-it('exposes insights prop to the item slot', async () => {
-  const insights = jest.fn();
-  __setState({
-    ...defaultState,
-    insights,
-  });
-
-  const wrapper = mount({
-    components: { Hits },
-    template: `
-      <Hits>
-        <template v-slot:item="{ item, insights }">
-          <div>
-            <button :id="'add-to-cart-' + item.objectID" @click="insights('clickedObjectIDsAfterSearch', {eventName: 'Add to cart', objectIDs: [item.objectID]})">
-              Add to cart
-            </button>
-          </div>
-        </template>
-      </Hits>
-    `,
-  });
-  await wrapper.find('#add-to-cart-two').trigger('click');
-  expect(insights).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
-    eventName: 'Add to cart',
-    objectIDs: ['two'],
-  });
 });
 
 it('exposes send-event method for insights middleware', async () => {

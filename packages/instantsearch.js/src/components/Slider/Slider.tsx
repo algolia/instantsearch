@@ -1,15 +1,14 @@
 /** @jsx h */
 
+import { range } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, Component } from 'preact';
-
-import { range } from '../../lib/utils';
 
 import Pit from './Pit';
 import Rheostat from './Rheostat';
 
 import type { HandleProps } from './Rheostat';
-import type { RangeBoundaries } from '../../connectors/range/connectRange';
+import type { Range } from '../../connectors';
 import type { ComponentCSSClasses } from '../../types';
 import type {
   RangeSliderCssClasses,
@@ -20,10 +19,10 @@ export type RangeSliderComponentCSSClasses =
   ComponentCSSClasses<RangeSliderCssClasses>;
 
 export type SliderProps = {
-  refine: (values: RangeBoundaries) => void;
+  refine: (values: Range) => void;
   min?: number;
   max?: number;
-  values: RangeBoundaries;
+  values: Range;
   pips?: boolean;
   step?: number;
   tooltips?: RangeSliderWidgetParams['tooltips'];
@@ -35,9 +34,9 @@ class Slider extends Component<SliderProps> {
     return this.props.min! >= this.props.max!;
   }
 
-  private handleChange = ({ values }: { values: RangeBoundaries }) => {
+  private handleChange = ({ values: [min, max] }: { values: number[] }) => {
     if (!this.isDisabled) {
-      this.props.refine(values);
+      this.props.refine({ min, max });
     }
   };
 
@@ -132,7 +131,12 @@ class Slider extends Component<SliderProps> {
           pitPoints={pitPoints}
           snap={true}
           snapPoints={snapPoints}
-          values={(this.isDisabled ? [min, max] : values) as [number, number]}
+          values={
+            (this.isDisabled ? [min, max] : [values.min, values.max]) as [
+              number,
+              number,
+            ]
+          }
           disabled={this.isDisabled}
         />
       </div>

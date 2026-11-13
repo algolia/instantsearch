@@ -1,11 +1,11 @@
-import { isChatBusy, openChat } from 'instantsearch.js/es/lib/chat';
+import { isChatBusy, openChat } from 'instantsearch-core/internal';
 import React, { useRef, useState } from 'react';
 import { useInstantSearch, useSearchBox } from 'react-instantsearch-core';
 
 import { SearchBox as SearchBoxUiComponent } from '../ui/SearchBox';
 
 import type { SearchBoxProps as SearchBoxUiComponentProps } from '../ui/SearchBox';
-import type { ChatRenderState } from 'instantsearch.js/es/connectors/chat/connectChat';
+import type { ChatRenderState } from 'instantsearch-core';
 import type { UseSearchBoxProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<
@@ -55,14 +55,15 @@ export function SearchBox({
   translations,
   ...props
 }: SearchBoxProps) {
-  const { query, refine, isSearchStalled } = useSearchBox(
+  const { query, refine } = useSearchBox(
     { queryHook },
     {
       $$widgetType: 'ais.searchBox',
       ...(aiMode ? { opensChat: true } : {}),
     }
   );
-  const { indexRenderState } = useInstantSearch();
+  const { indexRenderState, status } = useInstantSearch();
+  const isSearchStalled = status === 'stalled';
   const [inputValue, setInputValue] = useState(query);
   const inputRef = useRef<HTMLInputElement>(null);
 

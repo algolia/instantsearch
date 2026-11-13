@@ -1,5 +1,21 @@
 /** @jsx h */
 
+import { type ChatRenderState } from 'instantsearch-core';
+import { createFeedContainer } from 'instantsearch-core';
+import {
+  getPromptSuggestionHits,
+  isChatBusy,
+  isPromptSuggestion,
+  openChat,
+} from 'instantsearch-core/internal';
+import {
+  createDocumentationMessageGenerator,
+  noop,
+  warn,
+  walkIndex,
+} from 'instantsearch-core/internal';
+import { index } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import {
   createAutocompleteComponent,
   createAutocompleteDetachedContainerComponent,
@@ -15,39 +31,30 @@ import {
   createAutocompleteStorage,
   createAutocompleteSuggestionComponent,
   cx,
-  getPromptSuggestionHits,
-  isPromptSuggestion,
 } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 import { useEffect, useId, useMemo, useRef, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectFeeds from '../../connectors/feeds/connectFeeds';
-import { createFeedContainer } from '../../connectors/feeds/FeedContainer';
-import { connectAutocomplete, connectSearchBox } from '../../connectors/index';
-import { Highlight, ReverseHighlight } from '../../helpers/components';
-import { isChatBusy, openChat } from '../../lib/chat';
-import { component } from '../../lib/suit';
-import { prepareTemplateProps } from '../../lib/templating';
 import {
-  createDocumentationMessageGenerator,
-  find,
-  getContainerNode,
-  noop,
-  warn,
-  walkIndex,
-} from '../../lib/utils';
+  connectAutocomplete,
+  connectFeeds,
+  connectSearchBox,
+} from '../../connectors/index';
+import { Highlight, ReverseHighlight } from '../../helpers/components';
+import { prepareTemplateProps } from '../../lib/templating';
+import { getContainerNode } from '../../lib/utils';
 import configure from '../configure/configure';
-import index from '../index/index';
 
 import type {
   AutocompleteConnectorParams,
   AutocompleteRenderState,
   AutocompleteWidgetDescription,
   TransformItemsIndicesConfig,
-} from '../../connectors/autocomplete/connectAutocomplete';
-import type { ChatRenderState } from '../../connectors/chat/connectChat';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template } from '../../types';
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type {
   BaseHit,
   Hit,
@@ -56,11 +63,9 @@ import type {
   InstantSearch,
   Renderer,
   RendererOptions,
-  Template,
   Widget,
   WidgetFactory,
-} from '../../types';
-import type { PlainSearchParameters } from 'algoliasearch-helper';
+} from 'instantsearch-core';
 import type {
   AutocompleteClassNames,
   AutocompleteIndexClassNames,
@@ -284,8 +289,6 @@ const createRenderer = <TItem extends BaseHit>(
           defaultTemplates: {} as unknown as NonNullable<
             typeof showRecentObj.templates
           >,
-          templatesConfig:
-            connectorParams.instantSearchInstance.templatesConfig,
           templates: showRecentObj.templates,
         });
 
@@ -327,8 +330,6 @@ const createRenderer = <TItem extends BaseHit>(
           defaultTemplates: {} as unknown as NonNullable<
             typeof rendererParams.templates
           >,
-          templatesConfig:
-            connectorParams.instantSearchInstance.templatesConfig,
           templates: rendererParams.templates,
         }),
         RecentSearchComponent,
@@ -523,8 +524,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       showRecent
         ? autocompleteIndex.hits.filter(
             (suggestionHit) =>
-              !find(
-                storageHits,
+              !storageHits.find(
                 (storageHit) => storageHit.query === suggestionHit.query
               )
           )
@@ -744,8 +744,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   }
 
   indicesForPanel.forEach(({ indexId, indexName, hits }, i) => {
-    const currentIndexConfig = find(
-      indicesConfig,
+    const currentIndexConfig = indicesConfig.find(
       (config) => config.indexName === indexName
     );
 
@@ -758,7 +757,6 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         defaultTemplates: {} as unknown as NonNullable<
           IndexConfig<TItem>['templates']
         >,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates: currentIndexConfig.templates,
       });
     }
@@ -823,7 +821,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
           __indexName: indexName,
         }))}
         getItemProps={getItemProps}
-        sendEvent={find(indices, (idx) => idx.indexId === indexId)?.sendEvent}
+        sendEvent={indices.find((idx) => idx.indexId === indexId)?.sendEvent}
         classNames={currentIndexConfig.cssClasses}
       />
     );
@@ -1213,7 +1211,6 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
   const isFeedsMode = feeds !== undefined;
   const {
     container,
-    escapeHTML,
     showQuerySuggestions,
     showPromptSuggestions,
     showRecent,
@@ -1571,7 +1568,6 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
           ...feedContainers,
           {
             ...makeWidget({
-              escapeHTML,
               transformItems: effectiveTransformItems,
               future: { undefinedEmptyQuery: true },
             }),
@@ -1601,7 +1597,6 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
         ),
         {
           ...makeWidget({
-            escapeHTML,
             transformItems: effectiveTransformItems,
             future: { undefinedEmptyQuery: true },
           }),
@@ -1638,7 +1633,6 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
         instanceRef = null;
         activated = false;
         pendingQuery = undefined;
-        return undefined;
       },
     };
   }

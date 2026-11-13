@@ -1,31 +1,28 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { createRelatedProductsComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectRelatedProducts from '../../connectors/related-products/connectRelatedProducts';
+import { connectRelatedProducts } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import type {
   RelatedProductsWidgetDescription,
   RelatedProductsConnectorParams,
   RelatedProductsRenderState,
-} from '../../connectors/related-products/connectRelatedProducts';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template, TemplateWithSendEvent } from '../../types';
 import type {
-  Template,
   WidgetFactory,
   Hit,
   Renderer,
   BaseHit,
   RecommendResponse,
-  TemplateWithBindEvent,
-} from '../../types';
+} from 'instantsearch-core';
 import type {
   RecommendClassNames,
   RelatedProductsProps as RelatedProductsUiProps,
@@ -67,7 +64,6 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
         defaultTemplates: {} as unknown as Required<
           RelatedProductsTemplates<THit>
         >,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
 
@@ -194,7 +190,7 @@ export type RelatedProductsTemplates<
   /**
    * Template to use for each result. This template will receive an object containing a single record.
    */
-  item: TemplateWithBindEvent<Hit<THit>>;
+  item: TemplateWithSendEvent<Hit<THit>>;
 
   /**
    * Template to use to wrap all items.
@@ -250,7 +246,6 @@ export default (function relatedProducts<
     queryParameters,
     fallbackParameters,
     threshold,
-    escapeHTML,
     transformItems,
     templates = {},
     cssClasses = {},
@@ -280,7 +275,6 @@ export default (function relatedProducts<
       queryParameters,
       fallbackParameters,
       threshold,
-      escapeHTML,
       transformItems,
     }),
     $$widgetType: 'ais.relatedProducts',

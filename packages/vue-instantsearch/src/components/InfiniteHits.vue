@@ -27,7 +27,6 @@
       :refine-previous="refinePrevious"
       :refine-next="refineNext"
       :refine="refineNext"
-      :insights="state.insights"
       :send-event="state.sendEvent"
     >
       <template
@@ -68,7 +67,6 @@
             name="item"
             :item="item"
             :index="index"
-            :insights="state.insights"
             :send-event="state.sendEvent"
           >
             objectID: {{ item.objectID }}, index: {{ index }}
@@ -99,7 +97,7 @@
 </template>
 
 <script>
-import { connectInfiniteHitsWithInsights } from 'instantsearch.js/es/connectors/index';
+import { connectInfiniteHits } from 'instantsearch-core';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
@@ -109,7 +107,7 @@ export default {
   mixins: [
     createWidgetMixin(
       {
-        connector: connectInfiniteHitsWithInsights,
+        connector: connectInfiniteHits,
       },
       {
         $$widgetType: 'ais.infiniteHits',
@@ -126,10 +124,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    escapeHTML: {
-      type: Boolean,
-      default: true,
-    },
     transformItems: {
       type: Function,
       default: undefined,
@@ -144,7 +138,6 @@ export default {
       return {
         showBanner: this.showBanner,
         showPrevious: this.showPrevious,
-        escapeHTML: this.escapeHTML,
         transformItems: this.transformItems,
         cache: this.cache,
       };

@@ -4,6 +4,7 @@ import {
   wait,
 } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
+import { TAG_PLACEHOLDER } from 'instantsearch-core/internal';
 
 import type { ToggleRefinementWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
@@ -212,6 +213,7 @@ export function createOptionsTests(
         expect.arrayContaining([
           expect.objectContaining({
             params: {
+              ...TAG_PLACEHOLDER,
               facetFilters: [['free_shipping:true']],
               facets: ['free_shipping'],
             },
@@ -274,6 +276,7 @@ export function createOptionsTests(
         expect.arrayContaining([
           expect.objectContaining({
             params: {
+              ...TAG_PLACEHOLDER,
               facetFilters: [['free_shipping:yes']],
               facets: ['free_shipping'],
             },

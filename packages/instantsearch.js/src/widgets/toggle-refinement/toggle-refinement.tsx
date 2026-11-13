@@ -1,16 +1,14 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import ToggleRefinement from '../../components/ToggleRefinement/ToggleRefinement';
-import connectToggleRefinement from '../../connectors/toggle-refinement/connectToggleRefinement';
-import { component } from '../../lib/suit';
+import { connectToggleRefinement } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
@@ -22,9 +20,10 @@ import type {
   ToggleRefinementConnectorParams,
   ToggleRefinementWidgetDescription,
   ToggleRefinementRenderState,
-} from '../../connectors/toggle-refinement/connectToggleRefinement';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { RendererOptions, Template, WidgetFactory } from '../../types';
+import type { Template } from '../../types';
+import type { RendererOptions, WidgetFactory } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'toggle-refinement',
@@ -49,7 +48,6 @@ const renderer =
     {
       value,
       refine,
-      instantSearchInstance,
     }: ToggleRefinementRenderState &
       RendererOptions<ToggleRefinementConnectorParams>,
     isFirstRendering: boolean
@@ -57,7 +55,6 @@ const renderer =
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
 

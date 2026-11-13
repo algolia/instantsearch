@@ -5,6 +5,8 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { SearchParameters } from 'algoliasearch-helper';
+import { getInitialResults, waitForResults } from 'instantsearch-core';
+import { TAG_PLACEHOLDER } from 'instantsearch-core/internal';
 
 import {
   connectConfigure,
@@ -13,7 +15,6 @@ import {
 } from '../../connectors';
 import instantsearch from '../../index.es';
 import { index } from '../../widgets';
-import { getInitialResults, waitForResults } from '../server';
 
 describe('waitForResults', () => {
   test('resolves when no search or recommend request is pending', async () => {
@@ -133,7 +134,7 @@ describe('getInitialResults', () => {
       ])
     );
     search.addWidgets([
-      index({ EXPERIMENTAL_isolated: true, indexId: 'isolated' }).addWidgets([
+      index({ isolated: true, indexId: 'isolated' }).addWidgets([
         index({ indexName: 'suggestions' }),
       ]),
       index({ indexName: 'nested' }),
@@ -186,6 +187,7 @@ describe('getInitialResults', () => {
           facetsRefinements: {},
           hierarchicalFacets: [],
           hierarchicalFacetsRefinements: {},
+          ...TAG_PLACEHOLDER,
           index: 'indexName',
           numericRefinements: {},
           tagRefinements: [],
@@ -230,6 +232,7 @@ describe('getInitialResults', () => {
           facetsRefinements: {},
           hierarchicalFacets: [],
           hierarchicalFacetsRefinements: {},
+          ...TAG_PLACEHOLDER,
           index: 'indexName',
           numericRefinements: {},
           tagRefinements: [],
@@ -274,6 +277,7 @@ describe('getInitialResults', () => {
           facetsRefinements: {},
           hierarchicalFacets: [],
           hierarchicalFacetsRefinements: {},
+          ...TAG_PLACEHOLDER,
           index: 'indexName',
           numericRefinements: {},
           tagRefinements: [],
@@ -303,6 +307,7 @@ describe('getInitialResults', () => {
           facetsRefinements: {},
           hierarchicalFacets: [],
           hierarchicalFacetsRefinements: {},
+          ...TAG_PLACEHOLDER,
           index: 'indexName2',
           numericRefinements: {},
           tagRefinements: [],
@@ -362,16 +367,24 @@ describe('getInitialResults', () => {
     expect(requestParams).toMatchInlineSnapshot(`
       [
         {
+          "highlightPostTag": "__/ais-highlight__",
+          "highlightPreTag": "__ais-highlight__",
           "query": "apple",
         },
         {
+          "highlightPostTag": "__/ais-highlight__",
+          "highlightPreTag": "__ais-highlight__",
           "query": "samsung",
         },
         {
+          "highlightPostTag": "__/ais-highlight__",
+          "highlightPreTag": "__ais-highlight__",
           "hitsPerPage": 2,
           "query": "apple",
         },
         {
+          "highlightPostTag": "__/ais-highlight__",
+          "highlightPreTag": "__ais-highlight__",
           "hitsPerPage": 3,
           "query": "apple",
         },
@@ -457,6 +470,8 @@ describe('getInitialResults', () => {
             "hierarchicalCategories.lvl0",
             "hierarchicalCategories.lvl1",
           ],
+          "highlightPostTag": "__/ais-highlight__",
+          "highlightPreTag": "__ais-highlight__",
           "maxValuesPerFacet": 10,
         },
         {
@@ -471,6 +486,8 @@ describe('getInitialResults', () => {
             "hierarchicalCategories.lvl0",
             "hierarchicalCategories.lvl1",
           ],
+          "highlightPostTag": "__/ais-highlight__",
+          "highlightPreTag": "__ais-highlight__",
           "hitsPerPage": 0,
           "maxValuesPerFacet": 10,
           "page": 0,
@@ -481,6 +498,8 @@ describe('getInitialResults', () => {
           "facets": [
             "hierarchicalCategories.lvl0",
           ],
+          "highlightPostTag": "__/ais-highlight__",
+          "highlightPreTag": "__ais-highlight__",
           "hitsPerPage": 0,
           "maxValuesPerFacet": 10,
           "page": 0,
@@ -510,6 +529,7 @@ describe('getInitialResults', () => {
     expect(requestParams).toEqual([
       {
         clickAnalytics: true,
+        ...TAG_PLACEHOLDER,
         query: 'apple',
         userToken: expect.stringMatching(/^anonymous-/),
       },

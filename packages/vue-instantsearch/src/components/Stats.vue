@@ -2,7 +2,7 @@
   <div v-if="state" :class="suit()">
     <slot
       v-bind="state"
-      :results="state.instantSearchInstance.helper.lastResults"
+      :results="state.instantSearchInstance.mainIndex.getHelper().lastResults"
     >
       <!-- prettier-ignore -->
       <span :class="suit('text')"
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { connectStats } from 'instantsearch.js/es/connectors/index';
+import { connectStats } from 'instantsearch-core';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';

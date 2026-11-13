@@ -1,24 +1,21 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Slider from '../../components/Slider/Slider';
-import connectRange from '../../connectors/range/connectRange';
-import { component } from '../../lib/suit';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { connectRange } from '../../connectors';
+import { getContainerNode } from '../../lib/utils';
 
 import type { RangeSliderComponentCSSClasses } from '../../components/Slider/Slider';
 import type {
-  RangeBoundaries,
   RangeConnectorParams,
   RangeRenderState,
   RangeWidgetDescription,
-} from '../../connectors/range/connectRange';
-import type { Renderer, WidgetFactory } from '../../types';
+} from '../../connectors';
+import type { Renderer, WidgetFactory } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'range-slider' });
 const suit = component('RangeSlider');
@@ -37,25 +34,14 @@ const renderer =
     step?: number;
     tooltips: RangeSliderWidgetParams['tooltips'];
   }): Renderer<RangeRenderState, Partial<RangeSliderWidgetParams>> =>
-  ({ refine, range, start }, isFirstRendering) => {
+  ({ refine, range, currentRefinement }, isFirstRendering) => {
     if (isFirstRendering) {
       // There's no information at this point, let's render nothing.
       return;
     }
 
     const { min: minRange, max: maxRange } = range;
-
-    const [minStart, maxStart] = start;
-    const minFinite = minStart === -Infinity ? minRange : minStart;
-    const maxFinite = maxStart === Infinity ? maxRange : maxStart;
-
-    // Clamp values to the range for avoid extra rendering & refinement
-    // Should probably be done on the connector side, but we need to stay
-    // backward compatible so we still need to pass [-Infinity, Infinity]
-    const values: RangeBoundaries = [
-      minFinite! > maxRange! ? maxRange : minFinite,
-      maxFinite! < minRange! ? minRange : maxFinite,
-    ];
+    const { min: minValue, max: maxValue } = currentRefinement;
 
     render(
       <Slider
@@ -63,7 +49,10 @@ const renderer =
         refine={refine}
         min={minRange}
         max={maxRange}
-        values={values}
+        values={{
+          min: minValue ?? minRange,
+          max: maxValue ?? maxRange,
+        }}
         tooltips={tooltips}
         step={step}
         pips={pips}

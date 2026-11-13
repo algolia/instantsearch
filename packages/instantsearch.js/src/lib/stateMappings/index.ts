@@ -1,2 +1,4 @@
-export { default as simple } from './simple';
-export { default as singleIndex } from './singleIndex';
+export {
+  simpleStateMapping as simple,
+  singleIndexStateMapping as singleIndex,
+} from 'instantsearch-core';

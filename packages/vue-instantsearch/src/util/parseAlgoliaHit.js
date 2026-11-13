@@ -1,7 +1,5 @@
 // copied from React InstantSearch
-import { getPropertyByPath } from 'instantsearch.js/es/lib/utils';
-
-import { unescape } from '../util/unescape';
+import { getPropertyByPath } from 'instantsearch-core';
 
 const TAG_PLACEHOLDER = {
   highlightPreTag: '__ais-highlight__',
@@ -86,7 +84,7 @@ export function parseAlgoliaHit({
       parseHighlightedAttribute({
         preTag,
         postTag,
-        highlightedValue: unescape(item.value),
+        highlightedValue: item.value,
       })
     );
   }
@@ -94,6 +92,6 @@ export function parseAlgoliaHit({
   return parseHighlightedAttribute({
     preTag,
     postTag,
-    highlightedValue: unescape(highlightObject.value),
+    highlightedValue: highlightObject.value,
   });
 }

@@ -4,7 +4,7 @@ import { InstantSearchContext } from './InstantSearchContext';
 import { invariant } from './invariant';
 
 import type { InternalInstantSearch } from './useInstantSearchApi';
-import type { UiState } from 'instantsearch.js';
+import type { UiState } from 'instantsearch-core';
 import type { Context } from 'react';
 
 export function useInstantSearchContext<

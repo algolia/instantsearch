@@ -8,7 +8,7 @@ import { mount, nextTick } from '../../../test/utils';
 import InstantSearch from '../InstantSearch';
 import RelatedProducts from '../RelatedProducts';
 
-jest.unmock('instantsearch.js/es');
+jest.unmock('instantsearch-core/internal');
 
 const wait = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms));
 

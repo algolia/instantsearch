@@ -1,16 +1,14 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import RefinementList from '../../components/RefinementList/RefinementList';
-import connectRefinementList from '../../connectors/refinement-list/connectRefinementList';
-import { component } from '../../lib/suit';
+import { connectRefinementList } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 import searchBoxDefaultTemplates from '../search-box/defaultTemplates';
 
 import defaultTemplates from './defaultTemplates';
@@ -21,10 +19,11 @@ import type {
   RefinementListRenderState,
   RefinementListConnectorParams,
   RefinementListWidgetDescription,
-} from '../../connectors/refinement-list/connectRefinementList';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template, WidgetFactory, Renderer } from '../../types';
+import type { Template } from '../../types';
 import type { SearchBoxTemplates } from '../search-box/search-box';
+import type { WidgetFactory, Renderer } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'refinement-list',
@@ -194,11 +193,6 @@ export type RefinementListWidgetParams = {
    */
   searchableIsAlwaysActive?: boolean;
   /**
-   * When activated, it will escape the facet values that are returned from Algolia.
-   * In this case, the surrounding tags will always be `<mark></mark>`.
-   */
-  searchableEscapeFacetValues?: boolean;
-  /**
    * When activated, submitting the search box will select the first item in the list.
    * @default true
    */
@@ -253,7 +247,6 @@ const renderer =
       createURL,
       searchForItems,
       isFromSearch,
-      instantSearchInstance,
       toggleShowMore,
       isShowingMore,
       hasExhaustiveItems,
@@ -264,12 +257,10 @@ const renderer =
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       renderState.searchBoxTemplateProps = prepareTemplateProps({
         defaultTemplates: searchBoxDefaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates: searchBoxTemplates,
       });
       return;
@@ -338,7 +329,6 @@ const refinementList: RefinementListWidget = function refinementList(
     showMoreButtonLabel,
     searchable = false,
     searchablePlaceholder = 'Search...',
-    searchableEscapeFacetValues = true,
     searchableIsAlwaysActive = true,
     searchableSelectOnSubmit = true,
     cssClasses: userCssClasses = {},
@@ -350,9 +340,6 @@ const refinementList: RefinementListWidget = function refinementList(
     throw new Error(withUsage('The `container` option is required.'));
   }
 
-  const escapeFacetValues = searchable
-    ? Boolean(searchableEscapeFacetValues)
-    : false;
   const containerNode = getContainerNode(container);
 
   const cssClasses = {
@@ -454,7 +441,6 @@ const refinementList: RefinementListWidget = function refinementList(
       showMore,
       showMoreLimit,
       sortBy,
-      escapeFacetValues,
       transformItems,
     }),
     $$widgetType: 'ais.refinementList',

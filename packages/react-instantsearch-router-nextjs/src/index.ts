@@ -1,9 +1,9 @@
-import history from 'instantsearch.js/es/lib/routers/history';
+import { historyRouter as history } from 'instantsearch-core';
 
 import { stripLocaleFromUrl } from './utils/stripLocaleFromUrl';
 
-import type { Router, UiState } from 'instantsearch.js';
-import type { BrowserHistoryArgs } from 'instantsearch.js/es/lib/routers/history';
+import type { Router, UiState } from 'instantsearch-core';
+import type { BrowserHistoryArgs } from 'instantsearch-core';
 import type { Router as NextRouter, SingletonRouter } from 'next/router';
 
 type BeforePopStateCallback = NonNullable<NextRouter['_bps']>;
@@ -86,8 +86,8 @@ export function createInstantSearchRouterNext<TRouteState = UiState>(
   // If we're rendering on the server, we create a simpler router
   if (typeof window === 'undefined') {
     return history({
-      getLocation() {
-        return new URL(serverUrl!) as unknown as Location;
+      getCurrentURL() {
+        return new URL(serverUrl!);
       },
       ...routerOptions,
     });

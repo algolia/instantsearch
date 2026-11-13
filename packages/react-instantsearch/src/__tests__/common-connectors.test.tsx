@@ -4,7 +4,7 @@
 import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/connectors';
 import { act, render } from '@testing-library/react';
-import { connectRatingMenu } from 'instantsearch.js/es/connectors';
+import { connectRatingMenu } from 'instantsearch-core';
 import React, { useState } from 'react';
 
 import {
@@ -26,7 +26,6 @@ import {
   useTrendingItems,
   useTrendingFacets,
   useLookingSimilar,
-  useFilterSuggestions,
   useCompare,
 } from '..';
 
@@ -45,14 +44,13 @@ import type {
   UseTrendingItemsProps,
   UseTrendingFacetsProps,
   UseLookingSimilarProps,
-  UseFilterSuggestionsProps,
   UseCompareProps,
 } from '..';
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 import type {
   RatingMenuConnectorParams,
   RatingMenuWidgetDescription,
-} from 'instantsearch.js/es/connectors/rating-menu/connectRatingMenu';
+} from 'instantsearch-core';
 
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
@@ -471,41 +469,6 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
     render(<App />);
   },
   createChatConnectorTests: () => {},
-  createFilterSuggestionsConnectorTests: ({
-    instantSearchOptions,
-    widgetParams,
-  }) => {
-    function CustomFilterSuggestions(props: UseFilterSuggestionsProps) {
-      const { suggestions, refine, isLoading } = useFilterSuggestions(props);
-      useRefinementList({ attribute: 'brand' });
-
-      return (
-        <div data-testid="FilterSuggestions-root">
-          {isLoading && (
-            <div data-testid="FilterSuggestions-loading">Loading...</div>
-          )}
-          <ul data-testid="FilterSuggestions-list">
-            {suggestions.map((suggestion) => (
-              <li key={`${suggestion.attribute}-${suggestion.value}`}>
-                <button
-                  data-testid="FilterSuggestions-refine"
-                  onClick={() => refine(suggestion.attribute, suggestion.value)}
-                >
-                  {suggestion.label} ({suggestion.count})
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      );
-    }
-
-    render(
-      <InstantSearch {...instantSearchOptions}>
-        <CustomFilterSuggestions {...widgetParams} />
-      </InstantSearch>
-    );
-  },
   createCompareConnectorTests: ({ instantSearchOptions, widgetParams }) => {
     const {
       products = [],
@@ -609,7 +572,6 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createTrendingFacetsConnectorTests: { act },
   createLookingSimilarConnectorTests: { act },
   createChatConnectorTests: { act, skippedTests: { options: true } },
-  createFilterSuggestionsConnectorTests: { act },
   createCompareConnectorTests: { act },
 };
 

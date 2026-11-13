@@ -8,11 +8,11 @@ import { fireEvent, within } from '@testing-library/dom';
 import algoliasearchHelper from 'algoliasearch-helper';
 
 import { createSingleSearchResponse } from '../../../../../../tests/mocks/createAPIResponse';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/createWidget';
+} from '../../../../../instantsearch-core/test/createWidget';
 import resultCard from '../result-card';
 
 import type { SearchResults } from 'algoliasearch-helper';
@@ -116,7 +116,8 @@ describe('resultCard', () => {
       container,
       agentId: 'a',
       templates: {
-        layout: ({ status, query }) => `<p>${status}: ${query}</p>`,
+        layout: ({ status, query }, { html }) =>
+          html`<p>${status}: ${query}</p>`,
       },
     });
 

@@ -3,7 +3,6 @@
     <slot
       :items="state.items"
       :refine="state.refine"
-      :has-no-results="state.hasNoResults"
       :can-refine="state.canRefine"
       :createURL="state.createURL"
     >
@@ -26,7 +25,7 @@
 </template>
 
 <script>
-import { connectHitsPerPage } from 'instantsearch.js/es/connectors/index';
+import { connectHitsPerPage } from 'instantsearch-core';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';

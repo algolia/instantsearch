@@ -1,5 +1,5 @@
+import { connectResultCard } from 'instantsearch-core';
 import { createResultCardComponent } from 'instantsearch-ui-components';
-import { connectResultCard } from 'instantsearch.js/es/connectors/index';
 
 import { createHooksMixin } from '../mixins/hooks';
 import { createSuitMixin } from '../mixins/suit';

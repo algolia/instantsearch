@@ -1,4 +1,4 @@
-import { createInfiniteHitsSessionStorageCache } from 'instantsearch.js/es/lib/infiniteHitsCache';
+import { createInfiniteHitsSessionStorageCache } from 'instantsearch-core';
 import { infiniteHits as fn } from 'instantsearch.js/es/widgets';
 
 import { renderProductCard } from '../../../components/widgets/ProductCard';
@@ -27,11 +27,6 @@ export const infiniteHits = defineWidget({
       key: 'cache',
       label: 'sessionStorageCache',
       value: { cache: createInfiniteHitsSessionStorageCache() },
-    },
-    {
-      key: 'escapeHTML',
-      label: 'false',
-      value: { escapeHTML: false },
     },
   ],
 });

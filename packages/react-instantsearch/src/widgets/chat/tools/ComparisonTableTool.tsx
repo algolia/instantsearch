@@ -3,9 +3,11 @@ import React, { createElement, Fragment } from 'react';
 
 import type {
   ClientSideToolComponentProps,
+  UserClientSideTool,
+} from 'instantsearch-core';
+import type {
   ComparisonTableTranslations,
   Pragma,
-  UserClientSideTool,
 } from 'instantsearch-ui-components';
 
 /**

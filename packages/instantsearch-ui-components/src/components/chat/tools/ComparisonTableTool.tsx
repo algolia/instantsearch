@@ -6,9 +6,9 @@ import {
   defaultComparisonTableTranslations,
 } from './createGroundedComparisonTable';
 
-import type { Renderer } from '../../../types';
-import type { ClientSideToolComponentProps } from '../types';
 import type { ComparisonTableTranslations } from './createGroundedComparisonTable';
+import type { Renderer } from '../../../types';
+import type { ClientSideToolComponentProps } from 'instantsearch-core';
 
 /**
  * Grounded comparison-table renderer for `algolia_display_results` outputs.

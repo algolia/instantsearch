@@ -26,23 +26,19 @@
     "scripts/transforms"
   ],
   "dependencies": {
-    "@algolia/events": "^4.0.1",
     "@swc/helpers": "0.5.18",
     "@types/dom-speech-recognition": "^0.0.1",
     "@types/google.maps": "^3.55.12",
-    "@types/hogan.js": "^3.0.0",
-    "@types/qs": "^6.5.3",
     "algoliasearch-helper": "3.30.2",
-    "hogan.js": "^3.0.2",
     "htm": "^3.0.0",
+    "instantsearch-core": "0.1.0",
     "instantsearch-ui-components": "0.46.0",
     "preact": "^10.10.0",
-    "qs": "^6.5.1",
     "react": ">= 0.14.0",
     "search-insights": "^2.17.2"
   },
   "peerDependencies": {
-    "algoliasearch": ">= 3.1 < 6"
+    "algoliasearch": ">= 4 < 6"
   },
   "scripts": {
     "build": "BABEL_ENV=es,rollup BUILD_FORMAT=esm rollup -c rollup.config.mjs && BABEL_ENV=rollup BUILD_FORMAT=cjs rollup -c rollup.config.mjs && BABEL_ENV=rollup BUILD_FORMAT=umd rollup -c rollup.config.mjs && yarn build:types",
@@ -58,7 +54,6 @@
     "@instantsearch/mocks": "1.131.0",
     "@instantsearch/tests": "1.131.0",
     "@instantsearch/testutils": "1.120.0",
-    "algoliasearch": "5.1.1",
-    "places.js": "1.17.1"
+    "algoliasearch": "5.1.1"
   }
 }

@@ -3,13 +3,13 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
+import { historyRouter } from 'instantsearch-core';
+import { noop, warning } from 'instantsearch-core/internal';
 
 import instantsearch from '../../..';
 import { simple } from '../../stateMappings';
-import { noop, warning } from '../../utils';
-import historyRouter from '../history';
 
-import type { UiState } from '../../../types';
+import type { UiState } from 'instantsearch-core';
 
 jest.useFakeTimers();
 
@@ -77,50 +77,50 @@ describe('life cycle', () => {
     });
   });
 
-  describe('getLocation', () => {
-    test('calls getLocation on windowTitle', () => {
-      const getLocation = jest.fn(() => window.location);
+  describe('getCurrentURL', () => {
+    test('calls getCurrentURL on windowTitle', () => {
+      const getCurrentURL = jest.fn(() => new URL(window.location.href));
 
       historyRouter<UiState>({
         windowTitle() {
           return 'Search';
         },
-        getLocation,
+        getCurrentURL,
         cleanUrlOnDispose: true,
       });
 
-      expect(getLocation).toHaveBeenCalledTimes(1);
+      expect(getCurrentURL).toHaveBeenCalledTimes(1);
     });
 
-    test('calls getLocation on read', () => {
-      const getLocation = jest.fn(() => window.location);
+    test('calls getCurrentURL on read', () => {
+      const getCurrentURL = jest.fn(() => new URL(window.location.href));
       const router = historyRouter<UiState>({
-        getLocation,
+        getCurrentURL,
         cleanUrlOnDispose: true,
       });
 
-      expect(getLocation).toHaveBeenCalledTimes(0);
+      expect(getCurrentURL).toHaveBeenCalledTimes(0);
 
       router.write({ indexName: { query: 'query1' } });
       jest.runAllTimers();
 
-      expect(getLocation).toHaveBeenCalledTimes(1);
+      expect(getCurrentURL).toHaveBeenCalledTimes(1);
 
       router.read();
 
-      expect(getLocation).toHaveBeenCalledTimes(2);
+      expect(getCurrentURL).toHaveBeenCalledTimes(2);
     });
 
-    test('calls getLocation on createURL', () => {
-      const getLocation = jest.fn(() => window.location);
+    test('calls getCurrentURL on createURL', () => {
+      const getCurrentURL = jest.fn(() => new URL(window.location.href));
       const router = historyRouter<UiState>({
-        getLocation,
+        getCurrentURL,
         cleanUrlOnDispose: true,
       });
 
       router.createURL({ indexName: { query: 'query1' } });
 
-      expect(getLocation).toHaveBeenCalledTimes(1);
+      expect(getCurrentURL).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -223,17 +223,17 @@ describe('life cycle', () => {
         search.start();
         jest.runAllTimers();
       }).toThrowErrorMatchingInlineSnapshot(
-        `"You need to provide \`getLocation\` to the \`history\` router in environments where \`window\` does not exist."`
+        `"You need to provide \`getCurrentURL\` to the \`history\` router in environments where \`window\` does not exist."`
       );
     });
 
-    test('does not fail on environments without window with provided getLocation', () => {
+    test('does not fail on environments without window with provided getCurrentURL', () => {
       // @ts-expect-error
       delete global.window;
 
       expect(() => {
         const router = historyRouter<UiState>({
-          getLocation() {
+          getCurrentURL() {
             return {
               protocol: '',
               hostname: '',
@@ -241,7 +241,7 @@ describe('life cycle', () => {
               pathname: '',
               hash: '',
               search: '',
-            } as unknown as Location;
+            } as unknown as URL;
           },
           cleanUrlOnDispose: true,
         });
@@ -259,13 +259,13 @@ describe('life cycle', () => {
       }).not.toThrow();
     });
 
-    test('does not fail when running the whole router lifecycle with getLocation', () => {
+    test('does not fail when running the whole router lifecycle with getCurrentURL', () => {
       // @ts-expect-error
       delete global.window;
 
       expect(() => {
         const router = historyRouter<UiState>({
-          getLocation() {
+          getCurrentURL() {
             return {
               protocol: '',
               hostname: '',
@@ -273,7 +273,7 @@ describe('life cycle', () => {
               pathname: '',
               hash: '',
               search: '',
-            } as unknown as Location;
+            } as unknown as URL;
           },
           cleanUrlOnDispose: true,
         });
@@ -318,24 +318,9 @@ describe('life cycle', () => {
     });
 
     describe('cleanUrlOnDispose', () => {
-      const consoleSpy = jest.spyOn(global.console, 'info');
-      consoleSpy.mockImplementation(() => {});
-
-      beforeEach(() => {
-        consoleSpy.mockReset();
-      });
-
-      test('cleans refinements from URL if not defined', () => {
+      test('does not clean refinements from URL if not defined', () => {
         const windowPushState = jest.spyOn(window.history, 'pushState');
         const router = historyRouter<UiState>();
-
-        expect(consoleSpy)
-          .toHaveBeenCalledWith(`Starting from the next major version, InstantSearch will not clean up the URL from active refinements when it is disposed.
-
-We recommend setting \`cleanUrlOnDispose\` to false to adopt this change today.
-To stay with the current behaviour and remove this warning, set the option to true.
-
-See documentation: https://www.algolia.com/doc/api-reference/widgets/history-router/js/#widget-param-cleanurlondispose`);
 
         router.write({ indexName: { query: 'query1' } });
         jest.runAllTimers();
@@ -352,19 +337,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/history-rou
         router.dispose();
         jest.runAllTimers();
 
-        expect(windowPushState).toHaveBeenCalledTimes(2);
-        expect(windowPushState).toHaveBeenLastCalledWith(
-          {},
-          '',
-          'http://localhost/'
-        );
+        expect(windowPushState).toHaveBeenCalledTimes(1);
       });
 
       test('cleans refinements from URL if `true`', () => {
         const windowPushState = jest.spyOn(window.history, 'pushState');
         const router = historyRouter<UiState>({ cleanUrlOnDispose: true });
-
-        expect(consoleSpy).not.toHaveBeenCalled();
 
         router.write({ indexName: { query: 'query1' } });
         jest.runAllTimers();
@@ -392,8 +370,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/history-rou
       test('does not clean refinements from URL if `false`', () => {
         const windowPushState = jest.spyOn(window.history, 'pushState');
         const router = historyRouter<UiState>({ cleanUrlOnDispose: false });
-
-        expect(consoleSpy).not.toHaveBeenCalled();
 
         router.write({ indexName: { query: 'query1' } });
         jest.runAllTimers();
@@ -427,6 +403,144 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/history-rou
       expect(() => router.createURL({ indexName: {} }))
         .toWarnDev(`[InstantSearch.js]: The URL returned by the \`createURL\` function is invalid.
 Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algolia.com/search?query=iphone\`.`);
+    });
+
+    test('calls the provided createURL with qsModule, the route state and the current URL', () => {
+      const currentURL = new URL('https://website.com/search');
+      const createURL = jest.fn(() => 'https://website.com/search?query=a');
+      const router = historyRouter<UiState>({
+        createURL,
+        getCurrentURL: () => currentURL,
+        cleanUrlOnDispose: true,
+      });
+
+      router.createURL({ indexName: { query: 'a' } });
+
+      expect(createURL).toHaveBeenCalledWith({
+        qsModule: {
+          parse: expect.any(Function),
+          stringify: expect.any(Function),
+        },
+        routeState: { indexName: { query: 'a' } },
+        currentURL,
+      });
+    });
+  });
+
+  describe('parseURL', () => {
+    test('calls the provided parseURL with qsModule and the current URL', () => {
+      const currentURL = new URL('https://website.com/search?query=a');
+      const parseURL = jest.fn(() => ({ indexName: { query: 'a' } }));
+      const router = historyRouter<UiState>({
+        parseURL,
+        getCurrentURL: () => currentURL,
+        cleanUrlOnDispose: true,
+      });
+
+      expect(router.read()).toEqual({ indexName: { query: 'a' } });
+      expect(parseURL).toHaveBeenCalledWith({
+        qsModule: {
+          parse: expect.any(Function),
+          stringify: expect.any(Function),
+        },
+        currentURL,
+      });
+    });
+  });
+
+  describe('qsModule', () => {
+    test('writes and reads the custom URLs of the routing guide', () => {
+      const router = historyRouter<Record<string, unknown>>({
+        createURL({ qsModule, routeState, currentURL }) {
+          const queryString = qsModule.stringify(routeState, {
+            addQueryPrefix: true,
+            arrayFormat: 'repeat',
+          });
+
+          return `${currentURL.origin}${currentURL.pathname}${queryString}`;
+        },
+        parseURL({ qsModule, currentURL }) {
+          return qsModule.parse(currentURL.search.slice(1));
+        },
+        getCurrentURL: () =>
+          new URL(
+            'https://website.com/search?query=iphone%20case&brands=Apple&brands=Samsung'
+          ),
+        cleanUrlOnDispose: true,
+      });
+
+      expect(
+        router.createURL({ query: 'iphone case', brands: ['Apple', 'Samsung'] })
+      ).toBe(
+        'https://website.com/search?query=iphone%20case&brands=Apple&brands=Samsung'
+      );
+      expect(router.read()).toEqual({
+        query: 'iphone case',
+        brands: ['Apple', 'Samsung'],
+      });
+    });
+  });
+
+  describe('URLs of InstantSearch.js v4', () => {
+    // Keep this URL as the v4.122.0 history router wrote it with `qs`: v4
+    // links, bookmarks and indexed pages have to keep working.
+    const v4URL =
+      'https://website.com/search?instant_search%5Bquery%5D=iphone%20case%20%26%20%22cover%22&instant_search%5Bpage%5D=2&instant_search%5BhitsPerPage%5D=16&instant_search%5BsortBy%5D=instant_search_price_asc&instant_search%5BrefinementList%5D%5Bbrand%5D%5B0%5D=Apple&instant_search%5BrefinementList%5D%5Bbrand%5D%5B1%5D=Samsung&instant_search%5BhierarchicalMenu%5D%5BhierarchicalCategories.lvl0%5D%5B0%5D=Audio%20%3E%20Headphones&instant_search%5Brange%5D%5Bprice%5D=10%3A100&instant_search%5Btoggle%5D%5Bfree_shipping%5D=true&instant_search_articles%5Bquery%5D=Gr%C3%B6%C3%9Fe%20%E5%90%8D%E5%89%8D%20%F0%9F%99%82#results';
+
+    test('writes the same URL as v4', () => {
+      const router = historyRouter<UiState>({
+        getCurrentURL: () => new URL('https://website.com/search#results'),
+        cleanUrlOnDispose: true,
+      });
+
+      expect(
+        router.createURL({
+          instant_search: {
+            query: 'iphone case & "cover"',
+            page: 2,
+            hitsPerPage: 16,
+            sortBy: 'instant_search_price_asc',
+            refinementList: { brand: ['Apple', 'Samsung'] },
+            hierarchicalMenu: {
+              'hierarchicalCategories.lvl0': ['Audio > Headphones'],
+            },
+            range: { price: '10:100' },
+            toggle: { free_shipping: true },
+          },
+          instant_search_articles: { query: 'Größe 名前 🙂' },
+        })
+      ).toBe(v4URL);
+    });
+
+    test('reads the URL like v4, also once its brackets, spaces and escapes are rewritten', () => {
+      const rewrittenV4URL = v4URL
+        .replace(/%5B/g, '[')
+        .replace(/%5D/g, ']')
+        .replace(/%20/g, '+')
+        .replace(/%[0-9A-F]{2}/g, (escape) => escape.toLowerCase());
+
+      [v4URL, rewrittenV4URL].forEach((url) => {
+        const router = historyRouter<UiState>({
+          getCurrentURL: () => new URL(url),
+          cleanUrlOnDispose: true,
+        });
+
+        expect(router.read()).toEqual({
+          instant_search: {
+            query: 'iphone case & "cover"',
+            page: '2',
+            hitsPerPage: '16',
+            sortBy: 'instant_search_price_asc',
+            refinementList: { brand: ['Apple', 'Samsung'] },
+            hierarchicalMenu: {
+              'hierarchicalCategories.lvl0': ['Audio > Headphones'],
+            },
+            range: { price: '10:100' },
+            toggle: { free_shipping: 'true' },
+          },
+          instant_search_articles: { query: 'Größe 名前 🙂' },
+        });
+      });
     });
   });
 });

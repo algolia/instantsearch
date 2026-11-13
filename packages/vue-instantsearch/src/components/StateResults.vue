@@ -16,7 +16,6 @@
 <script>
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
-import { _objectSpread } from '../util/polyfills';
 import { isVue3 } from '../util/vue-compat';
 
 export default {
@@ -39,7 +38,6 @@ export default {
         const helper = this.getParentIndex().getHelper();
         const state = helper ? helper.state : null;
 
-        // @MAJOR no longer spread this inside `results`
         this.state = {
           results,
           state,
@@ -78,7 +76,7 @@ export default {
   computed: {
     stateResults() {
       const { results, state, status, error } = this.state;
-      return _objectSpread({}, results, { results, state, status, error });
+      return { results, state, status, error };
     },
   },
 };

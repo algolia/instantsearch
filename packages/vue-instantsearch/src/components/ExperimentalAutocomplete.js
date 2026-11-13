@@ -1,4 +1,18 @@
 import {
+  connectAutocomplete,
+  connectFeeds,
+  connectSearchBox,
+  createFeedContainer,
+  getHighlightedParts,
+} from 'instantsearch-core';
+import {
+  getPromptSuggestionHits,
+  isChatBusy,
+  isPromptSuggestion,
+  noop,
+  openChat,
+} from 'instantsearch-core/internal';
+import {
   createAutocompleteComponent,
   createAutocompleteDetachedContainerComponent,
   createAutocompleteDetachedFormContainerComponent,
@@ -14,22 +28,7 @@ import {
   createAutocompleteSuggestionComponent,
   createHighlightComponent,
   cx,
-  getPromptSuggestionHits,
-  isPromptSuggestion,
 } from 'instantsearch-ui-components';
-import { createFeedContainer } from 'instantsearch.js/es/connectors/feeds/FeedContainer';
-import {
-  connectAutocomplete,
-  connectFeeds,
-  connectSearchBox,
-} from 'instantsearch.js/es/connectors/index';
-import { isChatBusy, openChat } from 'instantsearch.js/es/lib/chat';
-import {
-  find,
-  getHighlightedParts,
-  noop,
-  unescape,
-} from 'instantsearch.js/es/lib/utils';
 
 import { createHooksMixin } from '../mixins/hooks';
 import { createSuitMixin } from '../mixins/suit';
@@ -126,13 +125,11 @@ function renderConditionalHighlight(
 
   const prefix = reverse ? 'ais-ReverseHighlight' : 'ais-Highlight';
   const parts = [
-    getHighlightedParts(unescape(result.value || '')).map(
-      ({ value, isHighlighted }) => ({
-        // Vue gets rid of TextNodes with a single white space
-        value: value === ' ' ? '  ' : value,
-        isHighlighted: reverse ? !isHighlighted : isHighlighted,
-      })
-    ),
+    getHighlightedParts(result.value || '').map(({ value, isHighlighted }) => ({
+      // Vue gets rid of TextNodes with a single white space
+      value: value === ' ' ? '  ' : value,
+      isHighlighted: reverse ? !isHighlighted : isHighlighted,
+    })),
   ];
 
   return createElement(Highlight, {
@@ -409,7 +406,6 @@ export default {
     showRecent: { type: [Boolean, Object], default: false },
     searchParameters: { type: Object, default: undefined },
     requiresSearch: { type: Boolean, default: true },
-    escapeHTML: { type: Boolean, default: true },
     getSearchPageUrl: { type: Function, default: undefined },
     onSelect: { type: Function, default: undefined },
     transformItems: { type: Function, default: undefined },
@@ -590,7 +586,6 @@ export default {
             ]
           : null,
         connectorParams: {
-          escapeHTML: this.escapeHTML,
           transformItems,
           future: { undefinedEmptyQuery: true },
         },
@@ -765,8 +760,7 @@ export default {
           autocompleteIndex.indexName === querySuggestionsKey && showRecent
             ? autocompleteIndex.hits.filter(
                 (suggestionHit) =>
-                  !find(
-                    storageHits,
+                  !storageHits.find(
                     (storageHit) => storageHit.query === suggestionHit.query
                   )
               )
@@ -1003,8 +997,7 @@ export default {
       }
 
       indicesForPanel.forEach(({ indexId, indexName, hits }) => {
-        const currentIndexConfig = find(
-          indicesConfig,
+        const currentIndexConfig = indicesConfig.find(
           (config) => config.indexName === indexName
         );
 
@@ -1078,7 +1071,7 @@ export default {
               : undefined,
           items: hits.map((item) => ({ ...item, __indexName: indexName })),
           getItemProps,
-          sendEvent: find(indices, (idx) => idx.indexId === indexId)?.sendEvent,
+          sendEvent: indices.find((idx) => idx.indexId === indexId)?.sendEvent,
           classNames: currentIndexConfig.classNames,
         });
       });

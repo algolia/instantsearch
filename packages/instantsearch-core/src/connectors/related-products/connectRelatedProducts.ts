@@ -1,0 +1,222 @@
+import {
+  createDocumentationMessageGenerator,
+  checkRendering,
+  noop,
+  TAG_PLACEHOLDER,
+  createSendEventForHits,
+  addAbsolutePosition,
+  addMissingQueryID,
+} from '../../lib/utils';
+
+import type { SendEventForHits } from '../../lib/utils';
+import type {
+  Connector,
+  TransformItems,
+  BaseHit,
+  Renderer,
+  Unmounter,
+  UnknownWidgetParams,
+  RecommendResponse,
+  Hit,
+  AlgoliaHit,
+} from '../../types';
+import type { PlainSearchParameters } from 'algoliasearch-helper';
+
+const withUsage = createDocumentationMessageGenerator({
+  name: 'related-products',
+  connector: true,
+});
+
+export type RelatedProductsRenderState<
+  THit extends NonNullable<object> = BaseHit,
+> = {
+  /**
+   * The matched recommendations from the Algolia API.
+   */
+  items: Array<Hit<THit>>;
+
+  /**
+   * Sends an event to the Insights middleware.
+   */
+  sendEvent: SendEventForHits;
+};
+
+export type RelatedProductsConnectorParams<
+  THit extends NonNullable<object> = BaseHit,
+> = {
+  /**
+   * The `objectIDs` of the items to get related products from.
+   */
+  objectIDs: string[];
+  /**
+   * The number of recommendations to retrieve.
+   */
+  limit?: number;
+  /**
+   * The threshold for the recommendations confidence score (between 0 and 100).
+   */
+  threshold?: number;
+  /**
+   * List of search parameters to send.
+   */
+  fallbackParameters?: Omit<
+    PlainSearchParameters,
+    'page' | 'hitsPerPage' | 'offset' | 'length'
+  >;
+  /**
+   * List of search parameters to send.
+   */
+  queryParameters?: Omit<
+    PlainSearchParameters,
+    'page' | 'hitsPerPage' | 'offset' | 'length'
+  >;
+  /**
+   * Function to transform the items passed to the templates.
+   */
+  transformItems?: TransformItems<
+    Hit<THit>,
+    { results: RecommendResponse<AlgoliaHit<THit>> }
+  >;
+};
+
+export type RelatedProductsWidgetDescription<
+  THit extends NonNullable<object> = BaseHit,
+> = {
+  $$type: 'ais.relatedProducts';
+  renderState: RelatedProductsRenderState<THit>;
+};
+
+export type RelatedProductsConnector<
+  THit extends NonNullable<object> = BaseHit,
+> = Connector<
+  RelatedProductsWidgetDescription<THit>,
+  RelatedProductsConnectorParams<THit>
+>;
+
+export default (function connectRelatedProducts<
+  TWidgetParams extends UnknownWidgetParams,
+>(
+  renderFn: Renderer<
+    RelatedProductsRenderState,
+    RelatedProductsConnectorParams & TWidgetParams
+  >,
+  unmountFn: Unmounter = noop
+) {
+  checkRendering(renderFn, withUsage());
+
+  return <THit extends NonNullable<object> = BaseHit>(
+    widgetParams: TWidgetParams & RelatedProductsConnectorParams<THit>
+  ) => {
+    const {
+      objectIDs,
+      limit,
+      threshold,
+      fallbackParameters,
+      queryParameters,
+      transformItems = ((items) => items) as NonNullable<
+        RelatedProductsConnectorParams['transformItems']
+      >,
+    } = widgetParams || {};
+
+    if (!objectIDs || objectIDs.length === 0) {
+      throw new Error(withUsage('The `objectIDs` option is required.'));
+    }
+
+    let sendEvent: SendEventForHits;
+
+    return {
+      dependsOn: 'recommend',
+      $$type: 'ais.relatedProducts',
+
+      init(initOptions) {
+        renderFn(
+          {
+            ...this.getWidgetRenderState(initOptions),
+            instantSearchInstance: initOptions.instantSearchInstance,
+          },
+          true
+        );
+      },
+
+      render(renderOptions) {
+        const renderState = this.getWidgetRenderState(renderOptions);
+
+        renderFn(
+          {
+            ...renderState,
+            instantSearchInstance: renderOptions.instantSearchInstance,
+          },
+          false
+        );
+      },
+
+      getRenderState(renderState) {
+        return renderState;
+      },
+
+      getWidgetRenderState({ results, helper, instantSearchInstance }) {
+        if (!sendEvent) {
+          sendEvent = createSendEventForHits({
+            instantSearchInstance,
+            helper,
+            widgetType: this.$$type,
+          });
+        }
+        if (results === null || results === undefined) {
+          return { items: [], widgetParams, sendEvent };
+        }
+
+        const itemsWithAbsolutePosition = addAbsolutePosition(
+          results.hits,
+          0,
+          1
+        );
+
+        const itemsWithAbsolutePositionAndQueryID = addMissingQueryID(
+          itemsWithAbsolutePosition,
+          results.queryID
+        );
+
+        const transformedItems = transformItems(
+          itemsWithAbsolutePositionAndQueryID as unknown as Hit<THit>[],
+          {
+            results: results as RecommendResponse<AlgoliaHit<THit>>,
+          }
+        );
+
+        return {
+          items: transformedItems,
+          widgetParams,
+          sendEvent,
+        };
+      },
+
+      dispose() {
+        unmountFn();
+      },
+
+      getWidgetParameters(state) {
+        return objectIDs.reduce(
+          (acc, objectID) =>
+            acc.addRelatedProducts({
+              objectID,
+              maxRecommendations: limit,
+              threshold,
+              fallbackParameters: fallbackParameters
+                ? {
+                    ...TAG_PLACEHOLDER,
+                    ...fallbackParameters,
+                  }
+                : undefined,
+              queryParameters: {
+                ...TAG_PLACEHOLDER,
+                ...queryParameters,
+              },
+              $$id: this.$$id!,
+            }),
+          state.removeParams(this.$$id!)
+        );
+      },
+    };
+  };
+} satisfies RelatedProductsConnector);

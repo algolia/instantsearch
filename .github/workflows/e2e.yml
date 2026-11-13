@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       soft-fail-secondary:
-        description: 'Report IE11 and Next.js failures without failing the workflow.'
+        description: 'Report Next.js failures without failing the workflow.'
         type: boolean
         default: false
   workflow_dispatch:
@@ -48,6 +48,7 @@ jobs:
             packages/react-instantsearch-nextjs/dist \
             packages/vue-instantsearch/vue2 \
             packages/vue-instantsearch/vue3 \
+            packages/instantsearch-core/dist \
             packages/instantsearch-ui-components/dist
 
       - name: Upload build outputs

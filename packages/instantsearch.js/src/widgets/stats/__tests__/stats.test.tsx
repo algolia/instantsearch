@@ -15,7 +15,7 @@ import instantsearch from '../../../index.es';
 import searchBox from '../../search-box/search-box';
 import stats from '../stats';
 
-import type { SearchResponse } from '../../../../src/types';
+import type { SearchResponse } from 'instantsearch-core';
 
 beforeEach(() => {
   document.body.innerHTML = '';
@@ -77,14 +77,7 @@ describe('stats', () => {
         stats({ container }),
       ]);
 
-      // @MAJOR Once Hogan.js and string-based templates are removed,
-      // `search.start()` can be moved to the test body and the following
-      // assertion can go away.
-      expect(async () => {
-        search.start();
-
-        await wait(0);
-      }).not.toWarnDev();
+      search.start();
 
       await wait(0);
 

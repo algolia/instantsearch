@@ -1,16 +1,14 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import RefinementList from '../../components/RefinementList/RefinementList';
-import connectNumericMenu from '../../connectors/numeric-menu/connectNumericMenu';
-import { component } from '../../lib/suit';
+import { connectNumericMenu } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
@@ -18,14 +16,10 @@ import type {
   NumericMenuConnectorParams,
   NumericMenuRenderState,
   NumericMenuWidgetDescription,
-} from '../../connectors/numeric-menu/connectNumericMenu';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type {
-  ComponentCSSClasses,
-  Renderer,
-  Template,
-  WidgetFactory,
-} from '../../types';
+import type { ComponentCSSClasses, Template } from '../../types';
+import type { Renderer, WidgetFactory } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'numeric-menu' });
 const suit = component('NumericMenu');
@@ -46,14 +40,10 @@ const renderer =
     };
     templates: NumericMenuTemplates;
   }): Renderer<NumericMenuRenderState, Partial<NumericMenuWidgetParams>> =>
-  (
-    { createURL, instantSearchInstance, refine, items },
-    isFirstRendering: boolean
-  ) => {
+  ({ createURL, refine, items }, isFirstRendering: boolean) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;

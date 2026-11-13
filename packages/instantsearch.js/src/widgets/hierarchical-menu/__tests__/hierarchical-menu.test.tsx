@@ -9,10 +9,10 @@ import {
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import { fireEvent, within } from '@testing-library/dom';
+import { createInsightsMiddleware } from 'instantsearch-core';
 import { h } from 'preact';
 
 import instantsearch from '../../../index.es';
-import { createInsightsMiddleware } from '../../../middlewares';
 import hierarchicalMenu from '../hierarchical-menu';
 
 beforeEach(() => {
@@ -125,14 +125,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         }),
       ]);
 
-      // @MAJOR Once Hogan.js and string-based templates are removed,
-      // `search.start()` can be moved to the test body and the following
-      // assertion can go away.
-      expect(async () => {
-        search.start();
-
-        await wait(0);
-      }).not.toWarnDev();
+      search.start();
 
       await wait(0);
 

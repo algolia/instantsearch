@@ -1,21 +1,20 @@
 /** @jsx h */
 
+import { connectCompare } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { createCompareBarComponent } from 'instantsearch-ui-components';
 import { h, Fragment, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectCompare from '../../connectors/compare/connectCompare';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
+import type { Template } from '../../types';
+import type { RendererOptions } from 'instantsearch-core';
 import type {
   CompareConnectorParams,
   CompareRenderState,
-} from '../../connectors/compare/connectCompare';
-import type { RendererOptions, Template } from '../../types';
+} from 'instantsearch-core';
 import type {
   CompareBarClassNames,
   CompareBarItem,
@@ -107,12 +106,10 @@ export default function compareBar(widgetParams: CompareBarWidgetParams) {
       removeItem,
       clearItems,
       compare,
-      instantSearchInstance,
     } = renderState;
 
     const templateProps = prepareTemplateProps({
       defaultTemplates: {} as unknown as CompareBarTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates,
     });
 

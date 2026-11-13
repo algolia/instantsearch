@@ -3,20 +3,20 @@
 import {
   endsInsideRootProperty,
   getJsonCursor,
-} from '../../../lib/utils/jsonCursor';
+} from 'instantsearch-core/internal';
 
 import {
   createGroundedComparisonTableComponent,
   defaultComparisonTableTranslations,
 } from './createGroundedComparisonTable';
 
-import type { RecordWithObjectID, Renderer } from '../../../types';
-import type { ClientSideToolComponentProps } from '../types';
 import type {
   ComparisonCriterion,
   ComparisonTableTranslations,
   GroundedComparisonTableProps,
 } from './createGroundedComparisonTable';
+import type { RecordWithObjectID, Renderer } from '../../../types';
+import type { ClientSideToolComponentProps } from 'instantsearch-core';
 
 /**
  * Builtin comparison tool (`algolia_compare_products`).

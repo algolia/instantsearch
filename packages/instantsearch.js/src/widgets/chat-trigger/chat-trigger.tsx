@@ -1,21 +1,20 @@
 /** @jsx h */
 
+import { connectChatTrigger } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { createChatToggleButtonComponent } from 'instantsearch-ui-components';
 import { h, Fragment, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectChatTrigger from '../../connectors/chat/connectChatTrigger';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
+import type { Template } from '../../types';
+import type { RendererOptions } from 'instantsearch-core';
 import type {
   ChatTriggerConnectorParams,
   ChatTriggerRenderState,
-} from '../../connectors/chat/connectChatTrigger';
-import type { RendererOptions, Template } from '../../types';
+} from 'instantsearch-core';
 import type {
   ChatToggleButtonProps,
   ChatToggleButtonTranslations,
@@ -109,13 +108,10 @@ export default function chatTrigger(widgetParams: ChatTriggerWidgetParams) {
       RendererOptions<ChatTriggerConnectorParams>,
     _isFirstRender: boolean
   ) {
-    const { open, toggleOpen, instantSearchInstance } = renderState;
+    const { open, toggleOpen } = renderState;
 
-    // Resolve template props at render time so user-provided helpers and
-    // compile options from `instantSearchInstance.templatesConfig` apply.
     const templateProps = prepareTemplateProps({
       defaultTemplates: {} as unknown as ChatTriggerTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates,
     });
 

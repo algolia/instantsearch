@@ -1,4 +1,4 @@
-// Note: Below, we will be importing all algoliasearch v3,4,5 types.
+// Note: Below, we will be importing all algoliasearch v4 and v5 types.
 // The goal is being able to export the algoliasearch-helper types using
 // the version of the client installed by the developer.
 
@@ -9,7 +9,7 @@ import type * as RecommendClient from '@algolia/recommend';
 // @ts-ignore
 import type * as AlgoliaSearch from 'algoliasearch';
 // @ts-ignore
-import type algoliasearch from 'algoliasearch/lite'; // oxlint-disable-line import/default -- only v3/v4 of the client have a default export
+import type algoliasearch from 'algoliasearch/lite'; // oxlint-disable-line import/default -- only v4 of the client has a default export
 // @ts-ignore
 import type * as AlgoliaSearchLite from 'algoliasearch/lite';
 
@@ -25,16 +25,12 @@ type IsUnknown<T> = unknown extends T // `T` can be `unknown` or `any`
     : false
   : false;
 
-type SearchClientV4Shape = {
-  transporter: unknown;
-};
-
 type SearchClientShape = {
   search: unknown;
 };
 
 // @ts-ignore
-type ClientV3_4 = ReturnType<typeof algoliasearch>;
+type ClientV4 = ReturnType<typeof algoliasearch>;
 
 type ClientLiteV5 =
   IsUnknown<AnyToUnknown<typeof AlgoliaSearchLite>> extends true
@@ -73,32 +69,22 @@ type ClientV5 = ClientLiteV5 extends SearchClientShape
 
 type PickForClient<
   T extends {
-    v3: unknown;
     v4: unknown;
     v5: unknown;
   },
-> = ClientV5 extends SearchClientShape
-  ? T['v5']
-  : // @ts-ignore
-    ClientV3_4 extends SearchClientV4Shape
-    ? T['v4']
-    : T['v3'];
+> = ClientV5 extends SearchClientShape ? T['v5'] : T['v4'];
 
 type ClientVersion = PickForClient<{
-  v3: '3';
   v4: '4';
   v5: '5';
 }>;
 
 type DefaultSearchClient = PickForClient<{
-  v3: ClientV3_4;
-  v4: ClientV3_4;
+  v4: ClientV4;
   v5: ClientV5;
 }>;
 
 export type HighlightResult<T> = PickForClient<{
-  // @ts-ignore this doesn't exist as an exact type in v3
-  v3: any;
   // @ts-ignore
   v4: ClientSearch.HighlightResult<T>;
   // @ts-ignore the type in the v5 library is not yet correct https://github.com/algolia/api-clients-automation/issues/853
@@ -106,8 +92,6 @@ export type HighlightResult<T> = PickForClient<{
 }>;
 
 export type SnippetResult<T> = PickForClient<{
-  // @ts-ignore this doesn't exist as an exact type in v3
-  v3: any;
   // @ts-ignore
   v4: ClientSearch.SnippetResult<T>;
   // @ts-ignore the type in the v5 library is not yet correct https://github.com/algolia/api-clients-automation/issues/853
@@ -115,7 +99,6 @@ export type SnippetResult<T> = PickForClient<{
 }>;
 
 export type RankingInfo = PickForClient<{
-  v3: Record<string, unknown>;
   // @ts-ignore
   v4: ClientSearch.RankingInfo;
   // @ts-ignore
@@ -123,8 +106,6 @@ export type RankingInfo = PickForClient<{
 }>;
 
 export type SearchOptions = PickForClient<{
-  // @ts-ignore
-  v3: AlgoliaSearch.QueryParameters;
   // @ts-ignore
   v4: ClientSearch.SearchOptions;
   v5: NonNullable<
@@ -135,24 +116,6 @@ export type SearchOptions = PickForClient<{
 
 export type SearchResponse<T> = PickForClient<{
   // @ts-ignore
-  v3: AlgoliaSearch.Response<T> & {
-    appliedRelevancyStrictness?: number;
-    nbSortedHits?: number;
-    renderingContent?: {
-      facetOrdering?: {
-        facets?: {
-          order?: string[];
-        };
-        values?: {
-          [facet: string]: {
-            order?: string[];
-            sortRemainingBy?: 'count' | 'alpha' | 'hidden';
-          };
-        };
-      };
-    };
-  };
-  // @ts-ignore
   v4: ClientSearch.SearchResponse<T>;
   // @ts-ignore
   v5: AlgoliaSearch.SearchResponse<T>;
@@ -160,15 +123,12 @@ export type SearchResponse<T> = PickForClient<{
 
 export type SearchResponses<T> = PickForClient<{
   // @ts-ignore
-  v3: AlgoliaSearch.MultiResponse<T>;
-  // @ts-ignore
   v4: ClientSearch.MultipleQueriesResponse<T>;
   // @ts-ignore
   v5: AlgoliaSearch.SearchResponses<T>;
 }>;
 
 export type RecommendResponse<T> = PickForClient<{
-  v3: any;
   // @ts-ignore
   v4: ClientSearch.SearchResponse<T>;
   // @ts-ignore
@@ -176,7 +136,6 @@ export type RecommendResponse<T> = PickForClient<{
 }>;
 
 export type RecommendResponses<T> = PickForClient<{
-  v3: any;
   // @ts-ignore
   v4: RecommendClient.RecommendQueriesResponse<T>;
   // @ts-ignore
@@ -189,7 +148,6 @@ type _OptionalKeys<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 type _RequiredKeys<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
 export type FrequentlyBoughtTogetherQuery = PickForClient<{
-  v3: any;
   // @ts-ignore
   v4: Omit<RecommendClient.FrequentlyBoughtTogetherQuery, 'indexName'>;
   // @ts-ignore
@@ -200,7 +158,6 @@ export type FrequentlyBoughtTogetherQuery = PickForClient<{
   >;
 }>;
 export type LookingSimilarQuery = PickForClient<{
-  v3: any;
   // @ts-ignore
   v4: Omit<RecommendClient.LookingSimilarQuery, 'indexName'>;
   v5: _OptionalKeys<
@@ -210,7 +167,6 @@ export type LookingSimilarQuery = PickForClient<{
   >;
 }>;
 export type RelatedProductsQuery = PickForClient<{
-  v3: any;
   // @ts-ignore
   v4: Omit<RecommendClient.RelatedProductsQuery, 'indexName'>;
   v5: _OptionalKeys<
@@ -220,7 +176,6 @@ export type RelatedProductsQuery = PickForClient<{
   >;
 }>;
 export type TrendingFacetsQuery = PickForClient<{
-  v3: any;
   // @ts-ignore
   v4: Omit<RecommendClient.TrendingFacetsQuery, 'indexName'>;
   v5: _OptionalKeys<
@@ -230,7 +185,6 @@ export type TrendingFacetsQuery = PickForClient<{
   >;
 }>;
 export type TrendingItemsQuery = PickForClient<{
-  v3: any;
   // @ts-ignore
   v4: Omit<RecommendClient.TrendingItemsQuery, 'indexName'>;
   v5: _OptionalKeys<
@@ -274,65 +228,39 @@ export type PlainRecommendParameters =
 
 export type SearchForFacetValuesResponse = PickForClient<{
   // @ts-ignore
-  v3: AlgoliaSearch.SearchForFacetValues.Response;
-  // @ts-ignore
   v4: ClientSearch.SearchForFacetValuesResponse;
   // @ts-ignore
   v5: AlgoliaSearch.SearchForFacetValuesResponse;
 }>;
 
-export type FindAnswersOptions = PickForClient<{
-  v3: any; // answers only exists in v4
-  // @ts-ignore
-  v4: ClientSearch.FindAnswersOptions;
-  v5: any; // answers only exists in v4
-}>;
-export type FindAnswersResponse<T> = PickForClient<{
-  v3: any; // answers only exists in v4
-  // @ts-ignore
-  v4: ClientSearch.FindAnswersResponse<T>;
-  v5: any; // answers only exists in v4
-}>;
-export type FindAnswers = PickForClient<{
-  v3: any; // answers only exists in v4
-  // @ts-ignore
-  v4: ReturnType<DefaultSearchClient['initIndex']>['findAnswers'];
-  v5: any; // answers only exists in v4
-}>;
-
 export type SupportedLanguage = PickForClient<{
-  v3: string;
   v4: string;
   // @ts-ignore
   v5: AlgoliaSearch.SupportedLanguage;
 }>;
 
-// v5 only has the `searchForFacetValues` method in the `search` client, not in `lite`.
-// We need to check both clients to get the correct type.
-// (this is not actually used in the codebase, but it's here for completeness)
-type SearchForFacetValuesV5 = ClientSearchV5 | ClientFullV5 extends {
-  searchForFacetValues: unknown;
-}
-  ?
-      | ClientSearchV5['searchForFacetValues']
-      | ClientFullV5['searchForFacetValues']
-  : never;
-
 export interface SearchClient {
   search: <T>(
-    requests: Array<{ indexName: string; params: SearchOptions }>
+    requests: Array<
+      | {
+          type?: 'default';
+          indexName: string;
+          params: SearchOptions;
+        }
+      | {
+          type: 'facet';
+          indexName: string;
+          facet: string;
+          params: SearchOptions & {
+            maxFacetHits?: number;
+            facetQuery?: string;
+          };
+        }
+    >
   ) => Promise<SearchResponses<T>>;
   getRecommendations?: <T>(
     requests: RecommendOptions[]
   ) => Promise<RecommendResponses<T>>;
-  searchForFacetValues?: DefaultSearchClient extends {
-    searchForFacetValues: unknown;
-  }
-    ? DefaultSearchClient['searchForFacetValues']
-    : SearchForFacetValuesV5;
-  initIndex?: DefaultSearchClient extends { initIndex: unknown }
-    ? DefaultSearchClient['initIndex']
-    : never;
   addAlgoliaAgent?: DefaultSearchClient['addAlgoliaAgent'];
 }
 

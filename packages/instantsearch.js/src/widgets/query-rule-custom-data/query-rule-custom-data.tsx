@@ -1,15 +1,13 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import CustomData from '../../components/QueryRuleCustomData/QueryRuleCustomData';
-import connectQueryRules from '../../connectors/query-rules/connectQueryRules';
-import { component } from '../../lib/suit';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { connectQueryRules } from '../../connectors';
+import { getContainerNode } from '../../lib/utils';
 
 import type {
   QueryRuleCustomDataComponentCSSClasses,
@@ -19,9 +17,10 @@ import type {
   QueryRulesConnectorParams,
   QueryRulesRenderState,
   QueryRulesWidgetDescription,
-} from '../../connectors/query-rules/connectQueryRules';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { WidgetFactory, Template } from '../../types';
+import type { Template } from '../../types';
+import type { WidgetFactory } from 'instantsearch-core';
 
 export type QueryRuleCustomDataCSSClasses = Partial<{
   root: string | string[];

@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig",
+  "extends": "./tsconfig.typecheck.json",
   "exclude": [
     "**/es",
     "**/dist",
@@ -12,6 +12,8 @@
     "examples/react/react-native",
     "examples/js/e-commerce-umd/public/packages",
     "examples/js/showcase",
-    "packages/create-instantsearch-app/src/templates/**/*"
+    "packages/create-instantsearch-app/src/templates/**/*",
+    // Codemod fixtures are intentionally written against the old API.
+    "packages/instantsearch-codemods/__testfixtures__"
   ]
 }

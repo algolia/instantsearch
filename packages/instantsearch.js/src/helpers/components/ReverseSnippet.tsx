@@ -1,14 +1,9 @@
 /** @jsx h */
+import { getPropertyByPath, getHighlightedParts } from 'instantsearch-core';
+import { toArray, warning } from 'instantsearch-core/internal';
 import { h } from 'preact';
 
 import { ReverseSnippet as ReverseSnippetUiComponent } from '../../components/ReverseSnippet/ReverseSnippet';
-import {
-  getPropertyByPath,
-  unescape,
-  toArray,
-  warning,
-  getHighlightedParts,
-} from '../../lib/utils';
 
 import type { ReverseSnippetProps as ReverseSnippetUiComponentProps } from '../../components/ReverseSnippet/ReverseSnippet';
 import type {
@@ -16,7 +11,7 @@ import type {
   Hit,
   HitAttributeSnippetResult,
   PartialKeys,
-} from '../../types';
+} from 'instantsearch-core';
 
 export type ReverseSnippetProps<THit extends Hit<BaseHit>> = {
   hit: THit;
@@ -47,12 +42,10 @@ See: https://alg.li/highlighting
   );
 
   const parts = properties.map(({ value }) =>
-    getHighlightedParts(unescape(value || '')).map(
-      ({ isHighlighted, ...rest }) => ({
-        ...rest,
-        isHighlighted: !isHighlighted,
-      })
-    )
+    getHighlightedParts(value || '').map(({ isHighlighted, ...rest }) => ({
+      ...rest,
+      isHighlighted: !isHighlighted,
+    }))
   );
 
   return (

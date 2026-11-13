@@ -19,9 +19,8 @@
  * catalog-sourced values, no matter what the model emits.
  */
 
-import { chatToolProps } from '@instantsearch/testutils';
 import { render, screen, within } from '@testing-library/react';
-import { collectChatRecords } from 'instantsearch-ui-components';
+import { collectChatRecords } from 'instantsearch-core/internal';
 import React from 'react';
 
 import { createComparisonTableTool } from '../ComparisonTableTool';
@@ -29,7 +28,7 @@ import { createComparisonTableTool } from '../ComparisonTableTool';
 import type {
   ChatComponentContext,
   ClientSideToolComponentProps,
-} from 'instantsearch-ui-components';
+} from 'instantsearch-core';
 
 type ToolMessage = ClientSideToolComponentProps['context']['message'];
 
@@ -117,7 +116,7 @@ function renderComparison(
 
   return render(
     <LayoutComponent
-      {...chatToolProps({
+      context={{
         ...metadata,
         messages,
         // The tool only consumes records; the search tool fetched them.
@@ -128,7 +127,7 @@ function renderComparison(
         addToolResult: jest.fn(),
         setIndexUiState: jest.fn(),
         sendEvent: jest.fn(),
-      })}
+      }}
     />
   );
 }

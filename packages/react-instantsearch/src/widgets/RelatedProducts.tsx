@@ -2,11 +2,11 @@ import { createRelatedProductsComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment, useMemo } from 'react';
 import { useInstantSearch, useRelatedProducts } from 'react-instantsearch-core';
 
+import type { BaseHit, Hit } from 'instantsearch-core';
 import type {
   RelatedProductsProps as RelatedProductsUiComponentProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { BaseHit, Hit } from 'instantsearch.js';
 import type { UseRelatedProductsProps } from 'react-instantsearch-core';
 
 type UiProps<TItem extends BaseHit> = Pick<
@@ -42,7 +42,6 @@ export function RelatedProducts<TItem extends BaseHit = BaseHit>({
   threshold,
   fallbackParameters,
   queryParameters,
-  escapeHTML,
   transformItems,
   itemComponent,
   headerComponent,
@@ -58,7 +57,6 @@ export function RelatedProducts<TItem extends BaseHit = BaseHit>({
       threshold,
       fallbackParameters,
       queryParameters,
-      escapeHTML,
       transformItems,
     },
     { $$widgetType: 'ais.relatedProducts' }

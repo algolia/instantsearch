@@ -5,11 +5,11 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import { fireEvent, screen } from '@testing-library/dom';
+import { createInsightsMiddleware } from 'instantsearch-core';
+import { openChat } from 'instantsearch-core/internal';
+import { warning } from 'instantsearch-core/internal';
 
 import instantsearch from '../../../index.es';
-import { openChat } from '../../../lib/chat/openChat';
-import { warning } from '../../../lib/utils';
-import { createInsightsMiddleware } from '../../../middlewares';
 import { chatInlineLayout } from '../../../templates';
 import chatTrigger from '../../chat-trigger/chat-trigger';
 import chat from '../chat';
@@ -351,7 +351,7 @@ describe('chat', () => {
           container,
           agentId: 'test-agent-id',
           disableTriggerValidation: true,
-          templates: { item: (hit) => `<div>${hit.name}</div>` },
+          templates: { item: (hit, { html }) => html`<div>${hit.name}</div>` },
           messages: [
             {
               id: 'assistant-message-id',
@@ -397,7 +397,7 @@ describe('chat', () => {
           container,
           agentId: 'test-agent-id',
           disableTriggerValidation: true,
-          templates: { item: (hit) => `<div>${hit.name}</div>` },
+          templates: { item: (hit, { html }) => html`<div>${hit.name}</div>` },
           messages: [
             {
               id: 'assistant-message-id',
@@ -467,7 +467,7 @@ describe('chat', () => {
           container,
           agentId: 'test-agent-id',
           disableTriggerValidation: true,
-          templates: { item: (hit) => `<div>${hit.name}</div>` },
+          templates: { item: (hit, { html }) => html`<div>${hit.name}</div>` },
           messages: [
             {
               id: 'assistant-message-id',
@@ -930,7 +930,7 @@ describe('chat', () => {
           container,
           agentId: 'test-agent-id',
           templates: {
-            item: (hit) => `<div>${hit.name}</div>`,
+            item: (hit, { html }) => html`<div>${hit.name}</div>`,
             layout: chatInlineLayout(),
           },
         }),

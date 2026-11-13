@@ -1,31 +1,28 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { createTrendingItemsComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectTrendingItems from '../../connectors/trending-items/connectTrendingItems';
+import { connectTrendingItems } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import type {
   TrendingItemsWidgetDescription,
   TrendingItemsConnectorParams,
   TrendingItemsRenderState,
-} from '../../connectors/trending-items/connectTrendingItems';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template, TemplateWithSendEvent } from '../../types';
 import type {
-  Template,
   WidgetFactory,
   Renderer,
   BaseHit,
   RecommendResponse,
   Hit,
-  TemplateWithBindEvent,
-} from '../../types';
+} from 'instantsearch-core';
 import type {
   RecommendClassNames,
   TrendingItemsProps as TrendingItemsUiProps,
@@ -67,7 +64,6 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
         defaultTemplates: {} as unknown as Required<
           TrendingItemsTemplates<THit>
         >,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
 
@@ -193,7 +189,7 @@ export type TrendingItemsTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * Template to use for each result. This template will receive an object containing a single record.
      */
-    item: TemplateWithBindEvent<Hit<THit>>;
+    item: TemplateWithSendEvent<Hit<THit>>;
 
     /**
      * Template to use to wrap all items.
@@ -250,7 +246,6 @@ export default (function trendingItems<
     queryParameters,
     fallbackParameters,
     threshold,
-    escapeHTML,
     transformItems,
     templates = {},
     cssClasses = {},
@@ -283,7 +278,6 @@ export default (function trendingItems<
       queryParameters,
       fallbackParameters,
       threshold,
-      escapeHTML,
       transformItems,
     }),
     $$widgetType: 'ais.trendingItems',

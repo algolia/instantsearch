@@ -2,9 +2,8 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx h */
-import { chatToolProps } from '@instantsearch/testutils';
 import { fireEvent, screen, within } from '@testing-library/dom';
-import { collectChatRecords } from 'instantsearch-ui-components';
+import { collectChatRecords } from 'instantsearch-core/internal';
 import { h, render } from 'preact';
 
 import { createGroupedResultsTool } from '../grouped-results-tool';
@@ -12,7 +11,7 @@ import { createGroupedResultsTool } from '../grouped-results-tool';
 import type {
   ChatComponentContext,
   ClientSideToolComponentProps,
-} from 'instantsearch-ui-components';
+} from 'instantsearch-core';
 import type { ComponentType } from 'preact';
 
 const createToolProps = (
@@ -56,25 +55,27 @@ const createToolProps = (
     },
   ] as ChatComponentContext['messages'];
 
-  return chatToolProps({
-    messages,
-    status: 'ready',
-    isClearing: false,
-    open: true,
-    maximized: false,
-    tools: {},
-    regenerate: jest.fn(),
-    stop: jest.fn(),
-    onReload: jest.fn(),
-    onClose: jest.fn(),
-    message,
-    records: collectChatRecords(messages),
-    indexUiState: {},
-    setIndexUiState: jest.fn(),
-    addToolResult: jest.fn(),
-    applyFilters: jest.fn(),
-    sendEvent: jest.fn(),
-  });
+  return {
+    context: {
+      messages,
+      status: 'ready',
+      isClearing: false,
+      open: true,
+      maximized: false,
+      tools: {},
+      regenerate: jest.fn(),
+      stop: jest.fn(),
+      onReload: jest.fn(),
+      onClose: jest.fn(),
+      message,
+      records: collectChatRecords(messages),
+      indexUiState: {},
+      setIndexUiState: jest.fn(),
+      addToolResult: jest.fn(),
+      applyFilters: jest.fn(),
+      sendEvent: jest.fn(),
+    },
+  };
 };
 
 describe('createGroupedResultsTool', () => {

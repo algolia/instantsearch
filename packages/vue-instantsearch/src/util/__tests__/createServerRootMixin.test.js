@@ -8,6 +8,7 @@ import {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
+import { TAG_PLACEHOLDER } from 'instantsearch-core/internal';
 import VueI18n from 'vue-i18n';
 import { createI18n } from 'vue-i18n-vue3';
 import Router from 'vue-router';
@@ -26,7 +27,7 @@ import { createFakeClient } from '../testutils/client';
 import { createSerializedState } from '../testutils/helper';
 import { isVue3, isVue2, Vue2, renderCompat } from '../vue-compat';
 
-jest.unmock('instantsearch.js/es');
+jest.unmock('instantsearch-core/internal');
 
 function renderToString(app) {
   if (isVue3) {
@@ -290,11 +291,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
       expect(mainIndex.getWidgetUiState({})).toMatchInlineSnapshot(`
         {
-          "hello": {
-            "configure": {
-              "hitsPerPage": 100,
-            },
-          },
+          "hello": {},
         }
       `);
 
@@ -304,6 +301,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
           {
             "indexName": "hello",
             "params": {
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
               "hitsPerPage": 100,
               "query": "",
             },
@@ -359,6 +358,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
               expect(state.hello).toEqual({
                 requestParams: [
                   {
+                    ...TAG_PLACEHOLDER,
                     hitsPerPage: 100,
                     query: '',
                   },
@@ -376,6 +376,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
                   facetsRefinements: {},
                   hierarchicalFacets: [],
                   hierarchicalFacetsRefinements: {},
+                  ...TAG_PLACEHOLDER,
                   hitsPerPage: 100,
                   index: 'hello',
                   numericRefinements: {},
@@ -388,6 +389,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
               expect(state.nestedIndex).toEqual({
                 requestParams: [
                   {
+                    ...TAG_PLACEHOLDER,
                     hitsPerPage: 100,
                     query: '',
                   },
@@ -405,6 +407,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
                   facetsRefinements: {},
                   hierarchicalFacets: [],
                   hierarchicalFacetsRefinements: {},
+                  ...TAG_PLACEHOLDER,
                   index: 'hello2',
                   numericRefinements: {},
                   tagRefinements: [],
@@ -919,6 +922,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
             {
               "indexName": "hello",
               "params": {
+                "highlightPostTag": "__/ais-highlight__",
+                "highlightPreTag": "__ais-highlight__",
                 "hitsPerPage": 100,
                 "query": "",
               },
@@ -979,11 +984,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
         expect(mainIndex.getWidgetUiState({})).toMatchInlineSnapshot(`
           {
-            "hello": {
-              "configure": {
-                "hitsPerPage": 100,
-              },
-            },
+            "hello": {},
           }
         `);
 
@@ -993,6 +994,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
             {
               "indexName": "hello",
               "params": {
+                "highlightPostTag": "__/ais-highlight__",
+                "highlightPreTag": "__ais-highlight__",
                 "hitsPerPage": 100,
                 "query": "",
               },
@@ -1088,7 +1091,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       expect(instantsearch.mainIndex.getHelper()).not.toBeNull();
     });
 
-    it('sets helper & mainHelper', () => {
+    it('sets the helper', () => {
       const serialized = createSerializedState();
 
       const app = {
@@ -1115,14 +1118,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       } = mount(app);
 
       expect(instantsearch.helper).toBe(null);
-      expect(instantsearch.mainHelper).toBe(null);
 
       instantsearch.hydrate({
         hello: serialized,
       });
 
       expect(instantsearch.helper).toEqual(expect.any(AlgoliaSearchHelper));
-      expect(instantsearch.mainHelper).toEqual(expect.any(AlgoliaSearchHelper));
     });
   });
 
@@ -1179,6 +1180,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         `
         {
           "createURL": [Function],
+          "error": undefined,
           "helper": Anything,
           "instantSearchInstance": Anything,
           "parent": Anything,
@@ -1190,11 +1192,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
               "results": Anything,
             },
           ],
-          "searchMetadata": {
-            "isSearchStalled": false,
-          },
           "state": Anything,
-          "templatesConfig": {},
+          "status": "idle",
         }
       `
       );
@@ -1224,6 +1223,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       const state = new SearchParameters(resultsState.state);
       const localState = new SearchParameters({
         index: 'lol',
+        ...TAG_PLACEHOLDER,
       });
       const results = new SearchResults(state, resultsState.results);
 
@@ -1285,7 +1285,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         expect(renderArgs.createURL()).toBe('#');
       });
 
-      it('allows for widgets without getWidgetState', () => {
+      it('allows for widgets without getWidgetUiState', () => {
         let instantSearchInstance;
         mount({
           mixins: [
@@ -1303,12 +1303,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         const widget = {
           init: jest.fn(),
           render: jest.fn(),
-          getWidgetState(uiState) {
+          getWidgetUiState(uiState) {
             return uiState;
           },
         };
 
-        const widgetWithoutGetWidgetState = {
+        const widgetWithoutGetWidgetUiState = {
           init: jest.fn(),
           render: jest.fn(),
         };
@@ -1317,7 +1317,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
           lol: createSerializedState(),
         });
 
-        instantSearchInstance.addWidgets([widget, widgetWithoutGetWidgetState]);
+        instantSearchInstance.addWidgets([
+          widget,
+          widgetWithoutGetWidgetUiState,
+        ]);
 
         instantSearchInstance.__forceRender(
           widget,

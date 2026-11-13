@@ -11,8 +11,8 @@ import { h } from 'preact';
 import { prepareTemplateProps } from '../../../lib/templating';
 import InfiniteHits from '../InfiniteHits';
 
-import type { Hit } from '../../../types';
 import type { InfiniteHitsProps } from '../InfiniteHits';
+import type { Hit } from 'instantsearch-core';
 
 beforeEach(() => {
   document.body.innerHTML = '';
@@ -48,7 +48,6 @@ describe('InfiniteHits', () => {
       ]),
       hits: hits as THit[],
       sendEvent: jest.fn(),
-      bindEvent: jest.fn(),
       showPrevious: jest.fn(),
       showMore: jest.fn(),
       hasShowPrevious: true,
@@ -82,7 +81,6 @@ describe('InfiniteHits', () => {
             return '';
           },
         },
-        templatesConfig: {},
         templates: {},
       }),
       ...props,

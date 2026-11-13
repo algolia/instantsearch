@@ -1,25 +1,25 @@
 /** @jsx h */
 
+import {
+  createDocumentationMessageGenerator,
+  getObjectType,
+  warning,
+} from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Panel from '../../components/Panel/Panel';
-import { component } from '../../lib/suit';
-import {
-  createDocumentationMessageGenerator,
-  getContainerNode,
-  getObjectType,
-  warning,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import type { PanelComponentCSSClasses } from '../../components/Panel/Panel';
+import type { Template } from '../../types';
 import type {
-  Template,
   RenderOptions,
   WidgetFactory,
   InitOptions,
   Widget,
-} from '../../types';
+} from 'instantsearch-core';
 
 export type PanelCSSClasses = Partial<{
   /**
@@ -268,18 +268,20 @@ const panel: PanelWidget = (panelWidgetParams) => {
     const containerNode = getContainerNode(widgetParams.container);
 
     const defaultTemplates: PanelTemplates<typeof widgetFactory> = {
-      collapseButtonText: ({ collapsed: isCollapsed }) =>
-        `<svg
+      collapseButtonText: ({ collapsed: isCollapsed }) => (
+        <svg
           aria-hidden="true"
           focusable="false"
-          class="${cssClasses.collapseIcon}"
-          style="width: 1em; height: 1em;"
+          className={cssClasses.collapseIcon}
+          style={{ width: '1em', height: '1em' }}
           viewBox="0 0 500 500"
         >
-        <path d="${
-          isCollapsed ? 'M100 250l300-150v300z' : 'M250 400l150-300H100z'
-        }" fill="currentColor" />
-        </svg>`,
+          <path
+            d={isCollapsed ? 'M100 250l300-150v300z' : 'M250 400l150-300H100z'}
+            fill="currentColor"
+          />
+        </svg>
+      ),
     };
 
     if (templates.collapseButtonText === undefined) {
@@ -354,10 +356,8 @@ const panel: PanelWidget = (panelWidgetParams) => {
         render(null, containerNode);
 
         if (typeof widget.dispose === 'function') {
-          return widget.dispose.call(this, ...args);
+          widget.dispose.call(this, ...args);
         }
-
-        return undefined;
       },
     } as AugmentedWidget<typeof widgetFactory>;
   };

@@ -38,13 +38,12 @@ import {
   PromptSuggestions,
   ResultCard,
   Autocomplete,
-  FilterSuggestions,
   CompareBar,
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
-import type { Hit } from 'instantsearch.js';
-import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
+import type { Hit } from 'instantsearch-core';
+import type { SendEventForHits } from 'instantsearch-core';
 
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
@@ -235,8 +234,8 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
 
     return {
       algoliaAgents: [
-        `instantsearch.js (${
-          require('../../../instantsearch.js/package.json').version
+        `instantsearch-core (${
+          require('../../../instantsearch-core/package.json').version
         })`,
         `react-instantsearch (${
           require('../../../react-instantsearch-core/package.json').version
@@ -455,14 +454,6 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
       </InstantSearch>
     );
   },
-  createFilterSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
-    render(
-      <InstantSearch {...instantSearchOptions}>
-        <FilterSuggestions {...widgetParams} />
-        <GlobalErrorSwallower />
-      </InstantSearch>
-    );
-  },
   createPromptSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
     // The widget hands clicked suggestions to a <Chat> on the same index, and
     // errors without one, so the default setup renders both. `renderChat: false`
@@ -596,7 +587,6 @@ const testOptions: TestOptionsMap<TestSuites> = {
       'keeps a query cleared before the first opening when submitting to the panel': true,
     },
   },
-  createFilterSuggestionsWidgetTests: { act },
   createPromptSuggestionsWidgetTests: { act },
   createCompareBarWidgetTests: { act },
   createResultCardWidgetTests: { act },

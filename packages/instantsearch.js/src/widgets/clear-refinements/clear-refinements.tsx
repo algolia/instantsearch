@@ -1,16 +1,14 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import ClearRefinements from '../../components/ClearRefinements/ClearRefinements';
-import connectClearRefinements from '../../connectors/clear-refinements/connectClearRefinements';
-import { component } from '../../lib/suit';
+import { connectClearRefinements } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
@@ -22,9 +20,10 @@ import type {
   ClearRefinementsConnectorParams,
   ClearRefinementsRenderState,
   ClearRefinementsWidgetDescription,
-} from '../../connectors/clear-refinements/connectClearRefinements';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { WidgetFactory, Template, Renderer } from '../../types';
+import type { Template } from '../../types';
+import type { WidgetFactory, Renderer } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'clear-refinements',
@@ -48,11 +47,10 @@ const renderer =
     ClearRefinementsRenderState,
     Partial<ClearRefinementsWidgetParams>
   > =>
-  ({ refine, canRefine, instantSearchInstance }, isFirstRendering) => {
+  ({ refine, canRefine }, isFirstRendering) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;
@@ -62,7 +60,7 @@ const renderer =
       <ClearRefinements
         refine={refine}
         cssClasses={cssClasses}
-        hasRefinements={canRefine}
+        canRefine={canRefine}
         templateProps={renderState.templateProps!}
       />,
       containerNode
@@ -90,7 +88,7 @@ export type ClearRefinementsTemplates = Partial<{
   /**
    * Template for the content of the button
    */
-  resetLabel: Template<{ hasRefinements: boolean }>;
+  resetLabel: Template<{ canRefine: boolean }>;
 }>;
 
 export type ClearRefinementsWidgetParams = {

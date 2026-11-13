@@ -47,7 +47,7 @@
   "dependencies": {
     "@swc/helpers": "0.5.18",
     "algoliasearch-helper": "3.30.2",
-    "instantsearch.js": "4.123.0",
+    "instantsearch-core": "^0.1.0",
     "use-sync-external-store": "^1.0.0"
   },
   "devDependencies": {
@@ -55,7 +55,7 @@
     "react-instantsearch-core-v6": "npm:react-instantsearch-core@6.40.4"
   },
   "peerDependencies": {
-    "algoliasearch": ">= 3.1 < 6",
+    "algoliasearch": ">= 4 < 6",
     "react": ">= 16.8.0 < 20"
   }
 }

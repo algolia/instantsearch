@@ -7,16 +7,16 @@ import { wait } from '@instantsearch/testutils/wait';
 import algoliasearchHelper from 'algoliasearch-helper';
 
 import { createSingleSearchResponse } from '../../../../../../tests/mocks/createAPIResponse';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/createWidget';
+} from '../../../../../instantsearch-core/test/createWidget';
 import promptSuggestions from '../prompt-suggestions';
 
-import type { InstantSearch } from '../../../types';
 import type { SearchResults } from 'algoliasearch-helper';
+import type { InstantSearch } from 'instantsearch-core';
 
 function makeResults(): SearchResults {
   const helper = algoliasearchHelper(createSearchClient(), '');
@@ -122,7 +122,7 @@ describe('promptSuggestions', () => {
 
       // The mount check is still pending; unmount so it doesn't fire (and
       // throw) into the next test.
-      widget.dispose!(createDisposeOptions({ helper: search.helper! }));
+      widget.dispose!(createDisposeOptions());
     });
 
     it('does not throw when an `onSuggestionClick` override owns the click', async () => {

@@ -4,10 +4,10 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
+import { historyRouter } from 'instantsearch-core';
 
 import instantsearch from '../../..';
 import { connectSearchBox } from '../../../connectors';
-import historyRouter from '../../routers/history';
 
 /* eslint no-lone-blocks: "off" */
 
@@ -32,6 +32,7 @@ describe('routing with debounced third-party client-side router', () => {
       routing: {
         router: historyRouter({
           writeDelay,
+          cleanUrlOnDispose: true,
         }),
       },
     });

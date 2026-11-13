@@ -3,7 +3,7 @@
  */
 import { runTestSuites } from '@instantsearch/tests/common';
 import * as testSuites from '@instantsearch/tests/widgets';
-import { connectCompare } from 'instantsearch.js/es/connectors/index';
+import { connectCompare } from 'instantsearch-core';
 
 import { nextTick, mountApp, mountAppOrThrow } from '../../test/utils';
 import {
@@ -43,7 +43,7 @@ import {
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
-jest.unmock('instantsearch.js/es');
+jest.unmock('instantsearch-core/internal');
 
 /**
  * prevent rethrowing InstantSearch errors, so tests can be asserted.
@@ -341,8 +341,8 @@ const testSetups = {
 
     return {
       algoliaAgents: [
-        `instantsearch.js (${
-          require('../../../instantsearch.js/package.json').version
+        `instantsearch-core (${
+          require('../../../instantsearch-core/package.json').version
         })`,
         `Vue InstantSearch (${
           require('../../../vue-instantsearch/package.json').version
@@ -734,9 +734,6 @@ const testSetups = {
 
     await nextTick();
   },
-  createFilterSuggestionsWidgetTests() {
-    throw new Error('FilterSuggestions is not supported in Vue InstantSearch');
-  },
   createPromptSuggestionsWidgetTests() {
     throw new Error('PromptSuggestions is not supported in Vue InstantSearch');
   },
@@ -868,9 +865,6 @@ const testOptions = {
     },
   },
   createAutocompleteWidgetTests: undefined,
-  createFilterSuggestionsWidgetTests: {
-    skippedTests: { 'FilterSuggestions widget common tests': true },
-  },
   createPromptSuggestionsWidgetTests: {
     skippedTests: { 'PromptSuggestions widget common tests': true },
   },

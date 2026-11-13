@@ -1,6 +1,6 @@
 # vue-instantsearch
 
-Vue 2 **and** Vue 3 bindings (single source, built for both). Components wrap the `instantsearch.js` connectors — the logic isn't reimplemented here.
+Vue 2 **and** Vue 3 bindings (single source, built for both). Components wrap the connectors from `instantsearch-core` — the logic isn't reimplemented here. The package re-exports core's public root (`export * from 'instantsearch-core'` in `src/instantsearch.js`), so users import routers, state mappings, connectors and middlewares from `vue-instantsearch` and never install `instantsearch.js` or `instantsearch-core`. Flavor-only helpers come from `instantsearch-core/internal`. Don't import `instantsearch.js` here (lint-enforced). The published entry points are fixed by the `exports` map in `package.json`; new public paths must be added there.
 
 ## Layout
 
@@ -33,4 +33,5 @@ yarn jest packages/vue-instantsearch/src/components/__tests__/<Pascal>   # from 
 ```
 
 - Vue 2/3 dual support: run `./scripts/prepare-vue3.js` (root `yarn prepare-vue3`) when switching the working tree to Vue 3. Don't assume one Vue version — changes must work for both.
+- `rollup.config.mjs` writes a `package.json` into each `vue2|vue3/{es,cjs}` folder. esbuild, webpack and Rollup's node-resolve read `sideEffects` from the nearest `package.json`, so it overrides the root one: keep it `false`, or unused widgets stay in apps' bundles (`test/module/*/is-tree-shakable.mjs` checks it).
 - Cross-flavor behavior lives in `tests/common/widgets/<name>/`; register it in this package's `common-widgets.test.*`.

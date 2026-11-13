@@ -4,14 +4,14 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
+import { simpleStateMapping } from 'instantsearch-core';
+import { historyRouter } from 'instantsearch-core';
 
 import { connectPagination, connectSearchBox } from '../../../connectors';
 import instantsearch from '../../../index.es';
 import { index } from '../../../widgets';
-import simpleStateMapping from '../../stateMappings/simple';
-import historyRouter from '../history';
 
-import type { Widget } from '../../../types';
+import type { Widget } from 'instantsearch-core';
 
 beforeEach(() => {
   window.history.pushState({}, '', '/');
@@ -102,7 +102,7 @@ test('clears url with cleanUrlOnDispose: true', async () => {
   expect(window.location.search).toBe('');
 });
 
-test('clears url with cleanUrlOnDispose: undefined', async () => {
+test('keeps url with cleanUrlOnDispose: undefined', async () => {
   const router = historyRouter({ writeDelay });
 
   const indexName = 'indexName';
@@ -138,8 +138,10 @@ test('clears url with cleanUrlOnDispose: undefined', async () => {
 
   await wait(writeWait);
 
-  // URL has been cleaned
-  expect(window.location.search).toBe('');
+  // URL has not been cleaned
+  expect(window.location.search).toBe(
+    `?${encodeURI('indexName[page]=40&indexName[query]=test')}`
+  );
 });
 
 describe('after a popstate', () => {

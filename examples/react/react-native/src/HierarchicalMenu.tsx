@@ -2,10 +2,9 @@ import React from 'react';
 import {
   useHierarchicalMenu,
   UseHierarchicalMenuProps,
+  type HierarchicalMenuItem,
 } from 'react-instantsearch-core';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
-import type { HierarchicalMenuItem } from 'instantsearch.js/es/connectors/hierarchical-menu/connectHierarchicalMenu';
 
 type HierarchicalMenuProps = UseHierarchicalMenuProps & {
   onChange?: () => void;
@@ -33,9 +32,7 @@ function HierarchicalList({
               onChange?.();
             }}
           >
-            <Text
-              style={[styles.label, item.isRefined && styles.labelRefined]}
-            >
+            <Text style={[styles.label, item.isRefined && styles.labelRefined]}>
               {item.label}
             </Text>
             <View style={styles.count}>

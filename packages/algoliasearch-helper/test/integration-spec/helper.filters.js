@@ -32,8 +32,8 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
 
   var calls = 0;
 
-  helper.on('error', function (event) {
-    done(event.error);
+  helper.on('error', function (error) {
+    done(error);
   });
 
   helper.on('result', function (event) {
@@ -49,7 +49,7 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
         f3: 1,
       });
 
-      helper.addRefine('facet', 'f2').search();
+      helper.addFacetRefinement('facet', 'f2').search();
     }
 
     if (calls === 2) {
@@ -59,14 +59,14 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
         f2: 1,
       });
 
-      helper.toggleRefine('facet', 'f3').search();
+      helper.toggleFacetRefinement('facet', 'f3').search();
     }
 
     if (calls === 3) {
       expect(results.hits.length).toBe(0);
       expect(results.facets[0]).toBe(undefined);
 
-      helper.removeRefine('facet', 'f2').search();
+      helper.removeFacetRefinement('facet', 'f2').search();
     }
 
     if (calls === 4) {
@@ -86,5 +86,5 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
     }
   });
 
-  helper.addRefine('facet', 'f1').search();
+  helper.addFacetRefinement('facet', 'f1').search();
 });

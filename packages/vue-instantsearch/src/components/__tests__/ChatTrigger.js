@@ -8,7 +8,7 @@ import { mount, nextTick } from '../../../test/utils';
 import ChatTrigger from '../ChatTrigger';
 import InstantSearch from '../InstantSearch';
 
-jest.unmock('instantsearch.js/es');
+jest.unmock('instantsearch-core/internal');
 
 let wrapper;
 

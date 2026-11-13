@@ -11,12 +11,11 @@ import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import { render as preactRender } from 'preact';
 
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
 import {
-  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/createWidget';
+} from '../../../../../instantsearch-core/test/createWidget';
 import createHTMLMarker from '../createHTMLMarker';
 import geoSearch from '../geo-search';
 import originalRenderer from '../GeoSearchRenderer';
@@ -121,8 +120,7 @@ describe('GeoSearch', () => {
   });
 
   const createContainer = () => document.createElement('div');
-  const createFakeInstantSearch = () =>
-    createInstantSearch({ templatesConfig: undefined });
+  const createFakeInstantSearch = () => createInstantSearch();
   const createFakeHelper = () =>
     algoliasearchHelper(createSearchClient(), 'indexName');
 
@@ -399,12 +397,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
     expect(render).toHaveBeenCalledTimes(1);
 
-    widget.dispose(
-      createDisposeOptions({
-        helper,
-        state: helper.state,
-      })
-    );
+    widget.dispose();
 
     expect(render).toHaveBeenCalledTimes(2);
     expect(render).toHaveBeenCalledWith(null, container);
@@ -618,13 +611,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           })
         );
 
-        expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(
+        expect(lastRenderArgs(renderer).hasMapMovedSinceLastRefine()).toBe(
           false
         );
 
         simulateEvent(mapInstance, eventName);
 
-        expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(true);
+        expect(lastRenderArgs(renderer).hasMapMovedSinceLastRefine()).toBe(
+          true
+        );
       });
 
       it(`expect to listen for "${eventName}" and schedule a refine call`, () => {
@@ -750,14 +745,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         // Simulate programmatic event
         lastRenderState(renderer).isUserInteraction = false;
 
-        expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(
+        expect(lastRenderArgs(renderer).hasMapMovedSinceLastRefine()).toBe(
           false
         );
         expect(lastRenderState(renderer).isPendingRefine).toBe(false);
 
         simulateEvent(mapInstance, eventName);
 
-        expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(
+        expect(lastRenderArgs(renderer).hasMapMovedSinceLastRefine()).toBe(
           false
         );
         expect(lastRenderState(renderer).isPendingRefine).toBe(false);
@@ -791,14 +786,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           expect.any(Function)
         );
 
-        expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(
+        expect(lastRenderArgs(renderer).hasMapMovedSinceLastRefine()).toBe(
           false
         );
         expect(lastRenderState(renderer).isPendingRefine).toBe(false);
 
         simulateEvent(mapInstance, eventName);
 
-        expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(
+        expect(lastRenderArgs(renderer).hasMapMovedSinceLastRefine()).toBe(
           false
         );
         expect(lastRenderState(renderer).isPendingRefine).toBe(false);
@@ -1072,7 +1067,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           }),
         },
         templates: {
-          HTMLMarker: '<p>{{objectID}}</p>',
+          HTMLMarker: ({ objectID }, { html }) => html`<p>${objectID}</p>`,
         },
       });
 
@@ -1106,21 +1101,30 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           expect.objectContaining({
             __id: '123',
             title: 'ID: 123',
-            template: '<p>123</p>',
+            template: expect.objectContaining({
+              type: 'p',
+              props: { children: '123' },
+            }),
           }),
         ],
         [
           expect.objectContaining({
             __id: '456',
             title: 'ID: 456',
-            template: '<p>456</p>',
+            template: expect.objectContaining({
+              type: 'p',
+              props: { children: '456' },
+            }),
           }),
         ],
         [
           expect.objectContaining({
             __id: '789',
             title: 'ID: 789',
-            template: '<p>789</p>',
+            template: expect.objectContaining({
+              type: 'p',
+              props: { children: '789' },
+            }),
           }),
         ],
       ]);
@@ -1141,7 +1145,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         googleReference,
         container,
         templates: {
-          HTMLMarker: '<p>{{objectID}}</p>',
+          HTMLMarker: ({ objectID }, { html }) => html`<p>${objectID}</p>`,
         },
       });
 
@@ -1174,19 +1178,28 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         [
           expect.objectContaining({
             __id: '123',
-            template: '<p>123</p>',
+            template: expect.objectContaining({
+              type: 'p',
+              props: { children: '123' },
+            }),
           }),
         ],
         [
           expect.objectContaining({
             __id: '456',
-            template: '<p>456</p>',
+            template: expect.objectContaining({
+              type: 'p',
+              props: { children: '456' },
+            }),
           }),
         ],
         [
           expect.objectContaining({
             __id: '789',
-            template: '<p>789</p>',
+            template: expect.objectContaining({
+              type: 'p',
+              props: { children: '789' },
+            }),
           }),
         ],
       ]);
@@ -1687,7 +1700,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(renderer).hasMapMovedSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(false);
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
       expect(mapInstance.fitBounds).toHaveBeenLastCalledWith(
@@ -1985,7 +1998,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(renderer).hasMapMovedSinceLastRefine()).toBe(false);
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
       expect(mapInstance.setZoom).not.toHaveBeenCalled();
       expect(mapInstance.setCenter).not.toHaveBeenCalled();
@@ -1995,7 +2008,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       simulateEvent(mapInstance, 'dragstart');
       simulateEvent(mapInstance, 'center_changed');
 
-      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(true);
+      expect(lastRenderArgs(renderer).hasMapMovedSinceLastRefine()).toBe(true);
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
       expect(mapInstance.setZoom).not.toHaveBeenCalled();
       expect(mapInstance.setCenter).not.toHaveBeenCalled();

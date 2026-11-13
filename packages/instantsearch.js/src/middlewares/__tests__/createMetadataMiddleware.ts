@@ -4,14 +4,13 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
-import algoliasearchV3 from 'algoliasearch-v3';
 import algoliasearchV4 from 'algoliasearch-v4';
 import { algoliasearch as algoliasearchV5 } from 'algoliasearch-v5';
+import { createMetadataMiddleware } from 'instantsearch-core';
+import { isMetadataEnabled } from 'instantsearch-core';
 
-import { createMetadataMiddleware } from '..';
 import instantsearch from '../..';
 import { configure, hits, index, pagination, searchBox } from '../../widgets';
-import { isMetadataEnabled } from '../createMetadataMiddleware';
 
 declare global {
   interface Navigator {
@@ -115,7 +114,10 @@ describe('createMetadataMiddleware', () => {
       search.addWidgets([
         searchBox({ container: document.createElement('div') }),
         searchBox({ container: document.createElement('div') }),
-        hits({ container: document.createElement('div'), escapeHTML: true }),
+        hits({
+          container: document.createElement('div'),
+          transformItems: (items) => items,
+        }),
         index({ indexName: 'test2' }).addWidgets([
           pagination({ container: document.createElement('div') }),
           configure({ distinct: true, filters: 'hehe secret string!' }),
@@ -129,7 +131,7 @@ describe('createMetadataMiddleware', () => {
       expect(document.head).toMatchInlineSnapshot(`
         <head>
           <meta
-            content="{\\"widgets\\":[{\\"type\\":\\"ais.searchBox\\",\\"widgetType\\":\\"ais.searchBox\\",\\"params\\":[]},{\\"type\\":\\"ais.searchBox\\",\\"widgetType\\":\\"ais.searchBox\\",\\"params\\":[]},{\\"type\\":\\"ais.hits\\",\\"widgetType\\":\\"ais.hits\\",\\"params\\":[\\"escapeHTML\\"]},{\\"type\\":\\"ais.index\\",\\"widgetType\\":\\"ais.index\\",\\"params\\":[]},{\\"type\\":\\"ais.pagination\\",\\"widgetType\\":\\"ais.pagination\\",\\"params\\":[]},{\\"type\\":\\"ais.configure\\",\\"widgetType\\":\\"ais.configure\\",\\"params\\":[\\"searchParameters\\"]},{\\"middleware\\":true,\\"type\\":\\"ais.metadata\\",\\"internal\\":true}]}"
+            content="{\\"widgets\\":[{\\"type\\":\\"ais.searchBox\\",\\"widgetType\\":\\"ais.searchBox\\",\\"params\\":[]},{\\"type\\":\\"ais.searchBox\\",\\"widgetType\\":\\"ais.searchBox\\",\\"params\\":[]},{\\"type\\":\\"ais.hits\\",\\"widgetType\\":\\"ais.hits\\",\\"params\\":[\\"transformItems\\"]},{\\"type\\":\\"ais.index\\",\\"widgetType\\":\\"ais.index\\",\\"params\\":[]},{\\"type\\":\\"ais.pagination\\",\\"widgetType\\":\\"ais.pagination\\",\\"params\\":[]},{\\"type\\":\\"ais.configure\\",\\"widgetType\\":\\"ais.configure\\",\\"params\\":[\\"searchParameters\\"]},{\\"middleware\\":true,\\"type\\":\\"ais.metadata\\",\\"internal\\":true}]}"
             name="instantsearch:widgets"
           />
         </head>
@@ -150,7 +152,7 @@ describe('createMetadataMiddleware', () => {
           },
           {
             "params": [
-              "escapeHTML",
+              "transformItems",
             ],
             "type": "ais.hits",
             "widgetType": "ais.hits",
@@ -271,6 +273,7 @@ describe('createMetadataMiddleware', () => {
           expect.stringMatching(/Algolia for JavaScript \(5\..*\)/),
           expect.stringMatching(/Search \(5\..*\)/),
           expect.stringMatching(/Node.js \(.*\)/),
+          expect.stringMatching(/instantsearch-core \(.*\)/),
           expect.stringMatching(/instantsearch.js \(4\..*\)/),
           expect.stringMatching(/JS Helper \(3\..*\)/),
         ]);
@@ -312,6 +315,7 @@ describe('createMetadataMiddleware', () => {
           expect.stringMatching(/Algolia for JavaScript \(5\..*\)/),
           expect.stringMatching(/Search \(5\..*\)/),
           expect.stringMatching(/Node.js \(.*\)/),
+          expect.stringMatching(/instantsearch-core \(.*\)/),
           expect.stringMatching(/instantsearch.js \(4\..*\)/),
           expect.stringMatching(/JS Helper \(3\..*\)/),
           'test (cool)',
@@ -351,6 +355,7 @@ describe('createMetadataMiddleware', () => {
         ).toEqual([
           expect.stringMatching(/Algolia for JavaScript \(4\..*\)/),
           expect.stringMatching(/Node.js \(.*\)/),
+          expect.stringMatching(/instantsearch-core \(.*\)/),
           expect.stringMatching(/instantsearch.js \(4\..*\)/),
           expect.stringMatching(/JS Helper \(3\..*\)/),
         ]);
@@ -391,85 +396,7 @@ describe('createMetadataMiddleware', () => {
         ).toEqual([
           expect.stringMatching(/Algolia for JavaScript \(4\..*\)/),
           expect.stringMatching(/Node.js \(.*\)/),
-          expect.stringMatching(/instantsearch.js \(4\..*\)/),
-          expect.stringMatching(/JS Helper \(3\..*\)/),
-          'test (cool)',
-        ]);
-      });
-
-      it('for the v3 client', async () => {
-        const fakeSearchClient = createSearchClient();
-        const searchClient = algoliasearchV3('qsdf', 'qsdf');
-        searchClient.search = fakeSearchClient.search;
-
-        // not using createMetadataMiddleware() here,
-        // since metadata is built into instantsearch
-        const search = instantsearch({
-          searchClient,
-          indexName: 'test',
-        });
-
-        search.start();
-
-        await wait(100);
-
-        expect(document.head.children).toHaveLength(1);
-        expect(document.head.children[0]).toEqual(expect.any(HTMLMetaElement));
-
-        const metadata = JSON.parse(
-          document.head.querySelector('meta')!.content
-        );
-
-        expect(metadata).toEqual({
-          ua: expect.any(String),
-          widgets: expect.any(Array),
-        });
-
-        expect(
-          metadata.ua.split(';').map((part: string) => part.trim())
-        ).toEqual([
-          expect.stringMatching(/Algolia for JavaScript \(3\..*\)/),
-          expect.stringMatching(/Node.js \(.*\)/),
-          expect.stringMatching(/instantsearch.js \(4\..*\)/),
-          expect.stringMatching(/JS Helper \(3\..*\)/),
-        ]);
-      });
-
-      it('for the v3 client with custom user agent', async () => {
-        const fakeSearchClient = createSearchClient();
-        const searchClient = algoliasearchV3('qsdf', 'qsdf');
-        searchClient.search = fakeSearchClient.search;
-
-        // not using createMetadataMiddleware() here,
-        // since metadata is built into instantsearch
-        const search = instantsearch({
-          searchClient,
-          indexName: 'test',
-        });
-
-        search.start();
-
-        searchClient.addAlgoliaAgent('test (cool)');
-
-        await wait(100);
-
-        expect(document.head.children).toHaveLength(1);
-        expect(document.head.children[0]).toEqual(expect.any(HTMLMetaElement));
-
-        const metadata = JSON.parse(
-          document.head.querySelector('meta')!.content
-        );
-
-        expect(metadata).toEqual({
-          ua: expect.any(String),
-          widgets: expect.any(Array),
-        });
-
-        expect(
-          metadata.ua.split(';').map((part: string) => part.trim())
-        ).toEqual([
-          expect.stringMatching(/Algolia for JavaScript \(3\..*\)/),
-          expect.stringMatching(/Node.js \(.*\)/),
+          expect.stringMatching(/instantsearch-core \(.*\)/),
           expect.stringMatching(/instantsearch.js \(4\..*\)/),
           expect.stringMatching(/JS Helper \(3\..*\)/),
           'test (cool)',

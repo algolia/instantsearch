@@ -1,16 +1,17 @@
-import connectDynamicWidgets from '../../connectors/dynamic-widgets/connectDynamicWidgets';
-import { component } from '../../lib/suit';
 import {
   createDocumentationMessageGenerator,
-  getContainerNode,
   getWidgetAttribute,
-} from '../../lib/utils';
+} from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
+
+import { connectDynamicWidgets } from '../../connectors';
+import { getContainerNode } from '../../lib/utils';
 
 import type {
   DynamicWidgetsConnectorParams,
   DynamicWidgetsWidgetDescription,
-} from '../../connectors/dynamic-widgets/connectDynamicWidgets';
-import type { Widget, WidgetFactory } from '../../types';
+} from '../../connectors';
+import type { Widget, WidgetFactory } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'dynamic-widgets',

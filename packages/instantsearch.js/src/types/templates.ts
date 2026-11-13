@@ -4,14 +4,15 @@ import type {
   ReverseSnippet,
   Snippet,
 } from '../helpers/components';
-import type {
-  BuiltInBindEventForHits,
-  CustomBindEventForHits,
-  SendEventForHits,
-} from '../lib/utils';
 import type { html } from 'htm/preact';
+import type { SendEventForHits } from 'instantsearch-core';
 import type { VNode } from 'preact';
 
+/**
+ * A string is rendered as text. A function receives the template data and
+ * `{ html, components, sendEvent }`, and returns a VNode, a string (rendered
+ * as text) or `null`.
+ */
 export type Template<TTemplateData = void> =
   | string
   | ((
@@ -30,34 +31,21 @@ export type TemplateParams = {
   sendEvent?: SendEventForHits;
 };
 
-interface TemplateWithBindEventParams extends TemplateParams {
-  /** @deprecated use sendEvent instead */
-  (
-    ...args: Parameters<BuiltInBindEventForHits>
-  ): ReturnType<BuiltInBindEventForHits>;
-  /** @deprecated use sendEvent instead */
-  (
-    ...args: Parameters<CustomBindEventForHits>
-  ): ReturnType<CustomBindEventForHits>;
+interface TemplateWithSendEventParams extends TemplateParams {
   sendEvent: SendEventForHits;
 }
 
-export type TemplateWithBindEvent<TTemplateData = void> =
+export type TemplateWithSendEvent<TTemplateData = void> =
   | string
   | ((
       data: TTemplateData,
-      params: TemplateWithBindEventParams
+      params: TemplateWithSendEventParams
     ) => VNode | VNode[] | string);
 
 export type Templates = {
   [key: string]:
     | Template<any>
-    | TemplateWithBindEvent<any>
+    | TemplateWithSendEvent<any>
     | Templates
     | undefined;
 };
-
-export type HoganHelpers<TKeys extends string = string> = Record<
-  TKeys,
-  (text: string, render: (value: string) => string) => string
->;

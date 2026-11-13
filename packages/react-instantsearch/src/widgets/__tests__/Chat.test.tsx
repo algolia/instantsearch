@@ -5,8 +5,8 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import { act, fireEvent, render, screen } from '@testing-library/react';
-import { Chat as ChatInstance, openChat } from 'instantsearch.js/es/lib/chat';
-import { CACHE_KEY } from 'instantsearch.js/es/lib/chat/chat';
+import { Chat as ChatInstance, openChat } from 'instantsearch-core/internal';
+import { CACHE_KEY } from 'instantsearch-core/internal';
 import React from 'react';
 import { InstantSearch, useInstantSearch } from 'react-instantsearch-core';
 
@@ -15,7 +15,7 @@ import { Chat } from '../Chat';
 import { ChatTrigger } from '../ChatTrigger';
 
 import type { ChatHandle, ChatProps } from '../Chat';
-import type { UIMessage } from 'instantsearch.js/es/lib/chat';
+import type { UIMessage } from 'instantsearch-core';
 
 const searchClient = createSearchClient();
 
@@ -101,11 +101,7 @@ function ChatUnderTest({
   reasoningLabel?: string;
 }) {
   return (
-    <InstantSearch
-      searchClient={searchClient}
-      indexName="indexName"
-      future={{ preserveSharedStateOnUnmount: true }}
-    >
+    <InstantSearch searchClient={searchClient} indexName="indexName">
       <Chat
         chat={chat}
         transport={{ api: 'http://unused' }}
@@ -693,11 +689,7 @@ describe('Chat', () => {
     }> = [];
 
     render(
-      <InstantSearch
-        searchClient={searchClient}
-        indexName="indexName"
-        future={{ preserveSharedStateOnUnmount: true }}
-      >
+      <InstantSearch searchClient={searchClient} indexName="indexName">
         <Chat
           chat={chat}
           transport={{ api: 'http://unused' }}
@@ -742,11 +734,7 @@ describe('Chat', () => {
   test('merges messagesProps.assistantMessageProps with the dedicated props', async () => {
     const chat = createChat();
     const { container } = render(
-      <InstantSearch
-        searchClient={searchClient}
-        indexName="indexName"
-        future={{ preserveSharedStateOnUnmount: true }}
-      >
+      <InstantSearch searchClient={searchClient} indexName="indexName">
         <Chat
           chat={chat}
           transport={{ api: 'http://unused' }}
@@ -786,11 +774,7 @@ describe('Chat', () => {
     ));
 
     render(
-      <InstantSearch
-        searchClient={searchClient}
-        indexName="indexName"
-        future={{ preserveSharedStateOnUnmount: true }}
-      >
+      <InstantSearch searchClient={searchClient} indexName="indexName">
         <Chat
           chat={chat}
           transport={{ api: 'http://unused' }}
@@ -834,11 +818,7 @@ describe('Chat', () => {
       ],
     });
     const { container } = render(
-      <InstantSearch
-        searchClient={searchClient}
-        indexName="indexName"
-        future={{ preserveSharedStateOnUnmount: true }}
-      >
+      <InstantSearch searchClient={searchClient} indexName="indexName">
         <Chat
           chat={chat}
           transport={{ api: 'http://unused' }}
@@ -895,11 +875,7 @@ describe('Chat', () => {
     } satisfies NonNullable<ChatProps<unknown>['messagesProps']>;
 
     render(
-      <InstantSearch
-        searchClient={searchClient}
-        indexName="indexName"
-        future={{ preserveSharedStateOnUnmount: true }}
-      >
+      <InstantSearch searchClient={searchClient} indexName="indexName">
         <Chat
           chat={chat}
           transport={{ api: 'http://unused' }}
@@ -958,11 +934,7 @@ describe('Chat', () => {
 
     function Subject({ parseMarkdown }: { parseMarkdown: boolean }) {
       return (
-        <InstantSearch
-          searchClient={searchClient}
-          indexName="indexName"
-          future={{ preserveSharedStateOnUnmount: true }}
-        >
+        <InstantSearch searchClient={searchClient} indexName="indexName">
           <Chat
             chat={chat}
             transport={{ api: 'http://unused' }}

@@ -1,4 +1,4 @@
-import type { InsightsClient } from 'instantsearch.js';
+import type { InsightsClient } from 'react-instantsearch-core';
 
 type CreateInsightsClientOptions = {
   initialUserToken?: string;

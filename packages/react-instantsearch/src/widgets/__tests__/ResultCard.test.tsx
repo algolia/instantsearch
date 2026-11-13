@@ -13,7 +13,7 @@ import { ResultCard } from '../ResultCard';
 import { SearchBox } from '../SearchBox';
 
 import type { MockSearchClient } from '@instantsearch/mocks';
-import type { SearchResponse } from 'instantsearch.js';
+import type { SearchResponse } from 'instantsearch-core';
 
 // The card renders nothing until a Rule enables it in the results, so it is
 // excluded from `all-components.test.tsx` and covered here with a response

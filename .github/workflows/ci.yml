@@ -54,6 +54,7 @@ jobs:
             packages/react-instantsearch-nextjs/dist \
             packages/vue-instantsearch/vue2 \
             packages/vue-instantsearch/vue3 \
+            packages/instantsearch-core/dist \
             packages/instantsearch-ui-components/dist
 
       - name: Upload build outputs
@@ -153,40 +154,6 @@ jobs:
           INTEGRATION_TEST_APPID: ${{ secrets.INTEGRATION_TEST_APPID }}
           INTEGRATION_TEST_API_KEY: ${{ secrets.INTEGRATION_TEST_API_KEY }}
         run: yarn run test:ci
-
-  legacy-algoliasearch-v3:
-    name: legacy algoliasearch v3
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Setup Node
-        uses: actions/setup-node@v7
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'yarn'
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Download build outputs
-        uses: actions/download-artifact@v8
-        with:
-          name: build-outputs
-
-      - name: Unpack build outputs
-        run: tar -xf build-outputs.tar && rm build-outputs.tar
-
-      - name: Update dependencies
-        run: ./scripts/legacy/downgrade-algoliasearch-dependency.js
-
-      - name: Unit & integration tests
-        run: yarn run test:v3
-
-      - name: Type checking
-        run: yarn run type-check:v3
 
   legacy-algoliasearch-v4:
     name: legacy algoliasearch v4
@@ -293,7 +260,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     uses: ./.github/workflows/e2e.yml
     with:
-      # IE11 and the Next.js suites report but never block, matching the
+      # The Next.js suites report but never block, matching the
       # CircleCI release gate, which only required `e2e tests playwright`.
       soft-fail-secondary: true
     secrets: inherit
@@ -304,7 +271,6 @@ jobs:
       - build
       - lint
       - unit-tests
-      - legacy-algoliasearch-v3
       - legacy-algoliasearch-v4
       - helper-docs
       - e2e

@@ -1,23 +1,18 @@
 import {
-  createChatComponent,
-  shouldSearchToolRenderResults,
-} from 'instantsearch-ui-components';
-import {
   SearchIndexToolType,
   RecommendToolType,
   MemorizeToolType,
   MemorySearchToolType,
   PonderToolType,
-  DisplayResultsToolType,
   CompareProductsToolType,
   GroupedResultsToolType,
-} from 'instantsearch.js/es/lib/chat';
-import {
   focusAfterReveal,
   getActiveContainerAnimations,
   holdContainerInertUntilReveal,
   restoreContainerInertUntilReveal,
-} from 'instantsearch.js/es/lib/chat/focusAfterReveal';
+  shouldSearchToolRenderResults,
+} from 'instantsearch-core/internal';
+import { createChatComponent } from 'instantsearch-ui-components';
 import React, {
   createElement,
   Fragment,
@@ -42,26 +37,30 @@ export {
   MemorizeToolType,
   MemorySearchToolType,
   PonderToolType,
-  // eslint-disable-next-line typescript/no-deprecated
-  DisplayResultsToolType,
   CompareProductsToolType,
   GroupedResultsToolType,
 };
 
+import type {
+  IndexUiState,
+  UIMessage,
+  UserClientSideTool,
+  UserClientSideTools,
+} from 'instantsearch-core';
+import type { ContainerAnimationSnapshot } from 'instantsearch-core/internal';
 import type {
   Pragma,
   ChatProps as ChatUiProps,
   ChatLayoutOwnProps,
   RecommendComponentProps,
   RecordWithObjectID,
-  UserClientSideTool,
-  UserClientSideTools,
   ChatMessageProps,
 } from 'instantsearch-ui-components';
-import type { IndexUiState } from 'instantsearch.js';
-import type { UIMessage } from 'instantsearch.js/es/lib/chat';
-import type { ContainerAnimationSnapshot } from 'instantsearch.js/es/lib/chat/focusAfterReveal';
 import type { UseChatProps } from 'react-instantsearch-core';
+
+// Legacy name of the grouped-results tool, still emitted by agents configured
+// before the rename.
+const LEGACY_GROUPED_RESULTS_TOOL_TYPE = 'algolia_display_results';
 
 const ChatUiComponent = createChatComponent({
   createElement: createElement as Pragma,
@@ -91,8 +90,7 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
     ),
     [GroupedResultsToolType]: groupedResultsTool,
     // Agents configured before the rename still emit the legacy tool name.
-    // eslint-disable-next-line typescript/no-deprecated
-    [DisplayResultsToolType]: groupedResultsTool,
+    [LEGACY_GROUPED_RESULTS_TOOL_TYPE]: groupedResultsTool,
     [CompareProductsToolType]: createCompareProductsTool(itemComponent),
     [MemorizeToolType]: {},
     [MemorySearchToolType]: {},
