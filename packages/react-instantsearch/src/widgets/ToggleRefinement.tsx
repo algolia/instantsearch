@@ -7,7 +7,10 @@ import type { PartialKeys } from '../types';
 import type { ToggleRefinementProps as ToggleRefinementUiComponentProps } from '../ui/ToggleRefinement';
 import type { UseToggleRefinementProps } from 'react-instantsearch-core';
 
-type UiProps = Pick<ToggleRefinementUiComponentProps, 'onChange' | 'checked'>;
+type UiProps = Pick<
+  ToggleRefinementUiComponentProps,
+  'onChange' | 'checked' | 'value'
+>;
 
 export type ToggleRefinementProps = PartialKeys<
   Omit<ToggleRefinementUiComponentProps, keyof UiProps>,
@@ -31,6 +34,9 @@ export function ToggleRefinement({
   const uiProps: UiProps = {
     checked: value.isRefined,
     onChange: (isChecked) => refine({ isRefined: !isChecked }),
+    // Forwarded so `labelTextComponent` receives the connector's value, like
+    // the JS `templates.labelText` and the Vue scoped slot.
+    value,
   };
 
   return (
