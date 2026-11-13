@@ -85,6 +85,46 @@ describe('Selector', () => {
       (container.querySelector('.ais-Widget') as HTMLDivElement).hidden
     ).toBe(true);
   });
+
+  test('selects the blank option when the value stops matching an option', () => {
+    const options = [
+      { value: '', label: '' },
+      { value: 20, label: 'Twenty' },
+    ];
+    const { container, rerender } = render(
+      <Selector {...createProps({ options, value: 20 })} />
+    );
+    const select = container.querySelector('select')!;
+    expect(select.value).toBe('20');
+
+    // The configured value is absent from `options`, so the connector's blank
+    // option is the only one that can be selected. Passing `undefined` here
+    // would make the select uncontrolled in React, which keeps displaying
+    // the stale "20" after e.g. routing.
+    rerender(<Selector {...createProps({ options, value: undefined })} />);
+    expect(select.value).toBe('');
+
+    rerender(<Selector {...createProps({ options, value: 7 })} />);
+    expect(select.value).toBe('');
+
+    rerender(<Selector {...createProps({ options, value: 20 })} />);
+    expect(select.value).toBe('20');
+  });
+
+  test('doesn’t add a blank option when the consumer has none', () => {
+    const { container, rerender } = render(
+      <Selector {...createProps({ value: 'a' })} />
+    );
+    const select = container.querySelector('select')!;
+    expect(select.value).toBe('a');
+
+    rerender(<Selector {...createProps({ value: undefined })} />);
+    // The fallback only picks an existing `''` option — it never invents one.
+    expect(select.options).toHaveLength(2);
+    expect(
+      Array.from(select.options).filter((option) => option.value === '')
+    ).toHaveLength(0);
+  });
 });
 
 describe('SortBy', () => {
@@ -216,5 +256,27 @@ describe('HitsPerPage', () => {
       target: { value: '' },
     });
     expect(props.onChange).toHaveBeenCalledWith('');
+  });
+
+  test('falls back to the blank option when the current value matches no item', () => {
+    const items = [
+      { value: '' as const, label: '' },
+      { value: 20, label: '20 per page' },
+    ];
+    const { container, rerender } = render(
+      <HitsPerPage items={items} currentValue={20} onChange={jest.fn()} />
+    );
+    const select = container.querySelector('select')!;
+    expect(select.value).toBe('20');
+
+    // e.g. routing back to a configured `hitsPerPage` absent from `items`
+    rerender(
+      <HitsPerPage
+        items={items}
+        currentValue={undefined}
+        onChange={jest.fn()}
+      />
+    );
+    expect(select.value).toBe('');
   });
 });

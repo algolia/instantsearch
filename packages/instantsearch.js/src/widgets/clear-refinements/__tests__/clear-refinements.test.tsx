@@ -291,5 +291,51 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         </div>
       `);
     });
+
+    test('renders no button when `resetLabel` returns `null`', async () => {
+      const container = document.createElement('div');
+      const searchClient = createSearchClient();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+        initialUiState: {
+          indexName: {
+            refinementList: {
+              brand: ['Apple'],
+            },
+          },
+        },
+      });
+
+      search.addWidgets([
+        refinementList({
+          container: document.createElement('div'),
+          attribute: 'brand',
+        }),
+        clearRefinements({
+          container,
+          templates: {
+            resetLabel: () => null,
+          },
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      // The button used to be the `Template`'s root, so a `null` template
+      // removed it from the DOM entirely — it must not leave an empty button
+      // behind, even though there are refinements to clear.
+      expect(container).toMatchInlineSnapshot(`
+        <div>
+          <div
+            class="ais-ClearRefinements"
+          />
+        </div>
+      `);
+      expect(container.querySelector('button')).toBeNull();
+    });
   });
 });

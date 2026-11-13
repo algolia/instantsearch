@@ -352,19 +352,44 @@ const testSetups = {
     };
   },
   async createHitsPerPageWidgetTests({ instantSearchOptions, widgetParams }) {
+    let instantSearchInstance;
+    const middlewares = [
+      ({ instantSearchInstance: instance }) => {
+        instantSearchInstance = instance;
+        return { $$type: 'test/hits-per-page-instance' };
+      },
+      ...(instantSearchOptions.middlewares || []),
+    ];
+
     mountApp(
       {
         render: renderCompat((h) =>
-          h(AisInstantSearch, { props: instantSearchOptions }, [
-            h(AisHitsPerPage, { props: widgetParams }),
-            h(GlobalErrorSwallower),
-          ])
+          h(
+            AisInstantSearch,
+            { props: { ...instantSearchOptions, middlewares } },
+            [
+              h(AisHitsPerPage, { props: widgetParams }),
+              h(GlobalErrorSwallower),
+            ]
+          )
         ),
       },
       document.body.appendChild(document.createElement('div'))
     );
 
     await nextTick();
+
+    return {
+      setHitsPerPage(hitsPerPageValue) {
+        instantSearchInstance?.setUiState((uiState) => ({
+          ...uiState,
+          indexName: {
+            ...uiState.indexName,
+            hitsPerPage: hitsPerPageValue,
+          },
+        }));
+      },
+    };
   },
   async createClearRefinementsWidgetTests({
     instantSearchOptions,
