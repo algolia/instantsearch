@@ -20,9 +20,8 @@ import type {
 import type { BaseHit, SearchResponse } from 'instantsearch.js';
 
 function normalizeSnapshot(html: string) {
-  // JS and React render the default hit as JSON, Vue renders its own
-  // `objectID: …, index: …` placeholder.
-  // @MAJOR: Remove the Vue part once Vue uses the shared default hit.
+  // Every flavor renders the default hit as pretty-printed JSON: compact it
+  // and drop `__position` to keep the snapshots short.
   return (
     commonNormalizeSnapshot(html)
       .replace(/\s*?({.+?})\s*?/gs, (_, captured) => {
@@ -35,13 +34,6 @@ function normalizeSnapshot(html: string) {
       .replace(
         /<button class="ais-InfiniteHits-loadPrevious .*?">.*?<\/button>/,
         ''
-      )
-      // Vue InstantSearch doesn't render defaults hits like the other flavors
-      .replace(
-        /\s{0,}(objectID): (.+?), index: \d\s{0,}/gs,
-        (_, ...captured) => {
-          return `{"objectID":"${captured[1]}"}`;
-        }
       )
       // Vue InstantSearch adds new line between banner and hits
       .replace(/>\s*</g, '><')

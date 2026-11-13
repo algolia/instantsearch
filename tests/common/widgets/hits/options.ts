@@ -17,18 +17,16 @@ import type { TestOptions } from '../../common';
 import type { Hit, SearchResponse } from 'instantsearch.js';
 
 function normalizeSnapshot(html: string) {
-  // JS and React render the default hit as JSON, Vue renders its own
-  // `objectID: …, index: …` placeholder.
-  // @MAJOR: Remove the Vue part once Vue uses the shared default hit.
-  return commonNormalizeSnapshot(html)
-    .replace(/\s*?({.+?})\s*?/gs, (_, captured) => {
+  // Every flavor renders the default hit as pretty-printed JSON: compact it
+  // and drop `__position` to keep the snapshots short.
+  return commonNormalizeSnapshot(html).replace(
+    /\s*?({.+?})\s*?/gs,
+    (_, captured) => {
       return (captured as string)
         .replace(/\s/g, '')
         .replace(/,"__position":\d/, '');
-    })
-    .replace(/\s{0,}(objectID): (.+?), index: \d\s{0,}/gs, (_, ...captured) => {
-      return `{"objectID":"${captured[1]}"}`;
-    });
+    }
+  );
 }
 
 export function createOptionsTests(
