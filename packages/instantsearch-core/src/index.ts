@@ -5,7 +5,6 @@ export type {
   InstantSearchOptions,
   InstantSearchStatus,
 } from './instantsearch';
-export { getInsightsAnonymousUserToken } from './helpers';
 export { AbstractChat } from './lib/ai-lite';
 export {
   DefaultChatTransport,
