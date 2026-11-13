@@ -2,6 +2,29 @@
   "extends": ["../../.oxlintrc.json"],
   "rules": {
     "jest/no-export": "off",
-    "no-lone-blocks": "off"
+    "no-lone-blocks": "off",
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": [
+              "instantsearch.js/**",
+              "!instantsearch.js/package.json",
+              "!instantsearch.js/dist/**"
+            ],
+            "message": "instantsearch.js only exposes its root entry: import from 'instantsearch.js'."
+          },
+          {
+            "group": [
+              "instantsearch-core",
+              "instantsearch-core/*",
+              "!instantsearch-core/internal"
+            ],
+            "message": "instantsearch-core is an implementation detail of the flavors: import from your flavor package ('instantsearch.js', 'react-instantsearch', 'vue-instantsearch'). Test code may use instantsearch-core/internal."
+          }
+        ]
+      }
+    ]
   }
 }

@@ -9,7 +9,7 @@ import { algoliasearch as algoliasearchV5 } from 'algoliasearch-v5';
 import { createMetadataMiddleware } from 'instantsearch-core';
 import { isMetadataEnabled } from 'instantsearch-core';
 
-import instantsearch from '../..';
+import { instantsearch } from '../../index.es';
 import { configure, hits, index, pagination, searchBox } from '../../widgets';
 
 declare global {

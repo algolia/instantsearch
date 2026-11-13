@@ -5,7 +5,7 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 
-import instantsearch from '../../index.es';
+import { instantsearch } from '../../index.es';
 import { searchBox } from '../../widgets';
 
 import type { Router } from '../../index.es';

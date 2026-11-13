@@ -3,9 +3,9 @@ import {
   createControlledCompositionClient,
 } from '@instantsearch/mocks';
 import { waitForResults } from 'instantsearch-core';
+import { connectConfigure, connectSearchBox } from 'instantsearch-core';
 
-import { connectConfigure, connectSearchBox } from '../../connectors';
-import instantsearch from '../../index.es';
+import { instantsearch } from '../../index.es';
 
 describe('waitForResults', () => {
   test('waits for the results from the search instance', async () => {

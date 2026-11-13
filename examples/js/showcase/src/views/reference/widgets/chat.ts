@@ -1,5 +1,4 @@
-import { chatInlineLayout } from 'instantsearch.js/es/templates';
-import { chat as fn } from 'instantsearch.js/es/widgets';
+import { chat as fn, chatInlineLayout } from 'instantsearch.js';
 
 import { renderCarouselHit } from '../../../components/widgets/ProductCard';
 import { SHOWCASE_AGENT_ID } from '../../../constants';

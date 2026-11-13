@@ -6,7 +6,7 @@ import { createOptimisticUiTests } from './optimistic-ui';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { InfiniteHitsWidget } from 'instantsearch.js/es/widgets/infinite-hits/infinite-hits';
+import type { InfiniteHitsWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<InfiniteHitsWidget>[0];
 export type InfiniteHitsWidgetSetup = TestSetup<{

@@ -9,7 +9,7 @@ import {
   serializeWidgetParams,
 } from 'instantsearch-core/internal';
 
-import instantsearch from '../../..';
+import { instantsearch } from '../../../index.es';
 import { hits, index, searchBox } from '../../../widgets';
 
 import type { Widget } from 'instantsearch-core';

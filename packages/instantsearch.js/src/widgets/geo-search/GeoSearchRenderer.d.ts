@@ -6,12 +6,13 @@ import type {
   GeoSearchTemplates,
   GeoSearchWidgetParams,
 } from './geo-search';
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { ComponentCSSClasses } from '../../types';
 import type {
   GeoSearchConnectorParams,
   GeoSearchRenderState,
-} from '../../connectors';
-import type { PreparedTemplateProps } from '../../lib/templating';
-import type { ComponentCSSClasses, Renderer } from '../../types';
+  Renderer,
+} from 'instantsearch-core';
 
 // @TODO: decide whether this should use the "specialized renderer" pattern to separate these options from connector params
 type GeoSearchRendererParams = {

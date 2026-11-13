@@ -8,12 +8,12 @@ import Pit from './Pit';
 import Rheostat from './Rheostat';
 
 import type { HandleProps } from './Rheostat';
-import type { Range } from '../../connectors';
 import type { ComponentCSSClasses } from '../../types';
 import type {
   RangeSliderCssClasses,
   RangeSliderWidgetParams,
 } from '../../widgets/range-slider/range-slider';
+import type { Range } from 'instantsearch-core';
 
 export type RangeSliderComponentCSSClasses =
   ComponentCSSClasses<RangeSliderCssClasses>;

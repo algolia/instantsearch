@@ -3,6 +3,11 @@
 import { type ChatRenderState } from 'instantsearch-core';
 import { createFeedContainer } from 'instantsearch-core';
 import {
+  connectAutocomplete,
+  connectFeeds,
+  connectSearchBox,
+} from 'instantsearch-core';
+import {
   getPromptSuggestionHits,
   isChatBusy,
   isPromptSuggestion,
@@ -36,25 +41,20 @@ import { Fragment, h, render } from 'preact';
 import { useEffect, useId, useMemo, useRef, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
-import {
-  connectAutocomplete,
-  connectFeeds,
-  connectSearchBox,
-} from '../../connectors/index';
 import { Highlight, ReverseHighlight } from '../../helpers/components';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 import configure from '../configure/configure';
 
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template } from '../../types';
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type {
   AutocompleteConnectorParams,
   AutocompleteRenderState,
   AutocompleteWidgetDescription,
   TransformItemsIndicesConfig,
-} from '../../connectors';
-import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template } from '../../types';
-import type { PlainSearchParameters } from 'algoliasearch-helper';
+} from 'instantsearch-core';
 import type {
   BaseHit,
   Hit,

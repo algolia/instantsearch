@@ -5,7 +5,7 @@ import { createLinksTests } from './links';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { RatingMenuWidget } from 'instantsearch.js/es/widgets/rating-menu/rating-menu';
+import type { RatingMenuWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<RatingMenuWidget>[0];
 export type RatingMenuWidgetSetup = TestSetup<{

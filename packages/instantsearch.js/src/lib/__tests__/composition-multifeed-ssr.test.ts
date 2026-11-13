@@ -7,10 +7,10 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { getInitialResults, waitForResults } from 'instantsearch-core';
+import { connectFeeds, connectSearchBox } from 'instantsearch-core';
 import { hydrateSearchClient } from 'instantsearch-core/internal';
 
-import { connectFeeds, connectSearchBox } from '../../connectors';
-import instantsearch from '../../index.es';
+import { instantsearch } from '../../index.es';
 
 const compositionID = 'my-comp';
 

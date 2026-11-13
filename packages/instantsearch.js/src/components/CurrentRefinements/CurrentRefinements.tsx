@@ -4,12 +4,12 @@ import { isSpecialClick, capitalize } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h } from 'preact';
 
+import type { ComponentCSSClasses } from '../../types';
+import type { CurrentRefinementsCSSClasses } from '../../widgets/current-refinements/current-refinements';
 import type {
   CurrentRefinementsConnectorParamsItem,
   CurrentRefinementsConnectorParamsRefinement,
-} from '../../connectors';
-import type { ComponentCSSClasses } from '../../types';
-import type { CurrentRefinementsCSSClasses } from '../../widgets/current-refinements/current-refinements';
+} from 'instantsearch-core';
 
 export type CurrentRefinementsComponentCSSClasses =
   ComponentCSSClasses<CurrentRefinementsCSSClasses>;

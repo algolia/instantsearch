@@ -1,4 +1,4 @@
-import { promptSuggestions as fn } from 'instantsearch.js/es/widgets';
+import { promptSuggestions as fn } from 'instantsearch.js';
 
 import { SHOWCASE_AGENT_ID } from '../../../constants';
 import { defineWidget } from '../types';

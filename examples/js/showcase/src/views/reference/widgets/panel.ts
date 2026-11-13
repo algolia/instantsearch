@@ -1,4 +1,4 @@
-import { panel, refinementList } from 'instantsearch.js/es/widgets';
+import { panel, refinementList } from 'instantsearch.js';
 
 import { defineWidget, deriveNames } from '../types';
 

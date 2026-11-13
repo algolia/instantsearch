@@ -1,4 +1,4 @@
-import { resultCard } from 'instantsearch.js/es/widgets';
+import { resultCard } from 'instantsearch.js';
 
 import { SHOWCASE_AGENT_ID } from '../../constants';
 import { useWidget } from '../../hooks/useWidget';

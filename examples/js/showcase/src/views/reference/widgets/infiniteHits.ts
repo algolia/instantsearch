@@ -1,5 +1,7 @@
-import { createInfiniteHitsSessionStorageCache } from 'instantsearch-core';
-import { infiniteHits as fn } from 'instantsearch.js/es/widgets';
+import {
+  createInfiniteHitsSessionStorageCache,
+  infiniteHits as fn,
+} from 'instantsearch.js';
 
 import { renderProductCard } from '../../../components/widgets/ProductCard';
 import { defineWidget } from '../types';

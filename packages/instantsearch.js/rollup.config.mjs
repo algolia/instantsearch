@@ -1,8 +1,11 @@
 /**
  * Rollup configuration for instantsearch.js builds.
- * - ESM: preserved modules + dedicated entry from index.es.ts
- * - CJS: preserved modules
- * - UMD: bundled for browsers
+ * - ESM: preserved modules, `index.es.ts` is emitted as `es/index.js`
+ * - CJS: preserved modules, `index.es.ts` is emitted as `cjs/index.js`
+ * - UMD: bundled for browsers from index.ts (which pulls in `umd/`)
+ *
+ * `index.ts` and `umd/` only exist for the UMD build: the package root
+ * (`exports["."]`) resolves to `index.es.ts` in both module formats.
  */
 import { existsSync, readFileSync } from 'fs';
 import { dirname, resolve } from 'path';
@@ -25,6 +28,8 @@ const banner = createBanner({
 const isESM = process.env.BUILD_FORMAT === 'esm';
 const isCJS = process.env.BUILD_FORMAT === 'cjs';
 const isUMD = process.env.BUILD_FORMAT === 'umd';
+
+const IGNORED_DIRS = new Set(['__tests__', '__mocks__', 'umd']);
 
 const RESOLVABLE_EXTENSIONS = ['.ts', '.tsx', '.jsx'];
 
@@ -56,43 +61,43 @@ function resolveJsImportsToSource() {
 
 const configs = [];
 
+// `src/index.es.ts` is the package root. It is built along with the other
+// modules and only renamed, so the root and its imports share one copy of the
+// code instead of being bundled apart.
+const entryFileNames = (chunk) =>
+  chunk.name === 'index.es' ? 'index.js' : '[name].js';
+
 if (isESM || (!isESM && !isCJS && !isUMD)) {
-  const esmEntryConfig = createESMConfig({
-    input: 'src/index.es.ts',
+  const esmConfig = createESMConfig({
+    input: collectSourceEntries({
+      exclude: ['index.ts'],
+      ignoredDirs: IGNORED_DIRS,
+    }),
     pkg,
     outputDir: 'es',
+    preserveModules: true,
     plugins: [resolveJsImportsToSource()],
   });
 
-  esmEntryConfig.output = {
-    ...esmEntryConfig.output,
-    entryFileNames: 'index.js',
-  };
-  esmEntryConfig.plugins = esmEntryConfig.plugins.filter(
-    (plugin) => plugin && plugin.name !== 'emit-package-json'
-  );
+  esmConfig.output = { ...esmConfig.output, entryFileNames };
 
-  configs.push(
-    esmEntryConfig,
-    createESMConfig({
-      input: collectSourceEntries({ exclude: ['index.ts', 'index.es.ts'] }),
-      pkg,
-      outputDir: 'es',
-      preserveModules: true,
-      plugins: [resolveJsImportsToSource()],
-    })
-  );
+  configs.push(esmConfig);
 }
 
 if (isCJS || (!isESM && !isCJS && !isUMD)) {
-  configs.push(
-    createCJSConfig({
-      input: collectSourceEntries({ exclude: ['index.es.ts'] }),
-      pkg,
-      outputDir: 'cjs',
-      preserveModules: true,
-    })
-  );
+  const cjsConfig = createCJSConfig({
+    input: collectSourceEntries({
+      exclude: ['index.ts'],
+      ignoredDirs: IGNORED_DIRS,
+    }),
+    pkg,
+    outputDir: 'cjs',
+    preserveModules: true,
+  });
+
+  cjsConfig.output = { ...cjsConfig.output, entryFileNames };
+
+  configs.push(cjsConfig);
 }
 
 if (isUMD || (!isESM && !isCJS && !isUMD)) {

@@ -12,7 +12,7 @@ import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import { TAG_PLACEHOLDER } from 'instantsearch-core/internal';
 import { render as preactRender } from 'preact';
 
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import menuSelect from '../menu-select';
 
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';

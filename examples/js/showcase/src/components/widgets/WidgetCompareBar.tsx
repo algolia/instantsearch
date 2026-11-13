@@ -1,4 +1,4 @@
-import { compareBar } from 'instantsearch.js/es/widgets';
+import { compareBar } from 'instantsearch.js';
 
 import { useWidget } from '../../hooks/useWidget';
 

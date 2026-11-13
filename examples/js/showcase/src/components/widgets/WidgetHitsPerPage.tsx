@@ -1,4 +1,4 @@
-import { hitsPerPage } from 'instantsearch.js/es/widgets';
+import { hitsPerPage } from 'instantsearch.js';
 
 import { useWidget } from '../../hooks/useWidget';
 

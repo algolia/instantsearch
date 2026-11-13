@@ -4,7 +4,7 @@ import { createLinksTests } from './links';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { SortByWidget } from 'instantsearch.js/es/widgets/sort-by/sort-by';
+import type { SortByWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<SortByWidget>[0];
 export type SortByWidgetSetup = TestSetup<{

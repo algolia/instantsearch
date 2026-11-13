@@ -1,4 +1,4 @@
-import { numericMenu } from 'instantsearch.js/es/widgets';
+import { numericMenu } from 'instantsearch.js';
 
 import { useWidget } from '../../hooks/useWidget';
 

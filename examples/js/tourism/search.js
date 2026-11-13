@@ -1,16 +1,15 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import instantsearch from 'instantsearch.js';
 import {
   configure,
+  geoSearch,
+  hits,
+  instantsearch,
+  pagination,
+  rangeSlider,
+  refinementList,
   searchBox,
   stats,
-  hits,
-  pagination,
-  refinementList,
-  rangeSlider,
-  geoSearch,
-} from 'instantsearch.js/es/widgets';
-
+} from 'instantsearch.js';
 import 'instantsearch.css/themes/reset.css';
 
 const search = instantsearch({

@@ -1,5 +1,4 @@
-import { connectClearRefinements } from 'instantsearch.js/es/connectors';
-
+import { connectClearRefinements } from 'instantsearch.js';
 const resultsContainer = document.querySelector('.container-results');
 
 type ClearRefinementsWidgetParams = {

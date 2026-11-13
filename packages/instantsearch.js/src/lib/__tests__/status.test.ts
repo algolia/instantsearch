@@ -4,9 +4,9 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
+import { connectAutocomplete, connectSearchBox } from 'instantsearch-core';
 
-import { connectAutocomplete, connectSearchBox } from '../../connectors';
-import instantsearch from '../../index.es';
+import { instantsearch } from '../../index.es';
 
 import type { InstantSearch } from 'instantsearch-core';
 

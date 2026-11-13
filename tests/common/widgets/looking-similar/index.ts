@@ -4,7 +4,7 @@ import { createLinksTests } from './links';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { LookingSimilarWidget } from 'instantsearch.js/es/widgets/looking-similar/looking-similar';
+import type { LookingSimilarWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<LookingSimilarWidget>[0];
 export type LookingSimilarWidgetSetup = TestSetup<{

@@ -9,7 +9,7 @@ import { createInsightsMiddleware } from 'instantsearch-core';
 import { openChat } from 'instantsearch-core/internal';
 import { warning } from 'instantsearch-core/internal';
 
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import { chatInlineLayout } from '../../../templates';
 import chatTrigger from '../../chat-trigger/chat-trigger';
 import chat from '../chat';

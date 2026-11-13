@@ -1,12 +1,12 @@
 /** @jsx h */
 
+import { connectInfiniteHits } from 'instantsearch-core';
 import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
-import { connectInfiniteHits } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 
@@ -16,15 +16,15 @@ import type {
   InfiniteHitsComponentCSSClasses,
   InfiniteHitsComponentTemplates,
 } from '../../components/InfiniteHits/InfiniteHits';
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template, TemplateWithSendEvent } from '../../types';
+import type { SearchResults } from 'algoliasearch-helper';
 import type {
   InfiniteHitsConnectorParams,
   InfiniteHitsRenderState,
   InfiniteHitsCache,
   InfiniteHitsWidgetDescription,
-} from '../../connectors';
-import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template, TemplateWithSendEvent } from '../../types';
-import type { SearchResults } from 'algoliasearch-helper';
+} from 'instantsearch-core';
 import type { WidgetFactory, Renderer, BaseHit, Hit } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({

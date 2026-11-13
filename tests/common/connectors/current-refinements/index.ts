@@ -3,7 +3,7 @@ import { fakeAct } from '../../common';
 import { createRoutingTests } from './routing';
 
 import type { TestSetup, TestOptions } from '../../common';
-import type { CurrentRefinementsWidget } from 'instantsearch.js/es/widgets/current-refinements/current-refinements';
+import type { CurrentRefinementsWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<CurrentRefinementsWidget>[0];
 export type CurrentRefinementsConnectorSetup = TestSetup<{

@@ -1,6 +1,5 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import instantsearch from 'instantsearch.js';
-import { configure, refinementList } from 'instantsearch.js/es/widgets';
+import { configure, instantsearch, refinementList } from 'instantsearch.js';
 import { useEffect, useRef, useState } from 'preact/hooks';
 
 import { DocsLink, ParamDocsLink } from '../components/DocsLink';
