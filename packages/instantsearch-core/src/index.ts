@@ -8,7 +8,6 @@ export type {
 } from './instantsearch';
 export * from './connectors';
 export {
-  getInsightsAnonymousUserToken,
   getInsightsAnonymousUserTokenInternal,
   ANONYMOUS_TOKEN_COOKIE_KEY,
   getUsageSessionId,
