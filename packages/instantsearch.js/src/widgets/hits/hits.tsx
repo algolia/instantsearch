@@ -1,10 +1,7 @@
 /** @jsx h */
 
 import { connectHits } from 'instantsearch-core';
-import {
-  createDocumentationMessageGenerator,
-  warning,
-} from 'instantsearch-core/internal';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { createHitsComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
@@ -77,16 +74,7 @@ const renderer =
         templateKey="item"
         rootTagName="li"
         rootProps={rootProps}
-        data={{
-          ...hit,
-          get __hitIndex() {
-            warning(
-              false,
-              'The `__hitIndex` property is deprecated. Use the absolute `__position` instead.'
-            );
-            return index;
-          },
-        }}
+        data={hit}
         sendEvent={sendEvent}
       />
     );
@@ -132,12 +120,7 @@ export type HitsTemplates<THit extends NonNullable<object> = BaseHit> =
      *
      * When not provided, each hit is rendered as JSON.
      */
-    item: TemplateWithSendEvent<
-      Hit<THit> & {
-        /** @deprecated the index in the hits array, use __position instead, which is the absolute position */
-        __hitIndex: number;
-      }
-    >;
+    item: TemplateWithSendEvent<Hit<THit>>;
 
     /**
      * Template to use for the banner.
