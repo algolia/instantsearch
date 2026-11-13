@@ -132,6 +132,67 @@ describe('infiniteHits', () => {
       ).toHaveClass('BANNER_LINK');
     });
 
+    test('updates the hits and the "Show more" button in place', async () => {
+      const container = document.body.appendChild(
+        document.createElement('div')
+      );
+      const searchClient = createMockedSearchClient({ nbPages: 3 });
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+
+      search.addWidgets([infiniteHits({ container })]);
+      search.start();
+
+      await wait(0);
+
+      const firstHit = container.querySelector('.ais-InfiniteHits-item');
+      const showMoreButton = container.querySelector<HTMLButtonElement>(
+        '.ais-InfiniteHits-loadMore'
+      )!;
+
+      showMoreButton.focus();
+      userEvent.click(showMoreButton);
+
+      await wait(0);
+
+      expect(container.querySelectorAll('.ais-InfiniteHits-item')).toHaveLength(
+        6
+      );
+      expect(container.querySelector('.ais-InfiniteHits-item')).toBe(firstHit);
+      expect(container.querySelector('.ais-InfiniteHits-loadMore')).toBe(
+        showMoreButton
+      );
+      expect(showMoreButton).toHaveFocus();
+    });
+
+    test('renders the buttons when `transformItems` removes every hit', async () => {
+      const container = document.body.appendChild(
+        document.createElement('div')
+      );
+      const searchClient = createMockedSearchClient({ nbPages: 3 });
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+
+      search.addWidgets([
+        infiniteHits({
+          container,
+          showPrevious: true,
+          transformItems: () => [],
+        }),
+      ]);
+      search.start();
+
+      await wait(0);
+
+      expect(container).not.toHaveTextContent('No results');
+      expect(
+        container.querySelector('.ais-InfiniteHits-loadPrevious')
+      ).toBeInTheDocument();
+      expect(
+        container.querySelector('.ais-InfiniteHits-loadMore')
+      ).toBeInTheDocument();
+    });
+
     type CustomRecord = { somethingSpecial: string };
 
     function createMockedSearchClient(
