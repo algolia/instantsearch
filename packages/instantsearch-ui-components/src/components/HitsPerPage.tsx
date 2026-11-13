@@ -76,6 +76,19 @@ export function createHitsPerPageComponent({
       ...props
     } = userProps;
 
+    // The connector only inserts the blank option when the configured value
+    // is already absent from `items` at init. Routing later to an absent
+    // value leaves no item matching, so supply the blank option here too:
+    // without it the select goes uncontrolled (in React) and keeps displaying
+    // the stale selection.
+    const matchesAnItem =
+      currentValue !== undefined &&
+      items.some((item) => `${item.value}` === `${currentValue}`);
+    const options =
+      matchesAnItem || items.some((item) => item.value === '')
+        ? items
+        : [{ value: '' as const, label: '' }, ...items];
+
     return (
       <Selector
         {...props}
@@ -84,7 +97,7 @@ export function createHitsPerPageComponent({
           select: cx('ais-HitsPerPage-select', classNames.select),
           option: cx('ais-HitsPerPage-option', classNames.option),
         }}
-        options={items}
+        options={options}
         value={currentValue}
         onChange={(value) => {
           // The blank option (`value: ''`) is the connector's sentinel for

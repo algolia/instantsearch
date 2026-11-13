@@ -138,6 +138,21 @@ describe('ToggleRefinement', () => {
       `);
   });
 
+  test('omits the label text element when `labelTextComponent` returns `null`', () => {
+    // The JS flavor's `templates.labelText` owned the
+    // `ais-ToggleRefinement-labelText` span and removed it from the DOM when
+    // the template resolved to `null`.
+    const props = createProps({
+      value: { name: 'free_shipping', isRefined: false, count: null },
+      labelTextComponent: () => null,
+    });
+    const { container } = render(<ToggleRefinement {...props} />);
+    expect(
+      container.querySelector('.ais-ToggleRefinement-labelText')
+    ).toBeNull();
+    expect(container.querySelector('input')).not.toBeNull();
+  });
+
   test('does not spread the `value` prop on the root element', () => {
     const props = createProps({
       value: { name: 'free_shipping', isRefined: false, count: null },
