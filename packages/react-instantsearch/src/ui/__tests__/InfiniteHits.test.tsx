@@ -55,22 +55,18 @@ describe('InfiniteHits', () => {
             <li
               class="ais-InfiniteHits-item"
             >
-              <div
-                style="word-break: break-all;"
-              >
-                {"objectID":"abc","__position":1}
-                …
-              </div>
+              {
+        "objectID": "abc",
+        "__position": 1
+      }
             </li>
             <li
               class="ais-InfiniteHits-item"
             >
-              <div
-                style="word-break: break-all;"
-              >
-                {"objectID":"def","__position":2}
-                …
-              </div>
+              {
+        "objectID": "def",
+        "__position": 2
+      }
             </li>
           </ol>
           <button
@@ -126,22 +122,18 @@ describe('InfiniteHits', () => {
             <li
               class="ais-InfiniteHits-item"
             >
-              <div
-                style="word-break: break-all;"
-              >
-                {"objectID":"abc","__position":1}
-                …
-              </div>
+              {
+        "objectID": "abc",
+        "__position": 1
+      }
             </li>
             <li
               class="ais-InfiniteHits-item"
             >
-              <div
-                style="word-break: break-all;"
-              >
-                {"objectID":"def","__position":2}
-                …
-              </div>
+              {
+        "objectID": "def",
+        "__position": 2
+      }
             </li>
           </ol>
           <button
@@ -189,22 +181,18 @@ describe('InfiniteHits', () => {
             <li
               class="ais-InfiniteHits-item"
             >
-              <div
-                style="word-break: break-all;"
-              >
-                {"objectID":"abc","__position":1}
-                …
-              </div>
+              {
+        "objectID": "abc",
+        "__position": 1
+      }
             </li>
             <li
               class="ais-InfiniteHits-item"
             >
-              <div
-                style="word-break: break-all;"
-              >
-                {"objectID":"def","__position":2}
-                …
-              </div>
+              {
+        "objectID": "def",
+        "__position": 2
+      }
             </li>
           </ol>
           <button
@@ -243,22 +231,18 @@ describe('InfiniteHits', () => {
             <li
               class="ais-InfiniteHits-item"
             >
-              <div
-                style="word-break: break-all;"
-              >
-                {"objectID":"abc","__position":1}
-                …
-              </div>
+              {
+        "objectID": "abc",
+        "__position": 1
+      }
             </li>
             <li
               class="ais-InfiniteHits-item"
             >
-              <div
-                style="word-break: break-all;"
-              >
-                {"objectID":"def","__position":2}
-                …
-              </div>
+              {
+        "objectID": "def",
+        "__position": 2
+      }
             </li>
           </ol>
           <button
@@ -376,22 +360,18 @@ describe('InfiniteHits', () => {
               <li
                 class="ais-InfiniteHits-item"
               >
-                <div
-                  style="word-break: break-all;"
-                >
-                  {"objectID":"abc","__position":1}
-                  …
-                </div>
+                {
+          "objectID": "abc",
+          "__position": 1
+        }
               </li>
               <li
                 class="ais-InfiniteHits-item"
               >
-                <div
-                  style="word-break: break-all;"
-                >
-                  {"objectID":"def","__position":2}
-                  …
-                </div>
+                {
+          "objectID": "def",
+          "__position": 2
+        }
               </li>
             </ol>
             <button
@@ -432,22 +412,18 @@ describe('InfiniteHits', () => {
               <li
                 class="ais-InfiniteHits-item"
               >
-                <div
-                  style="word-break: break-all;"
-                >
-                  {"objectID":"abc","__position":1}
-                  …
-                </div>
+                {
+          "objectID": "abc",
+          "__position": 1
+        }
               </li>
               <li
                 class="ais-InfiniteHits-item"
               >
-                <div
-                  style="word-break: break-all;"
-                >
-                  {"objectID":"def","__position":2}
-                  …
-                </div>
+                {
+          "objectID": "def",
+          "__position": 2
+        }
               </li>
             </ol>
             <button
@@ -574,22 +550,18 @@ describe('InfiniteHits', () => {
             <li
               class="ais-InfiniteHits-item ITEM"
             >
-              <div
-                style="word-break: break-all;"
-              >
-                {"objectID":"abc","__position":1}
-                …
-              </div>
+              {
+        "objectID": "abc",
+        "__position": 1
+      }
             </li>
             <li
               class="ais-InfiniteHits-item ITEM"
             >
-              <div
-                style="word-break: break-all;"
-              >
-                {"objectID":"def","__position":2}
-                …
-              </div>
+              {
+        "objectID": "def",
+        "__position": 2
+      }
             </li>
           </ol>
           <button

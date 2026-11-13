@@ -68,9 +68,8 @@
             :item="item"
             :index="index"
             :send-event="state.sendEvent"
+            >{{ renderDefaultHit(item) }}</slot
           >
-            objectID: {{ item.objectID }}, index: {{ index }}
-          </slot>
         </li>
       </ol>
 
@@ -98,9 +97,18 @@
 
 <script>
 import { connectInfiniteHits } from 'instantsearch-core';
+import { createDefaultHitComponent } from 'instantsearch-ui-components';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
+
+// The shared default hit only renders text, so in this template we render it
+// to a string and interpolate it as the `item` slot fallback.
+const defaultHit = createDefaultHitComponent({
+  createElement: (component, props, ...children) =>
+    component(Object.assign({}, props, { children: children.join('') })),
+  Fragment: ({ children }) => children,
+});
 
 export default {
   name: 'AisInfiniteHits',
@@ -144,6 +152,9 @@ export default {
     },
   },
   methods: {
+    renderDefaultHit(hit) {
+      return defaultHit({ hit });
+    },
     refinePrevious() {
       this.state.showPrevious();
     },
