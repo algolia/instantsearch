@@ -4,3 +4,4 @@ instantsearch.highlight({ attribute: 'name', hit });
 instantsearch.snippet({ attribute: 'name', hit });
 instantsearch.createInfiniteHitsSessionStorageCache();
 instantsearch.insights('init', {});
+instantsearch.getInsightsAnonymousUserToken();
