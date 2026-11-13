@@ -140,7 +140,6 @@ const fixVue3SfcExports = () => ({
 const external = (id) =>
   [
     'algoliasearch-helper',
-    'instantsearch.js',
     'instantsearch-core',
     'instantsearch-ui-components',
     'vue',
@@ -177,12 +176,6 @@ function outputs(vueVersion) {
     },
     plugins: [
       ...basePlugins,
-      createReplacePlugin({
-        mode: 'production',
-        additional: {
-          'instantsearch.js/es': 'instantsearch.js/cjs',
-        },
-      }),
       createTerserPlugin({ sourceMap: false }),
       createPackageJsonPlugin({ type: 'commonjs', sideEffects: false }),
     ],
@@ -200,9 +193,7 @@ function outputs(vueVersion) {
     },
     plugins: [
       ...basePlugins,
-      extensionResolver({
-        modulesToResolve: ['instantsearch.js'],
-      }),
+      extensionResolver(),
       createTerserPlugin({ sourceMap: false }),
       ...(vueVersion === 'vue3' ? [fixVue3SfcExports()] : []),
       createFile(

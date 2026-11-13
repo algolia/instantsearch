@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import InstantSearch from 'vue-instantsearch/vue2/es';
+import InstantSearch from 'vue-instantsearch/vue2';
 
 import './App.css';
 import App from './App.vue';

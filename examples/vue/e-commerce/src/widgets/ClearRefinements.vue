@@ -11,8 +11,7 @@
 </template>
 
 <script>
-import { connectClearRefinements } from 'instantsearch.js/es/connectors';
-import { createWidgetMixin } from 'vue-instantsearch';
+import { connectClearRefinements, createWidgetMixin } from 'vue-instantsearch';
 
 export default {
   name: 'AppClearRefinements',
