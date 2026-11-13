@@ -31,9 +31,12 @@ export type HitsPerPageRenderStateItem = {
   label: string;
 
   /**
-   * Number of hits to display per page.
+   * Number of hits to display per page. The empty string is the value of the
+   * blank option inserted when the configured value is absent from `items`;
+   * refining with it clears `hitsPerPage` (the helper converts it to
+   * `undefined`).
    */
-  value: number;
+  value: number | '';
 
   /**
    * Indicates if it's the current refined value.
@@ -48,9 +51,12 @@ export type HitsPerPageConnectorParamsItem = {
   label: string;
 
   /**
-   * Number of hits to display per page.
+   * Number of hits to display per page. The empty string is the value of the
+   * blank option inserted when the configured value is absent from `items`;
+   * refining with it clears `hitsPerPage` (the helper converts it to
+   * `undefined`).
    */
-  value: number;
+  value: number | '';
 
   /**
    * The default hits per page on first search.
@@ -85,8 +91,10 @@ export type HitsPerPageRenderState = {
 
   /**
    * Sets the number of hits per page and triggers a search.
+   * The empty string clears `hitsPerPage` (it's the value of the blank option
+   * shown when the configured value is absent from `items`).
    */
-  refine: (value: number) => void;
+  refine: (value: number | '') => void;
 
   /**
    * Indicates if search state can be refined.
@@ -159,9 +167,7 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
     };
 
     type ConnectorState = {
-      getRefine: (
-        helper: AlgoliaSearchHelper
-      ) => (value: HitsPerPageConnectorParamsItem['value']) => any;
+      getRefine: (helper: AlgoliaSearchHelper) => (value: number | '') => any;
       createURLFactory: (props: {
         state: SearchParameters;
         createURL: (InitOptions | RenderOptions)['createURL'];
@@ -223,7 +229,7 @@ You may want to add another entry to the \`items\` option with this value.`
 
           items = [
             // The helper will convert the empty string to `undefined`.
-            { value: '' as unknown as number, label: '' },
+            { value: '', label: '' },
             ...items,
           ];
         }
@@ -286,13 +292,16 @@ You may want to add another entry to the \`items\` option with this value.`
 
         return {
           ...uiState,
+          // The empty string never reaches the ui state: refining with it
+          // clears `hitsPerPage`, which returns early above.
           hitsPerPage,
         };
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
         return searchParameters.setQueryParameters({
-          hitsPerPage: uiState.hitsPerPage || defaultItem.value,
+          hitsPerPage:
+            (uiState.hitsPerPage as number) || (defaultItem.value as number),
         });
       },
     };
