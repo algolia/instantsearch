@@ -1,30 +1,30 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import instantsearch from 'instantsearch.js';
-import { connectQueryRules } from 'instantsearch.js/es/connectors';
 import {
   breadcrumb,
-  configure,
+  chat,
+  chatTrigger,
   clearRefinements,
+  compareBar,
+  configure,
+  connectQueryRules,
   currentRefinements,
   dynamicWidgets,
   hierarchicalMenu,
   hits,
   hitsPerPage,
   infiniteHits,
+  instantsearch,
   menu,
   pagination,
   panel,
   poweredBy,
+  queryRuleCustomData,
   rangeInput,
   refinementList,
   searchBox,
   sortBy,
   toggleRefinement,
-  queryRuleCustomData,
-  chat,
-  chatTrigger,
-  compareBar,
-} from 'instantsearch.js/es/widgets';
+} from 'instantsearch.js';
 
 import { createTabsWidget, createRefreshButton } from './helpers';
 

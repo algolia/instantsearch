@@ -1,12 +1,12 @@
 /** @jsx h */
 
+import { connectVoiceSearch } from 'instantsearch-core';
 import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import VoiceSearchComponent from '../../components/VoiceSearch/VoiceSearch';
-import { connectVoiceSearch } from '../../connectors';
 import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
@@ -15,13 +15,13 @@ import type {
   VoiceSearchComponentCSSClasses,
   VoiceSearchComponentTemplates,
 } from '../../components/VoiceSearch/VoiceSearch';
+import type { Template } from '../../types';
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type {
   VoiceSearchConnectorParams,
   VoiceSearchRenderState,
   VoiceSearchWidgetDescription,
-} from '../../connectors';
-import type { Template } from '../../types';
-import type { PlainSearchParameters } from 'algoliasearch-helper';
+} from 'instantsearch-core';
 import type { WidgetFactory, Renderer } from 'instantsearch-core';
 import type { CreateVoiceSearchHelper } from 'instantsearch-core/internal';
 

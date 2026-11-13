@@ -18,6 +18,18 @@
   "module": "es/index.js",
   "jsdelivr": "dist/instantsearch.production.min.js",
   "unpkg": "dist/instantsearch.production.min.js",
+  "exports": {
+    ".": {
+      "types": "./es/index.d.ts",
+      "import": "./es/index.js",
+      "require": "./cjs/index.js"
+    },
+    "./dist/instantsearch.development": "./dist/instantsearch.development.js",
+    "./dist/instantsearch.development.js": "./dist/instantsearch.development.js",
+    "./dist/instantsearch.production.min": "./dist/instantsearch.production.min.js",
+    "./dist/instantsearch.production.min.js": "./dist/instantsearch.production.min.js",
+    "./package.json": "./package.json"
+  },
   "sideEffects": false,
   "files": [
     "dist",
@@ -31,7 +43,7 @@
     "@types/google.maps": "^3.55.12",
     "algoliasearch-helper": "3.30.2",
     "htm": "^3.0.0",
-    "instantsearch-core": "0.1.0",
+    "instantsearch-core": "^0.1.0",
     "instantsearch-ui-components": "0.46.0",
     "preact": "^10.10.0",
     "react": ">= 0.14.0",

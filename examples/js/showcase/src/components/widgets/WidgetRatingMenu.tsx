@@ -1,4 +1,4 @@
-import { ratingMenu } from 'instantsearch.js/es/widgets';
+import { ratingMenu } from 'instantsearch.js';
 
 import { useWidget } from '../../hooks/useWidget';
 

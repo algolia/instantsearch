@@ -1,4 +1,4 @@
-import { chatTrigger } from 'instantsearch.js/es/widgets';
+import { chatTrigger } from 'instantsearch.js';
 
 import { useChatLayout } from '../../context/chatLayout';
 import { useWidget } from '../../hooks/useWidget';

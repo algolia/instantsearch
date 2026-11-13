@@ -1,14 +1,14 @@
 import { createFeedContainer } from 'instantsearch-core';
+import { connectFeeds } from 'instantsearch-core';
 import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { suitComponent as component } from 'instantsearch-core/internal';
 
-import { connectFeeds } from '../../connectors';
 import { getContainerNode } from '../../lib/utils';
 
 import type {
   FeedsConnectorParams,
   FeedsWidgetDescription,
-} from '../../connectors';
+} from 'instantsearch-core';
 import type {
   IndexWidget,
   RenderOptions,

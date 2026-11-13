@@ -10,7 +10,7 @@ import {
 import { wait } from '@instantsearch/testutils/wait';
 import { h } from 'preact';
 
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import queryRuleCustomData from '../query-rule-custom-data';
 
 beforeEach(() => {

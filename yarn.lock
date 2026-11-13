@@ -20881,7 +20881,7 @@ __metadata:
     algoliasearch: "npm:5.1.1"
     algoliasearch-helper: "npm:3.30.2"
     htm: "npm:^3.0.0"
-    instantsearch-core: "npm:0.1.0"
+    instantsearch-core: "npm:^0.1.0"
     instantsearch-ui-components: "npm:0.46.0"
     preact: "npm:^10.10.0"
     react: "npm:>= 0.14.0"

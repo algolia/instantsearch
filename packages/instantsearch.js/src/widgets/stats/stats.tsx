@@ -1,12 +1,12 @@
 /** @jsx h */
 
+import { connectStats } from 'instantsearch-core';
 import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Stats from '../../components/Stats/Stats';
-import { connectStats } from '../../connectors';
 import { formatNumber } from '../../lib/formatNumber';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
@@ -15,13 +15,13 @@ import type {
   StatsComponentCSSClasses,
   StatsComponentTemplates,
 } from '../../components/Stats/Stats';
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template } from '../../types';
 import type {
   StatsConnectorParams,
   StatsRenderState,
   StatsWidgetDescription,
-} from '../../connectors';
-import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template } from '../../types';
+} from 'instantsearch-core';
 import type { Renderer, WidgetFactory } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'stats' });

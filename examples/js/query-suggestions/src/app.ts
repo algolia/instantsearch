@@ -1,18 +1,17 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import instantsearch from 'instantsearch.js';
 import {
-  clearRefinements,
-  configure,
   autocomplete,
   chat,
   chatTrigger,
+  clearRefinements,
+  configure,
   hits,
+  instantsearch,
   pagination,
   panel,
   refinementList,
   stats,
-} from 'instantsearch.js/es/widgets';
-
+} from 'instantsearch.js';
 import 'instantsearch.css/themes/satellite.css';
 
 const searchClient = algoliasearch(

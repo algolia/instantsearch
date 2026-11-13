@@ -12,7 +12,7 @@ import { wait } from '@instantsearch/testutils/wait';
 import { fireEvent, within } from '@testing-library/dom';
 import { h } from 'preact';
 
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import refinementList from '../refinement-list';
 
 beforeEach(() => {

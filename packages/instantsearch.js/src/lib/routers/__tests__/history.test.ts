@@ -3,11 +3,10 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
-import { historyRouter } from 'instantsearch-core';
+import { historyRouter, simpleStateMapping } from 'instantsearch-core';
 import { noop, warning } from 'instantsearch-core/internal';
 
-import instantsearch from '../../..';
-import { simple } from '../../stateMappings';
+import { instantsearch } from '../../../index.es';
 
 import type { UiState } from 'instantsearch-core';
 
@@ -194,7 +193,7 @@ describe('life cycle', () => {
 
     test("doesn't throw if an index history state is null", () => {
       const router = historyRouter<UiState>({ cleanUrlOnDispose: true });
-      const stateMapping = simple();
+      const stateMapping = simpleStateMapping();
 
       router.onUpdate((routeState) => {
         const state = stateMapping.routeToState(routeState);
@@ -249,7 +248,7 @@ describe('life cycle', () => {
           indexName: 'indexName',
           searchClient: createSearchClient(),
           routing: {
-            stateMapping: simple(),
+            stateMapping: simpleStateMapping(),
             router,
           },
         });

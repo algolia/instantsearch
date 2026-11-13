@@ -1,5 +1,4 @@
-import { hits } from 'instantsearch.js/es/widgets';
-
+import { hits } from 'instantsearch.js';
 type Hit = {
   name: string;
   image: string;

@@ -1,5 +1,4 @@
-import { connectSearchBox } from 'instantsearch.js/es/connectors';
-
+import { connectSearchBox } from 'instantsearch.js';
 export function createTabsWidget({ container, tabs }) {
   const containerElement =
     typeof container === 'string'

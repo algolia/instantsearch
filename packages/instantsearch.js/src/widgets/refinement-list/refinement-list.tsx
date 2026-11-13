@@ -1,12 +1,12 @@
 /** @jsx h */
 
+import { connectRefinementList } from 'instantsearch-core';
 import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import RefinementList from '../../components/RefinementList/RefinementList';
-import { connectRefinementList } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 import searchBoxDefaultTemplates from '../search-box/defaultTemplates';
@@ -15,14 +15,14 @@ import defaultTemplates from './defaultTemplates';
 
 import type { RefinementListComponentCSSClasses } from '../../components/RefinementList/RefinementList';
 import type { SearchBoxComponentTemplates } from '../../components/SearchBox/SearchBox';
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template } from '../../types';
+import type { SearchBoxTemplates } from '../search-box/search-box';
 import type {
   RefinementListRenderState,
   RefinementListConnectorParams,
   RefinementListWidgetDescription,
-} from '../../connectors';
-import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template } from '../../types';
-import type { SearchBoxTemplates } from '../search-box/search-box';
+} from 'instantsearch-core';
 import type { WidgetFactory, Renderer } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({

@@ -1,4 +1,4 @@
-import { infiniteHits } from 'instantsearch.js/es/widgets';
+import { infiniteHits } from 'instantsearch.js';
 
 import { useWidget } from '../../hooks/useWidget';
 

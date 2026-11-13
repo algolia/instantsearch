@@ -4,16 +4,16 @@ import { h } from 'preact';
 
 import Template from '../Template/Template';
 
-import type {
-  ToggleRefinementRenderState,
-  ToggleRefinementValue,
-} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { ComponentCSSClasses } from '../../types';
 import type {
   ToggleRefinementTemplates,
   ToggleRefinementCSSClasses,
 } from '../../widgets/toggle-refinement/toggle-refinement';
+import type {
+  ToggleRefinementRenderState,
+  ToggleRefinementValue,
+} from 'instantsearch-core';
 
 export type ToggleRefinementComponentCSSClasses =
   ComponentCSSClasses<ToggleRefinementCSSClasses>;

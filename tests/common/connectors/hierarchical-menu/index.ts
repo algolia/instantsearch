@@ -3,7 +3,7 @@ import { fakeAct } from '../../common';
 import { createRoutingTests } from './routing';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { HierarchicalMenuWidget } from 'instantsearch.js/es/widgets/hierarchical-menu/hierarchical-menu';
+import type { HierarchicalMenuWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<HierarchicalMenuWidget>[0];
 export type HierarchicalMenuConnectorSetup = TestSetup<{

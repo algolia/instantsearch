@@ -1,6 +1,4 @@
-import type { CompareRenderState } from 'instantsearch-core';
-import type { Hit, TemplateParams } from 'instantsearch.js';
-
+import type { CompareRenderState, Hit, TemplateParams } from 'instantsearch.js';
 export function renderProductCard(
   hit: Hit,
   { html, components }: TemplateParams,

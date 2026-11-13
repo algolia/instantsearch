@@ -1,24 +1,24 @@
 /** @jsx h */
 
+import { connectRatingMenu } from 'instantsearch-core';
 import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import RefinementList from '../../components/RefinementList/RefinementList';
-import { connectRatingMenu } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { ComponentCSSClasses, Template } from '../../types';
 import type {
   RatingMenuWidgetDescription,
   RatingMenuConnectorParams,
   RatingMenuRenderState,
-} from '../../connectors';
-import type { PreparedTemplateProps } from '../../lib/templating';
-import type { ComponentCSSClasses, Template } from '../../types';
+} from 'instantsearch-core';
 import type { RendererOptions, WidgetFactory } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'rating-menu' });

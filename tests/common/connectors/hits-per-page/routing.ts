@@ -5,8 +5,7 @@ import {
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
-import { history } from 'instantsearch.js/es/lib/routers';
-import { simple } from 'instantsearch.js/es/lib/stateMappings';
+import { historyRouter, simpleStateMapping } from 'instantsearch.js';
 
 import type { HitsPerPageConnectorSetup } from '.';
 import type { SetupOptions, TestOptions } from '../../common';
@@ -27,12 +26,12 @@ export function createRoutingTests(
       test('Consistently shows the right URL, even before widget is initialized', async () => {
         const delay = 100;
         const margin = 10;
-        const router = history();
+        const router = historyRouter();
         const options: SetupOptions<HitsPerPageConnectorSetup> = {
           instantSearchOptions: {
             indexName: 'indexName',
             routing: {
-              stateMapping: simple(),
+              stateMapping: simpleStateMapping(),
               router,
             },
             searchClient: createSearchClient({

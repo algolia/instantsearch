@@ -1,4 +1,4 @@
-import { refinementList, panel } from 'instantsearch.js/es/widgets';
+import { panel, refinementList } from 'instantsearch.js';
 
 import { isWindowMediumSize } from '../utils';
 

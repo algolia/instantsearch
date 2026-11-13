@@ -5,7 +5,6 @@
 import { createCompositionClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 
-import instantsearch from '../../..';
 import {
   createResultsWithFeeds,
   createParentWithHelper,
@@ -17,6 +16,7 @@ import {
   createDisposeOptions,
   createWidget,
 } from '../../../../../instantsearch-core/test/createWidget';
+import { instantsearch } from '../../../index.es';
 import searchBox from '../../search-box/search-box';
 import feeds from '../feeds';
 

@@ -3,7 +3,7 @@ import { fakeAct } from '../../common';
 import { createRoutingTests } from './routing';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { HitsPerPageWidget } from 'instantsearch.js/es/widgets/hits-per-page/hits-per-page';
+import type { HitsPerPageWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<HitsPerPageWidget>[0];
 export type HitsPerPageConnectorSetup = TestSetup<{

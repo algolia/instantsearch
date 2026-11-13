@@ -5,7 +5,7 @@ import { createOptimisticUiTests } from './optimistic-ui';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { MenuWidget } from 'instantsearch.js/es/widgets/menu/menu';
+import type { MenuWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<MenuWidget>[0];
 export type MenuWidgetSetup = TestSetup<{

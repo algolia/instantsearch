@@ -1,4 +1,4 @@
-import { poweredBy as fn } from 'instantsearch.js/es/widgets';
+import { poweredBy as fn } from 'instantsearch.js';
 
 import { defineWidget } from '../types';
 

@@ -1,5 +1,4 @@
-import { carousel } from 'instantsearch.js/es/templates';
-import { lookingSimilar } from 'instantsearch.js/es/widgets';
+import { carousel, lookingSimilar } from 'instantsearch.js';
 
 import { useWidget } from '../../hooks/useWidget';
 

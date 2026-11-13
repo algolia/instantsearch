@@ -4,8 +4,8 @@ import { createOptionsTests } from './options';
 import { createTemplatesTests } from './templates';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { ResultCardConnectorParams } from 'instantsearch-core';
-import type { ResultCardWidget } from 'instantsearch.js/es/widgets/result-card/result-card';
+import type { ResultCardConnectorParams } from 'instantsearch.js';
+import type { ResultCardWidget } from 'instantsearch.js';
 import type { ResultCardProps } from 'react-instantsearch';
 
 type JSBaseWidgetParams = Parameters<ResultCardWidget>[0];
