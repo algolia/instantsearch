@@ -163,11 +163,21 @@ export default function transform(
   // to the former `AisExperimentalAutocomplete`, so this has to run before the
   // rename below, and a plain rename can't be applied to it.
   // ---------------------------------------------------------------------------
+  // When a file imports both, renaming would create two `AisAutocomplete`
+  // bindings. Keep the local name of the experimental one by aliasing the
+  // import instead, so no usage has to be rewritten.
+  let keepExperimentalAutocompleteName = false;
   root
     .find(j.ImportDeclaration)
     .filter((path) => /vue-instantsearch/.test(String(path.node.source.value)))
     .forEach((path) => {
-      (path.node.specifiers || []).forEach((specifier: any) => {
+      const specifiers: any[] = path.node.specifiers || [];
+      const importsOld = specifiers.some(
+        (specifier) =>
+          specifier.type === 'ImportSpecifier' &&
+          specifier.imported.name === 'AisAutocomplete'
+      );
+      specifiers.forEach((specifier) => {
         if (
           specifier.type === 'ImportSpecifier' &&
           specifier.imported.name === 'AisAutocomplete'
@@ -177,6 +187,20 @@ export default function transform(
             '`AisAutocomplete` (`<ais-autocomplete>`) is now the full autocomplete UI, formerly `AisExperimentalAutocomplete`. The renderless slot wrapper (`refine`, `currentRefinement`, `indices`) was removed: build it with `connectAutocomplete` and `createWidgetMixin` instead. If you meant the new component, there is nothing to change.'
           );
         }
+        if (
+          importsOld &&
+          specifier.type === 'ImportSpecifier' &&
+          specifier.imported.name === 'AisExperimentalAutocomplete' &&
+          (!specifier.local ||
+            specifier.local.name === 'AisExperimentalAutocomplete')
+        ) {
+          path.node.specifiers![path.node.specifiers!.indexOf(specifier)] =
+            j.importSpecifier(
+              j.identifier('AisAutocomplete'),
+              j.identifier('AisExperimentalAutocomplete')
+            );
+          keepExperimentalAutocompleteName = true;
+        }
       });
     });
 
@@ -185,7 +209,14 @@ export default function transform(
   // ---------------------------------------------------------------------------
   const rename = (collection: Collection<any>) =>
     collection
-      .filter((path: any) => path.node.name in IDENTIFIER_RENAMES)
+      .filter(
+        (path: any) =>
+          path.node.name in IDENTIFIER_RENAMES &&
+          !(
+            keepExperimentalAutocompleteName &&
+            path.node.name === 'AisExperimentalAutocomplete'
+          )
+      )
       .forEach((path: any) => {
         path.node.name = IDENTIFIER_RENAMES[path.node.name];
       });
