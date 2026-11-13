@@ -4023,7 +4023,7 @@ exports[`Templates React InstantSearch File content: package.json 1`] = `
     \\"start\\": \\"parcel index.html\\"
   },
   \\"partialDependencies\\": {
-    \\"react-instantsearch\\": \\"7.0.0\\"
+    \\"react-instantsearch\\": \\"8.0.0\\"
   }
 }"
 `;
@@ -4127,7 +4127,7 @@ import {
 
 import { Panel } from './Panel';
 
-import type { Hit } from 'instantsearch.js';
+import type { Hit } from 'react-instantsearch';
 
 import './App.css';
 
@@ -4425,17 +4425,17 @@ exports[`Templates React InstantSearch Native File content: package.json 1`] = `
     \\"web\\": \\"expo start --web\\"
   },
   \\"partialDependencies\\": {
-    \\"react-instantsearch-core\\": \\"7.0.0\\"
+    \\"react-instantsearch-core\\": \\"8.0.0\\"
   }
 }"
 `;
 
 exports[`Templates React InstantSearch Native File content: src/Highlight.tsx 1`] = `
-"import { Hit as AlgoliaHit } from 'instantsearch.js';
-import {
+"import {
   getHighlightedParts,
   getPropertyByPath,
-} from 'instantsearch-core';
+  Hit as AlgoliaHit,
+} from 'react-instantsearch-core';
 import React, { Fragment } from 'react';
 import { StyleSheet, Text } from 'react-native';
 
@@ -4515,9 +4515,9 @@ const styles = StyleSheet.create({
 `;
 
 exports[`Templates React InstantSearch Native File content: src/InfiniteHits.tsx 1`] = `
-"import { Hit as AlgoliaHit } from 'instantsearch.js';
-import React from 'react';
+"import React from 'react';
 import {
+  Hit as AlgoliaHit,
   useInfiniteHits,
   UseInfiniteHitsProps,
 } from 'react-instantsearch-core';
@@ -4651,7 +4651,7 @@ exports[`Templates React InstantSearch Native File content: tsconfig.json 1`] = 
 `;
 
 exports[`Templates React InstantSearch Native File content: types/ProductHit.ts 1`] = `
-"import { Hit as AlgoliaHit } from 'instantsearch.js';
+"import { Hit as AlgoliaHit } from 'react-instantsearch-core';
 
 export type ProductHit = AlgoliaHit<{
   brand: string;

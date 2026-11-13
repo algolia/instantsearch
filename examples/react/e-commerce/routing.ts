@@ -1,8 +1,6 @@
 /* eslint complexity: off */
 
-import { history as historyRouter } from 'instantsearch.js/es/lib/routers';
-
-import type { UiState } from 'instantsearch.js';
+import { historyRouter, type UiState } from 'react-instantsearch';
 
 type RouteState = {
   query?: string;

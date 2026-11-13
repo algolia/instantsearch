@@ -1,4 +1,4 @@
-import { Hit as AlgoliaHit } from 'instantsearch.js';
+import { Hit as AlgoliaHit } from 'react-instantsearch-core';
 
 export type ProductRecord = {
   brand: string;
