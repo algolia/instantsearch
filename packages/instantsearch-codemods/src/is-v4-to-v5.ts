@@ -569,6 +569,14 @@ export default function transform(
       );
     });
 
+  // __hitIndex in hits / infiniteHits item templates
+  root.find(j.Identifier, { name: '__hitIndex' }).forEach((path) => {
+    addComment(
+      enclosingStatement(path),
+      '`__hitIndex` is removed from the `hits` and `infiniteHits` item templates, use `__position` (the position across pages, starting at 1) instead.'
+    );
+  });
+
   // escapeHTML / escapeFacetValues
   ['escapeHTML', 'escapeFacetValues'].forEach((name) =>
     findProperties(root, name).forEach((path: any) =>

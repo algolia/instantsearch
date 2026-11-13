@@ -794,7 +794,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
       `);
     });
 
-    test('provides __hitIndex in the list to each item', async () => {
+    test('provides `__position` but no `__hitIndex` to each item', async () => {
       const container = document.createElement('div');
       const searchBoxContainer = document.createElement('div');
       const searchClient = createMockedSearchClient();
@@ -807,7 +807,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
           container,
           templates: {
             item(hit, { html }) {
-              return html`${hit.__hitIndex.toString()}`;
+              return html`${hit.__position} ${String('__hitIndex' in hit)}`;
             },
           },
         }),
@@ -821,12 +821,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
         [...container.querySelectorAll('.ais-Hits-item')].map(
           (item) => item.textContent
         )
-      ).toMatchInlineSnapshot(`
-        [
-          "0",
-          "1",
-        ]
-      `);
+      ).toEqual(['1 false', '2 false']);
     });
 
     type CustomHit = { name: string; description: string };
@@ -1043,7 +1038,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
         eventType: 'click',
         hits: [
           {
-            __hitIndex: 0,
             __position: 1,
             objectID: '1',
             name: 'Name 1',
@@ -1103,7 +1097,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
         eventType: 'conversion',
         hits: [
           {
-            __hitIndex: 1,
             __position: 2,
             objectID: '2',
             name: 'Name 2',
