@@ -1,14 +1,13 @@
-import { connectRatingMenu } from 'instantsearch-core';
 import React from 'react';
-import { useConnector } from 'react-instantsearch-core';
+import {
+  connectRatingMenu,
+  useConnector,
+  type RatingMenuConnectorParams,
+  type RatingMenuWidgetDescription,
+} from 'react-instantsearch-core';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { Rating } from './Rating';
-
-import type {
-  RatingMenuConnectorParams,
-  RatingMenuWidgetDescription,
-} from 'instantsearch-core';
 
 type RatingMenuProps = {
   attribute: string;
@@ -38,9 +37,7 @@ export function RatingMenu({ attribute, onChange }: RatingMenuProps) {
         >
           <View style={styles.labelRow}>
             <Rating value={item.stars.filter(Boolean).length} />
-            <Text
-              style={[styles.label, item.isRefined && styles.labelRefined]}
-            >
+            <Text style={[styles.label, item.isRefined && styles.labelRefined]}>
               & Up
             </Text>
           </View>

@@ -1,4 +1,4 @@
-import { configure } from 'instantsearch.js/es/widgets';
+import { configure } from 'instantsearch.js';
 import { useEffect } from 'preact/hooks';
 
 import { useSearch } from '../../context/search';

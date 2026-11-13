@@ -4,8 +4,8 @@ import {
   createDocumentationMessageGenerator,
   getObjectType,
   warning,
-} from 'instantsearch-core';
-import { suitComponent as component } from 'instantsearch-core';
+} from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 

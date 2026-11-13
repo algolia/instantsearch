@@ -6,7 +6,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import { findByLabelText, findByRole } from '@testing-library/dom';
 
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import pagination from '../pagination';
 
 beforeEach(() => {

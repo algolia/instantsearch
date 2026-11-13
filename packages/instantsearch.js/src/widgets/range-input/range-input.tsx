@@ -1,12 +1,12 @@
 /** @jsx h */
 
-import { createDocumentationMessageGenerator } from 'instantsearch-core';
-import { suitComponent as component } from 'instantsearch-core';
+import { connectRange } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import RangeInput from '../../components/RangeInput/RangeInput';
-import { connectRange } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 
@@ -14,13 +14,13 @@ import type {
   RangeInputComponentCSSClasses,
   RangeInputComponentTemplates,
 } from '../../components/RangeInput/RangeInput';
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template } from '../../types';
 import type {
   RangeConnectorParams,
   RangeRenderState,
   RangeWidgetDescription,
-} from '../../connectors';
-import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template } from '../../types';
+} from 'instantsearch-core';
 import type { Renderer, WidgetFactory } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'range-input' });

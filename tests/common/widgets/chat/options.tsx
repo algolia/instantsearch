@@ -10,11 +10,8 @@ import {
   Chat,
   GroupedResultsToolType,
   SearchIndexToolType,
-} from 'instantsearch-core';
-import {
-  chatInlineLayout,
-  chatSidePanelLayout,
-} from 'instantsearch.js/es/templates';
+} from 'instantsearch-core/internal';
+import { chatInlineLayout, chatSidePanelLayout } from 'instantsearch.js';
 import { createElement as createPreactElement } from 'preact';
 import React from 'react';
 import { ChatInlineLayout, ChatSidePanelLayout } from 'react-instantsearch';

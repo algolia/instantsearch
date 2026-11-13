@@ -3,7 +3,7 @@
  */
 /** @jsx h */
 import { fireEvent, screen, within } from '@testing-library/dom';
-import { collectChatRecords } from 'instantsearch-core';
+import { collectChatRecords } from 'instantsearch-core/internal';
 import { h, render } from 'preact';
 
 import { createGroupedResultsTool } from '../grouped-results-tool';

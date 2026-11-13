@@ -1806,7 +1806,7 @@ exports[`Templates InstantSearch.js File content: index.html 1`] = `
   </div>
 
   <script src=\\"https://cdn.jsdelivr.net/npm/algoliasearch@4.10.5/dist/algoliasearch-lite.umd.js\\"></script>
-  <script src=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@3.0.0\\"></script>
+  <script src=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@5.0.0/dist/instantsearch.production.min.js\\"></script>
   <script src=\\"./src/app.js\\"></script>
 </body>
 
@@ -1825,7 +1825,7 @@ exports[`Templates InstantSearch.js File content: package.json 1`] = `
     \\"lint:fix\\": \\"eslint . --fix && prettier --write .\\"
   },
   \\"partialDependencies\\": {
-    \\"instantsearch.js\\": \\"3.0.0\\"
+    \\"instantsearch.js\\": \\"5.0.0\\"
   }
 }"
 `;
@@ -2177,7 +2177,7 @@ yarn add @algolia/instantsearch-widget-date-picker
 ### Usage
 
 \`\`\`js
-import instantsearch from 'instantsearch.js';
+import { instantsearch } from 'instantsearch.js';
 import algoliasearch from 'algoliasearch/lite';
 import { datePicker } from '@algolia/instantsearch-widget-date-picker';
 
@@ -2796,8 +2796,7 @@ exports[`Templates InstantSearch.js widget File content: example/index.html 1`] 
 
 exports[`Templates InstantSearch.js widget File content: example/index.ts 1`] = `
 "import algoliasearch from 'algoliasearch/lite';
-import instantsearch from 'instantsearch.js/es';
-import { configure, hits, searchBox } from 'instantsearch.js/es/widgets';
+import { configure, hits, instantsearch, searchBox } from 'instantsearch.js';
 
 import { datePicker } from '../src';
 
@@ -2869,7 +2868,7 @@ exports[`Templates InstantSearch.js widget File content: package.json 1`] = `
     \\"dist\\"
   ],
   \\"peerDependencies\\": {
-    \\"instantsearch.js\\": \\"^4.27.1\\"
+    \\"instantsearch.js\\": \\"^5.0.0\\"
   },
   \\"browserslist\\": [
     \\"last 2 chrome versions\\",
@@ -3071,7 +3070,7 @@ export const createDatePickerRenderer: DatePickerRendererCreator = ({
 `;
 
 exports[`Templates InstantSearch.js widget File content: src/types.ts 1`] = `
-"import type { Renderer, Connector, WidgetFactory } from 'instantsearch.js/es';
+"import type { Renderer, Connector, WidgetFactory } from 'instantsearch.js';
 
 /*
  * Parameters send only to the widget creator function
@@ -4023,7 +4022,7 @@ exports[`Templates React InstantSearch File content: package.json 1`] = `
     \\"start\\": \\"parcel index.html\\"
   },
   \\"partialDependencies\\": {
-    \\"react-instantsearch\\": \\"7.0.0\\"
+    \\"react-instantsearch\\": \\"8.0.0\\"
   }
 }"
 `;
@@ -4127,7 +4126,7 @@ import {
 
 import { Panel } from './Panel';
 
-import type { Hit } from 'instantsearch.js';
+import type { Hit } from 'react-instantsearch';
 
 import './App.css';
 
@@ -4425,17 +4424,17 @@ exports[`Templates React InstantSearch Native File content: package.json 1`] = `
     \\"web\\": \\"expo start --web\\"
   },
   \\"partialDependencies\\": {
-    \\"react-instantsearch-core\\": \\"7.0.0\\"
+    \\"react-instantsearch-core\\": \\"8.0.0\\"
   }
 }"
 `;
 
 exports[`Templates React InstantSearch Native File content: src/Highlight.tsx 1`] = `
-"import { Hit as AlgoliaHit } from 'instantsearch.js';
-import {
+"import {
   getHighlightedParts,
   getPropertyByPath,
-} from 'instantsearch-core';
+  Hit as AlgoliaHit,
+} from 'react-instantsearch-core';
 import React, { Fragment } from 'react';
 import { StyleSheet, Text } from 'react-native';
 
@@ -4515,9 +4514,9 @@ const styles = StyleSheet.create({
 `;
 
 exports[`Templates React InstantSearch Native File content: src/InfiniteHits.tsx 1`] = `
-"import { Hit as AlgoliaHit } from 'instantsearch.js';
-import React from 'react';
+"import React from 'react';
 import {
+  Hit as AlgoliaHit,
   useInfiniteHits,
   UseInfiniteHitsProps,
 } from 'react-instantsearch-core';
@@ -4651,7 +4650,7 @@ exports[`Templates React InstantSearch Native File content: tsconfig.json 1`] = 
 `;
 
 exports[`Templates React InstantSearch Native File content: types/ProductHit.ts 1`] = `
-"import { Hit as AlgoliaHit } from 'instantsearch.js';
+"import { Hit as AlgoliaHit } from 'react-instantsearch-core';
 
 export type ProductHit = AlgoliaHit<{
   brand: string;

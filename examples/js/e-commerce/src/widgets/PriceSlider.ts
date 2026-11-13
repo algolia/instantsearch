@@ -1,4 +1,4 @@
-import { panel, rangeSlider } from 'instantsearch.js/es/widgets';
+import { panel, rangeSlider } from 'instantsearch.js';
 
 import { collapseButtonText } from '../templates/panel';
 

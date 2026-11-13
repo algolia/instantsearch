@@ -33,13 +33,27 @@ const INSTANTSEARCH_MOVED_HELPERS: Record<string, string> = {
   reverseHighlight: 'instantsearch.js/es/helpers',
   snippet: 'instantsearch.js/es/helpers',
   reverseSnippet: 'instantsearch.js/es/helpers',
-  getInsightsAnonymousUserToken: 'instantsearch.js/es/helpers',
   createInfiniteHitsSessionStorageCache: 'instantsearch-core',
 };
 
 /** Exports that no longer exist in v5. */
 const REMOVED_EXPORTS =
-  /^(places|answers|analytics|filterSuggestions|connectAnswers|connectFilterSuggestions|useFilterSuggestions|FilterSuggestions|EXPERIMENTAL_[cC]onfigureRelatedItems|connectConfigureRelatedItems|DisplayResultsToolType|ChatEmptyProps)$/;
+  /^(places|answers|analytics|filterSuggestions|connectAnswers|connectFilterSuggestions|useFilterSuggestions|FilterSuggestions|EXPERIMENTAL_[cC]onfigureRelatedItems|connectConfigureRelatedItems|DisplayResultsToolType|ChatEmptyProps|getInsightsAnonymousUserToken)$/;
+
+/**
+ * Removed exports whose replacement is specific enough to spell out, rather
+ * than pointing at the migration guide. Also matched on `instantsearch.<name>`,
+ * which used to be the way to reach them. Lines after the first are printed as
+ * plain comment lines, so a workaround can read as a list of options.
+ */
+const REMOVED_EXPORT_WORKAROUNDS: Record<string, string> = {
+  getInsightsAnonymousUserToken: [
+    '`getInsightsAnonymousUserToken` is removed. What to do depends on what you did with the token:',
+    '- to get the token onto your searches: delete the call, `createInsightsMiddleware` already sends it as the `userToken` search parameter;',
+    '- to use the value in your own code (send it to your API, log it, etc.): read it from the insights client, which now owns it: `aa("getUserToken", null, (err, userToken) => { ... })`;',
+    '- to get it on the server (SSR), where there is no insights client: read the `_ALGOLIA` cookie (insights only writes it when initialized with `useCookie: true`) and pass it as `userToken` yourself.',
+  ].join('\n'),
+};
 
 const REMOVED_WIDGETS = ['places', 'answers', 'analytics', 'filterSuggestions'];
 
@@ -69,12 +83,18 @@ export default function transform(
   const root = j(addWidgetToAddWidgets(file, api, options));
 
   const addComment = (node: any, text: string) => {
-    const value = ` ${todo(text)}`;
+    // Only the first line carries the `TODO` prefix, the rest read as its body.
+    const values = text
+      .split('\n')
+      .map((line, index) => (index === 0 ? ` ${todo(line)}` : ` ${line}`));
     const comments = node.comments || [];
-    if (comments.some((c: any) => c.value === value)) {
+    if (comments.some((c: any) => c.value === values[0])) {
       return;
     }
-    node.comments = [...comments, j.commentLine(value, true, false)];
+    node.comments = [
+      ...comments,
+      ...values.map((value) => j.commentLine(value, true, false)),
+    ];
   };
 
   const enclosingStatement = (path: any) => {
@@ -319,6 +339,19 @@ export default function transform(
         '`instantsearch.insights` is removed, use `createInsightsMiddleware` and `instantSearchInstance.use(...)`.'
       );
     });
+  // …and the helpers that used to hang off it, which no longer have an import
+  // to point at either.
+  Object.keys(REMOVED_EXPORT_WORKAROUNDS).forEach((name) => {
+    root
+      .find(j.MemberExpression, {
+        object: { type: 'Identifier', name: 'instantsearch' },
+        property: { type: 'Identifier', name },
+        computed: false,
+      })
+      .forEach((path) => {
+        addComment(enclosingStatement(path), REMOVED_EXPORT_WORKAROUNDS[name]);
+      });
+  });
 
   // ---------------------------------------------------------------------------
   // 6. History router: getLocation -> getCurrentURL, location -> currentURL,
@@ -576,16 +609,24 @@ export default function transform(
         (s: any) =>
           s.type === 'ImportSpecifier' && REMOVED_EXPORTS.test(s.imported.name)
       );
-      if (removed.length > 0) {
+      const generic = removed.filter(
+        (s: any) => !(s.imported.name in REMOVED_EXPORT_WORKAROUNDS)
+      );
+      if (generic.length > 0) {
         addComment(
           path.node,
-          `${removed
+          `${generic
             .map((s: any) => `\`${s.imported.name}\``)
             .join(', ')} no longer exist${
-            removed.length === 1 ? 's' : ''
+            generic.length === 1 ? 's' : ''
           } in v5, see the migration guide.`
         );
       }
+      removed
+        .filter((s: any) => s.imported.name in REMOVED_EXPORT_WORKAROUNDS)
+        .forEach((s: any) =>
+          addComment(path.node, REMOVED_EXPORT_WORKAROUNDS[s.imported.name])
+        );
     });
   root
     .find(j.MemberExpression, {

@@ -1,4 +1,4 @@
-import { autocomplete } from 'instantsearch.js/es/widgets';
+import { autocomplete } from 'instantsearch.js';
 
 import { useWidget } from '../../hooks/useWidget';
 

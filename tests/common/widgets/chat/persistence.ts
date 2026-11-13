@@ -2,13 +2,13 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import { within } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
-import { Chat } from 'instantsearch-core';
+import { Chat } from 'instantsearch-core/internal';
 
 import { openChat } from './utils';
 
 import type { ChatWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
-import type { UIMessage } from 'instantsearch-core';
+import type { UIMessage } from 'instantsearch.js';
 
 export function createPersistenceTests(
   setup: ChatWidgetSetup,

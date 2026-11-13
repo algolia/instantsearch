@@ -6,7 +6,7 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import refinementList from '../../refinement-list/refinement-list';
 import currentRefinements from '../current-refinements';
 

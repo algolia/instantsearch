@@ -1,14 +1,27 @@
 /* eslint-disable no-console */
 const assert = require('assert');
 
-const connectors = require('instantsearch.js/cjs/connectors/index.js');
-const helpers = require('instantsearch.js/cjs/helpers/index.js');
-const instantsearch = require('instantsearch.js/cjs/index.js');
-const widgets = require('instantsearch.js/cjs/widgets/index.js');
+const instantsearchModule = require('instantsearch.js');
+
+const {
+  instantsearch,
+  version,
+  searchBox,
+  connectSearchBox,
+  historyRouter,
+  carousel,
+} = instantsearchModule;
 
 assert.ok(instantsearch);
-assert.ok(connectors);
-assert.ok(helpers);
-assert.ok(widgets);
+assert.ok(version);
+assert.ok(searchBox);
+assert.ok(connectSearchBox);
+assert.ok(historyRouter);
+assert.ok(carousel);
+assert.ok(!('default' in instantsearchModule), 'has no default export');
+
+assert.throws(() => require('instantsearch.js/cjs/widgets/index.js'), {
+  code: 'ERR_PACKAGE_PATH_NOT_EXPORTED',
+});
 
 console.log('instantsearch.js is valid CJS');

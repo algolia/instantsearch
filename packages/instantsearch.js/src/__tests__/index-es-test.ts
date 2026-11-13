@@ -1,46 +1,90 @@
-import instantsearch from '../index.es';
+import * as instantsearchModule from '../index.es';
 
-describe('instantsearch()', () => {
-  it('includes a version', () => {
-    expect(instantsearch.version).toMatch(
-      /^(\d+\.)?(\d+\.)?(\*|\d+)(-beta.\d+)?$/
+import type {
+  HitsCSSClasses,
+  HitsTemplates,
+  HitsWidgetParams,
+  SearchBoxCSSClasses,
+  SearchBoxTemplates,
+  SearchBoxWidgetParams,
+  StatsTemplates,
+  QueryRuleCustomDataTemplates,
+} from '../index.es';
+
+const { instantsearch, version } = instantsearchModule;
+
+describe('index.es', () => {
+  it('exports instantsearch() and a version', () => {
+    expect(typeof instantsearch).toBe('function');
+    expect(version).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-beta.\d+)?$/);
+  });
+
+  it('has no default export', () => {
+    expect(instantsearchModule).not.toHaveProperty('default');
+  });
+
+  it('does not attach the namespaces to instantsearch()', () => {
+    expect(Object.keys(instantsearch)).toEqual([]);
+  });
+
+  it('exports widgets, connectors, routers, state mappings and helpers by name', () => {
+    expect(instantsearchModule).toEqual(
+      expect.objectContaining({
+        searchBox: expect.any(Function),
+        index: expect.any(Function),
+        carousel: expect.any(Function),
+        connectSearchBox: expect.any(Function),
+        createInsightsMiddleware: expect.any(Function),
+        createInfiniteHitsSessionStorageCache: expect.any(Function),
+        historyRouter: expect.any(Function),
+        simpleStateMapping: expect.any(Function),
+        singleIndexStateMapping: expect.any(Function),
+      })
     );
   });
 
-  it('does not include the widget functions', () => {
-    // @ts-expect-error
-    expect(() => instantsearch.widgets).toThrowErrorMatchingInlineSnapshot(`
-      "\\"instantsearch.widgets\\" are not available from the ES build.
-
-      To import the widgets:
-
-      import { searchBox } from 'instantsearch.js/es/widgets'"
-    `);
+  it('does not export the short router and state mapping names', () => {
+    expect(instantsearchModule).not.toHaveProperty('history');
+    expect(instantsearchModule).not.toHaveProperty('simple');
+    expect(instantsearchModule).not.toHaveProperty('singleIndex');
   });
 
-  it('does not include the connectors functions', () => {
-    // @ts-expect-error
-    expect(() => instantsearch.connectors).toThrowErrorMatchingInlineSnapshot(`
-      "\\"instantsearch.connectors\\" are not available from the ES build.
-
-      To import the connectors:
-
-      import { connectSearchBox } from 'instantsearch.js/es/connectors'"
-    `);
+  it('does not export the deprecated HTML-string and legacy insights helpers', () => {
+    [
+      'highlight',
+      'snippet',
+      'reverseHighlight',
+      'reverseSnippet',
+      'insights',
+    ].forEach((name) => {
+      expect(instantsearchModule).not.toHaveProperty(name);
+    });
   });
 
-  it('does not include the templates', () => {
-    // @ts-expect-error
-    expect(() => instantsearch.templates).toThrowErrorMatchingInlineSnapshot(`
-      "\\"instantsearch.templates\\" are not available from the ES build.
+  it('exports the public widget types from the root', () => {
+    // Type-only: this fails to compile when a widget type is not exported.
+    const searchBox: SearchBoxWidgetParams = { container: '#search-box' };
+    const searchBoxTemplates: SearchBoxTemplates = {};
+    const searchBoxCSSClasses: SearchBoxCSSClasses = { root: 'root' };
+    const hits: HitsWidgetParams = { container: '#hits' };
+    const hitsTemplates: HitsTemplates = {};
+    const hitsCSSClasses: HitsCSSClasses = { root: 'root' };
+    const statsTemplates: StatsTemplates = {};
+    const queryRuleCustomDataTemplates: QueryRuleCustomDataTemplates = {};
 
-      To import the templates:
-
-      import { carousel } from 'instantsearch.js/es/templates'"
-    `);
+    expect([
+      searchBox,
+      searchBoxTemplates,
+      searchBoxCSSClasses,
+      hits,
+      hitsTemplates,
+      hitsCSSClasses,
+      statsTemplates,
+      queryRuleCustomDataTemplates,
+    ]).toHaveLength(8);
   });
 
-  it('only includes the version', () => {
-    expect(Object.keys(instantsearch)).toEqual(['version']);
+  it('does not leak the widgets internal defaultTemplates', () => {
+    expect(instantsearchModule).not.toHaveProperty('defaultTemplates');
   });
 });

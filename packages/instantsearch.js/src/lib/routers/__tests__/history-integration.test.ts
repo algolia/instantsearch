@@ -4,11 +4,11 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
-import { simple as simpleStateMapping } from 'instantsearch-core';
+import { simpleStateMapping } from 'instantsearch-core';
 import { historyRouter } from 'instantsearch-core';
+import { connectPagination, connectSearchBox } from 'instantsearch-core';
 
-import { connectPagination, connectSearchBox } from '../../../connectors';
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import { index } from '../../../widgets';
 
 import type { Widget } from 'instantsearch-core';

@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@swc/helpers": "0.5.18",
-    "instantsearch-core": "0.1.0"
+    "instantsearch-core": "^0.1.0"
   },
   "devDependencies": {
     "@playwright/test": "1.49.1",

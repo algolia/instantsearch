@@ -1,4 +1,4 @@
-import { pagination } from 'instantsearch.js/es/widgets';
+import { pagination } from 'instantsearch.js';
 
 import { useWidget } from '../../hooks/useWidget';
 

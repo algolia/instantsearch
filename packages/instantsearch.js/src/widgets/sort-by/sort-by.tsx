@@ -1,12 +1,12 @@
 /** @jsx h */
 
-import { createDocumentationMessageGenerator } from 'instantsearch-core';
-import { suitComponent as component } from 'instantsearch-core';
+import { connectSortBy } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Selector from '../../components/Selector/Selector';
-import { connectSortBy } from '../../connectors';
 import { getContainerNode } from '../../lib/utils';
 
 import type { SelectorComponentCSSClasses } from '../../components/Selector/Selector';
@@ -15,7 +15,7 @@ import type {
   SortByItem,
   SortByRenderState,
   SortByWidgetDescription,
-} from '../../connectors';
+} from 'instantsearch-core';
 import type {
   Renderer,
   TransformItems,

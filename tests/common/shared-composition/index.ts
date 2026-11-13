@@ -3,7 +3,7 @@ import { fakeAct } from '../common';
 import { createSearchableTests } from './searchable';
 
 import type { TestOptions, TestSetup } from '../common';
-import type { RefinementListWidget } from 'instantsearch.js/es/widgets/refinement-list/refinement-list';
+import type { RefinementListWidget } from 'instantsearch.js';
 
 export type SharedCompositionSetup = TestSetup<{
   widgetParams: {

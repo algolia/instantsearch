@@ -3,7 +3,6 @@ import { useRef, useEffect } from 'preact/hooks';
 import { useSearch } from '../context/search';
 
 import type { IndexWidget, Widget } from 'instantsearch.js';
-
 type AnyWidget = Widget | IndexWidget;
 
 export function useWidget(

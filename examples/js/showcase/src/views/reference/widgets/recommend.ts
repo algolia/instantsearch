@@ -1,11 +1,11 @@
-import { carousel } from 'instantsearch.js/es/templates';
 import {
+  carousel,
   frequentlyBoughtTogether as fbtFn,
   lookingSimilar as lookingSimilarFn,
   relatedProducts as relatedProductsFn,
   trendingFacets as trendingFacetsFn,
   trendingItems as trendingItemsFn,
-} from 'instantsearch.js/es/widgets';
+} from 'instantsearch.js';
 
 import { renderCarouselHit } from '../../../components/widgets/ProductCard';
 import { defineWidget } from '../types';

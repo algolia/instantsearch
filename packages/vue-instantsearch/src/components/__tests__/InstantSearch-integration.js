@@ -7,7 +7,7 @@ import { createWidgetMixin } from '../../mixins/widget';
 import { createFakeClient } from '../../util/testutils/client';
 import InstantSearch from '../InstantSearch';
 import SearchBox from '../SearchBox.vue';
-jest.unmock('instantsearch-core');
+jest.unmock('instantsearch-core/internal');
 import '../../../test/utils/sortedHtmlSerializer';
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

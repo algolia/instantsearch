@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { isSpecialClick, isEqual } from 'instantsearch-core';
+import { isSpecialClick, isEqual } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, createRef, Component } from 'preact';
 
@@ -9,7 +9,6 @@ import Template from '../Template/Template';
 
 import RefinementListItem from './RefinementListItem';
 
-import type { HierarchicalMenuItem } from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { ComponentCSSClasses, Templates } from '../../types';
 import type { HierarchicalMenuComponentCSSClasses } from '../../widgets/hierarchical-menu/hierarchical-menu';
@@ -19,6 +18,7 @@ import type {
   SearchBoxComponentCSSClasses,
   SearchBoxComponentTemplates,
 } from '../SearchBox/SearchBox';
+import type { HierarchicalMenuItem } from 'instantsearch-core';
 import type { CreateURL } from 'instantsearch-core';
 import type { JSX } from 'preact';
 

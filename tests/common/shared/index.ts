@@ -5,10 +5,10 @@ import { createInteractionTests } from './interaction';
 import { createRoutingTests } from './routing';
 
 import type { TestOptions, TestSetup } from '../common';
-import type { HierarchicalMenuWidget } from 'instantsearch.js/es/widgets/hierarchical-menu/hierarchical-menu';
-import type { HitsWidget } from 'instantsearch.js/es/widgets/hits/hits';
-import type { MenuWidget } from 'instantsearch.js/es/widgets/menu/menu';
-import type { PaginationWidget } from 'instantsearch.js/es/widgets/pagination/pagination';
+import type { HierarchicalMenuWidget } from 'instantsearch.js';
+import type { HitsWidget } from 'instantsearch.js';
+import type { MenuWidget } from 'instantsearch.js';
+import type { PaginationWidget } from 'instantsearch.js';
 
 export type SharedSetup = TestSetup<{
   widgetParams: {

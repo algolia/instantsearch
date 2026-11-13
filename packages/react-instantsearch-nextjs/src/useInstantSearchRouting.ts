@@ -1,4 +1,4 @@
-import { history as historyRouter } from 'instantsearch-core';
+import { historyRouter } from 'instantsearch-core';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useRef, useEffect } from 'react';
 

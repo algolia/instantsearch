@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { omit } from 'instantsearch-core';
+import { omit } from 'instantsearch-core/internal';
 import { createDefaultHitComponent } from 'instantsearch-ui-components';
 import { h, Fragment } from 'preact';
 

@@ -3,7 +3,7 @@ import { fakeAct } from '../../common';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { ToggleRefinementWidget } from 'instantsearch.js/es/widgets/toggle-refinement/toggle-refinement';
+import type { ToggleRefinementWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<ToggleRefinementWidget>[0];
 export type ToggleRefinementWidgetSetup = TestSetup<{

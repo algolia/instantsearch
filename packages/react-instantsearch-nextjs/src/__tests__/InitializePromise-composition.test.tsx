@@ -18,8 +18,8 @@ import { TriggerSearch } from '../TriggerSearch';
 
 import type { PromiseWithState } from 'react-instantsearch-core';
 
-jest.mock('instantsearch-core', () => ({
-  ...jest.requireActual('instantsearch-core'),
+jest.mock('instantsearch-core/internal', () => ({
+  ...jest.requireActual('instantsearch-core/internal'),
   resetWidgetId: jest.fn(),
 }));
 

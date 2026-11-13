@@ -6,7 +6,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import { findAllByRole, findByRole } from '@testing-library/dom';
 
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import hitsPerPage from '../hits-per-page';
 
 describe('hitsPerPage', () => {

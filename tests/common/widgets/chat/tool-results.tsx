@@ -3,15 +3,17 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import { waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
-import { Chat } from 'instantsearch-core';
+import { Chat } from 'instantsearch-core/internal';
 import React from 'react';
 
 import { createDefaultWidgetParams, createVueElement, openChat } from './utils';
 
 import type { ChatWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
-import type { UIMessageChunk } from 'instantsearch-core';
-import type { ClientSideToolTemplateData } from 'instantsearch.js/es/widgets/chat/chat';
+import type {
+  ClientSideToolTemplateData,
+  UIMessageChunk,
+} from 'instantsearch.js';
 
 function chunksToResponse(chunks: UIMessageChunk[]): Response {
   return new Response(

@@ -4,12 +4,14 @@ import {
   connectSearchBox,
   createFeedContainer,
   getHighlightedParts,
+} from 'instantsearch-core';
+import {
   getPromptSuggestionHits,
   isChatBusy,
   isPromptSuggestion,
   noop,
   openChat,
-} from 'instantsearch-core';
+} from 'instantsearch-core/internal';
 import {
   createAutocompleteComponent,
   createAutocompleteDetachedContainerComponent,

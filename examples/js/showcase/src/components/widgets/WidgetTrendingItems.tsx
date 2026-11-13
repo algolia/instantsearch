@@ -1,5 +1,4 @@
-import { carousel } from 'instantsearch.js/es/templates';
-import { trendingItems } from 'instantsearch.js/es/widgets';
+import { carousel, trendingItems } from 'instantsearch.js';
 
 import { useWidget } from '../../hooks/useWidget';
 

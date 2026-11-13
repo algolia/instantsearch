@@ -3,7 +3,7 @@ import { fakeAct } from '../../common';
 import { createRoutingTests } from './routing';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { RefinementListWidget } from 'instantsearch.js/es/widgets/refinement-list/refinement-list';
+import type { RefinementListWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<RefinementListWidget>[0];
 export type RefinementListConnectorSetup = TestSetup<{

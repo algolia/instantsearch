@@ -4,7 +4,7 @@ const teardown = require('../../tasks/node/teardown');
 module.exports = {
   category: 'Web',
   libraryName: 'instantsearch.js',
-  supportedVersion: '>= 3.0.0 < 5.0.0',
+  supportedVersion: '>= 5.0.0 < 6.0.0',
   flags: {
     dynamicWidgets: '>= 4.30',
     insights: '>= 4.55',

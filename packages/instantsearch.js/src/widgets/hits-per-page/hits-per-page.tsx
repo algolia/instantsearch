@@ -1,20 +1,20 @@
 /** @jsx h */
 
-import { createDocumentationMessageGenerator } from 'instantsearch-core';
-import { suitComponent as component } from 'instantsearch-core';
+import { connectHitsPerPage } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Selector from '../../components/Selector/Selector';
-import { connectHitsPerPage } from '../../connectors';
 import { getContainerNode } from '../../lib/utils';
 
+import type { ComponentCSSClasses } from '../../types';
 import type {
   HitsPerPageConnectorParams,
   HitsPerPageRenderState,
   HitsPerPageWidgetDescription,
-} from '../../connectors';
-import type { ComponentCSSClasses } from '../../types';
+} from 'instantsearch-core';
 import type { WidgetFactory } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({

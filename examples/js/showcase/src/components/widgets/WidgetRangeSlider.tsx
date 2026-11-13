@@ -1,4 +1,4 @@
-import { connectRange } from 'instantsearch.js/es/connectors';
+import { connectRange } from 'instantsearch.js';
 import noUiSlider from 'nouislider';
 import { useRef, useEffect } from 'preact/hooks';
 

@@ -20,7 +20,7 @@
  */
 
 import { render, screen, within } from '@testing-library/react';
-import { collectChatRecords } from 'instantsearch-core';
+import { collectChatRecords } from 'instantsearch-core/internal';
 import React from 'react';
 
 import { createComparisonTableTool } from '../ComparisonTableTool';

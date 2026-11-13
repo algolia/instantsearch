@@ -1,6 +1,5 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import instantsearch from 'instantsearch.js';
-import { configure } from 'instantsearch.js/es/widgets';
+import { configure, instantsearch } from 'instantsearch.js';
 import { useRef, useEffect } from 'preact/hooks';
 
 import { WidgetAirportHits } from '../components/widgets/WidgetAirportHits';

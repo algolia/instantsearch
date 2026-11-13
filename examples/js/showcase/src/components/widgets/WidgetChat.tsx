@@ -1,9 +1,9 @@
 import {
+  chat,
   chatInlineLayout,
   chatOverlayLayout,
   chatSidePanelLayout,
-} from 'instantsearch.js/es/templates';
-import { chat } from 'instantsearch.js/es/widgets';
+} from 'instantsearch.js';
 import { useEffect, useRef } from 'preact/hooks';
 
 import { SHOWCASE_AGENT_ID } from '../../constants';
@@ -11,7 +11,7 @@ import { useSearch } from '../../context/search';
 
 import { renderCarouselHit } from './ProductCard';
 
-import type { ChatRenderState } from 'instantsearch-core';
+import type { ChatRenderState } from 'instantsearch.js';
 
 export type ChatLayout = 'inline' | 'overlay' | 'sidePanel';
 

@@ -1,20 +1,20 @@
 /** @jsx h */
 
-import { createDocumentationMessageGenerator } from 'instantsearch-core';
-import { suitComponent as component } from 'instantsearch-core';
+import { connectCurrentRefinements } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import CurrentRefinements from '../../components/CurrentRefinements/CurrentRefinements';
-import { connectCurrentRefinements } from '../../connectors';
 import { getContainerNode } from '../../lib/utils';
 
+import type { ComponentCSSClasses } from '../../types';
 import type {
   CurrentRefinementsConnectorParams,
   CurrentRefinementsRenderState,
   CurrentRefinementsWidgetDescription,
-} from '../../connectors';
-import type { ComponentCSSClasses } from '../../types';
+} from 'instantsearch-core';
 import type { Renderer, WidgetFactory } from 'instantsearch-core';
 
 export type CurrentRefinementsCSSClasses = Partial<{

@@ -1,5 +1,4 @@
-import { currentRefinements } from 'instantsearch.js/es/widgets';
-
+import { currentRefinements } from 'instantsearch.js';
 export const createSelectedTopics = ({ container }: { container: string }) =>
   currentRefinements({
     container,

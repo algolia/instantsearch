@@ -6,8 +6,9 @@ import { createAlgoliaSearchClient } from '@instantsearch/mocks';
 import { createInstantSearchSpy, wait } from '@instantsearch/testutils';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { history } from 'instantsearch-core';
-import { simple, TAG_PLACEHOLDER } from 'instantsearch-core';
+import { historyRouter as history } from 'instantsearch-core';
+import { simpleStateMapping as simple } from 'instantsearch-core';
+import { TAG_PLACEHOLDER } from 'instantsearch-core/internal';
 import React, { StrictMode, Suspense, version as ReactVersion } from 'react';
 import { SearchBox } from 'react-instantsearch';
 

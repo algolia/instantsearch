@@ -3,7 +3,7 @@ import { fakeAct } from '../../common';
 import { createRoutingTests } from './routing';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { BreadcrumbWidget } from 'instantsearch.js/es/widgets/breadcrumb/breadcrumb';
+import type { BreadcrumbWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<BreadcrumbWidget>[0];
 export type BreadcrumbConnectorSetup = TestSetup<{

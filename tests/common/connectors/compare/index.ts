@@ -3,7 +3,7 @@ import { fakeAct, skippableDescribe } from '../../common';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { CompareConnectorParams, CompareItem } from 'instantsearch-core';
+import type { CompareConnectorParams, CompareItem } from 'instantsearch.js';
 
 /**
  * Setup-only params, not forwarded to the connector:

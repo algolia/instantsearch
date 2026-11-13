@@ -3,7 +3,8 @@
   "ignorePatterns": [
     ".yarn/**",
     "packages/create-instantsearch-app/src/templates/**",
-    "packages/instantsearch-codemods/__testfixtures__/**"
+    "packages/instantsearch-codemods/__testfixtures__/**",
+    "packages/instantsearch.js/scripts/transforms/__testfixtures__/**"
   ],
   "categories": {
     "correctness": "off",
@@ -144,8 +145,16 @@
     "no-restricted-imports": [
       "error",
       {
-        "paths": ["instantsearch.js/es"],
-        "patterns": ["instantsearch.js/cjs/*"]
+        "patterns": [
+          {
+            "group": [
+              "instantsearch.js/**",
+              "!instantsearch.js/package.json",
+              "!instantsearch.js/dist/**"
+            ],
+            "message": "instantsearch.js only exposes its root entry: import from 'instantsearch.js'."
+          }
+        ]
       }
     ],
     "instantsearch/no-default-props-assignment": "error"
@@ -224,6 +233,43 @@
       }
     },
     {
+      "files": ["packages/react-instantsearch*/**/*"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["instantsearch.js", "instantsearch.js/*"],
+                "message": "React packages must not depend on instantsearch.js. Import from 'instantsearch-core' (or 'instantsearch-core/internal') instead."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["examples/react/**/*"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "instantsearch.js",
+                  "instantsearch.js/*",
+                  "instantsearch-core",
+                  "instantsearch-core/*"
+                ],
+                "message": "Import from 'react-instantsearch' (or 'react-instantsearch-core' in React Native) instead."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
       "files": ["packages/*/test/module/**/*.cjs"],
       "rules": {
         "import/extensions": "off"
@@ -282,6 +328,34 @@
         "jest/unbound-method": "off",
         "react-hooks/exhaustive-deps": "off",
         "react-hooks/rules-of-hooks": "off"
+      }
+    },
+    {
+      "files": [
+        "tests/mocks/**/*",
+        "tests/e2e/**/*",
+        "tests/versions/**/*",
+        "tests/umd.test.ts"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "instantsearch.js/**",
+                  "!instantsearch.js/package.json"
+                ],
+                "message": "instantsearch.js only exposes its root entry: import from 'instantsearch.js'."
+              },
+              {
+                "group": ["instantsearch-core/internal"],
+                "message": "instantsearch-core/internal is for first-party packages (packages/*): import from your flavor package instead."
+              }
+            ]
+          }
+        ]
       }
     },
     {

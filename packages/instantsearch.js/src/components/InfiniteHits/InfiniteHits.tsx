@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { warning } from 'instantsearch-core';
+import { warning } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h } from 'preact';
 

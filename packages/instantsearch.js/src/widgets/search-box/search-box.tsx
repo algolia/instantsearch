@@ -1,13 +1,13 @@
 /** @jsx h */
 
-import { isChatBusy, openChat } from 'instantsearch-core';
-import { createDocumentationMessageGenerator } from 'instantsearch-core';
-import { suitComponent as component } from 'instantsearch-core';
+import { connectSearchBox } from 'instantsearch-core';
+import { isChatBusy, openChat } from 'instantsearch-core/internal';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import SearchBox from '../../components/SearchBox/SearchBox';
-import { connectSearchBox } from '../../connectors';
 import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
@@ -16,12 +16,12 @@ import type {
   SearchBoxComponentCSSClasses,
   SearchBoxComponentTemplates,
 } from '../../components/SearchBox/SearchBox';
+import type { Template } from '../../types';
 import type {
   SearchBoxConnectorParams,
   SearchBoxRenderState,
   SearchBoxWidgetDescription,
-} from '../../connectors';
-import type { Template } from '../../types';
+} from 'instantsearch-core';
 import type { WidgetFactory, RendererOptions } from 'instantsearch-core';
 import type { ChatRenderState } from 'instantsearch-core';
 

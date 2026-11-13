@@ -2,7 +2,7 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { resolveSearchParameters } from 'instantsearch-core';
+import { resolveSearchParameters } from 'instantsearch-core/internal';
 
 import { createIndexInitOptions } from '../../../../../instantsearch-core/test/createWidget';
 import { index } from '../../../widgets';

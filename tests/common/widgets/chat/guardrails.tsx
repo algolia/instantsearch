@@ -1,13 +1,13 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
-import { Chat } from 'instantsearch-core';
+import { Chat } from 'instantsearch-core/internal';
 
 import { createDefaultWidgetParams, openChat } from './utils';
 
 import type { ChatWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
-import type { UIMessageChunk } from 'instantsearch-core';
+import type { UIMessageChunk } from 'instantsearch.js';
 
 function chunksToStream(
   chunks: UIMessageChunk[]

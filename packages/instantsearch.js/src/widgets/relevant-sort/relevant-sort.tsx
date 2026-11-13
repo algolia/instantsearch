@@ -1,12 +1,12 @@
 /** @jsx h */
 
-import { createDocumentationMessageGenerator } from 'instantsearch-core';
-import { suitComponent as component } from 'instantsearch-core';
+import { connectRelevantSort } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import RelevantSort from '../../components/RelevantSort/RelevantSort';
-import { connectRelevantSort } from '../../connectors';
 import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
@@ -15,13 +15,13 @@ import type {
   RelevantSortComponentCSSClasses,
   RelevantSortComponentTemplates,
 } from '../../components/RelevantSort/RelevantSort';
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template } from '../../types';
 import type {
   RelevantSortConnectorParams,
   RelevantSortRenderState,
   RelevantSortWidgetDescription,
-} from '../../connectors';
-import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template } from '../../types';
+} from 'instantsearch-core';
 import type { WidgetFactory } from 'instantsearch-core';
 
 export type RelevantSortCSSClasses = Partial<{

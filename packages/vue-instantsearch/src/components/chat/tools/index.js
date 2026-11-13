@@ -7,7 +7,7 @@ import {
   RecommendToolType,
   SearchIndexToolType,
   shouldSearchToolRenderResults,
-} from 'instantsearch-core';
+} from 'instantsearch-core/internal';
 
 import { createCompareProductsTool } from './CompareProductsTool';
 import { createGroupedResultsTool } from './GroupedResultsTool';
