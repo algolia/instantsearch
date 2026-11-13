@@ -1,5 +1,3 @@
-import { history } from 'instantsearch.js/es/lib/routers';
-import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import React from 'react';
 import {
   Configure,
@@ -11,6 +9,8 @@ import {
   Pagination,
   RefinementList,
   SearchBox,
+  historyRouter,
+  simpleStateMapping,
 } from 'react-instantsearch';
 
 import { searchClient } from './searchClient';
@@ -26,8 +26,8 @@ function App({ serverState, location }) {
         indexName="instant_search"
         searchClient={searchClient}
         routing={{
-          stateMapping: simple(),
-          router: history({
+          stateMapping: simpleStateMapping(),
+          router: historyRouter({
             cleanUrlOnDispose: false,
             getCurrentURL() {
               if (typeof window === 'undefined') {

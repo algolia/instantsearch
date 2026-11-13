@@ -1,7 +1,13 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useRef, useState } from 'react';
-import { Configure, InstantSearch, useSearchBox } from 'react-instantsearch-core';
+import {
+  Configure,
+  InstantSearch,
+  useSearchBox,
+  type Router,
+  type UiState,
+} from 'react-instantsearch-core';
 import {
   ActivityIndicator,
   FlatList,
@@ -33,8 +39,6 @@ import { SortBy } from './src/SortBy';
 import { Stats } from './src/Stats';
 import { Suggestions } from './src/Suggestions';
 import { ProductHit } from './types/ProductHit';
-
-import type { Router, UiState } from 'instantsearch.js';
 
 const USER_TOKEN = 'react-native-demo-user';
 

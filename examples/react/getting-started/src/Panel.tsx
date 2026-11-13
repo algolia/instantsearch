@@ -1,7 +1,5 @@
 import React from 'react';
-import { useInstantSearch } from 'react-instantsearch';
-
-import type { IndexRenderState } from 'instantsearch.js';
+import { useInstantSearch, type IndexRenderState } from 'react-instantsearch';
 
 type PanelProps = React.PropsWithChildren<{
   header: string;
