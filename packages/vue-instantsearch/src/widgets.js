@@ -10,7 +10,7 @@ export { default as AisHitsPerPage } from './components/HitsPerPage.vue';
 export { default as AisIndex } from './components/Index';
 export { default as AisInstantSearch } from './components/InstantSearch';
 export { default as AisInstantSearchSsr } from './components/InstantSearchSsr';
-export { default as AisInfiniteHits } from './components/InfiniteHits.vue';
+export { default as AisInfiniteHits } from './components/InfiniteHits';
 export { default as AisMenu } from './components/Menu.vue';
 export { default as AisMenuSelect } from './components/MenuSelect.vue';
 export { default as AisNumericMenu } from './components/NumericMenu.vue';

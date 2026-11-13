@@ -4,7 +4,7 @@
 
 import { mount } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
-import InfiniteHits from '../InfiniteHits.vue';
+import InfiniteHits from '../InfiniteHits';
 import '../../../test/utils/sortedHtmlSerializer';
 
 jest.mock('../../mixins/widget');
@@ -157,6 +157,78 @@ it('does not render a banner when showBanner is false', () => {
   });
 
   expect(wrapper.html()).toMatchSnapshot();
+});
+
+it('renders the "Show previous" button next to the default slot', async () => {
+  const showPrevious = jest.fn();
+  __setState({
+    ...defaultState,
+    showPrevious,
+  });
+
+  const wrapper = mount({
+    components: { InfiniteHits },
+    template: `
+      <InfiniteHits :show-previous="true">
+        <template v-slot="{ items }">
+          <p class="custom">{{ items.length }} items</p>
+        </template>
+      </InfiniteHits>
+    `,
+  });
+
+  const root = wrapper.find('.ais-InfiniteHits').element;
+  expect(root.children).toHaveLength(2);
+  expect(root.firstElementChild).toHaveClass('ais-InfiniteHits-loadPrevious');
+  expect(root.firstElementChild).toHaveTextContent('Show previous results');
+  expect(root.lastElementChild).toHaveTextContent('5 items');
+
+  await wrapper.find('.ais-InfiniteHits-loadPrevious').trigger('click');
+  expect(showPrevious).toHaveBeenCalledTimes(1);
+});
+
+it('renders the loadPrevious and loadMore slots in place of the buttons', async () => {
+  const showPrevious = jest.fn();
+  const showMore = jest.fn();
+  __setState({
+    ...defaultState,
+    isFirstPage: true,
+    isLastPage: true,
+    showPrevious,
+    showMore,
+  });
+
+  const wrapper = mount({
+    components: { InfiniteHits },
+    template: `
+      <InfiniteHits :show-previous="true">
+        <template v-slot:loadPrevious="{ refinePrevious, page, isFirstPage }">
+          <button class="previous" @click="refinePrevious">
+            {{ page }} {{ isFirstPage }}
+          </button>
+        </template>
+        <template v-slot:loadMore="{ refineNext, page, isLastPage }">
+          <button class="next" @click="refineNext">
+            {{ page }} {{ isLastPage }}
+          </button>
+        </template>
+      </InfiniteHits>
+    `,
+  });
+
+  const root = wrapper.find('.ais-InfiniteHits').element;
+  expect(root.firstElementChild).toHaveClass('previous');
+  expect(root.firstElementChild).toHaveTextContent('0 true');
+  expect(root.lastElementChild).toHaveClass('next');
+  expect(root.lastElementChild).toHaveTextContent('0 true');
+  expect(wrapper.findAll('.ais-InfiniteHits-item')).toHaveLength(5);
+  expect(wrapper.find('.ais-InfiniteHits-loadPrevious').exists()).toBe(false);
+  expect(wrapper.find('.ais-InfiniteHits-loadMore').exists()).toBe(false);
+
+  await wrapper.find('.previous').trigger('click');
+  await wrapper.find('.next').trigger('click');
+  expect(showPrevious).toHaveBeenCalledTimes(1);
+  expect(showMore).toHaveBeenCalledTimes(1);
 });
 
 it('exposes send-event method for insights middleware', async () => {
