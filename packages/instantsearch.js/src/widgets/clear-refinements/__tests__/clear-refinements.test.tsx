@@ -101,37 +101,39 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-ClearRefinements"
-  >
-    <button
-      class="ais-ClearRefinements-button"
-    >
-      Clear refinements
-    </button>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-ClearRefinements"
+          >
+            <button
+              class="ais-ClearRefinements-button"
+              type="button"
+            >
+              Clear refinements
+            </button>
+          </div>
+        </div>
+      `);
 
       fireEvent.click(within(container).getByRole('button'));
 
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-ClearRefinements"
-  >
-    <button
-      class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
-      disabled=""
-    >
-      Clear refinements
-    </button>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-ClearRefinements"
+          >
+            <button
+              class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
+              disabled=""
+              type="button"
+            >
+              Clear refinements
+            </button>
+          </div>
+        </div>
+      `);
     });
 
     test('renders with templates using `html`', async () => {
@@ -172,41 +174,43 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-ClearRefinements"
-  >
-    <button
-      class="ais-ClearRefinements-button"
-    >
-      <span>
-        Clear refinements
-      </span>
-    </button>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-ClearRefinements"
+          >
+            <button
+              class="ais-ClearRefinements-button"
+              type="button"
+            >
+              <span>
+                Clear refinements
+              </span>
+            </button>
+          </div>
+        </div>
+      `);
 
       fireEvent.click(within(container).getByRole('button'));
 
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-ClearRefinements"
-  >
-    <button
-      class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
-      disabled=""
-    >
-      <span>
-        No refinements
-      </span>
-    </button>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-ClearRefinements"
+          >
+            <button
+              class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
+              disabled=""
+              type="button"
+            >
+              <span>
+                No refinements
+              </span>
+            </button>
+          </div>
+        </div>
+      `);
     });
 
     test('renders with templates using JSX', async () => {
@@ -249,41 +253,43 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-ClearRefinements"
-  >
-    <button
-      class="ais-ClearRefinements-button"
-    >
-      <span>
-        Clear refinements
-      </span>
-    </button>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-ClearRefinements"
+          >
+            <button
+              class="ais-ClearRefinements-button"
+              type="button"
+            >
+              <span>
+                Clear refinements
+              </span>
+            </button>
+          </div>
+        </div>
+      `);
 
       fireEvent.click(within(container).getByRole('button'));
 
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-ClearRefinements"
-  >
-    <button
-      class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
-      disabled=""
-    >
-      <span>
-        No refinements
-      </span>
-    </button>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-ClearRefinements"
+          >
+            <button
+              class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
+              disabled=""
+              type="button"
+            >
+              <span>
+                No refinements
+              </span>
+            </button>
+          </div>
+        </div>
+      `);
     });
   });
 });
