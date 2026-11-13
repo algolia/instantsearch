@@ -1,125 +1,29 @@
-import { cx } from 'instantsearch-ui-components';
-import React from 'react';
+import { createCurrentRefinementsComponent } from 'instantsearch-ui-components';
+import React, { createElement, Fragment } from 'react';
 
-import { capitalize, isModifierClick } from './lib';
+import type {
+  CurrentRefinementsProps as CurrentRefinementsUiComponentProps,
+  Pragma,
+} from 'instantsearch-ui-components';
 
-import type { CurrentRefinementsConnectorParamsItem } from 'instantsearch-core';
+export type {
+  CurrentRefinementsClassNames,
+  CurrentRefinementsItem,
+  CurrentRefinementsRefinement,
+} from 'instantsearch-ui-components';
 
-export type CurrentRefinementsProps = React.ComponentProps<'div'> & {
-  classNames?: Partial<CurrentRefinementsClassNames>;
-  items?: Array<
-    Pick<
-      CurrentRefinementsConnectorParamsItem,
-      'label' | 'refinements' | 'refine'
-    > &
-      Record<string, unknown>
-  >;
-  canRefine?: boolean;
-};
+// The shared props resolve the root element's props through the global `JSX`
+// namespace, which React 19 no longer populates (`React.JSX` moved out of it),
+// so merge React's native `div` props back in — minus the props replaced by
+// the widget's own callbacks.
+export type CurrentRefinementsProps = CurrentRefinementsUiComponentProps &
+  Omit<React.ComponentProps<'div'>, keyof CurrentRefinementsUiComponentProps>;
 
-export type CurrentRefinementsClassNames = {
-  /**
-   * Class names to apply to the root element
-   */
-  root: string;
-  /**
-   * Class names to apply to the root element when there are no refinements possible
-   */
-  noRefinementRoot: string;
-  /**
-   * Class names to apply to the list element
-   */
-  list: string;
-  /**
-   * Class names to apply to each refinement
-   */
-  item: string;
-  /**
-   * Class names to apply to the label of each refinement
-   */
-  label: string;
-  /**
-   * Class names to apply to the container of each refinement's value
-   */
-  category: string;
-  /**
-   * Class names to apply to the text element of each refinement's value
-   */
-  categoryLabel: string;
-  /**
-   * Class names to apply to the each refinement's delete button
-   */
-  delete: string;
-};
+const CurrentRefinementsUiComponent = createCurrentRefinementsComponent({
+  createElement: createElement as Pragma,
+  Fragment,
+});
 
-export function CurrentRefinements({
-  classNames = {},
-  items = [],
-  canRefine = false,
-  ...props
-}: CurrentRefinementsProps) {
-  return (
-    <div
-      {...props}
-      className={cx(
-        'ais-CurrentRefinements',
-        classNames.root,
-        !canRefine &&
-          cx(
-            'ais-CurrentRefinements--noRefinement',
-            classNames.noRefinementRoot
-          ),
-        props.className
-      )}
-    >
-      <ul className={cx('ais-CurrentRefinements-list', classNames.list)}>
-        {items.map((item) => (
-          <li
-            key={[item.indexName, item.label].join('/')}
-            className={cx('ais-CurrentRefinements-item', classNames.item)}
-          >
-            <span
-              className={cx('ais-CurrentRefinements-label', classNames.label)}
-            >
-              {capitalize(item.label)}:{' '}
-            </span>
-            {item.refinements.map((refinement) => (
-              <span
-                key={refinement.label}
-                className={cx(
-                  'ais-CurrentRefinements-category',
-                  classNames.category
-                )}
-              >
-                <span
-                  className={cx(
-                    'ais-CurrentRefinements-categoryLabel',
-                    classNames.categoryLabel
-                  )}
-                >
-                  {refinement.label}
-                </span>
-                <button
-                  type="button"
-                  onClick={(event) => {
-                    if (isModifierClick(event)) {
-                      return;
-                    }
-
-                    item.refine(refinement);
-                  }}
-                  className={cx(
-                    'ais-CurrentRefinements-delete',
-                    classNames.delete
-                  )}
-                >
-                  ✕
-                </button>
-              </span>
-            ))}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+export function CurrentRefinements(props: CurrentRefinementsProps) {
+  return <CurrentRefinementsUiComponent {...props} />;
 }

@@ -17,6 +17,7 @@ function createProps(
   props?: Partial<ClearRefinementsProps>
 ): ClearRefinementsProps {
   return {
+    canRefine: true,
     translations: {
       resetButtonText: 'Clear refinements',
     },
@@ -36,6 +37,7 @@ describe('ClearRefinements', () => {
         >
           <button
             class="ais-ClearRefinements-button"
+            type="button"
           >
             Clear refinements
           </button>
@@ -59,6 +61,7 @@ describe('ClearRefinements', () => {
         >
           <button
             class="ais-ClearRefinements-button"
+            type="button"
           >
             Reset filters
           </button>
@@ -83,11 +86,11 @@ describe('ClearRefinements', () => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
-  test('disables the button', () => {
-    const props = createProps({});
+  test('disables the button when there are no refinements', () => {
+    const props = createProps({ canRefine: false });
     const onClick = jest.fn();
     const { container } = render(
-      <ClearRefinements {...props} onClick={onClick} disabled />
+      <ClearRefinements {...props} onClick={onClick} />
     );
 
     const button = container.querySelector('.ais-ClearRefinements-button');
@@ -106,7 +109,7 @@ describe('ClearRefinements', () => {
 
   test('accepts custom class names', () => {
     const props = createProps({
-      disabled: true,
+      canRefine: false,
       className: 'MyCustomClearRefinements',
       classNames: {
         root: 'ROOT',
@@ -124,6 +127,7 @@ describe('ClearRefinements', () => {
           <button
             class="ais-ClearRefinements-button BUTTON ais-ClearRefinements-button--disabled DISABLEDBUTTON"
             disabled=""
+            type="button"
           >
             Clear refinements
           </button>

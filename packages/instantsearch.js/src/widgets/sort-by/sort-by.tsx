@@ -1,15 +1,12 @@
 /** @jsx h */
 
 import { createDocumentationMessageGenerator } from 'instantsearch-core';
-import { suitComponent as component } from 'instantsearch-core';
-import { cx } from 'instantsearch-ui-components';
-import { h, render } from 'preact';
+import { createSortByComponent } from 'instantsearch-ui-components';
+import { Fragment, h, render } from 'preact';
 
-import Selector from '../../components/Selector/Selector';
 import { connectSortBy } from '../../connectors';
 import { getContainerNode } from '../../lib/utils';
 
-import type { SelectorComponentCSSClasses } from '../../components/Selector/Selector';
 import type {
   SortByConnectorParams,
   SortByItem,
@@ -23,7 +20,8 @@ import type {
 } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'sort-by' });
-const suit = component('SortBy');
+
+const SortBy = createSortByComponent({ createElement: h, Fragment });
 
 export type SortByWidgetCssClasses = Partial<{
   /**
@@ -101,10 +99,10 @@ export type SortByWidget = WidgetFactory<
 const renderer =
   ({
     containerNode,
-    cssClasses,
+    classNames,
   }: {
     containerNode: HTMLElement;
-    cssClasses: SelectorComponentCSSClasses;
+    classNames: SortByWidgetCssClasses;
   }): Renderer<SortByRenderState, SortByWidgetParams> =>
   ({ currentRefinement, options, refine }, isFirstRendering) => {
     if (isFirstRendering) {
@@ -112,15 +110,12 @@ const renderer =
     }
 
     render(
-      <div className={cssClasses.root}>
-        <Selector
-          cssClasses={cssClasses}
-          currentValue={currentRefinement}
-          options={options}
-          setValue={refine}
-          ariaLabel="Sort results by"
-        />
-      </div>,
+      <SortBy
+        items={options}
+        value={currentRefinement}
+        onChange={refine}
+        classNames={classNames}
+      />,
       containerNode
     );
   };
@@ -142,15 +137,15 @@ const sortBy: SortByWidget = (widgetParams) => {
 
   const containerNode = getContainerNode(container);
 
-  const cssClasses = {
-    root: cx(suit(), userCssClasses.root),
-    select: cx(suit({ descendantName: 'select' }), userCssClasses.select),
-    option: cx(suit({ descendantName: 'option' }), userCssClasses.option),
+  const classNames: SortByWidgetCssClasses = {
+    root: userCssClasses.root,
+    select: userCssClasses.select,
+    option: userCssClasses.option,
   };
 
   const specializedRenderer = renderer({
     containerNode,
-    cssClasses,
+    classNames,
   });
 
   const makeWidget = connectSortBy(specializedRenderer, () =>

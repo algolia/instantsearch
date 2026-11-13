@@ -1,63 +1,28 @@
-import { cx } from 'instantsearch-ui-components';
-import React from 'react';
+import { createToggleRefinementComponent } from 'instantsearch-ui-components';
+import React, { createElement, Fragment } from 'react';
 
-export type ToggleRefinementClassNames = {
-  /**
-   * Class names to apply to the root element
-   */
-  root: string;
-  /**
-   * Class names to apply to the label element
-   */
-  label: string;
-  /**
-   * Class names to apply to the checkbox element
-   */
-  checkbox: string;
-  /**
-   * Class names to apply to the label text
-   */
-  labelText: string;
-};
+import type {
+  Pragma,
+  ToggleRefinementProps as ToggleRefinementUiComponentProps,
+} from 'instantsearch-ui-components';
 
-export type ToggleRefinementProps = Omit<
-  React.ComponentProps<'div'>,
-  'onChange'
-> &
-  Pick<React.ComponentProps<'input'>, 'checked'> & {
-    classNames?: Partial<ToggleRefinementClassNames>;
-    onChange: (isChecked: boolean) => void;
-    label: string;
-  };
+export type {
+  ToggleRefinementClassNames,
+  ToggleRefinementValue,
+} from 'instantsearch-ui-components';
 
-export function ToggleRefinement({
-  classNames = {},
-  checked,
-  onChange,
-  label,
-  ...props
-}: ToggleRefinementProps) {
-  return (
-    <div
-      {...props}
-      className={cx('ais-ToggleRefinement', classNames.root, props.className)}
-    >
-      <label className={cx('ais-ToggleRefinement-label', classNames.label)}>
-        <input
-          className={cx('ais-ToggleRefinement-checkbox', classNames.checkbox)}
-          type="checkbox"
-          checked={checked}
-          onChange={(event) => {
-            onChange(event.target.checked);
-          }}
-        />
+// The shared props resolve the root element's props through the global `JSX`
+// namespace, which React 19 no longer populates (`React.JSX` moved out of it),
+// so merge React's native `div` props back in — minus the props replaced by
+// the widget's own callbacks.
+export type ToggleRefinementProps = ToggleRefinementUiComponentProps &
+  Omit<React.ComponentProps<'div'>, keyof ToggleRefinementUiComponentProps>;
 
-        <span
-          className={cx('ais-ToggleRefinement-labelText', classNames.labelText)}
-        >
-          {label}
-        </span>
-      </label>
-    </div>
-  );
+const ToggleRefinementUiComponent = createToggleRefinementComponent({
+  createElement: createElement as Pragma,
+  Fragment,
+});
+
+export function ToggleRefinement(props: ToggleRefinementProps) {
+  return <ToggleRefinementUiComponent {...props} />;
 }

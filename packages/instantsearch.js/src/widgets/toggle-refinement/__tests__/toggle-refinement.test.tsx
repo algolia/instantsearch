@@ -222,5 +222,36 @@ describe('toggleRefinement', () => {
         </div>
       `);
     });
+
+    test('renders no label text element when `labelText` returns `null`', async () => {
+      const container = document.createElement('div');
+      const searchClient = createSearchClient();
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+
+      search.addWidgets([
+        toggleRefinement({
+          container,
+          attribute: 'free_shipping',
+          templates: {
+            labelText: () => null,
+          },
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      // The `ais-ToggleRefinement-labelText` span used to be the `Template`'s
+      // root, so a `null` template removed it — it must not leave an empty
+      // styled element behind.
+      expect(
+        container.querySelector('.ais-ToggleRefinement-labelText')
+      ).toBeNull();
+      expect(
+        container.querySelector('.ais-ToggleRefinement-checkbox')
+      ).not.toBeNull();
+    });
   });
 });
