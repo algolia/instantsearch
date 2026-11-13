@@ -13,7 +13,7 @@ export { default as geoSearch } from './geo-search/geo-search';
 export { default as hierarchicalMenu } from './hierarchical-menu/hierarchical-menu';
 export { default as hits } from './hits/hits';
 export { default as hitsPerPage } from './hits-per-page/hits-per-page';
-export { index } from 'instantsearch-core';
+export { index } from 'instantsearch-core/internal';
 export type { IndexWidget } from 'instantsearch-core';
 export { default as infiniteHits } from './infinite-hits/infinite-hits';
 export { default as menu } from './menu/menu';

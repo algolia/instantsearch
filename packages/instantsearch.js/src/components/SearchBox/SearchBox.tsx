@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { noop } from 'instantsearch-core';
+import { noop } from 'instantsearch-core/internal';
 import { h, createRef, Component } from 'preact';
 
 import Template from '../Template/Template';

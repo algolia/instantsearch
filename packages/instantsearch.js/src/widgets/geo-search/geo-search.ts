@@ -1,7 +1,7 @@
 // global for TypeScript alone
 /* global google */
-import { createDocumentationMessageGenerator } from 'instantsearch-core';
-import { suitComponent as component } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { render } from 'preact';
 

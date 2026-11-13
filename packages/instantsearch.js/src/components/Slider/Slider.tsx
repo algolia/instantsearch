@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { range } from 'instantsearch-core';
+import { range } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, Component } from 'preact';
 

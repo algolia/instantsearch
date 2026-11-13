@@ -5,7 +5,7 @@ import {
   isPartText,
   isPartTextEmpty,
   isPartTool,
-} from 'instantsearch-core';
+} from 'instantsearch-core/internal';
 
 import { cx } from '../../lib';
 import { createButtonComponent } from '../Button';
@@ -23,11 +23,8 @@ import {
 } from './icons';
 
 import type { ComponentProps, Hooks, Renderer } from '../../types';
-import type {
-  ChatComponentContext,
-  ChatMessageBase,
-  ChatStatus,
-} from 'instantsearch-core';
+import type { ChatComponentContext, ChatStatus } from 'instantsearch-core';
+import type { ChatMessageBase } from 'instantsearch-core/internal';
 
 export type ResultCardStatus =
   | 'hidden'

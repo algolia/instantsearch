@@ -8,7 +8,7 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
-import { walkIndex } from 'instantsearch-core';
+import { walkIndex } from 'instantsearch-core/internal';
 
 import instantsearch from '../../..';
 import { autocomplete } from '../autocomplete';

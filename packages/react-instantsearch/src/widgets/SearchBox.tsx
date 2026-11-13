@@ -1,4 +1,4 @@
-import { isChatBusy, openChat } from 'instantsearch-core';
+import { isChatBusy, openChat } from 'instantsearch-core/internal';
 import React, { useRef, useState } from 'react';
 import { useInstantSearch, useSearchBox } from 'react-instantsearch-core';
 

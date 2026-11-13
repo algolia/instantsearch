@@ -1,4 +1,4 @@
-import { singleIndex as singleIndexStateMapping } from '..';
+import { singleIndexStateMapping } from '..';
 
 import type { UiState } from '../../../types';
 

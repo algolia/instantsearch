@@ -1,5 +1,9 @@
 import { getInitialResults, waitForResults } from 'instantsearch-core';
-import { isTwoPassWidget, walkIndex, resetWidgetId } from 'instantsearch-core';
+import {
+  isTwoPassWidget,
+  walkIndex,
+  resetWidgetId,
+} from 'instantsearch-core/internal';
 import React from 'react';
 
 import { InstantSearchServerContext } from '../components/InstantSearchServerContext';

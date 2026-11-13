@@ -1,2 +1,2 @@
-export { getUsageSessionId } from 'instantsearch-core';
-export { getInsightsAnonymousUserTokenInternal } from 'instantsearch-core';
+export { getUsageSessionId } from 'instantsearch-core/internal';
+export { getInsightsAnonymousUserTokenInternal } from 'instantsearch-core/internal';

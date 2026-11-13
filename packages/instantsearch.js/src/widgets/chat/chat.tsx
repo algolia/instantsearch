@@ -1,8 +1,8 @@
 /** @jsx h */
 
+import { connectChat } from 'instantsearch-core';
 import {
   CompareProductsToolType,
-  connectChat,
   findTool,
   focusAfterReveal,
   getActiveContainerAnimations,
@@ -15,8 +15,8 @@ import {
   restoreContainerInertUntilReveal,
   SearchIndexToolType,
   shouldSearchToolRenderResults,
-} from 'instantsearch-core';
-import { createDocumentationMessageGenerator } from 'instantsearch-core';
+} from 'instantsearch-core/internal';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { createChatComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 import { useCallback, useEffect, useMemo, useState } from 'preact/hooks';

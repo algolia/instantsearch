@@ -3,7 +3,7 @@
  */
 /** @jsx h */
 import { screen } from '@testing-library/dom';
-import { collectChatRecords } from 'instantsearch-core';
+import { collectChatRecords } from 'instantsearch-core/internal';
 import { h, render } from 'preact';
 
 import { createCompareProductsTool } from '../compare-products-tool';

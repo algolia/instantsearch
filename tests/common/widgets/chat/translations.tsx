@@ -1,7 +1,7 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
-import { Chat } from 'instantsearch-core';
+import { Chat } from 'instantsearch-core/internal';
 
 import { createDefaultWidgetParams, openChat } from './utils';
 

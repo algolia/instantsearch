@@ -10,7 +10,7 @@ import {
   Chat,
   GroupedResultsToolType,
   SearchIndexToolType,
-} from 'instantsearch-core';
+} from 'instantsearch-core/internal';
 import {
   chatInlineLayout,
   chatSidePanelLayout,

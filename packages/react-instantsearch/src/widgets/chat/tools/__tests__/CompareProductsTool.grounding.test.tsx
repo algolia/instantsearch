@@ -16,7 +16,7 @@
 
 import { render, screen } from '@testing-library/react';
 import { parsePartialJson } from 'instantsearch-core';
-import { collectChatRecords } from 'instantsearch-core';
+import { collectChatRecords } from 'instantsearch-core/internal';
 import React from 'react';
 
 import { createCompareProductsTool } from '../CompareProductsTool';

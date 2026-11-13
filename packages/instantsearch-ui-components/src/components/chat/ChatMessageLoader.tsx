@@ -5,7 +5,8 @@ import { cx } from '../../lib';
 import { LoadingSpinnerIcon } from './icons';
 
 import type { ComponentProps, Renderer } from '../../types';
-import type { ChatLoaderContext, ChatMessageBase } from 'instantsearch-core';
+import type { ChatLoaderContext } from 'instantsearch-core';
+import type { ChatMessageBase } from 'instantsearch-core/internal';
 
 export type ChatMessageLoaderTranslations = {
   /**

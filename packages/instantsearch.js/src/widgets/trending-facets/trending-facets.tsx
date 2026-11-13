@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { createDocumentationMessageGenerator } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { createTrendingFacetsComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 

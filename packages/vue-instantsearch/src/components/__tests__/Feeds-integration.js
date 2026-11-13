@@ -2,7 +2,7 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-jest.unmock('instantsearch-core');
+jest.unmock('instantsearch-core/internal');
 
 import { createCompositionClient } from '@instantsearch/mocks';
 
