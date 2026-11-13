@@ -59,6 +59,7 @@ export function createClearRefinementsComponent({ createElement }: Renderer) {
         className={cx('ais-ClearRefinements', classNames.root, props.className)}
       >
         <button
+          type="button"
           disabled={!canRefine}
           onClick={onClick}
           className={cx(
