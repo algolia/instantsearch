@@ -19,6 +19,7 @@ import type {
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { Template as TemplateType } from '../../types';
 import type { RendererOptions, WidgetFactory } from 'instantsearch-core';
+import type { ToggleRefinementValue } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'toggle-refinement',
@@ -137,17 +138,28 @@ const toggleRefinement: ToggleRefinementWidget = function toggleRefinement(
   };
 };
 
-const renderer =
-  ({
-    containerNode,
-    classNames,
-    templateProps,
-  }: {
-    containerNode: HTMLElement;
-    classNames: ToggleRefinementCSSClasses;
-    templateProps: PreparedTemplateProps<Required<ToggleRefinementTemplates>>;
-  }) =>
-  (
+const renderer = ({
+  containerNode,
+  classNames,
+  templateProps,
+}: {
+  containerNode: HTMLElement;
+  classNames: ToggleRefinementCSSClasses;
+  templateProps: PreparedTemplateProps<Required<ToggleRefinementTemplates>>;
+}) => {
+  // Created once per widget instance so Preact doesn't remount the template
+  // subtree on every render; the changing data (`value`) comes in through
+  // the props.
+  const labelTextComponent = ({ value }: { value: ToggleRefinementValue }) => (
+    <Template
+      {...templateProps}
+      rootTagName="fragment"
+      templateKey="labelText"
+      data={value}
+    />
+  );
+
+  return (
     {
       value,
       refine,
@@ -163,19 +175,13 @@ const renderer =
       <ToggleRefinement
         classNames={classNames}
         checked={value.isRefined}
-        labelTextComponent={({ value }) => (
-          <Template
-            {...templateProps}
-            rootTagName="fragment"
-            templateKey="labelText"
-            data={value}
-          />
-        )}
+        labelTextComponent={labelTextComponent}
         onChange={(isChecked) => refine({ isRefined: !isChecked })}
         value={value}
       />,
       containerNode
     );
   };
+};
 
 export default toggleRefinement;
