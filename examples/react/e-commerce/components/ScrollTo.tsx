@@ -1,6 +1,5 @@
-import { Middleware } from 'instantsearch.js';
 import React, { useEffect, useRef } from 'react';
-import { useInstantSearch } from 'react-instantsearch';
+import { Middleware, useInstantSearch } from 'react-instantsearch';
 
 export function ScrollTo({ children }: { children: React.ReactNode }) {
   const { addMiddlewares } = useInstantSearch();
