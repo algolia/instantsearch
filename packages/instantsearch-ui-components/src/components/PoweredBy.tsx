@@ -72,9 +72,12 @@ export function createPoweredByComponent({ createElement }: Renderer) {
           <svg
             viewBox="0 0 572 64"
             className={cx('ais-PoweredBy-logo', classNames.logo)}
+            // The height is a fallback expressed as a presentation attribute,
+            // so stylesheets (e.g. `.ais-PoweredBy-logo` rules) still win.
+            height="1.2em"
             // This style is necessary as long as it's not included in InstantSearch.css.
             // For now, InstantSearch.css sets a maximum width of 70px.
-            style={{ height: '1.2em', width: 'auto' }}
+            style={{ width: 'auto' }}
           >
             <path fill={theme === 'dark' ? '#FFF' : '#36395A'} d={FIRST_PATH} />
             <path
