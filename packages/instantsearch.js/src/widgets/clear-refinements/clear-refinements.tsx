@@ -76,24 +76,31 @@ export type ClearRefinementsWidget = WidgetFactory<
   ClearRefinementsWidgetParams
 >;
 
-const renderer =
-  ({
-    containerNode,
-    classNames,
-    renderState,
-  }: {
-    containerNode: HTMLElement;
-    classNames: ClearRefinementsCSSClasses;
-    renderState: {
-      templateProps?: PreparedTemplateProps<
-        Required<ClearRefinementsTemplates>
-      >;
-    };
-  }): Renderer<
-    ClearRefinementsRenderState,
-    Partial<ClearRefinementsWidgetParams>
-  > =>
-  ({ refine, canRefine }, isFirstRendering) => {
+const renderer = ({
+  containerNode,
+  classNames,
+  templateProps,
+}: {
+  containerNode: HTMLElement;
+  classNames: ClearRefinementsCSSClasses;
+  templateProps: PreparedTemplateProps<Required<ClearRefinementsTemplates>>;
+}): Renderer<
+  ClearRefinementsRenderState,
+  Partial<ClearRefinementsWidgetParams>
+> => {
+  // Created once per widget instance so Preact doesn't remount the template
+  // subtree on every render; the changing data (`canRefine`) comes in
+  // through the props.
+  const resetLabelComponent = ({ canRefine }: { canRefine: boolean }) => (
+    <Template
+      {...templateProps}
+      rootTagName="fragment"
+      templateKey="resetLabel"
+      data={{ canRefine }}
+    />
+  );
+
+  return ({ refine, canRefine }, isFirstRendering) => {
     if (isFirstRendering) {
       return;
     }
@@ -103,18 +110,12 @@ const renderer =
         canRefine={canRefine}
         onClick={refine}
         classNames={classNames}
-        resetLabelComponent={({ canRefine }) => (
-          <Template
-            {...renderState.templateProps!}
-            rootTagName="fragment"
-            templateKey="resetLabel"
-            data={{ canRefine }}
-          />
-        )}
+        resetLabelComponent={resetLabelComponent}
       />,
       containerNode
     );
   };
+};
 
 const clearRefinements: ClearRefinementsWidget = (widgetParams) => {
   const {
@@ -138,33 +139,27 @@ const clearRefinements: ClearRefinementsWidget = (widgetParams) => {
     disabledButton: userCssClasses.disabledButton,
   };
 
-  const renderState: {
-    templateProps?: PreparedTemplateProps<Required<ClearRefinementsTemplates>>;
-  } = {
-    templateProps: prepareTemplateProps({
-      defaultTemplates,
-      templates,
-    }),
-  };
+  const templateProps = prepareTemplateProps({
+    defaultTemplates,
+    templates,
+  });
 
   const specializedRenderer = renderer({
     containerNode,
     classNames,
-    renderState,
+    templateProps,
   });
 
   const makeWidget = connectClearRefinements(specializedRenderer, () =>
     render(null, containerNode)
   );
 
-  const widget = makeWidget({
-    includedAttributes,
-    excludedAttributes,
-    transformItems,
-  });
-
   return {
-    ...widget,
+    ...makeWidget({
+      includedAttributes,
+      excludedAttributes,
+      transformItems,
+    }),
     $$widgetType: 'ais.clearRefinements',
   };
 };
