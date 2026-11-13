@@ -245,12 +245,31 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
     };
   },
   createHitsPerPageWidgetTests({ instantSearchOptions, widgetParams }) {
+    let search: ReturnType<typeof useInstantSearch> | undefined;
+    function CaptureInstantSearch() {
+      search = useInstantSearch();
+      return null;
+    }
+
     render(
       <InstantSearch {...instantSearchOptions}>
+        <CaptureInstantSearch />
         <HitsPerPage {...widgetParams} />
         <GlobalErrorSwallower />
       </InstantSearch>
     );
+
+    return {
+      setHitsPerPage(hitsPerPageValue) {
+        search?.setUiState((uiState) => ({
+          ...uiState,
+          indexName: {
+            ...uiState.indexName,
+            hitsPerPage: hitsPerPageValue,
+          },
+        }));
+      },
+    };
   },
   createClearRefinementsWidgetTests({ instantSearchOptions, widgetParams }) {
     const refinementListAttributes = Object.keys(

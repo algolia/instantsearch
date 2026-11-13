@@ -4,9 +4,8 @@ import { createDocumentationMessageGenerator } from 'instantsearch-core';
 import { createClearRefinementsComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
-import Template from '../../components/Template/Template';
 import { connectClearRefinements } from '../../connectors';
-import { prepareTemplateProps } from '../../lib/templating';
+import { prepareTemplateProps, renderTemplate } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
@@ -88,17 +87,26 @@ const renderer = ({
   ClearRefinementsRenderState,
   Partial<ClearRefinementsWidgetParams>
 > => {
-  // Created once per widget instance so Preact doesn't remount the template
-  // subtree on every render; the changing data (`canRefine`) comes in
-  // through the props.
-  const resetLabelComponent = ({ canRefine }: { canRefine: boolean }) => (
-    <Template
-      {...templateProps}
-      rootTagName="fragment"
-      templateKey="resetLabel"
-      data={{ canRefine }}
-    />
-  );
+  // Created once per widget instance so the changing data (`canRefine`)
+  // comes in through the arguments. The button used to be the `Template`'s
+  // root: returning `null` from `templates.resetLabel` removed the whole
+  // button from the DOM. Resolving the template here (rather than mounting
+  // `Template` as the button's content) keeps that behavior — the factory
+  // omits the button when this returns `null`.
+  const resetLabelComponent = ({ canRefine }: { canRefine: boolean }) => {
+    const content = renderTemplate({
+      templates: templateProps.templates,
+      templateKey: 'resetLabel',
+      data: { canRefine },
+    });
+
+    if (content === null) {
+      return null;
+    }
+
+    // An empty string renders an empty button rather than an empty text node
+    return <Fragment>{content === '' ? null : content}</Fragment>;
+  };
 
   return ({ refine, canRefine }, isFirstRendering) => {
     if (isFirstRendering) {

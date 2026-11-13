@@ -7,9 +7,19 @@ import type { TestOptions, TestSetup } from '../../common';
 import type { HitsPerPageWidget } from 'instantsearch.js/es/widgets/hits-per-page/hits-per-page';
 
 type WidgetParams = Parameters<HitsPerPageWidget>[0];
-export type HitsPerPageWidgetSetup = TestSetup<{
-  widgetParams: Omit<WidgetParams, 'container'>;
-}>;
+export type HitsPerPageWidgetSetup = TestSetup<
+  {
+    widgetParams: Omit<WidgetParams, 'container'>;
+  },
+  {
+    /**
+     * Changes `hitsPerPage` through the UI state from outside the widget, as
+     * routing would, so tests can assert the select follows state rather than
+     * keeping a stale selection.
+     */
+    setHitsPerPage: (hitsPerPage: number | undefined) => void;
+  }
+>;
 
 export function createHitsPerPageWidgetTests(
   setup: HitsPerPageWidgetSetup,

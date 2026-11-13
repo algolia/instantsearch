@@ -119,4 +119,19 @@ describe('ClearRefinements', () => {
       </button>
     `);
   });
+
+  test('omits the button when `resetLabelComponent` returns `null`', () => {
+    // The JS flavor's `templates.resetLabel` owned the button and removed it
+    // from the DOM when the template resolved to `null`.
+    const props = createProps({ resetLabelComponent: () => null });
+    const { container } = render(<ClearRefinements {...props} />);
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-ClearRefinements"
+        />
+      </div>
+    `);
+    expect(container.querySelector('button')).toBeNull();
+  });
 });

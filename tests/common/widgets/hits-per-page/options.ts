@@ -224,5 +224,57 @@ export function createOptionsTests(
         ])
       );
     });
+
+    test('follows the state when `hitsPerPage` changes outside the widget', async () => {
+      const searchClient = createSearchClient({});
+
+      const { setHitsPerPage } = await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+          // The configured value is absent from `items`, so the connector
+          // renders its blank option from the start.
+          initialUiState: {
+            indexName: {
+              hitsPerPage: 7,
+            },
+          },
+        },
+        widgetParams: {
+          items: [
+            { label: '10', value: 10, default: true },
+            { label: '20', value: 20 },
+          ],
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const select = document.querySelector(
+        '.ais-HitsPerPage-select'
+      ) as HTMLSelectElement;
+
+      await act(async () => {
+        userEvent.selectOptions(select, ['20']);
+        await wait(0);
+      });
+      expect(select.value).toBe('20');
+
+      // Simulate routing back to a configured value absent from `items`:
+      // no item is refined, so the connector renders its blank option. The
+      // select must follow the state — passing `undefined` through would make
+      // it uncontrolled in React and keep displaying the stale "20".
+      await act(async () => {
+        setHitsPerPage(7);
+        await wait(0);
+      });
+
+      expect(select.value).toBe('');
+      expect(
+        screen.getByRole<HTMLOptionElement>('option', { name: '20' }).selected
+      ).toBe(false);
+    });
   });
 }
