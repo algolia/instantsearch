@@ -124,10 +124,7 @@
 
 <script>
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import {
-  historyRouter,
-  simpleStateMapping as simpleMapping,
-} from 'instantsearch.js';
+import { historyRouter, simpleStateMapping } from 'vue-instantsearch';
 
 export default {
   data() {
@@ -140,7 +137,7 @@ export default {
         router: historyRouter({
           cleanUrlOnDispose: false,
         }),
-        stateMapping: simpleMapping(),
+        stateMapping: simpleStateMapping(),
       },
     };
   },

@@ -233,6 +233,43 @@
       }
     },
     {
+      "files": ["packages/react-instantsearch*/**/*"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["instantsearch.js", "instantsearch.js/*"],
+                "message": "React packages must not depend on instantsearch.js. Import from 'instantsearch-core' (or 'instantsearch-core/internal') instead."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["examples/react/**/*"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "instantsearch.js",
+                  "instantsearch.js/*",
+                  "instantsearch-core",
+                  "instantsearch-core/*"
+                ],
+                "message": "Import from 'react-instantsearch' (or 'react-instantsearch-core' in React Native) instead."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
       "files": ["packages/*/test/module/**/*.cjs"],
       "rules": {
         "import/extensions": "off"

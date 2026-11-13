@@ -117,8 +117,7 @@
 </template>
 
 <script>
-import { connectHits } from 'instantsearch.js';
-import { createWidgetMixin } from 'vue-instantsearch';
+import { connectHits, createWidgetMixin } from 'vue-instantsearch';
 
 export default {
   name: 'AppNoResults',

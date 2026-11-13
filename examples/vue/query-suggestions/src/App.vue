@@ -102,7 +102,7 @@
 
 <script>
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import { historyRouter as history } from 'instantsearch.js';
+import { historyRouter } from 'vue-instantsearch';
 
 import 'instantsearch.css/themes/satellite.css';
 import './app.css';
@@ -114,7 +114,7 @@ export default {
         'latency',
         '6be0576ff61c053d5f9a3225e2a90f76'
       ),
-      routing: { router: history() },
+      routing: { router: historyRouter() },
       indices: [
         {
           indexName: 'instant_search',

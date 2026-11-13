@@ -1,8 +1,8 @@
-import { Hit as AlgoliaHit } from 'instantsearch.js';
 import {
   getHighlightedParts,
   getPropertyByPath,
-} from 'instantsearch-core';
+  Hit as AlgoliaHit,
+} from 'react-instantsearch-core';
 import React, { Fragment } from 'react';
 import { StyleSheet, Text } from 'react-native';
 

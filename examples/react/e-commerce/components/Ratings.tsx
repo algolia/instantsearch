@@ -1,10 +1,10 @@
+import React from 'react';
 import {
   connectRatingMenu,
   RatingMenuConnectorParams,
   RatingMenuWidgetDescription,
-} from 'instantsearch.js';
-import React from 'react';
-import { useConnector } from 'react-instantsearch';
+  useConnector,
+} from 'react-instantsearch';
 
 import { cx } from '../utils';
 

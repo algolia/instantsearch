@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 /* eslint-disable complexity */
-import { historyRouter } from 'instantsearch.js';
+import { historyRouter } from 'vue-instantsearch';
 
 const hitsPerPageItemsValue = [16, 32, 64];
 

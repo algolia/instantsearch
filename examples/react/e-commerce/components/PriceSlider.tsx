@@ -1,4 +1,3 @@
-import { Range } from 'instantsearch.js';
 import React, { useState } from 'react';
 import {
   Slider,
@@ -8,7 +7,7 @@ import {
   Ticks,
   GetHandleProps,
 } from 'react-compound-slider';
-import { useRange } from 'react-instantsearch';
+import { Range, useRange } from 'react-instantsearch';
 
 import './PriceSlider.css';
 import { formatNumber } from '../utils';
