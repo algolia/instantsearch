@@ -1,5 +1,5 @@
 /** @jsx createElement */
-import { capitalize, isSpecialClick } from 'instantsearch-core';
+import { capitalize, isSpecialClick } from 'instantsearch-core/internal';
 
 import { cx } from '../lib';
 
