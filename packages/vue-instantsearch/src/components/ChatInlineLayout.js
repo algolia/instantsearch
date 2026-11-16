@@ -22,7 +22,7 @@ function renderPiece(h, piece) {
  * This is also the markup `ais-chat` renders for `layout="inline"`; the
  * component is exported so a custom chat can reuse it as a `layoutComponent`.
  */
-export default {
+const AisChatInlineLayout = {
   name: 'AisChatInlineLayout',
   mixins: [createSuitMixin({ name: 'ChatInlineLayout' })],
   inheritAttrs: false,
@@ -72,3 +72,10 @@ export default {
     });
   }),
 };
+
+// Tells `ais-chat` this layout is always visible, so it doesn't require an
+// `ais-chat-trigger` (or AI mode) — the same marker the JS and React flavors
+// put on their inline layout.
+AisChatInlineLayout.$$inlineLayout = true;
+
+export default AisChatInlineLayout;

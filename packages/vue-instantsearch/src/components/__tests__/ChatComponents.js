@@ -49,6 +49,23 @@ describe('AisChatGreeting', () => {
       'Comment aider ?'
     );
   });
+
+  it('forwards undeclared attributes to the shared root', () => {
+    wrapper = mount(ChatGreeting, {
+      attachTo: document.body,
+      attrs: {
+        id: 'greeting',
+        'aria-labelledby': 'conversation-heading',
+        'data-testid': 'greeting',
+      },
+    });
+
+    const root = document.querySelector('.ais-ChatGreeting');
+    expect(root).not.toBeNull();
+    expect(root.getAttribute('id')).toBe('greeting');
+    expect(root.getAttribute('aria-labelledby')).toBe('conversation-heading');
+    expect(root.getAttribute('data-testid')).toBe('greeting');
+  });
 });
 
 describe('AisChatMessageLoader', () => {

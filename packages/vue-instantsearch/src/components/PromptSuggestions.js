@@ -5,6 +5,21 @@ import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
 import { Fragment, getScopedSlot, renderReactCompat } from '../util/vue-compat';
 
+/**
+ * Renders an overridable component with the React-style props the shared
+ * components pass around. A function (a scoped-slot adapter, or a React-style
+ * render function) is called eagerly by the React-style `createElement`; a Vue
+ * component object goes through the Vue-style one, which hands the props over as
+ * real props — the React-style `createElement` maps `onX` onto listeners, so a
+ * component declaring `onSuggestionClick` would never see the callback.
+ */
+function renderOverridable(h, hVue, component, props) {
+  if (typeof component === 'object' && component !== null) {
+    return hVue(component, { props });
+  }
+  return h(component, props);
+}
+
 const NO_CHAT_WIDGET_MESSAGE =
   'No `ais-chat` widget is mounted on this index, so there is nothing to send a clicked suggestion to. Mount an `ais-chat` on the same index, or pass `onSuggestionClick` to handle the click yourself.';
 
@@ -125,7 +140,7 @@ export default {
   created() {
     this.slotAdapters = {};
   },
-  render: renderReactCompat(function (h) {
+  render: renderReactCompat(function (h, hVue) {
     if (!this.state) {
       return null;
     }
@@ -146,7 +161,7 @@ export default {
 
     const layoutComponent = this.resolveComponent('layout', 'layoutComponent');
     if (layoutComponent) {
-      return h(layoutComponent, {
+      return renderOverridable(h, hVue, layoutComponent, {
         suggestions,
         isLoading,
         error,
@@ -163,8 +178,10 @@ export default {
     if (resolvedHeaderComponent === false) {
       headerComponent = false;
     } else if (resolvedHeaderComponent) {
-      // The shared component calls it with the header props.
-      headerComponent = (headerProps) => resolvedHeaderComponent(headerProps);
+      // The shared component calls it with the header props — a Vue component
+      // object can't be called, so it goes through `renderOverridable` too.
+      headerComponent = (headerProps) =>
+        renderOverridable(h, hVue, resolvedHeaderComponent, headerProps);
     }
 
     return h(this.PromptSuggestionsComponent, {
