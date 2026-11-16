@@ -536,7 +536,42 @@ export default function transform(
     });
 
   // ---------------------------------------------------------------------------
-  // 7. Things that need a human: leave a TODO
+  // 7. __hitIndex -> __position - 1 in hits / infiniteHits item templates
+  //    (`__position` starts at 1, so no plain rename)
+  // ---------------------------------------------------------------------------
+  root
+    .find(j.MemberExpression, {
+      property: { type: 'Identifier', name: '__hitIndex' },
+      computed: false,
+    })
+    .forEach((path: any) => {
+      // Mutated rather than rebuilt, to keep optional chaining (`hit?.`).
+      path.node.property = j.identifier('__position');
+      const parent = path.parent.node;
+      if (
+        parent.type === 'BinaryExpression' &&
+        parent.operator === '+' &&
+        parent.left === path.node &&
+        j.NumericLiteral.check(parent.right) &&
+        parent.right.value === 1
+      ) {
+        j(path.parent).replaceWith(path.node);
+      } else {
+        j(path).replaceWith(
+          j.binaryExpression('-', path.node, j.numericLiteral(1))
+        );
+      }
+    });
+  // What is left can't be rewritten in place (destructuring, keys, types).
+  root.find(j.Identifier, { name: '__hitIndex' }).forEach((path) => {
+    addComment(
+      enclosingStatement(path),
+      '`__hitIndex` is removed from the `hits` and `infiniteHits` item templates, use `__position - 1` instead (`__position` is the position across pages, starting at 1).'
+    );
+  });
+
+  // ---------------------------------------------------------------------------
+  // 8. Things that need a human: leave a TODO
   // ---------------------------------------------------------------------------
   // searchFunction -> onStateChange
   findProperties(root, 'searchFunction').forEach((path: any) => {
@@ -568,14 +603,6 @@ export default function transform(
         `\`${path.node.name}\` is removed, use \`status === 'stalled'\` (\`useInstantSearch().status\` in React).`
       );
     });
-
-  // __hitIndex in hits / infiniteHits item templates
-  root.find(j.Identifier, { name: '__hitIndex' }).forEach((path) => {
-    addComment(
-      enclosingStatement(path),
-      '`__hitIndex` is removed from the `hits` and `infiniteHits` item templates, use `__position` (the position across pages, starting at 1) instead.'
-    );
-  });
 
   // escapeHTML / escapeFacetValues
   ['escapeHTML', 'escapeFacetValues'].forEach((name) =>
