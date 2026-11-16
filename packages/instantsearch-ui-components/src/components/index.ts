@@ -25,6 +25,7 @@ export * from './chat/types';
 export * from './CompareBar';
 export * from './CurrentRefinements';
 export * from './ClearRefinements';
+export * from './DefaultHit';
 export * from './FrequentlyBoughtTogether';
 export * from './HitsPerPage';
 export * from './Highlight';

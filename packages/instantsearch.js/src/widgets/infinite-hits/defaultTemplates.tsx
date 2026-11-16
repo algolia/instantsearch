@@ -1,9 +1,12 @@
 /** @jsx h */
 
 import { omit } from 'instantsearch-core/internal';
+import { createDefaultHitComponent } from 'instantsearch-ui-components';
 import { h, Fragment } from 'preact';
 
 import type { InfiniteHitsComponentTemplates } from '../../components/InfiniteHits/InfiniteHits';
+
+const DefaultHit = createDefaultHitComponent({ createElement: h, Fragment });
 
 const defaultTemplates: InfiniteHitsComponentTemplates = {
   empty() {
@@ -16,9 +19,7 @@ const defaultTemplates: InfiniteHitsComponentTemplates = {
     return 'Show more results';
   },
   item(data) {
-    return (
-      <Fragment>{JSON.stringify(omit(data, ['__hitIndex']), null, 2)}</Fragment>
-    );
+    return <DefaultHit hit={omit(data, ['__hitIndex'])} />;
   },
 };
 
