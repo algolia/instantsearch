@@ -8,6 +8,9 @@ const items: Hits = [];
 
 new InstantSearch({ searchFunction(helper) { helper.search(); } });
 connectHits(render, { escapeHTML: false });
+hits({ container, templates: { item: ({ __hitIndex }) => `${__hitIndex}` } });
+const fallbackIndex = (hit) => hit?.__hitIndex ?? 0;
+const literalIndex = (hit) => hit?.['__hitIndex'];
 
 function App() {
   const { start, range } = useRange({ attribute: 'price' });

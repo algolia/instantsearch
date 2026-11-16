@@ -1110,7 +1110,6 @@ describe('infiniteHits', () => {
         eventType: 'click',
         hits: [
           {
-            __hitIndex: 0,
             __position: 1,
             objectID: '1',
             name: 'Name 1',
@@ -1170,7 +1169,6 @@ describe('infiniteHits', () => {
         eventType: 'conversion',
         hits: [
           {
-            __hitIndex: 1,
             __position: 2,
             objectID: '2',
             name: 'Name 2',

@@ -536,7 +536,57 @@ export default function transform(
     });
 
   // ---------------------------------------------------------------------------
-  // 7. Things that need a human: leave a TODO
+  // 7. __hitIndex -> __position - 1 in hits / infiniteHits item templates
+  //    (`__position` starts at 1, so no plain rename)
+  // ---------------------------------------------------------------------------
+  root
+    .find(j.MemberExpression)
+    .filter(
+      (path: any) =>
+        // In an optional chain, `- 1` would turn a missing hit into `NaN`.
+        path.node.type !== 'OptionalMemberExpression' &&
+        !path.node.optional &&
+        (path.node.computed
+          ? j.Literal.check(path.node.property) &&
+            path.node.property.value === '__hitIndex'
+          : path.node.property.name === '__hitIndex')
+    )
+    .forEach((path: any) => {
+      path.node.property = path.node.computed
+        ? j.stringLiteral('__position')
+        : j.identifier('__position');
+      const parent = path.parent.node;
+      if (
+        parent.type === 'BinaryExpression' &&
+        parent.operator === '+' &&
+        parent.left === path.node &&
+        j.NumericLiteral.check(parent.right) &&
+        parent.right.value === 1
+      ) {
+        j(path.parent).replaceWith(path.node);
+      } else {
+        j(path).replaceWith(
+          j.binaryExpression('-', path.node, j.numericLiteral(1))
+        );
+      }
+    });
+  // What is left can't be rewritten in place (destructuring, keys, types,
+  // optional chains).
+  [
+    ...root.find(j.Identifier, { name: '__hitIndex' }).paths(),
+    ...root
+      .find(j.Literal)
+      .filter((path: any) => path.node.value === '__hitIndex')
+      .paths(),
+  ].forEach((path) => {
+    addComment(
+      enclosingStatement(path),
+      '`__hitIndex` is removed from the `hits` and `infiniteHits` item templates, use `__position - 1` instead (`__position` is the position across pages, starting at 1).'
+    );
+  });
+
+  // ---------------------------------------------------------------------------
+  // 8. Things that need a human: leave a TODO
   // ---------------------------------------------------------------------------
   // searchFunction -> onStateChange
   findProperties(root, 'searchFunction').forEach((path: any) => {

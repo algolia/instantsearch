@@ -33,3 +33,5 @@ const { items: hits, results } = useHits();
 const { items: infiniteHits } = useInfiniteHits();
 const j = { // TODO(instantsearch v5): `getCurrentURL` must return a `URL` instead of a `Location` (e.g. `new URL(href)`).
 getCurrentURL() { return window.location; } };
+const templates = { item: (hit, { html }) => html`<p class="${(hit.__position - 1) % 2 ? 'odd' : 'even'}">${hit.__position}</p>` };
+const hitIndex = (hit) => hit['__position'] - 1;
