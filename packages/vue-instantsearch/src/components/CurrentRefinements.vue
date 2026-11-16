@@ -1,61 +1,11 @@
-<template>
-  <div :class="[suit(), noRefinement && suit('', 'noRefinement')]" v-if="state">
-    <slot
-      :refine="state.refine"
-      :items="state.items"
-      :createURL="state.createURL"
-    >
-      <ul :class="suit('list')">
-        <li
-          v-for="item in state.items"
-          :key="item.attribute"
-          :class="suit('item')"
-        >
-          <slot
-            name="item"
-            :refine="item.refine"
-            :item="item"
-            :createURL="state.createURL"
-          >
-            <span :class="suit('label')">{{ capitalize(item.label) }}: </span>
-            <span
-              v-for="refinement in item.refinements"
-              :key="createItemKey(refinement)"
-              :class="suit('category')"
-            >
-              <slot
-                name="refinement"
-                :refine="item.refine"
-                :refinement="refinement"
-                :createURL="state.createURL"
-              >
-                <span :class="suit('categoryLabel')">
-                  <q v-if="refinement.attribute === 'query'">{{
-                    refinement.label
-                  }}</q>
-                  <template v-else>{{ refinement.label }}</template> </span
-                ><button
-                  :class="suit('delete')"
-                  type="button"
-                  @click.left.exact="item.refine(refinement)"
-                >
-                  ✕
-                </button>
-              </slot>
-            </span>
-          </slot>
-        </li>
-      </ul>
-    </slot>
-  </div>
-</template>
-
 <script>
 import { connectCurrentRefinements } from 'instantsearch-core';
+import { createCurrentRefinementsComponent } from 'instantsearch-ui-components';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
+import { Fragment, getScopedSlot, renderReactCompat } from '../util/vue-compat';
 
 export default {
   name: 'AisCurrentRefinements',
@@ -97,17 +47,73 @@ export default {
       };
     },
   },
-  methods: {
-    createItemKey({ attribute, value, type, operator }) {
-      return [attribute, type, value, operator].join(':');
-    },
-    capitalize(value) {
-      if (!value) return '';
-      return (
-        value.toString().charAt(0).toLocaleUpperCase() +
-        value.toString().slice(1)
+  render: renderReactCompat(function (h) {
+    if (!this.state) {
+      return null;
+    }
+
+    const defaultSlot = getScopedSlot(this, 'default');
+    if (defaultSlot) {
+      return h(
+        'div',
+        {
+          className: [
+            this.suit(),
+            this.noRefinement && this.suit('', 'noRefinement'),
+          ],
+        },
+        [
+          defaultSlot({
+            refine: this.state.refine,
+            items: this.state.items,
+            createURL: this.state.createURL,
+          }),
+        ]
       );
-    },
-  },
+    }
+
+    const CurrentRefinements = createCurrentRefinementsComponent({
+      createElement: h,
+      Fragment,
+    });
+    const itemSlot = getScopedSlot(this, 'item');
+    const refinementSlot = getScopedSlot(this, 'refinement');
+
+    return h(CurrentRefinements, {
+      classNames: this.classNames && {
+        root: this.classNames['ais-CurrentRefinements'],
+        noRefinementRoot:
+          this.classNames['ais-CurrentRefinements--noRefinement'],
+        list: this.classNames['ais-CurrentRefinements-list'],
+        item: this.classNames['ais-CurrentRefinements-item'],
+        label: this.classNames['ais-CurrentRefinements-label'],
+        category: this.classNames['ais-CurrentRefinements-category'],
+        categoryLabel: this.classNames['ais-CurrentRefinements-categoryLabel'],
+        delete: this.classNames['ais-CurrentRefinements-delete'],
+      },
+      items: this.state.items,
+      canRefine: this.state.canRefine,
+      itemComponent:
+        itemSlot &&
+        (({ item, className, key }) =>
+          h('li', { key, className }, [
+            itemSlot({
+              refine: item.refine,
+              item,
+              createURL: this.state.createURL,
+            }),
+          ])),
+      refinementComponent:
+        refinementSlot &&
+        (({ item, refinement, className, key }) =>
+          h('span', { key, className }, [
+            refinementSlot({
+              refine: item.refine,
+              refinement,
+              createURL: this.state.createURL,
+            }),
+          ])),
+    });
+  }),
 };
 </script>
