@@ -540,13 +540,18 @@ export default function transform(
   //    (`__position` starts at 1, so no plain rename)
   // ---------------------------------------------------------------------------
   root
-    .find(j.MemberExpression, {
-      property: { type: 'Identifier', name: '__hitIndex' },
-      computed: false,
-    })
+    .find(j.MemberExpression)
+    .filter((path: any) =>
+      path.node.computed
+        ? j.Literal.check(path.node.property) &&
+          path.node.property.value === '__hitIndex'
+        : path.node.property.name === '__hitIndex'
+    )
     .forEach((path: any) => {
       // Mutated rather than rebuilt, to keep optional chaining (`hit?.`).
-      path.node.property = j.identifier('__position');
+      path.node.property = path.node.computed
+        ? j.stringLiteral('__position')
+        : j.identifier('__position');
       const parent = path.parent.node;
       if (
         parent.type === 'BinaryExpression' &&

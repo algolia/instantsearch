@@ -32,3 +32,4 @@ const { hits, results } = useHits();
 const { hits: infiniteHits } = useInfiniteHits();
 const j = { getLocation() { return window.location; } };
 const templates = { item: (hit, { html }) => html`<p class="${hit.__hitIndex % 2 ? 'odd' : 'even'}">${hit.__hitIndex + 1}. ${hit?.__hitIndex}</p>` };
+const hitIndex = (hit) => hit['__hitIndex'];
