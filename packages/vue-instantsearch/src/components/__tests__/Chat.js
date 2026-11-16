@@ -7,6 +7,7 @@ import { Chat } from 'instantsearch-core/internal';
 
 import { mount, nextTick } from '../../../test/utils';
 import ChatComponent from '../Chat';
+import ChatInlineLayout from '../ChatInlineLayout';
 import ChatTrigger from '../ChatTrigger';
 import InstantSearch from '../InstantSearch';
 
@@ -263,6 +264,36 @@ describe('AisChat', () => {
     expect(document.querySelector('.ais-ChatMessages').textContent).toContain(
       'Inline'
     );
+  });
+
+  it('treats the exported inline layout as an inline layout', async () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const chat = new Chat({ messages: [textMessage('Inline layout')] });
+    mountChat(
+      chat,
+      // The exported component carries the `$$inlineLayout` marker, so using it
+      // as a custom layout is the same as `layout: "inline"`: no trigger needed.
+      { layoutComponent: ChatInlineLayout },
+      `
+      <InstantSearch :search-client="searchClient" index-name="indexName">
+        <ChatComponent v-bind="chatProps" />
+      </InstantSearch>
+      `
+    );
+
+    await wait(0);
+    await nextTick();
+
+    const warnings = warnSpy.mock.calls.map(([message]) => String(message));
+    warnSpy.mockRestore();
+
+    expect(document.querySelector('.ais-ChatInlineLayout')).not.toBeNull();
+    expect(document.querySelector('.ais-ChatMessages').textContent).toContain(
+      'Inline layout'
+    );
+    expect(
+      warnings.some((message) => message.includes('no way to be opened'))
+    ).toBe(false);
   });
 
   describe('slots', () => {

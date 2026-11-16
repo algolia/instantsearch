@@ -44,6 +44,10 @@ export default {
       banner: this.banner,
       translations: this.translations,
       classNames: this.classNames,
+      // `inheritAttrs` is off so the shared component owns the root element:
+      // undeclared attributes (`id`, `aria-*`, `data-*`, the chat `context` …)
+      // have to be handed over, since the factory spreads them onto that root.
+      ...this.$attrs,
     });
   }),
 };
