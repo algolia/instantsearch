@@ -17,6 +17,10 @@ connectHits(render, { // TODO(instantsearch v5): `escapeHTML` is removed: highli
 escapeHTML: false });
 // TODO(instantsearch v5): `__hitIndex` is removed from the `hits` and `infiniteHits` item templates, use `__position - 1` instead (`__position` is the position across pages, starting at 1).
 hits({ container, templates: { item: ({ __hitIndex }) => `${__hitIndex}` } });
+// TODO(instantsearch v5): `__hitIndex` is removed from the `hits` and `infiniteHits` item templates, use `__position - 1` instead (`__position` is the position across pages, starting at 1).
+const fallbackIndex = (hit) => hit?.__hitIndex ?? 0;
+// TODO(instantsearch v5): `__hitIndex` is removed from the `hits` and `infiniteHits` item templates, use `__position - 1` instead (`__position` is the position across pages, starting at 1).
+const literalIndex = (hit) => hit?.['__hitIndex'];
 
 function App() {
   const { // TODO(instantsearch v5): `start` is replaced by `currentRefinement`, an object `{ min, max }` (unset values are `undefined` instead of `-Infinity`/`Infinity`), and `refine` takes `{ min, max }`.
