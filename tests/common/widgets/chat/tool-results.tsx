@@ -225,6 +225,9 @@ export function createToolResultTests(
         status: 'displayed',
         objectIDs: ['phone-a', 'phone-b'],
       };
+      // Differs from the tool's own acknowledgement, so the stored part shows
+      // whose result it ended with.
+      const serverOutput = { ...acknowledgement, answeredBy: 'server' };
       const takeaway: UIMessageChunk[] = [
         { type: 'text-start', id: 'text-1' },
         { type: 'text-delta', id: 'text-1', delta: 'Phone A is cheaper.' },
@@ -249,7 +252,7 @@ export function createToolResultTests(
           type: 'tool-output-available',
           toolName: 'algolia_compare_products',
           toolCallId: 'call-1',
-          output: acknowledgement,
+          output: serverOutput,
         },
       ];
 
@@ -261,6 +264,9 @@ export function createToolResultTests(
           );
         });
         const transport = { api: '/api', fetch: fetchMock };
+        // The chat stores the conversation once a response finishes, the same
+        // way in every flavor: that's where the final tool part is read.
+        const persistence = { messages: true };
 
         await setup({
           instantSearchOptions: {
@@ -268,9 +274,9 @@ export function createToolResultTests(
             searchClient: createSearchClient(),
           },
           widgetParams: {
-            javascript: { transport, persistence: false },
-            react: { transport, persistence: false },
-            vue: { transport, persistence: false },
+            javascript: { transport, persistence },
+            react: { transport, persistence },
+            vue: { transport, persistence },
           },
         });
 
@@ -312,6 +318,21 @@ export function createToolResultTests(
         ).not.toBeInTheDocument();
       }
 
+      function storedComparisonPart() {
+        const key = Array.from(
+          { length: sessionStorage.length },
+          (_, index) => sessionStorage.key(index)!
+        ).find((name) =>
+          name.startsWith('instantsearch-chat-initial-messages')
+        );
+        const messages: Array<{ parts: Array<{ type: string }> }> = JSON.parse(
+          sessionStorage.getItem(key!)!
+        );
+        return messages
+          .flatMap((message) => message.parts)
+          .find((part) => part.type === 'tool-algolia_compare_products');
+      }
+
       test('shows a comparison the server ran in one request', async () => {
         const fetchMock = await askForComparison([
           [
@@ -328,6 +349,13 @@ export function createToolResultTests(
 
         expectComparisonTable();
         expect(fetchMock).toHaveBeenCalledTimes(1);
+        expect(storedComparisonPart()).toEqual(
+          expect.objectContaining({
+            state: 'output-available',
+            providerExecuted: true,
+            output: serverOutput,
+          })
+        );
       });
 
       test('shows a comparison the server replays from its cache in one request', async () => {
@@ -346,6 +374,13 @@ export function createToolResultTests(
 
         expectComparisonTable();
         expect(fetchMock).toHaveBeenCalledTimes(1);
+        expect(storedComparisonPart()).toEqual(
+          expect.objectContaining({
+            state: 'output-available',
+            providerExecuted: true,
+            output: serverOutput,
+          })
+        );
       });
 
       test('acknowledges a comparison the agent left to the client, then continues', async () => {
@@ -385,6 +420,12 @@ export function createToolResultTests(
               output: acknowledgement,
             }),
           ])
+        );
+        expect(storedComparisonPart()).toEqual(
+          expect.objectContaining({
+            state: 'output-available',
+            output: acknowledgement,
+          })
         );
       });
     });
