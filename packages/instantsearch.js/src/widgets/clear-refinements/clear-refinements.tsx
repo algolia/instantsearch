@@ -1,23 +1,22 @@
 /** @jsx h */
 
+import { connectClearRefinements } from 'instantsearch-core';
 import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { createClearRefinementsComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
-import { connectClearRefinements } from 'instantsearch-core';
-import Template from '../../components/Template/Template';
 import { prepareTemplateProps, renderTemplate } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template as TemplateType } from '../../types';
 import type {
   ClearRefinementsConnectorParams,
   ClearRefinementsRenderState,
   ClearRefinementsWidgetDescription,
 } from 'instantsearch-core';
-import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template as TemplateType } from '../../types';
 import type { WidgetFactory, Renderer } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({

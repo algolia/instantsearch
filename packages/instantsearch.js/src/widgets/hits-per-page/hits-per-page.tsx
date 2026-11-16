@@ -7,7 +7,6 @@ import { Fragment, h, render } from 'preact';
 
 import { getContainerNode } from '../../lib/utils';
 
-import type { ComponentCSSClasses } from '../../types';
 import type {
   HitsPerPageConnectorParams,
   HitsPerPageRenderState,

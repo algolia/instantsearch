@@ -5,14 +5,13 @@ import { createDocumentationMessageGenerator } from 'instantsearch-core/internal
 import { createToggleRefinementComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
-import Template from '../../components/Template/Template';
 import { prepareTemplateProps, renderTemplate } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template } from '../../types';
+import type { Template as TemplateType } from '../../types';
 import type {
   ToggleRefinementConnectorParams,
   ToggleRefinementWidgetDescription,
