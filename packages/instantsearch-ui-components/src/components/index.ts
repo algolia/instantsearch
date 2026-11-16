@@ -19,7 +19,6 @@ export * from './chat/ChatToggleButton';
 export * from './chat/tools/CarouselTool';
 export * from './chat/icons';
 export * from './chat/tools/CompareProductsTool';
-export * from './chat/tools/ComparisonTableTool';
 export * from './chat/tools/createGroundedComparisonTable';
 export * from './chat/tools/GroupedResultsTool';
 export * from './chat/types';
