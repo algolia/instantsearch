@@ -15,6 +15,7 @@ import type { ComponentProps } from 'react';
 const NON_WIDGETS = [
   'Highlight',
   'ReverseHighlight',
+  'ReverseSnippet',
   'Snippet',
   'PoweredBy',
   'Chat',
@@ -127,6 +128,7 @@ function Widget<TWidget extends SingleWidget>({
       );
     }
     case 'Snippet':
+    case 'ReverseSnippet':
     case 'Highlight':
     case 'ReverseHighlight': {
       return (

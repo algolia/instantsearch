@@ -42,17 +42,32 @@ export default {
       type: String,
       required: true,
     },
+    // The `ais-reverse-*` widgets mark what the query did *not* match, so the
+    // parts come back inverted.
+    reversed: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return { TextNode };
   },
   computed: {
     parsedHighlights() {
-      return parseAlgoliaHit({
+      const parts = parseAlgoliaHit({
         attribute: this.attribute,
         hit: this.hit,
         highlightProperty: this.highlightProperty,
       });
+
+      if (!this.reversed) {
+        return parts;
+      }
+
+      return parts.map(({ isHighlighted, ...rest }) => ({
+        ...rest,
+        isHighlighted: !isHighlighted,
+      }));
     },
   },
 };

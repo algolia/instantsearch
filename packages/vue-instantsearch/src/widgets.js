@@ -33,6 +33,7 @@ export { default as AisTrendingFacets } from './components/TrendingFacets';
 export { default as AisRefinementList } from './components/RefinementList.vue';
 export { default as AisStateResults } from './components/StateResults.vue';
 export { default as AisSearchBox } from './components/SearchBox.vue';
+export { default as AisReverseSnippet } from './components/ReverseSnippet.vue';
 export { default as AisSnippet } from './components/Snippet.vue';
 export { default as AisSortBy } from './components/SortBy.vue';
 export { default as AisStats } from './components/Stats.vue';

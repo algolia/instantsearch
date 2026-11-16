@@ -28,6 +28,12 @@ export default {
       type: String,
       required: true,
     },
+    // The `ais-reverse-*` widgets mark what the query did *not* match, so the
+    // parts come back inverted.
+    reversed: {
+      type: Boolean,
+      default: false,
+    },
   },
   render() {
     const property =
@@ -39,7 +45,7 @@ export default {
         ({ value, isHighlighted }) => ({
           // We have to do this because Vue gets rid of TextNodes with a single white space
           value: value === ' ' ? '  ' : value,
-          isHighlighted,
+          isHighlighted: this.reversed ? !isHighlighted : isHighlighted,
         })
       )
     );
