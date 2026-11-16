@@ -34,8 +34,7 @@
   "files": [
     "dist",
     "cjs",
-    "es",
-    "scripts/transforms"
+    "es"
   ],
   "dependencies": {
     "@swc/helpers": "0.5.18",
