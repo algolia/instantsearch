@@ -13,8 +13,7 @@
  * unless it is in the explicit allowlist of intentional differences below.
  */
 
-import instantsearch from 'instantsearch.js';
-import * as jsChat from 'instantsearch.js/es/widgets/chat/chat';
+import * as jsExports from 'instantsearch.js';
 import * as reactExports from 'react-instantsearch';
 
 // Loaded with `require` on purpose (same rationale as
@@ -25,39 +24,33 @@ function getVueExports(): Record<string, unknown> {
   return require('../../packages/vue-instantsearch/src/instantsearch.js');
 }
 
+/** Module keys, minus the interop markers a transpiled module can add. */
+function exportNames(moduleExports: object): string[] {
+  return Object.keys(moduleExports).filter(
+    (name) => name !== 'default' && name !== '__esModule'
+  );
+}
+
 /**
- * The JS flavor's root entry is a function with namespaces (`widgets`,
- * `templates`, `connectors`, …) rather than flat named exports, so its
- * widget surface is the union of its namespaces plus the named exports of
- * the chat widget module (the JS public surface for chat tooling — the
- * `Tool`/`Tools` types and the chat tool factories live there).
+ * The JS root entry is a flat set of named exports (the `instantsearch` object
+ * carrying `widgets`/`templates` namespaces is the UMD build, which users can't
+ * import), so the JS surface is the root module's own keys. The root is also the
+ * only importable entry: `instantsearch.js/es/…` is off-limits (oxlint), and the
+ * built ESM output can't be loaded from these tests anyway.
  */
 function getJsExportNames(): string[] {
-  // The extracted root declarations type only the call signature, so the
-  // namespaces are read through a loose shape (the test compares runtime
-  // keys, not types).
-  const jsEntry = instantsearch as unknown as {
-    widgets: Record<string, unknown>;
-    templates: Record<string, unknown>;
-  };
-  return [
-    ...Object.keys(jsEntry.widgets),
-    ...Object.keys(jsEntry.templates),
-    // The entry point itself (`instantsearch()`), plus what it carries.
-    'instantsearch',
-    'version',
-    ...Object.keys(jsChat).filter((name) => name !== 'default'),
-  ];
+  return exportNames(jsExports);
 }
 
 /** React exports hooks (`useSearchBox`, …) that only exist in its headless layer. */
 function getReactExportNames(): string[] {
-  return Object.keys(reactExports).filter((name) => !name.startsWith('use'));
+  return exportNames(reactExports).filter((name) => !name.startsWith('use'));
 }
 
 /**
- * Vue exports its widgets as `Ais*` components; the mixin/server helpers are
- * framework glue.
+ * Vue's entry is `export * from 'instantsearch-core'` plus its `Ais*` widgets, so
+ * it carries the same shared API as the other roots. Only the mixin/server
+ * helpers it exists to provide are framework glue rather than shared surface.
  */
 const VUE_FRAMEWORK_GLUE = [
   'createSuitMixin',
@@ -66,10 +59,8 @@ const VUE_FRAMEWORK_GLUE = [
 ];
 
 function getVueExportNames(): string[] {
-  return Object.keys(getVueExports()).filter(
-    (name) =>
-      (name.startsWith('Ais') || name.startsWith('create')) &&
-      !VUE_FRAMEWORK_GLUE.includes(name)
+  return exportNames(getVueExports()).filter(
+    (name) => !VUE_FRAMEWORK_GLUE.includes(name)
   );
 }
 
@@ -95,10 +86,12 @@ const INTENTIONAL_DIFFERENCES: Record<string, string[]> = {
   // React's standalone text-highlighting widgets: in JS the highlighting is a
   // template helper (`highlight`/`html` tagged templates) rather than a
   // widget, and Vue ships `Highlight` and `Snippet` but not `ReverseHighlight`
-  // (pre-existing gap, same template-helper story applies).
+  // (pre-existing gap, same template-helper story applies). JS ships the
+  // `ReverseSnippet` component that React and Vue have no wrapper for — the
+  // same pre-existing gap, in the other direction.
   highlight: ['javascript'],
   reversehighlight: ['javascript', 'vue'],
-  snippet: ['javascript'],
+  reversesnippet: ['react', 'vue'],
 
   // React exposes these connectors as hooks in react-instantsearch-core
   // instead of composed widgets (Vue and JS ship widgets for them).
@@ -128,17 +121,19 @@ const INTENTIONAL_DIFFERENCES: Record<string, string[]> = {
   wrappromisewithstate: ['javascript', 'vue'],
   instantsearchssr: ['javascript', 'react'],
 
-  // React re-exports the chat tool-type constants from its root and JS from
-  // its chat widget module; in Vue they come from `instantsearch-core`.
+  // The chat tool-type constants: React re-exports their values from its root,
+  // while JS and Vue only carry the types (JS declares them on its chat widget
+  // module, whose path isn't importable, and Vue takes them from
+  // `instantsearch-core/internal`) — so nothing runtime shows up there.
   // React also exports its `createDefaultTools` factory from the root — in
   // the other flavors the default tool sets are wired inside the chat widget.
-  searchindextooltype: ['vue'],
-  recommendtooltype: ['vue'],
+  searchindextooltype: ['javascript', 'vue'],
+  recommendtooltype: ['javascript', 'vue'],
   memorizetooltype: ['javascript', 'vue'],
   memorysearchtooltype: ['javascript', 'vue'],
   pondertooltype: ['javascript', 'vue'],
-  compareproductstooltype: ['vue'],
-  groupedresultstooltype: ['vue'],
+  compareproductstooltype: ['javascript', 'vue'],
+  groupedresultstooltype: ['javascript', 'vue'],
   createdefaulttools: ['javascript', 'vue'],
 
   // The version string: JS exposes `instantsearch.version`, React exports
