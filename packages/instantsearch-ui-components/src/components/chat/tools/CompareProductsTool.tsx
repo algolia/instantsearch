@@ -21,7 +21,8 @@ import type {
 /**
  * Builtin comparison tool (`algolia_compare_products`).
  *
- * The agent calls this client-side tool to lay out a comparison as a table:
+ * The agent calls this tool to lay out a comparison as a table, whether Agent
+ * Studio runs it as a server tool or the agent still declares it client-side:
  * the compared products across the top (hydrated from the chat records store,
  * `context.records`, so the header never shows a product that isn't in the
  * catalog) and model-authored criteria down the side. Each criterion carries

@@ -214,5 +214,179 @@ export function createToolResultTests(
       ).not.toBeInTheDocument();
       expect(fetchMock).toHaveBeenCalledTimes(1);
     });
+
+    describe('comparison tool', () => {
+      const comparison = {
+        objectIDs: ['phone-a', 'phone-b'],
+        criteria: [{ label: 'Price', values: ['$199', '$299'] }],
+        intro: null,
+      };
+      const acknowledgement = {
+        status: 'displayed',
+        objectIDs: ['phone-a', 'phone-b'],
+      };
+      const takeaway: UIMessageChunk[] = [
+        { type: 'text-start', id: 'text-1' },
+        { type: 'text-delta', id: 'text-1', delta: 'Phone A is cheaper.' },
+        { type: 'text-end', id: 'text-1' },
+      ];
+      // Agent Studio flags the call `providerExecuted` when the agent
+      // declares the comparison as a server tool, and answers it itself.
+      const serverComparison: UIMessageChunk[] = [
+        {
+          type: 'tool-input-start',
+          toolCallId: 'call-1',
+          toolName: 'algolia_compare_products',
+        },
+        {
+          type: 'tool-input-available',
+          toolCallId: 'call-1',
+          toolName: 'algolia_compare_products',
+          input: comparison,
+          providerExecuted: true,
+        },
+        {
+          type: 'tool-output-available',
+          toolName: 'algolia_compare_products',
+          toolCallId: 'call-1',
+          output: acknowledgement,
+        },
+      ];
+
+      async function askForComparison(responses: UIMessageChunk[][]) {
+        const fetchMock = jest.fn();
+        responses.forEach((chunks) => {
+          fetchMock.mockImplementationOnce(() =>
+            Promise.resolve(chunksToResponse(chunks))
+          );
+        });
+        const transport = { api: '/api', fetch: fetchMock };
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient: createSearchClient(),
+          },
+          widgetParams: {
+            javascript: { transport, persistence: false },
+            react: { transport, persistence: false },
+            vue: { transport, persistence: false },
+          },
+        });
+
+        await openChat(act);
+
+        userEvent.type(
+          document.querySelector('.ais-ChatPrompt-textarea')!,
+          'Compare them'
+        );
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        userEvent.click(document.querySelector('.ais-ChatPrompt-submit')!);
+
+        await waitFor(() => {
+          expect(
+            document.querySelector('.ais-ChatMessages')!.textContent
+          ).toContain('Phone A is cheaper.');
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        return fetchMock;
+      }
+
+      function expectComparisonTable() {
+        expect(
+          document.querySelector('.ais-ChatToolComparisonTable')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('[data-testid="cell-phone-b-0"]')
+        ).toHaveTextContent('$299');
+        expect(
+          document.querySelector('.ais-ChatMessageError')
+        ).not.toBeInTheDocument();
+      }
+
+      test('shows a comparison the server ran in one request', async () => {
+        const fetchMock = await askForComparison([
+          [
+            { type: 'start', messageId: 'assistant-1' },
+            { type: 'start-step' },
+            ...serverComparison,
+            { type: 'finish-step' },
+            { type: 'start-step' },
+            ...takeaway,
+            { type: 'finish-step' },
+            { type: 'finish' },
+          ],
+        ]);
+
+        expectComparisonTable();
+        expect(fetchMock).toHaveBeenCalledTimes(1);
+      });
+
+      test('shows a comparison the server replays from its cache in one request', async () => {
+        // A cache replay puts the call, its output and the text in one step,
+        // so the last step ends on a resolved tool call.
+        const fetchMock = await askForComparison([
+          [
+            { type: 'start', messageId: 'assistant-1' },
+            { type: 'start-step' },
+            ...serverComparison,
+            ...takeaway,
+            { type: 'finish-step' },
+            { type: 'finish' },
+          ],
+        ]);
+
+        expectComparisonTable();
+        expect(fetchMock).toHaveBeenCalledTimes(1);
+      });
+
+      test('acknowledges a comparison the agent left to the client, then continues', async () => {
+        // An agent that declares the comparison as a client-side tool ends
+        // its response on the call and waits for the result.
+        const fetchMock = await askForComparison([
+          [
+            { type: 'start', messageId: 'assistant-1' },
+            { type: 'start-step' },
+            {
+              type: 'tool-input-available',
+              toolCallId: 'call-1',
+              toolName: 'algolia_compare_products',
+              input: comparison,
+            },
+            { type: 'finish-step' },
+            { type: 'finish' },
+          ],
+          [
+            { type: 'start', messageId: 'assistant-1' },
+            { type: 'start-step' },
+            ...takeaway,
+            { type: 'finish-step' },
+            { type: 'finish' },
+          ],
+        ]);
+
+        expectComparisonTable();
+        expect(fetchMock).toHaveBeenCalledTimes(2);
+        const resent = JSON.parse(fetchMock.mock.calls[1][1].body);
+        expect(resent.messages[resent.messages.length - 1].parts).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              type: 'tool-algolia_compare_products',
+              toolCallId: 'call-1',
+              state: 'output-available',
+              output: acknowledgement,
+            }),
+          ])
+        );
+      });
+    });
   });
 }
