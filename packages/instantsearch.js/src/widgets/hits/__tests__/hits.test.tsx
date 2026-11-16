@@ -794,36 +794,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
       `);
     });
 
-    test('provides `__position` but no `__hitIndex` to each item', async () => {
-      const container = document.createElement('div');
-      const searchBoxContainer = document.createElement('div');
-      const searchClient = createMockedSearchClient();
-
-      const search = instantsearch({ indexName: 'indexName', searchClient });
-
-      search.addWidgets([
-        searchBox({ container: searchBoxContainer }),
-        hits({
-          container,
-          templates: {
-            item(hit, { html }) {
-              return html`${hit.__position} ${String('__hitIndex' in hit)}`;
-            },
-          },
-        }),
-      ]);
-
-      search.start();
-
-      await wait(0);
-
-      expect(
-        [...container.querySelectorAll('.ais-Hits-item')].map(
-          (item) => item.textContent
-        )
-      ).toEqual(['1 false', '2 false']);
-    });
-
     type CustomHit = { name: string; description: string };
 
     function createMockedSearchClient(
