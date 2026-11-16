@@ -1,36 +1,11 @@
-<template>
-  <div :class="suit()" v-if="state">
-    <slot
-      :items="state.options"
-      :refine="state.refine"
-      :current-refinement="state.currentRefinement"
-      :can-refine="state.canRefine"
-    >
-      <select
-        :class="suit('select')"
-        @change="state.refine($event.currentTarget.value)"
-        aria-label="Sort results by"
-      >
-        <option
-          v-for="item in state.options"
-          :key="item.value"
-          :class="suit('option')"
-          :value="item.value"
-          :selected="item.value === state.currentRefinement"
-        >
-          {{ item.label }}
-        </option>
-      </select>
-    </slot>
-  </div>
-</template>
-
 <script>
 import { connectSortBy } from 'instantsearch-core';
+import { createSortByComponent } from 'instantsearch-ui-components';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
+import { Fragment, getScopedSlot, renderReactCompat } from '../util/vue-compat';
 
 export default {
   name: 'AisSortBy',
@@ -42,7 +17,6 @@ export default {
         $$widgetType: 'ais.sortBy',
       }
     ),
-
     createPanelConsumerMixin(),
   ],
   props: {
@@ -63,5 +37,35 @@ export default {
       };
     },
   },
+  render: renderReactCompat(function (h) {
+    if (!this.state) {
+      return null;
+    }
+
+    const defaultSlot = getScopedSlot(this, 'default');
+    if (defaultSlot) {
+      return h('div', { className: this.suit() }, [
+        defaultSlot({
+          items: this.state.options,
+          refine: this.state.refine,
+          currentRefinement: this.state.currentRefinement,
+          canRefine: this.state.canRefine,
+        }),
+      ]);
+    }
+
+    const SortBy = createSortByComponent({ createElement: h, Fragment });
+
+    return h(SortBy, {
+      classNames: this.classNames && {
+        root: this.classNames['ais-SortBy'],
+        select: this.classNames['ais-SortBy-select'],
+        option: this.classNames['ais-SortBy-option'],
+      },
+      items: this.state.options,
+      value: this.state.currentRefinement,
+      onChange: this.state.refine,
+    });
+  }),
 };
 </script>

@@ -346,20 +346,32 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
     };
   },
   createHitsPerPageWidgetTests({ instantSearchOptions, widgetParams }) {
-    instantsearch(instantSearchOptions)
-      .addWidgets([
-        hitsPerPage({
-          container: document.body.appendChild(document.createElement('div')),
-          ...widgetParams,
-        }),
-      ])
-      .on('error', () => {
-        /*
-         * prevent rethrowing InstantSearch errors, so tests can be asserted.
-         * IRL this isn't needed, as the error doesn't stop execution.
-         */
-      })
-      .start();
+    const search = instantsearch(instantSearchOptions);
+    search.addWidgets([
+      hitsPerPage({
+        container: document.body.appendChild(document.createElement('div')),
+        ...widgetParams,
+      }),
+    ]);
+    search.on('error', () => {
+      /*
+       * prevent rethrowing InstantSearch errors, so tests can be asserted.
+       * IRL this isn't needed, as the error doesn't stop execution.
+       */
+    });
+    search.start();
+
+    return {
+      setHitsPerPage(hitsPerPageValue) {
+        search.setUiState((uiState) => ({
+          ...uiState,
+          indexName: {
+            ...uiState.indexName,
+            hitsPerPage: hitsPerPageValue,
+          },
+        }));
+      },
+    };
   },
   createClearRefinementsWidgetTests({ instantSearchOptions, widgetParams }) {
     const refinementListAttributes = Object.keys(

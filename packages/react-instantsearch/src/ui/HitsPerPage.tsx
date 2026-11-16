@@ -1,59 +1,28 @@
-import { cx } from 'instantsearch-ui-components';
-import React from 'react';
+import { createHitsPerPageComponent } from 'instantsearch-ui-components';
+import React, { createElement, Fragment } from 'react';
 
-import type { HitsPerPageConnectorParamsItem as HitsPerPageItem } from 'instantsearch-core';
+import type {
+  HitsPerPageProps as HitsPerPageUiComponentProps,
+  Pragma,
+} from 'instantsearch-ui-components';
 
-export type HitsPerPageProps = Omit<React.ComponentProps<'div'>, 'onChange'> & {
-  items: HitsPerPageItem[];
-  onChange: (value: number) => void;
-  currentValue: number;
-  classNames?: Partial<HitsPerPageClassNames>;
-};
+export type {
+  HitsPerPageClassNames,
+  HitsPerPageItem,
+} from 'instantsearch-ui-components';
 
-export type HitsPerPageClassNames = {
-  /**
-   * Class names to apply to the root element
-   */
-  root: string;
-  /**
-   * Class names to apply to the select element
-   */
-  select: string;
-  /**
-   * Class names to apply to the option element
-   */
-  option: string;
-};
+// The shared props resolve the root element's props through the global `JSX`
+// namespace, which React 19 no longer populates (`React.JSX` moved out of it),
+// so merge React's native `div` props back in — minus the props replaced by
+// the widget's own callbacks.
+export type HitsPerPageProps = HitsPerPageUiComponentProps &
+  Omit<React.ComponentProps<'div'>, keyof HitsPerPageUiComponentProps>;
 
-export function HitsPerPage({
-  items,
-  onChange,
-  currentValue,
-  classNames = {},
-  ...props
-}: HitsPerPageProps) {
-  return (
-    <div
-      {...props}
-      className={cx('ais-HitsPerPage', classNames.root, props.className)}
-    >
-      <select
-        className={cx('ais-HitsPerPage-select', classNames.select)}
-        onChange={(event) => {
-          onChange(Number(event.target.value));
-        }}
-        value={String(currentValue)}
-      >
-        {items.map((item) => (
-          <option
-            key={item.value}
-            className={cx('ais-HitsPerPage-option', classNames.option)}
-            value={item.value}
-          >
-            {item.label}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
+const HitsPerPageUiComponent = createHitsPerPageComponent({
+  createElement: createElement as Pragma,
+  Fragment,
+});
+
+export function HitsPerPage(props: HitsPerPageProps) {
+  return <HitsPerPageUiComponent {...props} />;
 }
