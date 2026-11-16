@@ -19,6 +19,7 @@ const nonWidgetComponents = [
   'AisInstantSearch',
   'AisInstantSearchSsr',
   'AisHighlight',
+  'AisReverseHighlight',
   'AisReverseSnippet',
   'AisSnippet',
   'AisPanel',
