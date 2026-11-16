@@ -236,7 +236,7 @@ function buildIndicesConfig(vm) {
  * the markup and the hooks state.
  */
 const AutocompleteConnector = {
-  name: 'AisExperimentalAutocompleteConnector',
+  name: 'AisAutocompleteConnector',
   mixins: [
     createWidgetMixin(
       { connector: connectAutocomplete },
@@ -269,7 +269,7 @@ const AutocompleteConnector = {
  * can't be described with components.
  */
 const AutocompleteFeeds = {
-  name: 'AisExperimentalAutocompleteFeeds',
+  name: 'AisAutocompleteFeeds',
   inject: {
     instantSearchInstance: { from: '$_ais_instantSearchInstance' },
     getParentIndex: { from: '$_ais_getParentIndex' },
@@ -306,7 +306,7 @@ const AutocompleteFeeds = {
  * `handleMount`.
  */
 const IsolatedIndex = {
-  name: 'AisExperimentalAutocompleteIsolatedIndex',
+  name: 'AisAutocompleteIsolatedIndex',
   props: {
     tree: { type: Object, required: true },
     handleRender: { type: Function, required: true },
@@ -360,7 +360,7 @@ const IsolatedIndex = {
 };
 
 /**
- * Experimental Autocomplete widget.
+ * Autocomplete widget.
  *
  * It composes `connectAutocomplete` with the shared `instantsearch-ui-components`
  * markup, exactly like the `autocomplete` widget of InstantSearch.js and the
@@ -379,7 +379,7 @@ const IsolatedIndex = {
  * hooks store (see the "hook-based shared components" section of CLAUDE.md).
  */
 export default {
-  name: 'AisExperimentalAutocomplete',
+  name: 'AisAutocomplete',
   mixins: [createSuitMixin({ name: 'Autocomplete' }), createHooksMixin()],
   inject: {
     instantSearchInstance: {
@@ -424,7 +424,7 @@ export default {
   created() {
     if (this.feeds && this.indices) {
       throw new Error(
-        'The `feeds` and `indices` options of <ais-experimental-autocomplete> are mutually exclusive.'
+        'The `feeds` and `indices` options of <ais-autocomplete> are mutually exclusive.'
       );
     }
 
@@ -448,7 +448,7 @@ export default {
 
     if (isFeedsMode(this) && !this.instantSearchInstance.compositionID) {
       throw new Error(
-        'feeds-mode of <ais-experimental-autocomplete> requires a composition-based InstantSearch instance (compositionID must be set).'
+        'feeds-mode of <ais-autocomplete> requires a composition-based InstantSearch instance (compositionID must be set).'
       );
     }
 

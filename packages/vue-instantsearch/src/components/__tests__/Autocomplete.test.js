@@ -13,7 +13,7 @@ import { Chat } from 'instantsearch-core/internal';
 import { createApp, mountApp, nextTick } from '../../../test/utils';
 import {
   AisChat,
-  AisExperimentalAutocomplete,
+  AisAutocomplete,
   AisHits,
   AisInstantSearch,
 } from '../../instantsearch';
@@ -59,7 +59,7 @@ async function mountAutocomplete({
     render: renderCompat((h) =>
       h(AisInstantSearch, { props: { ...instantSearchProps, searchClient } }, [
         h(InstanceSpy),
-        h(AisExperimentalAutocomplete, { props, scopedSlots: slots }),
+        h(AisAutocomplete, { props, scopedSlots: slots }),
         withHits && h(AisHits),
         chat &&
           h(AisChat, {
@@ -92,7 +92,7 @@ async function mountAutocomplete({
   };
 }
 
-describe('AisExperimentalAutocomplete', () => {
+describe('AisAutocomplete', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
     // The chat persists its messages and conversation.
@@ -455,7 +455,7 @@ describe('AisExperimentalAutocomplete', () => {
                 },
               },
               [
-                h(AisExperimentalAutocomplete, {
+                h(AisAutocomplete, {
                   props: { indices: [], feeds: [] },
                 }),
               ]

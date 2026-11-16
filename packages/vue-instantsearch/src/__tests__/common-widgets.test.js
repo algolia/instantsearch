@@ -31,7 +31,7 @@ import {
   AisMenuSelect,
   AisDynamicWidgets,
   AisRelatedProducts,
-  AisExperimentalAutocomplete,
+  AisAutocomplete,
   AisFrequentlyBoughtTogether,
   AisLookingSimilar,
   AisTrendingItems,
@@ -744,7 +744,7 @@ const testSetups = {
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
-            h(AisExperimentalAutocomplete, {
+            h(AisAutocomplete, {
               props,
               scopedSlots: slots,
             }),
