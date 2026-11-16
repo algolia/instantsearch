@@ -86,11 +86,11 @@ const INTENTIONAL_DIFFERENCES: Record<string, string[]> = {
   // React's standalone text-highlighting widgets: in JS the highlighting is a
   // template helper (`highlight`/`html` tagged templates) rather than a
   // widget, and Vue ships `Highlight` and `Snippet` but not `ReverseHighlight`
-  // (pre-existing gap, same template-helper story applies). JS ships the
-  // `ReverseSnippet` component that React and Vue have no wrapper for — the
-  // same pre-existing gap, in the other direction.
+  // (pre-existing gap, same template-helper story applies).
   highlight: ['javascript'],
   reversehighlight: ['javascript', 'vue'],
+  // React and Vue got `ReverseSnippet` wrappers in #7425 — drop this line once
+  // that lands.
   reversesnippet: ['react', 'vue'],
 
   // React exposes these connectors as hooks in react-instantsearch-core

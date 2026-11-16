@@ -64,6 +64,8 @@ yarn website:examples && E2E_FLAVOR=react E2E_BROWSER=chromium yarn test:e2e
 
 Packages build with the root's `rollup` and `tsc`, which only scripts started from the root can reach, so build through Lerna as CI does: `yarn workspace <pkg> build` stops at `command not found`, and `instantsearch.js`'s `build:types` exits 0 with stale declarations. `yarn type-check` reads other packages, and public paths like `instantsearch.js/es/…`, from those built declarations: rebuild the packages you changed before type-checking, and run `yarn build:ci` after a rebase or a branch switch.
 
+CI checks these three in a single job, in the order `Format check` → `Lint` → `Type checking`: the first failure stops the job, so a red `Lint` step means `Type checking` never ran — read a missing step as unknown, not as passing, and run `yarn format` before pushing.
+
 Don't pass `--silent` to `yarn jest`. Some tests count `console.error` calls, and Jest's silent console no longer turns `console.trace` into one, so the "can attach many `render` listeners" test in `instantsearch-core` fails with it.
 
 ## Conventions
