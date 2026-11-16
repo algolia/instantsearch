@@ -6,6 +6,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { Chat } from 'instantsearch-core/internal';
 
 import { mount, nextTick } from '../../../test/utils';
+import { renderReactCompat } from '../../util/vue-compat';
 import ChatComponent from '../Chat';
 import ChatTrigger from '../ChatTrigger';
 import InstantSearch from '../InstantSearch';
@@ -326,6 +327,40 @@ describe('AisChat', () => {
 
       expect(document.querySelector('.ais-Chat-container--open')).toBeNull();
     });
+  });
+
+  it('hands a component-object `headerComponent` its callbacks as props', async () => {
+    const chat = new Chat({});
+    // A Vue component object takes callbacks as declared props, and the chat
+    // hands them over the React way (`onX`). The compat renderer lower-cases
+    // listener names, so `onToggleMaximize` reaches the child only as a
+    // `togglemaximize` listener unless it is also passed as a prop.
+    const HeaderComponent = {
+      props: {
+        onToggleMaximize: { type: Function, default: undefined },
+        onClear: { type: Function, default: undefined },
+      },
+      render: renderReactCompat(function (h) {
+        return h('div', { class: 'custom-header' }, [
+          h(
+            'span',
+            { class: 'custom-header-maximize' },
+            typeof this.onToggleMaximize
+          ),
+          h('span', { class: 'custom-header-clear' }, typeof this.onClear),
+        ]);
+      }),
+    };
+
+    mountChat(chat, { headerComponent: HeaderComponent });
+    await openChat();
+
+    expect(document.querySelector('.custom-header-maximize').textContent).toBe(
+      'function'
+    );
+    expect(document.querySelector('.custom-header-clear').textContent).toBe(
+      'function'
+    );
   });
 
   it('exposes setOpen, setInput and sendMessage on the component', async () => {
