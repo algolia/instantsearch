@@ -3,6 +3,7 @@
  */
 
 import { mount } from '../../../test/utils';
+import { renderReactCompat } from '../../util/vue-compat';
 import ChatGreeting from '../ChatGreeting';
 import ChatInlineLayout from '../ChatInlineLayout';
 import ChatMessageLoader from '../ChatMessageLoader';
@@ -117,21 +118,15 @@ describe.each([
   });
 
   it('renders the shared layout with the chat pieces inside the container', () => {
-    const HeaderComponent = {
-      render(h) {
-        return h('div', { attrs: { 'data-testid': 'header' } });
-      },
-    };
-    const MessagesComponent = {
-      render(h) {
-        return h('div', { attrs: { 'data-testid': 'messages' } });
-      },
-    };
-    const PromptComponent = {
-      render(h) {
-        return h('div', { attrs: { 'data-testid': 'prompt' } });
-      },
-    };
+    // A piece the layout renders in place of its header/messages/prompt. Defined
+    // through `renderReactCompat` so one definition works on both versions:
+    // Vue 2 hands a component's `render` the `createElement`, Vue 3 hands it the
+    // instance proxy.
+    const piece = (testId) => ({
+      render: renderReactCompat(function (h) {
+        return h('div', { 'data-testid': testId });
+      }),
+    });
 
     wrapper = mount(component, {
       attachTo: document.body,
@@ -139,9 +134,9 @@ describe.each([
         ...(name === 'AisChatInlineLayout'
           ? {}
           : { open: true, maximized: false }),
-        headerComponent: HeaderComponent,
-        messagesComponent: MessagesComponent,
-        promptComponent: PromptComponent,
+        headerComponent: piece('header'),
+        messagesComponent: piece('messages'),
+        promptComponent: piece('prompt'),
       },
     });
 
