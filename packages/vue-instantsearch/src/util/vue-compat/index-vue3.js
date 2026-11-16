@@ -115,6 +115,17 @@ export function augmentReactCreateElement(baseH) {
             isCapture ? CAPTURE_SUFFIX : ''
           }`
         ] = value;
+
+        if (typeof tag !== 'string') {
+          // A component takes React-style callbacks as props, not as listeners
+          // — and the handler key above is lower-cased past its first letter, so
+          // `onToggleMaximize` becomes `onTogglemaximize` and a component
+          // declaring the prop receives nothing. Offer it under its own name
+          // too: declared props are matched before Vue reads a key as a
+          // listener, and an `onX` key is never rendered as an attribute, so
+          // this cannot leak onto the child's root element.
+          data[name] = value;
+        }
       } else if (typeof value === 'boolean' && name.indexOf('aria-') === 0) {
         data[name] = String(value);
       } else {
