@@ -180,6 +180,26 @@ export function createOptionsTests(
       );
     });
 
+    test('adds the empty modifier to the root without results', async () => {
+      const searchClient = createMockedSearchClient({ hits: [], nbPages: 0 });
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {},
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(
+        document.querySelector('#hits-with-defaults .ais-InfiniteHits')
+      ).toHaveClass('ais-InfiniteHits', 'ais-InfiniteHits--empty');
+    });
+
     test('renders transformed items', async () => {
       const searchClient = createMockedSearchClient();
 

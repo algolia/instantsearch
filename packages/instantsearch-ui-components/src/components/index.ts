@@ -30,6 +30,7 @@ export * from './FrequentlyBoughtTogether';
 export * from './HitsPerPage';
 export * from './Highlight';
 export * from './Hits';
+export * from './InfiniteHits';
 export * from './LookingSimilar';
 export * from './PoweredBy';
 export * from './RelatedProducts';
