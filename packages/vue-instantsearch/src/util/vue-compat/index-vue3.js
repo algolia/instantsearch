@@ -110,20 +110,29 @@ export function augmentReactCreateElement(baseH) {
         const eventName = name
           .slice(2, isCapture ? -CAPTURE_SUFFIX.length : undefined)
           .toLowerCase();
-        data[
-          `on${eventName[0].toUpperCase()}${eventName.slice(1)}${
-            isCapture ? CAPTURE_SUFFIX : ''
-          }`
-        ] = value;
+        const handlerKey = `on${eventName[0].toUpperCase()}${eventName.slice(
+          1
+        )}${isCapture ? CAPTURE_SUFFIX : ''}`;
 
-        if (typeof tag !== 'string') {
-          // A component takes React-style callbacks as props, not as listeners
-          // — and the handler key above is lower-cased past its first letter, so
-          // `onToggleMaximize` becomes `onTogglemaximize` and a component
-          // declaring the prop receives nothing. Offer it under its own name
-          // too: declared props are matched before Vue reads a key as a
-          // listener, and an `onX` key is never rendered as an attribute, so
-          // this cannot leak onto the child's root element.
+        // A component takes React-style callbacks as props, not as listeners —
+        // and the handler key is lower-cased past its first letter, so
+        // `onToggleMaximize` becomes `onTogglemaximize` and a component
+        // declaring the prop receives nothing. Offer it under its own name.
+        const isComponent = typeof tag !== 'string';
+        const declaresCallback = isComponent && declaresProp(tag, name);
+
+        // An `onX` key the child does not declare falls through to its root
+        // element as a listener, so a child that declares the callback and
+        // binds it itself would run it twice per event: the handler key stays
+        // out of the vnode once the prop carries it.
+        if (!declaresCallback) {
+          data[handlerKey] = value;
+        }
+
+        if (isComponent) {
+          // Declared props are matched before Vue reads a key as a listener,
+          // and an `onX` key is never rendered as an attribute, so this cannot
+          // leak onto the child's root element.
           data[name] = value;
         }
       } else if (typeof value === 'boolean' && name.indexOf('aria-') === 0) {
@@ -162,6 +171,52 @@ function isEventProp(name, value) {
     thirdCharCode >= 65 &&
     thirdCharCode <= 90
   );
+}
+
+/**
+ * Whether a component definition declares this prop — through its own `props`,
+ * or through a mixin or `extends` that Vue merges into the same table.
+ */
+function declaresProp(component, name, depth = 0) {
+  if (!component || typeof component !== 'object' || depth > 5) {
+    return false;
+  }
+
+  const declared = component.props
+    ? Array.isArray(component.props)
+      ? component.props
+      : Object.keys(component.props)
+    : [];
+
+  if (declared.some((key) => key === name || camelize(key) === name)) {
+    return true;
+  }
+
+  const sources = (component.mixins || []).concat(
+    component.extends ? [component.extends] : []
+  );
+
+  return sources.some(
+    (source) =>
+      typeof source === 'object' && declaresProp(source, name, depth + 1)
+  );
+}
+
+// `on-toggle-maximize` -> `onToggleMaximize`: Vue matches a declared prop under
+// either spelling.
+function camelize(value) {
+  if (value.indexOf('-') === -1) {
+    return value;
+  }
+
+  return value
+    .split('-')
+    .map((chunk, index) =>
+      index === 0 || chunk === ''
+        ? chunk
+        : chunk[0].toUpperCase() + chunk.slice(1)
+    )
+    .join('');
 }
 
 function toVueRef(ref) {
