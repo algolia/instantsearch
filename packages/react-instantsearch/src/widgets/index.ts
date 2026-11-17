@@ -21,6 +21,7 @@ export * from './RangeInput';
 export * from './RefinementList';
 export * from './RelatedProducts';
 export * from './ReverseHighlight';
+export * from './ReverseSnippet';
 export * from './SearchBox';
 export * from './Snippet';
 export * from './SortBy';
