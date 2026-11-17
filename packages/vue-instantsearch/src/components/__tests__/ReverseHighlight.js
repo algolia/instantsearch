@@ -40,6 +40,34 @@ test('marks them in the highlighted tag name', () => {
   ).toBe('EM');
 });
 
+test('marks an array-valued attribute, joining the values', () => {
+  const wrapper = mount(ReverseHighlight, {
+    propsData: {
+      attribute: 'attr',
+      hit: {
+        _highlightResult: {
+          attr: [
+            { value: 'con__ais-highlight__ten__/ais-highlight__t' },
+            {
+              value: 'nothing __ais-highlight__matched__/ais-highlight__ here',
+            },
+          ],
+        },
+      },
+    },
+  });
+
+  expect(wrapper.find('.ais-ReverseHighlight').text()).toBe(
+    'content, nothing matched here'
+  );
+
+  const marked = Array.from(
+    wrapper.element.querySelectorAll('.ais-ReverseHighlight-highlighted')
+  ).map((element) => element.textContent.trim());
+
+  expect(marked).toEqual(['con', 't', 'nothing', 'here']);
+});
+
 test('allows usage of dot delimited path to access nested attribute', () => {
   const wrapper = mount(ReverseHighlight, {
     propsData: {

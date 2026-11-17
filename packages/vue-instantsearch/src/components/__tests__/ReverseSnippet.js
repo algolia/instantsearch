@@ -40,6 +40,34 @@ test('marks them in the highlighted tag name', () => {
   );
 });
 
+test('marks an array-valued attribute, joining the values', () => {
+  const wrapper = mount(ReverseSnippet, {
+    propsData: {
+      attribute: 'attr',
+      hit: {
+        _snippetResult: {
+          attr: [
+            { value: 'con__ais-highlight__ten__/ais-highlight__t' },
+            {
+              value: 'nothing __ais-highlight__matched__/ais-highlight__ here',
+            },
+          ],
+        },
+      },
+    },
+  });
+
+  expect(wrapper.find('.ais-ReverseSnippet').text()).toBe(
+    'content, nothing matched here'
+  );
+
+  const marked = Array.from(
+    wrapper.element.querySelectorAll('.ais-ReverseSnippet-highlighted')
+  ).map((element) => element.textContent.trim());
+
+  expect(marked).toEqual(['con', 't', 'nothing', 'here']);
+});
+
 test('allows usage of dot delimited path to access nested attribute', () => {
   const wrapper = mount(ReverseSnippet, {
     propsData: {
