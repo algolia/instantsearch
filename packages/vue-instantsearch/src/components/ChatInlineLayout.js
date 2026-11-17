@@ -1,22 +1,9 @@
 import { createChatInlineLayoutComponent } from 'instantsearch-ui-components';
 
 import { createSuitMixin } from '../mixins/suit';
+import { renderLayoutPiece } from '../util/layoutPiece';
+import { takeRootClass } from '../util/rootClass';
 import { renderReactCompat } from '../util/vue-compat';
-
-/**
- * Renders a layout piece: an already-rendered element (what the chat hands
- * its built-in layouts) passes through, a Vue component object or a
- * React-style render function gets rendered in tag position.
- */
-function renderPiece(h, piece) {
-  if (!piece) {
-    return piece;
-  }
-  if (typeof piece === 'function' || typeof piece.render === 'function') {
-    return h(piece);
-  }
-  return piece;
-}
 
 /**
  * This is also the markup `ais-chat` renders for `layout="inline"`; the
@@ -63,12 +50,14 @@ const AisChatInlineLayout = {
       });
     }
 
+    const { classNames, attrs } = takeRootClass(this.classNames, this.$attrs);
+
     return h(this.LayoutComponent, {
-      headerComponent: renderPiece(h, this.headerComponent),
-      messagesComponent: renderPiece(h, this.messagesComponent),
-      promptComponent: renderPiece(h, this.promptComponent),
-      classNames: this.classNames,
-      ...this.$attrs,
+      headerComponent: renderLayoutPiece(h, this.headerComponent),
+      messagesComponent: renderLayoutPiece(h, this.messagesComponent),
+      promptComponent: renderLayoutPiece(h, this.promptComponent),
+      classNames,
+      ...attrs,
     });
   }),
 };

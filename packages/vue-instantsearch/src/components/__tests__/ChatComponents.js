@@ -146,4 +146,81 @@ describe.each([
     expect(document.querySelector('[data-testid="messages"]')).not.toBeNull();
     expect(document.querySelector('[data-testid="prompt"]')).not.toBeNull();
   });
+
+  it('renders pieces whose render comes from a mixin or a setup()', () => {
+    // A component whose `render` arrives through a mixin — which is what a
+    // single-file component or a `setup()` definition looks like to the layout:
+    // an options object with no own `render` key. Spotting components by
+    // looking for `render` drops these, so they have to be rendered in tag
+    // position whatever they carry.
+    const withRender = (testId) => ({
+      mixins: [
+        {
+          render: renderReactCompat(function (h) {
+            return h('div', { 'data-testid': testId });
+          }),
+        },
+      ],
+    });
+
+    wrapper = mount(component, {
+      attachTo: document.body,
+      propsData: {
+        ...(name === 'AisChatInlineLayout'
+          ? {}
+          : { open: true, maximized: false }),
+        headerComponent: withRender('header'),
+        messagesComponent: { setup: () => ({}), ...withRender('messages') },
+        promptComponent: () => 'ask away',
+      },
+    });
+
+    expect(document.querySelector('[data-testid="header"]')).not.toBeNull();
+    expect(document.querySelector('[data-testid="messages"]')).not.toBeNull();
+    expect(document.querySelector('.ais-Chat-container').textContent).toContain(
+      'ask away'
+    );
+  });
+});
+
+describe.each([
+  ['AisChatGreeting', ChatGreeting, 'ais-ChatGreeting'],
+  ['AisChatMessageLoader', ChatMessageLoader, 'ais-ChatMessageLoader'],
+  ['AisChatOverlayLayout', ChatOverlayLayout, 'ais-ChatOverlayLayout'],
+  ['AisChatInlineLayout', ChatInlineLayout, 'ais-ChatInlineLayout'],
+  ['AisChatSidePanelLayout', ChatSidePanelLayout, 'ais-ChatSidePanelLayout'],
+])('%s', (name, component, rootClass) => {
+  let wrapper;
+
+  afterEach(() => {
+    if (wrapper) {
+      wrapper.destroy();
+      wrapper = undefined;
+    }
+    document.body.innerHTML = '';
+  });
+
+  it('keeps a class binding on the shared root', () => {
+    // On Vue 3 `class` arrives through `$attrs`, which `inheritAttrs: false`
+    // keeps off the root, and the shared component's own `className` wins over
+    // a second one — the binding has to reach the factory instead.
+    wrapper = mount(
+      {
+        components: { Widget: component },
+        data: () => ({ maximized: true }),
+        template: `<Widget
+          class="string-class"
+          :class="[{ 'object-class': maximized }, 'array-class']"
+        />`,
+      },
+      { attachTo: document.body }
+    );
+
+    const root = document.querySelector(`.${rootClass}`);
+
+    expect(root).not.toBeNull();
+    expect(root.classList.contains('string-class')).toBe(true);
+    expect(root.classList.contains('object-class')).toBe(true);
+    expect(root.classList.contains('array-class')).toBe(true);
+  });
 });

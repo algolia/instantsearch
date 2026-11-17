@@ -1,6 +1,7 @@
 import { createChatMessageLoaderComponent } from 'instantsearch-ui-components';
 
 import { createSuitMixin } from '../mixins/suit';
+import { takeClassName } from '../util/rootClass';
 import { renderReactCompat } from '../util/vue-compat';
 
 /**
@@ -34,13 +35,18 @@ export default {
       });
     }
 
+    // This factory composes its root class from a `className` prop rather than
+    // `classNames`, so the `class` binding goes there.
+    const { className, attrs } = takeClassName(undefined, this.$attrs);
+
     return h(this.LoaderComponent, {
       translations: this.translations,
       inline: this.inline,
+      className,
       // Extra props the chat passes to loader components (e.g. the turn
       // `context`). The default markup ignores them, but custom loaders
       // wrapped around this one may read them.
-      ...this.$attrs,
+      ...attrs,
     });
   }),
 };
