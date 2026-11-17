@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.7.0](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.6.16...create-instantsearch-app@7.7.0) (2026-11-17)
+
+
+### Features
+
+* **create-instantsearch-app:** use algoliasearch v5 in InstantSearch.js template ([#7408](https://github.com/algolia/instantsearch/issues/7408)) ([1066fcd](https://github.com/algolia/instantsearch/commit/1066fcd5031876c4dab66b02e8f8216946040d12))
+
+
+
+
+
 ## [7.6.16](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.6.15...create-instantsearch-app@7.6.16) (2026-11-10)
 
 **Note:** Version bump only for package create-instantsearch-app
