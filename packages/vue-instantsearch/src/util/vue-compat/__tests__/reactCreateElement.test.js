@@ -109,6 +109,37 @@ describe('renderReactCompat', () => {
     expect(onKeyDown).toHaveBeenCalledTimes(1);
   });
 
+  it('keeps the callback reachable for a child that declares the event in emits', () => {
+    const onKeyDown = jest.fn();
+
+    const Child = {
+      // Declares both the prop it could call itself and the event it emits.
+      // Vue resolves `$emit('keydown')` through the lower-cased handler key,
+      // not through the declared prop, and a declared emit keeps that key from
+      // falling through to the root — so the callback has to stay reachable
+      // without also running twice.
+      props: { onKeyDown: { type: Function, default: undefined } },
+      emits: ['keydown'],
+      render: renderReactCompat(function (h) {
+        return h(
+          'button',
+          { onClick: () => this.$emit('keydown', 'emitted') },
+          'child'
+        );
+      }),
+    };
+
+    mountComponent({
+      render: renderReactCompat(function (h) {
+        return h(Child, { onKeyDown });
+      }),
+    });
+
+    document.querySelector('button').click();
+    expect(onKeyDown).toHaveBeenCalledTimes(1);
+    expect(onKeyDown).toHaveBeenCalledWith('emitted');
+  });
+
   it('keeps the callback reachable through $listeners and emits', () => {
     const onClose = jest.fn();
 

@@ -120,12 +120,18 @@ export function augmentReactCreateElement(baseH) {
         // declaring the prop receives nothing. Offer it under its own name.
         const isComponent = typeof tag !== 'string';
         const declaresCallback = isComponent && declaresProp(tag, name);
+        // A child that also declares this event in `emits` is reached through
+        // the handler key — `$emit('keydown')` looks `onKeydown` up on the
+        // vnode — and a declared emit keeps that key from falling through to
+        // the root element, so there is nothing to double here.
+        const declaresEmittedEvent =
+          isComponent && declaresEmit(tag, eventName);
 
         // An `onX` key the child does not declare falls through to its root
         // element as a listener, so a child that declares the callback and
         // binds it itself would run it twice per event: the handler key stays
         // out of the vnode once the prop carries it.
-        if (!declaresCallback) {
+        if (!declaresCallback || declaresEmittedEvent) {
           data[handlerKey] = value;
         }
 
@@ -199,6 +205,37 @@ function declaresProp(component, name, depth = 0) {
   return sources.some(
     (source) =>
       typeof source === 'object' && declaresProp(source, name, depth + 1)
+  );
+}
+
+/**
+ * Whether a component definition declares this emitted event — through its own
+ * `emits`, or through a mixin or `extends`. Vue resolves an emitted event by
+ * looking the handler key up on the vnode rather than through declared props,
+ * so a child that emits it has to keep that key.
+ */
+function declaresEmit(component, eventName, depth = 0) {
+  if (!component || typeof component !== 'object' || depth > 5) {
+    return false;
+  }
+
+  const declared = component.emits
+    ? Array.isArray(component.emits)
+      ? component.emits
+      : Object.keys(component.emits)
+    : [];
+
+  if (declared.indexOf(eventName) !== -1) {
+    return true;
+  }
+
+  const sources = (component.mixins || []).concat(
+    component.extends ? [component.extends] : []
+  );
+
+  return sources.some(
+    (source) =>
+      typeof source === 'object' && declaresEmit(source, eventName, depth + 1)
   );
 }
 
