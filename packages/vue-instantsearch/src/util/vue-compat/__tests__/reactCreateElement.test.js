@@ -80,6 +80,35 @@ describe('renderReactCompat', () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
+  it('calls a declared callback once when the child binds it to its own root', () => {
+    const onKeyDown = jest.fn();
+
+    const Child = {
+      props: { onKeyDown: { type: Function, default: undefined } },
+      render: renderReactCompat(function (h) {
+        // The child takes the callback as a prop and binds it itself, the way a
+        // custom prompt or search box does. The callback must not also arrive
+        // as a listener on this element, which would run it twice per key.
+        return h('input', {
+          id: 'child-input',
+          onKeyDown: (event) => this.onKeyDown(event),
+        });
+      }),
+    };
+
+    mountComponent({
+      render: renderReactCompat(function (h) {
+        return h(Child, { onKeyDown });
+      }),
+    });
+
+    document
+      .getElementById('child-input')
+      .dispatchEvent(new KeyboardEvent('keydown', { bubbles: true }));
+
+    expect(onKeyDown).toHaveBeenCalledTimes(1);
+  });
+
   it('keeps the callback reachable through $listeners and emits', () => {
     const onClose = jest.fn();
 
