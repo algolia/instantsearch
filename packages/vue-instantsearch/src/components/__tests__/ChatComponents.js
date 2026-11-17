@@ -224,3 +224,46 @@ describe.each([
     expect(root.classList.contains('array-class')).toBe(true);
   });
 });
+
+// Every chat widget with a shared root takes `classNames`, except the loader,
+// which composes a plain `className` instead — that one is covered on the
+// helper directly, in `util/__tests__/rootClass.test.js`.
+describe.each([
+  ['AisChatGreeting', ChatGreeting, 'ais-ChatGreeting'],
+  ['AisChatOverlayLayout', ChatOverlayLayout, 'ais-ChatOverlayLayout'],
+  ['AisChatInlineLayout', ChatInlineLayout, 'ais-ChatInlineLayout'],
+  ['AisChatSidePanelLayout', ChatSidePanelLayout, 'ais-ChatSidePanelLayout'],
+])('%s', (name, component, rootClass) => {
+  let wrapper;
+
+  afterEach(() => {
+    if (wrapper) {
+      wrapper.destroy();
+      wrapper = undefined;
+    }
+    document.body.innerHTML = '';
+  });
+
+  it('keeps an array-valued root class next to a class binding', () => {
+    // `classNames.root` accepts a list, and folding the class binding in next
+    // to it must not stringify that list with commas: `first,second` is one
+    // class, so neither entry would match.
+    wrapper = mount(
+      {
+        components: { Widget: component },
+        template: `<Widget
+          :class-names="{ root: ['first-class', 'second-class'] }"
+          class="extra-class"
+        />`,
+      },
+      { attachTo: document.body }
+    );
+
+    const root = document.querySelector(`.${rootClass}`);
+
+    expect(root).not.toBeNull();
+    expect(root.classList.contains('first-class')).toBe(true);
+    expect(root.classList.contains('second-class')).toBe(true);
+    expect(root.classList.contains('extra-class')).toBe(true);
+  });
+});
