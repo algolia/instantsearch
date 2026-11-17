@@ -109,6 +109,19 @@ export function augmentReactCreateElement(createElement) {
           .slice(2, isCapture ? -CAPTURE_SUFFIX.length : undefined)
           .toLowerCase();
         data.on[isCapture ? `!${eventName}` : eventName] = value;
+
+        if (typeof tag !== 'string') {
+          // A component takes React-style callbacks as props, not as listeners
+          // — and every listener name is lower-cased, so `onToggleMaximize`
+          // only ever arrives as a `togglemaximize` listener and a component
+          // declaring the prop receives nothing. Offer it as a prop too. The
+          // props bag (unlike `attrs`) is read only for declared props, so a
+          // callback the child does not declare cannot leak into its `$attrs`
+          // and get rendered as an attribute; the listener stays for children
+          // built on `$listeners`.
+          data.props = data.props || {};
+          data.props[name] = value;
+        }
       } else if (name === 'value' || name === 'checked') {
         // Controlled form fields from shared TSX (e.g. `<input value={query} />`
         // in AutocompleteSearch). In Vue 2, `attrs.value` sets only the initial
