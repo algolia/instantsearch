@@ -1,6 +1,7 @@
 import { createChatGreetingComponent } from 'instantsearch-ui-components';
 
 import { createSuitMixin } from '../mixins/suit';
+import { takeRootClass } from '../util/rootClass';
 import { renderReactCompat } from '../util/vue-compat';
 
 /**
@@ -40,14 +41,18 @@ export default {
       });
     }
 
+    // `inheritAttrs` is off so the shared component owns the root element:
+    // undeclared attributes (`id`, `aria-*`, `data-*`, the chat `context`, the
+    // `class` binding …) have to be handed over, since the factory spreads them
+    // onto that root. `class` goes in through `classNames`, because the factory
+    // puts its own `className` on the root.
+    const { classNames, attrs } = takeRootClass(this.classNames, this.$attrs);
+
     return h(this.GreetingComponent, {
       banner: this.banner,
       translations: this.translations,
-      classNames: this.classNames,
-      // `inheritAttrs` is off so the shared component owns the root element:
-      // undeclared attributes (`id`, `aria-*`, `data-*`, the chat `context` …)
-      // have to be handed over, since the factory spreads them onto that root.
-      ...this.$attrs,
+      classNames,
+      ...attrs,
     });
   }),
 };
