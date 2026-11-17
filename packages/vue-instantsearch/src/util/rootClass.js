@@ -50,8 +50,22 @@ function takeClass(attrs) {
   return { value: toClassString(value), attrs: left };
 }
 
+// Both sides of the merge can arrive in any of the shapes below — a
+// `classNames.root` from the widget's prop, and the class binding — so each is
+// flattened before joining. A plain `join` would stringify a list with commas,
+// turning `['first', 'second']` into the single class `first,second`.
 function join(...values) {
-  return values.filter(Boolean).join(' ');
+  const out = [];
+
+  values.forEach((value) => {
+    const classes = value ? toClassString(value) : '';
+
+    if (classes) {
+      out.push(classes);
+    }
+  });
+
+  return out.join(' ');
 }
 
 // `class` bindings come in three shapes: a string, an array of them, or an
