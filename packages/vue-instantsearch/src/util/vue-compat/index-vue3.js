@@ -123,9 +123,12 @@ export function augmentReactCreateElement(baseH) {
         // A child that also declares this event in `emits` is reached through
         // the handler key — `$emit('keydown')` looks `onKeydown` up on the
         // vnode — and a declared emit keeps that key from falling through to
-        // the root element, so there is nothing to double here.
+        // the root element, so there is nothing to double here. A capture
+        // callback is not that key: `$emit` resolves `onFocus`, never
+        // `onFocusCapture`, so for a `Capture` prop the key buys nothing and
+        // only falls through to the child root beside the binding it makes.
         const declaresEmittedEvent =
-          isComponent && declaresEmit(tag, eventName);
+          isComponent && !isCapture && declaresEmit(tag, eventName);
 
         // An `onX` key the child does not declare falls through to its root
         // element as a listener, so a child that declares the callback and

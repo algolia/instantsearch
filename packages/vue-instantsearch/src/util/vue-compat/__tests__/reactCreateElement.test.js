@@ -282,6 +282,38 @@ describe('renderReactCompat', () => {
       expect(onKeyDown).not.toHaveBeenCalled();
     });
 
+    // A `Capture` callback is a listener for the *capture* phase, and `$emit`
+    // resolves the plain event: `onFocusin`, never `onFocusinCapture`. So the
+    // declared emit does not need the capture key, and only the child does.
+    it('counts a capture callback once when the child declares an emit for the event', () => {
+      const onFocusInCapture = jest.fn();
+
+      const Child = {
+        props: { onFocusInCapture: { type: Function, default: undefined } },
+        emits: ['focusin'],
+        render: renderReactCompat(function (h) {
+          // The lower-cased capture key (`onFocusinCapture`) differs from the
+          // prop name here, which is what makes it fall through on its own.
+          return h('input', {
+            id: 'capture-input',
+            onFocusInCapture: () => this.onFocusInCapture(),
+          });
+        }),
+      };
+
+      mountComponent({
+        render: renderReactCompat(function (h) {
+          return h(Child, { onFocusInCapture });
+        }),
+      });
+
+      document
+        .getElementById('capture-input')
+        .dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+
+      expect(onFocusInCapture).toHaveBeenCalledTimes(1);
+    });
+
     it('counts the prop declared by a resolved async component once', async () => {
       const onKeyDown = jest.fn();
 
