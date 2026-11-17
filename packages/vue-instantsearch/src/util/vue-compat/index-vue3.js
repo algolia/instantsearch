@@ -15,48 +15,54 @@ export { Vue, Vue2, isVue2, isVue3 };
  */
 export const Fragment = (props) => (props && props.children) || [];
 
-export function renderCompat(fn) {
-  function h(tag, props, ...childrenArray) {
-    const children = childrenArray.length > 0 ? childrenArray : undefined;
-    if (
-      typeof props === 'object' &&
-      (props.attrs || props.props || props.scopedSlots || props.on)
-    ) {
-      // In vue 3, we no longer wrap with `attrs` or `props` key.
-      const onPropKeys = Object.keys(props.on || {});
-      const flatProps = Object.assign(
-        {},
-        props,
-        props.attrs,
-        props.props,
-        onPropKeys.reduce((acc, key) => {
-          // eslint-disable-next-line no-param-reassign
-          acc[`on${key[0].toUpperCase()}${key.slice(1)}`] = props.on[key];
-          return acc;
-        }, {})
-      );
-      delete flatProps.attrs;
-      delete flatProps.props;
-      delete flatProps.scopedSlots;
-      onPropKeys.forEach((key) => delete flatProps.on[key]);
-      if (flatProps.on && Object.keys(flatProps.on).length === 0) {
-        delete flatProps.on;
-      }
-
-      return Vue.h(
-        tag,
-        flatProps,
-        props.scopedSlots
-          ? Object.assign({ default: () => children }, props.scopedSlots)
-          : children
-      );
+/**
+ * The Vue-style `createElement` a `renderCompat` render function receives: it
+ * keeps Vue 2's `attrs`/`props`/`on` data shape working on Vue 3's flat props,
+ * so a render function written for both versions can name them.
+ */
+function vueCreateElement(tag, props, ...childrenArray) {
+  const children = childrenArray.length > 0 ? childrenArray : undefined;
+  if (
+    props &&
+    typeof props === 'object' &&
+    (props.attrs || props.props || props.scopedSlots || props.on)
+  ) {
+    // In vue 3, we no longer wrap with `attrs` or `props` key.
+    const onPropKeys = Object.keys(props.on || {});
+    const flatProps = Object.assign(
+      {},
+      props,
+      props.attrs,
+      props.props,
+      onPropKeys.reduce((acc, key) => {
+        // eslint-disable-next-line no-param-reassign
+        acc[`on${key[0].toUpperCase()}${key.slice(1)}`] = props.on[key];
+        return acc;
+      }, {})
+    );
+    delete flatProps.attrs;
+    delete flatProps.props;
+    delete flatProps.scopedSlots;
+    onPropKeys.forEach((key) => delete flatProps.on[key]);
+    if (flatProps.on && Object.keys(flatProps.on).length === 0) {
+      delete flatProps.on;
     }
 
-    return Vue.h(tag, props, children);
+    return Vue.h(
+      tag,
+      flatProps,
+      props.scopedSlots
+        ? Object.assign({ default: () => children }, props.scopedSlots)
+        : children
+    );
   }
 
+  return Vue.h(tag, props, children);
+}
+
+export function renderCompat(fn) {
   return function () {
-    return fn.call(this, h);
+    return fn.call(this, vueCreateElement);
   };
 }
 
@@ -126,9 +132,16 @@ export function augmentReactCreateElement(baseH) {
   };
 }
 
+/**
+ * Wraps a render function so it receives a React-style `createElement`, like the
+ * Vue 2 implementation. The second argument is the Vue-style `createElement`,
+ * for overridable components passed in as Vue component objects: the React-style
+ * one maps `onX` props onto Vue's listeners (and lower-cases their names), so a
+ * child declaring `onSuggestionClick` as a prop never receives the callback.
+ */
 export function renderReactCompat(fn) {
   return function () {
-    return fn.call(this, augmentReactCreateElement(Vue.h));
+    return fn.call(this, augmentReactCreateElement(Vue.h), vueCreateElement);
   };
 }
 
