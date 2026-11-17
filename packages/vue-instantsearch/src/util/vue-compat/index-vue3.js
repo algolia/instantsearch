@@ -181,62 +181,96 @@ function isEventProp(name, value) {
 
 /**
  * Whether a component definition declares this prop — through its own `props`,
- * or through a mixin or `extends` that Vue merges into the same table.
+ * or through anything Vue merges into that table: a mixin, `extends`, or a
+ * mixin registered on the whole app with `app.mixin()`.
  */
 function declaresProp(component, name, depth = 0) {
-  if (!component || typeof component !== 'object' || depth > 5) {
+  const definition = definitionOf(component, depth);
+
+  if (!definition) {
     return false;
   }
 
-  const declared = component.props
-    ? Array.isArray(component.props)
-      ? component.props
-      : Object.keys(component.props)
-    : [];
-
-  if (declared.some((key) => key === name || camelize(key) === name)) {
+  if (
+    declaredKeys(definition.props).some(
+      (key) => key === name || camelize(key) === name
+    )
+  ) {
     return true;
   }
 
-  const sources = (component.mixins || []).concat(
-    component.extends ? [component.extends] : []
-  );
-
-  return sources.some(
-    (source) =>
-      typeof source === 'object' && declaresProp(source, name, depth + 1)
+  return sourcesOf(definition, depth).some((source) =>
+    declaresProp(source, name, depth + 1)
   );
 }
 
 /**
  * Whether a component definition declares this emitted event — through its own
- * `emits`, or through a mixin or `extends`. Vue resolves an emitted event by
- * looking the handler key up on the vnode rather than through declared props,
- * so a child that emits it has to keep that key.
+ * `emits`, or through one of the same sources. Vue resolves an emitted event by
+ * looking the handler key up on the vnode rather than through declared props, so
+ * a child that emits it has to keep that key.
  */
 function declaresEmit(component, eventName, depth = 0) {
-  if (!component || typeof component !== 'object' || depth > 5) {
+  const definition = definitionOf(component, depth);
+
+  if (!definition) {
     return false;
   }
 
-  const declared = component.emits
-    ? Array.isArray(component.emits)
-      ? component.emits
-      : Object.keys(component.emits)
-    : [];
-
-  if (declared.indexOf(eventName) !== -1) {
+  if (declaredKeys(definition.emits).indexOf(eventName) !== -1) {
     return true;
   }
 
-  const sources = (component.mixins || []).concat(
-    component.extends ? [component.extends] : []
+  return sourcesOf(definition, depth).some((source) =>
+    declaresEmit(source, eventName, depth + 1)
+  );
+}
+
+// An async component keeps what it declares behind `__asyncResolved`, available
+// once it has loaded; until then there is nothing to read, and the callback
+// stays a listener as well.
+function definitionOf(component, depth) {
+  const definition =
+    component && component.__asyncResolved
+      ? component.__asyncResolved
+      : component;
+
+  if (!definition || typeof definition !== 'object' || depth > 5) {
+    return undefined;
+  }
+
+  return definition;
+}
+
+// `props` and `emits` each take either a list of names or an object keyed by
+// them.
+function declaredKeys(option) {
+  if (!option) {
+    return [];
+  }
+
+  return Array.isArray(option) ? option : Object.keys(option);
+}
+
+/**
+ * The definitions Vue merges into a component's own options. Mixins registered
+ * on the app with `app.mixin()` are merged into every component at instance
+ * creation, so no definition object shows them — the app context of the
+ * component rendering this vnode has them instead.
+ */
+function sourcesOf(definition, depth) {
+  const own = (definition.mixins || []).concat(
+    definition.extends ? [definition.extends] : []
   );
 
-  return sources.some(
-    (source) =>
-      typeof source === 'object' && declaresEmit(source, eventName, depth + 1)
-  );
+  if (depth > 0) {
+    return own;
+  }
+
+  const instance = Vue.getCurrentInstance && Vue.getCurrentInstance();
+  const appContext = instance && instance.appContext;
+
+  return ((appContext && appContext.mixins) || []).concat(own);
 }
 
 // `on-toggle-maximize` -> `onToggleMaximize`: Vue matches a declared prop under

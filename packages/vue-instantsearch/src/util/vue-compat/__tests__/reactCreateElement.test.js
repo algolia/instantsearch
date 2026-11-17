@@ -2,8 +2,16 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { mount } from '../../../../test/utils';
-import { renderReactCompat } from '../index';
+import { defineAsyncComponent } from 'vue';
+
+import { mount, nextTick } from '../../../../test/utils';
+import { createApp, isVue3, renderReactCompat } from '../index';
+
+// Attribute fall-through, the emit casing of `onKeydown`, and `app.mixin` are
+// Vue 3 behaviour. Vue 2 lower-cases every listener name, never falls attributes
+// through to a child root, and registers app-wide mixins through `Vue.mixin` —
+// which would leak into every other test in this file.
+const describeOnVue3 = isVue3 ? describe : describe.skip;
 
 // The React-style renderer is how Vue consumes the shared
 // `instantsearch-ui-components` markup, and it is also how a widget hands a
@@ -203,5 +211,148 @@ describe('renderReactCompat', () => {
 
     expect(onClick).toHaveBeenCalledTimes(1);
     expect(element.getAttribute('onClick')).toBeNull();
+  });
+
+  describeOnVue3('the emit and fall-through behaviour of Vue 3', () => {
+    // Vue resolves `$emit(event)` by looking `on<Event>` up on the vnode, so a
+    // child that emits the event needs that key — in either of the two spellings
+    // Vue itself accepts for a declared emit.
+
+    it.each([
+      ['keyDown', 'camelCase'],
+      ['key-down', 'kebab-case'],
+    ])(
+      'reaches a child that declares the emitted event as %s',
+      async (declared) => {
+        const onKeyDown = jest.fn();
+
+        const Child = {
+          props: { onKeyDown: { type: Function, default: undefined } },
+          emits: [declared],
+          render: renderReactCompat(function (h) {
+            return h(
+              'button',
+              { onClick: () => this.$emit(declared, 'emitted') },
+              'child'
+            );
+          }),
+        };
+
+        mountComponent({
+          render: renderReactCompat(function (h) {
+            return h(Child, { onKeyDown });
+          }),
+        });
+
+        document.querySelector('button').click();
+        expect(onKeyDown).toHaveBeenCalledTimes(1);
+        expect(onKeyDown).toHaveBeenCalledWith('emitted');
+      }
+    );
+
+    it('takes the callback through the prop when a child emits an undeclared event', () => {
+      const onKeyDown = jest.fn();
+
+      const Child = {
+        props: { onKeyDown: { type: Function, default: undefined } },
+        // No `emits` here: Vue warns about this emit in development, asking for
+        // the event to be declared, or taken as an `onKeydown` prop.
+        render: renderReactCompat(function (h) {
+          return h(
+            'button',
+            { onClick: () => this.$emit('keydown', 'undeclared') },
+            'child'
+          );
+        }),
+      };
+
+      mountComponent({
+        render: renderReactCompat(function (h) {
+          return h(Child, { onKeyDown });
+        }),
+      });
+
+      document.querySelector('button').click();
+
+      // The handler key is what `$emit('keydown')` resolves, and it is the same
+      // key that falls through to this child's root as a listener — so a child
+      // declaring the prop does not get it. That is the trade: a child taking the
+      // callback as a prop calls the prop, and one that emits declares the event,
+      // which is also what Vue’s own warning asks of it.
+      expect(onKeyDown).not.toHaveBeenCalled();
+    });
+
+    it('counts the prop declared by a resolved async component once', async () => {
+      const onKeyDown = jest.fn();
+
+      const Inner = {
+        props: { onKeyDown: { type: Function, default: undefined } },
+        render: renderReactCompat(function (h) {
+          return h('input', {
+            id: 'async-input',
+            // An override loaded lazily, binding the callback it declared.
+            onKeyDown: (event) => this.onKeyDown(event),
+          });
+        }),
+      };
+
+      const Async = defineAsyncComponent(() => Promise.resolve(Inner));
+
+      const app = mountComponent({
+        data: () => ({ tick: 0 }),
+        render: renderReactCompat(function (h) {
+          return h(Async, { key: `v${this.tick}`, onKeyDown });
+        }),
+      });
+
+      await nextTick();
+      // Once the definition has loaded, the parent renders the override again —
+      // the way a chat does while a turn streams in.
+      await app.setData({ tick: 1 });
+      await nextTick();
+
+      document
+        .getElementById('async-input')
+        .dispatchEvent(new KeyboardEvent('keydown', { bubbles: true }));
+
+      expect(onKeyDown).toHaveBeenCalledTimes(1);
+    });
+  });
+});
+
+describeOnVue3('with a mixin registered on the app', () => {
+  it('counts the prop that mixin declares once', () => {
+    const onKeyDown = jest.fn();
+
+    const Child = {
+      // Declares nothing of its own: Vue merges the app-level mixin into every
+      // component, which no definition object shows.
+      render: renderReactCompat(function (h) {
+        return h('input', {
+          id: 'mixin-input',
+          onKeyDown: (event) => this.onKeyDown(event),
+        });
+      }),
+    };
+
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+
+    const app = createApp({
+      render: renderReactCompat(function (h) {
+        return h(Child, { onKeyDown });
+      }),
+    });
+    app.mixin({ props: { onKeyDown: { type: Function, default: undefined } } });
+    app.mount(host);
+
+    host
+      .querySelector('#mixin-input')
+      .dispatchEvent(new KeyboardEvent('keydown', { bubbles: true }));
+
+    app.unmount();
+    host.remove();
+
+    expect(onKeyDown).toHaveBeenCalledTimes(1);
   });
 });
