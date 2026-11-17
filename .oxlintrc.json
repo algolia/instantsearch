@@ -3,8 +3,7 @@
   "ignorePatterns": [
     ".yarn/**",
     "packages/create-instantsearch-app/src/templates/**",
-    "packages/instantsearch-codemods/__testfixtures__/**",
-    "packages/instantsearch.js/scripts/transforms/__testfixtures__/**"
+    "packages/instantsearch-codemods/__testfixtures__/**"
   ],
   "categories": {
     "correctness": "off",
