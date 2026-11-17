@@ -40,8 +40,11 @@ export function createCompareProductsTool(getItemComponent, translations) {
     // Render as the arguments stream in: the columns once `objectIDs` is
     // complete, then a row per finished criterion.
     streamInput: true,
-    // Client-side tool: acknowledge the call so the agent's turn can complete.
-    // The table itself is rendered from the call's input + the chat's records.
+    // Only runs for an agent that declares the comparison as a client-side
+    // tool: acknowledge the call so the agent's turn can complete. A server
+    // tool's call arrives flagged `providerExecuted`, with Agent Studio's own
+    // result. Either way the table is rendered from the call's input + the
+    // chat's records.
     onToolCall: ({ input, addToolResult }) => {
       const objectIDs = input && input.objectIDs;
 
