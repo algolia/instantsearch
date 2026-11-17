@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.123.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.123.0...instantsearch.js@4.123.1) (2026-11-17)
+
+**Note:** Version bump only for package instantsearch.js
+
+
+
+
+
 # [4.123.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.122.0...instantsearch.js@4.123.0) (2026-11-10)
 
 
