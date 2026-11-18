@@ -175,12 +175,15 @@ export default function transform(
     names: Array<string | [string, string]>,
     source: string
   ) => {
-    const existing = root
-      .find(j.ImportDeclaration)
-      .filter(
-        (path) =>
-          path.node.source.value === source && path.node.importKind !== 'type'
-      );
+    const existing = root.find(j.ImportDeclaration).filter(
+      (path) =>
+        path.node.source.value === source &&
+        path.node.importKind !== 'type' &&
+        // `import * as x` can't take named specifiers.
+        !(path.node.specifiers || []).some(
+          (s) => s.type === 'ImportNamespaceSpecifier'
+        )
+    );
     const declared = new Set<string>();
     root.find(j.ImportSpecifier).forEach((path) => {
       declared.add((path.node.local || path.node.imported).name);
@@ -453,7 +456,8 @@ export default function transform(
         );
         return;
       }
-      // `routers.history()` -> `routers.historyRouter()`
+      // `routers.history()` -> `routers.historyRouter()`,
+      // `const { history } = routers` -> `const { historyRouter: history } = routers`
       specifiers
         .filter((s) => s.type === 'ImportNamespaceSpecifier')
         .forEach((s) => {
@@ -467,6 +471,19 @@ export default function transform(
               member.node.property = j.identifier(
                 renames[member.node.property.name]
               );
+            });
+          root
+            .find(j.VariableDeclarator, {
+              id: { type: 'ObjectPattern' },
+              init: { type: 'Identifier', name: s.local.name },
+            })
+            .forEach((declarator: any) => {
+              declarator.node.id.properties
+                .filter((prop: any) => propertyName(prop)! in renames)
+                .forEach((prop: any) => {
+                  prop.key = j.identifier(renames[propertyName(prop)!]);
+                  prop.shorthand = false;
+                });
             });
         });
       path.node.specifiers = specifiers.map((s) => {
@@ -654,12 +671,16 @@ export default function transform(
       j(path).remove();
     });
 
+  // The UMD global, or the local name of the migrated import.
+  const isInstantSearchReceiver = (node: any) =>
+    node.type === 'Identifier' &&
+    (node.name === 'instantsearch' || node.name === instantsearchLocal);
   root
     .find(j.MemberExpression, {
-      object: { type: 'Identifier', name: 'instantsearch' },
       property: { type: 'Identifier', name: 'insights' },
       computed: false,
     })
+    .filter((path) => isInstantSearchReceiver(path.node.object))
     .forEach((path) => {
       addComment(
         enclosingStatement(path),
@@ -671,10 +692,10 @@ export default function transform(
   Object.keys(REMOVED_EXPORT_WORKAROUNDS).forEach((name) => {
     root
       .find(j.MemberExpression, {
-        object: { type: 'Identifier', name: 'instantsearch' },
         property: { type: 'Identifier', name },
         computed: false,
       })
+      .filter((path) => isInstantSearchReceiver(path.node.object))
       .forEach((path) => {
         addComment(enclosingStatement(path), REMOVED_EXPORT_WORKAROUNDS[name]);
       });

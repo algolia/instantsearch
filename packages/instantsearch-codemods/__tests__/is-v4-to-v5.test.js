@@ -9,6 +9,7 @@ define(__dirname, 'src/is-v4-to-v5', null, 'is-v4-to-v5/imports');
 define(__dirname, 'src/is-v4-to-v5', null, 'is-v4-to-v5/imports-react');
 define(__dirname, 'src/is-v4-to-v5', null, 'is-v4-to-v5/imports-vue');
 define(__dirname, 'src/is-v4-to-v5', null, 'is-v4-to-v5/imports-edge-cases');
+define(__dirname, 'src/is-v4-to-v5', null, 'is-v4-to-v5/imports-namespace');
 define(__dirname, 'src/is-v4-to-v5', null, 'is-v4-to-v5/todos', {
   parser: 'tsx',
 });
