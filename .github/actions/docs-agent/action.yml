@@ -19,7 +19,11 @@ inputs:
   deadline-minutes:
     description: 'Wall-clock budget for the whole loop'
     default: '25'
-  anthropic-api-key:
+  inference-token:
+    description: 'Enablers service token'
+    required: true
+  inference-base-url:
+    description: 'Enablers inference endpoint'
     required: true
 
 outputs:
@@ -29,9 +33,6 @@ outputs:
   passes:
     description: 'Number of Claude passes used'
     value: ${{ steps.agent.outputs.passes }}
-  cost:
-    description: 'Total USD spent across all passes'
-    value: ${{ steps.agent.outputs.cost }}
   changed:
     description: 'true if the agent left uncommitted changes in docs-new'
     value: ${{ steps.agent.outputs.changed }}
@@ -52,7 +53,13 @@ runs:
         # docs-staging-prepare.sh strips the credential actions/checkout
         # persisted; docs-staging-commit.sh restores it for the push alone, in
         # its own step.
-        ANTHROPIC_API_KEY: ${{ inputs.anthropic-api-key }}
+        ANTHROPIC_AUTH_TOKEN: ${{ inputs.inference-token }}
+        ANTHROPIC_BASE_URL: ${{ inputs.inference-base-url }}
+        ANTHROPIC_MODEL: xlarge
+        ANTHROPIC_DEFAULT_OPUS_MODEL: xlarge
+        ANTHROPIC_DEFAULT_SONNET_MODEL: xlarge
+        ANTHROPIC_DEFAULT_HAIKU_MODEL: xlarge
+        CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: '1'
         PROMPT_FILE: ${{ inputs.prompt-file }}
         CONTEXT_FILE: ${{ inputs.context-file }}
         MAX_TURNS: ${{ inputs.max-turns }}
@@ -67,6 +74,8 @@ runs:
         # which exits non-zero on `max_turns`, and a `grep` that legitimately
         # matches nothing - handle it explicitly at the call site instead.
         set -uo pipefail
+        : "${ANTHROPIC_BASE_URL:?ENABLERS_BASE_URL must be configured}"
+        : "${ANTHROPIC_AUTH_TOKEN:?Enablers token is required}"
 
         WS="${GITHUB_WORKSPACE}"
         DOCS="${WS}/docs-new"
@@ -112,7 +121,7 @@ runs:
         }
 
         # --- telemetry ---------------------------------------------------
-        # The final `result` line of the stream carries cost, turns and the
+        # The final `result` line of the stream carries duration, turns and the
         # permission denials. Surfacing it is how you tune the budget from
         # data instead of guessing, and how a broken allowlist gets noticed.
         : > "$STATE/telemetry.tsv"
@@ -125,13 +134,12 @@ runs:
           # missing line into a dead step and the run loses its work.
           result=$(grep '"type":"result"' "$log" | tail -1) || true
           if [ -z "$result" ]; then
-            printf '%s\t?\t?\t?\texit %s\t?\n' "$label" "$rc" >> "$STATE/telemetry.tsv"
+            printf '%s\t?\t?\texit %s\t?\n' "$label" "$rc" >> "$STATE/telemetry.tsv"
             return
           fi
-          printf '%s\t%s\t%s\t%s\t%s\t%s\n' \
+          printf '%s\t%s\t%s\t%s\t%s\n' \
             "$label" \
             "$(printf '%s' "$result" | jq -r '.num_turns // "?"')" \
-            "$(printf '%s' "$result" | jq -r 'if .total_cost_usd then (.total_cost_usd * 100 | round / 100 | tostring) else "?" end')" \
             "$(printf '%s' "$result" | jq -r 'if .duration_ms then ((.duration_ms / 1000) | floor | tostring) + "s" else "?" end')" \
             "$(printf '%s' "$result" | jq -r '.subtype // "?"')" \
             "$(printf '%s' "$result" | jq -r '(.permission_denials // []) | length')" \
@@ -361,12 +369,9 @@ runs:
         CHANGED=false
         [ -n "$(git -C "$DOCS" status --porcelain)" ] && CHANGED=true
 
-        TOTAL_COST=$(awk -F'\t' '{ if ($3 != "?") s += $3 } END { printf "%.2f", s }' "$STATE/telemetry.tsv")
-
         {
           echo "status=${STATUS}"
           echo "passes=${PASS}"
-          echo "cost=${TOTAL_COST}"
           echo "changed=${CHANGED}"
           echo "verify=${VERIFY}"
         } >> "$GITHUB_OUTPUT"
@@ -375,11 +380,11 @@ runs:
         {
           echo "### Agent run"
           echo
-          echo "| Pass | Turns | Cost (USD) | Duration | Stop reason | Denied tools |"
-          echo "| --- | ---: | ---: | ---: | --- | ---: |"
-          awk -F'\t' '{ printf "| %s | %s | %s | %s | `%s` | %s |\n", $1, $2, $3, $4, $5, $6 }' "$STATE/telemetry.tsv"
+          echo "| Pass | Turns | Duration | Stop reason | Denied tools |"
+          echo "| --- | ---: | ---: | --- | ---: |"
+          awk -F'\t' '{ printf "| %s | %s | %s | `%s` | %s |\n", $1, $2, $3, $4, $5 }' "$STATE/telemetry.tsv"
           echo
-          echo "**Total:** \$${TOTAL_COST} · status \`${STATUS}\` · checks \`${VERIFY}\` · changes \`${CHANGED}\`"
+          echo "**Status:** \`${STATUS}\` · checks \`${VERIFY}\` · changes \`${CHANGED}\`"
           echo
           if [ -s "$STATE/denials.txt" ]; then
             echo "<details><summary>Denied tool calls (each one is a wasted turn - widen the allowlist)</summary>"

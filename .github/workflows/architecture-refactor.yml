@@ -45,8 +45,17 @@ jobs:
     timeout-minutes: 60
     permissions:
       contents: write
+      id-token: write
       issues: write
       pull-requests: write
+
+    env:
+      ANTHROPIC_BASE_URL: ${{ secrets.ENABLERS_BASE_URL }}
+      ANTHROPIC_MODEL: xlarge
+      ANTHROPIC_DEFAULT_OPUS_MODEL: xlarge
+      ANTHROPIC_DEFAULT_SONNET_MODEL: xlarge
+      ANTHROPIC_DEFAULT_HAIKU_MODEL: xlarge
+      CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: '1'
 
     steps:
       - name: Checkout
@@ -77,14 +86,30 @@ jobs:
       - name: Install automation tools
         run: npm install -g @anthropic-ai/claude-code
 
+      - name: Fetch Enablers token
+        id: enablers
+        uses: hashicorp/vault-action@4c06c5ccf5c0761b6029f56cfb1dcf5565918a3b # v3.4.0
+        with:
+          url: ${{ secrets.VAULT_ADDR }}
+          method: jwt
+          path: github-oidc
+          role: instantsearch_enablers
+          jwtGithubAudience: https://github.com/algolia
+          exportEnv: false
+          exportToken: false
+          secrets: |
+            identity/oidc/token/enablers_standard token | ENABLERS_TOKEN ;
+
       - name: Run scout
         id: scout
         if: steps.request.outputs.stage == 'scout'
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_AUTH_TOKEN: ${{ steps.enablers.outputs.ENABLERS_TOKEN }}
           RUN_ID: github-${{ github.run_id }}
         run: |
           set -euo pipefail
+          : "${ANTHROPIC_BASE_URL:?ENABLERS_BASE_URL must be configured}"
+          : "${ANTHROPIC_AUTH_TOKEN:?Enablers token is required}"
 
           node .github/scripts/architecture-refactor.cjs scout \
             --run "$RUN_ID" \
@@ -156,9 +181,11 @@ jobs:
           RUN_ID: github-${{ github.run_id }}
           ISSUE_NUMBER: ${{ steps.request.outputs.issue_number }}
           CANDIDATE_ID: ${{ steps.request.outputs.candidate_id }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_AUTH_TOKEN: ${{ steps.enablers.outputs.ENABLERS_TOKEN }}
         run: |
           set -euo pipefail
+          : "${ANTHROPIC_BASE_URL:?ENABLERS_BASE_URL must be configured}"
+          : "${ANTHROPIC_AUTH_TOKEN:?Enablers token is required}"
 
           run_dir="architecture-refactor-runs/${RUN_ID}"
           mkdir -p "$run_dir"

@@ -14,6 +14,7 @@ on:
         default: false
 
 permissions:
+  id-token: write
   contents: write
   pull-requests: write
 
@@ -87,13 +88,36 @@ jobs:
         if: steps.pick.outputs.status == 'ok'
         run: npm install -g @anthropic-ai/claude-code
 
+      - name: Fetch Enablers token
+        id: enablers
+        if: steps.pick.outputs.status == 'ok'
+        uses: hashicorp/vault-action@4c06c5ccf5c0761b6029f56cfb1dcf5565918a3b # v3.4.0
+        with:
+          url: ${{ secrets.VAULT_ADDR }}
+          method: jwt
+          path: github-oidc
+          role: instantsearch_enablers
+          jwtGithubAudience: https://github.com/algolia
+          exportEnv: false
+          exportToken: false
+          secrets: |
+            identity/oidc/token/enablers_standard token | ENABLERS_TOKEN ;
+
       - name: Run Claude Code
         if: steps.pick.outputs.status == 'ok'
         timeout-minutes: 18
         continue-on-error: true
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_BASE_URL: ${{ secrets.ENABLERS_BASE_URL }}
+          ANTHROPIC_MODEL: xlarge
+          ANTHROPIC_DEFAULT_OPUS_MODEL: xlarge
+          ANTHROPIC_DEFAULT_SONNET_MODEL: xlarge
+          ANTHROPIC_DEFAULT_HAIKU_MODEL: xlarge
+          CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: '1'
+          ANTHROPIC_AUTH_TOKEN: ${{ steps.enablers.outputs.ENABLERS_TOKEN }}
         run: |
+          : "${ANTHROPIC_BASE_URL:?ENABLERS_BASE_URL must be configured}"
+          : "${ANTHROPIC_AUTH_TOKEN:?Enablers token is required}"
           claude -p "$(cat .github/prompts/lint-fix.md)" \
             --allowedTools "Read,Edit,Write,Glob,Grep,Bash(node_modules/.bin/oxlint *)" \
             --max-turns 60 \
