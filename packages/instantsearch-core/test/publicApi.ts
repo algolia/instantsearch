@@ -2,10 +2,17 @@
 // re-exports them, so adding or removing one is a public API change.
 export const publicRuntimeExports = [
   'AbstractChat',
+  'CompareProductsToolType',
   'DefaultChatTransport',
   'DefaultTaskTransport',
+  'GroupedResultsToolType',
   'HttpChatTransport',
+  'MemorizeToolType',
+  'MemorySearchToolType',
   'Paginator',
+  'PonderToolType',
+  'RecommendToolType',
+  'SearchIndexToolType',
   'SerialJobExecutor',
   'buildTaskPayload',
   'connectAutocomplete',

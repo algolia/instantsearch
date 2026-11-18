@@ -6,6 +6,8 @@ import {
   PonderToolType,
   CompareProductsToolType,
   GroupedResultsToolType,
+} from 'instantsearch-core';
+import {
   focusAfterReveal,
   getActiveContainerAnimations,
   holdContainerInertUntilReveal,
