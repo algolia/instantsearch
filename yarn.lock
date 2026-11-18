@@ -31349,7 +31349,7 @@ __metadata:
     ts-node: "npm:8.4.1"
   peerDependencies:
     next: ">= 13.4 < 17"
-    react-instantsearch: ">= 7.1.0 < 8"
+    react-instantsearch: ">= 8.0.0-0 < 9"
   languageName: unknown
   linkType: soft
 
