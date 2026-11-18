@@ -1,5 +1,4 @@
-import instantsearch from 'instantsearch.js';
-import { autocomplete } from 'instantsearch.js/es/widgets';
+import { instantsearch, autocomplete } from 'instantsearch.js';
 
 const search = instantsearch({ indexName: 'x' });
 search.addWidgets([autocomplete({ container: '#a' })]);
