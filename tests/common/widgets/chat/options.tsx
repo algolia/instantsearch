@@ -6,12 +6,13 @@ import {
 import { wait } from '@instantsearch/testutils';
 import { waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
+import { Chat } from 'instantsearch-core/internal';
 import {
-  Chat,
+  chatInlineLayout,
+  chatSidePanelLayout,
   GroupedResultsToolType,
   SearchIndexToolType,
-} from 'instantsearch-core/internal';
-import { chatInlineLayout, chatSidePanelLayout } from 'instantsearch.js';
+} from 'instantsearch.js';
 import { createElement as createPreactElement } from 'preact';
 import React from 'react';
 import { ChatInlineLayout, ChatSidePanelLayout } from 'react-instantsearch';

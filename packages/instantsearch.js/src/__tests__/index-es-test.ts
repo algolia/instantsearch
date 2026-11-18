@@ -43,6 +43,17 @@ describe('index.es', () => {
     );
   });
 
+  it('exports the chat tool type constants as values', () => {
+    expect(instantsearchModule).toEqual(
+      expect.objectContaining({
+        SearchIndexToolType: 'algolia_search_index',
+        RecommendToolType: 'algolia_recommend',
+        CompareProductsToolType: 'algolia_compare_products',
+        GroupedResultsToolType: 'algolia_grouped_results',
+      })
+    );
+  });
+
   it('does not export the short router and state mapping names', () => {
     expect(instantsearchModule).not.toHaveProperty('history');
     expect(instantsearchModule).not.toHaveProperty('simple');

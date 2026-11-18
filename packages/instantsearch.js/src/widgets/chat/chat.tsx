@@ -1,19 +1,21 @@
 /** @jsx h */
 
-import { connectChat } from 'instantsearch-core';
 import {
   CompareProductsToolType,
-  findTool,
-  focusAfterReveal,
-  getActiveContainerAnimations,
+  connectChat,
   GroupedResultsToolType,
-  holdContainerInertUntilReveal,
   MemorizeToolType,
   MemorySearchToolType,
   PonderToolType,
   RecommendToolType,
-  restoreContainerInertUntilReveal,
   SearchIndexToolType,
+} from 'instantsearch-core';
+import {
+  findTool,
+  focusAfterReveal,
+  getActiveContainerAnimations,
+  holdContainerInertUntilReveal,
+  restoreContainerInertUntilReveal,
   shouldSearchToolRenderResults,
 } from 'instantsearch-core/internal';
 import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';

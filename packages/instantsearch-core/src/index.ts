@@ -60,6 +60,15 @@ export type {
   ToolResultSubmission,
   ToolResultSubmissionOptions,
 } from './lib/ai-lite';
+export {
+  SearchIndexToolType,
+  RecommendToolType,
+  MemorizeToolType,
+  MemorySearchToolType,
+  PonderToolType,
+  CompareProductsToolType,
+  GroupedResultsToolType,
+} from './lib/chat';
 export { getHighlightedParts, getPropertyByPath } from './lib/utils';
 export type { SendEventForHits } from './lib/utils';
 export type {
