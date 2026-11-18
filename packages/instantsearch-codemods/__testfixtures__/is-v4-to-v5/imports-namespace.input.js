@@ -4,7 +4,7 @@ import search from 'instantsearch.js';
 
 const { history } = routers;
 
-const instance = search({ indexName: 'x' });
+const instance = search({ indexName: 'x', routing: { router: history() } });
 instance.addWidgets([
   search.widgets.configure({ hitsPerPage: 8 }),
   widgets.hits({ container: '#hits' }),

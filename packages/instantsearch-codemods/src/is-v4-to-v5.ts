@@ -403,6 +403,9 @@ export default function transform(
   // 5. Deep imports: `instantsearch.js` only exposes its root. React and Vue
   //    don't depend on it anymore, so they import from their own package.
   // ---------------------------------------------------------------------------
+  // Local names of the history router: aliased imports, or destructured from
+  // a namespace import.
+  const historyRouterLocals = new Set<string>();
   const importSources = root
     .find(j.ImportDeclaration)
     .nodes()
@@ -481,7 +484,14 @@ export default function transform(
               declarator.node.id.properties
                 .filter((prop: any) => propertyName(prop)! in renames)
                 .forEach((prop: any) => {
-                  prop.key = j.identifier(renames[propertyName(prop)!]);
+                  const name = renames[propertyName(prop)!];
+                  if (
+                    name === 'historyRouter' &&
+                    prop.value.type === 'Identifier'
+                  ) {
+                    historyRouterLocals.add(prop.value.name);
+                  }
+                  prop.key = j.identifier(name);
                   prop.shorthand = false;
                 });
             });
@@ -762,8 +772,6 @@ export default function transform(
     });
   });
 
-  // Local names of the history router, aliased or not.
-  const historyRouterLocals = new Set<string>();
   root
     .find(j.ImportDeclaration)
     .filter((path) => isInstantSearchSource(path.node.source.value))

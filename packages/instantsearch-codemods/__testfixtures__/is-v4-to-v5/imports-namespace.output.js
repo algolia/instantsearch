@@ -4,7 +4,10 @@ import { instantsearch as search, configure } from 'instantsearch.js';
 
 const { historyRouter: history } = routers;
 
-const instance = search({ indexName: 'x' });
+const instance = search({ indexName: 'x', routing: { router: history({
+  // TODO(instantsearch v5): the default of `cleanUrlOnDispose` is now `false`. This keeps the v4 behavior; remove it to adopt the new default.
+  cleanUrlOnDispose: true
+}) } });
 instance.addWidgets([
   configure({ hitsPerPage: 8 }),
   widgets.hits({ container: '#hits' }),
