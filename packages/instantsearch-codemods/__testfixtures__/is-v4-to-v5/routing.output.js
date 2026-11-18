@@ -1,4 +1,4 @@
-import { history } from 'instantsearch.js/es/lib/routers';
+import { historyRouter as history } from 'instantsearch.js';
 
 const a = history({
   // TODO(instantsearch v5): the default of `cleanUrlOnDispose` is now `false`. This keeps the v4 behavior; remove it to adopt the new default.
@@ -24,7 +24,7 @@ const e = {
 const f = {
   parseURL: ({ qsModule, currentURL }) => qsModule.parse(currentURL.search.slice(1)),
 };
-const g = { // TODO(instantsearch v5): the default history router no longer cleans the URL on dispose. Pass `router: history({ cleanUrlOnDispose: true })` to keep the v4 behavior.
+const g = { // TODO(instantsearch v5): the default history router no longer cleans the URL on dispose. Pass `router: historyRouter({ cleanUrlOnDispose: true })` to keep the v4 behavior.
 routing: true };
 const h = createInstantSearchRouterNext({
   serverUrl,

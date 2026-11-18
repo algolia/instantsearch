@@ -29,18 +29,73 @@ const IDENTIFIER_RENAMES: Record<string, string> = {
   toggleRefine: 'toggleFacetRefinement',
 };
 
-/** Properties of the `instantsearch` global/default export that moved to imports. */
-const INSTANTSEARCH_MOVED_HELPERS: Record<string, string> = {
-  highlight: 'instantsearch.js/es/helpers',
-  reverseHighlight: 'instantsearch.js/es/helpers',
-  snippet: 'instantsearch.js/es/helpers',
-  reverseSnippet: 'instantsearch.js/es/helpers',
-  createInfiniteHitsSessionStorageCache: 'instantsearch-core',
+/** Namespaces of the v4 `instantsearch` default export, now named exports of the root. */
+const NAMESPACES = [
+  'widgets',
+  'connectors',
+  'middlewares',
+  'routers',
+  'stateMappings',
+  'templates',
+];
+
+/** Properties of the v4 `instantsearch` default export, now named exports of the root. */
+const TOP_LEVEL_EXPORTS = ['version', 'createInfiniteHitsSessionStorageCache'];
+
+/** Router and state mapping exports renamed in v5, by namespace. */
+const RENAMED_EXPORTS: Record<string, Record<string, string>> = {
+  routers: { history: 'historyRouter' },
+  stateMappings: {
+    simple: 'simpleStateMapping',
+    singleIndex: 'singleIndexStateMapping',
+  },
 };
+
+/** v4 deep import paths (relative to `instantsearch.js/es`) and the name of their default export. */
+const DEEP_DEFAULT_EXPORTS: Record<string, string> = {
+  '': 'instantsearch',
+  'lib/main': 'instantsearch',
+  'lib/routers/history': 'historyRouter',
+  'lib/stateMappings/simple': 'simpleStateMapping',
+  'lib/stateMappings/singleIndex': 'singleIndexStateMapping',
+  'lib/infiniteHitsCache/sessionStorage':
+    'createInfiniteHitsSessionStorageCache',
+};
+
+/**
+ * Name of the default export of a widget, connector or middleware entry module
+ * (`widgets/hits/hits`, `connectors/hits/connectHits`,
+ * `middlewares/createInsightsMiddleware`). Other files in these folders, like
+ * `widgets/hits/defaultTemplates`, aren't exported from the root.
+ */
+function entryModuleExport(deepPath: string) {
+  const [folder, dir = '', file, ...rest] = deepPath.split('/');
+  const name = dir.replace(/-(\w)/g, (_, char) => char.toUpperCase());
+  if (rest.length > 0) return undefined;
+  if (folder === 'middlewares' && dir && !file) return dir;
+  if (folder === 'widgets' && file === dir) return name;
+  if (
+    folder === 'connectors' &&
+    file === `connect${name.charAt(0).toUpperCase()}${name.slice(1)}`
+  ) {
+    return file;
+  }
+  return undefined;
+}
+
+/** Deep import paths only `instantsearch.js` exports: React and Vue don't depend on it anymore. */
+const JS_ONLY_PATHS = /^(widgets|templates|helpers\/components)(\/|$)/;
+
+/** Deep import paths of internal modules, which have no public equivalent to point to. */
+const INTERNAL_PATHS =
+  /^lib\/(?!(routers|stateMappings|infiniteHitsCache|server|main)(\/|$))/;
 
 /** Exports that no longer exist in v5. */
 const REMOVED_EXPORTS =
-  /^(places|answers|analytics|filterSuggestions|connectAnswers|connectFilterSuggestions|useFilterSuggestions|FilterSuggestions|EXPERIMENTAL_[cC]onfigureRelatedItems|connectConfigureRelatedItems|DisplayResultsToolType|ChatEmptyProps|getInsightsAnonymousUserToken)$/;
+  /^(places|answers|analytics|filterSuggestions|connectAnswers|connectFilterSuggestions|useFilterSuggestions|FilterSuggestions|EXPERIMENTAL_[cC]onfigureRelatedItems|connectConfigureRelatedItems|DisplayResultsToolType|ChatEmptyProps|getInsightsAnonymousUserToken|highlight|snippet|reverseHighlight|reverseSnippet|insights)$/;
+
+const highlightWorkaround = (name: string, component: string) =>
+  `\`${name}\` is removed, use \`components.${component}\` in templates instead (\`components\` is in the second argument of the template function).`;
 
 /**
  * Removed exports whose replacement is specific enough to spell out, rather
@@ -55,6 +110,10 @@ const REMOVED_EXPORT_WORKAROUNDS: Record<string, string> = {
     '- to use the value in your own code (send it to your API, log it, etc.): read it from the insights client, which now owns it: `aa("getUserToken", null, (err, userToken) => { ... })`;',
     '- to get it on the server (SSR), where there is no insights client: read the `_ALGOLIA` cookie (insights only writes it when initialized with `useCookie: true`) and pass it as `userToken` yourself.',
   ].join('\n'),
+  highlight: highlightWorkaround('highlight', 'Highlight'),
+  snippet: highlightWorkaround('snippet', 'Snippet'),
+  reverseHighlight: highlightWorkaround('reverseHighlight', 'ReverseHighlight'),
+  reverseSnippet: highlightWorkaround('reverseSnippet', 'ReverseSnippet'),
 };
 
 const REMOVED_WIDGETS = ['places', 'answers', 'analytics', 'filterSuggestions'];
@@ -127,21 +186,40 @@ export default function transform(
       ...collection.find(j.ObjectMethod).paths(),
     ].filter((path: any) => propertyName(path.node) === name);
 
-  const addNamedImport = (names: string[], source: string) => {
-    const existing = root
-      .find(j.ImportDeclaration)
-      .filter(
-        (path) =>
-          path.node.source.value === source && path.node.importKind !== 'type'
-      );
+  const importSpecifier = (imported: string, local: string) =>
+    imported === local
+      ? j.importSpecifier(j.identifier(imported))
+      : j.importSpecifier(j.identifier(imported), j.identifier(local));
+
+  /** Names are `imported` or `[imported, local]`. */
+  const addNamedImport = (
+    names: Array<string | [string, string]>,
+    source: string
+  ) => {
+    const existing = root.find(j.ImportDeclaration).filter(
+      (path) =>
+        path.node.source.value === source &&
+        path.node.importKind !== 'type' &&
+        // `import * as x` can't take named specifiers.
+        !(path.node.specifiers || []).some(
+          (s) => s.type === 'ImportNamespaceSpecifier'
+        )
+    );
     const declared = new Set<string>();
     root.find(j.ImportSpecifier).forEach((path) => {
       declared.add((path.node.local || path.node.imported).name);
     });
-    const missing = names.filter((name) => !declared.has(name));
+    const pairs = names.map((name) =>
+      typeof name === 'string' ? [name, name] : name
+    );
+    const missing = pairs.filter(
+      ([, local], index) =>
+        !declared.has(local) &&
+        pairs.findIndex((pair) => pair[1] === local) === index
+    );
     if (missing.length === 0) return;
-    const specifiers = missing.map((name) =>
-      j.importSpecifier(j.identifier(name))
+    const specifiers = missing.map(([imported, local]) =>
+      importSpecifier(imported, local)
     );
 
     if (existing.size() > 0) {
@@ -312,7 +390,7 @@ export default function transform(
     });
 
   // ---------------------------------------------------------------------------
-  // 4. `Hits` type -> `Hit[]`, toggle-refinement types path
+  // 4. `Hits` type -> `Hit[]`
   // ---------------------------------------------------------------------------
   root
     .find(j.ImportDeclaration)
@@ -340,54 +418,300 @@ export default function transform(
             j.tsArrayType(j.tsTypeReference(j.identifier('Hit')))
           );
       }
-
-      const source = path.node.source.value as string;
-      if (
-        /connectors\/toggle-refinement\/types$/.test(source) &&
-        specifiers.some(
-          (s: any) =>
-            s.type === 'ImportSpecifier' &&
-            /^ToggleRefinement(Connector|WidgetDescription)$/.test(
-              s.imported.name
-            )
-        )
-      ) {
-        path.node.source = j.literal(
-          source.replace(/types$/, 'connectToggleRefinement')
-        );
-      }
     });
 
   // ---------------------------------------------------------------------------
-  // 5. `instantsearch.highlight(...)` & co moved to imports
+  // 5. Deep imports: `instantsearch.js` only exposes its root. React and Vue
+  //    don't depend on it anymore, so they import from their own package.
   // ---------------------------------------------------------------------------
-  const importsToAdd: Record<string, Set<string>> = {};
+  // Local names of the history router: aliased imports, or destructured from
+  // a namespace import.
+  const historyRouterLocals = new Set<string>();
+  const routersLocals = new Set<string>(['routers']);
+  const importSources = root
+    .find(j.ImportDeclaration)
+    .nodes()
+    .map((node) => String(node.source.value));
+  const flavorSource =
+    importSources.find((s) => s === 'react-instantsearch') ||
+    importSources.find((s) => s === 'react-instantsearch-core') ||
+    importSources
+      .find((s) => /^vue-instantsearch(\/|$)/.test(s))
+      // The widgets-only entry only exports the `Ais*` components.
+      ?.replace(/\/es\/src\/widgets\.js$/, '/es') ||
+    'instantsearch.js';
+
   root
-    .find(j.MemberExpression, {
-      object: { type: 'Identifier', name: 'instantsearch' },
-      computed: false,
+    .find(j.ImportDeclaration)
+    .filter((path) => {
+      const value = String(path.node.source.value);
+      return (
+        /^instantsearch\.js\/(es|cjs)(\/|$)/.test(value) ||
+        (value === 'instantsearch.js' && flavorSource !== 'instantsearch.js')
+      );
     })
-    .filter(
-      (path: any) =>
-        path.node.property.type === 'Identifier' &&
-        path.node.property.name in INSTANTSEARCH_MOVED_HELPERS
-    )
-    .forEach((path: any) => {
-      const name = path.node.property.name as string;
-      const source = INSTANTSEARCH_MOVED_HELPERS[name];
-      importsToAdd[source] = importsToAdd[source] || new Set();
-      importsToAdd[source].add(name);
-      j(path).replaceWith(j.identifier(name));
+    .forEach((path) => {
+      const deepPath = String(path.node.source.value)
+        .replace(/^instantsearch\.js(\/(es|cjs))?\/?/, '')
+        .replace(/\.js$/, '')
+        .replace(/(^|\/)index$/, '');
+      const renames = RENAMED_EXPORTS[deepPath.replace(/^lib\//, '')] || {};
+      const defaultName =
+        DEEP_DEFAULT_EXPORTS[deepPath] || entryModuleExport(deepPath);
+      const specifiers: any[] = path.node.specifiers || [];
+      const source =
+        JS_ONLY_PATHS.test(deepPath) ||
+        (defaultName === 'instantsearch' &&
+          specifiers.some((s) => s.type === 'ImportDefaultSpecifier'))
+          ? 'instantsearch.js'
+          : flavorSource;
+
+      if (
+        INTERNAL_PATHS.test(deepPath) ||
+        (!defaultName &&
+          specifiers.some((s) => s.type === 'ImportDefaultSpecifier'))
+      ) {
+        addComment(
+          path.node,
+          `\`instantsearch.js\` only exposes its root now, import this by name from \`${source}\` if it's still exported (internal modules are not).`
+        );
+        return;
+      }
+      // `routers.history()` -> `routers.historyRouter()`,
+      // `const { history } = routers` -> `const { historyRouter: history } = routers`
+      specifiers
+        .filter((s) => s.type === 'ImportNamespaceSpecifier')
+        .forEach((s) => {
+          if (renames.history) {
+            routersLocals.add(s.local.name);
+          }
+          root
+            .find(j.MemberExpression, {
+              object: { type: 'Identifier', name: s.local.name },
+              computed: false,
+            })
+            .filter((member: any) => member.node.property.name in renames)
+            .forEach((member: any) => {
+              member.node.property = j.identifier(
+                renames[member.node.property.name]
+              );
+            });
+          root
+            .find(j.VariableDeclarator, {
+              id: { type: 'ObjectPattern' },
+              init: { type: 'Identifier', name: s.local.name },
+            })
+            .forEach((declarator: any) => {
+              declarator.node.id.properties
+                .filter((prop: any) => propertyName(prop)! in renames)
+                .forEach((prop: any) => {
+                  const name = renames[propertyName(prop)!];
+                  if (
+                    name === 'historyRouter' &&
+                    prop.value.type === 'Identifier'
+                  ) {
+                    historyRouterLocals.add(prop.value.name);
+                  }
+                  prop.key = j.identifier(name);
+                  prop.shorthand = false;
+                });
+            });
+        });
+      path.node.specifiers = specifiers.map((s) => {
+        if (s.type === 'ImportDefaultSpecifier') {
+          return importSpecifier(defaultName!, s.local.name);
+        }
+        if (s.type === 'ImportSpecifier' && s.imported.name in renames) {
+          return importSpecifier(
+            renames[s.imported.name],
+            (s.local || s.imported).name
+          );
+        }
+        return s;
+      });
+      path.node.source = j.literal(source);
     });
-  Object.keys(importsToAdd).forEach((source) =>
-    addNamedImport(Array.from(importsToAdd[source]), source)
-  );
+
+  // ---------------------------------------------------------------------------
+  // 6. The `instantsearch` default export is a named export without namespaces
+  //    (the UMD build keeps them, so the global is left alone).
+  // ---------------------------------------------------------------------------
+  root
+    .find(j.ImportDeclaration, { source: { value: 'instantsearch.js' } })
+    .forEach((path) => {
+      path.node.specifiers = (path.node.specifiers || []).map((s: any) =>
+        s.type === 'ImportDefaultSpecifier'
+          ? importSpecifier('instantsearch', s.local.name)
+          : s
+      );
+    });
+  const instantsearchLocal = root
+    .find(j.ImportSpecifier, { imported: { name: 'instantsearch' } })
+    .filter((path: any) => path.parent.node.source.value === 'instantsearch.js')
+    .nodes()
+    .map((node: any) => (node.local || node.imported).name)[0];
+
+  if (instantsearchLocal) {
+    const importsToAdd: Array<string | [string, string]> = [];
+    const importedNames = new Set(
+      root
+        .find(j.ImportSpecifier)
+        .filter((path: any) =>
+          isInstantSearchSource(path.parent.node.source.value)
+        )
+        .nodes()
+        .map((node: any) => (node.local || node.imported).name)
+    );
+    const usedNames = new Set(
+      root
+        .find(j.Identifier)
+        .filter((path: any) => {
+          const parent = path.parent.node;
+          return !(
+            (j.MemberExpression.check(parent) &&
+              parent.property === path.node &&
+              !parent.computed) ||
+            ((parent.type === 'Property' || parent.type === 'ObjectProperty') &&
+              parent.key === path.node &&
+              !parent.shorthand)
+          );
+        })
+        .nodes()
+        .map((node) => node.name)
+        .filter((name) => !importedNames.has(name))
+    );
+    const isNamespace = (node: any) =>
+      Boolean(node) &&
+      node.type === 'MemberExpression' &&
+      !node.computed &&
+      node.object.type === 'Identifier' &&
+      node.object.name === instantsearchLocal &&
+      NAMESPACES.includes(node.property.name);
+    const exportName = (namespace: string, name: string) =>
+      (RENAMED_EXPORTS[namespace] || {})[name] || name;
+
+    // `instantsearch.widgets.searchBox` -> `searchBox`
+    root
+      .find(j.MemberExpression, { computed: false })
+      .filter((path: any) => isNamespace(path.node.object))
+      .forEach((path: any) => {
+        const name = exportName(
+          path.node.object.property.name,
+          path.node.property.name
+        );
+        // Left for the TODO below, to not shadow a local binding.
+        if (usedNames.has(name)) return;
+        importsToAdd.push(name);
+        j(path).replaceWith(j.identifier(name));
+      });
+
+    // `const { searchBox } = instantsearch.widgets` -> `import { searchBox }`.
+    // Only at the module level: imports can't keep the scope of a function.
+    root
+      .find(j.VariableDeclarator)
+      .filter(
+        (path: any) =>
+          path.parent.parent.node.type === 'Program' &&
+          path.node.id.type === 'ObjectPattern' &&
+          isNamespace(path.node.init) &&
+          path.node.id.properties.every(
+            (prop: any) =>
+              (prop.type === 'Property' || prop.type === 'ObjectProperty') &&
+              propertyName(prop) &&
+              prop.value.type === 'Identifier'
+          )
+      )
+      .forEach((path: any) => {
+        path.node.id.properties.forEach((prop: any) =>
+          importsToAdd.push([
+            exportName(path.node.init.property.name, propertyName(prop)!),
+            prop.value.name,
+          ])
+        );
+        j(path).remove();
+      });
+
+    // `instantsearch.version` -> `version`
+    root
+      .find(j.MemberExpression, {
+        object: { type: 'Identifier', name: instantsearchLocal },
+        computed: false,
+      })
+      .filter((path: any) =>
+        TOP_LEVEL_EXPORTS.includes(path.node.property.name)
+      )
+      .forEach((path: any) => {
+        const name = path.node.property.name;
+        if (usedNames.has(name)) {
+          addComment(
+            enclosingStatement(path),
+            `\`${instantsearchLocal}.${name}\` is removed, import \`${name}\` by name from \`instantsearch.js\` (the name is already taken in this file).`
+          );
+          return;
+        }
+        importsToAdd.push(name);
+        j(path).replaceWith(j.identifier(name));
+      });
+
+    root
+      .find(j.MemberExpression)
+      .filter((path: any) => isNamespace(path.node))
+      .forEach((path: any) => {
+        addComment(
+          enclosingStatement(path),
+          `\`${instantsearchLocal}.${path.node.property.name}\` is removed, import its exports by name from \`instantsearch.js\`.`
+        );
+      });
+
+    addNamedImport(importsToAdd, 'instantsearch.js');
+  }
+
+  // Merge the imports that now share a source.
+  const mergeableImports: Record<string, any> = {};
+  root
+    .find(j.ImportDeclaration)
+    .filter((path) => {
+      const specifiers = path.node.specifiers || [];
+      return (
+        isInstantSearchSource(path.node.source.value) &&
+        specifiers.length > 0 &&
+        specifiers.every((s) => s.type === 'ImportSpecifier')
+      );
+    })
+    .forEach((path) => {
+      const key = `${path.node.importKind} ${path.node.source.value}`;
+      const first = mergeableImports[key];
+      if (!first) {
+        mergeableImports[key] = path.node;
+        return;
+      }
+      first.specifiers = [
+        ...first.specifiers,
+        ...(path.node.specifiers || []).filter(
+          (s: any) =>
+            !first.specifiers.some(
+              (f: any) =>
+                (f.local || f.imported).name === (s.local || s.imported).name
+            )
+        ),
+      ];
+      first.comments = [
+        ...(first.comments || []),
+        ...(path.node.comments || []),
+      ];
+      j(path).remove();
+    });
+
+  // The UMD global, or the local name of the migrated import.
+  const isInstantSearchReceiver = (node: any) =>
+    node.type === 'Identifier' &&
+    (node.name === 'instantsearch' || node.name === instantsearchLocal);
   root
     .find(j.MemberExpression, {
-      object: { type: 'Identifier', name: 'instantsearch' },
       property: { type: 'Identifier', name: 'insights' },
       computed: false,
     })
+    .filter((path) => isInstantSearchReceiver(path.node.object))
     .forEach((path) => {
       addComment(
         enclosingStatement(path),
@@ -399,17 +723,17 @@ export default function transform(
   Object.keys(REMOVED_EXPORT_WORKAROUNDS).forEach((name) => {
     root
       .find(j.MemberExpression, {
-        object: { type: 'Identifier', name: 'instantsearch' },
         property: { type: 'Identifier', name },
         computed: false,
       })
+      .filter((path) => isInstantSearchReceiver(path.node.object))
       .forEach((path) => {
         addComment(enclosingStatement(path), REMOVED_EXPORT_WORKAROUNDS[name]);
       });
   });
 
   // ---------------------------------------------------------------------------
-  // 6. History router: getLocation -> getCurrentURL, location -> currentURL,
+  // 7. History router: getLocation -> getCurrentURL, location -> currentURL,
   //    and keep the v4 default of `cleanUrlOnDispose`
   // ---------------------------------------------------------------------------
   findProperties(root, 'getLocation').forEach((path: any) => {
@@ -469,14 +793,16 @@ export default function transform(
     });
   });
 
-  const importedFromInstantSearch = new Set<string>();
   root
     .find(j.ImportDeclaration)
     .filter((path) => isInstantSearchSource(path.node.source.value))
     .forEach((path) => {
       (path.node.specifiers || []).forEach((s: any) => {
-        if (s.type === 'ImportSpecifier') {
-          importedFromInstantSearch.add((s.local || s.imported).name);
+        if (
+          s.type === 'ImportSpecifier' &&
+          ['history', 'historyRouter'].includes(s.imported.name)
+        ) {
+          historyRouterLocals.add((s.local || s.imported).name);
         }
       });
     });
@@ -495,17 +821,14 @@ export default function transform(
 
   const isHistoryCall = (callee: any) => {
     if (callee.type === 'Identifier') {
-      return (
-        ['history', 'historyRouter'].includes(callee.name) &&
-        importedFromInstantSearch.has(callee.name)
-      );
+      return historyRouterLocals.has(callee.name);
     }
     return (
       callee.type === 'MemberExpression' &&
       !callee.computed &&
-      callee.property.name === 'history' &&
+      ['history', 'historyRouter'].includes(callee.property.name) &&
       ((callee.object.type === 'Identifier' &&
-        callee.object.name === 'routers') ||
+        routersLocals.has(callee.object.name)) ||
         (callee.object.type === 'MemberExpression' &&
           callee.object.property.name === 'routers'))
     );
@@ -569,7 +892,7 @@ export default function transform(
 
   // `routing: true` / `routing` with no router uses the default history router
   const routingMessage =
-    'the default history router no longer cleans the URL on dispose. Pass `router: history({ cleanUrlOnDispose: true })` to keep the v4 behavior.';
+    'the default history router no longer cleans the URL on dispose. Pass `router: historyRouter({ cleanUrlOnDispose: true })` to keep the v4 behavior.';
   findProperties(root, 'routing').forEach((path: any) => {
     if (path.node.value.type === 'BooleanLiteral' && path.node.value.value) {
       addComment(path.node, routingMessage);
@@ -591,7 +914,7 @@ export default function transform(
     });
 
   // ---------------------------------------------------------------------------
-  // 7. __hitIndex -> __position - 1 in hits / infiniteHits item templates
+  // 8. __hitIndex -> __position - 1 in hits / infiniteHits item templates
   //    (`__position` starts at 1, so no plain rename)
   // ---------------------------------------------------------------------------
   root
@@ -641,7 +964,7 @@ export default function transform(
   });
 
   // ---------------------------------------------------------------------------
-  // 8. Things that need a human: leave a TODO
+  // 9. Things that need a human: leave a TODO
   // ---------------------------------------------------------------------------
   // searchFunction -> onStateChange
   findProperties(root, 'searchFunction').forEach((path: any) => {
@@ -679,7 +1002,7 @@ export default function transform(
     findProperties(root, name).forEach((path: any) =>
       addComment(
         path.node,
-        `\`${name}\` is removed: highlighted values are not escaped by the connectors anymore, and the \`highlight\`/\`snippet\` helpers escape their own output.`
+        `\`${name}\` is removed: highlighted values are not escaped by the connectors anymore, and the \`Highlight\`/\`Snippet\` components escape their own output.`
       )
     )
   );
