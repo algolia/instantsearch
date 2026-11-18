@@ -13,7 +13,7 @@ import {
   simpleStateMapping as simple,
   singleIndexStateMapping as singleIndex,
 } from 'instantsearch.js';
-// TODO(instantsearch v5): `instantsearch.js` only exposes its root now, import this by name from `instantsearch.js` (internal modules are not exported anymore).
+// TODO(instantsearch v5): `instantsearch.js` only exposes its root now, import this by name from `instantsearch.js` if it's still exported (internal modules are not).
 import getPropertyByPath from 'instantsearch.js/es/lib/utils/getPropertyByPath';
 
 const index = 0;

@@ -36,6 +36,7 @@ const NAMESPACES = [
   'middlewares',
   'routers',
   'stateMappings',
+  'templates',
 ];
 
 /** Properties of the v4 `instantsearch` default export, now named exports of the root. */
@@ -63,6 +64,10 @@ const DEEP_DEFAULT_EXPORTS: Record<string, string> = {
 
 /** Deep import paths only `instantsearch.js` exports: React and Vue don't depend on it anymore. */
 const JS_ONLY_PATHS = /^(widgets|templates|helpers\/components)(\/|$)/;
+
+/** Deep import paths of internal modules, which have no public equivalent to point to. */
+const INTERNAL_PATHS =
+  /^lib\/(?!(routers|stateMappings|infiniteHitsCache|server|main)(\/|$))/;
 
 /** Exports that no longer exist in v5. */
 const REMOVED_EXPORTS =
@@ -402,7 +407,10 @@ export default function transform(
   const flavorSource =
     importSources.find((s) => s === 'react-instantsearch') ||
     importSources.find((s) => s === 'react-instantsearch-core') ||
-    importSources.find((s) => /^vue-instantsearch(\/|$)/.test(s)) ||
+    importSources
+      .find((s) => /^vue-instantsearch(\/|$)/.test(s))
+      // The widgets-only entry only exports the `Ais*` components.
+      ?.replace(/\/es\/src\/widgets\.js$/, '/es') ||
     'instantsearch.js';
 
   root
@@ -435,15 +443,32 @@ export default function transform(
           : flavorSource;
 
       if (
-        !defaultName &&
-        specifiers.some((s) => s.type === 'ImportDefaultSpecifier')
+        INTERNAL_PATHS.test(deepPath) ||
+        (!defaultName &&
+          specifiers.some((s) => s.type === 'ImportDefaultSpecifier'))
       ) {
         addComment(
           path.node,
-          `\`instantsearch.js\` only exposes its root now, import this by name from \`${source}\` (internal modules are not exported anymore).`
+          `\`instantsearch.js\` only exposes its root now, import this by name from \`${source}\` if it's still exported (internal modules are not).`
         );
         return;
       }
+      // `routers.history()` -> `routers.historyRouter()`
+      specifiers
+        .filter((s) => s.type === 'ImportNamespaceSpecifier')
+        .forEach((s) => {
+          root
+            .find(j.MemberExpression, {
+              object: { type: 'Identifier', name: s.local.name },
+              computed: false,
+            })
+            .filter((member: any) => member.node.property.name in renames)
+            .forEach((member: any) => {
+              member.node.property = j.identifier(
+                renames[member.node.property.name]
+              );
+            });
+        });
       path.node.specifiers = specifiers.map((s) => {
         if (s.type === 'ImportDefaultSpecifier') {
           return importSpecifier(defaultName!, s.local.name);
@@ -508,6 +533,7 @@ export default function transform(
         .filter((name) => !importedNames.has(name))
     );
     const isNamespace = (node: any) =>
+      Boolean(node) &&
       node.type === 'MemberExpression' &&
       !node.computed &&
       node.object.type === 'Identifier' &&
@@ -531,11 +557,13 @@ export default function transform(
         j(path).replaceWith(j.identifier(name));
       });
 
-    // `const { searchBox } = instantsearch.widgets` -> `import { searchBox }`
+    // `const { searchBox } = instantsearch.widgets` -> `import { searchBox }`.
+    // Only at the module level: imports can't keep the scope of a function.
     root
       .find(j.VariableDeclarator)
       .filter(
         (path: any) =>
+          path.parent.parent.node.type === 'Program' &&
           path.node.id.type === 'ObjectPattern' &&
           isNamespace(path.node.init) &&
           path.node.id.properties.every(
@@ -565,8 +593,16 @@ export default function transform(
         TOP_LEVEL_EXPORTS.includes(path.node.property.name)
       )
       .forEach((path: any) => {
-        importsToAdd.push(path.node.property.name);
-        j(path).replaceWith(j.identifier(path.node.property.name));
+        const name = path.node.property.name;
+        if (usedNames.has(name)) {
+          addComment(
+            enclosingStatement(path),
+            `\`${instantsearchLocal}.${name}\` is removed, import \`${name}\` by name from \`instantsearch.js\` (the name is already taken in this file).`
+          );
+          return;
+        }
+        importsToAdd.push(name);
+        j(path).replaceWith(j.identifier(name));
       });
 
     root
@@ -705,14 +741,18 @@ export default function transform(
     });
   });
 
-  const importedFromInstantSearch = new Set<string>();
+  // Local names of the history router, aliased or not.
+  const historyRouterLocals = new Set<string>();
   root
     .find(j.ImportDeclaration)
     .filter((path) => isInstantSearchSource(path.node.source.value))
     .forEach((path) => {
       (path.node.specifiers || []).forEach((s: any) => {
-        if (s.type === 'ImportSpecifier') {
-          importedFromInstantSearch.add((s.local || s.imported).name);
+        if (
+          s.type === 'ImportSpecifier' &&
+          ['history', 'historyRouter'].includes(s.imported.name)
+        ) {
+          historyRouterLocals.add((s.local || s.imported).name);
         }
       });
     });
@@ -731,15 +771,12 @@ export default function transform(
 
   const isHistoryCall = (callee: any) => {
     if (callee.type === 'Identifier') {
-      return (
-        ['history', 'historyRouter'].includes(callee.name) &&
-        importedFromInstantSearch.has(callee.name)
-      );
+      return historyRouterLocals.has(callee.name);
     }
     return (
       callee.type === 'MemberExpression' &&
       !callee.computed &&
-      callee.property.name === 'history' &&
+      ['history', 'historyRouter'].includes(callee.property.name) &&
       ((callee.object.type === 'Identifier' &&
         callee.object.name === 'routers') ||
         (callee.object.type === 'MemberExpression' &&
