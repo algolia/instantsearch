@@ -2,6 +2,9 @@ import { instantsearch, carousel, historyRouter as makeRouter } from 'instantsea
 import * as routers from 'instantsearch.js';
 // TODO(instantsearch v5): `instantsearch.js` only exposes its root now, import this by name from `instantsearch.js` if it's still exported (internal modules are not).
 import { noop } from 'instantsearch.js/es/lib/utils';
+import * as routing from 'instantsearch.js';
+// TODO(instantsearch v5): `instantsearch.js` only exposes its root now, import this by name from `instantsearch.js` if it's still exported (internal modules are not).
+import hitsTemplates from 'instantsearch.js/es/widgets/hits/defaultTemplates';
 
 const version = 'app';
 // TODO(instantsearch v5): `instantsearch.version` is removed, import `version` by name from `instantsearch.js` (the name is already taken in this file).
@@ -25,6 +28,10 @@ const search = instantsearch({
   }) },
 });
 const router = makeRouter({
+  // TODO(instantsearch v5): the default of `cleanUrlOnDispose` is now `false`. This keeps the v4 behavior; remove it to adopt the new default.
+  cleanUrlOnDispose: true
+});
+const otherRouter = routing.historyRouter({
   // TODO(instantsearch v5): the default of `cleanUrlOnDispose` is now `false`. This keeps the v4 behavior; remove it to adopt the new default.
   cleanUrlOnDispose: true
 });

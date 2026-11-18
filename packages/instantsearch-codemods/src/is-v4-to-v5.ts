@@ -62,6 +62,27 @@ const DEEP_DEFAULT_EXPORTS: Record<string, string> = {
     'createInfiniteHitsSessionStorageCache',
 };
 
+/**
+ * Name of the default export of a widget, connector or middleware entry module
+ * (`widgets/hits/hits`, `connectors/hits/connectHits`,
+ * `middlewares/createInsightsMiddleware`). Other files in these folders, like
+ * `widgets/hits/defaultTemplates`, aren't exported from the root.
+ */
+function entryModuleExport(deepPath: string) {
+  const [folder, dir = '', file, ...rest] = deepPath.split('/');
+  const name = dir.replace(/-(\w)/g, (_, char) => char.toUpperCase());
+  if (rest.length > 0) return undefined;
+  if (folder === 'middlewares' && dir && !file) return dir;
+  if (folder === 'widgets' && file === dir) return name;
+  if (
+    folder === 'connectors' &&
+    file === `connect${name.charAt(0).toUpperCase()}${name.slice(1)}`
+  ) {
+    return file;
+  }
+  return undefined;
+}
+
 /** Deep import paths only `instantsearch.js` exports: React and Vue don't depend on it anymore. */
 const JS_ONLY_PATHS = /^(widgets|templates|helpers\/components)(\/|$)/;
 
@@ -406,6 +427,7 @@ export default function transform(
   // Local names of the history router: aliased imports, or destructured from
   // a namespace import.
   const historyRouterLocals = new Set<string>();
+  const routersLocals = new Set<string>(['routers']);
   const importSources = root
     .find(j.ImportDeclaration)
     .nodes()
@@ -434,12 +456,8 @@ export default function transform(
         .replace(/\.js$/, '')
         .replace(/(^|\/)index$/, '');
       const renames = RENAMED_EXPORTS[deepPath.replace(/^lib\//, '')] || {};
-      const basename = deepPath.split('/').pop() || '';
       const defaultName =
-        DEEP_DEFAULT_EXPORTS[deepPath] ||
-        (/^(widgets|connectors|middlewares)\//.test(deepPath)
-          ? basename.replace(/-(\w)/g, (_, char) => char.toUpperCase())
-          : undefined);
+        DEEP_DEFAULT_EXPORTS[deepPath] || entryModuleExport(deepPath);
       const specifiers: any[] = path.node.specifiers || [];
       const source =
         JS_ONLY_PATHS.test(deepPath) ||
@@ -464,6 +482,9 @@ export default function transform(
       specifiers
         .filter((s) => s.type === 'ImportNamespaceSpecifier')
         .forEach((s) => {
+          if (renames.history) {
+            routersLocals.add(s.local.name);
+          }
           root
             .find(j.MemberExpression, {
               object: { type: 'Identifier', name: s.local.name },
@@ -807,7 +828,7 @@ export default function transform(
       !callee.computed &&
       ['history', 'historyRouter'].includes(callee.property.name) &&
       ((callee.object.type === 'Identifier' &&
-        callee.object.name === 'routers') ||
+        routersLocals.has(callee.object.name)) ||
         (callee.object.type === 'MemberExpression' &&
           callee.object.property.name === 'routers'))
     );
