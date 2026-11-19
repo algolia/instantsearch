@@ -432,17 +432,14 @@ jobs:
       - legacy-algoliasearch-v3
       - legacy-algoliasearch-v4
       - vue-v3
-      # The two master-only jobs, so that a prerelease dispatched against
-      # `master` waits on them too. They are skipped on any other branch, and a
-      # skipped dependency would skip this job as well — which is why the `if`
-      # below has to say `!cancelled()` and then look at the results itself:
-      # fail on a dependency that failed, publish over one that never ran.
+      # The two master-only jobs, so a prerelease dispatched against `master`
+      # waits on them too. On any other branch they are skipped, and a job that
+      # needs a skipped job is skipped itself — hence `!cancelled()` below,
+      # which is also what lifts GitHub's own rule that a job only starts when
+      # every dependency passed. The first step puts that rule back.
       - helper-docs
       - e2e
-    if: >-
-      github.event_name == 'workflow_dispatch' && !cancelled() &&
-      !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+    if: github.event_name == 'workflow_dispatch' && !cancelled()
     runs-on: ubuntu-latest
     timeout-minutes: 90
     # The environment the packages' trusted publishers name. It has no required
@@ -453,6 +450,28 @@ jobs:
       # The OIDC token Lerna trades for an npm token, and for provenance.
       id-token: write
     steps:
+      # Skipped is fine — that is `helper-docs` and `e2e` on a branch that has
+      # no use for them. Failed, timed out or cancelled is not, and the
+      # `!cancelled()` above means GitHub no longer screens those out for us.
+      # Better to find out here than after a version number has been spent.
+      - name: Stop if CI did not pass
+        env:
+          NEEDS: ${{ toJSON(needs) }}
+        run: |
+          node -e '
+            const needs = JSON.parse(process.env.NEEDS);
+            const report = Object.entries(needs)
+              .map(([job, { result }]) => `${job}=${result}`)
+              .join(" ");
+            const bad = Object.entries(needs)
+              .filter(([, { result }]) => !["success", "skipped"].includes(result));
+            console.log(`dependencies: ${report}`);
+            for (const [job, { result }] of bad) {
+              console.log(`::error::${job} ${result}`);
+            }
+            process.exit(bad.length ? 1 : 0);
+          '
+
       - name: Mint GitHub App token
         id: app-token
         uses: actions/create-github-app-token@v3
