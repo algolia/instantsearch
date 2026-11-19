@@ -353,7 +353,13 @@ function assertCleanBranch() {
   // bump commit Lerna is about to make. The fix-up commit below stages with
   // `git add --update` for the same reason: untracked files never ride along.
   if (capture('git', ['status', '--porcelain', '--untracked-files=no'])) {
-    fail('tracked files differ from HEAD; commit or stash them first');
+    fail(
+      [
+        'tracked files differ from HEAD; commit or stash them first.',
+        '         If they are versions left by an interrupted run, start over with',
+        '           git checkout -- .',
+      ].join('\n')
+    );
   }
 
   const upstream = capture('git', [
@@ -879,6 +885,21 @@ const versionArgs = [
 // runs the fix-up too, so the table says what a publish would actually land.
 // Publish then repeats these two steps for real, from the same commit.
 const planArgs = [...versionArgs, '--no-changelog'];
+
+// A signal would otherwise leave the rewritten manifests on disk: Ctrl-C exits
+// through neither `fail()` nor the plan's own restore, and the next run then
+// stops at the clean-tree check. Restoring here is safe because a handler only
+// runs once `spawnSync` has returned — the child is in the same process group
+// and takes the signal too — so nothing is still writing while the tree goes
+// back. Once the plan's edits are gone `restoreWorkingTree()` does nothing, so
+// an interrupted publish keeps its uncommitted bump for whoever ran it.
+for (const signal of ['SIGINT', 'SIGTERM']) {
+  process.on(signal, () => {
+    restoreWorkingTree();
+    process.exit(signal === 'SIGINT' ? 130 : 143);
+  });
+}
+
 planEditsOnDisk = true;
 run('yarn', planArgs);
 run('yarn', ['test:versions', '--fix']);
