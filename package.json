@@ -38,7 +38,6 @@
     "test:e2e:saucelabs": "wdio scripts/wdio/saucelabs.conf.js",
     "test:v3": "lerna run test:v3",
     "release": "shipjs prepare",
-    "release:channel": "node ./scripts/release/release.mjs",
     "postinstall": "lerna run prepare",
     "prepare-vue3": "./scripts/prepare-vue3.js",
     "watch:es": "lerna run watch:es --parallel --stream --ignore='example-*' --ignore='create-instantsearch-app'"

@@ -4,7 +4,21 @@ on:
   schedule:
     # Tuesdays at 09:00 UTC
     - cron: '0 9 * * 2'
+  # Run it on `master` for the current major or `v4` for fixes on the previous
+  # one; the branch picked is the branch the release pull request targets.
   workflow_dispatch:
+    inputs:
+      channel:
+        description: stable, or a prerelease channel (also its npm dist-tag)
+        type: choice
+        required: true
+        default: stable
+        options:
+          - stable
+          - beta
+          - alpha
+          - rc
+          - next
 
 permissions:
   contents: read
@@ -13,7 +27,21 @@ jobs:
   prepare-release:
     name: prepare release
     runs-on: ubuntu-latest
+    env:
+      # A dispatch names its channel. The weekly run follows the repository
+      # variable `RELEASE_CHANNEL`: set it to `beta` while `master` is on a beta
+      # train, so the schedule ships betas instead of graduating the train.
+      CHANNEL: ${{ github.event_name == 'workflow_dispatch' && inputs.channel || vars.RELEASE_CHANNEL || 'stable' }}
     steps:
+      - name: Only from a release branch
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          case "$BRANCH" in
+            master|v4) ;;
+            *) echo "::error::Releases are prepared from master or v4, not $BRANCH"; exit 1 ;;
+          esac
+
       - name: Mint GitHub App token
         id: app-token
         uses: actions/create-github-app-token@v3
@@ -26,7 +54,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
         with:
-          ref: master
           token: ${{ steps.app-token.outputs.token }}
           fetch-depth: 0
 
@@ -52,4 +79,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           SLACK_INCOMING_HOOK: ${{ secrets.SLACK_INCOMING_HOOK }}
-        run: yarn run shipjs prepare --yes --no-browse
+          EVENT: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+          ARGS=(--yes --no-browse)
+          if [ "$CHANNEL" != 'stable' ]; then
+            ARGS+=(--preid "$CHANNEL")
+          elif [ "$EVENT" = 'workflow_dispatch' ]; then
+            # Turning prereleases into stable versions only happens when
+            # someone dispatches `stable` on purpose, never on the weekly
+            # schedule (see `version` in `ship.config.mjs`).
+            ARGS+=(--graduate)
+          fi
+          yarn run shipjs prepare "${ARGS[@]}"
