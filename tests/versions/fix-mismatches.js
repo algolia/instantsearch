@@ -12,14 +12,56 @@ const ROOT_DIR = path.join(__dirname, '../..');
 const PACKAGES_DIR = path.join(ROOT_DIR, 'packages');
 const EXAMPLES_DIR = path.join(ROOT_DIR, 'examples');
 
-function compareSemver(a, b) {
-  const pa = a.split('.').map(Number);
-  const pb = b.split('.').map(Number);
-  for (let i = 0; i < 3; i++) {
-    if (pa[i] > pb[i]) return 1;
-    if (pa[i] < pb[i]) return -1;
+function splitSemver(version) {
+  const dash = version.indexOf('-');
+  if (dash === -1) {
+    return [version.split('.').map(Number), ''];
+  }
+  return [
+    version.slice(0, dash).split('.').map(Number),
+    version.slice(dash + 1),
+  ];
+}
+
+// The ordering a prerelease needs: it sorts below the release it leads up to,
+// its identifiers compare numerically when they are all digits, numeric
+// identifiers rank below alphanumeric ones, and a longer list wins when the
+// shared prefix is equal. Without this, `8.0.0-beta.0` and `8.0.0-beta.2` read
+// as equal and syncing a group pulls the higher prerelease down.
+function comparePrerelease(a, b) {
+  if (a === b) return 0;
+  if (a === '') return 1;
+  if (b === '') return -1;
+
+  const ia = a.split('.');
+  const ib = b.split('.');
+  for (let i = 0; i < Math.max(ia.length, ib.length); i++) {
+    const x = ia[i];
+    const y = ib[i];
+    if (x === undefined) return -1;
+    if (y === undefined) return 1;
+
+    const nx = /^\d+$/.test(x) ? Number(x) : undefined;
+    const ny = /^\d+$/.test(y) ? Number(y) : undefined;
+    if (nx !== undefined && ny !== undefined) {
+      if (nx !== ny) return nx > ny ? 1 : -1;
+      continue;
+    }
+    if (nx !== undefined) return -1;
+    if (ny !== undefined) return 1;
+    if (x !== y) return x > y ? 1 : -1;
   }
   return 0;
+}
+
+function compareSemver(a, b) {
+  const [coreA, preA] = splitSemver(a);
+  const [coreB, preB] = splitSemver(b);
+  for (let i = 0; i < 3; i++) {
+    if (coreA[i] > coreB[i]) return 1;
+    if (coreA[i] < coreB[i]) return -1;
+  }
+  return comparePrerelease(preA, preB);
 }
 
 function getToday() {

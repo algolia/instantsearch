@@ -88,6 +88,34 @@ describe('fixMismatchesIn', () => {
     expect(pkgA.version).toBe('1.2.0');
   });
 
+  it('raises the group to the highest prerelease, never down to it', () => {
+    // A prerelease train: Lerna bumps only one member of the group again, so
+    // the others keep an earlier `-beta.N`. The three-number comparison used to
+    // call those equal and take the highest member down to the first one
+    // listed — a version that had already been published, so the release
+    // silently skipped it.
+    writePackage(tmpDir, 'pkg-a', '8.0.0-beta.1');
+    writePackage(tmpDir, 'pkg-b', '8.0.0-beta.2');
+    writePackage(tmpDir, 'pkg-c', '8.0.0-beta.1');
+
+    runFix(tmpDir, { group: ['pkg-a', 'pkg-b', 'pkg-c'] });
+
+    for (const name of ['pkg-a', 'pkg-b', 'pkg-c']) {
+      const pkg = readJson(path.join(tmpDir, `packages/${name}/package.json`));
+      expect(pkg.version).toBe('8.0.0-beta.2');
+    }
+  });
+
+  it('ranks a release above the prerelease that leads up to it', () => {
+    writePackage(tmpDir, 'pkg-a', '8.0.0');
+    writePackage(tmpDir, 'pkg-b', '8.0.0-beta.4');
+
+    runFix(tmpDir, { group: ['pkg-a', 'pkg-b'] });
+
+    const pkgB = readJson(path.join(tmpDir, 'packages/pkg-b/package.json'));
+    expect(pkgB.version).toBe('8.0.0');
+  });
+
   it('updates the in-source version file', () => {
     writePackage(tmpDir, 'pkg-a', '1.2.0');
     writeVersionFile(tmpDir, 'pkg-a', 'src/version.ts', '1.1.0', 'esm');
