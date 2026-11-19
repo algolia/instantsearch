@@ -424,19 +424,26 @@ jobs:
   # every package first, and npm publishes unsigned until it is.
   prerelease:
     name: prerelease ${{ github.event.inputs.channel }} (${{ github.event.inputs.action }})
+    # Everything in this file except Ship.js's two jobs — which a prerelease
+    # replaces — and except `legacy-algoliasearch-v3`. A `needs` entry has to name
+    # a job the same file defines, and that one is a job a branch deletes when it
+    # drops the support it tests (v5 does): naming it here would leave every run
+    # on such a branch referring to a job that isn't there, which is a broken
+    # file rather than one skipped job. It still runs on `master`, just without
+    # blocking a prerelease.
+    #
+    # The two master-only jobs are in, so a prerelease dispatched against
+    # `master` waits on them too. On any other branch they are skipped, and a job
+    # that needs a skipped job is skipped itself — hence `!cancelled()` below,
+    # which is also what lifts GitHub's own rule that a job only starts when
+    # every dependency passed. The first step puts that rule back.
     needs:
       - build
       - test-metadata
       - lint
       - unit-tests
-      - legacy-algoliasearch-v3
       - legacy-algoliasearch-v4
       - vue-v3
-      # The two master-only jobs, so a prerelease dispatched against `master`
-      # waits on them too. On any other branch they are skipped, and a job that
-      # needs a skipped job is skipped itself — hence `!cancelled()` below,
-      # which is also what lifts GitHub's own rule that a job only starts when
-      # every dependency passed. The first step puts that rule back.
       - helper-docs
       - e2e
     if: github.event_name == 'workflow_dispatch' && !cancelled()
