@@ -247,6 +247,10 @@ function captureJson(command, args) {
 }
 
 function fail(message) {
+  // Every exit goes through here, including a command that failed halfway
+  // through the throwaway version pass, so a plan never leaves rewritten
+  // manifests behind for the next run to trip over.
+  restoreWorkingTree();
   process.stderr.write(`\nrelease: ${message}\n`);
   process.exit(1);
 }
@@ -281,11 +285,6 @@ function restoreWorkingTree() {
       `release: the tree is restored; these untracked files were already there:\n${leftovers}\n`
     );
   }
-}
-
-function bail(message) {
-  restoreWorkingTree();
-  fail(message);
 }
 
 // `5.0.0-beta.0` on channel `beta`.
@@ -630,10 +629,19 @@ async function preflight({ packages, fatal }) {
       `${unclear.length} package(s) could not be checked:`,
       ...unclear.map(({ name, detail: why }) => `  ${name} — ${why}`)
     );
+    if (fatal) {
+      lines.push(
+        '',
+        'An exchange that did not answer is not an answer. Publishing now could',
+        'put a version out with no provenance, which cannot be undone.'
+      );
+    }
   }
 
-  if (fatal && blocked.length) {
-    bail(lines.join('\n'));
+  // Fail closed. A package whose exchange never answered is as unsafe to
+  // publish as one npm refused outright, so `fatal` stops for both.
+  if (fatal && (blocked.length || unclear.length)) {
+    fail(lines.join('\n'));
   }
 
   process.stdout.write(`\n${lines.join('\n')}\n`);
@@ -711,6 +719,7 @@ async function verifyPublished({ published, distTag, requireSigned }) {
   const unsigned = [];
   const unreadable = [];
   const mistagged = [];
+  let attested = 0;
 
   for (const { name, version } of published) {
     const { count, detail } = await readAttestations(name, version);
@@ -724,22 +733,31 @@ async function verifyPublished({ published, distTag, requireSigned }) {
     const { tags = {}, detail: tagDetail } = await readDistTags(name);
     const tagged = tagDetail ? undefined : tags[distTag];
 
-    if (count === 0 && !requireSigned) {
-      // The one case where no attestation is not a failure: the run said
-      // `--allow-unsigned`, so there was nothing to sign with.
-      process.stdout.write(
-        `  unsigned    ${name}@${version} → ${distTag} (expected: --allow-unsigned)\n`
-      );
-    } else if (count === 0) {
-      unsigned.push({ name, version });
-      process.stdout.write(`  UNSIGNED    ${name}@${version}\n`);
-    } else if (tagged !== version) {
+    // Two independent checks. `--allow-unsigned` waives the attestation and
+    // nothing else: a version that reached npm without landing on the channel
+    // tag is a wrong release whether or not it is signed, and a tag read that
+    // failed counts as unconfirmed rather than as fine.
+    if (count === 0) {
+      if (requireSigned) {
+        unsigned.push({ name, version });
+        process.stdout.write(`  UNSIGNED    ${name}@${version}\n`);
+      } else {
+        // The one case where no attestation is not a failure: the run said
+        // `--allow-unsigned`, so there was nothing to sign with.
+        process.stdout.write(
+          `  unsigned    ${name}@${version} (expected: --allow-unsigned)\n`
+        );
+      }
+    } else {
+      attested += 1;
+      process.stdout.write(`  signed      ${name}@${version}\n`);
+    }
+
+    if (tagged !== version) {
       mistagged.push({ name, version, tagged, detail: tagDetail });
       process.stdout.write(
         `  wrong tag   ${name}@${version} — \`${distTag}\` points at ${tagged || '(nowhere)'}${tagDetail ? ` (${tagDetail})` : ''}\n`
       );
-    } else {
-      process.stdout.write(`  signed      ${name}@${version} → ${distTag}\n`);
     }
   }
 
@@ -779,9 +797,11 @@ async function verifyPublished({ published, distTag, requireSigned }) {
     fail(lines.join('\n'));
   }
 
+  // A count, not a yes/no: `--allow-unsigned` skips the exchange for every
+  // package, but Lerna still signs the ones it can, so a run can end mixed.
   process.stdout.write(
-    `\nrelease: ${published.length} package(s) on \`${distTag}\`` +
-      `${requireSigned ? ', all attested.' : ', none attested.'}\n`
+    `\nrelease: ${published.length} package(s) on \`${distTag}\`, ` +
+      `${attested} of ${published.length} attested.\n`
   );
 }
 
@@ -836,6 +856,11 @@ if (options.mode === 'publish') {
   }
 }
 
+// The same command in every mode, and the same one `ship.config.mjs` runs for a
+// stable release. `--no-git-tag-version --no-push` is the point: the commit and
+// the tags have to come *after* `yarn test:versions --fix` below, because that
+// fix-up can move a package's version. Letting Lerna commit and tag first would
+// leave tags naming versions that were never published.
 const versionArgs = [
   'lerna',
   'version',
@@ -845,25 +870,18 @@ const versionArgs = [
   '--conventional-prerelease',
   '--preid',
   options.channel,
-];
-// Lerna's own default subject is a bare `Publish`, which is not a Conventional
-// Commit and hides which train it was. `chore(release):` rather than
-// `chore: release` on purpose: `ci.yml` reads a commit subject starting with
-// `chore: release` on `master` as Ship.js's own release commit, and this bump is
-// deliberately not one.
-versionArgs.push('--message', `chore(release): publish ${options.channel}`);
-
-// Every mode computes the versions in a throwaway pass first, so the guards
-// below run against real numbers while the branch is still untouched. Publish
-// then runs the same command for real, from the same commit, so it agrees.
-const planArgs = [
-  ...versionArgs,
   '--no-git-tag-version',
   '--no-push',
-  '--no-changelog',
 ];
+
+// Every mode computes the versions in a throwaway pass first, so the guards
+// below run against real numbers while the branch is still untouched — and it
+// runs the fix-up too, so the table says what a publish would actually land.
+// Publish then repeats these two steps for real, from the same commit.
+const planArgs = [...versionArgs, '--no-changelog'];
 planEditsOnDisk = true;
 run('yarn', planArgs);
+run('yarn', ['test:versions', '--fix']);
 
 const planned = readPackages();
 const table = formatTable(packages, planned);
@@ -880,7 +898,7 @@ const willPublish = planned.filter(
 );
 
 if (!willPublish.length) {
-  bail(
+  fail(
     'nothing to publish; no package has a version the registry does not already have'
   );
 }
@@ -900,7 +918,7 @@ const offChannel = willPublish.filter(
   ({ version }) => !matchesChannel(version, options.channel)
 );
 if (offChannel.length) {
-  bail(
+  fail(
     [
       `these versions must not go out under the \`${distTag}\` dist-tag:`,
       ...offChannel.map(({ name, version }) => `  ${name}@${version}`),
@@ -918,22 +936,27 @@ if (
   distTag === 'latest' ||
   willPublish.some(({ version }) => !isPrerelease(version))
 ) {
-  bail(
+  fail(
     'refusing to publish a stable version: this script only moves a channel tag'
   );
 }
 
 // Each package's own `version` lifecycle rewrites its version file
 // (`src/version.ts` and friends), and the react flavor has to stay in sync
-// across its three packages. Report it here so a plan says what a publish would
-// have to fix up; `yarn test:versions --fix` does the fixing further down, in
-// the publish path, exactly as `ship.config.mjs` does for a stable release.
-const versionsOutOfSync =
-  run('yarn', ['test:versions'], { allowFail: true }) !== 0;
-if (versionsOutOfSync) {
-  process.stdout.write(
-    'release: `yarn test:versions` reports a mismatch; a publish would fix it and\n' +
-      '         commit that fix on top of the bump.\n'
+// across its three packages; `yarn test:versions --fix` just ran both. This
+// re-reads the result. If it still disagrees, the table above is not what a
+// publish would land, and publishing something the plan did not show is exactly
+// what this script exists to prevent — so it stops here, in plan mode too.
+if (run('yarn', ['test:versions'], { allowFail: true }) !== 0) {
+  fail(
+    [
+      '`yarn test:versions` still reports a mismatch after its own --fix pass,',
+      'so the versions above are not what a publish would land.',
+      '',
+      'tests/versions/index.js says which group or version file disagrees; the',
+      'usual cause is a package that should have joined this train, or a version',
+      'file that nothing regenerates any more. Fix that, then re-run.',
+    ].join('\n')
   );
 }
 
@@ -956,7 +979,14 @@ if (!options.yes) {
   });
 }
 
+// The real pass: the two steps the plan just ran, in the same order, still
+// without touching git — the commit and the tags come after them, not between.
 run('yarn', versionArgs);
+run('yarn', ['test:versions', '--fix']);
+
+// The bump rewrote every workspace range to the new versions, so the lockfile
+// has to agree before it reaches anyone else's `yarn install --frozen-lockfile`.
+run('yarn', ['install', '--mode=update-lockfile']);
 
 // The real pass has to land on the versions that were just checked and approved.
 const actual = new Map(
@@ -968,46 +998,53 @@ const drifted = willPublish.filter(
 if (drifted.length) {
   fail(
     [
-      'the version pass produced different versions than the plan above; nothing was published:',
+      'the version pass produced different versions than the plan above; nothing was committed, tagged, pushed or published:',
       ...drifted.map(
         ({ name, version }) =>
           `  ${name} planned ${version}, got ${actual.get(name)}`
       ),
       '',
-      'Something landed on the branch mid-run. The bump commit and its tags are pushed;',
-      'reset them and re-run once the branch settles.',
+      'Something landed on the branch mid-run. Nothing has left this machine,',
+      'so the fix is to re-run once the branch settles.',
     ].join('\n')
   );
 }
 
-// The bump is committed and pushed, but `lerna version` only runs the per-package
-// `version` lifecycle. The cross-package checks Ship.js relies on still have to
-// land, and they have to be *committed*: `lerna publish` refuses to run on a
-// dirty tree (EPristine), so an uncommitted fix would fail the publish rather
-// than be packed into the tarball.
-run('yarn', ['test:versions', '--fix']);
-
-// The bump rewrote every workspace range to the new versions, so the lockfile
-// has to agree before it reaches anyone else's `yarn install --frozen-lockfile`.
-run('yarn', ['install', '--mode=update-lockfile']);
-
-const stillDirty = capture('git', [
-  'status',
-  '--porcelain',
-  '--untracked-files=no',
-]);
-if (stillDirty) {
-  process.stdout.write(
-    `\nrelease: committing what the version pass left to fix up:\n${stillDirty}\n`
-  );
-  run('git', ['add', '--update']);
-  run('git', [
-    'commit',
-    '-m',
-    `chore(release): sync versions for ${options.channel}`,
-  ]);
-  run('git', ['push', '--follow-tags', 'origin', `HEAD:${branch}`]);
+// One commit, then the tags: the numbers that survived the fix-up are what the
+// tags name, so a tag can never point at a version the tree it marks does not
+// carry. It has to be committed anyway — `lerna publish` refuses a dirty tree
+// (EPristine) — and `--update` keeps it to tracked files, so a stray untracked
+// file cannot ride along into a release commit.
+const bump = capture('git', ['status', '--porcelain', '--untracked-files=no']);
+if (!bump) {
+  fail('the version pass changed nothing on disk, so there is nothing to tag');
 }
+process.stdout.write(`\nrelease: committing the bump:\n${bump}\n`);
+run('git', ['add', '--update']);
+// `chore(release):` rather than `chore: release` on purpose: `ci.yml` reads a
+// subject starting with `chore: release` on `master` as Ship.js's own release
+// commit, and this bump is deliberately not one.
+run('git', ['commit', '-m', `chore(release): publish ${options.channel}`]);
+
+// Annotated, on purpose: `git push --follow-tags` below carries annotated tags
+// and skips lightweight ones, and annotated `name@version` tags are what a
+// Ship.js release leaves behind — which matters, because the next
+// `lerna version` reads those names to find where this train starts.
+for (const { name, version } of planned) {
+  if (capture('git', ['tag', '-l', `${name}@${version}`])) {
+    // Already tagged: this package kept the version it published last time.
+    continue;
+  }
+  run('git', [
+    'tag',
+    '--annotate',
+    '--message',
+    `${name}@${version}`,
+    `${name}@${version}`,
+  ]);
+}
+
+run('git', ['push', '--follow-tags', 'origin', `HEAD:${branch}`]);
 
 process.stdout.write('\nrelease: bump commit and tags pushed.\n');
 

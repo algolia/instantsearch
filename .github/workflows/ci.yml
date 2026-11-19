@@ -426,12 +426,23 @@ jobs:
     name: prerelease ${{ github.event.inputs.channel }} (${{ github.event.inputs.action }})
     needs:
       - build
+      - test-metadata
       - lint
       - unit-tests
       - legacy-algoliasearch-v3
       - legacy-algoliasearch-v4
       - vue-v3
-    if: github.event_name == 'workflow_dispatch'
+      # The two master-only jobs, so that a prerelease dispatched against
+      # `master` waits on them too. They are skipped on any other branch, and a
+      # skipped dependency would skip this job as well — which is why the `if`
+      # below has to say `!cancelled()` and then look at the results itself:
+      # fail on a dependency that failed, publish over one that never ran.
+      - helper-docs
+      - e2e
+    if: >-
+      github.event_name == 'workflow_dispatch' && !cancelled() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
     timeout-minutes: 90
     # The environment the packages' trusted publishers name. It has no required
