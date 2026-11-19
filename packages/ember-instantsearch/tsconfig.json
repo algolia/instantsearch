@@ -1,0 +1,13 @@
+{
+  "extends": "@ember/library-tsconfig",
+  "include": ["src/**/*", "tests/**/*"],
+  "exclude": ["tests/common-*", "tests/-support/testutils.ts"],
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["ember-source/types", "@glint/ember-tsc/types", "vite/client"],
+    "paths": {
+      "ember-instantsearch": ["./src/index.ts"],
+      "ember-instantsearch/*": ["./src/*"]
+    }
+  }
+}

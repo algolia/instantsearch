@@ -152,6 +152,7 @@ Here are the main files and folders of the project.
 ```
 ▸ examples/                            << Examples, grouped per flavor
 ▸ packages/                            << Packages of the project
+  ▸ ember-instantsearch/                 << Ember InstantSearch library
   ▸ instantsearch-ui-components/         << Shared UI components library across all flavors
   ▸ react-instantsearch/                 << Bundled React InstantSearch library
   ▸ react-instantsearch-core/            << Runtime-independent React InstantSearch version

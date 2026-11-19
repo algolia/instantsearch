@@ -29,6 +29,11 @@ const VERSION_FILES = [
     versionFile: 'src/version.ts',
     format: 'esm',
   },
+  {
+    name: 'ember-instantsearch',
+    versionFile: 'src/version.ts',
+    format: 'esm',
+  },
 ];
 
 function buildVersionFileContent(version, format) {
