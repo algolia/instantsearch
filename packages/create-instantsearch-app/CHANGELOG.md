@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.0.0-beta.0](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.7.0...create-instantsearch-app@8.0.0-beta.0) (2026-11-19)
+
+
+### chore
+
+* introduce instantsearch-core ([#7018](https://github.com/algolia/instantsearch/issues/7018)) ([22e480b](https://github.com/algolia/instantsearch/commit/22e480b441333d92c6c2091a42b51295c4db9e20))
+
+
+* feat!: drop support for algoliasearch v3 (#7407) ([37bfc77](https://github.com/algolia/instantsearch/commit/37bfc779b761b73fe41e90c09720d4eb26930638)), closes [#7407](https://github.com/algolia/instantsearch/issues/7407) [#7406](https://github.com/algolia/instantsearch/issues/7406) [#7385](https://github.com/algolia/instantsearch/issues/7385)
+* fix(instantsearch)!: remove future.preserveSharedStateOnUnmount ([a0dfce7](https://github.com/algolia/instantsearch/commit/a0dfce708661c0d60ae56ff0f1ddedf2a08c5375)), closes [#6488](https://github.com/algolia/instantsearch/issues/6488)
+
+
+### Features
+
+* drop ie11 support ([#7113](https://github.com/algolia/instantsearch/issues/7113)) ([eb9972a](https://github.com/algolia/instantsearch/commit/eb9972a3666103aa1f5797fa614618a306c1f2cf))
+
+
+### BREAKING CHANGES
+
+* algoliasearch v3 is no longer supported: use algoliasearch v4 or v5. The `algoliasearch` peer dependency range of algoliasearch-helper, instantsearch.js, react-instantsearch-core, react-instantsearch and vue-instantsearch is now `>= 4 < 6`. The `ClientV3_4` type, exported from `algoliasearch-helper/types/algoliasearch`, instantsearch-core and instantsearch.js, is renamed to `ClientV4`.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+* `future.preserveSharedStateOnUnmount` is removed and InstantSearch behaves as if it were `true`: removing a widget keeps the state that remaining widgets with the same attribute use. Remove the option from `instantsearch()`, `<InstantSearch>` and `<ais-instant-search>`.
+
+FX-4094
+* instantsearch.js no longer exposes the modules that moved to instantsearch-core at their old deep paths (`instantsearch.js/es/connectors/<name>/connect<Name>`, `es/lib/utils/*`, `es/lib/chat`, `es/lib/ai-lite`, `es/lib/tasks`, `es/lib/infiniteHitsCache`, `es/middlewares`, and the type modules under `es/types`). Import them from `instantsearch-core` instead. instantsearch-ui-components no longer re-exports the chat types and helpers that moved to core (`find`, `startsWith`, `addAbsolutePosition`, `collectChatRecords`, `getPromptSuggestionHits`, `UIMessage`, `ChatState`, ...); import them from `instantsearch-core`.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+* fix(tests): import core test helper by relative path
+
+instantsearch-core's exports map does not expose test/, so
+instantsearch-core/test/createWidget failed to resolve with
+ERR_PACKAGE_PATH_NOT_EXPORTED and broke every suite that loads
+@instantsearch/testutils.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+* browser support is now: "chrome >= 60, firefox >= 55, safari >= 12.2, not op_mini all". If you need any lower browser support, ensure you run the package through a bundler and/or transformer.
+
+Co-authored-by: Haroen Viaene <hello@haroen.me>
+Co-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+
+
+
+
 # [7.7.0](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.6.16...create-instantsearch-app@7.7.0) (2026-11-17)
 
 

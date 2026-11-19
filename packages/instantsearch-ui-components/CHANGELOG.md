@@ -3,6 +3,81 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-beta.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.46.1...instantsearch-ui-components@1.0.0-beta.0) (2026-11-19)
+
+
+### chore
+
+* introduce instantsearch-core ([#7018](https://github.com/algolia/instantsearch/issues/7018)) ([22e480b](https://github.com/algolia/instantsearch/commit/22e480b441333d92c6c2091a42b51295c4db9e20))
+
+
+* refactor(hits)!: share the default hit component across flavors (#7411) ([2e651ec](https://github.com/algolia/instantsearch/commit/2e651eca4321a8af42e3c13aae677b937b471d38)), closes [#7411](https://github.com/algolia/instantsearch/issues/7411)
+* refactor(core)!: replace IE11 polyfills with native methods (#7399) ([3f8400c](https://github.com/algolia/instantsearch/commit/3f8400c0aecb795e387d38290d8f34113beaf2f4)), closes [#7399](https://github.com/algolia/instantsearch/issues/7399)
+* fix(widgets)!: remove deprecated autocomplete aliases and chat shims ([e71bbc2](https://github.com/algolia/instantsearch/commit/e71bbc2efefb89fd515d47da5c822b497be47d08))
+* fix(widgets)!: remove filter suggestions ([9100931](https://github.com/algolia/instantsearch/commit/910093119344dbda1aa599f58793e56e6fe907df))
+
+
+### Features
+
+* **ui-components:** shared factories for the classic refinement widgets ([#7413](https://github.com/algolia/instantsearch/issues/7413)) ([b8a140a](https://github.com/algolia/instantsearch/commit/b8a140a2c6668a25c7449d4c69f75e04c3b6474f))
+
+
+### BREAKING CHANGES
+
+* in React InstantSearch, the default placeholder of
+`Hits` and `InfiniteHits` (used when no `hitComponent` is given) now
+renders the full hit as JSON, like InstantSearch.js, instead of the
+first 100 characters wrapped in a `word-break` div.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+* refactor(hits)!: use the shared default hit in Vue InstantSearch
+
+`AisHits` now renders through `renderReactCompat` and only passes an
+`itemComponent` when the `item` slot is provided, so the shared default
+hit from `instantsearch-ui-components` renders otherwise.
+`AisInfiniteHits` uses the shared default hit as the `item` slot
+fallback. The common tests no longer normalize a Vue-specific default.
+* in Vue InstantSearch, the default placeholder of
+`AisHits` and `AisInfiniteHits` (used when no `item` slot is given) now
+renders the full hit as JSON, like the other flavors, instead of
+`objectID: …, index: …`.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+* `find`, `findIndex` and `isFiniteNumber` are no longer exported from `instantsearch-core`. Use `Array.prototype.find`, `Array.prototype.findIndex` and `Number.isFinite` instead.
+
+- algoliasearch-helper: remove the internal `find`, `findIndex` and `flat` functions in favor of `Array.prototype.find`, `findIndex` and `flat`
+- instantsearch-core: remove the `find`, `findIndex` and `isFiniteNumber` utils and update all call sites across packages
+- instantsearch-core: use `Object.assign` in `hydrateRecommendCache`
+
+Co-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>
+* `EXPERIMENTAL_autocomplete` (instantsearch.js) and
+`EXPERIMENTAL_Autocomplete` (React InstantSearch) are removed; use
+`autocomplete` and `Autocomplete`. Chat tool and empty components now only
+receive `context`; the deprecated root props (`status`, `tools`, `onClose`,
+...), `ChatEmptyProps` and the `DisplayResultsToolType` export are removed.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+* the filterSuggestions widget, connectFilterSuggestions, useFilterSuggestions and FilterSuggestions no longer exist
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+* instantsearch.js no longer exposes the modules that moved to instantsearch-core at their old deep paths (`instantsearch.js/es/connectors/<name>/connect<Name>`, `es/lib/utils/*`, `es/lib/chat`, `es/lib/ai-lite`, `es/lib/tasks`, `es/lib/infiniteHitsCache`, `es/middlewares`, and the type modules under `es/types`). Import them from `instantsearch-core` instead. instantsearch-ui-components no longer re-exports the chat types and helpers that moved to core (`find`, `startsWith`, `addAbsolutePosition`, `collectChatRecords`, `getPromptSuggestionHits`, `UIMessage`, `ChatState`, ...); import them from `instantsearch-core`.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+* fix(tests): import core test helper by relative path
+
+instantsearch-core's exports map does not expose test/, so
+instantsearch-core/test/createWidget failed to resolve with
+ERR_PACKAGE_PATH_NOT_EXPORTED and broke every suite that loads
+@instantsearch/testutils.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+
+
+
+
 ## [0.46.1](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.46.0...instantsearch-ui-components@0.46.1) (2026-11-17)
 
 **Note:** Version bump only for package instantsearch-ui-components

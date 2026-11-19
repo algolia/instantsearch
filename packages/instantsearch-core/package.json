@@ -1,6 +1,6 @@
 {
   "name": "instantsearch-core",
-  "version": "0.1.0",
+  "version": "1.0.0-beta.0",
   "description": "Internal shared package for InstantSearch flavors. Not intended for direct use.",
   "types": "dist/es/index.d.ts",
   "main": "dist/cjs/index.js",
@@ -56,7 +56,7 @@
   "dependencies": {
     "@swc/helpers": "0.5.18",
     "@types/dom-speech-recognition": "^0.0.1",
-    "algoliasearch-helper": "3.30.3",
+    "algoliasearch-helper": "4.0.0-beta.0",
     "search-insights": "^2.17.2"
   },
   "devDependencies": {

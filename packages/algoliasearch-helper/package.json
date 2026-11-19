@@ -1,6 +1,6 @@
 {
   "name": "algoliasearch-helper",
-  "version": "3.30.3",
+  "version": "4.0.0-beta.0",
   "description": "Helper for implementing advanced search features with algolia",
   "main": "index.js",
   "types": "index.d.ts",

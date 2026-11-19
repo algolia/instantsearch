@@ -3,6 +3,315 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-beta.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.123.1...instantsearch.js@5.0.0-beta.0) (2026-11-19)
+
+
+### Bug Fixes
+
+* **chat:** export the tool type constants from the public entry [FX-4166] ([#7429](https://github.com/algolia/instantsearch/issues/7429)) ([a1f160f](https://github.com/algolia/instantsearch/commit/a1f160f9efac5d9e620690700d8be2504018f251))
+* **insights:** report the flavor version in usage events ([#7358](https://github.com/algolia/instantsearch/issues/7358)) ([8918638](https://github.com/algolia/instantsearch/commit/89186381ded867a539d5436d4e20c2d05774626e))
+
+
+### chore
+
+* introduce instantsearch-core ([#7018](https://github.com/algolia/instantsearch/issues/7018)) ([22e480b](https://github.com/algolia/instantsearch/commit/22e480b441333d92c6c2091a42b51295c4db9e20))
+
+
+### Code Refactoring
+
+* **core:** move highlight/snippet helpers and suit to core ([#7342](https://github.com/algolia/instantsearch/issues/7342)) ([b1b895a](https://github.com/algolia/instantsearch/commit/b1b895a4c1539c153bf2e2f48753628711882d34))
+
+
+* refactor(hits,infinite-hits)!: remove the deprecated __hitIndex (#7419) ([f9b890d](https://github.com/algolia/instantsearch/commit/f9b890d212d5ae6c5cedd1463e1d102adb188055)), closes [#7419](https://github.com/algolia/instantsearch/issues/7419) [#5495](https://github.com/algolia/instantsearch/issues/5495)
+* refactor(hits)!: share the default hit component across flavors (#7411) ([2e651ec](https://github.com/algolia/instantsearch/commit/2e651eca4321a8af42e3c13aae677b937b471d38)), closes [#7411](https://github.com/algolia/instantsearch/issues/7411)
+* refactor(core)!: replace IE11 polyfills with native methods (#7399) ([3f8400c](https://github.com/algolia/instantsearch/commit/3f8400c0aecb795e387d38290d8f34113beaf2f4)), closes [#7399](https://github.com/algolia/instantsearch/issues/7399)
+* feat!: drop support for algoliasearch v3 (#7407) ([37bfc77](https://github.com/algolia/instantsearch/commit/37bfc779b761b73fe41e90c09720d4eb26930638)), closes [#7407](https://github.com/algolia/instantsearch/issues/7407) [#7406](https://github.com/algolia/instantsearch/issues/7406) [#7385](https://github.com/algolia/instantsearch/issues/7385)
+* fix(instantsearch)!: remove the legacy insightsClient [FX-4099] (#7394) ([100f010](https://github.com/algolia/instantsearch/commit/100f010248665200d32b98f24b1c3fd8365ab907)), closes [#7394](https://github.com/algolia/instantsearch/issues/7394) [#6403](https://github.com/algolia/instantsearch/issues/6403) [#6462](https://github.com/algolia/instantsearch/issues/6462)
+* fix(instantsearch)!: make search.helper the helper that sends the requests [FX-4097] (#7392) ([dd48215](https://github.com/algolia/instantsearch/commit/dd4821516e48d1dac8de6c3bd19bbef406d55ef6)), closes [#7392](https://github.com/algolia/instantsearch/issues/7392) [#6516](https://github.com/algolia/instantsearch/issues/6516)
+* fix(routing)!: replace qs with a built-in query string codec (#7401) ([1102c1e](https://github.com/algolia/instantsearch/commit/1102c1e8a3ab0e849a5a83f96d51661f9cd1be4a)), closes [#7401](https://github.com/algolia/instantsearch/issues/7401)
+* fix(algoliasearch-helper)!: only call client.search for facet values [FX-4100] (#7385) ([aa706e9](https://github.com/algolia/instantsearch/commit/aa706e9ab3ac72471a290f91f07018a9e1004dc3)), closes [#7385](https://github.com/algolia/instantsearch/issues/7385) [#6465](https://github.com/algolia/instantsearch/issues/6465)
+* fix(errors)!: emit errors directly ([80d4ede](https://github.com/algolia/instantsearch/commit/80d4ede1b4a80a78baaa84f64a5545030649866d)), closes [#6472](https://github.com/algolia/instantsearch/issues/6472)
+* fix(algoliasearch-helper)!: always persist the hierarchical root count ([a3688a4](https://github.com/algolia/instantsearch/commit/a3688a48a72ef9dcd8008117991657a77c654efc)), closes [#6478](https://github.com/algolia/instantsearch/issues/6478)
+* fix(instantsearch)!: remove future.preserveSharedStateOnUnmount ([a0dfce7](https://github.com/algolia/instantsearch/commit/a0dfce708661c0d60ae56ff0f1ddedf2a08c5375)), closes [#6488](https://github.com/algolia/instantsearch/issues/6488)
+* fix(insights)!: remove the insights helper and the hits click listener ([a8e6501](https://github.com/algolia/instantsearch/commit/a8e6501aee386aae0c5a08b519c69aa76a791e18))
+* fix(insights)!: remove bindEvent ([f55ac8e](https://github.com/algolia/instantsearch/commit/f55ac8e79d4d6e8f5c18b0cd588703fa23fb68d7))
+* fix(instantsearch)!: remove templatesConfig and numberLocale ([0034c08](https://github.com/algolia/instantsearch/commit/0034c08caee939f225c06cc6f7b0c0c3478898fe))
+* fix(templates)!: remove Hogan.js ([3192304](https://github.com/algolia/instantsearch/commit/319230481d3d1eddf06fe86613672edec57489ad))
+* fix(connectors)!: update the connector render states for v5 [FX-4096] (#7383) ([aa23e68](https://github.com/algolia/instantsearch/commit/aa23e6892f335a13e2af3ed319f35504edfdd197)), closes [#7383](https://github.com/algolia/instantsearch/issues/7383)
+* fix(widgets)!: remove deprecated autocomplete aliases and chat shims ([e71bbc2](https://github.com/algolia/instantsearch/commit/e71bbc2efefb89fd515d47da5c822b497be47d08))
+* fix(connectors)!: remove deprecated render state fields ([0528206](https://github.com/algolia/instantsearch/commit/052820626cb49dfcb500694292c9a340a33ff309))
+* fix(instantsearch)!: remove deprecated instance and index APIs ([fe4f9fb](https://github.com/algolia/instantsearch/commit/fe4f9fb6a2a901b18f8518e560f0302a469d3759))
+* fix(widgets)!: remove filter suggestions ([9100931](https://github.com/algolia/instantsearch/commit/910093119344dbda1aa599f58793e56e6fe907df))
+* fix(widgets)!: remove experimental widgets ([eb36cb7](https://github.com/algolia/instantsearch/commit/eb36cb719b7338a954869abf9d378f658666836d))
+* fix(widgets)!: remove answers widget ([d626e74](https://github.com/algolia/instantsearch/commit/d626e74d0fc6c3f963ff73b0775a3917383715b1))
+* fix(widgets)!: remove analytics widget ([a624d6b](https://github.com/algolia/instantsearch/commit/a624d6bff04f72dc93f3a66c803fdd8a4d5d821a))
+* fix(widgets)!: remove places widget ([51f8b92](https://github.com/algolia/instantsearch/commit/51f8b92a2e342b236c6269dc3ac9ee319cbb1ec6))
+
+
+### Features
+
+* drop ie11 support ([#7113](https://github.com/algolia/instantsearch/issues/7113)) ([eb9972a](https://github.com/algolia/instantsearch/commit/eb9972a3666103aa1f5797fa614618a306c1f2cf))
+* **ui-components:** shared factories for the classic refinement widgets ([#7413](https://github.com/algolia/instantsearch/issues/7413)) ([b8a140a](https://github.com/algolia/instantsearch/commit/b8a140a2c6668a25c7449d4c69f75e04c3b6474f))
+
+
+### BREAKING CHANGES
+
+* the `item` template of `hits` and `infiniteHits` no
+longer receives `__hitIndex`. Use `__position`, the position of the hit
+across pages, starting at 1.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+* feat(codemods): rewrite __hitIndex to __position - 1
+
+Instead of leaving a TODO, the is-v4-to-v5 codemod now rewrites
+`hit.__hitIndex` to `hit.__position - 1`, and `hit.__hitIndex + 1` to
+`hit.__position`. `__position` starts at 1 and counts across pages, so
+the values match on the first page of `hits`, and in `infiniteHits`
+lists that start at the first page.
+
+Where `__hitIndex` can't be rewritten in place, like when it is
+destructured, the codemod still leaves a TODO, which now says
+`__position - 1`.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+* test(hits,infinite-hits): drop the tests checking for no __hitIndex
+
+They only checked that the item templates don't get `__hitIndex`
+anymore. `__position` stays covered by the insights payload
+expectations of both widgets.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+* fix(codemods): rewrite bracket access to __hitIndex too
+
+`hit['__hitIndex']` was neither rewritten nor flagged with a TODO. It is
+now rewritten like `hit.__hitIndex`, to `hit['__position'] - 1`.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+* docs(codemods): mention transformItems in the __hitIndex caveat
+
+`__position` is set before `transformItems` runs, so `__position - 1`
+also differs from the old `__hitIndex` when `transformItems` filters or
+reorders the hits, not only after the first page of `hits`.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+* fix(codemods): leave optional __hitIndex accesses as TODOs
+
+Rewriting `hit?.__hitIndex` to `hit?.__position - 1` turned a missing
+hit into `NaN`, so a fallback like `hit?.__hitIndex ?? 0` stopped
+working. Accesses in an optional chain, including `hit?.['__hitIndex']`,
+now get the TODO comment instead.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+* in React InstantSearch, the default placeholder of
+`Hits` and `InfiniteHits` (used when no `hitComponent` is given) now
+renders the full hit as JSON, like InstantSearch.js, instead of the
+first 100 characters wrapped in a `word-break` div.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+* refactor(hits)!: use the shared default hit in Vue InstantSearch
+
+`AisHits` now renders through `renderReactCompat` and only passes an
+`itemComponent` when the `item` slot is provided, so the shared default
+hit from `instantsearch-ui-components` renders otherwise.
+`AisInfiniteHits` uses the shared default hit as the `item` slot
+fallback. The common tests no longer normalize a Vue-specific default.
+* in Vue InstantSearch, the default placeholder of
+`AisHits` and `AisInfiniteHits` (used when no `item` slot is given) now
+renders the full hit as JSON, like the other flavors, instead of
+`objectID: …, index: …`.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+* `find`, `findIndex` and `isFiniteNumber` are no longer exported from `instantsearch-core`. Use `Array.prototype.find`, `Array.prototype.findIndex` and `Number.isFinite` instead.
+
+- algoliasearch-helper: remove the internal `find`, `findIndex` and `flat` functions in favor of `Array.prototype.find`, `findIndex` and `flat`
+- instantsearch-core: remove the `find`, `findIndex` and `isFiniteNumber` utils and update all call sites across packages
+- instantsearch-core: use `Object.assign` in `hydrateRecommendCache`
+
+Co-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>
+* algoliasearch v3 is no longer supported: use algoliasearch v4 or v5. The `algoliasearch` peer dependency range of algoliasearch-helper, instantsearch.js, react-instantsearch-core, react-instantsearch and vue-instantsearch is now `>= 4 < 6`. The `ClientV3_4` type, exported from `algoliasearch-helper/types/algoliasearch`, instantsearch-core and instantsearch.js, is renamed to `ClientV4`.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+* `withInsights`, `inferInsightsPayload`, `connectHitsWithInsights` and `connectInfiniteHitsWithInsights` are removed from `instantsearch-core` and `instantsearch.js`, and the slots of Vue's `ais-hits` and `ais-infinite-hits` no longer receive `insights`. Use the `insights` option of InstantSearch and the `sendEvent` function from the render state or the slot instead.
+
+FX-4099
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+* fix(instantsearch)!: remove the insightsClient option
+
+The `insightsClient` option of InstantSearch only fed the `insights()`
+render state function that `withInsights` added, and it was deprecated
+in favor of the `insights` option. InstantSearch no longer reads it or
+exposes `search.insightsClient`, and Vue's `ais-instant-search` drops
+the `insights-client` prop. The `insightsClient` of the insights
+middleware, passed through the `insights` option, is unchanged. The
+usage events no longer list the removed option among the ones they
+leave out.
+* the `insightsClient` option of InstantSearch, `search.insightsClient` and the `insights-client` prop of Vue's `ais-instant-search` are removed. Pass the client to the insights middleware instead, with `insights: { insightsClient }`.
+
+FX-4099
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+* `search.mainHelper` is removed, and `search.helper` is now the helper that sends the requests, which `search.mainHelper` was. Replace `search.mainHelper` with `search.helper`, and use `search.mainIndex.getHelper()` where you read the state or the results of the main index from `search.helper`.
+
+FX-4097
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+* `instantsearch-core` and `instantsearch.js` no longer depend on `qs` and `@types/qs`. If your code imports `qs`, add it to your own dependencies.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+* test(routing): check that v5 writes and reads the URLs of v4
+
+The history router tests now use a URL that the v4.122.0 router wrote
+with `qs`. For the same route state, v5 writes the same URL. It reads
+that URL, and the same URL with raw brackets, `+` for spaces and
+lowercase escapes, to the same state as v4 does.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+* chore(routing): credit qs in the query string codec
+
+The codec writes the qs@6.17.1 format, and its parsing is ported from
+qs. The file now says so and keeps the BSD 3-Clause notice of qs, which
+derived source has to retain. It's a regular comment, so minified
+bundles don't grow.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+* fix(routing): pass the codec to createURL and parseURL as qsModule
+
+Custom `createURL` and `parseURL` functions get `qsModule` again, now
+backed by the codec, so they keep working without importing `qs`. Its
+`stringify` supports the `addQueryPrefix` and `arrayFormat` (`indices`,
+`brackets`, `repeat`) options of `qs`, and its `parse` supports
+`ignoreQueryPrefix` and `arrayLimit`, which defaults to 99 (100 items).
+Other options are a TypeScript error and warn in development.
+
+The e-commerce examples use `qsModule` again, with the same URLs.
+* `qsModule` in the `createURL` and `parseURL` functions of the history router is a built-in codec instead of `qs`. It supports the `addQueryPrefix` and `arrayFormat` (`indices`, `brackets`, `repeat`) options of `stringify`, and `ignoreQueryPrefix` and `arrayLimit` of `parse`. For any other `qs` option, import `qs` yourself.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+* `helper.searchForFacetValues`, used by searchable refinement lists, only calls `client.search` with `type: 'facet'` requests; the `client.searchForFacetValues` and `client.initIndex` fallbacks are removed. Custom search clients must handle facet requests in `search`. algoliasearch v3 clients, whose `search` only forwards `indexName` and `params`, can no longer search for facet values.
+
+FX-4100
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+* `error` listeners receive the `Error` directly. On the helper, replace `helper.on('error', ({ error }) => {})` with `helper.on('error', (error) => {})`. On the InstantSearch instance, read the error itself instead of `error.error`.
+
+FX-4094
+* `future.persistHierarchicalRootCount` and the helper's `persistHierarchicalRootCount` search results option are removed. The root level of a hierarchical facet always keeps its own count, as with `persistHierarchicalRootCount: true`.
+
+FX-4094
+* `future.preserveSharedStateOnUnmount` is removed and InstantSearch behaves as if it were `true`: removing a widget keeps the state that remaining widgets with the same attribute use. Remove the option from `instantsearch()`, `<InstantSearch>` and `<ais-instant-search>`.
+
+FX-4094
+* `instantsearch.insights()` is removed, along with
+`readDataAttributes`, `writeDataAttributes`, `serializePayload`,
+`deserializePayload` and `withInsightsListener`,
+and `data-insights-method` attributes are no longer read. Use `sendEvent`
+in templates, or the `insights` middleware.
+
+FX-4085
+* `bindEvent` is removed from the `hits` and `infiniteHits`
+render state and from template params; use `sendEvent` instead. The
+`TemplateWithBindEvent` type is renamed to `TemplateWithSendEvent`.
+
+FX-4085
+* the `numberLocale` option and the `templatesConfig`
+property of the InstantSearch instance are removed, and `templatesConfig`
+is no longer part of widgets' init and render options.
+
+FX-4085
+* Hogan.js templates are removed. String templates and
+strings returned by function templates are rendered as text, not HTML;
+use the `html` function or JSX for markup. The `templatesConfig` option
+of `prepareTemplateProps` and the `HoganHelpers` type are removed.
+
+FX-4085
+* the `hasMapMoveSinceLastRefine` render-state property of
+connectGeoSearch (and useGeoSearch) is renamed to `hasMapMovedSinceLastRefine`.
+The old name is removed without an alias.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+* fix(widgets)!: replace remaining hasRefinements with canRefine [FX-4096]
+* **core:** `instantsearch.js/es/helpers/highlight`, `es/helpers/reverseHighlight`, `es/helpers/snippet`, `es/helpers/reverseSnippet` and `es/lib/suit` are removed. Import `highlight`, `snippet`, `reverseHighlight` and `reverseSnippet` from `instantsearch.js/es/helpers` or from `instantsearch-core`.
+
+Co-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>
+* `EXPERIMENTAL_autocomplete` (instantsearch.js) and
+`EXPERIMENTAL_Autocomplete` (React InstantSearch) are removed; use
+`autocomplete` and `Autocomplete`. Chat tool and empty components now only
+receive `context`; the deprecated root props (`status`, `tools`, `onClose`,
+...), `ChatEmptyProps` and the `DisplayResultsToolType` export are removed.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+* the following deprecated connector render state fields are removed:
+
+- `hits` from `connectHits` and `connectInfiniteHits` (and `useHits` / `useInfiniteHits`). Use `items`.
+- `hasNoResults` from `connectSortBy`, `connectRatingMenu`, `connectNumericMenu` and `connectHitsPerPage` (and the Vue `has-no-results` slot prop of `ais-sort-by` / `ais-hits-per-page`). Use `canRefine`.
+- `hasRefinements` from `connectClearRefinements`. Use `canRefine`.
+- `isSearchStalled` from `connectSearchBox` (and `useSearchBox`). Use `instantSearchInstance.status === 'stalled'` (`useInstantSearch().status` in React).
+- the `Hits` type. Use `Hit[]`.
+- the `ToggleRefinementConnector` / `ToggleRefinementWidgetDescription` re-exports from `connectors/toggle-refinement/types`. Import them from `connectToggleRefinement`.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+* the following deprecated APIs are removed:
+
+- `searchFunction` option (and the React/Vue `searchFunction` / `search-function` props). Use `onStateChange` instead.
+- `addWidget()` / `removeWidget()`. Use `addWidgets([widget])` / `removeWidgets([widget])`.
+- `EXPERIMENTAL_use()`. Use `use()`.
+- `_isSearchStalled`. Use `status === 'stalled'`.
+- `EXPERIMENTAL_isolated` on the `index` widget. Use `isolated`.
+- `getWidgetState` (on the `index` widget and as a widget lifecycle hook). Use `getWidgetUiState`.
+- `searchMetadata` in widget init/render options. Use `status`.
+- the `searchParameters` option warning (the option itself was removed in v4). Use the `configure` widget.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+* the filterSuggestions widget, connectFilterSuggestions, useFilterSuggestions and FilterSuggestions no longer exist
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+* experimental configure related items is replaced with related products
+* experimental dynamic widgets is replaced with dynamic widgets
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+* the answers widget no longer exists
+* the findAnswers in the helper no longer exists
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+* the analytics widget no longer exists
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+* the places widget no longer exists
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+* instantsearch.js no longer exposes the modules that moved to instantsearch-core at their old deep paths (`instantsearch.js/es/connectors/<name>/connect<Name>`, `es/lib/utils/*`, `es/lib/chat`, `es/lib/ai-lite`, `es/lib/tasks`, `es/lib/infiniteHitsCache`, `es/middlewares`, and the type modules under `es/types`). Import them from `instantsearch-core` instead. instantsearch-ui-components no longer re-exports the chat types and helpers that moved to core (`find`, `startsWith`, `addAbsolutePosition`, `collectChatRecords`, `getPromptSuggestionHits`, `UIMessage`, `ChatState`, ...); import them from `instantsearch-core`.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+* fix(tests): import core test helper by relative path
+
+instantsearch-core's exports map does not expose test/, so
+instantsearch-core/test/createWidget failed to resolve with
+ERR_PACKAGE_PATH_NOT_EXPORTED and broke every suite that loads
+@instantsearch/testutils.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+* browser support is now: "chrome >= 60, firefox >= 55, safari >= 12.2, not op_mini all". If you need any lower browser support, ensure you run the package through a bundler and/or transformer.
+
+Co-authored-by: Haroen Viaene <hello@haroen.me>
+Co-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+
+
+
+
 ## [4.123.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.123.0...instantsearch.js@4.123.1) (2026-11-17)
 
 **Note:** Version bump only for package instantsearch.js

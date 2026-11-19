@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.css",
-  "version": "8.25.1",
+  "version": "9.0.0-beta.0",
   "description": "InstantSearch.css is a CSS library to style InstantSearch-powered search experiences.",
   "keywords": [
     "algolia",
