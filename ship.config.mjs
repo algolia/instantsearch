@@ -16,7 +16,6 @@ const changedPackages = packages
     ),
   }))
   .filter(({ isPublished }) => !isPublished);
-let updatedPackages = [];
 let previousVersions = new Map();
 
 // The npm dist-tag for stable versions released from this branch. `latest` on
@@ -34,30 +33,29 @@ export default {
   },
   getTagName: () => changedPackages.map((pkg) => `${pkg.name}@${pkg.version}`),
   getStagingBranchName: () => `chore/release-${Date.now()}`,
-  // `prerelease` is `{ preid }` for `shipjs prepare --preid <channel>`.
-  version({ exec, prerelease }) {
+  // `prerelease` is `{ preid }` for `shipjs prepare --preid <channel>`, and
+  // `graduate` is `true` for `shipjs prepare --graduate`.
+  version({ exec, prerelease, graduate }) {
     const prereleased = packages.filter(({ version }) => isPrerelease(version));
-    if (
-      !prerelease &&
-      prereleased.length > 0 &&
-      process.env.SHIPJS_ALLOW_GRADUATE !== 'true'
-    ) {
-      // Without a channel, `--conventional-graduate` below turns every
-      // prerelease into its stable version: only on purpose.
+    if (!prerelease && !graduate && prereleased.length > 0) {
+      // A stable release would have to graduate these: only on purpose.
       throw new Error(
         [
           'These packages are on a prerelease, and a stable release would graduate them:',
           ...prereleased.map(({ name, version }) => `  ${name}@${version}`),
-          'Prepare with `--preid <channel>` to continue the prerelease, or set SHIPJS_ALLOW_GRADUATE=true to graduate.',
+          'Prepare with `--preid <channel>` to continue the prerelease, or with `--graduate` to graduate.',
         ].join('\n')
       );
     }
-    const flags = prerelease
-      ? // Every changed package goes to `<x.y.z>-<preid>.N`.
-        `--conventional-prerelease --preid ${prerelease.preid}`
-      : // A package last released as a prerelease goes stable even without a
-        // commit since; without this flag Lerna would leave it on the prerelease.
-        '--conventional-graduate';
+    let flags = '';
+    if (prerelease) {
+      // Every changed package goes to `<x.y.z>-<preid>.N`.
+      flags = `--conventional-prerelease --preid ${prerelease.preid}`;
+    } else if (graduate) {
+      // A package last released as a prerelease goes stable even without a
+      // commit since; without this flag Lerna would leave it on the prerelease.
+      flags = '--conventional-graduate';
+    }
     exec(
       `yarn lerna version --no-git-tag-version --no-push --exact --conventional-commits ${flags} --yes`
     );
@@ -70,15 +68,16 @@ export default {
     previousVersions = new Map(
       packages.map(({ name, version }) => [name, version])
     );
-    updatedPackages = packageVersionsAfterUpdate.filter(
+    const updatedPackages = packageVersionsAfterUpdate.filter(
       ({ name, version }) => previousVersions.get(name) !== version
     );
 
+    // Independent versions: Ship.js takes the first package's version as
+    // `nextVersion` (only used for the release type) and passes `packages` to
+    // the commit and pull request hooks. No updated package means nothing to
+    // release, and Ship.js stops there.
     return {
-      // Ship.js only uses this for the release type in the pull request (and
-      // `shouldPrepare` is not called with a `version` hook), so any updated
-      // package does. See https://github.com/algolia/shipjs/issues/986.
-      nextVersion: (updatedPackages[0] || packages[0]).version,
+      packages: updatedPackages.map(({ name, version }) => ({ name, version })),
     };
   },
   // The stable title must stay a prefix of the prerelease one: `shipjs trigger`
@@ -94,16 +93,17 @@ export default {
     releaseType,
     publishCommands,
     title,
+    packages: updated = [],
   }) => {
     const repoLink = `[${repo}](${repoURL})`;
     // this is assuming there's a single "previous" version, so can't be used with independent versioning.
     // const diffLink = `[\`${currentVersion}\` → \`${nextVersion}\`](${diffURL})`;
     const publishCommandsTable = `\`\`\`${publishCommands}\`\`\``;
-    const updatedPackagesSummary = updatedPackages.length
+    const updatedPackagesSummary = updated.length
       ? [
           '| Package | Current Version | Next Version |',
           '|---|---|---|',
-          ...updatedPackages.map(
+          ...updated.map(
             ({ name, version }) =>
               `| \`${name}\` | \`${previousVersions.get(name)}\` | \`${version}\` |`
           ),

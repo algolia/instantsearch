@@ -79,14 +79,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           SLACK_INCOMING_HOOK: ${{ secrets.SLACK_INCOMING_HOOK }}
-          # Turning prereleases into stable versions only happens when someone
-          # dispatches `stable` on purpose, never on the weekly schedule
-          # (see `version` in `ship.config.mjs`).
-          SHIPJS_ALLOW_GRADUATE: ${{ github.event_name == 'workflow_dispatch' }}
+          EVENT: ${{ github.event_name }}
         run: |
           set -euo pipefail
           ARGS=(--yes --no-browse)
           if [ "$CHANNEL" != 'stable' ]; then
             ARGS+=(--preid "$CHANNEL")
+          elif [ "$EVENT" = 'workflow_dispatch' ]; then
+            # Turning prereleases into stable versions only happens when
+            # someone dispatches `stable` on purpose, never on the weekly
+            # schedule (see `version` in `ship.config.mjs`).
+            ARGS+=(--graduate)
           fi
           yarn run shipjs prepare "${ARGS[@]}"
