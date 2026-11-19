@@ -1,10 +1,6 @@
-import {
-  associateDestroyableChild,
-  destroy,
-  registerDestructor,
-} from '@ember/destroyable';
+import { isDestroying } from '@ember/destroyable';
 import { tracked } from '@glimmer/tracking';
-import { createCache, getValue } from '@glimmer/tracking/primitives/cache';
+import { resource, use } from 'ember-resources';
 import { isEqual } from 'instantsearch.js/es/lib/utils/isEqual';
 
 import type { Parent } from '../types.ts';
@@ -23,13 +19,6 @@ export class Mounted<TState, TWidget extends Widget | IndexWidget> {
   declare widget: TWidget;
   declare params: unknown;
   declare parent: Parent;
-  declare scope: object;
-
-  /**
-   * True after a newer widget took the place of this one.
-   * The index disposed of this widget already, so it must not be removed.
-   */
-  isReplaced = false;
 
   constructor(initialState: TState) {
     this.state = initialState;
@@ -48,8 +37,7 @@ export interface WidgetFactory<
 /**
  * Keeps one widget on the index of `parent`, for as long as `owner` lives.
  *
- * `parent` and `params` are read with autotracking, now and each time
- * `current` is read.
+ * `parent` and `params` are read with autotracking inside a resource.
  * New params (compared by value) create a new widget,
  * which takes the place of the old one with `updateWidget`.
  * That keeps the UI state that the widget owns, as in the other flavors.
@@ -69,50 +57,55 @@ export function useWidget<
   function mount(nextParent: Parent, nextParams: TParams) {
     const previous = current;
     const mounted = new Mounted<TState, TWidget>(factory.initialState());
-    const scope = {};
 
     mounted.widget = factory.create(nextParams, mounted);
     mounted.params = nextParams;
     mounted.parent = nextParent;
-    mounted.scope = scope;
 
-    if (previous) {
-      previous.isReplaced = previous.parent === nextParent;
-      destroy(previous.scope);
-    }
-
-    if (previous && previous.isReplaced) {
+    if (previous && previous.parent === nextParent) {
       nextParent.index.updateWidget(previous.widget, mounted.widget);
     } else {
+      previous?.parent.index.removeWidgets([previous.widget]);
       nextParent.index.addWidgets([mounted.widget]);
     }
-
-    associateDestroyableChild(owner, scope);
-    registerDestructor(scope, () => {
-      if (mounted.isReplaced) return;
-
-      nextParent.index.removeWidgets([mounted.widget]);
-    });
 
     current = mounted;
 
     return mounted;
   }
 
-  const cache = createCache(() => {
-    const nextParent = parent();
-    const nextParams = params();
+  const widget = use(
+    owner,
+    resource(({ on }) => {
+      const nextParent = parent();
+      const nextParams = params();
 
-    if (
-      current &&
-      current.parent === nextParent &&
-      isEqual(current.params, nextParams)
-    ) {
-      return current;
-    }
+      /**
+       * A rerun with equal params keeps the widget it has.
+       */
+      const mounted =
+        current &&
+        current.parent === nextParent &&
+        isEqual(current.params, nextParams)
+          ? current
+          : mount(nextParent, nextParams);
 
-    return mount(nextParent, nextParams);
-  });
+      /**
+       * A rerun also runs this cleanup, and `mount` already
+       * took care of the old widget then.
+       *
+       * Only the end of `owner` removes the widget from its index.
+       */
+      on.cleanup(() => {
+        if (!isDestroying(owner) || !current) return;
+
+        current.parent.index.removeWidgets([current.widget]);
+        current = undefined;
+      });
+
+      return mounted;
+    })
+  );
 
   /**
    * The widget joins now, during the render of its component,
@@ -120,13 +113,9 @@ export function useWidget<
    * reads no state (like a `Connector` without a block).
    * Later reads apply new params.
    */
-  getValue(cache);
+  void widget.current;
 
-  return {
-    get current() {
-      return getValue(cache)!;
-    },
-  };
+  return widget;
 }
 
 /**

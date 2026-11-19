@@ -53,6 +53,7 @@
   "dependencies": {
     "@embroider/addon-shim": "1.11.0",
     "decorator-transforms": "2.4.0",
+    "ember-resources": "^7.1.0",
     "instantsearch.js": "4.123.1"
   },
   "peerDependencies": {

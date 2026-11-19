@@ -3824,7 +3824,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@embroider/addon-shim@npm:1.11.0, @embroider/addon-shim@npm:^1.10.2":
+"@embroider/addon-shim@npm:1.11.0, @embroider/addon-shim@npm:^1.10.2, @embroider/addon-shim@npm:^1.2.0":
   version: 1.11.0
   resolution: "@embroider/addon-shim@npm:1.11.0"
   checksum: 10c0/4019ac9fa9fb115b0c337b61450b4c618f9c6ad5fce63bad4fae507f6929c54e898cf889f2e1b08bbd2e5e4fa4588f42b57dea50a7f3a44c77c326475b0bd719
@@ -19093,6 +19093,7 @@ __metadata:
     algoliasearch: "npm:5.1.1"
     babel-plugin-ember-template-compilation: "npm:4.0.1"
     decorator-transforms: "npm:2.4.0"
+    ember-resources: "npm:^7.1.0"
     ember-source: "npm:7.4.0"
     instantsearch.js: "npm:4.123.1"
     playwright: "npm:1.49.1"
@@ -19106,6 +19107,23 @@ __metadata:
     ember-source: ">= 7.1.0"
   languageName: unknown
   linkType: soft
+
+"ember-resources@npm:^7.1.0":
+  version: 7.1.0
+  resolution: "ember-resources@npm:7.1.0"
+  dependencies:
+    "@embroider/addon-shim": "npm:^1.2.0"
+  peerDependencies:
+    "@glimmer/component": ">= 1.1.2 || >= 2.0.0"
+    "@glint/template": ">= 1.0.0"
+  peerDependenciesMeta:
+    "@glimmer/component":
+      optional: true
+    "@glint/template":
+      optional: true
+  checksum: 10c0/3ddbe29ad4f41599235f0cfc734f6ee711f45363241d25d11cd8153286a1ce215d3a5745b540103fa75095ba2f32076de269c41e09e32febff3612a841e31f72
+  languageName: node
+  linkType: hard
 
 "ember-rfc176-data@npm:^0.3.17":
   version: 0.3.18
