@@ -57,7 +57,7 @@ const testSetups = {
         <Root @options={{@options}} as |ais|>
           <ais.SearchBox />
           <ais.Hits
-            id="main-hits"
+            @id="main-hits"
             @escapeHTML={{@params.escapeHTML}}
             @transformItems={{@params.transformItems}}
             as |hit sendEvent|
@@ -83,7 +83,7 @@ const testSetups = {
             />
           </div>
           <ais.Index @indexName="nested" as |nested|>
-            <nested.Hits id="nested-hits" as |hit sendEvent|>
+            <nested.Hits @id="nested-hits" as |hit sendEvent|>
               <div data-testid="nested-hits-{{hit.__position}}">
                 {{hit.objectID}}
                 <button

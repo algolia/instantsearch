@@ -227,7 +227,7 @@ describe('Ember InstantSearch', () => {
           <ais.SearchBox />
           <ais.Index @indexName="products_by_price" as |byPrice|>
             <byPrice.Configure @searchParameters={{hash hitsPerPage=1}} />
-            <byPrice.Hits id="by-price" />
+            <byPrice.Hits @id="by-price" />
           </ais.Index>
         </InstantSearch>
       </template>
