@@ -5,8 +5,7 @@ import {
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
-import { history } from 'instantsearch.js/es/lib/routers';
-import { simple } from 'instantsearch.js/es/lib/stateMappings';
+import { historyRouter, simpleStateMapping } from 'instantsearch.js';
 
 import type { SharedSetup } from '.';
 import type { TestOptions } from '../common';
@@ -30,14 +29,14 @@ export function createRoutingTests(
         const attribute = 'one';
         const hierarchicalAttribute = 'hierarchicalCategories.lvl0';
 
-        const router = history({
+        const router = historyRouter({
           writeDelay: 0,
         });
         const options = {
           instantSearchOptions: {
             indexName: 'indexName',
             routing: {
-              stateMapping: simple(),
+              stateMapping: simpleStateMapping(),
               router,
             },
             searchClient: createSearchClient({

@@ -7,12 +7,13 @@ import { useState, useEffect, useRef } from 'preact/hooks';
 import { renderTemplate } from '../../lib/templating';
 import Template from '../Template/Template';
 
-import type { ComponentCSSClasses, UnknownWidgetFactory } from '../../types';
+import type { ComponentCSSClasses } from '../../types';
 import type {
   PanelCSSClasses,
   PanelSharedOptions,
   PanelTemplates,
 } from '../../widgets/panel/panel';
+import type { UnknownWidgetFactory } from 'instantsearch-core';
 
 export type PanelComponentCSSClasses = ComponentCSSClasses<PanelCSSClasses>;
 
@@ -53,6 +54,15 @@ function Panel<TWidget extends UnknownWidgetFactory>(
     setIsCollapsed(props.isCollapsed);
   }
 
+  const collapseButtonLabel =
+    props.collapsible && props.templates.collapseButtonLabel !== undefined
+      ? renderTemplate({
+          templates: props.templates,
+          templateKey: 'collapseButtonLabel',
+          data: { collapsed: isCollapsed },
+        })
+      : undefined;
+
   return (
     <div
       className={cx(
@@ -77,13 +87,9 @@ function Panel<TWidget extends UnknownWidgetFactory>(
               className={props.cssClasses.collapseButton}
               aria-expanded={!isCollapsed}
               aria-label={
-                props.templates.collapseButtonLabel === undefined
-                  ? undefined
-                  : renderTemplate({
-                      templates: props.templates,
-                      templateKey: 'collapseButtonLabel',
-                      data: { collapsed: isCollapsed },
-                    })
+                typeof collapseButtonLabel === 'string'
+                  ? collapseButtonLabel
+                  : undefined
               }
               onClick={(event) => {
                 event.preventDefault();

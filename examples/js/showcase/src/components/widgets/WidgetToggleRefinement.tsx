@@ -1,4 +1,4 @@
-import { toggleRefinement } from 'instantsearch.js/es/widgets';
+import { toggleRefinement } from 'instantsearch.js';
 
 import { useWidget } from '../../hooks/useWidget';
 

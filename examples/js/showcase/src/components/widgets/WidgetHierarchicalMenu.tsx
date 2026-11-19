@@ -1,4 +1,4 @@
-import { hierarchicalMenu } from 'instantsearch.js/es/widgets';
+import { hierarchicalMenu } from 'instantsearch.js';
 
 import { useWidget } from '../../hooks/useWidget';
 

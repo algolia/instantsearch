@@ -60,6 +60,47 @@ describe('Hits', () => {
     `);
   });
 
+  test('renders hits as JSON without itemComponent', () => {
+    const props = createProps({ itemComponent: undefined });
+    const { container } = render(<Hits {...props} />);
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-Hits"
+        >
+          <ol
+            class="ais-Hits-list"
+          >
+            <li
+              class="ais-Hits-item"
+            >
+              {
+        "objectID": "abc",
+        "__position": 1
+      }
+            </li>
+            <li
+              class="ais-Hits-item"
+            >
+              {
+        "objectID": "def",
+        "__position": 2
+      }
+            </li>
+          </ol>
+        </div>
+      </div>
+    `);
+
+    fireEvent.click(container.querySelector('.ais-Hits-item')!);
+    expect(props.sendEvent).toHaveBeenCalledTimes(1);
+    expect(props.sendEvent).toHaveBeenLastCalledWith(
+      'click:internal',
+      props.hits[0],
+      'Hit Clicked'
+    );
+  });
+
   test('renders with a banner (navigable)', () => {
     const props = createProps({
       banner: {

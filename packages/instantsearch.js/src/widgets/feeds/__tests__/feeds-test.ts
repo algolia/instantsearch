@@ -5,18 +5,18 @@
 import { createCompositionClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 
-import instantsearch from '../../..';
 import {
   createResultsWithFeeds,
   createParentWithHelper,
-} from '../../../../test/createFeedsTestHelpers';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+} from '../../../../../instantsearch-core/test/createFeedsTestHelpers';
+import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
   createDisposeOptions,
   createWidget,
-} from '../../../../test/createWidget';
+} from '../../../../../instantsearch-core/test/createWidget';
+import { instantsearch } from '../../../index.es';
 import searchBox from '../../search-box/search-box';
 import feeds from '../feeds';
 

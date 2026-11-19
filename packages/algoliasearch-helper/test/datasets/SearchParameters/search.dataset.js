@@ -336,7 +336,6 @@ function getData() {
     index: 'test_hotels-node',
     hitsPerPage: 20,
     nbHits: 4,
-    persistHierarchicalRootCount: false,
     nbPages: 1,
     page: 0,
     params:

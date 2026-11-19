@@ -5,7 +5,7 @@ import { createLinksTests } from './links';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { RangeInputWidget } from 'instantsearch.js/es/widgets/range-input/range-input';
+import type { RangeInputWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<RangeInputWidget>[0];
 export type RangeInputWidgetSetup = TestSetup<{

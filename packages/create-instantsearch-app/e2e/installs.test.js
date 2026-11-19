@@ -33,6 +33,7 @@ describe('Installation', () => {
         `yarn start ${appPath} \
           --name ${appName} \
           --template "InstantSearch.js" \
+          --library-version 5.0.0 \
           --no-interactive \
           --no-installation`,
         { stdio: 'ignore' }
@@ -48,6 +49,7 @@ describe('Installation', () => {
         `yarn start ${appPath} \
           --name ${appName} \
           --template "InstantSearch.js" \
+          --library-version 5.0.0 \
           --no-interactive \
           --no-installation`,
         { stdio: 'ignore' }
@@ -64,6 +66,7 @@ describe('Installation', () => {
           `yarn start ${appPath} \
           --name ${appName} \
           --template "InstantSearch.js" \
+          --library-version 5.0.0 \
           --no-interactive \
           --no-installation`,
           { stdio: 'ignore' }
@@ -83,6 +86,7 @@ describe('Installation', () => {
           `yarn start ${appPath}/file \
           --name ${appName} \
           --template "InstantSearch.js" \
+          --library-version 5.0.0 \
           --no-interactive \
           --no-installation`,
           { stdio: 'ignore' }
@@ -99,6 +103,7 @@ describe('Installation', () => {
         `yarn start ${appPath} \
           --name ${appName} \
           --template "InstantSearch.js" \
+          --library-version 5.0.0 \
           --no-interactive \
           --no-installation`,
         { stdio: 'ignore' }
@@ -113,6 +118,7 @@ describe('Installation', () => {
       execSync(
         `yarn start ${appPath} \
           --template "InstantSearch.js" \
+          --library-version 5.0.0 \
           --no-interactive \
           --no-installation`,
         { stdio: 'ignore' }
@@ -128,6 +134,7 @@ describe('Installation', () => {
         `yarn start ${appPath} \
           --name ${appName} \
           --template "InstantSearch.js" \
+          --library-version 5.0.0 \
           --no-interactive \
           --no-installation`,
         { stdio: 'ignore' }
@@ -143,6 +150,7 @@ describe('Installation', () => {
         `yarn start ${appPath}/react \
           --name ${appName} \
           --template "React InstantSearch" \
+          --library-version 8.0.0 \
           --no-interactive \
           --no-installation`,
         { stdio: 'ignore' }

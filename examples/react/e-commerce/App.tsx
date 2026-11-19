@@ -13,6 +13,7 @@ import {
   ToggleRefinement,
   Highlight,
   Snippet,
+  type Hit as AlgoliaHit,
 } from 'react-instantsearch';
 
 import {
@@ -37,8 +38,6 @@ import './Theme.css';
 import './App.css';
 import './components/Pagination.css';
 import './App.mobile.css';
-
-import type { Hit as AlgoliaHit } from 'instantsearch.js';
 
 const searchClient = algoliasearch(
   'latency',

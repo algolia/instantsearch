@@ -1,16 +1,16 @@
+import { connectHits } from 'instantsearch-core';
 import { createHitsComponent } from 'instantsearch-ui-components';
-import { connectHitsWithInsights } from 'instantsearch.js/es/connectors/index';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
-import { getScopedSlot, renderCompat } from '../util/vue-compat';
+import { Fragment, getScopedSlot, renderReactCompat } from '../util/vue-compat';
 
 export default {
   name: 'AisHits',
   mixins: [
     createWidgetMixin(
       {
-        connector: connectHitsWithInsights,
+        connector: connectHits,
       },
       {
         $$widgetType: 'ais.hits',
@@ -23,10 +23,6 @@ export default {
       type: Boolean,
       default: true,
     },
-    escapeHTML: {
-      type: Boolean,
-      default: true,
-    },
     transformItems: {
       type: Function,
       default: undefined,
@@ -36,12 +32,11 @@ export default {
     widgetParams() {
       return {
         showBanner: this.showBanner,
-        escapeHTML: this.escapeHTML,
         transformItems: this.transformItems,
       };
     },
   },
-  render: renderCompat(function (h) {
+  render: renderReactCompat(function (h) {
     if (!this.state) {
       return null;
     }
@@ -50,62 +45,37 @@ export default {
     const itemSlot = getScopedSlot(this, 'item');
     const bannerSlot = getScopedSlot(this, 'banner');
 
-    const itemComponent = ({
-      hit,
-      index,
-      onClick,
-      onAuxClick,
-      // We don't want to pass the Preact key as a prop
-      key: _key,
-      ...rootProps
-    }) => {
-      return h(
-        'li',
-        {
-          key: hit.objectID,
-          attrs: rootProps,
-          on: {
-            click: onClick,
-            auxclick: onAuxClick,
-          },
-        },
-        [
-          (itemSlot &&
-            itemSlot({
-              item: hit,
-              index,
-              insights: this.state.insights,
-              sendEvent: this.state.sendEvent,
-            })) ||
-            `objectID: ${hit.objectID}, index: ${index}`,
-        ]
-      );
-    };
-
     // We only want to render the default slot
     // if no other slots are defined
     if (!itemSlot && !bannerSlot && defaultSlot) {
       return h(
         'div',
-        {
-          attrs: {
-            class: this.suit(),
-          },
-        },
-        [
-          defaultSlot({
-            banner: this.state.banner,
-            items: this.state.items,
-            insights: this.state.insights,
-            sendEvent: this.state.sendEvent,
-          }),
-        ]
+        { className: this.suit() },
+        defaultSlot({
+          banner: this.state.banner,
+          items: this.state.items,
+          sendEvent: this.state.sendEvent,
+        })
       );
     }
 
-    return h(createHitsComponent({ createElement: h }), {
+    const HitsUiComponent = createHitsComponent({ createElement: h, Fragment });
+
+    return h(HitsUiComponent, {
       hits: this.state.items,
-      itemComponent,
+      // Without an `item` slot, the shared component renders its default hit.
+      itemComponent:
+        itemSlot &&
+        (({ hit, index, ...rootProps }) =>
+          h(
+            'li',
+            rootProps,
+            itemSlot({
+              item: hit,
+              index,
+              sendEvent: this.state.sendEvent,
+            })
+          )),
       banner: this.showBanner ? this.state.banner : undefined,
       bannerComponent: bannerSlot,
       sendEvent: this.state.sendEvent,

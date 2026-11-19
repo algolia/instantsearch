@@ -3,9 +3,9 @@
  */
 import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/shared';
+import { connectMenu, connectPagination } from 'instantsearch-core';
 
-import { connectMenu, connectPagination } from '../connectors';
-import instantsearch from '../index.es';
+import { instantsearch } from '../index.es';
 import {
   menu,
   pagination,

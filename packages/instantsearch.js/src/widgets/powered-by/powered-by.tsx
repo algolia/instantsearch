@@ -1,41 +1,37 @@
 /** @jsx h */
 
-import { cx } from 'instantsearch-ui-components';
-import { h, render } from 'preact';
+import { connectPoweredBy } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { createPoweredByComponent } from 'instantsearch-ui-components';
+import { Fragment, h, render } from 'preact';
 
-import PoweredBy from '../../components/PoweredBy/PoweredBy';
-import connectPoweredBy from '../../connectors/powered-by/connectPoweredBy';
-import { component } from '../../lib/suit';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
-import type { PoweredByComponentCSSClasses } from '../../components/PoweredBy/PoweredBy';
 import type {
   PoweredByConnectorParams,
   PoweredByRenderState,
   PoweredByWidgetDescription,
-} from '../../connectors/powered-by/connectPoweredBy';
-import type { Renderer, WidgetFactory } from '../../types';
+} from 'instantsearch-core';
+import type { Renderer, WidgetFactory } from 'instantsearch-core';
 
-const suit = component('PoweredBy');
 const withUsage = createDocumentationMessageGenerator({ name: 'powered-by' });
+
+const PoweredBy = createPoweredByComponent({ createElement: h, Fragment });
 
 const renderer =
   ({
     containerNode,
-    cssClasses,
+    classNames,
+    theme,
   }: {
     containerNode: HTMLElement;
-    cssClasses: PoweredByComponentCSSClasses;
+    classNames: PoweredByCSSClasses;
+    theme: 'light' | 'dark';
   }): Renderer<PoweredByRenderState, Partial<PoweredByWidgetParams>> =>
-  ({ url, widgetParams }, isFirstRendering) => {
+  ({ url }, isFirstRendering) => {
     if (isFirstRendering) {
-      const { theme = 'light' } = widgetParams;
-
       render(
-        <PoweredBy cssClasses={cssClasses} url={url} theme={theme} />,
+        <PoweredBy classNames={classNames} url={url} theme={theme} />,
         containerNode
       );
 
@@ -97,19 +93,16 @@ const poweredBy: PoweredByWidget = function poweredBy(widgetParams) {
 
   const containerNode = getContainerNode(container);
 
-  const cssClasses = {
-    root: cx(
-      suit(),
-      suit({ modifierName: theme === 'dark' ? 'dark' : 'light' }),
-      userCssClasses.root
-    ),
-    link: cx(suit({ descendantName: 'link' }), userCssClasses.link),
-    logo: cx(suit({ descendantName: 'logo' }), userCssClasses.logo),
+  const classNames: PoweredByCSSClasses = {
+    root: userCssClasses.root,
+    link: userCssClasses.link,
+    logo: userCssClasses.logo,
   };
 
   const specializedRenderer = renderer({
     containerNode,
-    cssClasses,
+    classNames,
+    theme,
   });
 
   const makeWidget = connectPoweredBy(specializedRenderer, () =>

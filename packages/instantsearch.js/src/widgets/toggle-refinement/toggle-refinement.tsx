@@ -1,79 +1,33 @@
 /** @jsx h */
 
-import { cx } from 'instantsearch-ui-components';
-import { h, render } from 'preact';
+import { connectToggleRefinement } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { createToggleRefinementComponent } from 'instantsearch-ui-components';
+import { Fragment, h, render } from 'preact';
 
-import ToggleRefinement from '../../components/ToggleRefinement/ToggleRefinement';
-import connectToggleRefinement from '../../connectors/toggle-refinement/connectToggleRefinement';
-import { component } from '../../lib/suit';
-import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { prepareTemplateProps, renderTemplate } from '../../lib/templating';
+import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
-import type {
-  ToggleRefinementComponentCSSClasses,
-  ToggleRefinementComponentTemplates,
-} from '../../components/ToggleRefinement/ToggleRefinement';
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template as TemplateType } from '../../types';
 import type {
   ToggleRefinementConnectorParams,
   ToggleRefinementWidgetDescription,
   ToggleRefinementRenderState,
-} from '../../connectors/toggle-refinement/connectToggleRefinement';
-import type { PreparedTemplateProps } from '../../lib/templating';
-import type { RendererOptions, Template, WidgetFactory } from '../../types';
+} from 'instantsearch-core';
+import type { RendererOptions, WidgetFactory } from 'instantsearch-core';
+import type { ToggleRefinementValue } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'toggle-refinement',
 });
-const suit = component('ToggleRefinement');
 
-const renderer =
-  ({
-    containerNode,
-    cssClasses,
-    renderState,
-    templates,
-  }: {
-    containerNode: HTMLElement;
-    cssClasses: ToggleRefinementComponentCSSClasses;
-    renderState: {
-      templateProps?: PreparedTemplateProps<ToggleRefinementComponentTemplates>;
-    };
-    templates: ToggleRefinementTemplates;
-  }) =>
-  (
-    {
-      value,
-      refine,
-      instantSearchInstance,
-    }: ToggleRefinementRenderState &
-      RendererOptions<ToggleRefinementConnectorParams>,
-    isFirstRendering: boolean
-  ) => {
-    if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
-        defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
-        templates,
-      });
-
-      return;
-    }
-
-    render(
-      <ToggleRefinement
-        cssClasses={cssClasses}
-        currentRefinement={value}
-        templateProps={renderState.templateProps!}
-        refine={refine}
-      />,
-      containerNode
-    );
-  };
+const ToggleRefinement = createToggleRefinementComponent({
+  createElement: h,
+  Fragment,
+});
 
 export type ToggleRefinementCSSClasses = Partial<{
   /**
@@ -98,7 +52,7 @@ export type ToggleRefinementTemplates = Partial<{
   /**
    * the text that describes the toggle action
    */
-  labelText: Template<ToggleRefinementRenderState['value']>;
+  labelText: TemplateType<ToggleRefinementRenderState['value']>;
 }>;
 
 export type ToggleRefinementWidgetParams = {
@@ -155,21 +109,22 @@ const toggleRefinement: ToggleRefinementWidget = function toggleRefinement(
 
   const containerNode = getContainerNode(container);
 
-  const cssClasses = {
-    root: cx(suit(), userCssClasses.root),
-    label: cx(suit({ descendantName: 'label' }), userCssClasses.label),
-    checkbox: cx(suit({ descendantName: 'checkbox' }), userCssClasses.checkbox),
-    labelText: cx(
-      suit({ descendantName: 'labelText' }),
-      userCssClasses.labelText
-    ),
+  const classNames: ToggleRefinementCSSClasses = {
+    root: userCssClasses.root,
+    label: userCssClasses.label,
+    checkbox: userCssClasses.checkbox,
+    labelText: userCssClasses.labelText,
   };
+
+  const templateProps = prepareTemplateProps({
+    defaultTemplates,
+    templates,
+  });
 
   const specializedRenderer = renderer({
     containerNode,
-    cssClasses,
-    renderState: {},
-    templates,
+    classNames,
+    templateProps,
   });
 
   const makeWidget = connectToggleRefinement(specializedRenderer, () =>
@@ -179,6 +134,61 @@ const toggleRefinement: ToggleRefinementWidget = function toggleRefinement(
   return {
     ...makeWidget({ attribute, on, off }),
     $$widgetType: 'ais.toggleRefinement',
+  };
+};
+
+const renderer = ({
+  containerNode,
+  classNames,
+  templateProps,
+}: {
+  containerNode: HTMLElement;
+  classNames: ToggleRefinementCSSClasses;
+  templateProps: PreparedTemplateProps<Required<ToggleRefinementTemplates>>;
+}) => {
+  // Created once per widget instance so the changing data (`value`) comes in
+  // through the arguments. The `ais-ToggleRefinement-labelText` span used to
+  // be the `Template`'s root: returning `null` from `templates.labelText`
+  // removed it from the DOM. Resolving the template here (rather than
+  // mounting `Template` as the span's content) keeps that behavior — the
+  // factory omits the span when this returns `null`.
+  const labelTextComponent = ({ value }: { value: ToggleRefinementValue }) => {
+    const content = renderTemplate({
+      templates: templateProps.templates,
+      templateKey: 'labelText',
+      data: value,
+    });
+
+    if (content === null) {
+      return null;
+    }
+
+    // An empty string renders an empty span rather than an empty text node
+    return <Fragment>{content === '' ? null : content}</Fragment>;
+  };
+
+  return (
+    {
+      value,
+      refine,
+    }: ToggleRefinementRenderState &
+      RendererOptions<ToggleRefinementConnectorParams>,
+    isFirstRendering: boolean
+  ) => {
+    if (isFirstRendering) {
+      return;
+    }
+
+    render(
+      <ToggleRefinement
+        classNames={classNames}
+        checked={value.isRefined}
+        labelTextComponent={labelTextComponent}
+        onChange={(isChecked) => refine({ isRefined: !isChecked })}
+        value={value}
+      />,
+      containerNode
+    );
   };
 };
 

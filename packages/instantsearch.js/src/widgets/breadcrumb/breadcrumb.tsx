@@ -1,16 +1,14 @@
 /** @jsx h */
 
+import { connectBreadcrumb } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
-import connectBreadcrumb from '../../connectors/breadcrumb/connectBreadcrumb';
-import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
@@ -18,13 +16,14 @@ import type {
   BreadcrumbComponentCSSClasses,
   BreadcrumbComponentTemplates,
 } from '../../components/Breadcrumb/Breadcrumb';
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template } from '../../types';
 import type {
   BreadcrumbWidgetDescription,
   BreadcrumbConnectorParams,
   BreadcrumbRenderState,
-} from '../../connectors/breadcrumb/connectBreadcrumb';
-import type { PreparedTemplateProps } from '../../lib/templating';
-import type { WidgetFactory, Template, Renderer } from '../../types';
+} from 'instantsearch-core';
+import type { WidgetFactory, Renderer } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'breadcrumb' });
 const suit = component('Breadcrumb');
@@ -43,14 +42,10 @@ const renderer =
     };
     templates: BreadcrumbTemplates;
   }): Renderer<BreadcrumbRenderState, Partial<BreadcrumbWidgetParams>> =>
-  (
-    { canRefine, createURL, instantSearchInstance, items, refine },
-    isFirstRendering
-  ) => {
+  ({ canRefine, createURL, items, refine }, isFirstRendering) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
 

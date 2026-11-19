@@ -3,7 +3,7 @@
  */
 
 import { createAlgoliaSearchClient } from '@instantsearch/mocks';
-import instantsearch from 'instantsearch.js/es';
+import { instantsearch } from 'instantsearch-core/internal';
 
 import { version } from '../../../package.json';
 import { mount, nextTick } from '../../../test/utils';
@@ -12,6 +12,7 @@ import { warn } from '../../util/warn';
 import InstantSearch from '../InstantSearch';
 import '../../../test/utils/sortedHtmlSerializer';
 
+jest.mock('instantsearch-core/internal');
 jest.mock('../../util/warn');
 
 beforeEach(() => {
@@ -20,20 +21,16 @@ beforeEach(() => {
 
 it('passes props to InstantSearch.js', () => {
   const searchClient = {};
-  const insightsClient = jest.fn();
-  const searchFunction = (helper) => helper.search();
 
   mount(InstantSearch, {
     propsData: {
       searchClient,
-      insightsClient,
       indexName: 'something',
       routing: {
         router: {},
         stateMapping: {},
       },
       stalledSearchDelay: 250,
-      searchFunction,
     },
   });
 
@@ -44,9 +41,8 @@ it('passes props to InstantSearch.js', () => {
       stateMapping: {},
     },
     searchClient,
-    insightsClient,
-    searchFunction,
     stalledSearchDelay: 250,
+    _internalVersion: version,
   });
 });
 
@@ -151,7 +147,7 @@ it('Allows a change in `index-name`', async () => {
     indexName: 'doggie_bowl',
   });
 
-  const helper = wrapper.vm.instantSearchInstance.helper;
+  const helper = wrapper.vm.instantSearchInstance.mainIndex.getHelper();
 
   expect(helper.setIndex).toHaveBeenCalledTimes(1);
   expect(helper.setIndex).toHaveBeenCalledWith('doggie_bowl');
@@ -210,33 +206,11 @@ it('does not warn when the `search-client` does not change', async () => {
   expect(warn).not.toHaveBeenCalled();
 });
 
-it('Allows a change in `search-function`', async () => {
-  const oldValue = () => {};
-  const newValue = () => {};
-
-  const wrapper = mount(InstantSearch, {
-    propsData: {
-      searchClient: {},
-      indexName: 'bla',
-      searchFunction: oldValue,
-    },
-  });
-
-  expect(wrapper.vm.instantSearchInstance._searchFunction).toEqual(oldValue);
-
-  await wrapper.setProps({
-    searchFunction: newValue,
-  });
-
-  expect(wrapper.vm.instantSearchInstance._searchFunction).toEqual(newValue);
-});
-
 it('Allows a change in `stalled-search-delay`', async () => {
   const wrapper = mount(InstantSearch, {
     propsData: {
       searchClient: {},
       indexName: 'bla',
-      searchFunction: () => {},
       stalledSearchDelay: 200,
     },
   });

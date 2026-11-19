@@ -1,7 +1,5 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import instantsearch from 'instantsearch.js';
-import { singleIndex } from 'instantsearch.js/es/lib/stateMappings';
-
+import { instantsearch, singleIndexStateMapping } from 'instantsearch.js';
 import 'instantsearch.css/themes/reset.css';
 
 import {
@@ -26,7 +24,7 @@ const search = instantsearch({
   searchClient,
   indexName: 'PROD_algolia_blog',
   routing: {
-    stateMapping: singleIndex('PROD_algolia_blog'),
+    stateMapping: singleIndexStateMapping('PROD_algolia_blog'),
   },
   insights: true,
 });

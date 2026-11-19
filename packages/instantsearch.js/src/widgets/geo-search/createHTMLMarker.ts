@@ -62,11 +62,7 @@ const createHTMLMarker = (
       this.element.className = className;
       this.element.style.position = 'absolute';
 
-      if (typeof template === 'object') {
-        render(template, this.element);
-      } else {
-        this.element.innerHTML = template;
-      }
+      render(template, this.element);
 
       this.setMap(map);
     }

@@ -1,5 +1,4 @@
-import { searchBox as searchBoxWidget } from 'instantsearch.js/es/widgets';
-
+import { searchBox as searchBoxWidget } from 'instantsearch.js';
 export const searchBox = searchBoxWidget({
   container: '[data-widget="searchbox"]',
   placeholder: 'Product, brand, color, …',

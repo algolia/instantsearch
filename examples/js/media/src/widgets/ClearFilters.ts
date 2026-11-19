@@ -1,5 +1,4 @@
-import { clearRefinements } from 'instantsearch.js/es/widgets';
-
+import { clearRefinements } from 'instantsearch.js';
 export const createClearFilters = ({ container }: { container: string }) =>
   clearRefinements({
     container,

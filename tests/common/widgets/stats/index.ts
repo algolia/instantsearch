@@ -4,7 +4,7 @@ import { createLinksTests } from './links';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { StatsWidget } from 'instantsearch.js/src/widgets/stats/stats';
+import type { StatsWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<StatsWidget>[0];
 export type StatsWidgetSetup = TestSetup<{

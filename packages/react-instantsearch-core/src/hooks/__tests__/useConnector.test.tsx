@@ -12,10 +12,13 @@ import {
 } from '@instantsearch/testutils';
 import { render, waitFor, renderHook } from '@testing-library/react';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
-import connectConfigure from 'instantsearch.js/es/connectors/configure/connectConfigure';
-import connectHits from 'instantsearch.js/es/connectors/hits/connectHits';
-import connectPagination from 'instantsearch.js/es/connectors/pagination/connectPagination';
-import connectRefinementList from 'instantsearch.js/es/connectors/refinement-list/connectRefinementList';
+import {
+  connectConfigure,
+  connectHits,
+  connectPagination,
+  connectRefinementList,
+} from 'instantsearch-core';
+import { TAG_PLACEHOLDER } from 'instantsearch-core/internal';
 import React, { StrictMode, useState } from 'react';
 
 import { Index } from '../../components/Index';
@@ -28,11 +31,11 @@ import { useConnector } from '../useConnector';
 
 import type { UseHitsProps } from '../../connectors/useHits';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
-import type { Connector } from 'instantsearch.js';
 import type {
   HitsConnectorParams,
   HitsWidgetDescription,
-} from 'instantsearch.js/es/connectors/hits/connectHits';
+} from 'instantsearch-core';
+import type { Connector } from 'instantsearch-core';
 
 type CustomSearchBoxWidgetDescription = {
   $$type: 'test.searchBox';
@@ -425,6 +428,7 @@ describe('useConnector', () => {
       facetsRefinements: {},
       hierarchicalFacets: [],
       hierarchicalFacetsRefinements: {},
+      ...TAG_PLACEHOLDER,
       index: 'indexName',
       numericRefinements: {},
       query: 'query',
@@ -451,11 +455,7 @@ describe('useConnector', () => {
       ],
       state: helperState,
       renderState: searchContext.current!.renderState,
-      templatesConfig: searchContext.current!.templatesConfig,
       createURL: indexContext.current!.createURL,
-      searchMetadata: {
-        isSearchStalled: false,
-      },
       status: 'idle',
       error: undefined,
     });
@@ -819,43 +819,39 @@ describe('useConnector', () => {
     expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(1);
   });
 
-  test.each([true, false])(
-    'keeps the widget uiState on a prop change (preserveSharedStateOnUnmount: %s)',
-    async (preserveSharedStateOnUnmount) => {
-      const searchClient = createSearchClient({});
+  test('keeps the widget uiState on a prop change', async () => {
+    const searchClient = createSearchClient({});
 
-      function Pagination({ padding }: { padding: number }) {
-        const { currentRefinement } = useConnector(connectPagination, {
-          padding,
-        });
+    function Pagination({ padding }: { padding: number }) {
+      const { currentRefinement } = useConnector(connectPagination, {
+        padding,
+      });
 
-        return <div data-testid="page">{currentRefinement}</div>;
-      }
-
-      function App({ padding }: { padding: number }) {
-        return (
-          <InstantSearch
-            searchClient={searchClient}
-            indexName="indexName"
-            initialUiState={{ indexName: { page: 4 } }}
-            future={{ preserveSharedStateOnUnmount }}
-          >
-            <Pagination padding={padding} />
-          </InstantSearch>
-        );
-      }
-
-      const { rerender, getByTestId } = render(<App padding={2} />);
-
-      await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
-      expect(getByTestId('page')).toHaveTextContent('3');
-
-      rerender(<App padding={3} />);
-
-      await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(2));
-      expect(getByTestId('page')).toHaveTextContent('3');
+      return <div data-testid="page">{currentRefinement}</div>;
     }
-  );
+
+    function App({ padding }: { padding: number }) {
+      return (
+        <InstantSearch
+          searchClient={searchClient}
+          indexName="indexName"
+          initialUiState={{ indexName: { page: 4 } }}
+        >
+          <Pagination padding={padding} />
+        </InstantSearch>
+      );
+    }
+
+    const { rerender, getByTestId } = render(<App padding={2} />);
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
+    expect(getByTestId('page')).toHaveTextContent('3');
+
+    rerender(<App padding={3} />);
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(2));
+    expect(getByTestId('page')).toHaveTextContent('3');
+  });
 
   test('forgets the uiState the new widget params no longer claim', async () => {
     const searchClient = createSearchClient({});
@@ -875,7 +871,6 @@ describe('useConnector', () => {
           initialUiState={{
             indexName: { refinementList: { brand: ['Apple'] } },
           }}
-          future={{ preserveSharedStateOnUnmount: true }}
         >
           <RefinementList attribute={attribute} />
         </InstantSearchSpy>
@@ -911,11 +906,7 @@ describe('useConnector', () => {
 
     function App({ analyticsTag }: { analyticsTag: string }) {
       return (
-        <InstantSearch
-          searchClient={searchClient}
-          indexName="indexName"
-          future={{ preserveSharedStateOnUnmount: true }}
-        >
+        <InstantSearch searchClient={searchClient} indexName="indexName">
           <Configure
             searchParameters={{
               hitsPerPage: 10,

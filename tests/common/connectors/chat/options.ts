@@ -2,7 +2,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
-import { Chat } from 'instantsearch.js/src/lib/chat';
+import { Chat } from 'instantsearch-core/internal';
 
 import { skippableDescribe } from '../../common';
 

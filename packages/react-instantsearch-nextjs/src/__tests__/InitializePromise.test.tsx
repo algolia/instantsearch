@@ -7,13 +7,13 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { render, act } from '@testing-library/react';
-import connectAutocomplete from 'instantsearch.js/es/connectors/autocomplete/connectAutocomplete';
-import * as utils from 'instantsearch.js/es/lib/utils';
+import { connectAutocomplete } from 'instantsearch-core';
+import * as utils from 'instantsearch-core/internal';
 import { ServerInsertedHTMLContext } from 'next/navigation';
 import React from 'react';
 import {
   Configure,
-  EXPERIMENTAL_Autocomplete,
+  Autocomplete,
   SearchBox,
   TrendingItems,
 } from 'react-instantsearch';
@@ -29,8 +29,8 @@ import { TriggerSearch } from '../TriggerSearch';
 
 import type { PromiseWithState } from 'react-instantsearch-core';
 
-jest.mock('instantsearch.js/es/lib/utils', () => ({
-  ...jest.requireActual('instantsearch.js/es/lib/utils'),
+jest.mock('instantsearch-core/internal', () => ({
+  ...jest.requireActual('instantsearch-core/internal'),
   resetWidgetId: jest.fn(),
 }));
 
@@ -42,7 +42,7 @@ function AutocompleteWithoutSearch() {
 
 function RequestFreeAutocomplete() {
   return (
-    <EXPERIMENTAL_Autocomplete
+    <Autocomplete
       autoFocus
       requiresSearch={false}
       searchParameters={{ hitsPerPage: 3 }}

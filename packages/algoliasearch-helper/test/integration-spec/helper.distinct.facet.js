@@ -31,8 +31,8 @@ test('[INT][FILTERS] Using distinct should let me retrieve all facet without dis
     facets: ['colors'],
   });
 
-  helper.on('error', function (event) {
-    done(event.error);
+  helper.on('error', function (error) {
+    done(error);
   });
 
   helper.on('result', function (event) {

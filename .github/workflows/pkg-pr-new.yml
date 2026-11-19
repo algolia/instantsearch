@@ -42,6 +42,7 @@ jobs:
             --template './examples/react/next-routing' \
             --template './examples/vue/getting-started' \
             './packages/algoliasearch-helper' \
+            './packages/instantsearch-core' \
             './packages/instantsearch.js' \
             './packages/react-instantsearch' \
             './packages/react-instantsearch-core' \

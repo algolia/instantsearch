@@ -1,12 +1,8 @@
-/** @jsx h */
+import type { InfiniteHitsTemplates } from './infinite-hits';
 
-import { h, Fragment } from 'preact';
-
-import { omit } from '../../lib/utils';
-
-import type { InfiniteHitsComponentTemplates } from '../../components/InfiniteHits/InfiniteHits';
-
-const defaultTemplates: InfiniteHitsComponentTemplates = {
+// The default `item` rendering lives in `instantsearch-ui-components`
+// (see `createInfiniteHitsComponent`), shared with the other flavors.
+const defaultTemplates: InfiniteHitsTemplates = {
   empty() {
     return 'No results';
   },
@@ -15,11 +11,6 @@ const defaultTemplates: InfiniteHitsComponentTemplates = {
   },
   showMoreText() {
     return 'Show more results';
-  },
-  item(data) {
-    return (
-      <Fragment>{JSON.stringify(omit(data, ['__hitIndex']), null, 2)}</Fragment>
-    );
   },
 };
 

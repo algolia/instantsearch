@@ -6,8 +6,7 @@ import {
 import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
-import { history } from 'instantsearch.js/es/lib/routers';
-import { simple } from 'instantsearch.js/es/lib/stateMappings';
+import { historyRouter, simpleStateMapping } from 'instantsearch.js';
 
 import type { RefinementListConnectorSetup } from '.';
 import type { TestOptions, SetupOptions } from '../../common';
@@ -29,12 +28,12 @@ export function createRoutingTests(
         const delay = 100;
         const margin = 10;
         const attribute = 'brand';
-        const router = history();
+        const router = historyRouter();
         const options: SetupOptions<RefinementListConnectorSetup> = {
           instantSearchOptions: {
             indexName: 'indexName',
             routing: {
-              stateMapping: simple(),
+              stateMapping: simpleStateMapping(),
               router,
             },
             searchClient: createSearchClient({
@@ -208,7 +207,7 @@ export function createRoutingTests(
       test('works with unsafe "routeToState" implementation', async () => {
         const delay = 100;
         const attribute = 'brand';
-        const router = history();
+        const router = historyRouter();
         const options: SetupOptions<RefinementListConnectorSetup> = {
           instantSearchOptions: {
             indexName: 'indexName',

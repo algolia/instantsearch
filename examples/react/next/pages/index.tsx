@@ -1,12 +1,7 @@
 import { createMemoryCache } from '@algolia/client-common';
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import { Hit as AlgoliaHit } from 'instantsearch.js';
-import { GetServerSideProps } from 'next';
-import Head from 'next/head';
-import singletonRouter from 'next/router';
-import React from 'react';
-import { renderToString } from 'react-dom/server';
 import {
+  Hit as AlgoliaHit,
   DynamicWidgets,
   InstantSearch,
   Hits,
@@ -17,6 +12,11 @@ import {
   InstantSearchSSRProvider,
   getServerState,
 } from 'react-instantsearch';
+import { GetServerSideProps } from 'next';
+import Head from 'next/head';
+import singletonRouter from 'next/router';
+import React from 'react';
+import { renderToString } from 'react-dom/server';
 import { createInstantSearchRouterNext } from 'react-instantsearch-router-nextjs';
 
 import { Panel } from '../components/Panel';
@@ -71,9 +71,6 @@ export default function HomePage({ serverState, url }: HomePageProps) {
           }),
         }}
         insights={true}
-        future={{
-          preserveSharedStateOnUnmount: true,
-        }}
       >
         <div className="Container">
           <div>

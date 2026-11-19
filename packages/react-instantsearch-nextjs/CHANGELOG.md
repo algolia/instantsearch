@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.4.17...react-instantsearch-nextjs@2.0.0-beta.0) (2026-11-19)
+
+
+### chore
+
+* introduce instantsearch-core ([#7018](https://github.com/algolia/instantsearch/issues/7018)) ([22e480b](https://github.com/algolia/instantsearch/commit/22e480b441333d92c6c2091a42b51295c4db9e20))
+
+
+* fix(instantsearch)!: make search.helper the helper that sends the requests [FX-4097] (#7392) ([dd48215](https://github.com/algolia/instantsearch/commit/dd4821516e48d1dac8de6c3bd19bbef406d55ef6)), closes [#7392](https://github.com/algolia/instantsearch/issues/7392) [#6516](https://github.com/algolia/instantsearch/issues/6516)
+* fix(widgets)!: remove deprecated autocomplete aliases and chat shims ([e71bbc2](https://github.com/algolia/instantsearch/commit/e71bbc2efefb89fd515d47da5c822b497be47d08))
+
+
+### Features
+
+* drop ie11 support ([#7113](https://github.com/algolia/instantsearch/issues/7113)) ([eb9972a](https://github.com/algolia/instantsearch/commit/eb9972a3666103aa1f5797fa614618a306c1f2cf))
+
+
+### BREAKING CHANGES
+
+* `search.mainHelper` is removed, and `search.helper` is now the helper that sends the requests, which `search.mainHelper` was. Replace `search.mainHelper` with `search.helper`, and use `search.mainIndex.getHelper()` where you read the state or the results of the main index from `search.helper`.
+
+FX-4097
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+* `EXPERIMENTAL_autocomplete` (instantsearch.js) and
+`EXPERIMENTAL_Autocomplete` (React InstantSearch) are removed; use
+`autocomplete` and `Autocomplete`. Chat tool and empty components now only
+receive `context`; the deprecated root props (`status`, `tools`, `onClose`,
+...), `ChatEmptyProps` and the `DisplayResultsToolType` export are removed.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+* instantsearch.js no longer exposes the modules that moved to instantsearch-core at their old deep paths (`instantsearch.js/es/connectors/<name>/connect<Name>`, `es/lib/utils/*`, `es/lib/chat`, `es/lib/ai-lite`, `es/lib/tasks`, `es/lib/infiniteHitsCache`, `es/middlewares`, and the type modules under `es/types`). Import them from `instantsearch-core` instead. instantsearch-ui-components no longer re-exports the chat types and helpers that moved to core (`find`, `startsWith`, `addAbsolutePosition`, `collectChatRecords`, `getPromptSuggestionHits`, `UIMessage`, `ChatState`, ...); import them from `instantsearch-core`.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+* fix(tests): import core test helper by relative path
+
+instantsearch-core's exports map does not expose test/, so
+instantsearch-core/test/createWidget failed to resolve with
+ERR_PACKAGE_PATH_NOT_EXPORTED and broke every suite that loads
+@instantsearch/testutils.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+* browser support is now: "chrome >= 60, firefox >= 55, safari >= 12.2, not op_mini all". If you need any lower browser support, ensure you run the package through a bundler and/or transformer.
+
+Co-authored-by: Haroen Viaene <hello@haroen.me>
+Co-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+
+
+
+
 ## [1.4.17](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.4.16...react-instantsearch-nextjs@1.4.17) (2026-11-17)
 
 **Note:** Version bump only for package react-instantsearch-nextjs

@@ -4,6 +4,7 @@
 - [Codemods](#codemods)
   - [`rish-to-ris`](#rish-to-ris)
   - [`ris-v6-to-v7`](#ris-v6-to-v7)
+  - [`is-v4-to-v5`](#is-v4-to-v5)
   - [`addWidget-to-addWidgets`](#addwidget-to-addwidgets)
   - [Notes](#notes)
 
@@ -32,6 +33,28 @@ This will:
 
 ```
 npx @codeshift/cli --packages 'instantsearch-codemods#ris-v6-to-v7' <path>
+```
+
+### `is-v4-to-v5`
+
+Migrates InstantSearch.js, React InstantSearch and Vue InstantSearch code from v4 to v5. It transforms JavaScript and TypeScript files (`.js`, `.jsx`, `.ts`, `.tsx`), not `.vue` files. It will:
+
+- Rename removed `EXPERIMENTAL_*` APIs (`EXPERIMENTAL_autocomplete`, `EXPERIMENTAL_dynamicWidgets`, `EXPERIMENTAL_use`, `EXPERIMENTAL_isolated`, and Vue's `AisExperimentalAutocomplete`) and other renamed APIs (`getWidgetState`, `hasMapMoveSinceLastRefine`, `hasRefinements` in connector render state, deprecated helper methods like `addRefine`)
+- Replace `addWidget`/`removeWidget` with `addWidgets`/`removeWidgets`
+- Replace `hasNoResults` with `!canRefine` (only in files using the `hitsPerPage`, `numericMenu` or `ratingMenu` connectors, since Stats templates still have it) and `hits` with `items` for `useHits`/`useInfiniteHits`
+- Replace `__hitIndex` with `__position - 1` in `hits` and `infiniteHits` item templates (and `__hitIndex + 1` with `__position`), or add a TODO comment where it can't be replaced, like when it's destructured or read through optional chaining (`hit?.__hitIndex`), where `- 1` would turn a missing hit into `NaN`. `__position` is the position in the search results, so the values differ after the first page of `hits`, or when `transformItems` filters or reorders the hits
+- Replace deep imports (`instantsearch.js/es/...`) with imports from the root, renaming `history`, `simple` and `singleIndex` to `historyRouter`, `simpleStateMapping` and `singleIndexStateMapping`. In files that import `react-instantsearch`, `react-instantsearch-core` or `vue-instantsearch`, imports from `instantsearch.js` (other than its widgets and `instantsearch`) move to that package, since React and Vue InstantSearch don't depend on `instantsearch.js` anymore
+- Replace the `instantsearch` default import with the named export, and its namespaces (`instantsearch.widgets.searchBox`, `const { hits } = instantsearch.widgets`, `instantsearch.routers.history`, `instantsearch.version`, …) with named imports. The global from the UMD build keeps its namespaces, so it's left alone
+- Rename `getLocation` to `getCurrentURL` and `location` to `currentURL` in custom routers
+- Pass `cleanUrlOnDispose: true` to history routers, to keep the v4 behavior, with a TODO comment to adopt the new default
+- Add TODO comments where a manual change is needed (the old renderless Vue `AisAutocomplete` import, `searchFunction`, `isSearchStalled`, `escapeHTML`, range `start`, removed widgets, `routing: true`, `getInsightsAnonymousUserToken`, the `highlight`/`snippet` helpers, deep imports of internal modules, spelling out the replacement to use)
+
+`.vue` files are not transformed, so Vue templates and script blocks (for example the `has-no-results` slot prop and `search-function` prop) need manual changes, including renaming `<ais-experimental-autocomplete>` to `<ais-autocomplete>`.
+
+**Vue autocomplete (breaking):** `AisExperimentalAutocomplete` / `<ais-experimental-autocomplete>` is now `AisAutocomplete` / `<ais-autocomplete>` (the experimental name is removed, as in InstantSearch.js and React InstantSearch). The previous renderless `AisAutocomplete` (a slot wrapper around `connectAutocomplete` exposing `refine`, `currentRefinement` and `indices`) is removed, since the name now belongs to the full autocomplete UI. If you relied on it, build your own component with `connectAutocomplete` and `createWidgetMixin`. The codemod renames the identifier in script files and flags imports of the old `AisAutocomplete`; templates must be updated by hand.
+
+```
+npx @codeshift/cli --packages 'instantsearch-codemods#is-v4-to-v5' <path>
 ```
 
 ### `addWidget-to-addWidgets`

@@ -1,4 +1,4 @@
-import { hits as fn } from 'instantsearch.js/es/widgets';
+import { hits as fn } from 'instantsearch.js';
 
 import { renderProductCard } from '../../../components/widgets/ProductCard';
 import { defineWidget } from '../types';
@@ -20,11 +20,6 @@ export const hits = defineWidget({
     },
   ],
   toggles: [
-    {
-      key: 'escapeHTML',
-      label: 'false',
-      value: { escapeHTML: false },
-    },
     {
       key: 'transformItems',
       label: 'firstThreeOnly',

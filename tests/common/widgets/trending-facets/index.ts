@@ -4,7 +4,7 @@ import { createLinksTests } from './links';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { TrendingFacetsWidget } from 'instantsearch.js/es/widgets/trending-facets/trending-facets';
+import type { TrendingFacetsWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<TrendingFacetsWidget>[0];
 export type TrendingFacetsWidgetSetup = TestSetup<{

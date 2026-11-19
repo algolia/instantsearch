@@ -31,7 +31,7 @@
           </div>
 
           <div class="search-panel__results">
-            <ais-experimental-autocomplete
+            <ais-autocomplete
               detached-media-query="(max-width: 1024px)"
               placeholder="Search for products"
               :indices="indices"
@@ -64,7 +64,7 @@
                 <span class="ais-AutocompleteIndexHeaderTitle">Ask AI</span>
                 <span class="ais-AutocompleteIndexHeaderLine" />
               </template>
-            </ais-experimental-autocomplete>
+            </ais-autocomplete>
 
             <ais-hits>
               <template #item="{ item }">
@@ -102,7 +102,7 @@
 
 <script>
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import { history } from 'instantsearch.js/es/lib/routers';
+import { historyRouter } from 'vue-instantsearch';
 
 import 'instantsearch.css/themes/satellite.css';
 import './app.css';
@@ -114,7 +114,7 @@ export default {
         'latency',
         '6be0576ff61c053d5f9a3225e2a90f76'
       ),
-      routing: { router: history() },
+      routing: { router: historyRouter() },
       indices: [
         {
           indexName: 'instant_search',

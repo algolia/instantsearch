@@ -4,7 +4,7 @@ import { createLinksTests } from './links';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { CurrentRefinementsWidget } from 'instantsearch.js/es/widgets/current-refinements/current-refinements';
+import type { CurrentRefinementsWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<CurrentRefinementsWidget>[0];
 export type CurrentRefinementsWidgetSetup = TestSetup<{

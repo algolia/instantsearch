@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.0.0-beta.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.25.1...instantsearch.css@9.0.0-beta.0) (2026-11-19)
+
+
+* fix(widgets)!: remove filter suggestions ([9100931](https://github.com/algolia/instantsearch/commit/910093119344dbda1aa599f58793e56e6fe907df))
+
+
+### Features
+
+* drop ie11 support ([#7113](https://github.com/algolia/instantsearch/issues/7113)) ([eb9972a](https://github.com/algolia/instantsearch/commit/eb9972a3666103aa1f5797fa614618a306c1f2cf))
+
+
+### BREAKING CHANGES
+
+* the filterSuggestions widget, connectFilterSuggestions, useFilterSuggestions and FilterSuggestions no longer exist
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+* browser support is now: "chrome >= 60, firefox >= 55, safari >= 12.2, not op_mini all". If you need any lower browser support, ensure you run the package through a bundler and/or transformer.
+
+Co-authored-by: Haroen Viaene <hello@haroen.me>
+Co-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+
+
+
+
 ## [8.25.1](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.25.0...instantsearch.css@8.25.1) (2026-11-03)
 
 

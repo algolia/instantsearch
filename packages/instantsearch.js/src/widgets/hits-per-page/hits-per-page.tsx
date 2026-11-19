@@ -1,53 +1,46 @@
 /** @jsx h */
 
-import { cx } from 'instantsearch-ui-components';
-import { h, render } from 'preact';
+import { connectHitsPerPage } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { createHitsPerPageComponent } from 'instantsearch-ui-components';
+import { Fragment, h, render } from 'preact';
 
-import Selector from '../../components/Selector/Selector';
-import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage';
-import { component } from '../../lib/suit';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-  find,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import type {
   HitsPerPageConnectorParams,
   HitsPerPageRenderState,
   HitsPerPageWidgetDescription,
-} from '../../connectors/hits-per-page/connectHitsPerPage';
-import type { ComponentCSSClasses, WidgetFactory } from '../../types';
+} from 'instantsearch-core';
+import type { WidgetFactory } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hits-per-page',
 });
-const suit = component('HitsPerPage');
+
+const HitsPerPage = createHitsPerPageComponent({ createElement: h, Fragment });
 
 const renderer =
   ({
     containerNode,
-    cssClasses,
+    classNames,
   }: {
     containerNode: HTMLElement;
-    cssClasses: ComponentCSSClasses<HitsPerPageCSSClasses>;
+    classNames: HitsPerPageCSSClasses;
   }) =>
   ({ items, refine }: HitsPerPageRenderState, isFirstRendering: boolean) => {
     if (isFirstRendering) return;
 
     const { value: currentValue } =
-      find(items, ({ isRefined }) => isRefined) || {};
+      items.find(({ isRefined }) => isRefined) || {};
 
     render(
-      <div className={cssClasses.root}>
-        <Selector
-          cssClasses={cssClasses}
-          currentValue={currentValue}
-          options={items}
-          // @ts-expect-error: the refine function expects a number, but setValue will call it with a string. We don't want to change the type of the refine function because it's part of the connector API.
-          setValue={refine}
-        />
-      </div>,
+      <HitsPerPage
+        items={items}
+        currentValue={currentValue}
+        onChange={refine}
+        classNames={classNames}
+      />,
       containerNode
     );
   };
@@ -101,15 +94,15 @@ const hitsPerPage: HitsPerPageWidget = function hitsPerPage(widgetParams) {
 
   const containerNode = getContainerNode(container);
 
-  const cssClasses = {
-    root: cx(suit(), userCssClasses.root),
-    select: cx(suit({ descendantName: 'select' }), userCssClasses.select),
-    option: cx(suit({ descendantName: 'option' }), userCssClasses.option),
+  const classNames: HitsPerPageCSSClasses = {
+    root: userCssClasses.root,
+    select: userCssClasses.select,
+    option: userCssClasses.option,
   };
 
   const specializedRenderer = renderer({
     containerNode,
-    cssClasses,
+    classNames,
   });
 
   const makeWidget = connectHitsPerPage(specializedRenderer, () =>

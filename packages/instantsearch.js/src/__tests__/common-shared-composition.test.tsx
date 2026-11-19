@@ -4,7 +4,7 @@
 import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/shared-composition';
 
-import instantsearch from '../index.es';
+import { instantsearch } from '../index.es';
 import { refinementList } from '../widgets';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';

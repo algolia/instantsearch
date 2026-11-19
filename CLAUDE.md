@@ -6,7 +6,8 @@ Search UI libraries for Algolia across three flavors (vanilla JS, React, Vue), s
 
 | Package | What it is |
 | --- | --- |
-| `packages/instantsearch.js` | **Core.** Vanilla JS library. **All connectors live here** (`src/connectors/`) and are shared by every flavor. |
+| `packages/instantsearch-core` | **Core.** Connectors (`src/connectors/`), the runtime, routers, state mappings, middlewares and shared types, shared by every flavor. Its root (`instantsearch-core`) is the user-facing API that each flavor re-exports; `instantsearch-core/internal` holds helpers for the first-party flavors only (no semver guarantee, never import it outside `packages/*/src`). Users import from their flavor package, not from core. |
+| `packages/instantsearch.js` | Vanilla JS flavor: widgets, templates and the JS `InstantSearch` class on top of core. |
 | `packages/react-instantsearch-core` | Headless React: hooks (`useSearchBox`, …) that wrap connectors. Framework-agnostic (web/RN). |
 | `packages/react-instantsearch` | React DOM widgets = hooks + UI from `instantsearch-ui-components`. |
 | `packages/vue-instantsearch` | Vue 2/3 components wrapping connectors. |
@@ -16,7 +17,7 @@ Search UI libraries for Algolia across three flavors (vanilla JS, React, Vue), s
 | `packages/react-instantsearch-nextjs` / `-router-nextjs` | Next.js App Router / Pages Router integrations. |
 | `packages/create-instantsearch-app`, `instantsearch-cli`, `instantsearch-codemods` | Scaffolding / CLI / migration tooling. |
 
-Architecture in one line: **connector (logic, in instantsearch.js) → flavor wrapper (JS widget / React hook+component / Vue component) → shared UI components**. Change behavior in the connector; change markup in the UI layer.
+Architecture in one line: **connector (logic, in instantsearch-core) → flavor wrapper (JS widget / React hook+component / Vue component) → shared UI components**. Change behavior in the connector; change markup in the UI layer.
 
 ## Where work goes (per layer)
 
@@ -24,7 +25,8 @@ Because behavior lives in the connector and the flavors only wrap it, most chang
 
 | Work in… | Package |
 | --- | --- |
-| Connectors, JS widgets, runtime (`src/lib`), legacy Preact components (`src/components`), types | `packages/instantsearch.js` |
+| Connectors, runtime, routers, state mappings, middlewares, shared types | `packages/instantsearch-core` (public → `src/index.ts`, flavor-only helpers → `src/internal.ts`) |
+| JS widgets, legacy Preact components (`src/components`) | `packages/instantsearch.js` |
 | Shared framework-agnostic markup / `ais-*` classes | `packages/instantsearch-ui-components` |
 | React widgets/hooks + Next.js integrations | `react-instantsearch` / `react-instantsearch-core` / `*-nextjs` |
 | Vue components (Vue 2 **and** 3) | `vue-instantsearch` |
@@ -39,7 +41,8 @@ Node `20.19.0` (`.nvmrc`). Use Yarn (v4, pinned by `packageManager`).
 
 ```bash
 # Build
-yarn build                      # all packages (lerna)
+yarn build                      # all packages and examples (lerna)
+yarn build:ci                   # packages only, as CI builds them
 yarn lerna run build --scope <pkg>   # single package; swap in build:types for declarations only
 
 # Unit tests (Jest, jsdom)
@@ -53,13 +56,15 @@ yarn test                       # everything (slow)
 yarn lint:changed               # lint only changed files — use this while iterating
 yarn lint:fix                   # auto-fix
 yarn format                     # format the repo; yarn format:check only reports
-yarn type-check                 # tsc + per-package (also :v3 / :v4 for legacy algoliasearch)
+yarn type-check                 # tsc + per-package (also :v4 for legacy algoliasearch)
 
 # E2E — see .claude/rules/e2e.md (Playwright). Examples must be built first:
 yarn website:examples && E2E_FLAVOR=react E2E_BROWSER=chromium yarn test:e2e
 ```
 
-Packages build with the root's `rollup` and `tsc`, which only scripts started from the root can reach, so build through Lerna as CI does: `yarn workspace <pkg> build` stops at `command not found`, and `instantsearch.js`'s `build:types` exits 0 with stale declarations. `yarn type-check` reads other packages, and public paths like `instantsearch.js/es/…`, from those built declarations: rebuild the packages you changed before type-checking.
+Packages build with the root's `rollup` and `tsc`, which only scripts started from the root can reach, so build through Lerna as CI does: `yarn workspace <pkg> build` stops at `command not found`, and `instantsearch.js`'s `build:types` exits 0 with stale declarations. `yarn type-check` reads other packages, and public paths like `instantsearch.js/es/…`, from those built declarations: rebuild the packages you changed before type-checking, and run `yarn build:ci` after a rebase or a branch switch.
+
+Don't pass `--silent` to `yarn jest`. Some tests count `console.error` calls, and Jest's silent console no longer turns `console.trace` into one, so the "can attach many `render` listeners" test in `instantsearch-core` fails with it.
 
 ## Conventions
 

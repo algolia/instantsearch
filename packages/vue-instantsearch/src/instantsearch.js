@@ -1,3 +1,4 @@
+export * from 'instantsearch-core';
 export { createSuitMixin } from './mixins/suit';
 export { createWidgetMixin } from './mixins/widget';
 export * from './widgets';

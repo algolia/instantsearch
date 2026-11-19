@@ -1,15 +1,11 @@
-import {
-  getHighlightedParts,
-  getPropertyByPath,
-  unescape,
-} from 'instantsearch.js/es/lib/utils';
+import { getHighlightedParts, getPropertyByPath } from 'instantsearch-core';
 import React from 'react';
 
 import { Highlight as HighlightUiComponent } from '../ui/Highlight';
 
 import type { PartialKeys } from '../types';
 import type { HighlightProps as HighlightUiComponentProps } from '../ui/Highlight';
-import type { BaseHit, Hit } from 'instantsearch.js';
+import type { BaseHit, Hit } from 'instantsearch-core';
 
 export type HighlightProps<THit extends Hit<BaseHit>> = {
   hit: THit;
@@ -32,7 +28,7 @@ export function Highlight<THit extends Hit<BaseHit>>({
   const properties = Array.isArray(property) ? property : [property];
 
   const parts = properties.map((singleValue) =>
-    getHighlightedParts(unescape(singleValue.value || ''))
+    getHighlightedParts(singleValue.value || '')
   );
 
   return (

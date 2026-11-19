@@ -6,7 +6,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import { h } from 'preact';
 
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import toggleRefinement from '../toggle-refinement';
 
 beforeEach(() => {
@@ -91,14 +91,7 @@ describe('toggleRefinement', () => {
         }),
       ]);
 
-      // @MAJOR Once Hogan.js and string-based templates are removed,
-      // `search.start()` can be moved to the test body and the following
-      // assertion can go away.
-      expect(async () => {
-        search.start();
-
-        await wait(0);
-      }).not.toWarnDev();
+      search.start();
 
       await wait(0);
 
@@ -228,6 +221,37 @@ describe('toggleRefinement', () => {
           </div>
         </div>
       `);
+    });
+
+    test('renders no label text element when `labelText` returns `null`', async () => {
+      const container = document.createElement('div');
+      const searchClient = createSearchClient();
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+
+      search.addWidgets([
+        toggleRefinement({
+          container,
+          attribute: 'free_shipping',
+          templates: {
+            labelText: () => null,
+          },
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      // The `ais-ToggleRefinement-labelText` span used to be the `Template`'s
+      // root, so a `null` template removed it — it must not leave an empty
+      // styled element behind.
+      expect(
+        container.querySelector('.ais-ToggleRefinement-labelText')
+      ).toBeNull();
+      expect(
+        container.querySelector('.ais-ToggleRefinement-checkbox')
+      ).not.toBeNull();
     });
   });
 });

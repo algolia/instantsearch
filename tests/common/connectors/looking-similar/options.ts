@@ -6,6 +6,7 @@ import {
 import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
+import { TAG_PLACEHOLDER } from 'instantsearch-core/internal';
 
 import { skippableDescribe } from '../../common';
 
@@ -46,7 +47,6 @@ export function createOptionsTests(
           threshold: 3,
           fallbackParameters: { facetFilters: ['test1'] },
           queryParameters: { analytics: true },
-          escapeHTML: false,
         },
       };
 
@@ -58,8 +58,8 @@ export function createOptionsTests(
             objectID: '1',
             maxRecommendations: 2,
             threshold: 3,
-            fallbackParameters: { facetFilters: ['test1'] },
-            queryParameters: { analytics: true },
+            fallbackParameters: { facetFilters: ['test1'], ...TAG_PLACEHOLDER },
+            queryParameters: { analytics: true, ...TAG_PLACEHOLDER },
             model: 'looking-similar',
             indexName: 'indexName',
           }),
@@ -67,13 +67,35 @@ export function createOptionsTests(
             objectID: '2',
             maxRecommendations: 2,
             threshold: 3,
-            fallbackParameters: { facetFilters: ['test1'] },
-            queryParameters: { analytics: true },
+            fallbackParameters: { facetFilters: ['test1'], ...TAG_PLACEHOLDER },
+            queryParameters: { analytics: true, ...TAG_PLACEHOLDER },
             model: 'looking-similar',
             indexName: 'indexName',
           }),
         ])
       );
+    });
+
+    test('keeps custom highlight tags', async () => {
+      const searchClient = createRecommendSearchClient();
+      const customTags = { highlightPreTag: '<em>', highlightPostTag: '</em>' };
+      const options: SetupOptions<LookingSimilarConnectorSetup> = {
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: {
+          objectIDs: ['1'],
+          fallbackParameters: customTags,
+          queryParameters: customTags,
+        },
+      };
+
+      await setup(options);
+
+      expect(searchClient.getRecommendations).toHaveBeenCalledWith([
+        expect.objectContaining({
+          fallbackParameters: customTags,
+          queryParameters: customTags,
+        }),
+      ]);
     });
 
     test('returns recommendations', async () => {
@@ -148,7 +170,7 @@ export function createOptionsTests(
         getRecommendations: jest.fn((requests) =>
           Promise.resolve(
             createRecommendResponse(
-              // @ts-ignore `getRecommendations` isn't typed in v3
+              // @ts-ignore trending facets queries have no `objectID`
               requests.map((request: { objectID?: string }) =>
                 createSingleSearchResponse({
                   hits:
@@ -181,7 +203,7 @@ export function createOptionsTests(
         getRecommendations: jest.fn((requests) =>
           Promise.resolve(
             createRecommendResponse(
-              // @ts-ignore `getRecommendations` isn't typed in v3
+              // @ts-ignore trending facets queries have no `objectID`
               requests.map((request: { objectID?: string }) =>
                 createSingleSearchResponse(
                   request.objectID === '1'

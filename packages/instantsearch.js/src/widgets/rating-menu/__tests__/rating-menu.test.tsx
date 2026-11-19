@@ -10,11 +10,11 @@ import {
 import { wait } from '@instantsearch/testutils/wait';
 import { findAllByRole, findByRole } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
+import { historyRouter } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h } from 'preact';
 
-import instantsearch from '../../../index.es';
-import { history } from '../../../lib/routers';
+import { instantsearch } from '../../../index.es';
 import ratingMenu from '../rating-menu';
 
 beforeEach(() => {
@@ -24,7 +24,7 @@ beforeEach(() => {
 describe('ratingMenu', () => {
   test('has correct URLs', async () => {
     const container = document.createElement('div');
-    const router = history();
+    const router = historyRouter();
     const searchClient = createSearchClient({
       search: jest.fn((requests) =>
         Promise.resolve(
@@ -202,14 +202,7 @@ describe('ratingMenu', () => {
 
       search.addWidgets([ratingMenu({ container, attribute: 'price' })]);
 
-      // @MAJOR Once Hogan.js and string-based templates are removed,
-      // `search.start()` can be moved to the test body and the following
-      // assertion can go away.
-      expect(async () => {
-        search.start();
-
-        await wait(0);
-      }).not.toWarnDev();
+      search.start();
 
       await wait(0);
 

@@ -3,7 +3,7 @@ import { fakeAct, skippableDescribe } from '../../common';
 import { createBehaviourTests } from './behaviour';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { RangeSliderWidget } from 'instantsearch.js/es/widgets/range-slider/range-slider';
+import type { RangeSliderWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<RangeSliderWidget>[0];
 export type RangeSliderWidgetSetup = TestSetup<{

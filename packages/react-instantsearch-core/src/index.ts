@@ -1,3 +1,7 @@
+export * from 'instantsearch-core';
+// Names that exist both in `instantsearch-core` and in this package: the React
+// export wins (an explicit export shadows a star export).
+export { InstantSearch } from './components/InstantSearch';
 export { default as version } from './version';
 export * from './components/Configure';
 export * from './components/DynamicWidgets';
@@ -39,7 +43,6 @@ export * from './connectors/useToggleRefinement';
 export * from './connectors/useTrendingItems';
 export * from './connectors/useTrendingFacets';
 export * from './connectors/useLookingSimilar';
-export * from './connectors/useFilterSuggestions';
 export * from './hooks/useConnector';
 export * from './hooks/useInstantSearch';
 export * from './lib/wrapPromiseWithState';

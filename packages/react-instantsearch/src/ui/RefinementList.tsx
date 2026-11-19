@@ -1,12 +1,12 @@
+import { getHighlightedParts } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
-import { getHighlightedParts, unescape } from 'instantsearch.js/es/lib/utils';
 import React from 'react';
 
 import { Highlight } from './Highlight';
 import { ShowMoreButton } from './ShowMoreButton';
 
 import type { ShowMoreButtonTranslations } from './ShowMoreButton';
-import type { RefinementListItem } from 'instantsearch.js/es/connectors/refinement-list/connectRefinementList';
+import type { RefinementListItem } from 'instantsearch-core';
 
 export type RefinementListProps = React.ComponentProps<'div'> & {
   canRefine: boolean;
@@ -158,9 +158,7 @@ export function RefinementList({
                 >
                   {query.length > 0 ? (
                     <Highlight
-                      parts={[
-                        getHighlightedParts(unescape(item.highlighted || '')),
-                      ]}
+                      parts={[getHighlightedParts(item.highlighted || '')]}
                     />
                   ) : (
                     item.label

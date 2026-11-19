@@ -1,4 +1,4 @@
-import { chatTrigger as fn } from 'instantsearch.js/es/widgets';
+import { chatTrigger as fn } from 'instantsearch.js';
 
 import { defineWidget } from '../types';
 

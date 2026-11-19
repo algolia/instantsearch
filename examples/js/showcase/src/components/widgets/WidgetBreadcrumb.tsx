@@ -1,4 +1,4 @@
-import { breadcrumb } from 'instantsearch.js/es/widgets';
+import { breadcrumb } from 'instantsearch.js';
 
 import { useWidget } from '../../hooks/useWidget';
 

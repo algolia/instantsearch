@@ -6,16 +6,13 @@ import {
 import { wait } from '@instantsearch/testutils';
 import { waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
-import {
-  Chat,
-  DisplayResultsToolType,
-  GroupedResultsToolType,
-  SearchIndexToolType,
-} from 'instantsearch.js/es/lib/chat';
+import { Chat } from 'instantsearch-core/internal';
 import {
   chatInlineLayout,
   chatSidePanelLayout,
-} from 'instantsearch.js/es/templates';
+  GroupedResultsToolType,
+  SearchIndexToolType,
+} from 'instantsearch.js';
 import { createElement as createPreactElement } from 'preact';
 import React from 'react';
 import { ChatInlineLayout, ChatSidePanelLayout } from 'react-instantsearch';
@@ -1294,7 +1291,8 @@ export function createOptionsTests(
                 [SearchIndexToolType]: {
                   streamInput: true,
                   templates: {
-                    layout: '<div id="tool-content">streaming...</div>',
+                    layout: (_, { html }) =>
+                      html`<div id="tool-content">streaming...</div>`,
                   },
                 },
               },
@@ -1719,8 +1717,10 @@ export function createOptionsTests(
               tools: {
                 hello: {
                   templates: {
-                    layout:
-                      '<div id="tool-content">The message said hello!</div>',
+                    layout: (_, { html }) =>
+                      html`<div id="tool-content">
+                        The message said hello!
+                      </div>`,
                   },
                 },
               },
@@ -1797,8 +1797,10 @@ export function createOptionsTests(
                 hello: {
                   shouldRender,
                   templates: {
-                    layout:
-                      '<div id="tool-content">The message said hello!</div>',
+                    layout: (_, { html }) =>
+                      html`<div id="tool-content">
+                        The message said hello!
+                      </div>`,
                   },
                 },
               },
@@ -1896,12 +1898,14 @@ export function createOptionsTests(
                 hello: {
                   matchesToolName,
                   templates: {
-                    layout: '<div id="tool-content">Hello!</div>',
+                    layout: (_, { html }) =>
+                      html`<div id="tool-content">Hello!</div>`,
                   },
                 },
                 goodbye: {
                   templates: {
-                    layout: '<div id="other-tool-content">Goodbye!</div>',
+                    layout: (_, { html }) =>
+                      html`<div id="other-tool-content">Goodbye!</div>`,
                   },
                 },
               },
@@ -1993,8 +1997,10 @@ export function createOptionsTests(
                 hello: {
                   shouldRender,
                   templates: {
-                    layout:
-                      '<div id="tool-content">The message said hello!</div>',
+                    layout: (_, { html }) =>
+                      html`<div id="tool-content">
+                        The message said hello!
+                      </div>`,
                   },
                 },
               },
@@ -2069,7 +2075,8 @@ export function createOptionsTests(
                 hello: {
                   ...tool,
                   templates: {
-                    layout: '<div id="tool-content">streaming...</div>',
+                    layout: (_, { html }) =>
+                      html`<div id="tool-content">streaming...</div>`,
                   },
                 },
               },
@@ -2167,8 +2174,10 @@ export function createOptionsTests(
               tools: {
                 [SearchIndexToolType]: {
                   templates: {
-                    layout:
-                      '<div id="tool-content">The message said hello!</div>',
+                    layout: (_, { html }) =>
+                      html`<div id="tool-content">
+                        The message said hello!
+                      </div>`,
                   },
                 },
               },
@@ -3379,7 +3388,8 @@ export function createOptionsTests(
                 tools: {
                   [SearchIndexToolType]: {
                     templates: {
-                      layout: '<div id="tool-content">custom search</div>',
+                      layout: (_, { html }) =>
+                        html`<div id="tool-content">custom search</div>`,
                     },
                   },
                 },
@@ -3504,7 +3514,8 @@ export function createOptionsTests(
                 tools: {
                   [toolType]: {
                     templates: {
-                      layout: '<div id="custom-display">custom display</div>',
+                      layout: (_, { html }) =>
+                        html`<div id="custom-display">custom display</div>`,
                     },
                   },
                 },
@@ -3685,7 +3696,8 @@ export function createOptionsTests(
                   [toolType]: {
                     streamInput: false,
                     templates: {
-                      layout: '<div id="custom-display">custom display</div>',
+                      layout: (_, { html }) =>
+                        html`<div id="custom-display">custom display</div>`,
                     },
                   },
                 },
@@ -3744,8 +3756,7 @@ export function createOptionsTests(
       // two tests only pin that an agent configured before the rename — legacy
       // tool name, legacy flag — still resolves to the same tool.
       describe('legacy algolia_display_results tool name', () => {
-        // eslint-disable-next-line typescript/no-deprecated
-        const legacyToolType = DisplayResultsToolType;
+        const legacyToolType = 'algolia_display_results';
         const legacyMetadata = { displayResultsEnabled: true };
 
         test('renders Grouped Results and skips the search index tool', async () => {

@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { InstantSearchSSRContext } from './InstantSearchSSRContext';
 
 import type { InstantSearchSSRContextApi } from './InstantSearchSSRContext';
-import type { UiState } from 'instantsearch.js';
+import type { UiState } from 'instantsearch-core';
 import type { Context } from 'react';
 
 export function useInstantSearchSSRContext<

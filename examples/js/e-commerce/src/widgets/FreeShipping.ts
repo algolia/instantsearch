@@ -1,4 +1,4 @@
-import { panel, toggleRefinement } from 'instantsearch.js/es/widgets';
+import { panel, toggleRefinement } from 'instantsearch.js';
 
 import { collapseButtonText } from '../templates/panel';
 

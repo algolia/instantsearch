@@ -1,5 +1,4 @@
-import { panel, clearRefinements } from 'instantsearch.js/es/widgets';
-
+import { clearRefinements, panel } from 'instantsearch.js';
 const clearFilters = panel<typeof clearRefinements>({
   hidden({ results }) {
     return Boolean(results && results.nbHits > 0);

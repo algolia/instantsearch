@@ -1,22 +1,32 @@
+/**
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ */
+
+import { html } from 'htm/preact';
+import { warning } from 'instantsearch-core/internal';
+
+import {
+  Highlight,
+  ReverseHighlight,
+  ReverseSnippet,
+  Snippet,
+} from '../../../helpers/components';
 import { renderTemplate } from '../renderTemplate';
 
-import type { HoganHelpers } from '../../../types';
+import type { TemplateParams } from '../../../types';
 
 describe('renderTemplate', () => {
-  it('expect to process templates as string', () => {
-    const templateKey = 'test';
-    const templates = { test: 'it works with {{type}}' };
-    const data = { type: 'strings' };
+  afterEach(() => {
+    warning.cache = {};
+  });
 
-    const actual = renderTemplate({
-      templateKey,
-      templates,
-      data,
-    });
-
-    const expectation = 'it works with strings';
-
-    expect(actual).toBe(expectation);
+  it('returns string templates as they are', () => {
+    expect(
+      renderTemplate({
+        templateKey: 'test',
+        templates: { test: 'it works with strings' },
+      })
+    ).toBe('it works with strings');
   });
 
   it('expect to process templates as function', () => {
@@ -37,41 +47,47 @@ describe('renderTemplate', () => {
     expect(actual).toBe(expectation);
   });
 
-  it('expect to use custom compiler options', () => {
-    const templateKey = 'test';
-    const templates = { test: 'it works with <%options%>' };
-    const data = { options: 'custom delimiter' };
-    const compileOptions = { delimiters: '<% %>' };
+  it('renders a template returning a VNode', () => {
+    const templates = {
+      test: ({ name }: { name: string }, { html: h }: TemplateParams) =>
+        h`<strong>${name}</strong>`,
+    };
 
-    const actual = renderTemplate({
-      templateKey,
-      templates,
-      data,
-      compileOptions,
-    });
-
-    const expectation = 'it works with custom delimiter';
-
-    expect(actual).toBe(expectation);
-  });
-
-  it('expect to compress templates', () => {
     expect(
       renderTemplate({
-        templateKey: 'message',
-        templates: {
-          message: ` <h1> hello</h1>
-        <p>message</p> `,
-        },
+        templateKey: 'test',
+        templates,
+        data: { name: 'world' },
       })
-    ).toMatchInlineSnapshot(`
-      <h1>
-        hello
-      </h1>
-      <p>
-        message
-      </p>
-    `);
+    ).toMatchObject({ type: 'strong', props: { children: 'world' } });
+  });
+
+  it('renders a template returning null', () => {
+    expect(
+      renderTemplate({ templateKey: 'test', templates: { test: () => null } })
+    ).toBeNull();
+  });
+
+  it('passes `html`, `components` and `sendEvent` to the template', () => {
+    const sendEvent = jest.fn();
+    const template = jest.fn(() => 'rendered');
+
+    renderTemplate({
+      templateKey: 'test',
+      templates: { test: template },
+      data: { id: 1 },
+      sendEvent,
+    });
+
+    expect(template).toHaveBeenCalledTimes(1);
+    expect(template).toHaveBeenCalledWith(
+      { id: 1 },
+      expect.objectContaining({
+        html,
+        sendEvent,
+        components: { Highlight, ReverseHighlight, Snippet, ReverseSnippet },
+      })
+    );
   });
 
   it('expect to throw when the template is not a function or a string', () => {
@@ -104,61 +120,51 @@ describe('renderTemplate', () => {
     expect(() => actual2()).toThrow(expectation2);
   });
 
-  describe('with helpers', () => {
-    it('expect to call the relevant function', () => {
-      const templateKey = 'test';
-      const templates = {
-        test: '{{#helpers.emphasis}}{{feature}}{{/helpers.emphasis}}',
-      };
+  describe('strings that look like markup', () => {
+    it('warns with migration instructions for a Hogan.js template', () => {
+      expect(() =>
+        renderTemplate({
+          templateKey: 'item',
+          templates: { item: '<div>{{name}}</div>' },
+        })
+      )
+        .toWarnDev(`[InstantSearch.js]: The "item" template is a string that looks like HTML or a Hogan.js template. Strings are rendered as text, so HTML tags, entities and {{ }} placeholders show up as written.
 
-      const data = {
-        feature: 'helpers',
-      };
+Use a function template with the provided \`html\` function or JSX instead:
 
-      const helpers: HoganHelpers<'emphasis'> = {
-        emphasis: (text, render) => `<em>${render(text)}</em>`,
-      };
+  item: (data, { html }) => html\`...\`
 
-      const actual = renderTemplate({
-        templateKey,
-        templates,
-        data,
-        helpers,
-      });
-
-      const expectation = '<em>helpers</em>';
-
-      expect(actual).toBe(expectation);
+See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#upgrade-templates`);
     });
 
-    it('expect to set the context (`this`) to the template `data`', () => {
-      const templateKey = 'test';
-      const templates = {
-        test: '{{#helpers.emphasis}}{{feature}}{{/helpers.emphasis}}',
-      };
-
-      const data = {
-        feature: 'helpers',
-      };
-
-      const helpers = {
-        emphasis() {
-          // context will be different when using arrow function (lexical scope used)
-          expect(this).toBe(data);
-          return 'irrelevant return';
-        },
-      };
-
-      const actual = renderTemplate({
-        templateKey,
-        templates,
-        data,
-        helpers,
-      });
-
-      const expectation = 'irrelevant return';
-
-      expect(actual).toBe(expectation);
+    it.each([
+      ['an HTML tag', '<b>bold</b>'],
+      ['a closing tag', 'text</span>'],
+      ['a Hogan.js placeholder', 'Hello {{name}}'],
+      ['a named entity', 'Next &rsaquo;'],
+      ['a numeric entity', 'Next &#8250;'],
+    ])('warns for a string template with %s', (_, template) => {
+      expect(() =>
+        renderTemplate({ templateKey: 'test', templates: { test: template } })
+      ).toWarnDev();
     });
+
+    it('warns for a string returned by a function template', () => {
+      expect(() =>
+        renderTemplate({
+          templateKey: 'test',
+          templates: { test: () => '<b>bold</b>' },
+        })
+      ).toWarnDev();
+    });
+
+    it.each(['Results', '1 < 2', 'Tom & Jerry', ''])(
+      'does not warn for plain text %p',
+      (template) => {
+        expect(() =>
+          renderTemplate({ templateKey: 'test', templates: { test: template } })
+        ).not.toWarnDev();
+      }
+    );
   });
 });

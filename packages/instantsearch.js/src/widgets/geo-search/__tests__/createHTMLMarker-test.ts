@@ -3,6 +3,8 @@
  */
 
 /* global google */
+import { h } from 'preact';
+
 import createHTMLMarker from '../createHTMLMarker';
 
 describe('createHTMLMarker', () => {
@@ -39,7 +41,7 @@ describe('createHTMLMarker', () => {
       lng: 12,
     },
     map: 'map-instance-placeholder' as unknown as google.maps.Map,
-    template: '<div>Hello</div>',
+    template: h('div', null, 'Hello'),
     className: 'ais-geo-search-marker',
     ...rest,
   });

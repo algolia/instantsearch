@@ -1,61 +1,28 @@
-import { cx } from 'instantsearch-ui-components';
-import React from 'react';
+import { createClearRefinementsComponent } from 'instantsearch-ui-components';
+import React, { createElement, Fragment } from 'react';
 
-export type ClearRefinementsTranslations = {
-  /**
-   * The label of the button
-   */
-  resetButtonText: string;
-};
+import type {
+  ClearRefinementsProps as ClearRefinementsUiComponentProps,
+  Pragma,
+} from 'instantsearch-ui-components';
 
-export type ClearRefinementsProps = React.ComponentProps<'div'> &
-  Pick<React.ComponentProps<'button'>, 'disabled' | 'onClick'> & {
-    translations: ClearRefinementsTranslations;
-    classNames?: Partial<ClearRefinementsClassNames>;
-  };
+export type {
+  ClearRefinementsClassNames,
+  ClearRefinementsTranslations,
+} from 'instantsearch-ui-components';
 
-export type ClearRefinementsClassNames = {
-  /**
-   * Class names to apply to the root element
-   */
-  root: string;
-  /**
-   * Class names to apply to the button
-   */
-  button: string;
-  /**
-   * Class names to apply to the button when it's disabled
-   */
-  disabledButton: string;
-};
+// The shared props resolve the root element's props through the global `JSX`
+// namespace, which React 19 no longer populates (`React.JSX` moved out of it),
+// so merge React's native `div` props back in — minus the props replaced by
+// the widget's own callbacks.
+export type ClearRefinementsProps = ClearRefinementsUiComponentProps &
+  Omit<React.ComponentProps<'div'>, keyof ClearRefinementsUiComponentProps>;
 
-export function ClearRefinements({
-  classNames = {},
-  disabled = false,
-  onClick = () => {},
-  translations,
-  ...props
-}: ClearRefinementsProps) {
-  return (
-    <div
-      {...props}
-      className={cx('ais-ClearRefinements', classNames.root, props.className)}
-    >
-      <button
-        disabled={disabled}
-        onClick={onClick}
-        className={cx(
-          'ais-ClearRefinements-button',
-          classNames.button,
-          disabled &&
-            cx(
-              'ais-ClearRefinements-button--disabled',
-              classNames.disabledButton
-            )
-        )}
-      >
-        {translations.resetButtonText}
-      </button>
-    </div>
-  );
+const ClearRefinementsUiComponent = createClearRefinementsComponent({
+  createElement: createElement as Pragma,
+  Fragment,
+});
+
+export function ClearRefinements(props: ClearRefinementsProps) {
+  return <ClearRefinementsUiComponent {...props} />;
 }

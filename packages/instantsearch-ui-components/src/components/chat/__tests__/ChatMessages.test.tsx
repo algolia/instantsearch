@@ -3,11 +3,11 @@
  */
 /** @jsx createElement */
 import { act, render, screen } from '@testing-library/preact';
+import { getTextContent } from 'instantsearch-core/internal';
+import * as chatUtils from 'instantsearch-core/internal';
 import { Fragment, createElement } from 'preact';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 
-import * as chatUtils from '../../../lib/utils/chat';
-import { getTextContent } from '../../../lib/utils/chat';
 import { createChatMessageErrorComponent } from '../ChatMessageError';
 import { createChatMessagesComponent } from '../ChatMessages';
 
@@ -16,7 +16,16 @@ import type {
   ChatMessageTextComponentProps,
 } from '../ChatMessage';
 import type { ChatMessageErrorProps } from '../ChatMessageError';
-import type { ChatComponentPropsWithContext, ChatMessageBase } from '../types';
+import type { ChatComponentPropsWithContext } from 'instantsearch-core';
+import type { ChatMessageBase } from 'instantsearch-core/internal';
+
+jest.mock('instantsearch-core/internal', () => {
+  const actual = jest.requireActual('instantsearch-core/internal');
+  return {
+    ...actual,
+    isReasoningPartActive: jest.fn(actual.isReasoningPartActive),
+  };
+});
 
 const ChatMessages = createChatMessagesComponent({
   createElement,
@@ -880,10 +889,8 @@ describe('ChatMessages', () => {
   });
 
   test('does not scan for active reasoning once the disclosure is off', () => {
-    const isReasoningPartActive = jest.spyOn(
-      chatUtils,
-      'isReasoningPartActive'
-    );
+    const isReasoningPartActive = chatUtils.isReasoningPartActive as jest.Mock;
+    isReasoningPartActive.mockClear();
     const message = {
       role: 'assistant' as const,
       id: '1',
@@ -925,7 +932,6 @@ describe('ChatMessages', () => {
     render(<ChatMessages {...props} />);
 
     expect(isReasoningPartActive).toHaveBeenCalled();
-    isReasoningPartActive.mockRestore();
   });
 
   test('toggles the disclosure on completed messages when the option changes', () => {
@@ -2841,41 +2847,6 @@ describe('ChatMessages', () => {
           status: 'submitted',
           activePart: undefined,
         }),
-      }),
-      {}
-    );
-  });
-
-  test('still passes the pre-`context` root props to a custom empty component', () => {
-    const Empty = jest.fn(() => <span>Empty</span>);
-    const onClose = jest.fn();
-    const sendMessage = jest.fn();
-    const setInput = jest.fn();
-
-    render(
-      <ChatMessages
-        messages={[]}
-        status="ready"
-        indexUiState={{}}
-        setIndexUiState={jest.fn()}
-        tools={{}}
-        onReload={jest.fn()}
-        onClose={onClose}
-        sendMessage={sendMessage}
-        setInput={setInput}
-        emptyComponent={Empty}
-      />
-    );
-
-    // An empty/greeting component written against the previous API reads these
-    // from the root rather than from `context`.
-    expect(Empty).toHaveBeenCalledWith(
-      expect.objectContaining({
-        sendMessage,
-        setInput,
-        status: 'ready',
-        onClose,
-        context: expect.objectContaining({ status: 'ready' }),
       }),
       {}
     );

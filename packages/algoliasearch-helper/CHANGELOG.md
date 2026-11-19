@@ -3,6 +3,62 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-beta.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.30.3...algoliasearch-helper@4.0.0-beta.0) (2026-11-19)
+
+
+* refactor(core)!: replace IE11 polyfills with native methods (#7399) ([3f8400c](https://github.com/algolia/instantsearch/commit/3f8400c0aecb795e387d38290d8f34113beaf2f4)), closes [#7399](https://github.com/algolia/instantsearch/issues/7399)
+* feat!: drop support for algoliasearch v3 (#7407) ([37bfc77](https://github.com/algolia/instantsearch/commit/37bfc779b761b73fe41e90c09720d4eb26930638)), closes [#7407](https://github.com/algolia/instantsearch/issues/7407) [#7406](https://github.com/algolia/instantsearch/issues/7406) [#7385](https://github.com/algolia/instantsearch/issues/7385)
+* fix(algoliasearch-helper)!: remove deprecated timeoutCounts and timeoutHits [FX-4102] (#7388) ([e5d0260](https://github.com/algolia/instantsearch/commit/e5d0260bbb39017d01f1f934f63d2891b80b0680)), closes [#7388](https://github.com/algolia/instantsearch/issues/7388)
+* fix(algoliasearch-helper)!: remove getRefinements and hasRefinements [FX-4101] (#7389) ([deb17b9](https://github.com/algolia/instantsearch/commit/deb17b9611b886d925201eee8dbcea2e43f28c04)), closes [#7389](https://github.com/algolia/instantsearch/issues/7389) [#6570](https://github.com/algolia/instantsearch/issues/6570)
+* fix(algoliasearch-helper)!: only call client.search for facet values [FX-4100] (#7385) ([aa706e9](https://github.com/algolia/instantsearch/commit/aa706e9ab3ac72471a290f91f07018a9e1004dc3)), closes [#7385](https://github.com/algolia/instantsearch/issues/7385) [#6465](https://github.com/algolia/instantsearch/issues/6465)
+* fix(errors)!: emit errors directly ([80d4ede](https://github.com/algolia/instantsearch/commit/80d4ede1b4a80a78baaa84f64a5545030649866d)), closes [#6472](https://github.com/algolia/instantsearch/issues/6472)
+* fix(algoliasearch-helper)!: always persist the hierarchical root count ([a3688a4](https://github.com/algolia/instantsearch/commit/a3688a48a72ef9dcd8008117991657a77c654efc)), closes [#6478](https://github.com/algolia/instantsearch/issues/6478)
+* fix(widgets)!: remove answers widget ([d626e74](https://github.com/algolia/instantsearch/commit/d626e74d0fc6c3f963ff73b0775a3917383715b1))
+
+
+### BREAKING CHANGES
+
+* `find`, `findIndex` and `isFiniteNumber` are no longer exported from `instantsearch-core`. Use `Array.prototype.find`, `Array.prototype.findIndex` and `Number.isFinite` instead.
+
+- algoliasearch-helper: remove the internal `find`, `findIndex` and `flat` functions in favor of `Array.prototype.find`, `findIndex` and `flat`
+- instantsearch-core: remove the `find`, `findIndex` and `isFiniteNumber` utils and update all call sites across packages
+- instantsearch-core: use `Object.assign` in `hydrateRecommendCache`
+
+Co-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>
+* algoliasearch v3 is no longer supported: use algoliasearch v4 or v5. The `algoliasearch` peer dependency range of algoliasearch-helper, instantsearch.js, react-instantsearch-core, react-instantsearch and vue-instantsearch is now `>= 4 < 6`. The `ClientV3_4` type, exported from `algoliasearch-helper/types/algoliasearch`, instantsearch-core and instantsearch.js, is renamed to `ClientV4`.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+* the deprecated SearchResults fields timeoutCounts and timeoutHits are removed.
+
+Co-authored-by: Shahmir Ejaz <shaejaz5@gmail.com>
+Co-authored-by: Claude Opus 5.5 <noreply@anthropic.com>
+* `helper.hasRefinements(attribute)` is removed. Use the `helper.state` check for the kind of refinement: `isFacetRefined`, `isDisjunctiveFacetRefined`, `isHierarchicalFacetRefined` or `isNumericRefined`.
+* `helper.getRefinements(attribute)` is removed. Read the refinements of that kind from `helper.state`: `getConjunctiveRefinements`, `getDisjunctiveRefinements`, `getHierarchicalRefinement`, `getExcludeRefinements` or `getNumericRefinements`.
+* `SearchResults#getRefinements()` is removed. Read the refinements from `helper.state`, or from the render state of the `currentRefinements` or `clearRefinements` widgets.
+
+FX-4101
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+* `helper.searchForFacetValues`, used by searchable refinement lists, only calls `client.search` with `type: 'facet'` requests; the `client.searchForFacetValues` and `client.initIndex` fallbacks are removed. Custom search clients must handle facet requests in `search`. algoliasearch v3 clients, whose `search` only forwards `indexName` and `params`, can no longer search for facet values.
+
+FX-4100
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+* `error` listeners receive the `Error` directly. On the helper, replace `helper.on('error', ({ error }) => {})` with `helper.on('error', (error) => {})`. On the InstantSearch instance, read the error itself instead of `error.error`.
+
+FX-4094
+* `future.persistHierarchicalRootCount` and the helper's `persistHierarchicalRootCount` search results option are removed. The root level of a hierarchical facet always keeps its own count, as with `persistHierarchicalRootCount: true`.
+
+FX-4094
+* the answers widget no longer exists
+* the findAnswers in the helper no longer exists
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+
+
+
+
 ## [3.30.3](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.30.2...algoliasearch-helper@3.30.3) (2026-11-17)
 
 **Note:** Version bump only for package algoliasearch-helper

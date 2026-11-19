@@ -1,16 +1,14 @@
 /** @jsx h */
 
+import { connectMenu } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import MenuSelect from '../../components/MenuSelect/MenuSelect';
-import connectMenu from '../../connectors/menu/connectMenu';
-import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
@@ -18,13 +16,14 @@ import type {
   MenuSelectComponentCSSClasses,
   MenuSelectComponentTemplates,
 } from '../../components/MenuSelect/MenuSelect';
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template } from '../../types';
 import type {
   MenuConnectorParams,
   MenuRenderState,
   MenuWidgetDescription,
-} from '../../connectors/menu/connectMenu';
-import type { PreparedTemplateProps } from '../../lib/templating';
-import type { RendererOptions, Template, WidgetFactory } from '../../types';
+} from 'instantsearch-core';
+import type { RendererOptions, WidgetFactory } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'menu-select' });
 const suit = component('MenuSelect');
@@ -94,17 +93,12 @@ const renderer =
     templates: MenuSelectTemplates;
   }) =>
   (
-    {
-      refine,
-      items,
-      instantSearchInstance,
-    }: MenuRenderState & RendererOptions<MenuConnectorParams>,
+    { refine, items }: MenuRenderState & RendererOptions<MenuConnectorParams>,
     isFirstRendering: boolean
   ) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;

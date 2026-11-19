@@ -55,7 +55,7 @@ describe('MenuSelect', () => {
       refine: () => {},
       templateProps: {
         templates: {
-          item: '{{label}}',
+          item: ({ label }: { label: string }) => label,
           defaultOption: 'defaultOption',
         },
       },

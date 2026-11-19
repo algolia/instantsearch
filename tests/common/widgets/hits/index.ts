@@ -5,7 +5,7 @@ import { createLinksTests } from './links';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { HitsWidget } from 'instantsearch.js/es/widgets/hits/hits';
+import type { HitsWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<HitsWidget>[0];
 export type HitsWidgetSetup = TestSetup<{

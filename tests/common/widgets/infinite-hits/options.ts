@@ -13,37 +13,27 @@ import type { InfiniteHitsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 import type { MockSearchClient } from '@instantsearch/mocks';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
-import type { BaseHit, SearchResponse } from 'instantsearch.js';
 import type {
   InfiniteHitsCache,
   InfiniteHitsCachedHits,
-} from 'instantsearch.js/es/connectors/infinite-hits/connectInfiniteHits';
+} from 'instantsearch.js';
+import type { BaseHit, SearchResponse } from 'instantsearch.js';
 
 function normalizeSnapshot(html: string) {
-  // Each flavor has its own way to render the hit by default.
-  // @MAJOR: Remove this once all flavors are aligned.
+  // Every flavor renders the default hit as pretty-printed JSON: compact it
+  // and drop `__position` to keep the snapshots short.
   return (
     commonNormalizeSnapshot(html)
-      .replace(
-        /(?:<div\s+style="word-break: break-all;"\s*?>)?\s*?({.+?})…?\s*?(?:<\/div>)?/gs,
-        (_, captured) => {
-          return (captured as string)
-            .replace(/\s/g, '')
-            .replace(/,"__position":\d/, '');
-        }
-      )
+      .replace(/\s*?({.+?})\s*?/gs, (_, captured) => {
+        return (captured as string)
+          .replace(/\s/g, '')
+          .replace(/,"__position":\d/, '');
+      })
       // React InstantSearch shows the "Load Previous" button by default, unlike
       // the other flavors
       .replace(
         /<button class="ais-InfiniteHits-loadPrevious .*?">.*?<\/button>/,
         ''
-      )
-      // Vue InstantSearch doesn't render defaults hits like the other flavors
-      .replace(
-        /\s{0,}(objectID): (.+?), index: \d\s{0,}/gs,
-        (_, ...captured) => {
-          return `{"objectID":"${captured[1]}"}`;
-        }
       )
       // Vue InstantSearch adds new line between banner and hits
       .replace(/>\s*</g, '><')
@@ -188,6 +178,26 @@ export function createOptionsTests(
         </div>
         `
       );
+    });
+
+    test('adds the empty modifier to the root without results', async () => {
+      const searchClient = createMockedSearchClient({ hits: [], nbPages: 0 });
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {},
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(
+        document.querySelector('#hits-with-defaults .ais-InfiniteHits')
+      ).toHaveClass('ais-InfiniteHits', 'ais-InfiniteHits--empty');
     });
 
     test('renders transformed items', async () => {

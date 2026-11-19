@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import type { Router, UiState } from 'instantsearch.js';
+import type { Router, UiState } from 'react-instantsearch-core';
 
 const STORAGE_KEY = 'instantsearch-route-state';
 const WRITE_DELAY = 400;
@@ -89,7 +89,7 @@ export function createAsyncStorageRouter<TRouteState = UiState>({
 }
 
 export async function hydrateRouteState<
-  TRouteState = UiState
+  TRouteState = UiState,
 >(): Promise<TRouteState> {
   try {
     const raw = await AsyncStorage.getItem(STORAGE_KEY);
