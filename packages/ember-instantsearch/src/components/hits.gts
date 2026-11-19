@@ -1,14 +1,12 @@
 import Component from '@glimmer/component';
-import { createHitsComponent } from 'instantsearch-ui-components';
+import { fn } from '@ember/helper';
+import { on } from '@ember/modifier';
 import { connectHits } from 'instantsearch.js/es/connectors/index';
-import { Fragment, h } from 'preact';
 
-import { PreactRoot } from '../-private/preact-root.ts';
 import { definedOnly } from '../-private/use-widget.ts';
 import { useConnector } from '../use-connector.ts';
 
 import type { Parent } from '../types.ts';
-import type { HitsClassNames } from 'instantsearch-ui-components';
 import type { BaseHit, Connector, Hit } from 'instantsearch.js';
 import type {
   HitsConnectorParams,
@@ -16,19 +14,10 @@ import type {
 } from 'instantsearch.js/es/connectors/hits/connectHits';
 import type { SendEventForHits } from 'instantsearch.js/es/lib/utils/index';
 
-const HitsUi = createHitsComponent({ createElement: h as never, Fragment });
-
 export interface HitsSignature<THit extends BaseHit = BaseHit> {
+  Element: HTMLDivElement;
   Args: HitsConnectorParams<THit> & {
     parent: Parent;
-    /**
-     * The `id` of the root element.
-     */
-    id?: string;
-    /**
-     * More class names, next to the `ais-Hits` ones.
-     */
-    classNames?: Partial<HitsClassNames>;
   };
   Blocks: {
     /**
@@ -38,19 +27,15 @@ export interface HitsSignature<THit extends BaseHit = BaseHit> {
   };
 }
 
-interface ItemProps {
-  hit: { objectID: string };
-  className: string;
-  onClick: () => void;
-  onAuxClick: () => void;
+/**
+ * Shows that a hit has no custom block, the same as React InstantSearch.
+ */
+function preview(hit: unknown) {
+  return `${JSON.stringify(hit).slice(0, 100)}…`;
 }
 
 /**
  * The list of results.
- *
- * The markup comes from `instantsearch-ui-components`,
- * the same as in the other flavors.
- * Each `<li>` is empty, and the block renders into it with `in-element`.
  *
  * @example
  * ```gjs
@@ -77,16 +62,6 @@ export default class Hits<THit extends BaseHit = BaseHit> extends Component<
     { $$widgetType: 'ais.hits' }
   );
 
-  preact = new PreactRoot(this);
-
-  /**
-   * The `<li>` of each hit, by `objectID`.
-   *
-   * Preact fills it while it renders the root,
-   * and the template reads it right after, in the same render.
-   */
-  items = new Map<string, HTMLElement>();
-
   get state() {
     return this.connection.state;
   }
@@ -95,57 +70,67 @@ export default class Hits<THit extends BaseHit = BaseHit> extends Component<
     return (this.state.items ?? []) as Hit<THit>[];
   }
 
-  itemFor = (hit: Hit<THit>): HTMLElement => this.items.get(hit.objectID)!;
+  get className() {
+    return this.hits.length === 0 ? 'ais-Hits ais-Hits--empty' : 'ais-Hits';
+  }
+
+  get banner() {
+    const banner = this.state.banner;
+
+    return banner && banner.image.urls[0]?.url ? banner : undefined;
+  }
+
+  get bannerImageUrl() {
+    return this.banner?.image.urls[0]?.url;
+  }
 
   /**
-   * The item components keep one identity for the life of `Hits`.
-   * A new function on each render would make Preact replace every `<li>`.
+   * The other flavors send a click event for any click inside a hit.
    */
-  BlockItem = ({ hit, className, onClick, onAuxClick }: ItemProps) =>
-    h('li', {
-      className,
-      onClick,
-      onAuxClick,
-      ref: (element: HTMLElement | null) => {
-        if (element) this.items.set(hit.objectID, element);
-      },
-    });
-
-  /**
-   * Shows that a hit has no custom block, the same as React InstantSearch.
-   */
-  PreviewItem = ({ hit, className, onClick, onAuxClick }: ItemProps) =>
-    h(
-      'li',
-      { className, onClick, onAuxClick },
-      h(
-        'div',
-        { style: { wordBreak: 'break-all' } },
-        `${JSON.stringify(hit).slice(0, 100)}…`
-      )
-    );
-
-  renderRoot = (hasBlock: boolean) => {
-    return this.preact.render(
-      h(HitsUi as never, {
-        id: this.args.id,
-        hits: this.hits,
-        sendEvent: this.state.sendEvent,
-        banner: this.state.banner,
-        classNames: this.args.classNames,
-        itemComponent: hasBlock ? this.BlockItem : this.PreviewItem,
-      })
-    );
+  handleClick = (hit: Hit<THit>) => {
+    this.state.sendEvent('click:internal', hit, 'Hit Clicked');
   };
 
   <template>
-    {{this.renderRoot (has-block)}}
-    {{#if (has-block)}}
-      {{#each this.hits key="objectID" as |hit|}}
-        {{#in-element (this.itemFor hit) insertBefore=null}}
-          {{yield hit this.state.sendEvent}}
-        {{/in-element}}
-      {{/each}}
-    {{/if}}
+    <div class={{this.className}} ...attributes>
+      {{#if this.banner}}
+        <aside class="ais-Hits-banner">
+          {{#if this.banner.link}}
+            <a
+              class="ais-Hits-banner-link"
+              href={{this.banner.link.url}}
+              target={{this.banner.link.target}}
+            >
+              <img
+                class="ais-Hits-banner-image"
+                src={{this.bannerImageUrl}}
+                alt={{this.banner.image.title}}
+              />
+            </a>
+          {{else}}
+            <img
+              class="ais-Hits-banner-image"
+              src={{this.bannerImageUrl}}
+              alt={{this.banner.image.title}}
+            />
+          {{/if}}
+        </aside>
+      {{/if}}
+      <ol class="ais-Hits-list">
+        {{#each this.hits key="objectID" as |hit|}}
+          <li
+            class="ais-Hits-item"
+            {{on "click" (fn this.handleClick hit)}}
+            {{on "auxclick" (fn this.handleClick hit)}}
+          >
+            {{#if (has-block)}}
+              {{yield hit this.state.sendEvent}}
+            {{else}}
+              <div style="word-break: break-all;">{{preview hit}}</div>
+            {{/if}}
+          </li>
+        {{/each}}
+      </ol>
+    </div>
   </template>
 }

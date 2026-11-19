@@ -53,9 +53,7 @@
   "dependencies": {
     "@embroider/addon-shim": "1.11.0",
     "decorator-transforms": "2.4.0",
-    "instantsearch-ui-components": "0.46.1",
-    "instantsearch.js": "4.123.1",
-    "preact": "^10.10.0"
+    "instantsearch.js": "4.123.1"
   },
   "peerDependencies": {
     "@glimmer/component": ">= 2.0.0",

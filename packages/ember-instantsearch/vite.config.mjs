@@ -36,12 +36,8 @@ export default defineConfig({
     /**
      * Workspace packages are served as source,
      * so the CommonJS ones need a pre-bundle.
-     *
-     * `preact` is listed so that Vite does not find it in the middle
-     * of a run and reload the tests.
      */
     include: [
-      'preact',
       'algoliasearch-helper',
       'hogan.js',
       'qs',
