@@ -5,14 +5,41 @@ on:
     branches:
       - master
   pull_request:
+  # A prerelease, from whichever branch is picked here. Everything else in this
+  # file still runs on a dispatch run — that is the point: `prerelease` needs
+  # them, so a dispatch publishes from a green tree. Only Ship.js steps aside,
+  # because a prerelease is not a stable release (see `release-if-needed`).
+  workflow_dispatch:
+    inputs:
+      # There is no branch input on purpose: the branch selected for the dispatch
+      # is the branch checked out and released, so the two cannot disagree.
+      channel:
+        description: Channel, which is also the npm dist-tag
+        type: choice
+        required: true
+        default: beta
+        options:
+          - beta
+          - alpha
+          - rc
+          - next
+      action:
+        description: plan bumps nothing and only reports; publish commits, tags, pushes and uploads
+        type: choice
+        required: true
+        default: plan
+        options:
+          - plan
+          - publish
 
 # Cancel superseded runs on pull requests. Master pushes get a group of their
 # own so they never queue behind each other: a concurrency group holds only one
 # pending run, so a queued master run would be cancelled by the next merge even
 # with `cancel-in-progress: false`, and a cancelled run never reaches
-# `shipjs trigger`.
+# `shipjs trigger`. Prerelease dispatches share one group, because two of them
+# publishing at once would race for the same versions and the same dist-tags.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.run_id }}
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.event_name == 'workflow_dispatch' && 'prerelease' || github.run_id }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
@@ -308,7 +335,9 @@ jobs:
       - legacy-algoliasearch-v4
       - helper-docs
       - e2e
-    if: github.ref == 'refs/heads/master'
+    # Never for a dispatch: that is a prerelease, and `master` being checked out
+    # for one would otherwise let Ship.js publish a stable version alongside it.
+    if: github.ref == 'refs/heads/master' && github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -377,3 +406,102 @@ jobs:
     if: needs.release-if-needed.outputs.released == 'true'
     uses: ./.github/workflows/release-templates.yml
     secrets: inherit
+
+  # A prerelease train from the dispatched branch: `scripts/release/release.mjs`
+  # bumps every public package with Lerna's conventional-commits rules and
+  # publishes it under the channel's dist-tag. It replaces Ship.js for this one
+  # job — Ship.js 0.28 has no notion of a prerelease and its `publishCommand`
+  # passes no `--tag`, so running it here would put a stable version on `latest`.
+  # `latest` stays Ship.js's on `master`, and graduating a branch is still that
+  # flow's job: merge it into `master` and `semver.inc` drops the prerelease.
+  #
+  # It is a job in this file rather than a workflow of its own because of npm.
+  # Every package here has a trusted publisher naming `ci.yml` — visible in the
+  # provenance of any published version, under `buildDefinition`'s
+  # `externalParameters.workflow.path` — and npm validates the *calling*
+  # workflow's filename, so publishing from here is signed with nothing to
+  # configure. A new workflow file would need that form filled in by hand on
+  # every package first, and npm publishes unsigned until it is.
+  prerelease:
+    name: prerelease ${{ github.event.inputs.channel }} (${{ github.event.inputs.action }})
+    needs:
+      - build
+      - lint
+      - unit-tests
+      - legacy-algoliasearch-v3
+      - legacy-algoliasearch-v4
+      - vue-v3
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    # The environment the packages' trusted publishers name. It has no required
+    # reviewers, so the dispatch itself is the approval.
+    environment: npm
+    permissions:
+      contents: read
+      # The OIDC token Lerna trades for an npm token, and for provenance.
+      id-token: write
+    steps:
+      - name: Mint GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.FX_BOT_APP_ID }}
+          private-key: ${{ secrets.FX_BOT_PRIVATE_KEY }}
+          owner: algolia
+          repositories: instantsearch
+
+      # The dispatched branch, in full and on a real local branch: a dispatch
+      # checks out a branch rather than a detached commit, which is what Lerna
+      # needs — it refuses to version a detached HEAD, and it pushes with
+      # `git push --follow-tags <remote> <branch>`. The full history, because the
+      # bump is derived from the release tags.
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Configure git identity
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+        run: |
+          USER_ID=$(gh api "/users/${APP_SLUG}%5Bbot%5D" --jq .id)
+          git config user.name "${APP_SLUG}[bot]"
+          git config user.email "${USER_ID}+${APP_SLUG}[bot]@users.noreply.github.com"
+
+      # Its own step so that a package npm will not let this run publish is a
+      # named red step, and not a line inside a release that already spent a
+      # version number. It runs for `plan` too: one token trade per package, and
+      # on its own it answers "could we release from here at all".
+      - name: Check that npm will accept this build
+        env:
+          CHANNEL: ${{ inputs.channel }}
+        run: node scripts/release/release.mjs --channel "$CHANNEL" --preflight
+
+      - name: ${{ github.event.inputs.action }} the prerelease
+        env:
+          CHANNEL: ${{ inputs.channel }}
+          ACTION: ${{ inputs.action }}
+        run: |
+          set -euo pipefail
+
+          ARGS=(--channel "$CHANNEL" "--$ACTION")
+          if [ "$ACTION" = 'publish' ]; then
+            # The dispatch is the confirmation: it named a branch and a channel,
+            # and the step above proved provenance is available here. Without that
+            # proof the script refuses to publish.
+            ARGS+=(--yes)
+          fi
+
+          node scripts/release/release.mjs "${ARGS[@]}"
