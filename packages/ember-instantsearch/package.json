@@ -1,0 +1,97 @@
+{
+  "name": "ember-instantsearch",
+  "version": "0.0.0",
+  "description": "⚡ Lightning-fast search for Ember, by Algolia",
+  "license": "MIT",
+  "homepage": "https://github.com/algolia/instantsearch/tree/master/packages/ember-instantsearch",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/algolia/instantsearch",
+    "directory": "packages/ember-instantsearch"
+  },
+  "author": {
+    "name": "Algolia, Inc.",
+    "url": "https://www.algolia.com"
+  },
+  "keywords": [
+    "algolia",
+    "components",
+    "ember",
+    "ember-addon",
+    "fast",
+    "instantsearch",
+    "search"
+  ],
+  "type": "module",
+  "imports": {
+    "#src/*": "./src/*"
+  },
+  "exports": {
+    ".": {
+      "types": "./declarations/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./addon-main.js": "./addon-main.cjs",
+    "./*": {
+      "types": "./declarations/*.d.ts",
+      "default": "./dist/*.js"
+    }
+  },
+  "files": [
+    "addon-main.cjs",
+    "declarations",
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "rollup --config",
+    "type-check": "ember-tsc --noEmit",
+    "test": "vitest run",
+    "test:dev": "vitest",
+    "watch:es": "rollup --config --watch"
+  },
+  "dependencies": {
+    "@embroider/addon-shim": "1.11.0",
+    "decorator-transforms": "2.4.0",
+    "instantsearch.js": "4.123.1"
+  },
+  "peerDependencies": {
+    "@glimmer/component": ">= 2.0.0",
+    "algoliasearch": ">= 3.32.0 < 6",
+    "ember-source": ">= 7.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.29.7",
+    "@babel/plugin-transform-typescript": "7.29.9",
+    "@ember/library-tsconfig": "3.0.0",
+    "@embroider/addon-dev": "8.5.0",
+    "@embroider/core": "4.6.10",
+    "@embroider/macros": "1.21.4",
+    "@embroider/vite": "1.8.0",
+    "@glimmer/component": "2.2.1",
+    "@glint/ember-tsc": "1.14.3",
+    "@glint/template": "1.11.1",
+    "@rollup/plugin-babel": "6.1.0",
+    "@testing-library/dom": "8.18.1",
+    "@testing-library/jest-dom": "5.16.5",
+    "@testing-library/user-event": "13.5.0",
+    "@vitest/browser-playwright": "4.1.12",
+    "@vitest/pretty-format": "4.1.12",
+    "algoliasearch": "5.1.1",
+    "babel-plugin-ember-template-compilation": "4.0.1",
+    "ember-source": "7.4.0",
+    "playwright": "1.49.1",
+    "rollup": "4.29.1",
+    "typescript": "5.9.3",
+    "vite": "7.3.1",
+    "vitest": "4.1.12"
+  },
+  "ember": {
+    "edition": "octane"
+  },
+  "ember-addon": {
+    "version": 2,
+    "type": "addon",
+    "main": "addon-main.cjs"
+  }
+}

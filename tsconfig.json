@@ -30,6 +30,10 @@
     "examples/js/e-commerce-umd/public/packages",
     // The showcase example uses Preact with its own tsconfig and JSX transform.
     "examples/js/showcase",
-    "packages/create-instantsearch-app/src/templates/**/*"
+    "packages/create-instantsearch-app/src/templates/**/*",
+    // Ember InstantSearch uses `.gts` files, which `tsc` cannot read. The
+    // package type-checks itself with `ember-tsc` (see its `type-check` script).
+    "packages/ember-instantsearch",
+    "examples/ember"
   ]
 }

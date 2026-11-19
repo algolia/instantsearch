@@ -9,6 +9,12 @@ import { screen } from '@testing-library/dom';
 import type { RefinementListWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 
+/**
+ * The label holds the value and the count in two inline elements.
+ * jsdom puts a space between them in the accessible name, a browser does not.
+ */
+const appleCheckboxName = /^Apple ?200$/;
+
 export function createOptimisticUiTests(
   setup: RefinementListWidgetSetup,
   { act }: Required<TestOptions>
@@ -63,7 +69,7 @@ export function createOptimisticUiTests(
       // Select a refinement
       {
         const firstItem = screen.getByRole('checkbox', {
-          name: 'Apple 200',
+          name: appleCheckboxName,
         });
         await act(async () => {
           firstItem.click();
@@ -81,7 +87,7 @@ export function createOptimisticUiTests(
       // Wait for new results to come in
       {
         const firstItem = screen.getByRole('checkbox', {
-          name: 'Apple 200',
+          name: appleCheckboxName,
         });
 
         await act(async () => {
@@ -97,7 +103,7 @@ export function createOptimisticUiTests(
       // Unselect the refinement
       {
         const firstItem = screen.getByRole('checkbox', {
-          name: 'Apple 200',
+          name: appleCheckboxName,
         });
         await act(async () => {
           firstItem.click();
@@ -115,7 +121,7 @@ export function createOptimisticUiTests(
       // Wait for new results to come in
       {
         const firstItem = screen.getByRole('checkbox', {
-          name: 'Apple 200',
+          name: appleCheckboxName,
         });
 
         await act(async () => {
@@ -186,7 +192,7 @@ export function createOptimisticUiTests(
       // Select a refinement
       {
         const firstItem = screen.getByRole('checkbox', {
-          name: 'Apple 200',
+          name: appleCheckboxName,
         });
         await act(async () => {
           firstItem.click();
@@ -209,7 +215,7 @@ export function createOptimisticUiTests(
         });
 
         const firstItem = screen.getByRole('checkbox', {
-          name: 'Apple 200',
+          name: appleCheckboxName,
         });
 
         // refinement has reverted back to previous state
@@ -225,7 +231,7 @@ export function createOptimisticUiTests(
       // Select the refinement again
       {
         const firstItem = screen.getByRole('checkbox', {
-          name: 'Apple 200',
+          name: appleCheckboxName,
         });
         await act(async () => {
           firstItem.click();
@@ -244,7 +250,7 @@ export function createOptimisticUiTests(
       {
         // refinement is consistent with clicks again
         const firstItem = screen.getByRole('checkbox', {
-          name: 'Apple 200',
+          name: appleCheckboxName,
         });
 
         await act(async () => {
