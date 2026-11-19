@@ -4,9 +4,7 @@ import { hash } from '@ember/helper';
 import index from 'instantsearch.js/es/widgets/index/index';
 
 import { definedOnly, useWidget } from '../-private/use-widget.ts';
-import Configure from './configure.gts';
 import Connector from './connector.gts';
-import Hits from './hits.gts';
 import Widget from './widget.gts';
 
 import type { Parent } from '../types.ts';
@@ -36,7 +34,7 @@ export interface IndexSignature {
  * @example
  * ```gjs
  * <ais.Index @indexName="instant_search_price_desc" as |priceDesc|>
- *   <priceDesc.Hits />
+ *   <priceDesc.Widget @widget={{hits}} />
  * </ais.Index>
  * ```
  */
@@ -73,9 +71,7 @@ export default class Index extends Component<IndexSignature> {
       (hash
         search=this.parent.search
         index=this.parent.index
-        Configure=(component Configure parent=this.parent)
         Connector=(component Connector parent=this.parent)
-        Hits=(component Hits parent=this.parent)
         Index=(component Index parent=this.parent)
         Widget=(component Widget parent=this.parent)
       )

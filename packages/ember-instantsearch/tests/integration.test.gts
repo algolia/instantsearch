@@ -2,8 +2,16 @@ import { tracked } from '@glimmer/tracking';
 import { hash } from '@ember/helper';
 import { renderSettled } from '@ember/renderer';
 import userEvent from '@testing-library/user-event';
-import { connectStats } from 'instantsearch.js/es/connectors/index';
-import { refinementList, searchBox } from 'instantsearch.js/es/widgets/index';
+import {
+  connectConfigure,
+  connectHits,
+  connectStats,
+} from 'instantsearch.js/es/connectors/index';
+import {
+  hits,
+  refinementList,
+  searchBox,
+} from 'instantsearch.js/es/widgets/index';
 import { describe, expect, test } from 'vitest';
 
 import { Highlight, InstantSearch } from 'ember-instantsearch';
@@ -45,9 +53,15 @@ describe('Ember InstantSearch', () => {
             @widget={{refinementList}}
             @params={{hash attribute="brand"}}
           />
-          <ais.Hits as |hit|>
-            <Highlight @hit={{hit}} @attribute="name" />
-          </ais.Hits>
+          <ais.Connector @connector={{connectHits}} as |state|>
+            <ol>
+              {{#each state.items as |hit|}}
+                <li class="ais-Hits-item">
+                  <Highlight @hit={{hit}} @attribute="name" />
+                </li>
+              {{/each}}
+            </ol>
+          </ais.Connector>
         </InstantSearch>
       </template>
     );
@@ -69,7 +83,7 @@ describe('Ember InstantSearch', () => {
     expect(texts('.ais-Highlight-nonHighlighted')).toEqual(['Phone', 'Pad']);
   });
 
-  test('Configure applies its search parameters, and new ones', async () => {
+  test('a Connector without a block applies its params, and new ones', async () => {
     const steps: string[] = [];
     const searchClient = createSearchClient(steps);
 
@@ -86,10 +100,13 @@ describe('Ember InstantSearch', () => {
           @indexName="products"
           as |ais|
         >
-          <ais.Configure
-            @searchParameters={{hash hitsPerPage=state.hitsPerPage}}
+          <ais.Connector
+            @connector={{connectConfigure}}
+            @params={{hash
+              searchParameters=(hash hitsPerPage=state.hitsPerPage)
+            }}
           />
-          <ais.Hits />
+          <ais.Widget @widget={{hits}} />
         </InstantSearch>
       </template>
     );
@@ -177,7 +194,7 @@ describe('Ember InstantSearch', () => {
             @params={{hash attribute="brand"}}
           />
           {{/if}}
-          <ais.Hits />
+          <ais.Widget @widget={{hits}} />
         </InstantSearch>
       </template>
     );
@@ -236,8 +253,13 @@ describe('Ember InstantSearch', () => {
         >
           <ais.Widget @widget={{searchBox}} />
           <ais.Index @indexName="products_by_price" as |byPrice|>
-            <byPrice.Configure @searchParameters={{hash hitsPerPage=1}} />
-            <byPrice.Hits id="by-price" />
+            <byPrice.Connector
+              @connector={{connectConfigure}}
+              @params={{hash searchParameters=(hash hitsPerPage=1)}}
+            />
+            <div id="by-price">
+              <byPrice.Widget @widget={{hits}} />
+            </div>
           </ais.Index>
         </InstantSearch>
       </template>
@@ -278,7 +300,7 @@ describe('Ember InstantSearch', () => {
           @indexName={{state.indexName}}
           as |ais|
         >
-          <ais.Hits />
+          <ais.Widget @widget={{hits}} />
         </InstantSearch>
       </template>
     );
@@ -311,7 +333,7 @@ describe('Ember InstantSearch', () => {
         >
           {{keep ais.search}}
           <ais.Widget @widget={{searchBox}} />
-          <ais.Hits />
+          <ais.Widget @widget={{hits}} />
         </InstantSearch>
       </template>
     );

@@ -117,7 +117,7 @@ export function useWidget<
   /**
    * The widget joins now, during the render of its component,
    * so it takes part in the first search even if its template
-   * reads no state (like `Configure` without a block).
+   * reads no state (like a `Connector` without a block).
    * Later reads apply new params.
    */
   getValue(cache);

@@ -17,7 +17,7 @@ export interface HighlightSignature {
   Element: HTMLSpanElement;
   Args: {
     /**
-     * A hit from `Hits`, with its `_highlightResult`.
+     * A hit from `connectHits`, with its `_highlightResult`.
      */
     hit: { _highlightResult?: unknown };
     /**
@@ -37,9 +37,11 @@ export interface HighlightSignature {
  *
  * @example
  * ```gjs
- * <ais.Hits as |hit|>
- *   <Highlight @hit={{hit}} @attribute="name" />
- * </ais.Hits>
+ * <ais.Connector @connector={{connectHits}} as |state|>
+ *   {{#each state.items as |hit|}}
+ *     <Highlight @hit={{hit}} @attribute="name" />
+ *   {{/each}}
+ * </ais.Connector>
  * ```
  */
 export default class Highlight extends Component<HighlightSignature> {

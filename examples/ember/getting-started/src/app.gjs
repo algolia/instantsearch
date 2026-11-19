@@ -1,5 +1,9 @@
 import { hash } from '@ember/helper';
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
+import {
+  connectConfigure,
+  connectHits,
+} from 'instantsearch.js/es/connectors/index';
 import { pagination, refinementList, searchBox } from 'instantsearch.js/es/widgets/index';
 
 import { Highlight, InstantSearch } from 'ember-instantsearch';
@@ -29,7 +33,10 @@ export const App = <template>
       @insights={{true}}
       as |ais|
     >
-      <ais.Configure @searchParameters={{hash hitsPerPage=8}} />
+      <ais.Connector
+        @connector={{connectConfigure}}
+        @params={{hash searchParameters=(hash hitsPerPage=8)}}
+      />
       <div class="search-panel">
         <div class="search-panel__filters">
           <div class="ais-Panel">
@@ -57,16 +64,24 @@ export const App = <template>
             @widget={{searchBox}}
             @params={{hash cssClasses=(hash root="searchbox")}}
           />
-          <ais.Hits as |hit|>
-            <article>
-              <h1>
-                <Highlight @hit={{hit}} @attribute="name" />
-              </h1>
-              <p>
-                <Highlight @hit={{hit}} @attribute="description" />
-              </p>
-            </article>
-          </ais.Hits>
+          <ais.Connector @connector={{connectHits}} as |state|>
+            <div class="ais-Hits">
+              <ol class="ais-Hits-list">
+                {{#each state.items key="objectID" as |hit|}}
+                  <li class="ais-Hits-item">
+                    <article>
+                      <h1>
+                        <Highlight @hit={{hit}} @attribute="name" />
+                      </h1>
+                      <p>
+                        <Highlight @hit={{hit}} @attribute="description" />
+                      </p>
+                    </article>
+                  </li>
+                {{/each}}
+              </ol>
+            </div>
+          </ais.Connector>
 
           <div class="pagination">
             <ais.Widget @widget={{pagination}} />

@@ -41,6 +41,9 @@ export interface ConnectorSignature<TConnector extends AnyConnector> {
 /**
  * Yields the render state of any connector, for a custom UI.
  *
+ * Without a block it renders nothing, which suits connectors
+ * that have no UI, like `connectConfigure`.
+ *
  * @example
  * ```gjs
  * import { connectStats } from 'instantsearch.js/es/connectors';
@@ -65,5 +68,22 @@ export default class Connector<
     return this.connection.state as RenderState<DescriptionOf<TConnector>>;
   }
 
-  <template>{{yield this.state}}</template>
+  /**
+   * Without a block, the template still reads the connection,
+   * so that new params apply, like for `connectConfigure`.
+   * It renders nothing.
+   */
+  get apply() {
+    void this.connection.state;
+
+    return undefined;
+  }
+
+  <template>
+    {{#if (has-block)}}
+      {{yield this.state}}
+    {{else}}
+      {{this.apply}}
+    {{/if}}
+  </template>
 }

@@ -19,6 +19,7 @@ npm install ember-instantsearch instantsearch.js algoliasearch
 ```gjs
 import { hash } from '@ember/helper';
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
+import { connectConfigure, connectHits } from 'instantsearch.js/es/connectors';
 import { pagination, refinementList, searchBox } from 'instantsearch.js/es/widgets';
 import { Highlight, InstantSearch } from 'ember-instantsearch';
 
@@ -28,12 +29,14 @@ const searchClient = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76'
 
 <template>
   <InstantSearch @searchClient={{searchClient}} @indexName="instant_search" as |ais|>
-    <ais.Configure @searchParameters={{hash hitsPerPage=8}} />
+    <ais.Connector @connector={{connectConfigure}} @params={{hash searchParameters=(hash hitsPerPage=8)}} />
     <ais.Widget @widget={{searchBox}} @params={{hash placeholder="Search for products"}} />
     <ais.Widget @widget={{refinementList}} @params={{hash attribute="brand"}} />
-    <ais.Hits as |hit|>
-      <Highlight @hit={{hit}} @attribute="name" />
-    </ais.Hits>
+    <ais.Connector @connector={{connectHits}} as |state|>
+      {{#each state.items as |hit|}}
+        <Highlight @hit={{hit}} @attribute="name" />
+      {{/each}}
+    </ais.Connector>
     <ais.Widget @widget={{pagination}} />
   </InstantSearch>
 </template>
@@ -47,11 +50,9 @@ The yielded object also has `search` (the InstantSearch.js instance) and `index`
 | --- | --- | --- |
 | `InstantSearch` |  | Creates and starts the search. `@indexName`, `@searchClient`, `@onStateChange`, `@searchFunction`, `@stalledSearchDelay` and `@future` can change later. `@routing` and `@initialUiState` apply once. |
 | `Index` |  | Searches another index. It yields the widgets again, bound to that index. |
-| `Configure` | `connectConfigure` | Renders nothing, unless it has a block. |
-| `Hits` | `connectHits` | The block gets each hit and `sendEvent`. Without a block, it shows the JSON of each hit. |
 | `Widget` | any | Mounts any InstantSearch.js widget, like `searchBox`, `refinementList` or `pagination`. `@params` are the widget params without `container`. |
-| `Highlight` |  | Highlights an attribute of a hit. |
-| `Connector` | any | Yields the render state of any connector, for a custom UI. |
+| `Highlight` |  | Highlights an attribute of a hit from `connectHits`. |
+| `Connector` | any | Yields the render state of any connector, for a custom UI. Without a block it renders nothing, for `connectConfigure`. |
 
 ### Any widget
 

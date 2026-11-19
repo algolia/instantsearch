@@ -1,4 +1,4 @@
-import { on } from '@ember/modifier';
+import { hash } from '@ember/helper';
 import { VERSION as emberVersion } from '@ember/version';
 import { runTestSuites } from '@instantsearch/tests/common';
 import { createHitsWidgetTests } from '@instantsearch/tests/widgets/hits';
@@ -7,7 +7,12 @@ import { createPaginationWidgetTests } from '@instantsearch/tests/widgets/pagina
 import { createRefinementListWidgetTests } from '@instantsearch/tests/widgets/refinement-list';
 import { createSearchBoxWidgetTests } from '@instantsearch/tests/widgets/search-box';
 import instantSearchVersion from 'instantsearch.js/es/lib/version';
-import { pagination, refinementList, searchBox } from 'instantsearch.js/es/widgets/index';
+import {
+  hits,
+  pagination,
+  refinementList,
+  searchBox,
+} from 'instantsearch.js/es/widgets/index';
 
 import { version } from 'ember-instantsearch';
 
@@ -18,13 +23,41 @@ import { Root } from './-support/root.gjs';
  * The suites in `tests/common` that Ember InstantSearch has widgets for.
  * The other flavors run all of them.
  */
-/**
- * `fn` would pass the click event on as the last argument of `sendEvent`,
- * which takes it as extra event data.
- */
-function send(sendEvent, eventType, hit, eventName) {
-  return () => sendEvent(eventType, hit, eventName);
+function withTemplates(params, templates) {
+  return Object.assign({ templates }, params);
 }
+
+const mainHitsTemplates = {
+  item: (hit, { html, sendEvent }) =>
+    html`<div data-testid=${`main-hits-top-level-${hit.__position}`}>
+      ${hit.objectID}
+      <button
+        data-testid=${`main-hits-convert-${hit.__position}`}
+        onClick=${() => sendEvent('conversion', hit, 'Converted')}
+      >
+        convert
+      </button>
+      <button
+        data-testid=${`main-hits-click-${hit.__position}`}
+        onClick=${() => sendEvent('click', hit, 'Clicked')}
+      >
+        click
+      </button>
+    </div>`,
+};
+
+const nestedHitsTemplates = {
+  item: (hit, { html, sendEvent }) =>
+    html`<div data-testid=${`nested-hits-${hit.__position}`}>
+      ${hit.objectID}
+      <button
+        data-testid=${`nested-hits-click-${hit.__position}`}
+        onClick=${() => sendEvent('click', hit, 'Clicked nested')}
+      >
+        click
+      </button>
+    </div>`,
+};
 
 const testSuites = {
   createHitsWidgetTests,
@@ -51,43 +84,22 @@ const testSetups = {
       <template>
         <Root @options={{@options}} as |ais|>
           <ais.Widget @widget={{searchBox}} />
-          <ais.Hits
-            id="main-hits"
-            @escapeHTML={{@params.escapeHTML}}
-            @transformItems={{@params.transformItems}}
-            as |hit sendEvent|
-          >
-            <div data-testid="main-hits-top-level-{{hit.__position}}">
-              {{hit.objectID}}
-              <button
-                type="button"
-                data-testid="main-hits-convert-{{hit.__position}}"
-                {{on "click" (send sendEvent "conversion" hit "Converted")}}
-              >convert</button>
-              <button
-                type="button"
-                data-testid="main-hits-click-{{hit.__position}}"
-                {{on "click" (send sendEvent "click" hit "Clicked")}}
-              >click</button>
-            </div>
-          </ais.Hits>
-          <div id="hits-with-defaults">
-            <ais.Hits
-              @escapeHTML={{@params.escapeHTML}}
-              @transformItems={{@params.transformItems}}
+          <div id="main-hits">
+            <ais.Widget
+              @widget={{hits}}
+              @params={{withTemplates @params mainHitsTemplates}}
             />
           </div>
+          <div id="hits-with-defaults">
+            <ais.Widget @widget={{hits}} @params={{@params}} />
+          </div>
           <ais.Index @indexName="nested" as |nested|>
-            <nested.Hits id="nested-hits" as |hit sendEvent|>
-              <div data-testid="nested-hits-{{hit.__position}}">
-                {{hit.objectID}}
-                <button
-                  type="button"
-                  data-testid="nested-hits-click-{{hit.__position}}"
-                  {{on "click" (send sendEvent "click" hit "Clicked nested")}}
-                >click</button>
-              </div>
-            </nested.Hits>
+            <div id="nested-hits">
+              <nested.Widget
+                @widget={{hits}}
+                @params={{hash templates=nestedHitsTemplates}}
+              />
+            </div>
           </ais.Index>
         </Root>
       </template>,
@@ -137,7 +149,14 @@ const testSetups = {
 };
 
 const testOptions = {
-  createHitsWidgetTests: { act },
+  createHitsWidgetTests: {
+    act,
+    /**
+     * Hits is the InstantSearch.js widget, which shows its default
+     * `empty` template ("No results"), as in the InstantSearch.js suite.
+     */
+    skippedTests: { 'common rendering': true },
+  },
   createInstantSearchWidgetTests: { act },
   createPaginationWidgetTests: { act },
   createRefinementListWidgetTests: { act },

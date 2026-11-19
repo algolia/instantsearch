@@ -10,9 +10,7 @@ import { isEqual } from 'instantsearch.js/es/lib/utils/isEqual';
 
 import { definedOnly } from '../-private/use-widget.ts';
 import version from '../version.ts';
-import Configure from './configure.gts';
 import Connector from './connector.gts';
-import Hits from './hits.gts';
 import Index from './index-widget.gts';
 import Widget from './widget.gts';
 
@@ -55,7 +53,7 @@ function addAlgoliaAgents(searchClient: SearchClient | CompositionClient) {
  * ```gjs
  * <InstantSearch @searchClient={{searchClient}} @indexName="instant_search" as |ais|>
  *   <ais.Widget @widget={{searchBox}} />
- *   <ais.Hits as |hit|>{{hit.name}}</ais.Hits>
+ *   <ais.Widget @widget={{hits}} />
  * </InstantSearch>
  * ```
  */
@@ -162,9 +160,7 @@ export default class InstantSearch extends Component<InstantSearchSignature> {
       (hash
         search=this.parent.search
         index=this.parent.index
-        Configure=(component Configure parent=this.parent)
         Connector=(component Connector parent=this.parent)
-        Hits=(component Hits parent=this.parent)
         Index=(component Index parent=this.parent)
         Widget=(component Widget parent=this.parent)
       )
