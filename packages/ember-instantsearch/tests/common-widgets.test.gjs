@@ -7,6 +7,7 @@ import { createPaginationWidgetTests } from '@instantsearch/tests/widgets/pagina
 import { createRefinementListWidgetTests } from '@instantsearch/tests/widgets/refinement-list';
 import { createSearchBoxWidgetTests } from '@instantsearch/tests/widgets/search-box';
 import instantSearchVersion from 'instantsearch.js/es/lib/version';
+import { pagination, refinementList, searchBox } from 'instantsearch.js/es/widgets/index';
 
 import { version } from 'ember-instantsearch';
 
@@ -38,13 +39,7 @@ const testSetups = {
     await render(
       <template>
         <Root @options={{@options}} as |ais|>
-          <ais.SearchBox
-            @placeholder={{@params.placeholder}}
-            @autofocus={{@params.autofocus}}
-            @searchAsYouType={{@params.searchAsYouType}}
-            @ignoreCompositionEvents={{@params.ignoreCompositionEvents}}
-            @queryHook={{@params.queryHook}}
-          />
+          <ais.Widget @widget={{searchBox}} @params={{@params}} />
         </Root>
       </template>,
       { options: instantSearchOptions, params: widgetParams }
@@ -55,7 +50,7 @@ const testSetups = {
     await render(
       <template>
         <Root @options={{@options}} as |ais|>
-          <ais.SearchBox />
+          <ais.Widget @widget={{searchBox}} />
           <ais.Hits
             id="main-hits"
             @escapeHTML={{@params.escapeHTML}}
@@ -107,19 +102,7 @@ const testSetups = {
     await render(
       <template>
         <Root @options={{@options}} as |ais|>
-          <ais.RefinementList
-            @attribute={{@params.attribute}}
-            @operator={{@params.operator}}
-            @limit={{@params.limit}}
-            @showMore={{@params.showMore}}
-            @showMoreLimit={{@params.showMoreLimit}}
-            @sortBy={{@params.sortBy}}
-            @escapeFacetValues={{@params.escapeFacetValues}}
-            @transformItems={{@params.transformItems}}
-            @searchable={{@params.searchable}}
-            @searchablePlaceholder={{@params.searchablePlaceholder}}
-            @searchableSelectOnSubmit={{@params.searchableSelectOnSubmit}}
-          />
+          <ais.Widget @widget={{refinementList}} @params={{@params}} />
         </Root>
       </template>,
       { options: instantSearchOptions, params: widgetParams }
@@ -130,14 +113,7 @@ const testSetups = {
     await render(
       <template>
         <Root @options={{@options}} as |ais|>
-          <ais.Pagination
-            @padding={{@params.padding}}
-            @totalPages={{@params.totalPages}}
-            @showFirst={{@params.showFirst}}
-            @showPrevious={{@params.showPrevious}}
-            @showNext={{@params.showNext}}
-            @showLast={{@params.showLast}}
-          />
+          <ais.Widget @widget={{pagination}} @params={{@params}} />
         </Root>
       </template>,
       { options: instantSearchOptions, params: widgetParams }

@@ -1,5 +1,6 @@
 import { hash } from '@ember/helper';
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
+import { pagination, refinementList, searchBox } from 'instantsearch.js/es/widgets/index';
 
 import { Highlight, InstantSearch } from 'ember-instantsearch';
 
@@ -34,19 +35,28 @@ export const App = <template>
           <div class="ais-Panel">
             <div class="ais-Panel-header"><span>brand</span></div>
             <div class="ais-Panel-body">
-              <ais.RefinementList @attribute="brand" />
+              <ais.Widget
+                @widget={{refinementList}}
+                @params={{hash attribute="brand"}}
+              />
             </div>
           </div>
           <div class="ais-Panel">
             <div class="ais-Panel-header"><span>categories</span></div>
             <div class="ais-Panel-body">
-              <ais.RefinementList @attribute="categories" />
+              <ais.Widget
+                @widget={{refinementList}}
+                @params={{hash attribute="categories"}}
+              />
             </div>
           </div>
         </div>
 
         <div class="search-panel__results">
-          <ais.SearchBox class="searchbox" />
+          <ais.Widget
+            @widget={{searchBox}}
+            @params={{hash cssClasses=(hash root="searchbox")}}
+          />
           <ais.Hits as |hit|>
             <article>
               <h1>
@@ -59,7 +69,7 @@ export const App = <template>
           </ais.Hits>
 
           <div class="pagination">
-            <ais.Pagination />
+            <ais.Widget @widget={{pagination}} />
           </div>
         </div>
       </div>

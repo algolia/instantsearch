@@ -7,9 +7,7 @@ import { definedOnly, useWidget } from '../-private/use-widget.ts';
 import Configure from './configure.gts';
 import Connector from './connector.gts';
 import Hits from './hits.gts';
-import Pagination from './pagination.gts';
-import RefinementList from './refinement-list.gts';
-import SearchBox from './search-box.gts';
+import Widget from './widget.gts';
 
 import type { Parent } from '../types.ts';
 import type { Yielded } from '../-private/yielded.ts';
@@ -79,9 +77,7 @@ export default class Index extends Component<IndexSignature> {
         Connector=(component Connector parent=this.parent)
         Hits=(component Hits parent=this.parent)
         Index=(component Index parent=this.parent)
-        Pagination=(component Pagination parent=this.parent)
-        RefinementList=(component RefinementList parent=this.parent)
-        SearchBox=(component SearchBox parent=this.parent)
+        Widget=(component Widget parent=this.parent)
       )
     }}
   </template>

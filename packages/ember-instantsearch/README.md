@@ -19,6 +19,7 @@ npm install ember-instantsearch instantsearch.js algoliasearch
 ```gjs
 import { hash } from '@ember/helper';
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
+import { pagination, refinementList, searchBox } from 'instantsearch.js/es/widgets';
 import { Highlight, InstantSearch } from 'ember-instantsearch';
 
 import 'instantsearch.css/themes/satellite.css';
@@ -28,12 +29,12 @@ const searchClient = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76'
 <template>
   <InstantSearch @searchClient={{searchClient}} @indexName="instant_search" as |ais|>
     <ais.Configure @searchParameters={{hash hitsPerPage=8}} />
-    <ais.SearchBox @placeholder="Search for products" />
-    <ais.RefinementList @attribute="brand" />
+    <ais.Widget @widget={{searchBox}} @params={{hash placeholder="Search for products"}} />
+    <ais.Widget @widget={{refinementList}} @params={{hash attribute="brand"}} />
     <ais.Hits as |hit|>
       <Highlight @hit={{hit}} @attribute="name" />
     </ais.Hits>
-    <ais.Pagination />
+    <ais.Widget @widget={{pagination}} />
   </InstantSearch>
 </template>
 ```
@@ -47,12 +48,26 @@ The yielded object also has `search` (the InstantSearch.js instance) and `index`
 | `InstantSearch` |  | Creates and starts the search. `@indexName`, `@searchClient`, `@onStateChange`, `@searchFunction`, `@stalledSearchDelay` and `@future` can change later. `@routing` and `@initialUiState` apply once. |
 | `Index` |  | Searches another index. It yields the widgets again, bound to that index. |
 | `Configure` | `connectConfigure` | Renders nothing, unless it has a block. |
-| `SearchBox` | `connectSearchBox` | `@searchAsYouType`, `@ignoreCompositionEvents`, `@queryHook`, `@autofocus`, `@placeholder`. |
 | `Hits` | `connectHits` | The block gets each hit and `sendEvent`. Without a block, it shows the JSON of each hit. |
-| `RefinementList` | `connectRefinementList` | `@searchable` and `@showMore` included. |
-| `Pagination` | `connectPagination` |  |
+| `Widget` | any | Mounts any InstantSearch.js widget, like `searchBox`, `refinementList` or `pagination`. `@params` are the widget params without `container`. |
 | `Highlight` |  | Highlights an attribute of a hit. |
 | `Connector` | any | Yields the render state of any connector, for a custom UI. |
+
+### Any widget
+
+`<ais.Widget>` mounts a widget of InstantSearch.js. The widget renders its own markup, so the options are the ones in the InstantSearch.js docs, such as `templates` and `cssClasses`:
+
+```gjs
+import { hash } from '@ember/helper';
+import { sortBy } from 'instantsearch.js/es/widgets';
+
+<ais.Widget
+  @widget={{sortBy}}
+  @params={{hash items=sortItems cssClasses=(hash root="my-sort")}}
+/>
+```
+
+New `@params` replace the widget and keep its UI state.
 
 ### Any connector
 

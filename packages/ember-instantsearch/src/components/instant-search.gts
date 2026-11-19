@@ -14,9 +14,7 @@ import Configure from './configure.gts';
 import Connector from './connector.gts';
 import Hits from './hits.gts';
 import Index from './index-widget.gts';
-import Pagination from './pagination.gts';
-import RefinementList from './refinement-list.gts';
-import SearchBox from './search-box.gts';
+import Widget from './widget.gts';
 
 import type { Parent } from '../types.ts';
 import type Owner from '@ember/owner';
@@ -56,7 +54,7 @@ function addAlgoliaAgents(searchClient: SearchClient | CompositionClient) {
  * @example
  * ```gjs
  * <InstantSearch @searchClient={{searchClient}} @indexName="instant_search" as |ais|>
- *   <ais.SearchBox />
+ *   <ais.Widget @widget={{searchBox}} />
  *   <ais.Hits as |hit|>{{hit.name}}</ais.Hits>
  * </InstantSearch>
  * ```
@@ -168,9 +166,7 @@ export default class InstantSearch extends Component<InstantSearchSignature> {
         Connector=(component Connector parent=this.parent)
         Hits=(component Hits parent=this.parent)
         Index=(component Index parent=this.parent)
-        Pagination=(component Pagination parent=this.parent)
-        RefinementList=(component RefinementList parent=this.parent)
-        SearchBox=(component SearchBox parent=this.parent)
+        Widget=(component Widget parent=this.parent)
       )
     }}
   </template>

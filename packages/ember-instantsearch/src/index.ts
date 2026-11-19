@@ -4,9 +4,7 @@ export { default as Highlight } from './components/highlight.gts';
 export { default as Hits } from './components/hits.gts';
 export { default as Index } from './components/index-widget.gts';
 export { default as InstantSearch } from './components/instant-search.gts';
-export { default as Pagination } from './components/pagination.gts';
-export { default as RefinementList } from './components/refinement-list.gts';
-export { default as SearchBox } from './components/search-box.gts';
+export { default as Widget } from './components/widget.gts';
 export { useConnector } from './use-connector.ts';
 export { default as version } from './version.ts';
 
@@ -17,15 +15,7 @@ export type { HitsSignature } from './components/hits.gts';
 export type { IndexSignature } from './components/index-widget.gts';
 export type { InstantSearchSignature } from './components/instant-search.gts';
 export type { Yielded } from './-private/yielded.ts';
-export type {
-  PaginationSignature,
-  PaginationTranslations,
-} from './components/pagination.gts';
-export type {
-  RefinementListSignature,
-  RefinementListTranslations,
-} from './components/refinement-list.gts';
-export type { SearchBoxSignature } from './components/search-box.gts';
+export type { WidgetParams, WidgetSignature } from './components/widget.gts';
 export type {
   AdditionalWidgetProperties,
   Connection,

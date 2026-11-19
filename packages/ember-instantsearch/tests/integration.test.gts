@@ -3,6 +3,7 @@ import { hash } from '@ember/helper';
 import { renderSettled } from '@ember/renderer';
 import userEvent from '@testing-library/user-event';
 import { connectStats } from 'instantsearch.js/es/connectors/index';
+import { refinementList, searchBox } from 'instantsearch.js/es/widgets/index';
 import { describe, expect, test } from 'vitest';
 
 import { Highlight, InstantSearch } from 'ember-instantsearch';
@@ -39,8 +40,11 @@ describe('Ember InstantSearch', () => {
           @indexName="products"
           as |ais|
         >
-          <ais.SearchBox />
-          <ais.RefinementList @attribute="brand" />
+          <ais.Widget @widget={{searchBox}} />
+          <ais.Widget
+            @widget={{refinementList}}
+            @params={{hash attribute="brand"}}
+          />
           <ais.Hits as |hit|>
             <Highlight @hit={{hit}} @attribute="name" />
           </ais.Hits>
@@ -119,7 +123,10 @@ describe('Ember InstantSearch', () => {
           @indexName="products"
           as |ais|
         >
-          <ais.RefinementList @attribute="brand" @limit={{state.limit}} />
+          <ais.Widget
+            @widget={{refinementList}}
+            @params={{hash attribute="brand" limit=state.limit}}
+          />
         </InstantSearch>
       </template>
     );
@@ -165,7 +172,10 @@ describe('Ember InstantSearch', () => {
           as |ais|
         >
           {{#if state.showBrands}}
-            <ais.RefinementList @attribute="brand" />
+            <ais.Widget
+            @widget={{refinementList}}
+            @params={{hash attribute="brand"}}
+          />
           {{/if}}
           <ais.Hits />
         </InstantSearch>
@@ -196,7 +206,7 @@ describe('Ember InstantSearch', () => {
           @indexName="products"
           as |ais|
         >
-          <ais.SearchBox />
+          <ais.Widget @widget={{searchBox}} />
           <ais.Connector @connector={{connectStats}} as |stats|>
             <p id="stats">{{stats.nbHits}} results</p>
           </ais.Connector>
@@ -224,7 +234,7 @@ describe('Ember InstantSearch', () => {
           @indexName="products"
           as |ais|
         >
-          <ais.SearchBox />
+          <ais.Widget @widget={{searchBox}} />
           <ais.Index @indexName="products_by_price" as |byPrice|>
             <byPrice.Configure @searchParameters={{hash hitsPerPage=1}} />
             <byPrice.Hits id="by-price" />
@@ -300,7 +310,7 @@ describe('Ember InstantSearch', () => {
           as |ais|
         >
           {{keep ais.search}}
-          <ais.SearchBox />
+          <ais.Widget @widget={{searchBox}} />
           <ais.Hits />
         </InstantSearch>
       </template>
