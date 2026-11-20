@@ -4,8 +4,13 @@ import { getHighlightedParts } from 'instantsearch-core';
 import { cx } from '../lib';
 
 import { createHighlightComponent } from './Highlight';
+import {
+  createShowMoreButtonComponent,
+  defaultShowMoreButtonTranslations,
+} from './ShowMoreButton';
 
 import type { ComponentProps, Renderer } from '../types';
+import type { ShowMoreButtonTranslations } from './ShowMoreButton';
 
 export type RefinementListItem = {
   /**
@@ -85,15 +90,7 @@ export type RefinementListClassNames = {
   disabledShowMore: string | string[];
 };
 
-export type RefinementListTranslations = {
-  /**
-   * The text of the "Show more" button.
-   */
-  showMoreButtonText: (options: { isShowingMore: boolean }) => string;
-  /**
-   * Accessible name (aria-label) for the "Show more" button.
-   */
-  showMoreButtonLabel?: string;
+export type RefinementListTranslations = ShowMoreButtonTranslations & {
   /**
    * What to display when a search for facet values has no results.
    */
@@ -160,9 +157,7 @@ export type RefinementListProps = Omit<ComponentProps<'div'>, 'onChange'> & {
 };
 
 const defaultTranslations: RefinementListTranslations = {
-  showMoreButtonText({ isShowingMore }) {
-    return isShowingMore ? 'Show less' : 'Show more';
-  },
+  ...defaultShowMoreButtonTranslations,
   noResultsText: 'No results.',
 };
 
@@ -171,6 +166,10 @@ export function createRefinementListComponent({
   Fragment,
 }: Renderer) {
   const Highlight = createHighlightComponent({ createElement, Fragment });
+  const ShowMoreButton = createShowMoreButtonComponent({
+    createElement,
+    Fragment,
+  });
 
   function DefaultItemComponent({
     item: _item,
@@ -300,25 +299,15 @@ export function createRefinementListComponent({
           )
         )}
         {showMore && (
-          <button
-            className={cx(
-              'ais-RefinementList-showMore',
-              classNames.showMore,
-              !canToggleShowMore &&
-                cx(
-                  'ais-RefinementList-showMore--disabled',
-                  classNames.disabledShowMore
-                )
-            )}
-            disabled={!canToggleShowMore}
-            onClick={onToggleShowMore}
-            aria-expanded={isShowingMore}
-            aria-label={translations.showMoreButtonLabel}
-          >
-            {showMoreTextComponent
-              ? showMoreTextComponent({ isShowingMore })
-              : translations.showMoreButtonText({ isShowingMore })}
-          </button>
+          <ShowMoreButton
+            widgetName="RefinementList"
+            canToggleShowMore={canToggleShowMore}
+            isShowingMore={isShowingMore}
+            onToggleShowMore={onToggleShowMore}
+            showMoreTextComponent={showMoreTextComponent}
+            classNames={classNames}
+            translations={translations}
+          />
         )}
       </div>
     );
