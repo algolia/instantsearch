@@ -14,7 +14,6 @@ import type { RefinementListProps } from '../RefinementList';
 describe('RefinementList', () => {
   function createProps(props: Partial<RefinementListProps>) {
     return {
-      canRefine: true,
       items: [
         {
           value: 'Insignia™',
@@ -32,8 +31,6 @@ describe('RefinementList', () => {
         },
       ],
       onRefine: jest.fn(),
-      query: '',
-      searchBox: null,
       canToggleShowMore: true,
       isShowingMore: false,
       onToggleShowMore: jest.fn(),
@@ -217,7 +214,7 @@ describe('RefinementList', () => {
 
   test('displays a search box', () => {
     const props = createProps({
-      searchBox: (
+      searchBoxComponent: () => (
         <SearchBox
           inputRef={createRef<HTMLInputElement>()}
           placeholder="Search brands"
@@ -403,7 +400,7 @@ describe('RefinementList', () => {
     `);
   });
 
-  test('highlights items when there is a search box and query', () => {
+  test('highlights items when they come from a search', () => {
     const props = createProps({
       items: [
         {
@@ -421,7 +418,7 @@ describe('RefinementList', () => {
           isRefined: false,
         },
       ],
-      searchBox: (
+      searchBoxComponent: () => (
         <SearchBox
           inputRef={createRef<HTMLInputElement>()}
           placeholder="Search brands"
@@ -436,7 +433,7 @@ describe('RefinementList', () => {
           }}
         />
       ),
-      query: 'sam',
+      isFromSearch: true,
     });
     const { container } = render(<RefinementList {...props} />);
 
@@ -518,7 +515,10 @@ describe('RefinementList', () => {
   });
 
   test('displays a no results fallback', () => {
-    const props = createProps({ noResults: 'No results' });
+    const props = createProps({
+      showNoResults: true,
+      translations: { noResultsText: 'No results' },
+    });
     const { container } = render(<RefinementList {...props} />);
 
     expect(container).toMatchInlineSnapshot(`
@@ -628,9 +628,8 @@ describe('RefinementList', () => {
 
   test('accepts custom class names (empty)', () => {
     const props = createProps({
-      canRefine: false,
       items: [],
-      noResults: 'No results.',
+      showNoResults: true,
       className: 'MyCustomRefinementList',
       classNames: {
         root: 'ROOT',
