@@ -274,8 +274,8 @@ describe('createMetadataMiddleware', () => {
           expect.stringMatching(/Search \(5\..*\)/),
           expect.stringMatching(/Node.js \(.*\)/),
           expect.stringMatching(/instantsearch-core \(.*\)/),
-          expect.stringMatching(/instantsearch.js \(4\..*\)/),
-          expect.stringMatching(/JS Helper \(3\..*\)/),
+          expect.stringMatching(/instantsearch.js \(5\..*\)/),
+          expect.stringMatching(/JS Helper \(4\..*\)/),
         ]);
       });
 
@@ -316,8 +316,8 @@ describe('createMetadataMiddleware', () => {
           expect.stringMatching(/Search \(5\..*\)/),
           expect.stringMatching(/Node.js \(.*\)/),
           expect.stringMatching(/instantsearch-core \(.*\)/),
-          expect.stringMatching(/instantsearch.js \(4\..*\)/),
-          expect.stringMatching(/JS Helper \(3\..*\)/),
+          expect.stringMatching(/instantsearch.js \(5\..*\)/),
+          expect.stringMatching(/JS Helper \(4\..*\)/),
           'test (cool)',
         ]);
       });
@@ -356,8 +356,8 @@ describe('createMetadataMiddleware', () => {
           expect.stringMatching(/Algolia for JavaScript \(4\..*\)/),
           expect.stringMatching(/Node.js \(.*\)/),
           expect.stringMatching(/instantsearch-core \(.*\)/),
-          expect.stringMatching(/instantsearch.js \(4\..*\)/),
-          expect.stringMatching(/JS Helper \(3\..*\)/),
+          expect.stringMatching(/instantsearch.js \(5\..*\)/),
+          expect.stringMatching(/JS Helper \(4\..*\)/),
         ]);
       });
 
@@ -397,8 +397,8 @@ describe('createMetadataMiddleware', () => {
           expect.stringMatching(/Algolia for JavaScript \(4\..*\)/),
           expect.stringMatching(/Node.js \(.*\)/),
           expect.stringMatching(/instantsearch-core \(.*\)/),
-          expect.stringMatching(/instantsearch.js \(4\..*\)/),
-          expect.stringMatching(/JS Helper \(3\..*\)/),
+          expect.stringMatching(/instantsearch.js \(5\..*\)/),
+          expect.stringMatching(/JS Helper \(4\..*\)/),
           'test (cool)',
         ]);
       });
