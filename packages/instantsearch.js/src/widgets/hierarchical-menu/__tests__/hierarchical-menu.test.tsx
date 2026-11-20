@@ -135,49 +135,45 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
             class="ais-HierarchicalMenu"
           >
             <ul
-              class="ais-HierarchicalMenu-list"
+              class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0"
             >
               <li
                 class="ais-HierarchicalMenu-item"
               >
-                <div>
-                  <a
-                    class="ais-HierarchicalMenu-link"
-                    href="#"
+                <a
+                  class="ais-HierarchicalMenu-link"
+                  href="#"
+                >
+                  <span
+                    class="ais-HierarchicalMenu-label"
                   >
-                    <span
-                      class="ais-HierarchicalMenu-label"
-                    >
-                      Cameras & Camcorders
-                    </span>
-                    <span
-                      class="ais-HierarchicalMenu-count"
-                    >
-                      1,369
-                    </span>
-                  </a>
-                </div>
+                    Cameras & Camcorders
+                  </span>
+                  <span
+                    class="ais-HierarchicalMenu-count"
+                  >
+                    1,369
+                  </span>
+                </a>
               </li>
               <li
                 class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected"
               >
-                <div>
-                  <a
-                    class="ais-HierarchicalMenu-link ais-HierarchicalMenu-link--selected"
-                    href="#"
+                <a
+                  class="ais-HierarchicalMenu-link ais-HierarchicalMenu-link--selected"
+                  href="#"
+                >
+                  <span
+                    class="ais-HierarchicalMenu-label"
                   >
-                    <span
-                      class="ais-HierarchicalMenu-label"
-                    >
-                      Video Games
-                    </span>
-                    <span
-                      class="ais-HierarchicalMenu-count"
-                    >
-                      505
-                    </span>
-                  </a>
-                </div>
+                    Video Games
+                  </span>
+                  <span
+                    class="ais-HierarchicalMenu-count"
+                  >
+                    505
+                  </span>
+                </a>
               </li>
             </ul>
             <button
@@ -245,41 +241,37 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
             class="ais-HierarchicalMenu"
           >
             <ul
-              class="ais-HierarchicalMenu-list"
+              class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0"
             >
               <li
                 class="ais-HierarchicalMenu-item"
               >
-                <div>
-                  <a
-                    href="#"
-                    style="font-weight: normal;"
-                  >
-                    <span>
-                      Cameras & Camcorders
-                       (
-                      1369
-                      )
-                    </span>
-                  </a>
-                </div>
+                <a
+                  href="#"
+                  style="font-weight: normal;"
+                >
+                  <span>
+                    Cameras & Camcorders
+                     (
+                    1369
+                    )
+                  </span>
+                </a>
               </li>
               <li
                 class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected"
               >
-                <div>
-                  <a
-                    href="#"
-                    style="font-weight: bold;"
-                  >
-                    <span>
-                      Video Games
-                       (
-                      505
-                      )
-                    </span>
-                  </a>
-                </div>
+                <a
+                  href="#"
+                  style="font-weight: bold;"
+                >
+                  <span>
+                    Video Games
+                     (
+                    505
+                    )
+                  </span>
+                </a>
               </li>
             </ul>
             <button
@@ -351,41 +343,37 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
             class="ais-HierarchicalMenu"
           >
             <ul
-              class="ais-HierarchicalMenu-list"
+              class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0"
             >
               <li
                 class="ais-HierarchicalMenu-item"
               >
-                <div>
-                  <a
-                    href="#"
-                    style="font-weight: normal;"
-                  >
-                    <span>
-                      Cameras & Camcorders
-                       (
-                      1369
-                      )
-                    </span>
-                  </a>
-                </div>
+                <a
+                  href="#"
+                  style="font-weight: normal;"
+                >
+                  <span>
+                    Cameras & Camcorders
+                     (
+                    1369
+                    )
+                  </span>
+                </a>
               </li>
               <li
                 class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected"
               >
-                <div>
-                  <a
-                    href="#"
-                    style="font-weight: bold;"
-                  >
-                    <span>
-                      Video Games
-                       (
-                      505
-                      )
-                    </span>
-                  </a>
-                </div>
+                <a
+                  href="#"
+                  style="font-weight: bold;"
+                >
+                  <span>
+                    Video Games
+                     (
+                    505
+                    )
+                  </span>
+                </a>
               </li>
             </ul>
             <button
@@ -403,6 +391,67 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       fireEvent.click(showMoreButton);
 
       expect(showMoreButton).toHaveTextContent('Show less');
+    });
+  });
+
+  describe('item clicks', () => {
+    test('keeps the browser behavior on special clicks', async () => {
+      const container = document.createElement('div');
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createMockedSearchClient(),
+      });
+      search.addWidgets([hierarchicalMenu({ container, attributes })]);
+      search.start();
+      await wait(0);
+
+      const link = within(container).getByRole('link', {
+        name: /video games/i,
+      });
+
+      expect(fireEvent.click(link, { metaKey: true })).toBe(true);
+      expect(search.getUiState().indexName.hierarchicalMenu).toBeUndefined();
+
+      expect(fireEvent.click(link)).toBe(false);
+      expect(search.getUiState().indexName.hierarchicalMenu).toEqual({
+        'categories.lvl0': ['Video Games'],
+      });
+    });
+
+    test('refines only the clicked child item with a custom template', async () => {
+      const container = document.createElement('div');
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createMockedSearchClient(),
+        initialUiState: {
+          indexName: {
+            hierarchicalMenu: {
+              'categories.lvl0': ['Cameras & Camcorders'],
+            },
+          },
+        },
+      });
+      search.addWidgets([
+        hierarchicalMenu({
+          container,
+          attributes,
+          templates: {
+            item: ({ label, url }) => <a href={url}>{label}</a>,
+          },
+        }),
+      ]);
+      search.start();
+      await wait(0);
+
+      const child = within(container).getByRole('link', {
+        name: 'Digital Cameras',
+      });
+
+      expect(child.parentElement).toHaveClass('ais-HierarchicalMenu-item');
+      expect(fireEvent.click(child)).toBe(false);
+      expect(search.getUiState().indexName.hierarchicalMenu).toEqual({
+        'categories.lvl0': ['Cameras & Camcorders', 'Digital Cameras'],
+      });
     });
   });
 

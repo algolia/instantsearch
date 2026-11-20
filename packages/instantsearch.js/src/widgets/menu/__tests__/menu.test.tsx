@@ -73,65 +73,59 @@ describe('menu', () => {
               <li
                 class="ais-Menu-item ais-Menu-item--selected"
               >
-                <div>
-                  <a
-                    class="ais-Menu-link"
-                    href="#"
+                <a
+                  class="ais-Menu-link"
+                  href="#"
+                >
+                  <span
+                    class="ais-Menu-label"
                   >
-                    <span
-                      class="ais-Menu-label"
-                    >
-                      Apple
-                    </span>
-                    <span
-                      class="ais-Menu-count"
-                    >
-                      442
-                    </span>
-                  </a>
-                </div>
+                    Apple
+                  </span>
+                  <span
+                    class="ais-Menu-count"
+                  >
+                    442
+                  </span>
+                </a>
               </li>
               <li
                 class="ais-Menu-item"
               >
-                <div>
-                  <a
-                    class="ais-Menu-link"
-                    href="#"
+                <a
+                  class="ais-Menu-link"
+                  href="#"
+                >
+                  <span
+                    class="ais-Menu-label"
                   >
-                    <span
-                      class="ais-Menu-label"
-                    >
-                      Canon
-                    </span>
-                    <span
-                      class="ais-Menu-count"
-                    >
-                      287
-                    </span>
-                  </a>
-                </div>
+                    Canon
+                  </span>
+                  <span
+                    class="ais-Menu-count"
+                  >
+                    287
+                  </span>
+                </a>
               </li>
               <li
                 class="ais-Menu-item"
               >
-                <div>
-                  <a
-                    class="ais-Menu-link"
-                    href="#"
+                <a
+                  class="ais-Menu-link"
+                  href="#"
+                >
+                  <span
+                    class="ais-Menu-label"
                   >
-                    <span
-                      class="ais-Menu-label"
-                    >
-                      Dell
-                    </span>
-                    <span
-                      class="ais-Menu-count"
-                    >
-                      174
-                    </span>
-                  </a>
-                </div>
+                    Dell
+                  </span>
+                  <span
+                    class="ais-Menu-count"
+                  >
+                    174
+                  </span>
+                </a>
               </li>
             </ul>
             <button
@@ -212,47 +206,41 @@ describe('menu', () => {
               <li
                 class="ais-Menu-item ais-Menu-item--selected"
               >
-                <div>
-                  <span
-                    style="font-weight: bold;"
-                    title="Apple"
-                  >
-                    Apple
-                     - (
-                    442
-                    )
-                  </span>
-                </div>
+                <span
+                  style="font-weight: bold;"
+                  title="Apple"
+                >
+                  Apple
+                   - (
+                  442
+                  )
+                </span>
               </li>
               <li
                 class="ais-Menu-item"
               >
-                <div>
-                  <span
-                    style="font-weight: normal;"
-                    title="Canon"
-                  >
-                    Canon
-                     - (
-                    287
-                    )
-                  </span>
-                </div>
+                <span
+                  style="font-weight: normal;"
+                  title="Canon"
+                >
+                  Canon
+                   - (
+                  287
+                  )
+                </span>
               </li>
               <li
                 class="ais-Menu-item"
               >
-                <div>
-                  <span
-                    style="font-weight: normal;"
-                    title="Dell"
-                  >
-                    Dell
-                     - (
-                    174
-                    )
-                  </span>
-                </div>
+                <span
+                  style="font-weight: normal;"
+                  title="Dell"
+                >
+                  Dell
+                   - (
+                  174
+                  )
+                </span>
               </li>
             </ul>
             <button
@@ -338,47 +326,41 @@ describe('menu', () => {
               <li
                 class="ais-Menu-item ais-Menu-item--selected"
               >
-                <div>
-                  <span
-                    style="font-weight: bold;"
-                    title="Apple"
-                  >
-                    Apple
-                     - (
-                    442
-                    )
-                  </span>
-                </div>
+                <span
+                  style="font-weight: bold;"
+                  title="Apple"
+                >
+                  Apple
+                   - (
+                  442
+                  )
+                </span>
               </li>
               <li
                 class="ais-Menu-item"
               >
-                <div>
-                  <span
-                    style="font-weight: normal;"
-                    title="Canon"
-                  >
-                    Canon
-                     - (
-                    287
-                    )
-                  </span>
-                </div>
+                <span
+                  style="font-weight: normal;"
+                  title="Canon"
+                >
+                  Canon
+                   - (
+                  287
+                  )
+                </span>
               </li>
               <li
                 class="ais-Menu-item"
               >
-                <div>
-                  <span
-                    style="font-weight: normal;"
-                    title="Dell"
-                  >
-                    Dell
-                     - (
-                    174
-                    )
-                  </span>
-                </div>
+                <span
+                  style="font-weight: normal;"
+                  title="Dell"
+                >
+                  Dell
+                   - (
+                  174
+                  )
+                </span>
               </li>
             </ul>
             <button

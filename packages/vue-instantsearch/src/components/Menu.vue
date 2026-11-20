@@ -1,59 +1,11 @@
-<template>
-  <div
-    v-if="state"
-    :class="[suit(), !state.canRefine && suit('', 'noRefinement')]"
-  >
-    <slot
-      :items="state.items"
-      :can-refine="state.canRefine"
-      :can-toggle-show-more="state.canToggleShowMore"
-      :is-showing-more="state.isShowingMore"
-      :refine="state.refine"
-      :createURL="state.createURL"
-      :toggle-show-more="state.toggleShowMore"
-      :send-event="state.sendEvent"
-    >
-      <ul :class="suit('list')">
-        <li
-          v-for="item in state.items"
-          :key="item.value"
-          :class="[suit('item'), item.isRefined && suit('item', 'selected')]"
-        >
-          <a
-            :href="state.createURL(item.value)"
-            :class="suit('link')"
-            @click.exact.left.prevent="state.refine(item.value)"
-          >
-            <span :class="suit('label')">{{ item.label }}</span>
-            <span :class="suit('count')">{{ item.count }}</span>
-          </a>
-        </li>
-      </ul>
-
-      <button
-        v-if="showShowMoreButton"
-        :class="[
-          suit('showMore'),
-          !state.canToggleShowMore && suit('showMore', 'disabled'),
-        ]"
-        :disabled="!state.canToggleShowMore"
-        :aria-expanded="state.isShowingMore ? 'true' : 'false'"
-        @click.prevent="state.toggleShowMore"
-      >
-        <slot name="showMoreLabel" :is-showing-more="state.isShowingMore">
-          {{ state.isShowingMore ? 'Show less' : 'Show more' }}
-        </slot>
-      </button>
-    </slot>
-  </div>
-</template>
-
 <script>
 import { connectMenu } from 'instantsearch-core';
+import { createMenuComponent } from 'instantsearch-ui-components';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
+import { Fragment, getScopedSlot, renderReactCompat } from '../util/vue-compat';
 
 export default {
   name: 'AisMenu',
@@ -109,9 +61,61 @@ export default {
         transformItems: this.transformItems,
       };
     },
-    showShowMoreButton() {
-      return this.state.canRefine && this.showMore;
-    },
   },
+  render: renderReactCompat(function (h) {
+    if (!this.state) {
+      return null;
+    }
+
+    const defaultSlot = getScopedSlot(this, 'default');
+    if (defaultSlot) {
+      return h(
+        'div',
+        {
+          className: [
+            this.suit(),
+            !this.state.canRefine && this.suit('', 'noRefinement'),
+          ],
+        },
+        [
+          defaultSlot({
+            items: this.state.items,
+            canRefine: this.state.canRefine,
+            canToggleShowMore: this.state.canToggleShowMore,
+            isShowingMore: this.state.isShowingMore,
+            refine: this.state.refine,
+            createURL: this.state.createURL,
+            toggleShowMore: this.state.toggleShowMore,
+            sendEvent: this.state.sendEvent,
+          }),
+        ]
+      );
+    }
+
+    const Menu = createMenuComponent({ createElement: h, Fragment });
+
+    return h(Menu, {
+      items: this.state.items,
+      createURL: this.state.createURL,
+      onRefine: (item) => this.state.refine(item.value),
+      showMore: this.state.canRefine && this.showMore,
+      canToggleShowMore: this.state.canToggleShowMore,
+      isShowingMore: this.state.isShowingMore,
+      onToggleShowMore: this.state.toggleShowMore,
+      showMoreTextComponent: getScopedSlot(this, 'showMoreLabel'),
+      classNames: this.classNames && {
+        root: this.classNames['ais-Menu'],
+        noRefinementRoot: this.classNames['ais-Menu--noRefinement'],
+        list: this.classNames['ais-Menu-list'],
+        item: this.classNames['ais-Menu-item'],
+        selectedItem: this.classNames['ais-Menu-item--selected'],
+        link: this.classNames['ais-Menu-link'],
+        label: this.classNames['ais-Menu-label'],
+        count: this.classNames['ais-Menu-count'],
+        showMore: this.classNames['ais-Menu-showMore'],
+        disabledShowMore: this.classNames['ais-Menu-showMore--disabled'],
+      },
+    });
+  }),
 };
 </script>

@@ -3,24 +3,12 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import {
-  normalizeSnapshot as commonNormalizeSnapshot,
-  wait,
-} from '@instantsearch/testutils';
+import { normalizeSnapshot, wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
 import type { MenuWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
-
-function normalizeSnapshot(html: string) {
-  // InstantSearch.js <Template> adds a div wrapper around menu items
-  // @MAJOR: Remove this once <Template> stops defaulting to div root tags
-  return commonNormalizeSnapshot(html).replace(
-    /<div>\s*(<a class="ais-Menu-link"[\s\S]*?<\/a>)\s*<\/div>/g,
-    '$1'
-  );
-}
 
 export function createOptionsTests(
   setup: MenuWidgetSetup,
@@ -59,6 +47,38 @@ export function createOptionsTests(
 
     beforeEach(() => {
       searchClient.search.mockClear();
+    });
+
+    test('formats the counts with the locale', async () => {
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient: createAlgoliaSearchClient({
+            search: jest.fn((requests) =>
+              Promise.resolve(
+                createMultiSearchResponse(
+                  ...requests.map(() =>
+                    createSingleSearchResponse({
+                      facets: { brand: { Samsung: 12345, Apple: 42 } },
+                    })
+                  )
+                )
+              )
+            ),
+          }),
+        },
+        widgetParams: { attribute: 'brand' },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(
+        Array.from(document.querySelectorAll('.ais-Menu-count')).map(
+          (count) => count.textContent
+        )
+      ).toEqual(['42', (12345).toLocaleString()]);
     });
 
     test('renders with props', async () => {

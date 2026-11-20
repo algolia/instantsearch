@@ -1,52 +1,11 @@
-<template>
-  <div
-    v-if="state"
-    :class="[suit(), !state.canRefine && suit('', 'noRefinement')]"
-  >
-    <slot
-      :items="state.items"
-      :can-refine="state.canRefine"
-      :can-toggle-show-more="state.canToggleShowMore"
-      :is-showing-more="state.isShowingMore"
-      :refine="state.refine"
-      :createURL="state.createURL"
-      :toggle-show-more="state.toggleShowMore"
-      :send-event="state.sendEvent"
-    >
-      <hierarchical-menu-list
-        :items="state.items"
-        :level="0"
-        :refine="state.refine"
-        :createURL="state.createURL"
-        :suit="suit"
-      />
-
-      <button
-        v-if="showMore"
-        :class="[
-          suit('showMore'),
-          !state.canToggleShowMore && suit('showMore', 'disabled'),
-        ]"
-        :disabled="!state.canToggleShowMore"
-        :aria-expanded="state.isShowingMore ? 'true' : 'false'"
-        @click.prevent="state.toggleShowMore"
-      >
-        <slot name="showMoreLabel" :is-showing-more="state.isShowingMore">
-          {{ state.isShowingMore ? 'Show less' : 'Show more' }}
-        </slot>
-      </button>
-    </slot>
-  </div>
-</template>
-
 <script>
 import { connectHierarchicalMenu } from 'instantsearch-core';
+import { createHierarchicalMenuComponent } from 'instantsearch-ui-components';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
-
-import HierarchicalMenuList from './HierarchicalMenuList.vue';
+import { Fragment, getScopedSlot, renderReactCompat } from '../util/vue-compat';
 
 export default {
   name: 'AisHierarchicalMenu',
@@ -62,9 +21,6 @@ export default {
     ),
     createPanelConsumerMixin(),
   ],
-  components: {
-    HierarchicalMenuList,
-  },
   props: {
     attributes: {
       type: Array,
@@ -118,5 +74,68 @@ export default {
       };
     },
   },
+  render: renderReactCompat(function (h) {
+    if (!this.state) {
+      return null;
+    }
+
+    const defaultSlot = getScopedSlot(this, 'default');
+    if (defaultSlot) {
+      return h(
+        'div',
+        {
+          className: [
+            this.suit(),
+            !this.state.canRefine && this.suit('', 'noRefinement'),
+          ],
+        },
+        [
+          defaultSlot({
+            items: this.state.items,
+            canRefine: this.state.canRefine,
+            canToggleShowMore: this.state.canToggleShowMore,
+            isShowingMore: this.state.isShowingMore,
+            refine: this.state.refine,
+            createURL: this.state.createURL,
+            toggleShowMore: this.state.toggleShowMore,
+            sendEvent: this.state.sendEvent,
+          }),
+        ]
+      );
+    }
+
+    const HierarchicalMenu = createHierarchicalMenuComponent({
+      createElement: h,
+      Fragment,
+    });
+
+    return h(HierarchicalMenu, {
+      items: this.state.items,
+      createURL: this.state.createURL,
+      onRefine: (item) => this.state.refine(item.value),
+      showMore: this.showMore,
+      canToggleShowMore: this.state.canToggleShowMore,
+      isShowingMore: this.state.isShowingMore,
+      onToggleShowMore: this.state.toggleShowMore,
+      showMoreTextComponent: getScopedSlot(this, 'showMoreLabel'),
+      classNames: this.classNames && {
+        root: this.classNames['ais-HierarchicalMenu'],
+        noRefinementRoot: this.classNames['ais-HierarchicalMenu--noRefinement'],
+        list: this.classNames['ais-HierarchicalMenu-list'],
+        childList: this.classNames['ais-HierarchicalMenu-list--child'],
+        item: this.classNames['ais-HierarchicalMenu-item'],
+        selectedItem: this.classNames['ais-HierarchicalMenu-item--selected'],
+        parentItem: this.classNames['ais-HierarchicalMenu-item--parent'],
+        link: this.classNames['ais-HierarchicalMenu-link'],
+        selectedItemLink:
+          this.classNames['ais-HierarchicalMenu-link--selected'],
+        label: this.classNames['ais-HierarchicalMenu-label'],
+        count: this.classNames['ais-HierarchicalMenu-count'],
+        showMore: this.classNames['ais-HierarchicalMenu-showMore'],
+        disabledShowMore:
+          this.classNames['ais-HierarchicalMenu-showMore--disabled'],
+      },
+    });
+  }),
 };
 </script>
