@@ -3,10 +3,7 @@ import {
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import {
-  normalizeSnapshot as commonNormalizeSnapshot,
-  wait,
-} from '@instantsearch/testutils';
+import { normalizeSnapshot, wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
@@ -14,20 +11,32 @@ import type { NumericMenuWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 import type { SearchResponse } from 'instantsearch.js';
 
-function normalizeSnapshot(html: string) {
-  // Each flavor has its own way to render the widget by default.
-  // @MAJOR: Remove this once all flavors are aligned.
-  return commonNormalizeSnapshot(html)
-    .replace(/<div>(.*?)<\/div>/gs, '$1')
-    .replace(/value=".*?"/gs, '')
-    .replace(/checked=""/g, '');
-}
-
 export function createOptionsTests(
   setup: NumericMenuWidgetSetup,
   { act }: Required<TestOptions>
 ) {
   describe('options', () => {
+    test('adds the noRefinement modifier when it cannot refine', async () => {
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient: createMockedSearchClient({ hits: [], nbHits: 0 }),
+        },
+        widgetParams: {
+          attribute: 'price',
+          items: [{ label: 'All' }, { label: 'Less than 500$', end: 500 }],
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(document.querySelector('.ais-NumericMenu')).toHaveClass(
+        'ais-NumericMenu--noRefinement'
+      );
+    });
+
     test('renders with props', async () => {
       const searchClient = createMockedSearchClient({});
 
@@ -72,6 +81,7 @@ export function createOptionsTests(
                   class="ais-NumericMenu-radio"
                   name="price"
                   type="radio"
+                  value="%7B%7D"
                 />
                 <span
                   class="ais-NumericMenu-labelText"
@@ -90,6 +100,7 @@ export function createOptionsTests(
                   class="ais-NumericMenu-radio"
                   name="price"
                   type="radio"
+                  value="%7B%22end%22:500%7D"
                 />
                 <span
                   class="ais-NumericMenu-labelText"
@@ -108,6 +119,7 @@ export function createOptionsTests(
                   class="ais-NumericMenu-radio"
                   name="price"
                   type="radio"
+                  value="%7B%22start%22:500,%22end%22:1000%7D"
                 />
                 <span
                   class="ais-NumericMenu-labelText"
@@ -126,6 +138,7 @@ export function createOptionsTests(
                   class="ais-NumericMenu-radio"
                   name="price"
                   type="radio"
+                  value="%7B%22start%22:1000%7D"
                 />
                 <span
                   class="ais-NumericMenu-labelText"

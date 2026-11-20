@@ -53,8 +53,7 @@ describe('HierarchicalMenu', () => {
           data: null,
         },
       ],
-      hasItems: true,
-      onNavigate: jest.fn(),
+      onRefine: jest.fn(),
       createURL: jest.fn((value: string) => `#${value}`),
       onToggleShowMore: jest.fn(),
       canToggleShowMore: true,
@@ -77,7 +76,7 @@ describe('HierarchicalMenu', () => {
           class="ais-HierarchicalMenu"
         >
           <ul
-            class="ais-HierarchicalMenu-list"
+            class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0"
           >
             <li
               class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected ais-HierarchicalMenu-item--parent"
@@ -98,7 +97,7 @@ describe('HierarchicalMenu', () => {
                 </span>
               </a>
               <ul
-                class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child"
+                class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child ais-HierarchicalMenu-list--lvl1"
               >
                 <li
                   class="ais-HierarchicalMenu-item"
@@ -184,7 +183,7 @@ describe('HierarchicalMenu', () => {
     `);
   });
 
-  test('calls an `onNavigate` callback when clicking a checkbox', () => {
+  test('calls an `onRefine` callback when clicking a checkbox', () => {
     const props = createProps();
     const { container } = render(<HierarchicalMenu {...props} />);
 
@@ -192,8 +191,10 @@ describe('HierarchicalMenu', () => {
       container.querySelector('[href="#iPad"]') as HTMLAnchorElement
     );
 
-    expect(props.onNavigate).toHaveBeenCalledTimes(1);
-    expect(props.onNavigate).toHaveBeenCalledWith('iPad');
+    expect(props.onRefine).toHaveBeenCalledTimes(1);
+    expect(props.onRefine).toHaveBeenCalledWith(
+      expect.objectContaining({ value: 'iPad' })
+    );
   });
 
   describe('Show more / less', () => {
@@ -207,7 +208,7 @@ describe('HierarchicalMenu', () => {
             class="ais-HierarchicalMenu"
           >
             <ul
-              class="ais-HierarchicalMenu-list"
+              class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0"
             >
               <li
                 class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected ais-HierarchicalMenu-item--parent"
@@ -228,7 +229,7 @@ describe('HierarchicalMenu', () => {
                   </span>
                 </a>
                 <ul
-                  class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child"
+                  class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child ais-HierarchicalMenu-list--lvl1"
                 >
                   <li
                     class="ais-HierarchicalMenu-item"
@@ -365,7 +366,7 @@ describe('HierarchicalMenu', () => {
           class="ais-HierarchicalMenu ROOT MyCustomHierarchicalMenu"
         >
           <ul
-            class="ais-HierarchicalMenu-list LIST"
+            class="ais-HierarchicalMenu-list LIST ais-HierarchicalMenu-list--lvl0"
           >
             <li
               class="ais-HierarchicalMenu-item ITEM ais-HierarchicalMenu-item--selected SELECTEDITEM ais-HierarchicalMenu-item--parent PARENTITEM"
@@ -386,7 +387,7 @@ describe('HierarchicalMenu', () => {
                 </span>
               </a>
               <ul
-                class="ais-HierarchicalMenu-list LIST ais-HierarchicalMenu-list--child CHILDLIST"
+                class="ais-HierarchicalMenu-list LIST ais-HierarchicalMenu-list--child CHILDLIST ais-HierarchicalMenu-list--lvl1"
               >
                 <li
                   class="ais-HierarchicalMenu-item ITEM"

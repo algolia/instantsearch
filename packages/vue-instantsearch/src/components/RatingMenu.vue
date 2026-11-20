@@ -1,80 +1,11 @@
-<template>
-  <div v-if="state" :class="suit()">
-    <slot
-      :items="state.items"
-      :refine="state.refine"
-      :createURL="state.createURL"
-      :send-event="state.sendEvent"
-      :can-refine="state.canRefine"
-    >
-      <svg style="display: none">
-        <symbol id="ais-RatingMenu-starSymbol" viewBox="0 0 24 24">
-          <path
-            d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z"
-          />
-        </symbol>
-        <symbol id="ais-RatingMenu-starEmptySymbol" viewBox="0 0 24 24">
-          <path
-            d="M12 6.76l1.379 4.246h4.465l-3.612 2.625 1.379 4.246-3.611-2.625-3.612 2.625 1.379-4.246-3.612-2.625h4.465l1.38-4.246zm0-6.472l-2.833 8.718h-9.167l7.416 5.389-2.833 8.718 7.417-5.388 7.416 5.388-2.833-8.718 7.417-5.389h-9.167l-2.833-8.718z"
-          />
-        </symbol>
-      </svg>
-
-      <ul :class="suit('list')">
-        <li
-          v-for="(item, key) in state.items"
-          :key="key"
-          :class="[suit('item'), item.isRefined && suit('item', 'selected')]"
-        >
-          <div>
-            <a
-              :href="state.createURL(item.value)"
-              :aria-label="`${item.value} & up`"
-              :class="suit('link')"
-              @click.exact.left.prevent="state.refine(item.value)"
-            >
-              <template v-for="(full, n) in item.stars">
-                <svg
-                  v-if="full"
-                  aria-hidden="true"
-                  width="24"
-                  height="24"
-                  :class="[suit('starIcon'), suit('starIcon--full')]"
-                  :key="n + '-full'"
-                >
-                  <use xlink:href="#ais-RatingMenu-starSymbol" />
-                </svg>
-
-                <svg
-                  v-else
-                  :class="[suit('starIcon'), suit('starIcon--empty')]"
-                  aria-hidden="true"
-                  width="24"
-                  height="24"
-                  :key="n + '-empty'"
-                >
-                  <use xlink:href="#ais-RatingMenu-starEmptySymbol" />
-                </svg>
-              </template>
-
-              <span :class="suit('label')" aria-hidden="true">
-                <slot name="andUp">&amp; Up</slot>
-              </span>
-              <span :class="suit('count')">{{ item.count }}</span>
-            </a>
-          </div>
-        </li>
-      </ul>
-    </slot>
-  </div>
-</template>
-
 <script>
 import { connectRatingMenu } from 'instantsearch-core';
+import { createRatingMenuComponent } from 'instantsearch-ui-components';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
+import { Fragment, getScopedSlot, renderReactCompat } from '../util/vue-compat';
 
 export default {
   name: 'AisRatingMenu',
@@ -108,5 +39,59 @@ export default {
       };
     },
   },
+  render: renderReactCompat(function (h) {
+    if (!this.state) {
+      return null;
+    }
+
+    const defaultSlot = getScopedSlot(this, 'default');
+    if (defaultSlot) {
+      return h(
+        'div',
+        {
+          className: [
+            this.suit(),
+            !this.state.canRefine && this.suit('', 'noRefinement'),
+          ],
+        },
+        [
+          defaultSlot({
+            items: this.state.items,
+            refine: this.state.refine,
+            createURL: this.state.createURL,
+            sendEvent: this.state.sendEvent,
+            canRefine: this.state.canRefine,
+          }),
+        ]
+      );
+    }
+
+    const RatingMenu = createRatingMenuComponent({
+      createElement: h,
+      Fragment,
+    });
+
+    return h(RatingMenu, {
+      items: this.state.items,
+      canRefine: this.state.canRefine,
+      createURL: this.state.createURL,
+      onRefine: (item) => this.state.refine(item.value),
+      andUpComponent: getScopedSlot(this, 'andUp'),
+      classNames: this.classNames && {
+        root: this.classNames['ais-RatingMenu'],
+        noRefinementRoot: this.classNames['ais-RatingMenu--noRefinement'],
+        list: this.classNames['ais-RatingMenu-list'],
+        item: this.classNames['ais-RatingMenu-item'],
+        selectedItem: this.classNames['ais-RatingMenu-item--selected'],
+        disabledItem: this.classNames['ais-RatingMenu-item--disabled'],
+        link: this.classNames['ais-RatingMenu-link'],
+        starIcon: this.classNames['ais-RatingMenu-starIcon'],
+        fullStarIcon: this.classNames['ais-RatingMenu-starIcon--full'],
+        emptyStarIcon: this.classNames['ais-RatingMenu-starIcon--empty'],
+        label: this.classNames['ais-RatingMenu-label'],
+        count: this.classNames['ais-RatingMenu-count'],
+      },
+    });
+  }),
 };
 </script>

@@ -3,45 +3,12 @@ import {
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import {
-  normalizeSnapshot as commonNormalizeSnapshot,
-  wait,
-} from '@instantsearch/testutils';
+import { normalizeSnapshot, wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
 import type { HierarchicalMenuWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
-
-function normalizeSnapshot(html: string) {
-  return (
-    commonNormalizeSnapshot(html)
-      // InstantSearch.js adds an extra `<div>` around anchors
-      .replace(/(<div>.*?<\/div>)/gs, (match) =>
-        match.replace('<div>', '').replace('</div>', '')
-      )
-      // Vue InstantSearch adds extra `--lvl` modifiers classes on lists
-      .replace(/ ais-HierarchicalMenu-list--lvl\d/g, '')
-      // InstantSearch.js adds an extra `<div>` with the child list modifier
-      // class around child lists
-      .replace(
-        /<div class="ais-HierarchicalMenu-list--child"><ul class="ais-HierarchicalMenu-list">.*?<\/ul><\/div>/g,
-        (match) =>
-          match
-            .replace(
-              '<ul class="ais-HierarchicalMenu-list">',
-              '<ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child">'
-            )
-            .replace('<div class="ais-HierarchicalMenu-list--child">', '')
-            .replace('</div>', '')
-      )
-      // InstantSearch.js formats count with `Number.toLocaleString`
-      .replace(
-        /<span class="ais-HierarchicalMenu-count">(.*?)<\/span>/g,
-        (match) => match.replace(',', '')
-      )
-  );
-}
 
 export function createOptionsTests(
   setup: HierarchicalMenuWidgetSetup,
@@ -77,7 +44,7 @@ export function createOptionsTests(
           class="ais-HierarchicalMenu"
         >
           <ul
-            class="ais-HierarchicalMenu-list"
+            class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0"
           >
             <li
               class="ais-HierarchicalMenu-item"
@@ -94,7 +61,7 @@ export function createOptionsTests(
                 <span
                   class="ais-HierarchicalMenu-count"
                 >
-                  1369
+                  1,369
                 </span>
               </a>
             </li>
@@ -201,7 +168,7 @@ export function createOptionsTests(
           class="ais-HierarchicalMenu"
         >
           <ul
-            class="ais-HierarchicalMenu-list"
+            class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0"
           >
             <li
               class="ais-HierarchicalMenu-item"
@@ -218,7 +185,7 @@ export function createOptionsTests(
                 <span
                   class="ais-HierarchicalMenu-count"
                 >
-                  1369
+                  1,369
                 </span>
               </a>
             </li>
@@ -275,11 +242,11 @@ export function createOptionsTests(
             <span
               class="ais-HierarchicalMenu-count"
             >
-              1369
+              1,369
             </span>
           </a>
           <ul
-            class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child"
+            class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child ais-HierarchicalMenu-list--lvl1"
           >
             <li
               class="ais-HierarchicalMenu-item"
@@ -353,7 +320,7 @@ export function createOptionsTests(
           class="ais-HierarchicalMenu"
         >
           <ul
-            class="ais-HierarchicalMenu-list"
+            class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0"
           >
             <li
               class="ais-HierarchicalMenu-item"
@@ -415,7 +382,7 @@ export function createOptionsTests(
           class="ais-HierarchicalMenu"
         >
           <ul
-            class="ais-HierarchicalMenu-list"
+            class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0"
           >
             <li
               class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected ais-HierarchicalMenu-item--parent"
@@ -436,7 +403,7 @@ export function createOptionsTests(
                 </span>
               </a>
               <ul
-                class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child"
+                class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child ais-HierarchicalMenu-list--lvl1"
               >
                 <li
                   class="ais-HierarchicalMenu-item"
@@ -824,7 +791,7 @@ export function createOptionsTests(
             class="ais-HierarchicalMenu"
           >
             <ul
-              class="ais-HierarchicalMenu-list"
+              class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0"
             >
               <li
                 class="ais-HierarchicalMenu-item"
@@ -841,7 +808,7 @@ export function createOptionsTests(
                   <span
                     class="ais-HierarchicalMenu-count"
                   >
-                    1369
+                    1,369
                   </span>
                 </a>
               </li>
