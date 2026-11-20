@@ -1,12 +1,17 @@
 /** @jsx h */
 
 import { connectRefinementList } from 'instantsearch-core';
-import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
-import { suitComponent as component } from 'instantsearch-core/internal';
-import { cx } from 'instantsearch-ui-components';
-import { h, render } from 'preact';
+import {
+  createDocumentationMessageGenerator,
+  isEqual,
+  isSpecialClick,
+  suitComponent as component,
+} from 'instantsearch-core/internal';
+import { createRefinementListComponent, cx } from 'instantsearch-ui-components';
+import { createRef, Fragment, h, render } from 'preact';
 
-import RefinementList from '../../components/RefinementList/RefinementList';
+import SearchBox from '../../components/SearchBox/SearchBox';
+import TemplateComponent from '../../components/Template/Template';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 import searchBoxDefaultTemplates from '../search-box/defaultTemplates';
@@ -24,6 +29,7 @@ import type {
   RefinementListWidgetDescription,
 } from 'instantsearch-core';
 import type { WidgetFactory, Renderer } from 'instantsearch-core';
+import type { RefinementListItemComponentProps } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'refinement-list',
@@ -211,36 +217,140 @@ export type RefinementListWidgetParams = {
   cssClasses?: RefinementListCSSClasses;
 };
 
-const renderer =
-  ({
-    containerNode,
-    cssClasses,
-    templates,
-    searchBoxTemplates,
-    renderState,
-    showMore,
-    showMoreButtonLabel,
-    searchable,
-    searchablePlaceholder,
-    searchableIsAlwaysActive,
-    searchableSelectOnSubmit,
-  }: {
-    containerNode: HTMLElement;
-    cssClasses: RefinementListComponentCSSClasses;
-    renderState: {
-      templateProps?: PreparedTemplateProps<RefinementListComponentTemplates>;
-      searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxComponentTemplates>;
-    };
-    templates: RefinementListOwnTemplates;
-    searchBoxTemplates: SearchBoxTemplates;
-    showMore?: boolean;
-    showMoreButtonLabel?: string;
-    searchable?: boolean;
-    searchablePlaceholder?: string;
-    searchableIsAlwaysActive?: boolean;
-    searchableSelectOnSubmit?: boolean;
-  }): Renderer<RefinementListRenderState, RefinementListConnectorParams> =>
-  (
+const RefinementListUiComponent = createRefinementListComponent({
+  createElement: h,
+  Fragment,
+});
+
+type RefinementListRendererState = {
+  templateProps?: PreparedTemplateProps<RefinementListOwnTemplates>;
+  searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxComponentTemplates>;
+};
+
+// Click events on DOM trees like LABEL > INPUT fire twice: once on the label
+// and once on the input the label activates. This guard ignores the click on
+// a label wrapping a checkbox or radio (the input's own click follows), lets
+// special clicks (modifier keys, middle click) keep their browser behavior,
+// prevents the navigation of links (the widget handles the URL), and stops
+// propagation so nested lists don't refine their parent too.
+function shouldRefineFromItemClick(
+  originalEvent: MouseEvent,
+  isRefined: boolean
+) {
+  if (isSpecialClick(originalEvent)) {
+    return false;
+  }
+
+  let parent = originalEvent.target as HTMLElement | null;
+
+  if (parent === null || parent.parentNode === null) {
+    return false;
+  }
+
+  if (
+    isRefined &&
+    parent.parentNode.querySelector('input[type="radio"]:checked')
+  ) {
+    // Prevent refinement for being reset if the user clicks on an already checked radio button
+    return false;
+  }
+
+  if (parent.tagName === 'INPUT') {
+    return true;
+  }
+
+  while (parent !== originalEvent.currentTarget) {
+    if (
+      parent.tagName === 'LABEL' &&
+      (parent.querySelector('input[type="checkbox"]') ||
+        parent.querySelector('input[type="radio"]'))
+    ) {
+      return false;
+    }
+
+    if (parent.tagName === 'A' && (parent as HTMLAnchorElement).href) {
+      originalEvent.preventDefault();
+    }
+
+    parent = parent.parentNode as HTMLElement;
+  }
+
+  originalEvent.stopPropagation();
+
+  return true;
+}
+
+const renderer = ({
+  containerNode,
+  cssClasses,
+  userCssClasses,
+  templates,
+  searchBoxTemplates,
+  renderState,
+  showMore,
+  showMoreButtonLabel,
+  searchable,
+  searchablePlaceholder,
+  searchableIsAlwaysActive,
+  searchableSelectOnSubmit,
+}: {
+  containerNode: HTMLElement;
+  cssClasses: RefinementListComponentCSSClasses;
+  userCssClasses: RefinementListOwnCSSClasses;
+  renderState: RefinementListRendererState;
+  templates: RefinementListOwnTemplates;
+  searchBoxTemplates: SearchBoxTemplates;
+  showMore?: boolean;
+  showMoreButtonLabel?: string;
+  searchable?: boolean;
+  searchablePlaceholder?: string;
+  searchableIsAlwaysActive?: boolean;
+  searchableSelectOnSubmit?: boolean;
+}): Renderer<RefinementListRenderState, RefinementListConnectorParams> => {
+  const searchBoxRef = createRef<SearchBox>();
+  let lastRefinedValue: string | undefined = undefined;
+  let lastRenderedState: Partial<RefinementListRenderState> = {};
+
+  // Latest render values, read by the item component so that it keeps the
+  // same identity across renders (a new one would remount every item).
+  let current: Pick<
+    RefinementListRenderState,
+    'refine' | 'createURL' | 'isFromSearch'
+  >;
+
+  const itemComponent = ({
+    item,
+    className,
+    children,
+  }: RefinementListItemComponentProps) => (
+    <li
+      className={className}
+      onClick={(originalEvent) => {
+        if (shouldRefineFromItemClick(originalEvent, item.isRefined)) {
+          lastRefinedValue = item.value;
+          current.refine(item.value);
+        }
+      }}
+    >
+      {templates.item ? (
+        <TemplateComponent
+          {...renderState.templateProps!}
+          templateKey="item"
+          rootTagName="fragment"
+          data={{
+            ...item,
+            url: current.createURL(item.value),
+            cssClasses,
+            isFromSearch: current.isFromSearch,
+          }}
+        />
+      ) : (
+        children
+      )}
+    </li>
+  );
+
+  return (
     {
       refine,
       items,
@@ -255,10 +365,12 @@ const renderer =
     isFirstRendering
   ) => {
     if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
-        defaultTemplates,
-        templates,
-      });
+      lastRenderedState = {};
+      renderState.templateProps =
+        prepareTemplateProps<RefinementListOwnTemplates>({
+          defaultTemplates,
+          templates,
+        });
       renderState.searchBoxTemplateProps = prepareTemplateProps({
         defaultTemplates: searchBoxDefaultTemplates,
         templates: searchBoxTemplates,
@@ -266,29 +378,109 @@ const renderer =
       return;
     }
 
+    // Leaving search mode (e.g. after selecting an item) clears the query
+    // typed in the search box.
+    if (searchBoxRef.current && !isFromSearch) {
+      searchBoxRef.current.resetInput();
+    }
+
+    // Skip renders that don't change the list, so they don't overwrite the
+    // query typed in the search box with its default.
+    if (
+      isEqual(lastRenderedState.items, items) &&
+      lastRenderedState.isShowingMore === isShowingMore &&
+      lastRenderedState.canToggleShowMore === canToggleShowMore &&
+      lastRenderedState.isFromSearch === isFromSearch
+    ) {
+      return;
+    }
+    lastRenderedState = {
+      items,
+      isShowingMore,
+      canToggleShowMore,
+      isFromSearch,
+    };
+
+    current = { refine, createURL, isFromSearch };
+
+    const shouldDisableSearchBox =
+      searchableIsAlwaysActive !== true &&
+      !(isFromSearch || !hasExhaustiveItems);
+
     render(
-      <RefinementList
-        createURL={createURL}
-        cssClasses={cssClasses}
-        facetValues={items}
-        templateProps={renderState.templateProps!}
-        searchBoxTemplateProps={renderState.searchBoxTemplateProps}
-        toggleRefinement={refine}
-        searchFacetValues={searchable ? searchForItems : undefined}
-        searchPlaceholder={searchablePlaceholder}
-        searchIsAlwaysActive={searchableIsAlwaysActive}
+      <RefinementListUiComponent
+        items={items}
         isFromSearch={isFromSearch}
-        showMore={showMore && !isFromSearch && items.length > 0}
-        showMoreButtonLabel={showMoreButtonLabel}
-        toggleShowMore={toggleShowMore}
-        isShowingMore={isShowingMore}
-        hasExhaustiveItems={hasExhaustiveItems}
+        classNames={userCssClasses}
+        itemComponent={itemComponent}
+        searchBoxComponent={
+          searchable
+            ? () => (
+                <SearchBox
+                  ref={searchBoxRef}
+                  placeholder={searchablePlaceholder}
+                  disabled={shouldDisableSearchBox}
+                  cssClasses={cssClasses.searchable!}
+                  templates={renderState.searchBoxTemplateProps!.templates}
+                  onChange={(event: Event) =>
+                    searchForItems((event.target as HTMLInputElement).value)
+                  }
+                  onReset={() => searchForItems('')}
+                  onSubmit={() => {
+                    if (searchableSelectOnSubmit !== false && items[0]) {
+                      refine(items[0].value);
+                    }
+                  }}
+                  // This sets the search box to a controlled state because
+                  // we don't rely on the `refine` prop but on `onChange`.
+                  searchAsYouType={false}
+                />
+              )
+            : undefined
+        }
+        showNoResults={Boolean(
+          searchable && isFromSearch && items.length === 0
+        )}
+        noResultsComponent={() => (
+          <TemplateComponent
+            {...renderState.templateProps!}
+            templateKey="searchableNoResults"
+            rootTagName="fragment"
+          />
+        )}
+        showMore={Boolean(showMore && !isFromSearch && items.length > 0)}
         canToggleShowMore={canToggleShowMore}
-        searchableSelectOnSubmit={searchableSelectOnSubmit}
+        isShowingMore={isShowingMore}
+        onToggleShowMore={toggleShowMore}
+        showMoreTextComponent={(data) => (
+          <TemplateComponent
+            {...renderState.templateProps!}
+            templateKey="showMoreText"
+            rootTagName="fragment"
+            data={data}
+          />
+        )}
+        translations={{ showMoreButtonLabel }}
       />,
       containerNode
     );
+
+    // Preact doesn't keep the focus on the refined checkbox across renders.
+    // @see https://github.com/preactjs/preact/issues/3242
+    if (lastRefinedValue !== undefined) {
+      const inputs = containerNode.querySelectorAll<HTMLInputElement>(
+        '.ais-RefinementList-list input'
+      );
+      for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i].value === lastRefinedValue) {
+          inputs[i].focus();
+          break;
+        }
+      }
+      lastRefinedValue = undefined;
+    }
   };
+};
 
 export type RefinementListWidget = WidgetFactory<
   RefinementListWidgetDescription & { $$widgetType: 'ais.refinementList' },
@@ -421,6 +613,7 @@ const refinementList: RefinementListWidget = function refinementList(
       loadingIndicator: templates.searchableLoadingIndicator,
     },
     renderState: {},
+    userCssClasses,
     searchable,
     searchablePlaceholder,
     searchableIsAlwaysActive,

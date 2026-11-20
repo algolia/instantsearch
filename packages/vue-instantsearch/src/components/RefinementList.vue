@@ -1,101 +1,18 @@
-<template>
-  <div
-    :class="[suit(), items.length === 0 && suit('', 'noRefinement')]"
-    v-if="state"
-  >
-    <slot
-      :items="items"
-      :refine="refine"
-      :search-for-items="state.searchForItems"
-      :search-for-items-query="searchForFacetValuesQuery"
-      :toggle-show-more="toggleShowMore"
-      :can-toggle-show-more="state.canToggleShowMore"
-      :is-showing-more="state.isShowingMore"
-      :createURL="state.createURL"
-      :is-from-search="state.isFromSearch"
-      :can-refine="state.canRefine"
-      :send-event="state.sendEvent"
-    >
-      <div :class="suit('searchBox')" v-if="searchable">
-        <search-input
-          v-model="searchForFacetValues"
-          :show-loading-indicator="true"
-          :placeholder="searchablePlaceholder"
-          :class-names="classNames"
-        />
-      </div>
-      <slot
-        name="noResults"
-        :query="searchForFacetValues"
-        v-if="state.isFromSearch && items.length === 0"
-      >
-        <div :class="suit('noResults')">No results.</div>
-      </slot>
-      <ul v-if="items.length > 0" :class="suit('list')">
-        <li
-          :class="[suit('item'), item.isRefined && suit('item', 'selected')]"
-          v-for="item in items"
-          :key="item.value"
-        >
-          <slot
-            name="item"
-            :item="item"
-            :refine="refine"
-            :createURL="state.createURL"
-          >
-            <label :class="suit('label')">
-              <input
-                :class="suit('checkbox')"
-                type="checkbox"
-                :value="item.value"
-                :checked="item.isRefined"
-                @change="refine(item.value)"
-              />
-              <span v-if="searchable" :class="suit('labelText')">
-                <ais-highlight attribute="item" :hit="item" />
-              </span>
-              <span v-else :class="suit('labelText')">{{ item.label }}</span>
-              <span :class="suit('count')">{{ item.count }}</span>
-            </label>
-          </slot>
-        </li>
-      </ul>
-      <button
-        :class="[
-          suit('showMore'),
-          {
-            [suit('showMore', 'disabled')]: !state.canToggleShowMore,
-          },
-        ]"
-        @click="toggleShowMore"
-        v-if="showMore"
-        :disabled="!state.canToggleShowMore"
-        :aria-expanded="state.isShowingMore ? 'true' : 'false'"
-        :aria-label="showMoreButtonLabel"
-      >
-        <slot name="showMoreLabel" :is-showing-more="state.isShowingMore">
-          Show {{ state.isShowingMore ? 'less' : 'more' }}
-        </slot>
-      </button>
-    </slot>
-  </div>
-</template>
-
 <script>
 import { connectRefinementList } from 'instantsearch-core';
+import { createRefinementListComponent } from 'instantsearch-ui-components';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
+import { Fragment, getScopedSlot, renderReactCompat } from '../util/vue-compat';
 
-import AisHighlight from './Highlight.vue';
 import SearchInput from './SearchInput.vue';
 
 const noop = () => {};
 
 export default {
   name: 'AisRefinementList',
-  components: { SearchInput, AisHighlight },
   mixins: [
     createSuitMixin({ name: 'RefinementList' }),
     createWidgetMixin(
@@ -207,5 +124,111 @@ export default {
       this.searchForFacetValuesQuery = '';
     },
   },
+  render: renderReactCompat(function (h) {
+    if (!this.state) {
+      return null;
+    }
+
+    const defaultSlot = getScopedSlot(this, 'default');
+    if (defaultSlot) {
+      return h(
+        'div',
+        {
+          className: [
+            this.suit(),
+            this.items.length === 0 && this.suit('', 'noRefinement'),
+          ],
+        },
+        [
+          defaultSlot({
+            items: this.items,
+            refine: this.refine,
+            searchForItems: this.state.searchForItems,
+            searchForItemsQuery: this.searchForFacetValuesQuery,
+            toggleShowMore: this.toggleShowMore,
+            canToggleShowMore: this.state.canToggleShowMore,
+            isShowingMore: this.state.isShowingMore,
+            createURL: this.state.createURL,
+            isFromSearch: this.state.isFromSearch,
+            canRefine: this.state.canRefine,
+            sendEvent: this.state.sendEvent,
+          }),
+        ]
+      );
+    }
+
+    const itemSlot = getScopedSlot(this, 'item');
+    const noResultsSlot = getScopedSlot(this, 'noResults');
+    const showMoreLabelSlot = getScopedSlot(this, 'showMoreLabel');
+
+    const RefinementList = createRefinementListComponent({
+      createElement: h,
+      Fragment,
+    });
+
+    return h(RefinementList, {
+      items: this.items,
+      onRefine: (item) => this.refine(item.value),
+      isFromSearch: this.state.isFromSearch,
+      searchBoxComponent: this.searchable
+        ? () =>
+            h(
+              'div',
+              { className: 'ais-SearchBox' },
+              h(SearchInput, {
+                modelValue: this.searchForFacetValues,
+                onInput: (value) => {
+                  this.searchForFacetValues = value;
+                },
+                showLoadingIndicator: true,
+                placeholder: this.searchablePlaceholder,
+                submitTitle: 'Submit the search query',
+                resetTitle: 'Clear the search query',
+                classNames: this.classNames,
+              })
+            )
+        : undefined,
+      showNoResults: Boolean(
+        this.searchable && this.state.isFromSearch && this.items.length === 0
+      ),
+      noResultsComponent:
+        noResultsSlot &&
+        (() => noResultsSlot({ query: this.searchForFacetValues })),
+      itemComponent:
+        itemSlot &&
+        (({ item, className }) =>
+          h(
+            'li',
+            { className, key: item.value },
+            itemSlot({
+              item,
+              refine: this.refine,
+              createURL: this.state.createURL,
+            })
+          )),
+      showMore: this.showMore,
+      canToggleShowMore: this.state.canToggleShowMore,
+      isShowingMore: this.state.isShowingMore,
+      onToggleShowMore: this.toggleShowMore,
+      showMoreTextComponent: showMoreLabelSlot,
+      translations: { showMoreButtonLabel: this.showMoreButtonLabel },
+      classNames: this.classNames && {
+        root: this.classNames['ais-RefinementList'],
+        noRefinementRoot: this.classNames['ais-RefinementList--noRefinement'],
+        searchBox: this.classNames['ais-RefinementList-searchBox'],
+        noResults: this.classNames['ais-RefinementList-noResults'],
+        list: this.classNames['ais-RefinementList-list'],
+        item: this.classNames['ais-RefinementList-item'],
+        selectedItem: this.classNames['ais-RefinementList-item--selected'],
+        label: this.classNames['ais-RefinementList-label'],
+        checkbox: this.classNames['ais-RefinementList-checkbox'],
+        labelText: this.classNames['ais-RefinementList-labelText'],
+        count: this.classNames['ais-RefinementList-count'],
+        showMore: this.classNames['ais-RefinementList-showMore'],
+        disabledShowMore:
+          this.classNames['ais-RefinementList-showMore--disabled'],
+      },
+    });
+  }),
 };
 </script>
