@@ -37,6 +37,7 @@ export * from './Menu';
 export * from './NumericMenu';
 export * from './PoweredBy';
 export * from './RatingMenu';
+export * from './RefinementList';
 export * from './RelatedProducts';
 export * from './Selector';
 export type { ShowMoreButtonTranslations } from './ShowMoreButton';

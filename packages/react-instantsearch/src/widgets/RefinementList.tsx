@@ -7,16 +7,19 @@ import { SearchBox as SearchBoxUiComponent } from '../ui/SearchBox';
 import type { RefinementListProps as RefinementListUiComponentProps } from '../ui/RefinementList';
 import type { SearchBoxProps } from '../ui/SearchBox';
 import type { RefinementListItem } from 'instantsearch-core';
+import type { RefinementListTranslations } from 'instantsearch-ui-components';
 import type { UseRefinementListProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<
   RefinementListUiComponentProps,
-  | 'canRefine'
   | 'items'
   | 'onRefine'
-  | 'query'
-  | 'searchBox'
-  | 'noResults'
+  | 'isFromSearch'
+  | 'searchBoxComponent'
+  | 'showNoResults'
+  | 'noResultsComponent'
+  | 'itemComponent'
+  | 'showMoreTextComponent'
   | 'canToggleShowMore'
   | 'onToggleShowMore'
   | 'isShowingMore'
@@ -33,13 +36,9 @@ export type RefinementListProps = Omit<
     searchableSelectOnSubmit?: boolean;
   } & {
     translations?: Partial<
-      UiProps['translations'] & {
+      RefinementListTranslations & {
         submitButtonTitle: string;
         resetButtonTitle: string;
-        /**
-         * What to display when there are no results.
-         */
-        noResultsText: string;
       }
     >;
   };
@@ -59,7 +58,6 @@ export function RefinementList({
   ...props
 }: RefinementListProps) {
   const {
-    canRefine,
     canToggleShowMore,
     isFromSearch,
     isShowingMore,
@@ -137,35 +135,33 @@ export function RefinementList({
 
   const uiProps: UiProps = {
     items,
-    canRefine,
     onRefine,
-    query: inputValue,
-    searchBox: searchable && (
-      <SearchBoxUiComponent
-        inputRef={inputRef}
-        placeholder={searchablePlaceholder}
-        isSearchStalled={false}
-        value={inputValue}
-        onChange={onChange}
-        onReset={onReset}
-        onSubmit={onSubmit}
-        translations={{
-          submitButtonTitle: mergedTranslations.submitButtonTitle,
-          resetButtonTitle: mergedTranslations.resetButtonTitle,
-        }}
-      />
-    ),
-    noResults:
-      searchable &&
-      isFromSearch &&
-      items.length === 0 &&
-      mergedTranslations.noResultsText,
+    isFromSearch,
+    searchBoxComponent: searchable
+      ? () => (
+          <SearchBoxUiComponent
+            inputRef={inputRef}
+            placeholder={searchablePlaceholder}
+            isSearchStalled={false}
+            value={inputValue}
+            onChange={onChange}
+            onReset={onReset}
+            onSubmit={onSubmit}
+            translations={{
+              submitButtonTitle: mergedTranslations.submitButtonTitle,
+              resetButtonTitle: mergedTranslations.resetButtonTitle,
+            }}
+          />
+        )
+      : undefined,
+    showNoResults: Boolean(searchable && isFromSearch && items.length === 0),
     canToggleShowMore,
     onToggleShowMore: toggleShowMore,
     isShowingMore,
     translations: {
       showMoreButtonText: mergedTranslations.showMoreButtonText,
       showMoreButtonLabel: translations?.showMoreButtonLabel,
+      noResultsText: mergedTranslations.noResultsText,
     },
   };
 
