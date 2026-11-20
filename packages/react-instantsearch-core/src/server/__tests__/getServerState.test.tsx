@@ -703,8 +703,6 @@ describe('getServerState', () => {
         </div>
       </section>
       <div class="ais-RefinementList ais-RefinementList--noRefinement">
-        <ul class="ais-RefinementList-list">
-        </ul>
       </div>
       <div class="ais-SearchBox">
         <form class="ais-SearchBox-form"
