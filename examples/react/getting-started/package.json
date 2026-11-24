@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-getting-started",
-  "version": "6.154.0",
+  "version": "6.155.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -11,13 +11,13 @@
   "dependencies": {
     "algoliasearch": "5.1.1",
     "algoliasearch-helper": "3.30.3",
-    "instantsearch-ui-components": "0.46.1",
+    "instantsearch-ui-components": "0.46.2",
     "instantsearch.css": "8.25.1",
-    "instantsearch.js": "4.123.1",
+    "instantsearch.js": "4.123.2",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-instantsearch": "7.55.1",
-    "react-instantsearch-core": "7.55.1"
+    "react-instantsearch": "7.55.2",
+    "react-instantsearch-core": "7.55.2"
   },
   "devDependencies": {
     "@types/react": "19.0.3",

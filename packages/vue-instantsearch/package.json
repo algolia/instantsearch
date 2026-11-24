@@ -16,7 +16,7 @@
     "autocomplete"
   ],
   "license": "MIT",
-  "version": "4.33.1",
+  "version": "4.33.2",
   "files": [
     "vue2",
     "vue3",
@@ -35,8 +35,8 @@
   },
   "dependencies": {
     "@swc/helpers": "0.5.18",
-    "instantsearch-ui-components": "0.46.1",
-    "instantsearch.js": "4.123.1",
+    "instantsearch-ui-components": "0.46.2",
+    "instantsearch.js": "4.123.2",
     "mitt": "^2.1.0"
   },
   "peerDependencies": {
