@@ -143,7 +143,7 @@ Run these inside an existing project. They're built to be driven by coding agent
 
 | Command | What it does |
 | --- | --- |
-| `npx create-instantsearch-app init` | Adds InstantSearch to the app in the current directory: detects the framework and layout, installs current packages, and writes a search client and provider (with Insights on). |
+| `npx create-instantsearch-app init` | Adds InstantSearch to the React app in the current directory (including the Next.js App Router): detects the layout, installs current packages, and writes a search client and provider (with Insights on). Vue, vanilla JS, and the Next.js Pages Router aren't supported yet. |
 | `npx create-instantsearch-app introspect` | Reads your index (searchable attributes, facets, numeric ranges, image field, query suggestions index) and suggests widgets, plus a ready-made command for a new app. |
 | `npx create-instantsearch-app agents-md` | Writes a managed block to `AGENTS.md` with the installed versions, file locations, and rules, so the next agent session doesn't fall back to outdated APIs. |
 
