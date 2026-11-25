@@ -4,7 +4,7 @@
 /** @jsx h */
 
 import { shallow } from '@instantsearch/testutils/enzyme';
-import { h } from 'preact';
+import { h, render } from 'preact';
 
 import Slider from '../Slider';
 
@@ -69,6 +69,44 @@ describe('Slider', () => {
     );
 
     expect(tree).toMatchSnapshot();
+  });
+
+  it('renders BEM modifier classes on the handles and large markers', () => {
+    const container = document.createElement('div');
+
+    render(
+      <Slider
+        refine={() => undefined}
+        min={0}
+        max={5000}
+        values={{ min: 0, max: 5000 }}
+        pips={true}
+        tooltips={true}
+        cssClasses={{
+          root: 'root',
+          disabledRoot: 'disabledRoot',
+        }}
+      />,
+      container
+    );
+
+    expect(container.querySelector('.rheostat-handle--lower')).toHaveAttribute(
+      'data-handle-key',
+      '0'
+    );
+    expect(container.querySelector('.rheostat-handle--upper')).toHaveAttribute(
+      'data-handle-key',
+      '1'
+    );
+
+    const largeMarkers = container.querySelectorAll('.rheostat-marker--large');
+    expect(largeMarkers).toHaveLength(3);
+    expect(
+      Array.from(largeMarkers).map((marker) => marker.textContent)
+    ).toEqual(['0', '2,500', '5,000']);
+    expect(
+      container.querySelectorAll('.rheostat-marker-horizontal')
+    ).toHaveLength(0);
   });
 
   it('expect to call handleChange on change', () => {
