@@ -55,6 +55,16 @@ describe('checkAppPath', () => {
       );
     });
 
+    test('should point to init when the directory is an existing app', () => {
+      mockReaddirSync.mockImplementationOnce(() => ['package.json', 'src']);
+
+      expect(() => utils.checkAppPath('path'))
+        .toThrowErrorMatchingInlineSnapshot(`
+        "Could not create project in destination folder \\"<red>path</color>\\" because it is not empty.
+        To add InstantSearch to this existing app, run <cyan>npx create-instantsearch-app init</color> inside it."
+      `);
+    });
+
     afterAll(() => {
       mockExistsSync.mockReset();
       mockLstatSync.mockReset();

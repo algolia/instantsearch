@@ -12,6 +12,8 @@
     "examples/react/react-native",
     "examples/js/e-commerce-umd/public/packages",
     "examples/js/showcase",
-    "packages/create-instantsearch-app/src/templates/**/*"
+    "packages/create-instantsearch-app/src/templates/**/*",
+    // introspect calls searchSingleIndex, which only exists in algoliasearch v5.
+    "packages/create-instantsearch-app/src/commands"
   ]
 }

@@ -18,6 +18,7 @@
 
 - [Get started](#get-started)
 - [Usage](#usage)
+- [Existing apps and coding agents](#existing-apps-and-coding-agents)
 - [API](#api)
 - [Tutorials](#tutorials)
 - [Previews](#previews)
@@ -30,7 +31,7 @@
 
 ## Get started
 
-> The tool requires Node ≥ 8.
+> The tool requires Node ≥ 18.
 
 ```
 npx create-instantsearch-app my-app
@@ -50,7 +51,18 @@ cd my-app
 yarn start
 ```
 
-> **Important** Selecting 'Y' when being prompted to ‘Enable user events’ activates the [`insights`](https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/#widget-param-insights) option for compatible templates, allowing Algolia to process your user Events. Events can unlock powerful features, enhancing your application's effectiveness and we encourage you to consider enabling this valuable functionality. Please review our [API reference](https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/#widget-param-insights) for more details about Events collection and settings.
+> **Important** Selecting 'Y' when being prompted to ‘Enable user events’ (or passing `--enable-insights`) activates the [`insights`](https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/#widget-param-insights) option for compatible templates, allowing Algolia to process your user Events. Events can unlock powerful features, enhancing your application's effectiveness and we encourage you to consider enabling this valuable functionality. Please review our [API reference](https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/#widget-param-insights) for more details about Events collection and settings.
+
+---
+
+Already have an app? Add InstantSearch to it instead:
+
+```
+cd my-existing-app
+npx create-instantsearch-app init
+```
+
+See [Existing apps and coding agents](#existing-apps-and-coding-agents).
 
 ## Usage
 
@@ -72,6 +84,7 @@ $ create-instantsearch-app --help
     --image-attribute <imageAttribute>                 The attribute of your index to use for image display
     --attributes-for-faceting <attributesForFaceting>  The attributes for faceting
     --template <template>                              The InstantSearch template to use
+    --enable-insights                                  Send user events to Algolia (sets the insights option)
     --library-version <libraryVersion>                 The version of the library
     --config <config>                                  The configuration file to get the options from
     --no-installation                                  Ignore dependency installation
@@ -123,6 +136,20 @@ Create the app based on this configuration:
 ```
 create-instantsearch-app my-app --config config.json
 ```
+
+## Existing apps and coding agents
+
+Run these inside an existing project. They're built to be driven by coding agents (Cursor, Claude Code, Codex) as much as by people: pass `--json` to get one machine-readable result with the files changed, any warnings, and the next steps.
+
+| Command | What it does |
+| --- | --- |
+| `npx create-instantsearch-app init` | Adds InstantSearch to the app in the current directory: detects the framework and layout, installs current packages, and writes a search client and provider (with Insights on). |
+| `npx create-instantsearch-app introspect` | Reads your index (searchable attributes, facets, numeric ranges, image field, query suggestions index) and suggests widgets, plus a ready-made command for a new app. |
+| `npx create-instantsearch-app agents-md` | Writes a managed block to `AGENTS.md` with the installed versions, file locations, and rules, so the next agent session doesn't fall back to outdated APIs. |
+
+`init` reads `ALGOLIA_APP_ID`, `ALGOLIA_SEARCH_API_KEY`, and `ALGOLIA_INDEX_NAME` (with or without a framework prefix) from the project's `.env*` files or the environment. It copies only the application ID and the search-only key to browser-exposed variables (`NEXT_PUBLIC_*`, `VITE_*`, and so on). Write and admin keys are reported by name and never copied.
+
+In a folder with no app, `init` stops and returns the command to generate one instead.
 
 ## API
 
