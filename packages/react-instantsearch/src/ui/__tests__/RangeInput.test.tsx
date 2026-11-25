@@ -229,6 +229,7 @@ describe('RangeInput', () => {
             </label>
             <button
               class="ais-RangeInput-submit SUBMIT"
+              disabled=""
               type="submit"
             >
               Go
