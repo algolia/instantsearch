@@ -141,7 +141,6 @@ test('overriding slots', () => {
     .toMatchInlineSnapshot(`
     <button aria-label="Submit the search query"
             class="ais-SearchBox-submit"
-            hidden="hidden"
             title="Submit the search query"
             type="submit"
     >

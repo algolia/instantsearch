@@ -1,13 +1,15 @@
 <script>
 import { connectRefinementList } from 'instantsearch-core';
-import { createRefinementListComponent } from 'instantsearch-ui-components';
+import {
+  createRefinementListComponent,
+  createSearchBoxComponent,
+} from 'instantsearch-ui-components';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
+import { getSearchBoxClassNames } from '../util/searchBoxClassNames';
 import { Fragment, getScopedSlot, renderReactCompat } from '../util/vue-compat';
-
-import SearchInput from './SearchInput.vue';
 
 const noop = () => {};
 
@@ -76,6 +78,9 @@ export default {
       required: false,
       default: undefined,
     },
+  },
+  created() {
+    this.searchInputRef = { current: null };
   },
   data() {
     return {
@@ -165,6 +170,13 @@ export default {
       createElement: h,
       Fragment,
     });
+    const SearchBox = createSearchBoxComponent({
+      createElement: h,
+      Fragment,
+    });
+    const onSearchInput = (event) => {
+      this.searchForFacetValues = event.target.value;
+    };
 
     return h(RefinementList, {
       items: this.items,
@@ -172,21 +184,19 @@ export default {
       isFromSearch: this.state.isFromSearch,
       searchBoxComponent: this.searchable
         ? () =>
-            h(
-              'div',
-              { className: 'ais-SearchBox' },
-              h(SearchInput, {
-                modelValue: this.searchForFacetValues,
-                onInput: (value) => {
-                  this.searchForFacetValues = value;
-                },
-                showLoadingIndicator: true,
-                placeholder: this.searchablePlaceholder,
-                submitTitle: 'Submit the search query',
-                resetTitle: 'Clear the search query',
-                classNames: this.classNames,
-              })
-            )
+            h(SearchBox, {
+              value: this.searchForFacetValues,
+              placeholder: this.searchablePlaceholder,
+              inputRef: this.searchInputRef,
+              inputProps: {
+                onInput: onSearchInput,
+                onCompositionEnd: onSearchInput,
+              },
+              onReset: () => {
+                this.searchForFacetValues = '';
+              },
+              classNames: getSearchBoxClassNames(this.classNames),
+            })
         : undefined,
       showNoResults: Boolean(
         this.searchable && this.state.isFromSearch && this.items.length === 0

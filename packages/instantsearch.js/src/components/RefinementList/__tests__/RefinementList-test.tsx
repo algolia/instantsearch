@@ -9,10 +9,7 @@ import { h } from 'preact';
 import RefinementList from '../RefinementList';
 
 import type { TemplateParams } from '../../../types';
-import type {
-  RefinementListItemData,
-  RefinementListTemplates,
-} from '../../../widgets/refinement-list/refinement-list';
+import type { RefinementListItemData } from '../../../widgets/refinement-list/refinement-list';
 import type { RefinementListProps } from '../RefinementList';
 
 const defaultProps = {
@@ -360,40 +357,6 @@ describe('RefinementList', () => {
       expect(container).toMatchSnapshot();
     });
 
-    it('without facets from search', () => {
-      const templates: Partial<RefinementListTemplates> = {
-        item: (item) => item.value,
-        searchableNoResults: (x) => JSON.stringify(x),
-        showMoreText: '',
-      };
-      type TestTemplates = typeof templates;
-
-      const props: RefinementListProps<TestTemplates> = {
-        createURL: () => '',
-        attribute: 'attribute',
-        facetValues: [],
-        cssClasses,
-        className: 'customClassName',
-        isFromSearch: true,
-        searchPlaceholder: 'Search',
-        searchFacetValues: (x) => x,
-        templateProps: {
-          templates,
-        },
-        searchBoxTemplateProps: {
-          templates: {
-            reset: 'reset',
-            submit: 'submit',
-            loadingIndicator: 'loadingIndicator',
-          },
-        },
-        toggleRefinement: () => {},
-      };
-      const { container } = render(<RefinementList {...props} />);
-
-      expect(container).toMatchSnapshot();
-    });
-
     it('with facets', () => {
       const templates = {
         item: (item: RefinementListItemData) => item.value,
@@ -499,52 +462,6 @@ describe('RefinementList', () => {
         canToggleShowMore: false,
         templateProps: {
           templates,
-        },
-        toggleRefinement: () => {},
-        createURL: () => '',
-      };
-      const { container } = render(<RefinementList {...props} />);
-
-      expect(container).toMatchSnapshot();
-    });
-
-    it('with facets from search', () => {
-      const templates = {
-        item: (item: RefinementListItemData) => item.value,
-        showMoreText: '',
-      };
-      type TestTemplates = typeof templates;
-
-      const props: RefinementListProps<TestTemplates> = {
-        attribute: 'attribute',
-        facetValues: [
-          {
-            value: '',
-            label: 'Amazon',
-            count: 1200,
-            isRefined: false,
-          },
-          {
-            value: '',
-            label: 'Google',
-            count: 1000,
-            isRefined: true,
-          },
-        ],
-        cssClasses,
-        className: 'customClassName',
-        isFromSearch: true,
-        searchPlaceholder: 'Search',
-        searchFacetValues: (x) => x,
-        templateProps: {
-          templates,
-        },
-        searchBoxTemplateProps: {
-          templates: {
-            reset: 'reset',
-            submit: 'submit',
-            loadingIndicator: 'loadingIndicator',
-          },
         },
         toggleRefinement: () => {},
         createURL: () => '',

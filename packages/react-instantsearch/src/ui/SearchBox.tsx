@@ -1,5 +1,10 @@
-import { cx } from 'instantsearch-ui-components';
-import React from 'react';
+import { createSearchBoxComponent, cx } from 'instantsearch-ui-components';
+import React, { createElement, Fragment } from 'react';
+
+import type {
+  Pragma,
+  SearchBoxIconComponent as SharedIconComponent,
+} from 'instantsearch-ui-components';
 
 export type IconProps = {
   classNames: Partial<SearchBoxClassNames>;
@@ -50,6 +55,10 @@ export type SearchBoxClassNames = {
    * Class names to apply to the AI mode icon
    */
   aiModeIcon: string;
+  /**
+   * Class names to apply to the AI mode label
+   */
+  aiModeLabel: string;
 };
 
 export type SearchBoxTranslations = {
@@ -65,6 +74,10 @@ export type SearchBoxTranslations = {
    * The alternative text of the AI mode button.
    */
   aiModeButtonTitle?: string;
+  /**
+   * The accessible name of the input.
+   */
+  inputAriaLabel?: string;
 };
 
 export type SearchBoxProps = Omit<
@@ -97,34 +110,8 @@ export type SearchBoxProps = Omit<
     translations: SearchBoxTranslations;
   };
 
-function DefaultSubmitIcon({ classNames }: IconProps) {
-  return (
-    <svg
-      className={cx('ais-SearchBox-submitIcon', classNames.submitIcon)}
-      width="10"
-      height="10"
-      viewBox="0 0 40 40"
-      aria-hidden="true"
-    >
-      <path d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"></path>
-    </svg>
-  );
-}
-
-function DefaultResetIcon({ classNames }: IconProps) {
-  return (
-    <svg
-      className={cx('ais-SearchBox-resetIcon', classNames.resetIcon)}
-      viewBox="0 0 20 20"
-      width="10"
-      height="10"
-      aria-hidden="true"
-    >
-      <path d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"></path>
-    </svg>
-  );
-}
-
+// The loading and AI mode icons use camelCase SVG attributes (React warns on
+// the kebab-case ones the shared defaults use).
 function DefaultLoadingIcon({ classNames }: IconProps) {
   return (
     <svg
@@ -182,6 +169,11 @@ function DefaultAiModeIcon({ classNames }: IconProps) {
   );
 }
 
+const SearchBoxUiComponent = createSearchBoxComponent({
+  createElement: createElement as Pragma,
+  Fragment,
+});
+
 export function SearchBox({
   formRef,
   inputRef,
@@ -193,119 +185,46 @@ export function SearchBox({
   placeholder = '',
   value,
   autoFocus,
-  resetIconComponent: ResetIcon = DefaultResetIcon,
-  submitIconComponent: SubmitIcon = DefaultSubmitIcon,
-  loadingIconComponent: LoadingIcon = DefaultLoadingIcon,
-  aiModeIconComponent: AiModeIcon = DefaultAiModeIcon,
+  resetIconComponent,
+  submitIconComponent,
+  loadingIconComponent = DefaultLoadingIcon,
+  aiModeIconComponent = DefaultAiModeIcon,
   onAiModeClick,
   aiModeButtonDisabled = false,
   classNames = {},
   translations,
   ...props
 }: SearchBoxProps) {
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (onSubmit) {
-      onSubmit(event);
-    }
-
-    if (inputRef.current) {
-      inputRef.current.blur();
-    }
-  }
-
-  function handleReset(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    onReset(event);
-
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }
-
   return (
-    <div
-      {...props}
-      className={cx('ais-SearchBox', classNames.root, props.className)}
-    >
-      <form
-        ref={formRef}
-        action=""
-        className={cx('ais-SearchBox-form', classNames.form)}
-        noValidate
-        onSubmit={handleSubmit}
-        onReset={handleReset}
-        role="search"
-      >
-        <input
-          {...inputProps}
-          ref={inputRef}
-          className={cx(
-            'ais-SearchBox-input',
-            classNames.input,
-            inputProps?.className
-          )}
-          aria-label="Search"
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-          placeholder={placeholder}
-          spellCheck={false}
-          maxLength={512}
-          type="search"
-          value={value}
-          onChange={onChange}
-          onCompositionEnd={onChange}
-          autoFocus={autoFocus}
-        />
-        <button
-          className={cx('ais-SearchBox-submit', classNames.submit)}
-          type="submit"
-          title={translations.submitButtonTitle}
-          aria-label={translations.submitButtonTitle}
-        >
-          <SubmitIcon classNames={classNames} />
-        </button>
-        <button
-          className={cx('ais-SearchBox-reset', classNames.reset)}
-          type="reset"
-          title={translations.resetButtonTitle}
-          aria-label={translations.resetButtonTitle}
-          hidden={value.length === 0 || isSearchStalled}
-        >
-          <ResetIcon classNames={classNames} />
-        </button>
-        {onAiModeClick && (
-          <button
-            className={cx('ais-AiModeButton', classNames.aiModeButton)}
-            type="button"
-            title={translations.aiModeButtonTitle || 'AI Mode'}
-            disabled={aiModeButtonDisabled}
-            onClick={(e) => {
-              e.preventDefault();
-              onAiModeClick();
-            }}
-          >
-            <AiModeIcon classNames={classNames} />
-            <span className="ais-AiModeButton-label">
-              {translations.aiModeButtonTitle || 'AI Mode'}
-            </span>
-          </button>
-        )}
-        <span
-          className={cx(
-            'ais-SearchBox-loadingIndicator',
-            classNames.loadingIndicator
-          )}
-          hidden={!isSearchStalled}
-        >
-          <LoadingIcon classNames={classNames} />
-        </span>
-      </form>
-    </div>
+    <SearchBoxUiComponent
+      {...(props as Record<string, unknown>)}
+      formRef={formRef}
+      inputRef={inputRef}
+      inputProps={{
+        ...(inputProps as Record<string, unknown>),
+        onChange,
+        onCompositionEnd: onChange,
+      }}
+      isSearchStalled={isSearchStalled}
+      onSubmit={
+        onSubmit &&
+        ((event) =>
+          onSubmit(event as unknown as React.FormEvent<HTMLFormElement>))
+      }
+      onReset={(event) =>
+        onReset(event as unknown as React.FormEvent<HTMLFormElement>)
+      }
+      placeholder={placeholder}
+      value={value}
+      autoFocus={autoFocus}
+      submitIconComponent={submitIconComponent as SharedIconComponent}
+      resetIconComponent={resetIconComponent as SharedIconComponent}
+      loadingIconComponent={loadingIconComponent as SharedIconComponent}
+      aiModeIconComponent={aiModeIconComponent as SharedIconComponent}
+      onAiModeClick={onAiModeClick}
+      aiModeButtonDisabled={aiModeButtonDisabled}
+      classNames={classNames}
+      translations={translations}
+    />
   );
 }
