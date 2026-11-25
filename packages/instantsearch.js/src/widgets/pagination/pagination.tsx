@@ -2,17 +2,13 @@
 
 import { connectPagination } from 'instantsearch-core';
 import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
-import { suitComponent as component } from 'instantsearch-core/internal';
-import { cx } from 'instantsearch-ui-components';
-import { h, render } from 'preact';
+import { createPaginationComponent } from 'instantsearch-ui-components';
+import { Fragment, h, render } from 'preact';
 
-import Pagination from '../../components/Pagination/Pagination';
+import { prepareTemplateProps, renderTemplate } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 
-import type {
-  PaginationComponentCSSClasses,
-  PaginationComponentTemplates,
-} from '../../components/Pagination/Pagination';
+import type { PreparedTemplateProps } from '../../lib/templating';
 import type { Template } from '../../types';
 import type {
   PaginationConnectorParams,
@@ -20,39 +16,75 @@ import type {
   PaginationWidgetDescription,
 } from 'instantsearch-core';
 import type { Renderer, WidgetFactory } from 'instantsearch-core';
+import type {
+  PaginationClassNames,
+  PaginationItemType,
+  PaginationLinkTextComponentProps,
+} from 'instantsearch-ui-components';
 
-const suit = component('Pagination');
 const withUsage = createDocumentationMessageGenerator({ name: 'pagination' });
 
-const defaultTemplates: PaginationComponentTemplates = {
+const Pagination = createPaginationComponent({
+  createElement: h,
+  Fragment,
+});
+
+const defaultTemplates: Required<PaginationTemplates> = {
   previous: () => '‹',
   next: () => '›',
   page: ({ page }) => `${page}`,
-  first: () => '«',
-  last: () => '»',
+  first: () => '‹‹',
+  last: () => '››',
 };
 
-const renderer =
-  ({
-    containerNode,
-    cssClasses,
-    templates,
-    showFirst,
-    showLast,
-    showPrevious,
-    showNext,
-    scrollToNode,
-  }: {
-    containerNode: HTMLElement;
-    cssClasses: PaginationComponentCSSClasses;
-    templates: PaginationComponentTemplates;
-    showFirst: boolean;
-    showLast: boolean;
-    showPrevious: boolean;
-    showNext: boolean;
-    scrollToNode: HTMLElement | false;
-  }): Renderer<PaginationRenderState, Partial<PaginationWidgetParams>> =>
-  (
+const templateKeys: Record<PaginationItemType, keyof PaginationTemplates> = {
+  firstPage: 'first',
+  previousPage: 'previous',
+  page: 'page',
+  nextPage: 'next',
+  lastPage: 'last',
+};
+
+const renderer = ({
+  containerNode,
+  classNames,
+  templateProps,
+  showFirst,
+  showLast,
+  showPrevious,
+  showNext,
+  scrollToNode,
+}: {
+  containerNode: HTMLElement;
+  classNames: Partial<PaginationClassNames>;
+  templateProps: PreparedTemplateProps<Required<PaginationTemplates>>;
+  showFirst: boolean;
+  showLast: boolean;
+  showPrevious: boolean;
+  showNext: boolean;
+  scrollToNode: HTMLElement | false;
+}): Renderer<PaginationRenderState, Partial<PaginationWidgetParams>> => {
+  // Templates render the link content. A template resolving to `null` omits
+  // the link, as it did when the `Template` owned the link element.
+  const linkTextComponent = ({
+    type,
+    page,
+  }: PaginationLinkTextComponentProps) => {
+    const content = renderTemplate({
+      templates: templateProps.templates,
+      templateKey: templateKeys[type],
+      data: { page: page + 1 },
+    });
+
+    if (content === null) {
+      return null;
+    }
+
+    // An empty string renders an empty link rather than an empty text node
+    return <Fragment>{content === '' ? null : content}</Fragment>;
+  };
+
+  return (
     {
       createURL,
       currentRefinement,
@@ -66,8 +98,8 @@ const renderer =
   ) => {
     if (isFirstRendering) return;
 
-    const setCurrentPage = (pageNumber: number) => {
-      refine(pageNumber);
+    const onNavigate = (page: number) => {
+      refine(page);
 
       if (scrollToNode !== false) {
         scrollToNode.scrollIntoView();
@@ -77,22 +109,23 @@ const renderer =
     render(
       <Pagination
         createURL={createURL}
-        cssClasses={cssClasses}
+        classNames={classNames}
         currentPage={currentRefinement}
-        templates={templates}
         nbPages={nbPages}
         pages={pages}
         isFirstPage={isFirstPage}
         isLastPage={isLastPage}
-        setCurrentPage={setCurrentPage}
+        onNavigate={onNavigate}
         showFirst={showFirst}
         showLast={showLast}
         showPrevious={showPrevious}
         showNext={showNext}
+        linkTextComponent={linkTextComponent}
       />,
       containerNode
     );
   };
+};
 
 export type PaginationCSSClasses = Partial<{
   /**
@@ -271,54 +304,15 @@ const pagination: PaginationWidget = function pagination(widgetParams) {
   const scrollTo = userScrollTo === true ? 'body' : userScrollTo;
   const scrollToNode = scrollTo !== false ? getContainerNode(scrollTo) : false;
 
-  const cssClasses = {
-    root: cx(suit(), userCssClasses.root),
-    noRefinementRoot: cx(
-      suit({ modifierName: 'noRefinement' }),
-      userCssClasses.noRefinementRoot
-    ),
-    list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
-    item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
-    firstPageItem: cx(
-      suit({ descendantName: 'item', modifierName: 'firstPage' }),
-      userCssClasses.firstPageItem
-    ),
-    lastPageItem: cx(
-      suit({ descendantName: 'item', modifierName: 'lastPage' }),
-      userCssClasses.lastPageItem
-    ),
-    previousPageItem: cx(
-      suit({ descendantName: 'item', modifierName: 'previousPage' }),
-      userCssClasses.previousPageItem
-    ),
-    nextPageItem: cx(
-      suit({ descendantName: 'item', modifierName: 'nextPage' }),
-      userCssClasses.nextPageItem
-    ),
-    pageItem: cx(
-      suit({ descendantName: 'item', modifierName: 'page' }),
-      userCssClasses.pageItem
-    ),
-    selectedItem: cx(
-      suit({ descendantName: 'item', modifierName: 'selected' }),
-      userCssClasses.selectedItem
-    ),
-    disabledItem: cx(
-      suit({ descendantName: 'item', modifierName: 'disabled' }),
-      userCssClasses.disabledItem
-    ),
-    link: cx(suit({ descendantName: 'link' }), userCssClasses.link),
-  };
-
-  const templates = {
-    ...defaultTemplates,
-    ...userTemplates,
-  };
+  const templateProps = prepareTemplateProps({
+    defaultTemplates,
+    templates: userTemplates,
+  });
 
   const specializedRenderer = renderer({
     containerNode,
-    cssClasses,
-    templates,
+    classNames: userCssClasses,
+    templateProps,
     showFirst,
     showLast,
     showPrevious,

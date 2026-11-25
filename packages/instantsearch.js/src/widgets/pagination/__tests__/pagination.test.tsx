@@ -117,5 +117,59 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       );
       expect(pageLink).toHaveClass('LINK');
     });
+
+    test('renders the default templates', async () => {
+      const container = document.createElement('div');
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.addWidgets([pagination({ container })]);
+      search.start();
+
+      await wait(0);
+
+      expect(
+        Array.from(container.querySelectorAll('.ais-Pagination-link')).map(
+          (link) => link.textContent
+        )
+      ).toEqual(['‹‹', '‹', '1', '›', '››']);
+    });
+
+    test('renders custom templates as the link content', async () => {
+      const container = document.createElement('div');
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.addWidgets([
+        pagination({
+          container,
+          templates: {
+            first: () => 'First',
+            previous: (_, { html }) => html`<em>Previous</em>`,
+            page: ({ page }) => `Page ${page}`,
+            next: () => 'Next',
+            last: () => null,
+          },
+        }),
+      ]);
+      search.start();
+
+      await wait(0);
+
+      const items = container.querySelectorAll('.ais-Pagination-item');
+
+      expect(Array.from(items).map((item) => item.innerHTML)).toEqual([
+        '<span class="ais-Pagination-link" aria-label="First Page">First</span>',
+        '<span class="ais-Pagination-link" aria-label="Previous Page"><em>Previous</em></span>',
+        '<a class="ais-Pagination-link" aria-label="Page 1" aria-current="page" href="#">Page 1</a>',
+        '<span class="ais-Pagination-link" aria-label="Next Page">Next</span>',
+        // A `null` template omits the link
+        '',
+      ]);
+    });
   });
 });

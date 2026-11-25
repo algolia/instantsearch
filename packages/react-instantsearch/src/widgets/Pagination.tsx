@@ -19,7 +19,7 @@ type UiProps = Pick<
 >;
 
 export type PaginationProps = Omit<PaginationUiComponentProps, keyof UiProps> &
-  UsePaginationProps & { translations?: Partial<UiProps['translations']> };
+  UsePaginationProps & { translations?: UiProps['translations'] };
 
 export function Pagination({
   showFirst,
@@ -54,19 +54,7 @@ export function Pagination({
     nbPages,
     createURL,
     onNavigate: refine,
-    translations: {
-      firstPageItemText: '‹‹',
-      previousPageItemText: '‹',
-      nextPageItemText: '›',
-      lastPageItemText: '››',
-      pageItemText: ({ currentPage }) => String(currentPage),
-      firstPageItemAriaLabel: 'First Page',
-      previousPageItemAriaLabel: 'Previous Page',
-      nextPageItemAriaLabel: 'Next Page',
-      lastPageItemAriaLabel: `Last Page, Page ${nbPages}`,
-      pageItemAriaLabel: ({ currentPage }) => `Page ${currentPage}`,
-      ...translations,
-    },
+    translations,
   };
 
   return (

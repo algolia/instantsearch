@@ -1,178 +1,19 @@
-<template>
-  <div
-    v-if="state"
-    :class="{ [suit()]: true, [suit('', 'noRefinement')]: state.nbPages <= 1 }"
-  >
-    <slot
-      :refine="refine"
-      :createURL="state.createURL"
-      :current-refinement="state.currentRefinement"
-      :nb-hits="state.nbHits"
-      :nb-pages="state.nbPages"
-      :pages="state.pages"
-      :is-first-page="state.isFirstPage"
-      :is-last-page="state.isLastPage"
-    >
-      <ul :class="suit('list')">
-        <li
-          :class="{
-            [suit('item')]: true,
-            [suit('item', 'disabled')]: state.isFirstPage,
-            [suit('item', 'firstPage')]: true,
-          }"
-          v-if="showFirst"
-        >
-          <slot
-            name="first"
-            :createURL="() => state.createURL(0)"
-            :is-first-page="state.isFirstPage"
-            :refine="() => refine(0)"
-          >
-            <template v-if="!state.isFirstPage">
-              <a
-                :class="suit('link')"
-                aria-label="First Page"
-                :href="state.createURL(0)"
-                @click.exact.left.prevent="refine(0)"
-                >‹‹</a
-              >
-            </template>
-            <template v-else>
-              <span :class="suit('link')" aria-label="First Page">‹‹</span>
-            </template>
-          </slot>
-        </li>
-        <li
-          :class="{
-            [suit('item')]: true,
-            [suit('item', 'disabled')]: state.isFirstPage,
-            [suit('item', 'previousPage')]: true,
-          }"
-          v-if="showPrevious"
-        >
-          <slot
-            name="previous"
-            :createURL="() => state.createURL(state.currentRefinement - 1)"
-            :is-first-page="state.isFirstPage"
-            :refine="() => refine(state.currentRefinement - 1)"
-          >
-            <template v-if="!state.isFirstPage">
-              <a
-                :class="suit('link')"
-                aria-label="Previous Page"
-                :href="state.createURL(state.currentRefinement - 1)"
-                @click.exact.left.prevent="refine(state.currentRefinement - 1)"
-                >‹</a
-              >
-            </template>
-            <template v-else>
-              <span :class="suit('link')" aria-label="Previous Page">‹</span>
-            </template>
-          </slot>
-        </li>
-
-        <li
-          :class="{
-            [suit('item')]: true,
-            [suit('item', 'page')]: true,
-            [suit('item', 'selected')]: state.currentRefinement === page,
-          }"
-          v-for="page in state.pages"
-          :key="page"
-        >
-          <slot
-            name="item"
-            :page="page"
-            :createURL="() => state.createURL(page)"
-            :is-first-page="state.isFirstPage"
-            :is-last-page="state.isLastPage"
-            :refine="() => refine(page)"
-          >
-            <a
-              :class="suit('link')"
-              :href="state.createURL(page)"
-              :aria-label="`Page ${page + 1}`"
-              :aria-current="
-                state.currentRefinement === page ? 'page' : undefined
-              "
-              @click.exact.left.prevent="refine(page)"
-              >{{ page + 1 }}</a
-            >
-          </slot>
-        </li>
-
-        <li
-          :class="{
-            [suit('item')]: true,
-            [suit('item', 'disabled')]: state.isLastPage,
-            [suit('item', 'nextPage')]: true,
-          }"
-          v-if="showNext"
-        >
-          <slot
-            name="next"
-            :createURL="() => state.createURL(state.currentRefinement + 1)"
-            :is-last-page="state.isLastPage"
-            :refine="() => refine(state.currentRefinement + 1)"
-          >
-            <template v-if="!state.isLastPage">
-              <a
-                :class="suit('link')"
-                aria-label="Next Page"
-                :href="state.createURL(state.currentRefinement + 1)"
-                @click.exact.left.prevent="refine(state.currentRefinement + 1)"
-                >›</a
-              >
-            </template>
-            <template v-else>
-              <span :class="suit('link')" aria-label="Next Page">›</span>
-            </template>
-          </slot>
-        </li>
-        <li
-          :class="{
-            [suit('item')]: true,
-            [suit('item', 'disabled')]: state.isLastPage,
-            [suit('item', 'lastPage')]: true,
-          }"
-          v-if="showLast"
-        >
-          <slot
-            name="last"
-            :createURL="() => state.createURL(state.nbPages - 1)"
-            :is-last-page="state.isLastPage"
-            :refine="() => refine(state.nbPages - 1)"
-          >
-            <template v-if="!state.isLastPage">
-              <a
-                :class="suit('link')"
-                :aria-label="`Last Page, Page ${state.nbPages}`"
-                :href="state.createURL(state.nbPages - 1)"
-                @click.exact.left.prevent="refine(state.nbPages - 1)"
-                >››</a
-              >
-            </template>
-            <template v-else>
-              <span
-                :class="suit('link')"
-                :aria-label="`Last Page, Page ${state.nbPages}`"
-              >
-                ››
-              </span>
-            </template>
-          </slot>
-        </li>
-      </ul>
-    </slot>
-  </div>
-</template>
-
 <script>
 import { connectPagination } from 'instantsearch-core';
+import { createPaginationComponent } from 'instantsearch-ui-components';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
+import { Fragment, getScopedSlot, renderReactCompat } from '../util/vue-compat';
+
+const slotNames = {
+  firstPage: 'first',
+  previousPage: 'previous',
+  page: 'item',
+  nextPage: 'next',
+  lastPage: 'last',
+};
 
 export default {
   name: 'AisPagination',
@@ -237,5 +78,92 @@ export default {
       this.$emit('page-change', p);
     },
   },
+  render: renderReactCompat(function (h) {
+    if (!this.state) {
+      return null;
+    }
+
+    const rootClassName = [
+      this.suit(),
+      this.state.nbPages <= 1 && this.suit('', 'noRefinement'),
+    ];
+
+    const defaultSlot = getScopedSlot(this, 'default');
+    if (defaultSlot) {
+      return h('div', { className: rootClassName }, [
+        defaultSlot({
+          refine: this.refine,
+          createURL: this.state.createURL,
+          currentRefinement: this.state.currentRefinement,
+          nbHits: this.state.nbHits,
+          nbPages: this.state.nbPages,
+          pages: this.state.pages,
+          isFirstPage: this.state.isFirstPage,
+          isLastPage: this.state.isLastPage,
+        }),
+      ]);
+    }
+
+    const Pagination = createPaginationComponent({
+      createElement: h,
+      Fragment,
+    });
+
+    const slots = {};
+    Object.keys(slotNames).forEach((type) => {
+      slots[type] = getScopedSlot(this, slotNames[type]);
+    });
+    const hasItemSlot = Object.keys(slots).some((type) => slots[type]);
+
+    return h(Pagination, {
+      classNames: this.classNames && {
+        root: this.classNames['ais-Pagination'],
+        noRefinementRoot: this.classNames['ais-Pagination--noRefinement'],
+        list: this.classNames['ais-Pagination-list'],
+        item: this.classNames['ais-Pagination-item'],
+        firstPageItem: this.classNames['ais-Pagination-item--firstPage'],
+        previousPageItem: this.classNames['ais-Pagination-item--previousPage'],
+        pageItem: this.classNames['ais-Pagination-item--page'],
+        selectedItem: this.classNames['ais-Pagination-item--selected'],
+        disabledItem: this.classNames['ais-Pagination-item--disabled'],
+        nextPageItem: this.classNames['ais-Pagination-item--nextPage'],
+        lastPageItem: this.classNames['ais-Pagination-item--lastPage'],
+        link: this.classNames['ais-Pagination-link'],
+      },
+      pages: this.state.pages,
+      currentPage: this.state.currentRefinement,
+      nbPages: this.state.nbPages,
+      isFirstPage: this.state.isFirstPage,
+      isLastPage: this.state.isLastPage,
+      showFirst: this.showFirst,
+      showPrevious: this.showPrevious,
+      showNext: this.showNext,
+      showLast: this.showLast,
+      createURL: this.state.createURL,
+      onNavigate: this.refine,
+      // The `first`, `previous`, `item`, `next` and `last` slots replace the
+      // link inside its `<li>`.
+      itemComponent: hasItemSlot
+        ? ({ type, page, className, key, children }) => {
+            const slot = slots[type];
+            if (!slot) {
+              return h('li', { key, className }, [children]);
+            }
+
+            const slotProps = {
+              createURL: () => this.state.createURL(page),
+              isFirstPage: this.state.isFirstPage,
+              isLastPage: this.state.isLastPage,
+              refine: () => this.refine(page),
+            };
+            if (type === 'page') {
+              slotProps.page = page;
+            }
+
+            return h('li', { key, className }, [slot(slotProps)]);
+          }
+        : undefined,
+    });
+  }),
 };
 </script>
