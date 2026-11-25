@@ -32,6 +32,7 @@ export * from './Highlight';
 export * from './Hits';
 export * from './InfiniteHits';
 export * from './LookingSimilar';
+export * from './Pagination';
 export * from './PoweredBy';
 export * from './RelatedProducts';
 export * from './Selector';
