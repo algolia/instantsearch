@@ -8,7 +8,7 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
-import { fireEvent, within } from '@testing-library/dom';
+import { fireEvent, waitFor, within } from '@testing-library/dom';
 import { h } from 'preact';
 
 import { instantsearch } from '../../../index.es';
@@ -334,6 +334,88 @@ describe('stats', () => {
           </div>
         </div>
       `);
+    });
+
+    test('omits the text element when the template returns `null`', async () => {
+      const container = document.createElement('div');
+      const searchClient = createMockedSearchClient();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      });
+
+      search.addWidgets([
+        stats({ container, templates: { text: () => null } }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container.querySelector('.ais-Stats')).not.toBeNull();
+      expect(container.querySelector('.ais-Stats-text')).toBeNull();
+    });
+
+    test('formats the processing time', async () => {
+      const container = document.createElement('div');
+      const searchClient = createMockedSearchClient({ processingTimeMS: 1234 });
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      });
+
+      search.addWidgets([stats({ container })]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container.querySelector('.ais-Stats-text')).toHaveTextContent(
+        '2 results found in 1,234ms'
+      );
+    });
+
+    test('announces the trimmed count after a debounce when results change', async () => {
+      const container = document.createElement('div');
+      const searchBoxContainer = document.createElement('div');
+      const searchClient = createMockedSearchClient();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      });
+
+      search.addWidgets([
+        searchBox({ container: searchBoxContainer }),
+        stats({ container }),
+      ]);
+
+      search.start();
+      await wait(0);
+
+      const region = container.querySelector('.ais-Stats-announcement')!;
+
+      // Initial results are not announced.
+      expect(region.textContent).toBe('');
+
+      fireEvent.input(within(searchBoxContainer).getByRole('searchbox'), {
+        target: { value: 'query with no results' },
+      });
+      await wait(0);
+
+      expect(container.querySelector('.ais-Stats-text')).toHaveTextContent(
+        'No results'
+      );
+      // Still empty before the debounce elapses.
+      expect(region.textContent).toBe('');
+
+      await waitFor(() => expect(region).toHaveTextContent('No results'), {
+        timeout: 3000,
+      });
+
+      search.dispose();
     });
 
     type CustomHit = { name: string; description: string };

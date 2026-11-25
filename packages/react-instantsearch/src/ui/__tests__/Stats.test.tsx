@@ -62,7 +62,11 @@ describe('Stats', () => {
     const { container } = render(
       <Stats
         className="MyCustomStats"
-        classNames={{ root: 'ROOT' }}
+        classNames={{
+          root: 'ROOT',
+          text: 'TEXT',
+          announcement: 'ANNOUNCEMENT',
+        }}
         {...props}
       />
     );
@@ -73,14 +77,14 @@ describe('Stats', () => {
           class="ais-Stats ROOT MyCustomStats"
         >
           <span
-            class="ais-Stats-text"
+            class="ais-Stats-text TEXT"
           >
             100 results found in 10ms
           </span>
           <span
             aria-atomic="true"
             aria-live="polite"
-            class="ais-Stats-announcement"
+            class="ais-Stats-announcement ANNOUNCEMENT"
             role="status"
             style="position: absolute; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px;"
           />
