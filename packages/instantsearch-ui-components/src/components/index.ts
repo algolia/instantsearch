@@ -35,6 +35,7 @@ export * from './LookingSimilar';
 export * from './PoweredBy';
 export * from './RefinementList';
 export * from './RelatedProducts';
+export * from './SearchBox';
 export * from './Selector';
 export * from './SortBy';
 export * from './ToggleRefinement';
