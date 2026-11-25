@@ -736,7 +736,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         );
       }
 
-      // A prompt-shortcut turn (the `compare` widget's
+      // A prompt-shortcut turn (`__SHORTCUT_<id>__`, or the `compare` widget's
       // `__ALGOLIA_COMPARISON_<id>__`) sends a sentinel as the user message,
       // which Agent Studio resolves into the natural-language text it
       // persists on that row. The local transcript still holds the sentinel,

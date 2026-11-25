@@ -80,6 +80,52 @@ describe('useChatTrigger', () => {
     );
   });
 
+  test('sends a prompt shortcut as its token, with the turn context', async () => {
+    const chat = createChat();
+    const sendMessage = jest.fn();
+    (chat as any).sendMessage = sendMessage;
+
+    function ShortcutEntrypoint() {
+      const { openChat } = useChatTrigger();
+
+      return (
+        <button
+          data-testid="shortcut"
+          onClick={() =>
+            openChat({
+              shortcut: { id: 'size_guide' },
+              turnContext: { product_name: 'Trail Jacket' },
+            })
+          }
+        />
+      );
+    }
+
+    render(
+      <InstantSearch searchClient={createSearchClient()} indexName="indexName">
+        <ChatProbe chat={chat} />
+        <ShortcutEntrypoint />
+      </InstantSearch>
+    );
+
+    await waitFor(() => expect(screen.getByTestId('chat')).toBeInTheDocument());
+
+    await act(async () => {
+      screen.getByTestId('shortcut').click();
+    });
+
+    expect(sendMessage).toHaveBeenCalledWith(
+      {
+        text: '__SHORTCUT_size_guide__',
+        metadata: {
+          turnContext: { product_name: 'Trail Jacket' },
+          promptShortcut: { sentinel: '__SHORTCUT_size_guide__' },
+        },
+      },
+      undefined
+    );
+  });
+
   test('reports the chat as busy while it is streaming', async () => {
     const chat = createChat();
 

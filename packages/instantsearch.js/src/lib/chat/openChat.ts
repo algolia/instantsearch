@@ -1,3 +1,5 @@
+import { warning } from '../utils';
+
 import type { ChatRenderState } from '../../connectors/chat/connectChat';
 
 /**
@@ -17,9 +19,22 @@ export type ChatReferer =
 export type OpenChatOptions = {
   /**
    * Text to submit to the chat as a user message. Empty or whitespace-only
-   * values open the chat without sending anything.
+   * values open the chat without sending anything. Ignored when `shortcut`
+   * is set.
    */
   message?: string;
+  /**
+   * Prompt shortcut to send instead of a message. The agent runs the prompt
+   * saved under this `id`, and the chat shows the display text the agent
+   * returns for it, if any, as the user message. The agent fills the
+   * shortcut's placeholders from `turnContext`.
+   *
+   * The `id` starts with a letter, followed by 2 to 63 letters, digits,
+   * underscores or hyphens. With any other value, nothing is sent and the
+   * chat is not opened. An id that passes this check can still be unknown to
+   * the agent.
+   */
+  shortcut?: { id: string };
   /**
    * Source that triggered the chat. When provided, the value is sent as the
    * `x-algolia-referer` header on the resulting chat completion request so
@@ -37,28 +52,49 @@ export type OpenChatOptions = {
   turnContext?: Record<string, string>;
 };
 
-// A prompt-shortcut sentinel (`__ALGOLIA_<KIND>_<id>__`, e.g. the `compare`
-// widget's configured comparison) stands for a prompt the server holds; the
-// server also decides what the transcript shows for it. Mirrors the backend's
-// matching: SCREAMING_SNAKE kind, then an id that starts with a letter and
-// runs 3-64 word characters/hyphens (`SHORTCUT_ID_PATTERN` on the backend).
+// A prompt-shortcut sentinel (`__SHORTCUT_<id>__`, or `__ALGOLIA_<KIND>_<id>__`
+// such as the `compare` widget's configured comparison) stands for a prompt
+// the server holds; the server also decides what the transcript shows for it.
+// Mirrors the backend's matching: `SHORTCUT` or a SCREAMING_SNAKE kind, then
+// an id that starts with a letter and runs 3-64 word characters/hyphens
+// (`SHORTCUT_ID_PATTERN` on the backend).
+const PROMPT_SHORTCUT_ID = /^[A-Za-z][\w-]{2,63}$/;
 const PROMPT_SHORTCUT_SENTINEL =
-  /^__ALGOLIA_[A-Z][A-Z_]*_[A-Za-z][\w-]{2,63}__$/;
+  /^__(?:SHORTCUT|ALGOLIA_[A-Z][A-Z_]*)_[A-Za-z][\w-]{2,63}__$/;
 
 // Centralizes the "open the chat from an entry point" behavior shared by the
 // SearchBox AI button, the Autocomplete AI button, prompt suggestions, and any
 // future entry point. The chat is always opened; the message is only sent when
-// it is non-empty and the chat is not already processing a message.
+// it is non-empty and the chat is not already processing a message. The one
+// exception is a `shortcut` with an invalid id, which leaves the chat closed.
 // Returns true when a message was submitted, so callers can clear their input.
 export function openChat(
   chatRenderState: Partial<ChatRenderState> | undefined,
-  { message, referer, turnContext }: OpenChatOptions = {}
+  { message, referer, turnContext, shortcut }: OpenChatOptions = {}
 ): boolean {
   if (!chatRenderState) {
     return false;
   }
 
-  const trimmed = message?.trim() ?? '';
+  let trimmed = message?.trim() ?? '';
+  if (shortcut) {
+    const { id } = shortcut;
+    if (typeof id !== 'string' || !PROMPT_SHORTCUT_ID.test(id)) {
+      warning(
+        false,
+        `The \`shortcut.id\` given to \`openChat\` is not a valid prompt shortcut id: ${
+          typeof id === 'string' ? JSON.stringify(id) : typeof id
+        }. It must start with a letter, followed by 2 to 63 letters, digits, underscores or hyphens. Nothing was sent.`
+      );
+      return false;
+    }
+    warning(
+      !trimmed,
+      '`openChat` received both `shortcut` and `message`. The shortcut is sent and `message` is ignored.'
+    );
+    trimmed = `__SHORTCUT_${id}__`;
+  }
+
   if (!trimmed) {
     if (chatRenderState.focusInput) {
       chatRenderState.focusInput();

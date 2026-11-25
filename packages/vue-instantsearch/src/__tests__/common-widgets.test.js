@@ -3,7 +3,10 @@
  */
 import { runTestSuites } from '@instantsearch/tests/common';
 import * as testSuites from '@instantsearch/tests/widgets';
-import { connectCompare } from 'instantsearch.js/es/connectors/index';
+import {
+  connectChatTrigger,
+  connectCompare,
+} from 'instantsearch.js/es/connectors/index';
 
 import { nextTick, mountApp, mountAppOrThrow } from '../../test/utils';
 import {
@@ -672,8 +675,24 @@ const testSetups = {
     const {
       renderChat = true,
       renderRefinements,
+      captureOpenChat,
       ...chatWidgetParams
     } = widgetParams;
+
+    const OpenChatCapture = {
+      mixins: [createWidgetMixin({ connector: connectChatTrigger })],
+      computed: {
+        widgetParams() {
+          return {};
+        },
+      },
+      render() {
+        if (this.state) {
+          captureOpenChat(this.state.openChat);
+        }
+        return null;
+      },
+    };
 
     mountApp(
       {
@@ -702,6 +721,7 @@ const testSetups = {
                 },
               }),
             h(AisChatTrigger, { key: 'trigger' }),
+            captureOpenChat && h(OpenChatCapture, { key: 'open-chat' }),
             renderChat && h(AisChat, { key: 'chat', props: chatWidgetParams }),
             h(GlobalErrorSwallower, { key: 'errors' }),
           ])
