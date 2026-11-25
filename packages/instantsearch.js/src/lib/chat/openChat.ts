@@ -26,8 +26,8 @@ export type OpenChatOptions = {
   /**
    * Prompt shortcut to send instead of a message. The agent runs the prompt
    * saved under this `id`, and the chat shows the display text the agent
-   * returns for it, if any, as the user message. The agent fills the
-   * shortcut's placeholders from `turnContext`.
+   * returns for it, if any, as the user message. Values for the shortcut's
+   * placeholders go in `turnContext`.
    *
    * The `id` starts with a letter, followed by 2 to 63 letters, digits,
    * underscores or hyphens. With any other value, nothing is sent and the
