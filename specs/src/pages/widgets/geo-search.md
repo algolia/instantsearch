@@ -7,15 +7,17 @@ html: |
     <div class="ais-GeoSearch-map">
       <!-- Map element here -->
     </div>
-    <div class="ais-GeoSearch-control">
-      <label class="ais-GeoSearch-label">
-        <input class="ais-GeoSearch-input" type="checkbox">
-        Search as I move the map
-      </label>
+    <div class="ais-GeoSearch-tree">
+      <div class="ais-GeoSearch-control">
+        <label class="ais-GeoSearch-label">
+          <input class="ais-GeoSearch-input" type="checkbox">
+          <span>Search as I move the map</span>
+        </label>
+      </div>
+      <button type="button" class="ais-GeoSearch-reset">
+        <span>Clear the map refinement</span>
+      </button>
     </div>
-    <button class="ais-GeoSearch-reset">
-      Clear the map refinement
-    </button>
   </div>
 alt1: Search as I move the map disabled
 althtml1: |
@@ -23,14 +25,16 @@ althtml1: |
     <div class="ais-GeoSearch-map">
       <!-- Map element here -->
     </div>
-    <div class="ais-GeoSearch-control">
-      <button class="ais-GeoSearch-redo">
-        Redo search here
+    <div class="ais-GeoSearch-tree">
+      <div class="ais-GeoSearch-control">
+        <button type="button" class="ais-GeoSearch-redo">
+          <span>Redo search here</span>
+        </button>
+      </div>
+      <button type="button" class="ais-GeoSearch-reset">
+        <span>Clear the map refinement</span>
       </button>
     </div>
-    <button class="ais-GeoSearch-reset">
-      Clear the map refinement
-    </button>
   </div>
 alt2: Control disabled
 althtml2: |
@@ -38,15 +42,19 @@ althtml2: |
     <div class="ais-GeoSearch-map">
       <!-- Map element here -->
     </div>
-    <button class="ais-GeoSearch-reset">
-      Clear the map refinement
-    </button>
+    <div class="ais-GeoSearch-tree">
+      <button type="button" class="ais-GeoSearch-reset">
+        <span>Clear the map refinement</span>
+      </button>
+    </div>
   </div>
 classes:
   - name: .ais-GeoSearch
     description: the root div of the widget
   - name: .ais-GeoSearch-map
     description: the map container of the widget
+  - name: .ais-GeoSearch-tree
+    description: the container of the controls and the reset button, rendered next to the map
   - name: .ais-GeoSearch-control
     description: the control element of the widget
   - name: .ais-GeoSearch-label

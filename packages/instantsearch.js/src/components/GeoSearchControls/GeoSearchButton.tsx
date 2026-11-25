@@ -17,7 +17,12 @@ const GeoSearchButton = ({
   onClick,
   children,
 }: Props) => (
-  <button className={className} onClick={onClick} disabled={disabled}>
+  <button
+    type="button"
+    className={className}
+    onClick={onClick}
+    disabled={disabled}
+  >
     {children}
   </button>
 );
