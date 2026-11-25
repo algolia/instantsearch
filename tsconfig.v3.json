@@ -24,6 +24,8 @@
     "packages/react-instantsearch-core/src/components/__tests__/InstantSearchSSRProvider.test.tsx",
     "packages/react-instantsearch-core/src/server/__tests__/getServerState.test.tsx",
     // test relies on v4, v3 and v5 at once
-    "packages/instantsearch.js/src/lib/utils/__tests__/getAppIdAndApiKey-test.ts"
+    "packages/instantsearch.js/src/lib/utils/__tests__/getAppIdAndApiKey-test.ts",
+    // introspect calls searchSingleIndex, which only exists in algoliasearch v5.
+    "packages/create-instantsearch-app/src/commands"
   ]
 }
