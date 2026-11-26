@@ -3,7 +3,7 @@
  */
 
 import { mount } from '../../../test/utils';
-import { renderReactCompat } from '../../util/vue-compat';
+import { isVue2, renderReactCompat, Vue2 } from '../../util/vue-compat';
 import ChatGreeting from '../ChatGreeting';
 import ChatInlineLayout from '../ChatInlineLayout';
 import ChatMessageLoader from '../ChatMessageLoader';
@@ -181,6 +181,35 @@ describe.each([
       'ask away'
     );
   });
+
+  // Only Vue 2 has component constructors: `Vue.extend(...)` — what a class
+  // component hands over — is a function that has to be instantiated. Calling
+  // it the way the React-style `createElement` calls a render function throws
+  // inside `_init`, so a constructor piece goes through the Vue-style one.
+  (isVue2 ? it : it.skip)('renders a component constructor as a piece', () => {
+    const piece = (testId) =>
+      Vue2.extend({
+        render: renderReactCompat(function (h) {
+          return h('div', { 'data-testid': testId });
+        }),
+      });
+
+    wrapper = mount(component, {
+      attachTo: document.body,
+      propsData: {
+        ...(name === 'AisChatInlineLayout'
+          ? {}
+          : { open: true, maximized: false }),
+        headerComponent: piece('header'),
+        messagesComponent: piece('messages'),
+        promptComponent: piece('prompt'),
+      },
+    });
+
+    expect(document.querySelector('[data-testid="header"]')).not.toBeNull();
+    expect(document.querySelector('[data-testid="messages"]')).not.toBeNull();
+    expect(document.querySelector('[data-testid="prompt"]')).not.toBeNull();
+  });
 });
 
 describe.each([
@@ -265,5 +294,69 @@ describe.each([
     expect(root.classList.contains('first-class')).toBe(true);
     expect(root.classList.contains('second-class')).toBe(true);
     expect(root.classList.contains('extra-class')).toBe(true);
+  });
+});
+
+describe('AisChatSidePanelLayout parent margin', () => {
+  let wrapper;
+
+  afterEach(() => {
+    if (wrapper) {
+      wrapper.destroy();
+      wrapper = undefined;
+    }
+    document.body.style.removeProperty('margin-right');
+    document.body.innerHTML = '';
+  });
+
+  it('returns the body margin when an open panel is destroyed', () => {
+    wrapper = mount(ChatSidePanelLayout, {
+      attachTo: document.body,
+      propsData: { open: true, maximized: false },
+    });
+
+    expect(document.body.style.marginRight).toBeTruthy();
+
+    // A panel removed by `v-if` never renders again, so the shared factory
+    // never gets the closed render that hands the margin back.
+    wrapper.destroy();
+
+    expect(document.body.style.marginRight).toBe('');
+  });
+
+  it('returns the margin of the element `parentElement` names', () => {
+    const page = document.createElement('div');
+    page.id = 'page';
+    document.body.appendChild(page);
+
+    wrapper = mount(ChatSidePanelLayout, {
+      attachTo: document.body,
+      propsData: {
+        open: true,
+        maximized: false,
+        parentElement: '#page',
+      },
+    });
+
+    expect(page.style.marginRight).toBeTruthy();
+    expect(document.body.style.marginRight).toBe('');
+
+    wrapper.destroy();
+
+    expect(page.style.marginRight).toBe('');
+  });
+
+  it('leaves a panel that never opened alone', () => {
+    document.body.style.marginRight = '4px';
+
+    wrapper = mount(ChatSidePanelLayout, {
+      attachTo: document.body,
+      propsData: { open: false, maximized: false },
+    });
+    wrapper.destroy();
+    wrapper = undefined;
+
+    // The panel never shifted the margin, so teardown must not clear it.
+    expect(document.body.style.marginRight).toBe('4px');
   });
 });

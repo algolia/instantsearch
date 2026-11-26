@@ -55,7 +55,7 @@ export default {
      */
     classNames: { type: Object, required: false, default: undefined },
   },
-  render: renderReactCompat(function (h) {
+  render: renderReactCompat(function (h, hVue) {
     if (!this.LayoutComponent) {
       this.LayoutComponent = createChatOverlayLayoutComponent({
         createElement: h,
@@ -67,9 +67,9 @@ export default {
     return h(this.LayoutComponent, {
       open: this.open,
       maximized: this.maximized,
-      headerComponent: renderLayoutPiece(h, this.headerComponent),
-      messagesComponent: renderLayoutPiece(h, this.messagesComponent),
-      promptComponent: renderLayoutPiece(h, this.promptComponent),
+      headerComponent: renderLayoutPiece(h, hVue, this.headerComponent),
+      messagesComponent: renderLayoutPiece(h, hVue, this.messagesComponent),
+      promptComponent: renderLayoutPiece(h, hVue, this.promptComponent),
       classNames,
       ...attrs,
     });

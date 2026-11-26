@@ -3,7 +3,7 @@ import { createChatSidePanelLayoutComponent } from 'instantsearch-ui-components'
 import { createSuitMixin } from '../mixins/suit';
 import { renderLayoutPiece } from '../util/layoutPiece';
 import { takeRootClass } from '../util/rootClass';
-import { renderReactCompat } from '../util/vue-compat';
+import { isVue3, renderReactCompat } from '../util/vue-compat';
 
 /**
  * The side-panel chat layout: a panel docked to the side of the viewport,
@@ -59,10 +59,38 @@ export default {
      */
     classNames: { type: Object, required: false, default: undefined },
   },
+  methods: {
+    /**
+     * Hands back the margin the shared factory shifted on the page element.
+     *
+     * The factory returns the margin on the render that closes the panel, so a
+     * panel removed while it is still open (`v-if`, a route change) never gets
+     * that render and leaves the page indented. Teardown asks the factory for
+     * the same restoration it runs there.
+     */
+    restoreParentMargin() {
+      if (!this.open || typeof document === 'undefined') {
+        return;
+      }
+
+      const element = this.parentElement
+        ? document.querySelector(this.parentElement)
+        : document.body;
+
+      if (element && this.LayoutComponent) {
+        this.LayoutComponent.restoreMargin(element);
+      }
+    },
+  },
+  // One key per version: Vue 2 names this hook `beforeDestroy`, Vue 3
+  // `beforeUnmount`, and an unknown option is simply ignored.
+  [isVue3 ? 'beforeUnmount' : 'beforeDestroy']() {
+    this.restoreParentMargin();
+  },
   // The factory keeps a `WeakMap` of the page elements it has shifted, so the
   // component it creates must survive across renders (see the Vue `CLAUDE.md`
   // note on creating shared components once per instance).
-  render: renderReactCompat(function (h) {
+  render: renderReactCompat(function (h, hVue) {
     if (!this.LayoutComponent) {
       this.LayoutComponent = createChatSidePanelLayoutComponent({
         createElement: h,
@@ -75,9 +103,9 @@ export default {
       open: this.open,
       maximized: this.maximized,
       parentElement: this.parentElement,
-      headerComponent: renderLayoutPiece(h, this.headerComponent),
-      messagesComponent: renderLayoutPiece(h, this.messagesComponent),
-      promptComponent: renderLayoutPiece(h, this.promptComponent),
+      headerComponent: renderLayoutPiece(h, hVue, this.headerComponent),
+      messagesComponent: renderLayoutPiece(h, hVue, this.messagesComponent),
+      promptComponent: renderLayoutPiece(h, hVue, this.promptComponent),
       classNames,
       ...attrs,
     });

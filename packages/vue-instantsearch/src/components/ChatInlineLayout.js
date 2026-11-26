@@ -43,7 +43,7 @@ const AisChatInlineLayout = {
      */
     classNames: { type: Object, required: false, default: undefined },
   },
-  render: renderReactCompat(function (h) {
+  render: renderReactCompat(function (h, hVue) {
     if (!this.LayoutComponent) {
       this.LayoutComponent = createChatInlineLayoutComponent({
         createElement: h,
@@ -53,9 +53,9 @@ const AisChatInlineLayout = {
     const { classNames, attrs } = takeRootClass(this.classNames, this.$attrs);
 
     return h(this.LayoutComponent, {
-      headerComponent: renderLayoutPiece(h, this.headerComponent),
-      messagesComponent: renderLayoutPiece(h, this.messagesComponent),
-      promptComponent: renderLayoutPiece(h, this.promptComponent),
+      headerComponent: renderLayoutPiece(h, hVue, this.headerComponent),
+      messagesComponent: renderLayoutPiece(h, hVue, this.messagesComponent),
+      promptComponent: renderLayoutPiece(h, hVue, this.promptComponent),
       classNames,
       ...attrs,
     });
