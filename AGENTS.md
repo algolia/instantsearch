@@ -11,7 +11,7 @@ Search UI libraries for Algolia across three flavors (vanilla JS, React, Vue), s
 | `packages/react-instantsearch-core` | Headless React: hooks (`useSearchBox`, …) that wrap connectors. Framework-agnostic (web/RN). |
 | `packages/react-instantsearch` | React DOM widgets = hooks + UI from `instantsearch-ui-components`. |
 | `packages/vue-instantsearch` | Vue 2/3 components wrapping connectors. |
-| `packages/instantsearch-ui-components` | **Shared UI layer.** Framework-agnostic widget markup + `ais-*` classes via factory components (`create<Name>Component({ createElement, Fragment })`); reused by React directly, Vue via `renderCompat`, JS via the Preact renderer. Newer widgets get their layout here; older ones still define it in `instantsearch.js/src/components/`. |
+| `packages/instantsearch-ui-components` | **Shared UI layer.** Framework-agnostic widget markup + `ais-*` classes via factory components (`create<Name>Component({ createElement, Fragment })`); reused by React directly, Vue via `renderCompat`, JS via the Preact renderer. Some widgets take their layout from here; others define it in their flavor (`instantsearch.js/src/components/`, `react-instantsearch/src/ui/`). |
 | `packages/algoliasearch-helper` | Low-level search-parameter/state manager underneath connectors. Mature, separately-versioned; **rarely the place for a change** — fix the connector instead. See its `AGENTS.md`. |
 | `packages/instantsearch.css` | Default themes. |
 | `packages/react-instantsearch-nextjs` / `-router-nextjs` | Next.js App Router / Pages Router integrations. |
@@ -26,7 +26,7 @@ Because behavior lives in the connector and the flavors only wrap it, most chang
 | Work in… | Package |
 | --- | --- |
 | Connectors, runtime, routers, state mappings, middlewares, shared types | `packages/instantsearch-core` (public → `src/index.ts`, flavor-only helpers → `src/internal.ts`; its `AGENTS.md` has the connector contract) |
-| JS widgets, legacy Preact components (`src/components`) | `packages/instantsearch.js` |
+| JS widgets, Preact components (`src/components`) | `packages/instantsearch.js` |
 | Shared framework-agnostic markup / `ais-*` classes | `packages/instantsearch-ui-components` |
 | React widgets/hooks + Next.js integrations | `react-instantsearch` / `react-instantsearch-core` / `*-nextjs` |
 | Vue components (Vue 2 **and** 3) | `vue-instantsearch` |
@@ -56,7 +56,8 @@ yarn test                       # everything (slow)
 yarn lint:changed               # lint only changed files — use this while iterating
 yarn lint:fix                   # auto-fix
 yarn format                     # format the repo; yarn format:check only reports
-yarn type-check                 # tsc + per-package (also :v4 for legacy algoliasearch)
+yarn type-check                 # tsc + per-package
+yarn type-check:v4              # the same check against the algoliasearch v4 client (CI downgrades it first)
 
 # E2E — see .claude/rules/e2e.md (Playwright). Examples must be built first:
 yarn website:examples && E2E_FLAVOR=react E2E_BROWSER=chromium yarn test:e2e
@@ -66,13 +67,13 @@ Packages build with the root's `rollup` and `tsc`, which only scripts started fr
 
 CI checks these three in a single job, in the order `Format check` → `Lint` → `Type checking`: the first failure stops the job, so a red `Lint` step means `Type checking` never ran — read a missing step as unknown, not as passing, and run `yarn format` before pushing.
 
-Don't pass `--silent` to `yarn jest`. Some tests count `console.error` calls, and Jest's silent console no longer turns `console.trace` into one, so the "can attach many `render` listeners" test in `instantsearch-core` fails with it.
+Don't pass `--silent` to `yarn jest`. Some tests count `console.error` calls, and Jest's silent console doesn't turn `console.trace` into one, so the "can attach many `render` listeners" test in `instantsearch-core` fails with it.
 
 ## Conventions
 
 - **TypeScript strict.** No implicit any; unused vars/params error. Avoid `for-in`/`for-of` and `async` in library code (oxlint enforces).
-- **Tests** co-locate in `__tests__/` next to source — Jest picks up _any_ file under `__tests__/` (the default `testMatch`), so some legacy tests are plain `*.js`; name new ones `*.test.ts(x)`. Prefer focused assertions; use inline snapshots sparingly (initial render only). Mocks/helpers come from `@instantsearch/mocks` and `@instantsearch/testutils`.
-- **Cross-flavor tests** live in `tests/common/{widgets,connectors}/<name>/` and each flavor registers them in its `common-widgets.test.*` / `common-connectors.test.*`. Run with `yarn jest common-widgets` (all three flavors) and scope to one widget via `-t "<Widget> widget common tests"`. This is the primary test surface for newer widgets like Autocomplete and Chat. See `tests/common/README.md`.
+- **Tests** co-locate in `__tests__/` next to source — Jest picks up _any_ file under `__tests__/` (the default `testMatch`), so some existing tests are plain `*.js`; name new ones `*.test.ts(x)`. Prefer focused assertions; use inline snapshots sparingly (initial render only). Mocks/helpers come from `@instantsearch/mocks` and `@instantsearch/testutils`.
+- **Cross-flavor tests** live in `tests/common/{widgets,connectors}/<name>/` and each flavor registers them in its `common-widgets.test.*` / `common-connectors.test.*`. Run with `yarn jest common-widgets` (all three flavors) and scope to one widget via `-t "<Widget> widget common tests"`. This is the primary test surface for widgets like Autocomplete and Chat. See `tests/common/README.md`.
 - **Commits: Conventional Commits** — `type(scope): description`, scope = widget/connector or topic (`deps`, `ci`). e.g. `fix(searchbox): increase magnifying glass size`, `feat(hits): add custom rendering`. Reference issues with `fix #1234` in the body.
 - **Branches:** target `master`; `vX` branches are critical-fix-only. Branch names: `fix/<issue>`, `feat/<name>`.
 - **Releases** are automated via Ship.js (`yarn release`); changelogs are generated from commits — don't hand-edit them. **Prereleases** bypass Ship.js: dispatch the **CI** workflow on the branch to release (`channel` = the npm dist-tag, `action` = `plan` first to see the exact versions). It publishes only that channel tag, never `latest`, and it has to stay a job in `ci.yml` because that is the workflow filename npm's trusted publishers already name — a new workflow file would need that form filled in on every package. Merging a branch into `master` graduates its betas: Ship.js's `semver.inc` drops the prerelease.

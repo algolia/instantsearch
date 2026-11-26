@@ -216,34 +216,24 @@ The fixtures account for this with combined selectors like:
 
 If you add new selectors, ensure they work across all flavors.
 
-## Migration Notes: WebDriverIO to Playwright
+## Waiting and selection
 
-When migrating tests from WebDriverIO to Playwright, be aware of these differences:
+### URL waiting
 
-### URL Waiting
+Use `await expect(page).toHaveURL(url)` — it retries. A hand-written poll over `browser.getUrl()` turns timing into a test dependency.
 
-- **WebDriverIO**: Used custom `waitForUrl()` that polls `browser.getUrl()` until match
-- **Playwright**: Use `await expect(page).toHaveURL(url)` which has built-in retrying
+### Clicking a container locator
 
-### Element Selection
+`page.locator('.ais-Hits-item')` matches the `<li>`, and clicking it can stop at the container without reaching the link inside. Target the link:
 
-- **WebDriverIO**: `$('.ais-Hits-item')` returns first match, clicking works on container elements
-- **Playwright**: `page.locator('.ais-Hits-item').first()` - clicking on container may not hit child link elements. Use `.locator('a')` to target links explicitly:
+```typescript
+const link = page.locator('.ais-Hits-item a').first();
+await link.click();
+```
 
-  ```typescript
-  // WebDriverIO
-  const link = await $('.ais-Hits-item');
-  await link.click();
+### Browser back navigation
 
-  // Playwright - click the link inside the hit
-  const link = page.locator('.ais-Hits-item a').first();
-  await link.click();
-  ```
-
-### Browser Back Navigation
-
-- **WebDriverIO**: `browser.back()` worked reliably for SPA navigation
-- **Playwright**: `page.goBack()` works but may require `slowMo` in headless mode for Next.js App Router dynamic routes
+`page.goBack()` handles SPA navigation, but a headless run can outrun the router's `popstate` handling on Next.js App Router dynamic routes — see the `slowMo` note below.
 
 ### Headless Mode Timing Issues
 

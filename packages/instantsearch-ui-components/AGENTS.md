@@ -1,6 +1,6 @@
 # instantsearch-ui-components
 
-The **framework-agnostic UI layer** — the shared markup/layout for widgets, reused by every flavor. This is where a widget's DOM structure and `ais-*` CSS classes live for **newer** widgets. (Older widgets still define their layout per-flavor; see "Old vs new" below.)
+The **framework-agnostic UI layer** — the shared markup/layout for widgets, reused by every flavor. This is where a widget's DOM structure and `ais-*` CSS classes live. Not every widget takes its markup from here — see "Who gets markup from here".
 
 ## The factory + renderer pattern
 
@@ -9,11 +9,49 @@ Components are **not** React/Preact/Vue components directly. Each is a factory t
 ```tsx
 /** @jsx createElement */
 import { cx } from '../lib';
-import type { Renderer, ComponentProps } from '../types';
 
-export function createHitsComponent({ createElement, Fragment }: Renderer) {
-  return function Hits(props) {
-    return <div className={cx('ais-Hits', props.classNames.root)}>…</div>;
+import type { ComponentProps, Renderer } from '../types';
+
+export type ClearRefinementsClassNames = {
+  root: string | string[];
+  button: string | string[];
+  disabledButton: string | string[];
+};
+
+export type ClearRefinementsProps = ComponentProps<'div'> & {
+  classNames?: Partial<ClearRefinementsClassNames>;
+  canRefine?: boolean;
+  onClick?: () => void;
+};
+
+// Abbreviated src/components/ClearRefinements.tsx — keep the shape below.
+export function createClearRefinementsComponent({ createElement }: Renderer) {
+  return function ClearRefinements(userProps: ClearRefinementsProps) {
+    const { classNames = {}, canRefine = false, onClick, ...props } = userProps;
+
+    return (
+      <div
+        {...props}
+        className={cx('ais-ClearRefinements', classNames.root, props.className)}
+      >
+        <button
+          type="button"
+          disabled={!canRefine}
+          onClick={onClick}
+          className={cx(
+            'ais-ClearRefinements-button',
+            classNames.button,
+            !canRefine &&
+              cx(
+                'ais-ClearRefinements-button--disabled',
+                classNames.disabledButton
+              )
+          )}
+        >
+          Clear refinements
+        </button>
+      </div>
+    );
   };
 }
 ```
@@ -21,20 +59,20 @@ export function createHitsComponent({ createElement, Fragment }: Renderer) {
 - **`Renderer` = `{ createElement, Fragment }`** is _injected_ by the consumer (`src/types/Renderer.ts`). Defaults are Preact's, but React passes `react`'s `createElement` and Vue passes its own `h` (wired up via the `renderCompat` helper in `vue-instantsearch`). **Never import `preact`/`react`/`vue` directly** — go through the injected renderer. The `/** @jsx createElement */` pragma at the top of each file is what wires JSX to the injected function.
 - Class names go through **`cx`** (`src/lib/cx.ts`) and follow the `ais-<Widget>-<element>` contract that `instantsearch.css` themes — treat those class names as a public API.
 - Props are typed with `ComponentProps<'div'>`-style helpers from `src/types`; expose a `classNames` partial so consumers can extend styling.
-- **`__tests__/types.test.ts` checks this contract on the built declarations**: a factory must be named `create<Name>Component` and return a function taking `userProps`. Hanging a host-callable helper off the component (`Object.assign(Component, { restore })`, so a flavor's teardown can call it) is allowed — the emitted intersection still passes — but a factory returning anything that isn't a function doesn't.
+- **`__tests__/types.test.ts`** (package root, _not_ under `src/`) **checks this contract on the built declarations** in `dist/es/components`: a factory must be named `create<Name>Component` and return a function taking `userProps`. Hanging a host-callable helper off the component (`Object.assign(Component, { restore })`, so a flavor's teardown can call it) is allowed — the emitted intersection still passes — but a factory returning anything that isn't a function doesn't.
 
 ## Layout
 
 - `src/components/<Name>.tsx` — a `create<Name>Component` factory. Exported from `src/components/index.ts` → `src/index.ts`.
 - Grouped families: `src/components/autocomplete/`, `src/components/chat/`, `src/components/recommend-shared/` (+ the recommend widgets `RelatedProducts`, `FrequentlyBoughtTogether`, `LookingSimilar`, `TrendingItems`, `TrendingFacets`).
 - `src/lib/` — `cx`, `stickToBottom`, shared `utils`. `src/types/` — `Renderer`, `ComponentProps`, `Hooks`, `Recommend`, `shared`.
-- Runtime deps are minimal on purpose (`@swc/helpers`); **no framework as a dependency**. Markdown rendering uses a vendored copy of `markdown-to-jsx` in `src/lib/markdown-to-jsx/` (React removed, see its README); it is linted, formatted and type-checked like the rest.
+- Runtime deps are minimal on purpose (`@swc/helpers`); **no framework as a dependency**. Markdown rendering uses a vendored copy of `markdown-to-jsx` in `src/lib/markdown-to-jsx/` (with no React in it — see its README); it is linted, formatted and type-checked like the rest.
 
-## Old vs new (important)
+## Who gets markup from here
 
-- **New widgets:** layout lives here and is consumed by all flavors — React via `import { create<Name>Component } from 'instantsearch-ui-components'`, Vue via the `renderCompat` helper, JS via the Preact renderer.
-- **Older widgets:** layout was defined per-flavor — JS in `packages/instantsearch.js/src/components/` (Preact), React in `packages/react-instantsearch/src/ui/`. The migration direction is to consolidate that markup here; some JS-package components are now thin wrappers that import from this package.
-- When adding/changing **shared** layout, do it here. When touching a widget that still defines its own markup, check whether it should be migrated rather than forked.
+- **Widgets built on this package:** their layout lives here and all three flavors consume it — React via `import { create<Name>Component } from 'instantsearch-ui-components'`, Vue via the `renderCompat` helper, JS via the Preact renderer.
+- **Widgets with per-flavor markup:** JS in `packages/instantsearch.js/src/components/` (Preact), React in `packages/react-instantsearch/src/ui/`. Some JS components there are thin wrappers that import from this package.
+- Write **shared** layout here. A widget that defines its own markup keeps it in its flavor — one home per widget, so don't copy markup into this package and leave the flavor's copy in place.
 
 ## Working here
 
