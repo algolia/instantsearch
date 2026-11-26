@@ -138,6 +138,37 @@ function validateIcons(
   visit(sourceFile);
 }
 
+/**
+ * The function a factory returns, seen through the wrappers TypeScript emits
+ * around it. A factory that hands its host a helper —
+ * `Object.assign(Component, { restore })` — declares a component that is also
+ * an object, which comes out as an intersection whose members include the
+ * function type. That is still a component: only the function member carries
+ * the props contract these checks care about.
+ */
+function resolveComponentType(
+  node: ts.TypeNode | undefined
+): ts.FunctionTypeNode | undefined {
+  if (!node) {
+    return undefined;
+  }
+  if (ts.isFunctionTypeNode(node)) {
+    return node;
+  }
+  if (ts.isParenthesizedTypeNode(node)) {
+    return resolveComponentType(node.type);
+  }
+  if (ts.isIntersectionTypeNode(node)) {
+    for (const member of node.types) {
+      const componentType = resolveComponentType(member);
+      if (componentType) {
+        return componentType;
+      }
+    }
+  }
+  return undefined;
+}
+
 function validateComponents(
   sourceFile: ts.SourceFile,
   filename: string,
@@ -159,29 +190,24 @@ function validateComponents(
       );
     }
 
-    const returnType = functionDeclaration.type as ts.FunctionTypeNode;
+    const returnType = resolveComponentType(functionDeclaration.type);
 
-    if (returnType.kind !== ts.SyntaxKind.FunctionType) {
+    if (!returnType) {
       report(functionDeclaration)(
         `Exported component's return type should be a function.`
       );
     }
 
-    if (
-      returnType.kind === ts.SyntaxKind.FunctionType &&
-      returnType.parameters.length > 1
-    ) {
+    if (returnType && returnType.parameters.length > 1) {
       report(functionDeclaration)(
         `Exported component's return type should have zero or one parameter`
       );
     }
 
     if (
-      functionDeclaration.type?.kind === ts.SyntaxKind.FunctionType &&
-      (functionDeclaration.type as ts.FunctionTypeNode).parameters[0] &&
-      (
-        functionDeclaration.type as ts.FunctionTypeNode
-      ).parameters[0].name.getText() !== 'userProps'
+      returnType &&
+      returnType.parameters[0] &&
+      returnType.parameters[0].name.getText() !== 'userProps'
     ) {
       report(functionDeclaration)(
         `Exported component's return type should be called 'userProps'.`
@@ -234,6 +260,49 @@ function walkDir(dir: string, relativePath: string = '') {
 }
 
 walkDir(componentsDir);
+
+describe('the component type contract', () => {
+  // The checks above run against built declarations, which can't express every
+  // shape worth pinning down, and `resolveComponentType` is exactly the kind of
+  // rule that rots quietly if nothing says where it stops. These declarations
+  // stand in for emitted ones, under the file name `Hits.d.ts` so the expected
+  // factory name is `createHitsComponent`.
+  function messages(returnType: string): string[] {
+    const sourceFile = ts.createSourceFile(
+      'Hits.d.ts',
+      `export declare function createHitsComponent(renderer: Renderer): ${returnType};`,
+      ts.ScriptTarget.ES2015,
+      true
+    );
+
+    return delint(sourceFile).map((error) => error.message);
+  }
+
+  test('accepts a factory returning a component', () => {
+    expect(messages('(userProps: HitsProps) => JSX.Element')).toEqual([]);
+  });
+
+  test('accepts a factory that hands its host a helper', () => {
+    // What `Object.assign(Component, { restore })` emits.
+    expect(
+      messages(
+        '((userProps: HitsProps) => JSX.Element) & { restore: () => void }'
+      )
+    ).toEqual([]);
+  });
+
+  test('rejects a return type that is not a component', () => {
+    expect(
+      messages('{ Component: (userProps: HitsProps) => JSX.Element }')
+    ).toEqual([`Exported component's return type should be a function.`]);
+  });
+
+  test('still checks the props argument inside a component with helpers', () => {
+    expect(messages('(props: HitsProps) => JSX.Element')).toEqual([
+      `Exported component's return type should be called 'userProps'.`,
+    ]);
+  });
+});
 
 describe('Exposes correct types', () => {
   describe.each(files)('$subdir/$file', ({ file, subdir }) => {

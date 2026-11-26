@@ -25,6 +25,13 @@ const nonWidgetComponents = [
   'AisPanel',
   'AisPoweredBy',
   'AisStateResults',
+  // Shared chat presentational components (no connector of their own).
+  'AisCarousel',
+  'AisChatGreeting',
+  'AisChatMessageLoader',
+  'AisChatOverlayLayout',
+  'AisChatInlineLayout',
+  'AisChatSidePanelLayout',
 ];
 
 function getAllComponents() {
@@ -93,6 +100,8 @@ function getAllComponents() {
         props.disableTriggerValidation = true;
       } else if (name === 'AisCompareBar') {
         props.configurationId = 'configurationId';
+      } else if (name === 'AisPromptSuggestions') {
+        props.agentId = 'agentId';
       } else if (name === 'AisResultCard') {
         // Like `AisChat`, a transport avoids the appId/apiKey requirement.
         props.agentId = 'agentId';

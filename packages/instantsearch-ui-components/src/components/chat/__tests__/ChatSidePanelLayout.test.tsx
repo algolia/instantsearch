@@ -159,4 +159,38 @@ describe('ChatSidePanelLayout', () => {
     expect(document.body.style.marginRight).toBe('');
     parent.remove();
   });
+
+  // The margin store lives in the factory's closure, and the component built at
+  // the top of this file already holds `document.body` from earlier renders —
+  // these two cover the store itself, so they get a fresh factory each.
+  test('hands the margin back to a host that tears an open panel down', () => {
+    const Panel = createChatSidePanelLayoutComponent({
+      createElement,
+      Fragment,
+    });
+
+    render(<Panel {...defaultProps} open={true} />);
+    expect(document.body.style.marginRight).toBeTruthy();
+
+    // A host that removes the panel while it is open never reaches the render
+    // that closes it, so its teardown calls this directly.
+    Panel.restoreMargin(document.body);
+
+    expect(document.body.style.marginRight).toBe('');
+  });
+
+  test('leaves a margin it never set alone', () => {
+    const Panel = createChatSidePanelLayoutComponent({
+      createElement,
+      Fragment,
+    });
+
+    document.body.style.marginRight = '4px';
+    render(<Panel {...defaultProps} open={false} />);
+
+    Panel.restoreMargin(document.body);
+
+    expect(document.body.style.marginRight).toBe('4px');
+    document.body.style.removeProperty('margin-right');
+  });
 });

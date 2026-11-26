@@ -21,6 +21,7 @@ export function createHitsComponent({ createElement, Fragment }: Renderer) {
 - **`Renderer` = `{ createElement, Fragment }`** is _injected_ by the consumer (`src/types/Renderer.ts`). Defaults are Preact's, but React passes `react`'s `createElement` and Vue passes its own `h` (wired up via the `renderCompat` helper in `vue-instantsearch`). **Never import `preact`/`react`/`vue` directly** — go through the injected renderer. The `/** @jsx createElement */` pragma at the top of each file is what wires JSX to the injected function.
 - Class names go through **`cx`** (`src/lib/cx.ts`) and follow the `ais-<Widget>-<element>` contract that `instantsearch.css` themes — treat those class names as a public API.
 - Props are typed with `ComponentProps<'div'>`-style helpers from `src/types`; expose a `classNames` partial so consumers can extend styling.
+- **`__tests__/types.test.ts` checks this contract on the built declarations**: a factory must be named `create<Name>Component` and return a function taking `userProps`. Hanging a host-callable helper off the component (`Object.assign(Component, { restore })`, so a flavor's teardown can call it) is allowed — the emitted intersection still passes — but a factory returning anything that isn't a function doesn't.
 
 ## Layout
 
