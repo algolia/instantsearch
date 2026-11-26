@@ -97,7 +97,7 @@ export function createGroupedResultsTool(getItemComponent) {
       this.hooksStore.beginRender();
 
       const tree = h(GroupedResultsUiComponent, {
-        toolProps: Object.assign({}, this.$attrs, { context: this.context }),
+        toolProps: { context: this.context },
         groupCarouselComponent: ({ items, sendEvent }) =>
           h(AisCarousel, {
             items,

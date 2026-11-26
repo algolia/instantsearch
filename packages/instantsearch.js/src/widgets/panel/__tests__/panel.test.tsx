@@ -12,7 +12,7 @@ import { within } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { h } from 'preact';
 
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import stats from '../../stats/stats';
 import panel from '../panel';
 
@@ -90,11 +90,6 @@ describe('panel', () => {
         type: 'function',
         collapseButtonLabel: ({ collapsed }: { collapsed: boolean }) =>
           collapsed ? 'Développer' : 'Réduire',
-      },
-      {
-        type: 'string',
-        collapseButtonLabel:
-          '{{#collapsed}}Développer{{/collapsed}}{{^collapsed}}Réduire{{/collapsed}}',
       },
     ])(
       'renders a $type collapse button label template',
@@ -180,14 +175,7 @@ describe('panel', () => {
         }),
       ]);
 
-      // @MAJOR Once Hogan.js and string-based templates are removed,
-      // `search.start()` can be moved to the test body and the following
-      // assertion can go away.
-      expect(async () => {
-        search.start();
-
-        await wait(0);
-      }).not.toWarnDev();
+      search.start();
 
       await wait(0);
 

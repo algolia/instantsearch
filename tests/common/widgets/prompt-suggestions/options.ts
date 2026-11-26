@@ -56,6 +56,18 @@ function createResultsClient(hits: Array<Record<string, unknown>>) {
 }
 
 /**
+ * A search client whose requests never resolve, so the widget never gets
+ * results (the same as a page that never searches).
+ */
+function createPendingClient() {
+  return createSearchClient({
+    search: jest.fn(
+      () => new Promise(() => {})
+    ) as unknown as MockSearchClient['search'],
+  });
+}
+
+/**
  * Mocks `global.fetch` (the agent-studio transport, not the search client)
  * with the Agent Studio streaming `tasks` response.
  */
@@ -69,28 +81,37 @@ function mockAgentFetch(suggestions: string[] = SUGGESTIONS) {
 
 export function createOptionsTests(
   setup: PromptSuggestionsWidgetSetup,
-  { act }: Required<TestOptions>
+  { act, flavor }: Required<TestOptions>
 ) {
   describe('options', () => {
-    test('throws without agentId or transport', () => {
-      const searchClient = createSearchClient({});
+    // Vue mounts widgets in a lifecycle hook, and Vue's error handling
+    // reports errors thrown there (console.error) instead of rethrowing them
+    // to the caller, so the misconfiguration surfaces as a logged error
+    // rather than a synchronous throw. The connector still refuses to mount
+    // the widget.
+    (flavor === 'vue' ? test.skip : test)(
+      'throws without agentId or transport',
+      () => {
+        const searchClient = createSearchClient({});
 
-      expect(() =>
-        setup({
-          instantSearchOptions: {
-            indexName: 'indexName',
-            searchClient,
-          },
-          widgetParams: {
-            javascript: {} as any,
-            react: {} as any,
-            vue: {},
-          },
-        })
-      ).toThrow(
-        'The `agentId` option is required unless a custom `transport` is provided.'
-      );
-    });
+        expect(() =>
+          setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              javascript: {} as any,
+              react: {} as any,
+              // Intentionally empty: the widget must throw without an agent.
+              vue: {} as any,
+            },
+          })
+        ).toThrow(
+          'The `agentId` option is required unless a custom `transport` is provided.'
+        );
+      }
+    );
 
     test('renders the suggestion pills returned by the agent', async () => {
       const searchClient = createResultsClient([
@@ -110,7 +131,10 @@ export function createOptionsTests(
             agentId: 'test-agent-id',
             configurationId: 'prompt-suggestions',
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
         },
       });
 
@@ -163,7 +187,10 @@ export function createOptionsTests(
             agentId: 'test-agent-id',
             configurationId: 'prompt-suggestions',
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
         },
       });
 
@@ -212,7 +239,10 @@ export function createOptionsTests(
             agentId: 'test-agent-id',
             configurationId: 'prompt-suggestions',
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
         },
       });
 
@@ -247,7 +277,10 @@ export function createOptionsTests(
             agentId: 'test-agent-id',
             configurationId: 'prompt-suggestions',
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
         },
       });
 
@@ -279,7 +312,7 @@ export function createOptionsTests(
         widgetParams: {
           javascript: { transport, configurationId: 'prompt-suggestions' },
           react: { transport, configurationId: 'prompt-suggestions' },
-          vue: {},
+          vue: { transport, configurationId: 'prompt-suggestions' },
         },
       });
 
@@ -330,7 +363,11 @@ export function createOptionsTests(
             transport,
             configurationId: 'prompt-suggestions',
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            transport,
+            configurationId: 'prompt-suggestions',
+          },
         },
       });
 
@@ -355,9 +392,7 @@ export function createOptionsTests(
     });
 
     test('requests suggestions with an explicit context when no search is triggered', async () => {
-      const searchClient = createResultsClient([
-        { objectID: '1', name: 'Product 1' },
-      ]);
+      const searchClient = createPendingClient();
       const fetchMock = mockAgentFetch();
       const context = { title: 'A product', brand: 'A brand' };
 
@@ -365,14 +400,6 @@ export function createOptionsTests(
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient,
-          // The common query gate: a page with no query never searches, so the
-          // widget never gets results. With an explicit `context` the request
-          // does not read them, so it must not wait for them either.
-          searchFunction(helper) {
-            if (helper.state.query) {
-              helper.search();
-            }
-          },
         },
         widgetParams: {
           javascript: {
@@ -385,7 +412,11 @@ export function createOptionsTests(
             configurationId: 'prompt-suggestions',
             context,
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            context,
+          },
         },
       });
 
@@ -393,7 +424,6 @@ export function createOptionsTests(
         await wait(DEBOUNCE_MS + 50);
       });
 
-      expect(searchClient.search).not.toHaveBeenCalled();
       expect(fetchMock).toHaveBeenCalledTimes(1);
       const [, init] = fetchMock.mock.calls[0] as unknown as [
         string,
@@ -408,20 +438,13 @@ export function createOptionsTests(
     });
 
     test('requests nothing without a context when no search is triggered', async () => {
-      const searchClient = createResultsClient([
-        { objectID: '1', name: 'Product 1' },
-      ]);
+      const searchClient = createPendingClient();
       const fetchMock = mockAgentFetch();
 
       await setup({
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient,
-          searchFunction(helper) {
-            if (helper.state.query) {
-              helper.search();
-            }
-          },
         },
         widgetParams: {
           javascript: {
@@ -432,7 +455,10 @@ export function createOptionsTests(
             agentId: 'test-agent-id',
             configurationId: 'prompt-suggestions',
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
         },
       });
 
@@ -464,7 +490,11 @@ export function createOptionsTests(
             configurationId: 'prompt-suggestions',
             context,
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            context,
+          },
         },
       });
 
@@ -497,7 +527,7 @@ export function createOptionsTests(
         widgetParams: {
           javascript: { agentId: 'test-agent-id' },
           react: { agentId: 'test-agent-id' },
-          vue: {},
+          vue: { agentId: 'test-agent-id' },
         },
       });
 
@@ -531,7 +561,10 @@ export function createOptionsTests(
             agentId: 'test-agent-id',
             configurationId: 'my_custom_task',
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'my_custom_task',
+          },
         },
       });
 
@@ -571,7 +604,11 @@ export function createOptionsTests(
             configurationId: 'prompt-suggestions',
             transformItems,
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            transformItems,
+          },
         },
       });
 
@@ -611,7 +648,12 @@ export function createOptionsTests(
             onSuggestionClick,
             renderChat: false,
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            onSuggestionClick,
+            renderChat: false,
+          },
         },
       });
 

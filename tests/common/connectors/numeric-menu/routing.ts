@@ -5,8 +5,7 @@ import {
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
-import { history } from 'instantsearch.js/es/lib/routers';
-import { simple } from 'instantsearch.js/es/lib/stateMappings';
+import { historyRouter, simpleStateMapping } from 'instantsearch.js';
 
 import type { NumericMenuConnectorSetup } from '.';
 import type { SetupOptions, TestOptions } from '../../common';
@@ -27,13 +26,13 @@ export function createRoutingTests(
       test('Consistently shows the right URL, even before widget is initialized', async () => {
         const delay = 100;
         const margin = 10;
-        const router = history();
+        const router = historyRouter();
         const attribute = 'price';
         const options: SetupOptions<NumericMenuConnectorSetup> = {
           instantSearchOptions: {
             indexName: 'indexName',
             routing: {
-              stateMapping: simple(),
+              stateMapping: simpleStateMapping(),
               router,
             },
             searchClient: createSearchClient({
@@ -91,7 +90,7 @@ export function createRoutingTests(
       test('works with unsafe "routeToState" implementation', async () => {
         const delay = 100;
         const attribute = 'range';
-        const router = history();
+        const router = historyRouter();
         const options: SetupOptions<NumericMenuConnectorSetup> = {
           instantSearchOptions: {
             indexName: 'indexName',

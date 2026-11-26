@@ -1,4 +1,4 @@
-import { hitsPerPage as fn } from 'instantsearch.js/es/widgets';
+import { hitsPerPage as fn } from 'instantsearch.js';
 
 import { uppercaseLabels } from '../transforms';
 import { defineWidget } from '../types';

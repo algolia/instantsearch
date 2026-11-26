@@ -1,7 +1,6 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import json from '@rollup/plugin-json';
 import vue2PluginModule from 'rollup-plugin-vue2';
 import vue3Plugin from 'rollup-plugin-vue3';
 
@@ -140,7 +139,7 @@ const fixVue3SfcExports = () => ({
 const external = (id) =>
   [
     'algoliasearch-helper',
-    'instantsearch.js',
+    'instantsearch-core',
     'instantsearch-ui-components',
     'vue',
     'mitt',
@@ -160,7 +159,6 @@ function outputs(vueVersion) {
     createResolvePlugin({
       extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.vue'],
     }),
-    json(),
     createReplacePlugin({ mode: 'production' }),
     createStripJsxPragmaPlugin(),
   ];
@@ -176,14 +174,8 @@ function outputs(vueVersion) {
     },
     plugins: [
       ...basePlugins,
-      createReplacePlugin({
-        mode: 'production',
-        additional: {
-          'instantsearch.js/es': 'instantsearch.js/cjs',
-        },
-      }),
       createTerserPlugin({ sourceMap: false }),
-      createPackageJsonPlugin({ type: 'commonjs', sideEffects: true }),
+      createPackageJsonPlugin({ type: 'commonjs', sideEffects: false }),
     ],
   };
 
@@ -199,9 +191,7 @@ function outputs(vueVersion) {
     },
     plugins: [
       ...basePlugins,
-      extensionResolver({
-        modulesToResolve: ['instantsearch.js'],
-      }),
+      extensionResolver(),
       createTerserPlugin({ sourceMap: false }),
       ...(vueVersion === 'vue3' ? [fixVue3SfcExports()] : []),
       createFile(
@@ -210,7 +200,7 @@ function outputs(vueVersion) {
 export default InstantSearch;
 export * from './src/instantsearch.js';`
       ),
-      createPackageJsonPlugin({ type: 'module', sideEffects: true }),
+      createPackageJsonPlugin({ type: 'module', sideEffects: false }),
     ],
   };
 

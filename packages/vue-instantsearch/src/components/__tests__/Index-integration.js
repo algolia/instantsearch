@@ -2,8 +2,8 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-jest.unmock('instantsearch.js/es');
-import instantsearch from 'instantsearch.js/es';
+jest.unmock('instantsearch-core/internal');
+import { instantsearch } from 'instantsearch-core/internal';
 
 import { mount } from '../../../test/utils';
 import { createWidgetMixin } from '../../mixins/widget';
@@ -102,7 +102,6 @@ it('child widgets render with right data', () => {
       instantSearchInstance: search,
       parent: indexWidget,
       state: expect.any(Object),
-      templatesConfig: expect.any(Object),
       uiState: {},
     })
   );

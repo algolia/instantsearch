@@ -3,6 +3,110 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.0.0-beta.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.55.1...react-instantsearch-core@8.0.0-beta.0) (2026-11-19)
+
+
+### Bug Fixes
+
+* **insights:** report the flavor version in usage events ([#7358](https://github.com/algolia/instantsearch/issues/7358)) ([8918638](https://github.com/algolia/instantsearch/commit/89186381ded867a539d5436d4e20c2d05774626e))
+
+
+### chore
+
+* introduce instantsearch-core ([#7018](https://github.com/algolia/instantsearch/issues/7018)) ([22e480b](https://github.com/algolia/instantsearch/commit/22e480b441333d92c6c2091a42b51295c4db9e20))
+
+
+* feat!: drop support for algoliasearch v3 (#7407) ([37bfc77](https://github.com/algolia/instantsearch/commit/37bfc779b761b73fe41e90c09720d4eb26930638)), closes [#7407](https://github.com/algolia/instantsearch/issues/7407) [#7406](https://github.com/algolia/instantsearch/issues/7406) [#7385](https://github.com/algolia/instantsearch/issues/7385)
+* fix(instantsearch)!: make search.helper the helper that sends the requests [FX-4097] (#7392) ([dd48215](https://github.com/algolia/instantsearch/commit/dd4821516e48d1dac8de6c3bd19bbef406d55ef6)), closes [#7392](https://github.com/algolia/instantsearch/issues/7392) [#6516](https://github.com/algolia/instantsearch/issues/6516)
+* fix(instantsearch)!: remove future.preserveSharedStateOnUnmount ([a0dfce7](https://github.com/algolia/instantsearch/commit/a0dfce708661c0d60ae56ff0f1ddedf2a08c5375)), closes [#6488](https://github.com/algolia/instantsearch/issues/6488)
+* fix(insights)!: remove bindEvent ([f55ac8e](https://github.com/algolia/instantsearch/commit/f55ac8e79d4d6e8f5c18b0cd588703fa23fb68d7))
+* fix(instantsearch)!: remove templatesConfig and numberLocale ([0034c08](https://github.com/algolia/instantsearch/commit/0034c08caee939f225c06cc6f7b0c0c3478898fe))
+* fix(connectors)!: update the connector render states for v5 [FX-4096] (#7383) ([aa23e68](https://github.com/algolia/instantsearch/commit/aa23e6892f335a13e2af3ed319f35504edfdd197)), closes [#7383](https://github.com/algolia/instantsearch/issues/7383)
+* fix(widgets)!: remove deprecated autocomplete aliases and chat shims ([e71bbc2](https://github.com/algolia/instantsearch/commit/e71bbc2efefb89fd515d47da5c822b497be47d08))
+* fix(connectors)!: remove deprecated render state fields ([0528206](https://github.com/algolia/instantsearch/commit/052820626cb49dfcb500694292c9a340a33ff309))
+* fix(instantsearch)!: remove deprecated instance and index APIs ([fe4f9fb](https://github.com/algolia/instantsearch/commit/fe4f9fb6a2a901b18f8518e560f0302a469d3759))
+* fix(widgets)!: remove filter suggestions ([9100931](https://github.com/algolia/instantsearch/commit/910093119344dbda1aa599f58793e56e6fe907df))
+
+
+### BREAKING CHANGES
+
+* algoliasearch v3 is no longer supported: use algoliasearch v4 or v5. The `algoliasearch` peer dependency range of algoliasearch-helper, instantsearch.js, react-instantsearch-core, react-instantsearch and vue-instantsearch is now `>= 4 < 6`. The `ClientV3_4` type, exported from `algoliasearch-helper/types/algoliasearch`, instantsearch-core and instantsearch.js, is renamed to `ClientV4`.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+* `search.mainHelper` is removed, and `search.helper` is now the helper that sends the requests, which `search.mainHelper` was. Replace `search.mainHelper` with `search.helper`, and use `search.mainIndex.getHelper()` where you read the state or the results of the main index from `search.helper`.
+
+FX-4097
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+* `future.preserveSharedStateOnUnmount` is removed and InstantSearch behaves as if it were `true`: removing a widget keeps the state that remaining widgets with the same attribute use. Remove the option from `instantsearch()`, `<InstantSearch>` and `<ais-instant-search>`.
+
+FX-4094
+* `bindEvent` is removed from the `hits` and `infiniteHits`
+render state and from template params; use `sendEvent` instead. The
+`TemplateWithBindEvent` type is renamed to `TemplateWithSendEvent`.
+
+FX-4085
+* the `numberLocale` option and the `templatesConfig`
+property of the InstantSearch instance are removed, and `templatesConfig`
+is no longer part of widgets' init and render options.
+
+FX-4085
+* the `hasMapMoveSinceLastRefine` render-state property of
+connectGeoSearch (and useGeoSearch) is renamed to `hasMapMovedSinceLastRefine`.
+The old name is removed without an alias.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+* fix(widgets)!: replace remaining hasRefinements with canRefine [FX-4096]
+* `EXPERIMENTAL_autocomplete` (instantsearch.js) and
+`EXPERIMENTAL_Autocomplete` (React InstantSearch) are removed; use
+`autocomplete` and `Autocomplete`. Chat tool and empty components now only
+receive `context`; the deprecated root props (`status`, `tools`, `onClose`,
+...), `ChatEmptyProps` and the `DisplayResultsToolType` export are removed.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+* the following deprecated connector render state fields are removed:
+
+- `hits` from `connectHits` and `connectInfiniteHits` (and `useHits` / `useInfiniteHits`). Use `items`.
+- `hasNoResults` from `connectSortBy`, `connectRatingMenu`, `connectNumericMenu` and `connectHitsPerPage` (and the Vue `has-no-results` slot prop of `ais-sort-by` / `ais-hits-per-page`). Use `canRefine`.
+- `hasRefinements` from `connectClearRefinements`. Use `canRefine`.
+- `isSearchStalled` from `connectSearchBox` (and `useSearchBox`). Use `instantSearchInstance.status === 'stalled'` (`useInstantSearch().status` in React).
+- the `Hits` type. Use `Hit[]`.
+- the `ToggleRefinementConnector` / `ToggleRefinementWidgetDescription` re-exports from `connectors/toggle-refinement/types`. Import them from `connectToggleRefinement`.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+* the following deprecated APIs are removed:
+
+- `searchFunction` option (and the React/Vue `searchFunction` / `search-function` props). Use `onStateChange` instead.
+- `addWidget()` / `removeWidget()`. Use `addWidgets([widget])` / `removeWidgets([widget])`.
+- `EXPERIMENTAL_use()`. Use `use()`.
+- `_isSearchStalled`. Use `status === 'stalled'`.
+- `EXPERIMENTAL_isolated` on the `index` widget. Use `isolated`.
+- `getWidgetState` (on the `index` widget and as a widget lifecycle hook). Use `getWidgetUiState`.
+- `searchMetadata` in widget init/render options. Use `status`.
+- the `searchParameters` option warning (the option itself was removed in v4). Use the `configure` widget.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+* the filterSuggestions widget, connectFilterSuggestions, useFilterSuggestions and FilterSuggestions no longer exist
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+* instantsearch.js no longer exposes the modules that moved to instantsearch-core at their old deep paths (`instantsearch.js/es/connectors/<name>/connect<Name>`, `es/lib/utils/*`, `es/lib/chat`, `es/lib/ai-lite`, `es/lib/tasks`, `es/lib/infiniteHitsCache`, `es/middlewares`, and the type modules under `es/types`). Import them from `instantsearch-core` instead. instantsearch-ui-components no longer re-exports the chat types and helpers that moved to core (`find`, `startsWith`, `addAbsolutePosition`, `collectChatRecords`, `getPromptSuggestionHits`, `UIMessage`, `ChatState`, ...); import them from `instantsearch-core`.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+* fix(tests): import core test helper by relative path
+
+instantsearch-core's exports map does not expose test/, so
+instantsearch-core/test/createWidget failed to resolve with
+ERR_PACKAGE_PATH_NOT_EXPORTED and broke every suite that loads
+@instantsearch/testutils.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+
+
+
+
 ## [7.55.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.55.0...react-instantsearch-core@7.55.1) (2026-11-17)
 
 **Note:** Version bump only for package react-instantsearch-core

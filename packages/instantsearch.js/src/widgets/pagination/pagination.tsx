@@ -1,26 +1,25 @@
 /** @jsx h */
 
+import { connectPagination } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Pagination from '../../components/Pagination/Pagination';
-import connectPagination from '../../connectors/pagination/connectPagination';
-import { component } from '../../lib/suit';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import type {
   PaginationComponentCSSClasses,
   PaginationComponentTemplates,
 } from '../../components/Pagination/Pagination';
+import type { Template } from '../../types';
 import type {
   PaginationConnectorParams,
   PaginationRenderState,
   PaginationWidgetDescription,
-} from '../../connectors/pagination/connectPagination';
-import type { Renderer, Template, WidgetFactory } from '../../types';
+} from 'instantsearch-core';
+import type { Renderer, WidgetFactory } from 'instantsearch-core';
 
 const suit = component('Pagination');
 const withUsage = createDocumentationMessageGenerator({ name: 'pagination' });

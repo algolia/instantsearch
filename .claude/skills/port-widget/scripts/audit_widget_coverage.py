@@ -283,7 +283,6 @@ def build_rows(
         "frequently-bought-together",
         "trending-items",
         "looking-similar",
-        "filter-suggestions",
         "chat",
     }:
         notes.append(

@@ -115,7 +115,7 @@ To run this project, you will need:
 - Node.js ≥ 20 (current stable version) – [nvm](https://github.com/creationix/nvm#install-script) is recommended
 - [Yarn](https://yarnpkg.com)
 
-Install with a plain `yarn` and keep install scripts enabled. The root `postinstall` runs package preparation and applies patches. The v3, v4, and v5 `algoliasearch` dependencies are declared in the root `package.json` and resolved through the root `yarn.lock`; they no longer need separate dependency containers.
+Install with a plain `yarn` and keep install scripts enabled. The root `postinstall` runs package preparation and applies patches. The v4 and v5 `algoliasearch` dependencies are declared in the root `package.json` and resolved through the root `yarn.lock`; they no longer need separate dependency containers.
 
 ## Launch the dev environment
 
@@ -357,21 +357,20 @@ To run the test continuously based on what you changed (useful when developing o
 yarn test --watch
 ```
 
-End-to-end tests are defined in [tests/e2e](./tests/e2e/README.md).
+End-to-end tests use [Playwright](https://playwright.dev) and are defined in [tests/e2e](./tests/e2e/README.md).
 
-To run them locally:
-
-```sh
-yarn test:e2e:local
-```
-
-To run them on Sauce Labs:
+Build the examples first, then run them locally:
 
 ```sh
-yarn test:e2e:saucelabs
+yarn website:examples
+yarn test:e2e
 ```
 
-> **Note** Make sure to set up Sauce Labs credentials with the `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` environment variables.
+Scope to a single flavor and/or browser for faster local iteration:
+
+```sh
+E2E_FLAVOR=react E2E_BROWSER=chromium yarn test:e2e
+```
 
 For more info, including how to write end-to-end tests, check the `tests/e2e` [CONTRIBUTING](./tests/e2e/CONTRIBUTING.md) and [README](./tests/e2e/README.md) files.
 
@@ -385,11 +384,11 @@ To ensure typing is correct in the latest version of InstantSearch.js, you can r
 yarn type-check
 ```
 
-Since we still support `algoliasearch@3`, you should also type check against v3.x.
+Since we still support `algoliasearch@4`, you should also type check against v4.x.
 
 ```sh
-./scripts/legacy/downgrade-algoliasearch-dependency.js
-yarn type-check:v3
+./scripts/legacy/downgrade-algoliasearch-v4.js
+yarn type-check:v4
 ```
 
 ## Linting

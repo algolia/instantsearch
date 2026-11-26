@@ -1,4 +1,4 @@
-import { clearRefinements as fn } from 'instantsearch.js/es/widgets';
+import { clearRefinements as fn } from 'instantsearch.js';
 
 import { defineWidget } from '../types';
 

@@ -1,27 +1,26 @@
 // global for TypeScript alone
 /* global google */
+import { connectGeoSearch } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
+import { suitComponent as component } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { render } from 'preact';
 
-import connectGeoSearch from '../../connectors/geo-search/connectGeoSearch';
-import { component } from '../../lib/suit';
 import { renderTemplate } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import createHTMLMarker from './createHTMLMarker';
 import defaultTemplates from './defaultTemplates';
 import renderer from './GeoSearchRenderer';
 
 import type { HTMLMarkerArguments } from './createHTMLMarker';
+import type { Template } from '../../types';
 import type {
   GeoSearchConnectorParams,
   GeoSearchWidgetDescription,
   GeoHit,
-} from '../../connectors/geo-search/connectGeoSearch';
-import type { GeoLoc, Template, WidgetFactory } from '../../types';
+} from 'instantsearch-core';
+import type { GeoLoc, WidgetFactory } from 'instantsearch-core';
 
 export type CreateMarker = (args: {
   item: GeoHit;

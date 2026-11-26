@@ -1,13 +1,16 @@
-import connectQueryRules from '../../connectors/query-rules/connectQueryRules';
-import { createDocumentationMessageGenerator, noop } from '../../lib/utils';
+import { connectQueryRules } from 'instantsearch-core';
+import {
+  createDocumentationMessageGenerator,
+  noop,
+} from 'instantsearch-core/internal';
 
 import type {
   ParamTrackedFilters,
   ParamTransformRuleContexts,
   QueryRulesConnectorParams,
   QueryRulesWidgetDescription,
-} from '../../connectors/query-rules/connectQueryRules';
-import type { WidgetFactory } from '../../types';
+} from 'instantsearch-core';
+import type { WidgetFactory } from 'instantsearch-core';
 
 export type QueryRuleContextWidgetParams = {
   trackedFilters: ParamTrackedFilters;

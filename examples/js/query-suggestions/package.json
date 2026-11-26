@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-query-suggestions",
-  "version": "1.87.0",
+  "version": "1.88.0-beta.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -12,10 +12,10 @@
   },
   "dependencies": {
     "algoliasearch": "5.1.1",
-    "algoliasearch-helper": "3.30.3",
-    "instantsearch-ui-components": "0.46.1",
-    "instantsearch.css": "8.25.1",
-    "instantsearch.js": "4.123.1"
+    "algoliasearch-helper": "4.0.0-beta.0",
+    "instantsearch-ui-components": "1.0.0-beta.0",
+    "instantsearch.css": "9.0.0-beta.0",
+    "instantsearch.js": "5.0.0-beta.0"
   },
   "devDependencies": {
     "vite": "5.0.7",

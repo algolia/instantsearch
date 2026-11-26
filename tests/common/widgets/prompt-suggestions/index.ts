@@ -4,8 +4,8 @@ import { createOptionsTests } from './options';
 import { createTemplatesTests } from './templates';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { PromptSuggestionsConnectorParams } from 'instantsearch.js/es/connectors/prompt-suggestions/connectPromptSuggestions';
-import type { PromptSuggestionsWidget } from 'instantsearch.js/es/widgets/prompt-suggestions/prompt-suggestions';
+import type { PromptSuggestionsConnectorParams } from 'instantsearch.js';
+import type { PromptSuggestionsWidget } from 'instantsearch.js';
 import type { PromptSuggestionsProps } from 'react-instantsearch';
 
 type JSBaseWidgetParams = Parameters<PromptSuggestionsWidget>[0];
@@ -26,10 +26,26 @@ export type JSPromptSuggestionsWidgetParams = Omit<
 export type ReactPromptSuggestionsWidgetParams = PromptSuggestionsProps &
   ChatPresenceParams;
 
+/**
+ * Scoped slots for the Vue widget: `layout` owns the full markup, `header`
+ * replaces the default header.
+ */
+type PromptSuggestionsScopedSlots = {
+  layout?: (props: { suggestions: string[] }) => unknown;
+  header?: (props: unknown) => unknown;
+};
+
 type PromptSuggestionsWidgetParams = {
   javascript: JSPromptSuggestionsWidgetParams;
   react: ReactPromptSuggestionsWidgetParams;
-  vue: Record<string, never>;
+  /**
+   * The Vue widget takes the same props as the React one (`agentId`,
+   * `transport`, `onSuggestionClick`, …), plus `scopedSlots` for custom
+   * rendering.
+   */
+  vue?: ReactPromptSuggestionsWidgetParams & {
+    scopedSlots?: PromptSuggestionsScopedSlots;
+  };
 };
 
 declare module '../../common' {

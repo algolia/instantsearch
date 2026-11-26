@@ -1,4 +1,4 @@
-import { trendingFacets } from 'instantsearch.js/es/widgets';
+import { trendingFacets } from 'instantsearch.js';
 
 import { useWidget } from '../../hooks/useWidget';
 

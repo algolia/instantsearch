@@ -51,8 +51,9 @@ export const products = hits<Hit>({
         </article>
       `;
     },
-    empty(results, { html }) {
-      const hasRefinements = results.getRefinements().length > 0;
+    empty(_, { html }) {
+      const hasRefinements =
+        window.search.renderState.instant_search.clearRefinements?.canRefine;
       const description = hasRefinements
         ? 'Try to reset your applied filters.'
         : 'Please try another query.';

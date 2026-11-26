@@ -1,5 +1,5 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import instantsearch from 'instantsearch.js';
+import { instantsearch } from 'instantsearch.js';
 import { useRef, useEffect } from 'preact/hooks';
 
 import { DynamicWidgets } from '../components/widgets/DynamicWidgets';

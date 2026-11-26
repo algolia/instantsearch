@@ -3,14 +3,16 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
-import { Chat } from 'instantsearch.js/es/lib/chat';
+import { Chat } from 'instantsearch-core/internal';
 
 import { mount, nextTick } from '../../../test/utils';
+import { renderReactCompat } from '../../util/vue-compat';
 import ChatComponent from '../Chat';
+import ChatInlineLayout from '../ChatInlineLayout';
 import ChatTrigger from '../ChatTrigger';
 import InstantSearch from '../InstantSearch';
 
-jest.unmock('instantsearch.js/es');
+jest.unmock('instantsearch-core/internal');
 
 const wait = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -265,6 +267,36 @@ describe('AisChat', () => {
     );
   });
 
+  it('treats the exported inline layout as an inline layout', async () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const chat = new Chat({ messages: [textMessage('Inline layout')] });
+    mountChat(
+      chat,
+      // The exported component carries the `$$inlineLayout` marker, so using it
+      // as a custom layout is the same as `layout: "inline"`: no trigger needed.
+      { layoutComponent: ChatInlineLayout },
+      `
+      <InstantSearch :search-client="searchClient" index-name="indexName">
+        <ChatComponent v-bind="chatProps" />
+      </InstantSearch>
+      `
+    );
+
+    await wait(0);
+    await nextTick();
+
+    const warnings = warnSpy.mock.calls.map(([message]) => String(message));
+    warnSpy.mockRestore();
+
+    expect(document.querySelector('.ais-ChatInlineLayout')).not.toBeNull();
+    expect(document.querySelector('.ais-ChatMessages').textContent).toContain(
+      'Inline layout'
+    );
+    expect(
+      warnings.some((message) => message.includes('no way to be opened'))
+    ).toBe(false);
+  });
+
   describe('slots', () => {
     it('renders the `item` slot in tool carousels', async () => {
       const chat = new Chat({ messages: [carouselMessage()] });
@@ -326,6 +358,40 @@ describe('AisChat', () => {
 
       expect(document.querySelector('.ais-Chat-container--open')).toBeNull();
     });
+  });
+
+  it('hands a component-object `headerComponent` its callbacks as props', async () => {
+    const chat = new Chat({});
+    // A Vue component object takes callbacks as declared props, and the chat
+    // hands them over the React way (`onX`). The compat renderer lower-cases
+    // listener names, so `onToggleMaximize` reaches the child only as a
+    // `togglemaximize` listener unless it is also passed as a prop.
+    const HeaderComponent = {
+      props: {
+        onToggleMaximize: { type: Function, default: undefined },
+        onClear: { type: Function, default: undefined },
+      },
+      render: renderReactCompat(function (h) {
+        return h('div', { class: 'custom-header' }, [
+          h(
+            'span',
+            { class: 'custom-header-maximize' },
+            typeof this.onToggleMaximize
+          ),
+          h('span', { class: 'custom-header-clear' }, typeof this.onClear),
+        ]);
+      }),
+    };
+
+    mountChat(chat, { headerComponent: HeaderComponent });
+    await openChat();
+
+    expect(document.querySelector('.custom-header-maximize').textContent).toBe(
+      'function'
+    );
+    expect(document.querySelector('.custom-header-clear').textContent).toBe(
+      'function'
+    );
   });
 
   it('exposes setOpen, setInput and sendMessage on the component', async () => {

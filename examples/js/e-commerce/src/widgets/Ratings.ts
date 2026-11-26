@@ -1,4 +1,4 @@
-import { panel, ratingMenu } from 'instantsearch.js/es/widgets';
+import { panel, ratingMenu } from 'instantsearch.js';
 
 import { collapseButtonText } from '../templates/panel';
 

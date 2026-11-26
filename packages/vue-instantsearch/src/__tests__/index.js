@@ -15,15 +15,23 @@ import {
 } from '../util/vue-compat';
 import { AisInstantSearch } from '../widgets';
 
-const renderlessComponents = ['AisExperimentalConfigureRelatedItems'];
 const nonWidgetComponents = [
   'AisInstantSearch',
   'AisInstantSearchSsr',
   'AisHighlight',
+  'AisReverseHighlight',
+  'AisReverseSnippet',
   'AisSnippet',
   'AisPanel',
   'AisPoweredBy',
   'AisStateResults',
+  // Shared chat presentational components (no connector of their own).
+  'AisCarousel',
+  'AisChatGreeting',
+  'AisChatMessageLoader',
+  'AisChatOverlayLayout',
+  'AisChatInlineLayout',
+  'AisChatSidePanelLayout',
 ];
 
 function getAllComponents() {
@@ -60,9 +68,6 @@ function getAllComponents() {
       const props = {};
       if (name === 'AisHierarchicalMenu' || name === 'AisBreadcrumb') {
         props.attributes = ['attr'];
-      } else if (name === 'AisExperimentalConfigureRelatedItems') {
-        props.hit = {};
-        props.matchingPatterns = {};
       } else if (name === 'AisToggleRefinement') {
         props.attribute = 'attr';
         props.label = 'label';
@@ -95,6 +100,8 @@ function getAllComponents() {
         props.disableTriggerValidation = true;
       } else if (name === 'AisCompareBar') {
         props.configurationId = 'configurationId';
+      } else if (name === 'AisPromptSuggestions') {
+        props.agentId = 'agentId';
       } else if (name === 'AisResultCard') {
         // Like `AisChat`, a transport avoids the appId/apiKey requirement.
         props.agentId = 'agentId';
@@ -156,23 +163,15 @@ function getAllComponents() {
 const components = getAllComponents();
 
 describe('DOM component', () => {
-  test.each(
-    components.filter(
-      ({ name }) => renderlessComponents.includes(name) === false
-    )
-  )(
+  test.each(components)(
     '$name should have the same `name` as suit class',
     ({ name, installedName, suitClass }) => {
       expect(installedName).toBe(name);
       if (name === 'AisInstantSearchSsr') {
         expect(suitClass).toBe(`ais-InstantSearch`);
-      } else if (name === 'AisExperimentalDynamicWidgets') {
-        expect(suitClass).toBe(`ais-DynamicWidgets`);
       } else if (name === 'AisChatTrigger') {
         // Renders the shared ChatToggleButton markup.
         expect(suitClass).toBe(`ais-ChatToggleButton`);
-      } else if (name === 'AisExperimentalAutocomplete') {
-        expect(suitClass).toBe(`ais-Autocomplete`);
       } else {
         expect(suitClass).toBe(`ais-${name.substr(3)}`);
       }
@@ -186,16 +185,8 @@ describe('installed widget', () => {
       ({ name }) => nonWidgetComponents.includes(name) === false
     )
   )('sets widgetType $name', ({ name, widget }) => {
-    if (name === 'AisExperimentalDynamicWidgets') {
-      expect(widget.$$widgetType).toBe('ais.dynamicWidgets');
-    } else if (name === 'AisExperimentalConfigureRelatedItems') {
-      expect(widget.$$widgetType).toBe('ais.configureRelatedItems');
-    } else if (name === 'AisExperimentalAutocomplete') {
-      expect(widget.$$widgetType).toBe('ais.autocomplete');
-    } else {
-      expect(widget.$$widgetType).toBe(
-        `ais.${name[3].toLowerCase()}${name.substr(4)}`
-      );
-    }
+    expect(widget.$$widgetType).toBe(
+      `ais.${name[3].toLowerCase()}${name.substr(4)}`
+    );
   });
 });

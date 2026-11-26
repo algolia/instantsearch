@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { connectRefinementList } from 'instantsearch.js/es/connectors/index';
+import { connectRefinementList } from 'instantsearch-core';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
@@ -197,7 +197,6 @@ export default {
         showMore: this.showMore,
         showMoreLimit: this.showMoreLimit,
         sortBy: this.sortBy,
-        escapeFacetValues: true,
         transformItems: this.transformItems,
       };
     },

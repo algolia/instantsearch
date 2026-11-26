@@ -23,12 +23,7 @@ type OverrideKeys<TTarget, TOptions> =
 
 export type MockSearchClient = OverrideKeys<
   SearchClient,
-  SearchClient extends { searchForFacetValues: (...args: any[]) => any }
-    ? {
-        search: jest.Mock<any, any>;
-        searchForFacetValues: jest.Mock<any, any>;
-      }
-    : { search: jest.Mock<any, any> }
+  { search: jest.Mock<any, any> }
 >;
 
 export function createAlgoliaSearchClient<
@@ -128,11 +123,6 @@ export function createAlgoliaSearchClient<
       }),
       ...options,
     };
-  } else {
-    options = {
-      _ua: 'Algolia for JavaScript (test)',
-      ...options,
-    };
   }
 
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -146,16 +136,15 @@ export function createAlgoliaSearchClient<
       Promise.resolve(
         createMultiSearchResponse(
           ...requests.map((request) =>
-            createSingleSearchResponse({
-              index: request.indexName,
-              params: getParams(version, request.params || {}),
-            })
+            request.type === 'facet'
+              ? createSFFVResponse()
+              : createSingleSearchResponse({
+                  index: request.indexName,
+                  params: getParams(version, request.params || {}),
+                })
           )
         )
       )
-    ),
-    searchForFacetValues: jest.fn(() =>
-      Promise.resolve([createSFFVResponse()])
     ),
     ...options,
   } as SearchClient as OverrideKeys<MockSearchClient, TOptions>;
@@ -168,10 +157,6 @@ function getParams(version: string, params: Record<string, any>) {
   if (version.startsWith('4.')) {
     const Transporter = require('@algolia/transporter');
     return Transporter.serializeQueryParameters(params);
-  }
-
-  if (version.startsWith('3.')) {
-    return (algoliasearch('appid', 'apikey') as any)._getSearchParams(params);
   }
 
   return 'wrong version, no params';

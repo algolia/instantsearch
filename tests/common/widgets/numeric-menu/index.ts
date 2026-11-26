@@ -4,7 +4,7 @@ import { createLinksTests } from './links';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { NumericMenuWidget } from 'instantsearch.js/es/widgets/numeric-menu/numeric-menu';
+import type { NumericMenuWidget } from 'instantsearch.js';
 
 type WidgetParams = Parameters<NumericMenuWidget>[0];
 export type NumericMenuWidgetSetup = TestSetup<{

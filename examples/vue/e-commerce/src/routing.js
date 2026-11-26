@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 /* eslint-disable complexity */
-import { history as historyRouter } from 'instantsearch.js/es/lib/routers';
+import { historyRouter } from 'vue-instantsearch';
 
 const hitsPerPageItemsValue = [16, 32, 64];
 
@@ -96,10 +96,10 @@ const router = historyRouter({
       .join(' | ');
   },
 
-  createURL({ qsModule, routeState, location }) {
-    const { protocol, hostname, port = '', pathname, hash } = location;
+  createURL({ qsModule, routeState, currentURL }) {
+    const { protocol, hostname, port = '', pathname, hash } = currentURL;
     const portWithPrefix = port === '' ? '' : `:${port}`;
-    const urlParts = location.href.match(/^(.*?)\/search/);
+    const urlParts = currentURL.href.match(/^(.*?)\/search/);
     const baseUrl =
       (urlParts && urlParts[0]) ||
       `${protocol}//${hostname}${portWithPrefix}${pathname}search`;
@@ -163,12 +163,12 @@ const router = historyRouter({
     return `${baseUrl}/${categoryPath}${queryString}${hash}`;
   },
 
-  parseURL({ qsModule, location }) {
-    const pathnameMatches = location.pathname.match(/search\/(.*?)\/?$/);
+  parseURL({ qsModule, currentURL }) {
+    const pathnameMatches = currentURL.pathname.match(/search\/(.*?)\/?$/);
     const category = getCategoryName(
       (pathnameMatches && pathnameMatches[1]) || ''
     );
-    const queryParameters = qsModule.parse(location.search.slice(1));
+    const queryParameters = qsModule.parse(currentURL.search.slice(1));
     const {
       query = '',
       page = 1,

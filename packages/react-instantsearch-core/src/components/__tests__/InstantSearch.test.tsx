@@ -6,8 +6,9 @@ import { createAlgoliaSearchClient } from '@instantsearch/mocks';
 import { createInstantSearchSpy, wait } from '@instantsearch/testutils';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { history } from 'instantsearch.js/es/lib/routers';
-import { simple } from 'instantsearch.js/es/lib/stateMappings';
+import { historyRouter as history } from 'instantsearch-core';
+import { simpleStateMapping as simple } from 'instantsearch-core';
+import { TAG_PLACEHOLDER } from 'instantsearch-core/internal';
 import React, { StrictMode, Suspense, version as ReactVersion } from 'react';
 import { SearchBox } from 'react-instantsearch';
 
@@ -190,11 +191,12 @@ describe('InstantSearch', () => {
     expect(searchClient.search).toHaveBeenLastCalledWith([
       {
         indexName: 'indexName',
-        params: { query: '' },
+        params: { ...TAG_PLACEHOLDER, query: '' },
       },
       {
         indexName: 'subIndexName',
         params: {
+          ...TAG_PLACEHOLDER,
           facets: ['brand'],
           maxValuesPerFacet: 10,
           query: '',
@@ -224,11 +226,12 @@ describe('InstantSearch', () => {
     expect(searchClient.search).toHaveBeenLastCalledWith([
       {
         indexName: 'indexName',
-        params: { query: '' },
+        params: { ...TAG_PLACEHOLDER, query: '' },
       },
       {
         indexName: 'subIndexName',
         params: {
+          ...TAG_PLACEHOLDER,
           facets: ['brand'],
           maxValuesPerFacet: 10,
           query: '',
@@ -242,10 +245,8 @@ describe('InstantSearch', () => {
     const routing = {
       stateMapping: simple(),
       router: history({
-        getLocation() {
-          return new URL(
-            `http://localhost/?indexName[query]=iphone`
-          ) as unknown as Location;
+        getCurrentURL() {
+          return new URL(`http://localhost/?indexName[query]=iphone`);
         },
       }),
     };
@@ -304,8 +305,8 @@ describe('InstantSearch', () => {
       const routing = {
         stateMapping: simple(),
         router: history({
-          getLocation() {
-            return new URL(url) as unknown as Location;
+          getCurrentURL() {
+            return new URL(url);
           },
         }),
       };
@@ -772,55 +773,6 @@ describe('InstantSearch', () => {
     await waitFor(() => {
       expect(onStateChange1).toHaveBeenCalledTimes(6);
       expect(onStateChange2).toHaveBeenCalledTimes(5);
-    });
-  });
-
-  test('updates searchFunction on searchFunction prop change', async () => {
-    const searchClient = createAlgoliaSearchClient({});
-    const searchFunction1 = jest.fn((helper) => {
-      helper.search();
-    });
-    const searchFunction2 = jest.fn((helper) => {
-      helper.search();
-    });
-
-    function App({
-      searchFunction,
-    }: Pick<InstantSearchProps, 'searchFunction'>) {
-      return (
-        <StrictMode>
-          <InstantSearch
-            searchClient={searchClient}
-            indexName="indexName"
-            searchFunction={searchFunction}
-          >
-            <SearchBox />
-          </InstantSearch>
-        </StrictMode>
-      );
-    }
-
-    const { rerender } = render(<App searchFunction={searchFunction1} />);
-
-    await waitFor(() => {
-      expect(searchFunction1).toHaveBeenCalledTimes(1);
-    });
-
-    userEvent.type(screen.getByRole('searchbox'), 'iphone');
-
-    await waitFor(() => {
-      expect(searchFunction1).toHaveBeenCalledTimes(7);
-    });
-
-    rerender(<App searchFunction={searchFunction2} />);
-
-    userEvent.type(screen.getByRole('searchbox'), ' case', {
-      initialSelectionStart: 6,
-    });
-
-    await waitFor(() => {
-      expect(searchFunction1).toHaveBeenCalledTimes(7);
-      expect(searchFunction2).toHaveBeenCalledTimes(5);
     });
   });
 

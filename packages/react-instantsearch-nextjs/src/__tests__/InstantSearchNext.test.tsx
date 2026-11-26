@@ -10,7 +10,7 @@ import { SearchBox } from 'react-instantsearch';
 
 import { InstantSearchNext } from '../InstantSearchNext';
 
-import type { InitialResults } from 'instantsearch.js';
+import type { InitialResults } from 'instantsearch-core';
 
 const InstantSearchInitialResults = Symbol.for('InstantSearchInitialResults');
 declare global {

@@ -1,5 +1,5 @@
-import hogan from 'hogan.js';
 import { html } from 'htm/preact';
+import { warning } from 'instantsearch-core/internal';
 
 import {
   Highlight,
@@ -8,57 +8,18 @@ import {
   Snippet,
 } from '../../helpers/components';
 
-import type { Templates, HoganHelpers, TemplateParams } from '../../types';
-import type {
-  BindEventForHits,
-  SendEventForHits,
-} from '../utils/createSendEventForHits';
-import type { HoganOptions, Template } from 'hogan.js';
-
-type TransformedHoganHelpers = {
-  [helper: string]: () => (text: string) => string;
-};
-
-// We add all our template helper methods to the template as lambdas. Note
-// that lambdas in Mustache are supposed to accept a second argument of
-// `render` to get the rendered value, not the literal `{{value}}`. But
-// this is currently broken (see https://github.com/twitter/hogan.js/issues/222).
-function transformHelpersToHogan(
-  helpers: HoganHelpers = {},
-  compileOptions?: HoganOptions,
-  data?: Record<string, any>
-) {
-  return Object.keys(helpers).reduce<TransformedHoganHelpers>(
-    (acc, helperKey) => ({
-      ...acc,
-      [helperKey]() {
-        return (text) => {
-          const render = (value: string) =>
-            (hogan.compile(value, compileOptions) as Template).render(this);
-
-          return helpers[helperKey].call(data, text, render);
-        };
-      },
-    }),
-    {}
-  );
-}
+import type { Templates, TemplateParams } from '../../types';
+import type { SendEventForHits } from 'instantsearch-core';
 
 export function renderTemplate({
   templates,
   templateKey,
-  compileOptions,
-  helpers,
   data,
-  bindEvent,
   sendEvent,
 }: {
   templates: Templates;
   templateKey: string;
-  compileOptions?: HoganOptions;
-  helpers?: HoganHelpers;
   data?: Record<string, any>;
-  bindEvent?: BindEventForHits;
   sendEvent?: SendEventForHits;
 }) {
   const template = templates[templateKey];
@@ -69,37 +30,38 @@ export function renderTemplate({
     );
   }
 
-  if (typeof template === 'function') {
-    // @MAJOR no longer pass bindEvent when string templates are removed
-    const params = (bindEvent || {}) as TemplateParams;
+  const content =
+    typeof template === 'function'
+      ? // `Templates` also covers templates whose `sendEvent` param is
+        // required; the widgets using them always provide it
+        template(data, getTemplateParams(sendEvent) as any)
+      : template;
 
-    params.html = html;
-    (params as any).sendEvent = sendEvent;
-    params.components = {
+  if (__DEV__ && typeof content === 'string') {
+    warning(
+      !/<[a-z/!]|\{\{|&(#\d+|#x[\da-f]+|[a-z]+);/i.test(content),
+      `The "${templateKey}" template is a string that looks like HTML or a Hogan.js template. Strings are rendered as text, so HTML tags, entities and {{ }} placeholders show up as written.
+
+Use a function template with the provided \`html\` function or JSX instead:
+
+  ${templateKey}: (data, { html }) => html\`...\`
+
+See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#upgrade-templates`
+    );
+  }
+
+  return content;
+}
+
+function getTemplateParams(sendEvent?: SendEventForHits): TemplateParams {
+  return {
+    html,
+    sendEvent,
+    components: {
       Highlight,
       ReverseHighlight,
       Snippet,
       ReverseSnippet,
-    };
-
-    // @MAJOR remove the `as any` when string templates are removed
-    // needed because not every template receives sendEvent
-    return template(data, params as any);
-  }
-
-  const transformedHelpers = transformHelpersToHogan(
-    helpers,
-    compileOptions,
-    data
-  );
-
-  return (hogan.compile(template, compileOptions) as Template)
-    .render({
-      ...data,
-      helpers: transformedHelpers,
-    })
-    .replace(/[ \n\r\t\f\xA0]+/g, (spaces) =>
-      spaces.replace(/(^|\xA0+)[^\xA0]+/g, '$1 ')
-    )
-    .trim();
+    },
+  };
 }

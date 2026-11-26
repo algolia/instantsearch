@@ -8,7 +8,7 @@ import type { UseClearRefinementsProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<
   ClearRefinementsUiComponentProps,
-  'disabled' | 'onClick' | 'translations'
+  'canRefine' | 'onClick' | 'translations'
 >;
 
 export type ClearRefinementsProps = Omit<
@@ -39,7 +39,7 @@ export function ClearRefinements({
 
   const uiProps: UiProps = {
     onClick: refine,
-    disabled: !canRefine,
+    canRefine,
     translations: {
       resetButtonText: 'Clear refinements',
       ...translations,

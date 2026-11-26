@@ -15,7 +15,7 @@ import {
   connectRatingMenu,
   connectRefinementList,
   connectToggleRefinement,
-} from 'instantsearch.js/es/connectors/index';
+} from 'instantsearch-core';
 
 import { nextTick, mountApp, mountAppOrThrow } from '../../test/utils';
 import {
@@ -26,7 +26,7 @@ import {
   createWidgetMixin,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
-jest.unmock('instantsearch.js/es');
+jest.unmock('instantsearch-core/internal');
 
 const testSetups = {
   async createRefinementListConnectorTests({
@@ -347,7 +347,6 @@ const testSetups = {
   createTrendingFacetsConnectorTests: () => {},
   createLookingSimilarConnectorTests: () => {},
   createChatConnectorTests: () => {},
-  createFilterSuggestionsConnectorTests: () => {},
   async createCompareConnectorTests({ instantSearchOptions, widgetParams }) {
     const {
       products = [],
@@ -568,11 +567,6 @@ const testOptions = {
     },
   },
   createChatConnectorTests: { skippedTests: { options: true } },
-  createFilterSuggestionsConnectorTests: {
-    skippedTests: {
-      options: true,
-    },
-  },
   createCompareConnectorTests: {
     // Vue batches DOM updates, so flush them after each step the shared tests
     // wrap in `act`.

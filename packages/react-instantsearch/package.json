@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch",
-  "version": "7.55.1",
+  "version": "8.0.0-beta.0",
   "description": "⚡ Lightning-fast search for React, by Algolia",
   "types": "dist/es/index.d.ts",
   "main": "dist/cjs/index.js",
@@ -45,12 +45,12 @@
   },
   "dependencies": {
     "@swc/helpers": "0.5.18",
-    "instantsearch-ui-components": "0.46.1",
-    "instantsearch.js": "4.123.1",
-    "react-instantsearch-core": "7.55.1"
+    "instantsearch-core": "1.0.0-beta.0",
+    "instantsearch-ui-components": "1.0.0-beta.0",
+    "react-instantsearch-core": "8.0.0-beta.0"
   },
   "peerDependencies": {
-    "algoliasearch": ">= 3.1 < 6",
+    "algoliasearch": ">= 4 < 6",
     "react": ">= 16.8.0 < 20",
     "react-dom": ">= 16.8.0 < 20"
   }

@@ -19,7 +19,7 @@ yarn add {{ packageName }}
 ### Usage
 
 ```js
-import instantsearch from 'instantsearch.js';
+import { instantsearch } from 'instantsearch.js';
 import algoliasearch from 'algoliasearch/lite';
 import { {{ camelCaseName }} } from '{{ packageName }}';
 

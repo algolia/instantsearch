@@ -1,0 +1,19 @@
+import { places, analytics } from 'instantsearch.js/es/widgets';
+import { highlight, getInsightsAnonymousUserToken } from 'instantsearch.js/es/helpers';
+import type { Hits } from 'instantsearch.js';
+import type { ToggleRefinementConnector } from 'instantsearch.js/es/connectors/toggle-refinement/types';
+import { useRange, useSearchBox } from 'react-instantsearch';
+
+const items: Hits = [];
+
+new InstantSearch({ searchFunction(helper) { helper.search(); } });
+connectHits(render, { escapeHTML: false });
+hits({ container, templates: { item: ({ __hitIndex }) => `${__hitIndex}` } });
+const fallbackIndex = (hit) => hit?.__hitIndex ?? 0;
+const literalIndex = (hit) => hit?.['__hitIndex'];
+
+function App() {
+  const { start, range } = useRange({ attribute: 'price' });
+  const { isSearchStalled } = useSearchBox();
+  return <InstantSearch routing searchClient={client} />;
+}

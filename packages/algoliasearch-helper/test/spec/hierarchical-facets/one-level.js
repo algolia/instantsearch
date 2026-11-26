@@ -20,7 +20,7 @@ test('hierarchical facets: only one level deep', function (done) {
     ],
   });
 
-  helper.toggleRefine('categories', 'beers');
+  helper.toggleFacetRefinement('categories', 'beers');
 
   var algoliaResponse = {
     results: [

@@ -4,8 +4,8 @@ import { createButtonComponent } from '../Button';
 
 import { ReloadIcon } from './icons';
 
-import type { ChatComponentPropsWithContext } from './types';
 import type { ComponentProps, Renderer } from '../../types';
+import type { ChatComponentPropsWithContext } from 'instantsearch-core';
 
 export type ChatMessageErrorTranslations = {
   /**

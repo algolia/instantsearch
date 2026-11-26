@@ -1,4 +1,4 @@
-import { relevantSort } from 'instantsearch.js/es/widgets';
+import { relevantSort } from 'instantsearch.js';
 
 import { useWidget } from '../../hooks/useWidget';
 

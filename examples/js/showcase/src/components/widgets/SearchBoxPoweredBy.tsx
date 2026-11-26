@@ -1,4 +1,4 @@
-import { searchBox, poweredBy } from 'instantsearch.js/es/widgets';
+import { poweredBy, searchBox } from 'instantsearch.js';
 
 import { useWidget } from '../../hooks/useWidget';
 

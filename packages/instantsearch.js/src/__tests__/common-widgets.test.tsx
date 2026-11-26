@@ -4,10 +4,10 @@
 
 import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/widgets';
+import { connectCompare } from 'instantsearch-core';
+import { Chat as InstantSearchChat } from 'instantsearch-core/internal';
 
-import { connectCompare } from '../connectors';
-import instantsearch from '../index.es';
-import { Chat as InstantSearchChat } from '../lib/chat';
+import { instantsearch } from '../index.es';
 import {
   hierarchicalMenu,
   breadcrumb,
@@ -41,7 +41,6 @@ import {
   promptSuggestions,
   resultCard,
   autocomplete,
-  filterSuggestions,
   compareBar,
 } from '../widgets';
 
@@ -347,20 +346,32 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
     };
   },
   createHitsPerPageWidgetTests({ instantSearchOptions, widgetParams }) {
-    instantsearch(instantSearchOptions)
-      .addWidgets([
-        hitsPerPage({
-          container: document.body.appendChild(document.createElement('div')),
-          ...widgetParams,
-        }),
-      ])
-      .on('error', () => {
-        /*
-         * prevent rethrowing InstantSearch errors, so tests can be asserted.
-         * IRL this isn't needed, as the error doesn't stop execution.
-         */
-      })
-      .start();
+    const search = instantsearch(instantSearchOptions);
+    search.addWidgets([
+      hitsPerPage({
+        container: document.body.appendChild(document.createElement('div')),
+        ...widgetParams,
+      }),
+    ]);
+    search.on('error', () => {
+      /*
+       * prevent rethrowing InstantSearch errors, so tests can be asserted.
+       * IRL this isn't needed, as the error doesn't stop execution.
+       */
+    });
+    search.start();
+
+    return {
+      setHitsPerPage(hitsPerPageValue) {
+        search.setUiState((uiState) => ({
+          ...uiState,
+          indexName: {
+            ...uiState.indexName,
+            hitsPerPage: hitsPerPageValue,
+          },
+        }));
+      },
+    };
   },
   createClearRefinementsWidgetTests({ instantSearchOptions, widgetParams }) {
     const refinementListAttributes = Object.keys(
@@ -764,22 +775,6 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       })
       .start();
   },
-  createFilterSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
-    instantsearch(instantSearchOptions)
-      .addWidgets([
-        filterSuggestions({
-          container: document.body.appendChild(document.createElement('div')),
-          ...widgetParams,
-        }),
-      ])
-      .on('error', () => {
-        /*
-         * prevent rethrowing InstantSearch errors, so tests can be asserted.
-         * IRL this isn't needed, as the error doesn't stop execution.
-         */
-      })
-      .start();
-  },
   createPromptSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
     // The widget hands clicked suggestions to a `chat` on the same index, and
     // errors without one, so the default setup mounts both. `renderChat: false`
@@ -943,7 +938,6 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createDynamicWidgetsWidgetTests: undefined,
   createChatWidgetTests: undefined,
   createAutocompleteWidgetTests: undefined,
-  createFilterSuggestionsWidgetTests: undefined,
   createPromptSuggestionsWidgetTests: undefined,
   createResultCardWidgetTests: undefined,
   createCompareBarWidgetTests: undefined,

@@ -4,7 +4,7 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import chatTrigger from '../chat-trigger';
 
 function getButtonLabel(container: HTMLElement) {

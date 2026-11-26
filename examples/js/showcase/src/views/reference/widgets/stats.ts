@@ -1,4 +1,4 @@
-import { stats as fn } from 'instantsearch.js/es/widgets';
+import { stats as fn } from 'instantsearch.js';
 
 import { defineWidget } from '../types';
 

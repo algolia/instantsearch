@@ -1,5 +1,5 @@
+import { connectRelatedProducts } from 'instantsearch-core';
 import { createRelatedProductsComponent } from 'instantsearch-ui-components';
-import { connectRelatedProducts } from 'instantsearch.js/es/connectors/index';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
@@ -55,11 +55,6 @@ export default {
       required: false,
       default: undefined,
     },
-    escapeHTML: {
-      type: Boolean,
-      required: false,
-      default: undefined,
-    },
     transformItems: {
       type: Function,
       required: false,
@@ -80,7 +75,6 @@ export default {
         threshold: this.threshold,
         fallbackParameters: this.fallbackParameters,
         queryParameters: this.queryParameters,
-        escapeHTML: this.escapeHTML,
         transformItems: this.transformItems,
       };
     },

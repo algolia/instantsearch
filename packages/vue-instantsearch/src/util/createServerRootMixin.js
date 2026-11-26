@@ -1,8 +1,7 @@
-import instantsearch from 'instantsearch.js/es';
-import {
-  waitForResults,
-  getInitialResults,
-} from 'instantsearch.js/es/lib/server';
+import { waitForResults, getInitialResults } from 'instantsearch-core';
+import { instantsearch } from 'instantsearch-core/internal';
+
+import version from '../version';
 
 import { isVue3, isVue2, Vue2, createSSRApp } from './vue-compat';
 import { warn } from './warn';
@@ -60,7 +59,10 @@ function defaultCloneComponent(componentInstance, { mixins = [] } = {}) {
 }
 
 function augmentInstantSearch(instantSearchOptions, cloneComponent) {
-  const search = instantsearch(instantSearchOptions);
+  const search = instantsearch({
+    ...instantSearchOptions,
+    _internalVersion: version,
+  });
 
   let initialResults;
 
@@ -166,12 +168,10 @@ function augmentInstantSearch(instantSearchOptions, cloneComponent) {
       scopedResults: parent.getScopedResults(),
       parent,
       state,
-      templatesConfig: {},
       createURL: parent.createURL,
       instantSearchInstance: search,
-      searchMetadata: {
-        isSearchStalled: false,
-      },
+      status: search.status,
+      error: search.error,
     });
   };
 

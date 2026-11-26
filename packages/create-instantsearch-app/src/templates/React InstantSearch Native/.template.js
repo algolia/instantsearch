@@ -5,7 +5,7 @@ const teardown = require('../../tasks/node/teardown');
 module.exports = {
   category: 'Mobile',
   libraryName: 'react-instantsearch-core',
-  supportedVersion: '>= 7.0.0 < 8.0.0',
+  supportedVersion: '>= 8.0.0 < 9.0.0',
   templateName: 'react-instantsearch-native',
   appName: 'react-instantsearch-native-app',
   keywords: [

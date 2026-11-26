@@ -654,7 +654,6 @@ export function createOptionsTests(
             ],
             searchParameters: {
               userToken: 'user-123',
-              // @ts-ignore `enableRules` was introduced after algoliasearch v3.
               enableRules: false,
               hitsPerPage: 10,
             },
@@ -675,7 +674,6 @@ export function createOptionsTests(
             ],
             searchParameters: {
               userToken: 'user-123',
-              // @ts-ignore `enableRules` was introduced after algoliasearch v3.
               enableRules: false,
               hitsPerPage: 10,
             },
@@ -1616,7 +1614,7 @@ export function createOptionsTests(
                 query: 'hello',
                 _highlightResult: {
                   query: {
-                    value: '<mark>hell</mark>o',
+                    value: '__ais-highlight__hell__/ais-highlight__o',
                     matchLevel: 'partial',
                     matchedWords: ['hell'],
                   },

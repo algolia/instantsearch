@@ -1,4 +1,4 @@
-import { isTwoPassWidget } from 'instantsearch.js/es/lib/utils';
+import { isTwoPassWidget } from 'instantsearch-core/internal';
 import { useEffect, useRef } from 'react';
 
 import { dequal } from './dequal';
@@ -8,8 +8,8 @@ import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';
 import { useRSCContext } from './useRSCContext';
 import { warn } from './warn';
 
-import type { Widget } from 'instantsearch.js';
-import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
+import type { Widget } from 'instantsearch-core';
+import type { IndexWidget } from 'instantsearch-core';
 
 export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
   widget,
@@ -105,7 +105,7 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
     // If we made a second request because of two-pass widgets, we need to
     // wait for the second result — except for the two-pass widgets themselves
     // which need to render their children after the first result.
-    if (!isTwoPassWidget(widget) && search.helper?.lastResults) {
+    if (!isTwoPassWidget(widget) && search.mainIndex.getHelper()?.lastResults) {
       use(waitForResultsRef.current);
     }
   }

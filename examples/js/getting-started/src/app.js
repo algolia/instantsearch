@@ -1,19 +1,18 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import instantsearch from 'instantsearch.js';
-import { carousel } from 'instantsearch.js/es/templates';
 import {
+  carousel,
+  chat,
+  chatTrigger,
   configure,
+  currentRefinements,
   hits,
+  instantsearch,
   pagination,
   panel,
   refinementList,
   searchBox,
   trendingItems,
-  chat,
-  chatTrigger,
-  currentRefinements,
-} from 'instantsearch.js/es/widgets';
-
+} from 'instantsearch.js';
 import 'instantsearch.css/themes/satellite.css';
 
 const searchClient = algoliasearch(

@@ -1,5 +1,4 @@
-import { connectMenu } from 'instantsearch.js/es/connectors';
-
+import { connectMenu } from 'instantsearch.js';
 const menu = connectMenu<{ container: string }>(
   ({ items, refine, widgetParams }) => {
     const { container } = widgetParams;

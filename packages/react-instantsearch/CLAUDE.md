@@ -1,10 +1,12 @@
 # react-instantsearch
 
-React DOM bindings. This package = **hooks (from `react-instantsearch-core`) + UI markup (from `instantsearch-ui-components`)**. The search logic itself is the connector in `instantsearch.js`; don't reimplement it here.
+React DOM bindings. This package = **hooks (from `react-instantsearch-core`) + UI markup (from `instantsearch-ui-components`)**. The search logic itself is the connector in `instantsearch-core`; don't reimplement it here.
+
+`react-instantsearch-core` also does `export * from 'instantsearch-core'`, and this package inherits it, so users import connectors, routers (`historyRouter`), state mappings, middlewares and types (`Hit`, `UiState`, …) from `react-instantsearch` and never install `instantsearch.js` or `instantsearch-core`. When a name collides with a core export, add an explicit `export { … }` next to the star export so the React one wins (`InstantSearch`, `SortBy`); `__tests__/core-reexports.test.ts` guards this. Don't import `instantsearch.js` anywhere under `packages/react-instantsearch*` (oxlint bans it).
 
 ## Layer split (where each thing goes)
 
-- `packages/react-instantsearch-core/src/connectors/use<Pascal>.ts` — the **hook** that wraps the `instantsearch.js` connector. Headless, no DOM. Exported from that package's `src/index.ts`.
+- `packages/react-instantsearch-core/src/connectors/use<Pascal>.ts` — the **hook** that wraps the `instantsearch-core` connector. Headless, no DOM. Exported from that package's `src/index.ts`.
 - `packages/react-instantsearch/src/widgets/<Pascal>.tsx` — the **component**: calls the hook, renders UI. Exported from `src/widgets/index.ts`.
 - `packages/react-instantsearch/src/ui/<Pascal>.tsx` — local presentational component, only when the markup isn't already in the shared `instantsearch-ui-components` package.
 

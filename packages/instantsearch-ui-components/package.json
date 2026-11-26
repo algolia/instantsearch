@@ -1,15 +1,18 @@
 {
   "name": "instantsearch-ui-components",
-  "version": "0.46.1",
+  "version": "1.0.0-beta.0",
   "description": "Common UI components for InstantSearch.",
   "types": "dist/es/index.d.ts",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
   "type": "module",
   "exports": {
-    "types": "./dist/es/index.d.ts",
-    "require": "./dist/cjs/index.js",
-    "default": "./dist/es/index.js"
+    ".": {
+      "types": "./dist/es/index.d.ts",
+      "require": "./dist/cjs/index.js",
+      "default": "./dist/es/index.js"
+    },
+    "./package.json": "./package.json"
   },
   "sideEffects": false,
   "license": "MIT",
@@ -44,6 +47,7 @@
     "watch:es": "rollup -c rollup.config.mjs --watch"
   },
   "dependencies": {
-    "@swc/helpers": "0.5.18"
+    "@swc/helpers": "0.5.18",
+    "instantsearch-core": "1.0.0-beta.0"
   }
 }

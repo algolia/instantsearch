@@ -41,7 +41,7 @@ export function createInsightsTests(
                       params,
                     }: Parameters<SearchClient['search']>[0][number]) =>
                       createSingleSearchResponse({
-                        // @ts-ignore this key doesn't exist in v3, v4 types
+                        // @ts-ignore this key doesn't exist in v4 types
                         _automaticInsights: true,
                         hits: [{ objectID: '1' }],
                         facets: {

@@ -1,4 +1,4 @@
-import { menuSelect } from 'instantsearch.js/es/widgets';
+import { menuSelect } from 'instantsearch.js';
 
 import { useWidget } from '../../hooks/useWidget';
 

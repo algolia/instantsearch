@@ -5,7 +5,7 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import historyRouter from 'instantsearch.js/es/lib/routers/history';
+import { historyRouter } from 'instantsearch-core';
 import React from 'react';
 import { InstantSearch, SearchBox } from 'react-instantsearch';
 
@@ -29,7 +29,9 @@ describe('routing using `replaceState`', () => {
         <InstantSearch
           searchClient={searchClient}
           indexName="indexName"
-          routing={{ router: historyRouter({ writeDelay: 0 }) }}
+          routing={{
+            router: historyRouter({ writeDelay: 0, cleanUrlOnDispose: true }),
+          }}
         >
           <SearchBox />
         </InstantSearch>

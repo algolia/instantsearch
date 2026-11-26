@@ -6,7 +6,7 @@ import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { wait } from '@instantsearch/testutils';
 import { h } from 'preact';
 
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import { carousel } from '../../../templates';
 import frequentlyBoughtTogether from '../frequently-bought-together';
 
@@ -107,13 +107,7 @@ describe('frequentlyBoughtTogether', () => {
 
       search.addWidgets([widget]);
 
-      // @MAJOR Once Hogan.js and string-based templates are removed,
-      // `search.start()` can be moved to the test body and the following
-      // assertion can go away.
-      expect(async () => {
-        search.start();
-        await wait(0);
-      }).not.toWarnDev();
+      search.start();
 
       await wait(0);
 

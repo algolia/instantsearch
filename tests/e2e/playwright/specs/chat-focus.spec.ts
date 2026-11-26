@@ -488,7 +488,7 @@ test.describe('Chat focus', () => {
       )
       .toBe(true);
 
-    await revealStyles.evaluate((element) => element.remove());
+    await revealStyles.evaluate((element) => (element as Element).remove());
 
     await expect
       .poll(() =>
@@ -763,7 +763,9 @@ test.describe('Chat focus', () => {
         replacement as Animation & { replacementReveal?: boolean }
       ).replacementReveal = true;
     });
-    await initialRevealStyles.evaluate((element) => element.remove());
+    await initialRevealStyles.evaluate((element) =>
+      (element as Element).remove()
+    );
 
     await expect
       .poll(() =>

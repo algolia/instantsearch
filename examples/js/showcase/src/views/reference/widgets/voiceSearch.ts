@@ -1,4 +1,4 @@
-import { voiceSearch as fn } from 'instantsearch.js/es/widgets';
+import { voiceSearch as fn } from 'instantsearch.js';
 
 import { defineWidget } from '../types';
 

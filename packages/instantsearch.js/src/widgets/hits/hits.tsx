@@ -1,36 +1,25 @@
 /** @jsx h */
 
+import { connectHits } from 'instantsearch-core';
+import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { createHitsComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectHits from '../../connectors/hits/connectHits';
-import { withInsights } from '../../lib/insights';
-import { createInsightsEventHandler } from '../../lib/insights/listener';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-  warning,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { Template, TemplateWithSendEvent } from '../../types';
+import type { SearchResults } from 'algoliasearch-helper';
 import type {
   HitsConnectorParams,
   HitsRenderState,
   HitsWidgetDescription,
-} from '../../connectors/hits/connectHits';
-import type { PreparedTemplateProps } from '../../lib/templating';
-import type {
-  Template,
-  TemplateWithBindEvent,
-  Hit,
-  WidgetFactory,
-  Renderer,
-  BaseHit,
-} from '../../types';
-import type { SearchResults } from 'algoliasearch-helper';
+} from 'instantsearch-core';
+import type { Hit, WidgetFactory, Renderer, BaseHit } from 'instantsearch-core';
 import type {
   HitsClassNames as HitsUiComponentClassNames,
   HitsProps as HitsUiComponentProps,
@@ -54,31 +43,14 @@ const renderer =
     };
     templates: HitsTemplates<THit>;
   }): Renderer<HitsRenderState, Partial<HitsWidgetParams>> =>
-  (
-    {
-      items,
-      results,
-      instantSearchInstance,
-      insights,
-      bindEvent,
-      sendEvent,
-      banner,
-    },
-    isFirstRendering
-  ) => {
+  ({ items, results, sendEvent, banner }, isFirstRendering) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps<HitsTemplates<THit>>({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;
     }
-
-    const handleInsightsClick = createInsightsEventHandler({
-      insights,
-      sendEvent,
-    });
 
     const emptyComponent: HitsUiComponentProps<Hit>['emptyComponent'] = ({
       ...rootProps
@@ -92,8 +64,6 @@ const renderer =
       />
     );
 
-    // @MAJOR: Move default hit component back to the UI library
-    // once flavour specificities are erased
     const itemComponent: HitsUiComponentProps<Hit>['itemComponent'] = ({
       hit,
       index,
@@ -103,28 +73,8 @@ const renderer =
         {...renderState.templateProps}
         templateKey="item"
         rootTagName="li"
-        rootProps={{
-          ...rootProps,
-          onClick: (event: MouseEvent) => {
-            handleInsightsClick(event);
-            rootProps.onClick();
-          },
-          onAuxClick: (event: MouseEvent) => {
-            handleInsightsClick(event);
-            rootProps.onAuxClick();
-          },
-        }}
-        data={{
-          ...hit,
-          get __hitIndex() {
-            warning(
-              false,
-              'The `__hitIndex` property is deprecated. Use the absolute `__position` instead.'
-            );
-            return index;
-          },
-        }}
-        bindEvent={bindEvent}
+        rootProps={rootProps}
+        data={hit}
         sendEvent={sendEvent}
       />
     );
@@ -143,7 +93,7 @@ const renderer =
     render(
       <Hits
         hits={items}
-        itemComponent={itemComponent}
+        itemComponent={templates.item === undefined ? undefined : itemComponent}
         sendEvent={sendEvent}
         classNames={cssClasses}
         emptyComponent={emptyComponent}
@@ -168,14 +118,9 @@ export type HitsTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * Template to use for each result. This template will receive an object containing a single record.
      *
-     * @default ''
+     * When not provided, each hit is rendered as JSON.
      */
-    item: TemplateWithBindEvent<
-      Hit<THit> & {
-        /** @deprecated the index in the hits array, use __position instead, which is the absolute position */
-        __hitIndex: number;
-      }
-    >;
+    item: TemplateWithSendEvent<Hit<THit>>;
 
     /**
      * Template to use for the banner.
@@ -214,7 +159,6 @@ export default (function hits<THit extends NonNullable<object> = BaseHit>(
 ) {
   const {
     container,
-    escapeHTML,
     transformItems,
     templates = {},
     cssClasses = {},
@@ -233,13 +177,12 @@ export default (function hits<THit extends NonNullable<object> = BaseHit>(
     templates,
   });
 
-  const makeWidget = withInsights(connectHits)(specializedRenderer, () =>
+  const makeWidget = connectHits(specializedRenderer, () =>
     render(null, containerNode)
   );
 
   return {
     ...makeWidget({
-      escapeHTML,
       transformItems,
     }),
     $$widgetType: 'ais.hits',

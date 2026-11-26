@@ -21,7 +21,7 @@ describe('Highlight', () => {
             data: {
               matchedWords: ['test'],
               matchLevel: 'partial',
-              value: '<mark>te</mark>st',
+              value: '__ais-highlight__te__/ais-highlight__st',
             },
           },
         }}
@@ -61,7 +61,7 @@ describe('Highlight', () => {
               {
                 matchedWords: ['test'],
                 matchLevel: 'partial',
-                value: '<mark>te</mark>st',
+                value: '__ais-highlight__te__/ais-highlight__st',
               },
               { matchedWords: [], matchLevel: 'none', value: 'nothing' },
             ],
@@ -113,7 +113,7 @@ describe('Highlight', () => {
               subdata: {
                 matchedWords: ['test'],
                 matchLevel: 'partial',
-                value: '<mark>te</mark>st',
+                value: '__ais-highlight__te__/ais-highlight__st',
               },
             },
           },
@@ -155,7 +155,7 @@ describe('Highlight', () => {
               subdata: {
                 matchedWords: ['test'],
                 matchLevel: 'partial',
-                value: '<mark>te</mark>st',
+                value: '__ais-highlight__te__/ais-highlight__st',
               },
             },
           },
@@ -205,7 +205,7 @@ describe('Highlight', () => {
     `);
   });
 
-  test("doesn't render html escaped content", () => {
+  test('renders html from the record as text', () => {
     const { container } = render(
       <Highlight
         hit={{
@@ -217,7 +217,7 @@ describe('Highlight', () => {
               matchedWords: ["don't"],
               matchLevel: 'partial',
               value:
-                '<mark>don</mark>&#39;t &lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt;',
+                '__ais-highlight__don__/ais-highlight__\'t <script>alert("xss");</script>',
             },
           },
         }}
@@ -267,7 +267,7 @@ describe('Highlight', () => {
               {
                 matchLevel: 'partial',
                 matchedWords: [],
-                value: '<mark>it</mark>em1',
+                value: '__ais-highlight__it__/ais-highlight__em1',
               },
               { matchLevel: 'none', matchedWords: [], value: 'item2' },
             ],
@@ -334,7 +334,7 @@ describe('Highlight', () => {
               data: {
                 matchedWords: ['test'],
                 matchLevel: 'partial',
-                value: '<mark>te</mark>st',
+                value: '__ais-highlight__te__/ais-highlight__st',
               },
             },
           }}
@@ -362,7 +362,7 @@ See: https://alg.li/highlighting`);
               data: {
                 matchedWords: ['test'],
                 matchLevel: 'partial',
-                value: '<mark>te</mark>st',
+                value: '__ais-highlight__te__/ais-highlight__st',
               },
             },
           }}

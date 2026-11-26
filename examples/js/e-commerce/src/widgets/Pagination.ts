@@ -1,8 +1,4 @@
-import {
-  pagination as paginationWidget,
-  panel,
-} from 'instantsearch.js/es/widgets';
-
+import { pagination as paginationWidget, panel } from 'instantsearch.js';
 const paginationWithMultiplePages = panel<typeof paginationWidget>({
   hidden({ results }) {
     return Boolean(results && results.nbPages <= 1);

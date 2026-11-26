@@ -144,7 +144,7 @@ How shared options propagate. Verify in SOURCE, never infer from the changelog:
 - Connector options: the params type (e.g. `ChatConnectorParams`) is defined in
   instantsearch.js / instantsearch-core and IMPORTED by the matching
   react-instantsearch-core `use*` hook - `useChat` imports `ChatConnectorParams`
-  from `instantsearch.js/es/connectors/chat/connectChat`. The React widget then
+  from `instantsearch-core`. The React widget then
   spreads `...props` into that hook, so the option works in React even though it
   is never re-declared or changelogged there. Vue wraps the same connectors.
 - UI and rendering features are shared via `instantsearch-ui-components`.

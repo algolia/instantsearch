@@ -6,7 +6,7 @@ import { wait } from '@instantsearch/testutils/wait';
 import { waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
-import instantsearch from '../../../index.es';
+import { instantsearch } from '../../../index.es';
 import chat from '../chat';
 
 // Replace the stick-to-bottom hook with a spy so we can assert the widget asks
