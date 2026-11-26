@@ -43,6 +43,7 @@ import {
   AisResultCard,
 } from '../instantsearch';
 import { isVue3, renderCompat } from '../util/vue-compat';
+import version from '../version';
 
 jest.unmock('instantsearch-core/internal');
 
@@ -378,9 +379,7 @@ const testSetups = {
         `instantsearch-core (${
           require('../../../instantsearch-core/package.json').version
         })`,
-        `Vue InstantSearch (${
-          require('../../../vue-instantsearch/package.json').version
-        })`,
+        `Vue InstantSearch (${version})`,
         `Vue (${require('../util/vue-compat').version})`,
       ],
     };

@@ -1,7 +1,7 @@
 import { INSTANTSEARCH_FUTURE_DEFAULTS } from 'instantsearch-core/internal';
 
-import { version } from '../../package.json'; // rollup does pick only what needed from json
 import { createSuitMixin } from '../mixins/suit';
+import version from '../version';
 
 import { isVue3, version as vueVersion } from './vue-compat';
 import { warn } from './warn';

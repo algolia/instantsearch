@@ -117,10 +117,6 @@ const INTENTIONAL_DIFFERENCES: Record<string, string[]> = {
   // tool-type constants it returns are not a difference — they are `const`s in
   // `instantsearch-core`, so every flavor's root carries them.)
   createdefaulttools: ['javascript', 'vue'],
-
-  // The version string: JS exposes `instantsearch.version`, React exports
-  // `version`; Vue relies on its package version.
-  version: ['vue'],
 };
 
 /**
