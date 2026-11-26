@@ -272,11 +272,11 @@ As this is not supported, please make sure to remove this other widget or this H
           return searchParameters;
         }
 
-        if (searchParameters.isHierarchicalFacet(hierarchicalFacetName)) {
-          const facet = searchParameters.getHierarchicalFacetByName(
-            hierarchicalFacetName
-          );
+        const facet = searchParameters.getHierarchicalFacetByName(
+          hierarchicalFacetName
+        );
 
+        if (facet) {
           warning(
             isEqual(facet.attributes, attributes) &&
               facet.separator === separator &&
@@ -292,6 +292,8 @@ As this is not supported, please make sure to remove this other widget or this H
             attributes,
             separator,
             rootPath,
+            // the breadcrumb has no `showParentLevel`, keep the hierarchicalMenu's
+            showParentLevel: facet?.showParentLevel,
           });
 
         if (!values) {

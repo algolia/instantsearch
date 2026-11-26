@@ -599,6 +599,40 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       ]);
     });
 
+    it('keeps the `showParentLevel` of the same `hierarchicalFacets` already defined', () => {
+      const render = () => {};
+      const makeWidget = connectBreadcrumb(render);
+      const helper = algoliasearchHelper(createSearchClient(), '', {
+        hierarchicalFacets: [
+          {
+            name: 'category',
+            attributes: ['category', 'subCategory'],
+            separator: ' > ',
+            rootPath: null,
+            showParentLevel: false,
+          },
+        ],
+      });
+
+      const widget = makeWidget({
+        attributes: ['category', 'subCategory'],
+      });
+
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual.hierarchicalFacets).toEqual([
+        {
+          name: 'category',
+          attributes: ['category', 'subCategory'],
+          separator: ' > ',
+          rootPath: null,
+          showParentLevel: false,
+        },
+      ]);
+    });
+
     it('warns with the same `hierarchicalFacets` already defined with different `attributes`', () => {
       const render = () => {};
       const makeWidget = connectBreadcrumb(render);
