@@ -128,4 +128,96 @@ describe('AisPromptSuggestions', () => {
     expect(header).not.toBeNull();
     expect(header.textContent).toBe('Start with an idea');
   });
+
+  it('applies the SUIT class names this widget documents', async () => {
+    wrapper = mount(PromptSuggestions, {
+      attachTo: document.body,
+      propsData: {
+        agentId: 'agentId',
+        classNames: {
+          'ais-PromptSuggestions': 'custom-root',
+          'ais-PromptSuggestions-header': 'custom-header',
+          'ais-PromptSuggestions-headerTitle': 'custom-title',
+          'ais-PromptSuggestions-suggestion': 'custom-pill',
+        },
+      },
+    });
+    await nextTick();
+
+    // The shared component reads short keys, so the SUIT names have to be
+    // folded onto them — otherwise every one of these is silently ignored.
+    const root = document.querySelector('.ais-PromptSuggestions');
+    expect(root.classList.contains('custom-root')).toBe(true);
+    // The SUIT keys are consumed by the mapping, not spread onto the markup.
+    expect(root.className).toBe('ais-PromptSuggestions custom-root');
+
+    const header = document.querySelector('.ais-PromptSuggestions-header');
+    expect(header.classList.contains('custom-header')).toBe(true);
+    expect(
+      header
+        .querySelector('.ais-PromptSuggestions-headerTitle')
+        .classList.contains('custom-title')
+    ).toBe(true);
+
+    const [pill] = document.querySelectorAll(
+      '.ais-PromptSuggestions-suggestion'
+    );
+    expect(pill.classList.contains('custom-pill')).toBe(true);
+  });
+
+  it('applies the short class names the shared component reads', async () => {
+    // The shape the React flavor takes: accepted too, so it can't no-op.
+    wrapper = mount(PromptSuggestions, {
+      attachTo: document.body,
+      propsData: {
+        agentId: 'agentId',
+        classNames: { root: 'short-root', suggestion: 'short-pill' },
+      },
+    });
+    await nextTick();
+
+    expect(
+      document
+        .querySelector('.ais-PromptSuggestions')
+        .classList.contains('short-root')
+    ).toBe(true);
+    expect(
+      document
+        .querySelector('.ais-PromptSuggestions-suggestion')
+        .classList.contains('short-pill')
+    ).toBe(true);
+  });
+
+  it('maps the skeleton class names while loading', async () => {
+    __setState({
+      suggestions: [],
+      isLoading: true,
+      error: undefined,
+      isChatBusy: false,
+      sendToChat: jest.fn(() => true),
+      onSuggestionClick: jest.fn(),
+      refresh: jest.fn(),
+    });
+
+    wrapper = mount(PromptSuggestions, {
+      attachTo: document.body,
+      propsData: {
+        agentId: 'agentId',
+        classNames: {
+          'ais-PromptSuggestions-skeleton': 'custom-skeleton',
+          'ais-PromptSuggestions-skeletonItem': 'custom-skeleton-item',
+        },
+      },
+    });
+    await nextTick();
+
+    const skeleton = document.querySelector('.ais-PromptSuggestions-skeleton');
+    expect(skeleton).not.toBeNull();
+    expect(skeleton.classList.contains('custom-skeleton')).toBe(true);
+    expect(
+      skeleton
+        .querySelector('.ais-PromptSuggestions-skeletonItem')
+        .classList.contains('custom-skeleton-item')
+    ).toBe(true);
+  });
 });

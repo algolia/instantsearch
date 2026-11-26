@@ -5,6 +5,41 @@ import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
 import { Fragment, getScopedSlot, renderReactCompat } from '../util/vue-compat';
 
+// The shared component reads short keys (`root`, `suggestion`); the Vue widget
+// documents the SUIT names `createSuitMixin` builds, so those are folded onto
+// the short ones here, as every other Vue widget that delegates its markup
+// does. A short key passed directly still works — that is the shape the React
+// flavor takes — but the SUIT name wins when both are given.
+const SUIT_CLASS_NAMES = {
+  root: 'ais-PromptSuggestions',
+  header: 'ais-PromptSuggestions-header',
+  headerTitle: 'ais-PromptSuggestions-headerTitle',
+  skeleton: 'ais-PromptSuggestions-skeleton',
+  skeletonItem: 'ais-PromptSuggestions-skeletonItem',
+  suggestion: 'ais-PromptSuggestions-suggestion',
+};
+
+function mapClassNames(classNames) {
+  if (!classNames) {
+    return undefined;
+  }
+
+  const mapped = {};
+
+  Object.keys(SUIT_CLASS_NAMES).forEach((key) => {
+    const value =
+      classNames[SUIT_CLASS_NAMES[key]] === undefined
+        ? classNames[key]
+        : classNames[SUIT_CLASS_NAMES[key]];
+
+    if (value !== undefined) {
+      mapped[key] = value;
+    }
+  });
+
+  return mapped;
+}
+
 /**
  * Renders an overridable component with the React-style props the shared
  * components pass around. A function (a scoped-slot adapter, or a React-style
@@ -191,7 +226,7 @@ export default {
       disabled: isChatBusy,
       skeletonCount: this.skeletonCount,
       translations: this.translations,
-      classNames: this.classNames,
+      classNames: mapClassNames(this.classNames),
       headerComponent,
     });
   }),
