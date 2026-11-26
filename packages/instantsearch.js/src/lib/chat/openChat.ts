@@ -52,15 +52,17 @@ export type OpenChatOptions = {
   turnContext?: Record<string, string>;
 };
 
-// A prompt-shortcut sentinel (`__SHORTCUT_<id>__`, or `__ALGOLIA_<KIND>_<id>__`
-// such as the `compare` widget's configured comparison) stands for a prompt
-// the server holds; the server also decides what the transcript shows for it.
-// Mirrors the backend's matching: `SHORTCUT` or a SCREAMING_SNAKE kind, then
-// an id that starts with a letter and runs 3-64 word characters/hyphens
-// (`SHORTCUT_ID_PATTERN` on the backend).
-const PROMPT_SHORTCUT_ID = /^[A-Za-z][\w-]{2,63}$/;
+// A prompt-shortcut sentinel (`__ALGOLIA_<KIND>_<id>__`, e.g. the `compare`
+// widget's configured comparison) stands for a prompt the server holds; the
+// server also decides what the transcript shows for it. Mirrors the backend's
+// matching: SCREAMING_SNAKE kind, then an id that starts with a letter and
+// runs 3-64 word characters/hyphens (`SHORTCUT_ID_PATTERN` on the backend).
 const PROMPT_SHORTCUT_SENTINEL =
-  /^__(?:SHORTCUT|ALGOLIA_[A-Z][A-Z_]*)_[A-Za-z][\w-]{2,63}__$/;
+  /^__ALGOLIA_[A-Z][A-Z_]*_[A-Za-z][\w-]{2,63}__$/;
+// A shortcut message stays hidden until the server echoes its display text,
+// so the id is held to the grammar the backend accepts: nothing else can be
+// sent unseen.
+const PROMPT_SHORTCUT_ID = /^[A-Za-z][\w-]{2,63}$/;
 
 // Centralizes the "open the chat from an entry point" behavior shared by the
 // SearchBox AI button, the Autocomplete AI button, prompt suggestions, and any
@@ -77,6 +79,7 @@ export function openChat(
   }
 
   let trimmed = message?.trim() ?? '';
+  let isPromptShortcut = PROMPT_SHORTCUT_SENTINEL.test(trimmed);
   if (shortcut) {
     const { id } = shortcut;
     if (typeof id !== 'string' || !PROMPT_SHORTCUT_ID.test(id)) {
@@ -93,6 +96,7 @@ export function openChat(
       '`openChat` received both `shortcut` and `message`. The shortcut is sent and `message` is ignored.'
     );
     trimmed = `__SHORTCUT_${id}__`;
+    isPromptShortcut = true;
   }
 
   if (!trimmed) {
@@ -115,9 +119,7 @@ export function openChat(
   // in `connectChat`) — or for good, when the shortcut is silent.
   const metadata = {
     ...(turnContext ? { turnContext } : {}),
-    ...(PROMPT_SHORTCUT_SENTINEL.test(trimmed)
-      ? { promptShortcut: { sentinel: trimmed } }
-      : {}),
+    ...(isPromptShortcut ? { promptShortcut: { sentinel: trimmed } } : {}),
   };
 
   chatRenderState.sendMessage(

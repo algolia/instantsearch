@@ -118,35 +118,16 @@ describe('openChat', () => {
     }
   );
 
-  test('marks a `__SHORTCUT_<id>__` message as a pending prompt shortcut', () => {
+  test('sends a shortcut token passed as `message` as an ordinary message', () => {
     const chat = createChatRenderState();
 
     openChat(chat, { message: '__SHORTCUT_size_guide__' });
 
     expect(chat.sendMessage).toHaveBeenCalledWith(
-      {
-        text: '__SHORTCUT_size_guide__',
-        metadata: {
-          promptShortcut: { sentinel: '__SHORTCUT_size_guide__' },
-        },
-      },
+      { text: '__SHORTCUT_size_guide__' },
       undefined
     );
   });
-
-  test.each(['__SHORTCUT_ab__', '__SHORTCUT_1abc__', 'hey __SHORTCUT_abc__'])(
-    'leaves a message that is not exactly a shortcut token unmarked: %s',
-    (message) => {
-      const chat = createChatRenderState();
-
-      openChat(chat, { message });
-
-      expect(chat.sendMessage).toHaveBeenCalledWith(
-        { text: message },
-        undefined
-      );
-    }
-  );
 
   describe('shortcut', () => {
     test('opens the chat, sends the shortcut token with its turn context and referer, and returns true', () => {
@@ -222,6 +203,8 @@ describe('openChat', () => {
       ['starting with an underscore', '_abc'],
       ['holding a space', 'size guide'],
       ['holding a token', '__SHORTCUT_abc__'],
+      ['ending with a newline', 'abc\n'],
+      ['holding a non-ASCII letter', 'abcé'],
       ['empty', ''],
       ['not a string', 123],
       ['not serializable', BigInt(10)],
