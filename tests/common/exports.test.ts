@@ -76,20 +76,15 @@ function normalize(name: string): string {
  * Intentional differences only. Every entry is a widget (normalized) name
  * mapped to the flavors that deliberately do not export it, with the reason.
  * Anything not listed here must be exported by all three flavors.
+ *
+ * An entry is only allowed while the difference is real — closing a disparity
+ * means deleting its line, which `findStaleDifferences` below enforces.
  */
 const INTENTIONAL_DIFFERENCES: Record<string, string[]> = {
   // JS-only imperative widgets (canvas/map and slider need direct DOM control;
   // React and Vue compositions don't have a flavor wrapper yet).
   geosearch: ['react', 'vue'],
   rangeslider: ['react', 'vue'],
-
-  // JS's template helper for highlighting (`highlight` and the `html` tagged
-  // template), which no other flavor exports under that name.
-  highlight: ['javascript'],
-  // Both closed by #7425 — Vue `ReverseHighlight`, React and Vue
-  // `ReverseSnippet`. Drop these two lines once that lands.
-  reversehighlight: ['javascript', 'vue'],
-  reversesnippet: ['react', 'vue'],
 
   // React exposes these connectors as hooks in react-instantsearch-core
   // instead of composed widgets (Vue and JS ship widgets for them).
@@ -102,9 +97,7 @@ const INTENTIONAL_DIFFERENCES: Record<string, string[]> = {
   relevantsort: ['react'],
   voicesearch: ['react'],
 
-  // Vue-only components: the experimental (preview-named) Autocomplete and
-  // the `StateResults` helper.
-  experimentalautocomplete: ['javascript', 'react'],
+  // Vue-only component: the `StateResults` render-prop helper.
   stateresults: ['javascript', 'react'],
 
   // SSR / server plumbing, which lives in a different entry point per flavor:
@@ -119,19 +112,10 @@ const INTENTIONAL_DIFFERENCES: Record<string, string[]> = {
   wrappromisewithstate: ['javascript', 'vue'],
   instantsearchssr: ['javascript', 'react'],
 
-  // The chat tool-type constants: React re-exports their values from its root,
-  // while JS and Vue only carry the types (JS declares them on its chat widget
-  // module, whose path isn't importable, and Vue takes them from
-  // `instantsearch-core/internal`) — so nothing runtime shows up there.
-  // React also exports its `createDefaultTools` factory from the root — in
-  // the other flavors the default tool sets are wired inside the chat widget.
-  searchindextooltype: ['javascript', 'vue'],
-  recommendtooltype: ['javascript', 'vue'],
-  memorizetooltype: ['javascript', 'vue'],
-  memorysearchtooltype: ['javascript', 'vue'],
-  pondertooltype: ['javascript', 'vue'],
-  compareproductstooltype: ['javascript', 'vue'],
-  groupedresultstooltype: ['javascript', 'vue'],
+  // `createDefaultTools`: React exports the factory from its root, while the
+  // other flavors wire their default tool sets inside the chat widget. (The
+  // tool-type constants it returns are not a difference — they are `const`s in
+  // `instantsearch-core`, so every flavor's root carries them.)
   createdefaulttools: ['javascript', 'vue'],
 
   // The version string: JS exposes `instantsearch.version`, React exports
@@ -139,14 +123,101 @@ const INTENTIONAL_DIFFERENCES: Record<string, string[]> = {
   version: ['vue'],
 };
 
-describe('export parity across flavors', () => {
+/**
+ * The allowlist invariant, as a check instead of a comment.
+ *
+ * The parity test can only ever look at what a flavor is _missing_, so it stays
+ * green when a listed difference is closed: the flavor gains the export, the
+ * line goes stale without failing, and it then sits there hiding the next time
+ * that flavor loses the export again (and it hides it better than nothing would,
+ * because a stale line reads like a decision someone made). So an entry is
+ * re-checked against the live surfaces: it may only name a flavor that
+ * genuinely lacks the name, the name must still be exported by somebody, and
+ * the flavor has to be a flavor.
+ */
+function findStaleDifferences(
+  allowlist: Record<string, string[]>,
+  surfaces: Record<string, Set<string>>
+): string[] {
+  const stale: string[] = [];
+  const flavors = Object.keys(surfaces);
+
+  Object.entries(allowlist).forEach(([name, allowed]) => {
+    const carriers = flavors.filter((flavor) => surfaces[flavor].has(name));
+
+    if (carriers.length === 0) {
+      stale.push(`${name}: no flavor exports it any more`);
+    }
+
+    allowed.forEach((flavor) => {
+      if (!surfaces[flavor]) {
+        stale.push(`${name}: '${flavor}' is not a flavor`);
+      } else if (surfaces[flavor].has(name)) {
+        stale.push(
+          `${name}: ${flavor} exports it (like ${carriers.join(
+            ', '
+          )}), so there is no difference to allowlist`
+        );
+      }
+    });
+  });
+
+  return stale;
+}
+
+describe('the staleness check itself', () => {
+  // Stand-in surfaces, so the guard is pinned down without editing the real
+  // allowlist: `panel` is JS-only here, `stateresults` is Vue-only, and nothing
+  // exports `experimentalautocomplete`.
   const surfaces = {
+    javascript: new Set(['chat', 'panel']),
+    react: new Set(['chat']),
+    vue: new Set(['chat', 'stateresults']),
+  };
+
+  test('accepts a difference that is still real', () => {
+    expect(
+      findStaleDifferences(
+        { stateresults: ['javascript', 'react'], panel: ['react', 'vue'] },
+        surfaces
+      )
+    ).toEqual([]);
+  });
+
+  test('fails an entry whose flavor has gained the export', () => {
+    expect(
+      findStaleDifferences({ panel: ['react', 'javascript'] }, surfaces)
+    ).toEqual([
+      'panel: javascript exports it (like javascript), so there is no difference to allowlist',
+    ]);
+  });
+
+  test('fails an entry for a name no flavor exports any more', () => {
+    expect(
+      findStaleDifferences(
+        { experimentalautocomplete: ['javascript', 'react'] },
+        surfaces
+      )
+    ).toEqual(['experimentalautocomplete: no flavor exports it any more']);
+  });
+
+  test('fails a flavor name that is not a flavor', () => {
+    expect(findStaleDifferences({ chat: ['javscript'] }, surfaces)).toEqual([
+      "chat: 'javscript' is not a flavor",
+    ]);
+  });
+});
+
+describe('export parity across flavors', () => {
+  // `Record<string, …>` because the allowlist's flavor names are data: the
+  // stale-entry check below looks them up and reports an unknown one.
+  const surfaces: Record<string, Set<string>> = {
     javascript: new Set(getJsExportNames().map(normalize)),
     react: new Set(getReactExportNames().map(normalize)),
     vue: new Set(getVueExportNames().map(normalize)),
   };
 
-  const flavors = Object.keys(surfaces) as Array<keyof typeof surfaces>;
+  const flavors = Object.keys(surfaces);
 
   const union = new Set<string>(
     [...surfaces.javascript, ...surfaces.react, ...surfaces.vue].sort()
@@ -165,6 +236,10 @@ describe('export parity across flavors', () => {
     });
 
     expect(missing).toEqual([]);
+  });
+
+  test('every allowlisted difference is still a real difference', () => {
+    expect(findStaleDifferences(INTENTIONAL_DIFFERENCES, surfaces)).toEqual([]);
   });
 
   test('the chat family is exported by all three flavors', () => {
