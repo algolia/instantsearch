@@ -1,9 +1,11 @@
 /**
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
+import { Chat } from '../chat';
 import { isChatBusy, openChat } from '../openChat';
 
 import type { ChatRenderState } from '../../../connectors/chat/connectChat';
+import type { UIMessage, UIMessageChunk } from '../../ai-lite/types';
 
 function createChatRenderState(
   overrides: Partial<ChatRenderState> = {}
@@ -174,17 +176,92 @@ describe('openChat', () => {
   });
 
   test.each(['submitted', 'streaming'] as const)(
-    'opens but does not send while the chat is %s',
+    'opens, hands the message to the chat, and returns true while the chat is %s',
     (status) => {
       const chat = createChatRenderState({ status });
 
       const sent = openChat(chat, { message: 'macbook' });
 
-      expect(sent).toBe(false);
+      expect(sent).toBe(true);
       expect(chat.setOpen).toHaveBeenCalledWith(true);
-      expect(chat.sendMessage).not.toHaveBeenCalled();
+      expect(chat.sendMessage).toHaveBeenCalledWith(
+        { text: 'macbook' },
+        undefined
+      );
     }
   );
+
+  test('a message sent while a reply streams goes out after that reply', async () => {
+    const tick = () => new Promise((resolve) => setTimeout(resolve, 0));
+    const waitFor = async (predicate: () => boolean) => {
+      let guard = 0;
+      while (!predicate() && guard < 500) {
+        guard += 1;
+        await tick();
+      }
+    };
+
+    // The first reply stays open until the test ends it.
+    let firstReply!: ReadableStreamDefaultController<UIMessageChunk>;
+    let requestCount = 0;
+    const sendMessages = jest.fn(() => {
+      requestCount += 1;
+      const messageId = `assistant-${requestCount}`;
+      return Promise.resolve(
+        new ReadableStream<UIMessageChunk>({
+          start(controller) {
+            controller.enqueue({ type: 'start', messageId });
+            if (requestCount === 1) {
+              firstReply = controller;
+            } else {
+              controller.enqueue({ type: 'finish' });
+              controller.close();
+            }
+          },
+        })
+      );
+    });
+    const chat = new Chat<UIMessage>({
+      persistence: false,
+      transport: {
+        sendMessages,
+        reconnectToStream: () => Promise.resolve(null),
+      },
+    });
+    const renderState = {
+      get status() {
+        return chat.status;
+      },
+      setOpen: jest.fn(),
+      sendMessage: chat.sendMessage,
+    } as Partial<ChatRenderState>;
+    const userMessages = () =>
+      chat.messages
+        .filter((message) => message.role === 'user')
+        .map((message) => (message.parts[0] as { text: string }).text);
+
+    expect(openChat(renderState, { message: 'first' })).toBe(true);
+    await waitFor(() => chat.status === 'streaming');
+
+    expect(openChat(renderState, { message: 'second' })).toBe(true);
+    await tick();
+
+    expect(sendMessages).toHaveBeenCalledTimes(1);
+    expect(userMessages()).toEqual(['first']);
+
+    firstReply.enqueue({ type: 'finish' });
+    firstReply.close();
+    await waitFor(() => requestCount === 2 && chat.status === 'ready');
+
+    expect(sendMessages).toHaveBeenCalledTimes(2);
+    expect(chat.messages.map((message) => message.role)).toEqual([
+      'user',
+      'assistant',
+      'user',
+      'assistant',
+    ]);
+    expect(userMessages()).toEqual(['first', 'second']);
+  });
 
   test('returns false when chatRenderState is undefined', () => {
     expect(openChat(undefined, { message: 'macbook' })).toBe(false);

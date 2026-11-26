@@ -116,7 +116,7 @@ export type CompareRenderState = {
   /**
    * Opens the sibling `chat` widget and sends the comparison placeholder for
    * the current selection, then clears the selection (which dismisses the
-   * compare bar). Returns `true` when the message was submitted (`false` when the selection is too small, the chat is missing or busy).
+   * compare bar). Returns `true` when the message was submitted (`false` when the selection is too small or the chat is missing).
    */
   compare: () => boolean;
   widgetParams: CompareConnectorParams;

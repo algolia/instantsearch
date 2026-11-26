@@ -514,7 +514,7 @@ describe('Chat', () => {
 
     await act(async () => {
       openChat(
-        { ...chatRenderState, status: 'submitted' },
+        { ...chatRenderState, sendMessage: jest.fn() },
         { message: 'macbook' }
       );
       await wait(0);
