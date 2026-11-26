@@ -1,6 +1,6 @@
 # instantsearch.js (vanilla JS flavor)
 
-The vanilla JS flavor: widgets, templates, the JS `instantsearch()` entry and a re-export of `instantsearch-core`. **Connectors, the InstantSearch runtime, routers, state mappings and middlewares live in `packages/instantsearch-core`** and are consumed by all flavors; a behavior change usually belongs there (see its `CLAUDE.md`/README), not here. Users import everything from the single `instantsearch.js` root: named exports only, no default export.
+The vanilla JS flavor: widgets, templates, the JS `instantsearch()` entry and a re-export of `instantsearch-core`. **Connectors, the InstantSearch runtime, routers, state mappings and middlewares live in `packages/instantsearch-core`** and are consumed by all flavors; a behavior change usually belongs there (see its `AGENTS.md`), not here. Users import everything from the single `instantsearch.js` root: named exports only, no default export.
 
 ## Layout
 
@@ -10,7 +10,7 @@ The vanilla JS flavor: widgets, templates, the JS `instantsearch()` entry and a 
 - `src/widgets/<name>/<name>.tsx` — vanilla JS widget = connector (from `instantsearch-core`) + default template/rendering. Exported from `src/widgets/index.ts`.
 - `src/components/` — the **JS flavor's Preact components** (the widgets' markup). This is the _legacy_ home for widget layout; newer widgets pull their layout from the shared `instantsearch-ui-components` package instead, and some components here are now thin wrappers that import from it. Add **new shared** markup to `instantsearch-ui-components`, not here.
 - `src/lib/` — JS-flavor runtime pieces (`InstantSearch` subclass, Preact template helpers, `utils`). The core runtime is in `instantsearch-core`.
-- `src/lib/ai-lite/` — hand-written reimplementation of the Vercel AI SDK's UI layer (`UIMessage` parts, the SSE chunk protocol, the `Chat` state machine `connectChat` drives). It replaced `ai@^5.0.18` in #6880 and tracks nothing upstream: AI SDK fixes land on the `ai@6` line and never reach us. **Before changing its semantics, diff the matching file under [`vercel/ai/packages/ai/src/ui`](https://github.com/vercel/ai/tree/main/packages/ai/src/ui)** — the auto-continue predicate silently missed vercel/ai#9944 (don't resend provider-executed tool turns) for months. Deliberate gaps: no tool-approval flow, no metadata/data-part schema validation, no `finishReason`. Agent Studio runs its tools server-side without setting `providerExecuted`, so `onToolCall` also sees every server tool call: answer one only through a registered tool, or once the response completes without the server's result. An earlier answer resolves the call, and the server's `tool-output-available` is then dropped. The exception is `algolia_compare_products` declared as a server tool: the chat ships a handler under that name, so Agent Studio flags those calls `providerExecuted`, and `onToolCall` never sees them.
+- `src/widgets/{chat,chat-trigger,prompt-suggestions,compare-bar}/` — the JS chat surface: connector + template. There is **no chat logic and no `ai-lite` here** — `src/lib/ai-lite/` holds only a public-types test now; the AI-SDK reimplementation, the `Chat` state machine and `connectChat` all live in `packages/instantsearch-core` (`src/lib/ai-lite/`, `src/lib/chat/`, `src/connectors/chat/` there — read that package's `AGENTS.md` before touching chat semantics), and the shared chat markup is in `instantsearch-ui-components/src/components/chat/`.
 - `src/types/` — JS-only public types (templates, components); the shared ones come from `instantsearch-core`.
 
 ## Working here
@@ -21,7 +21,7 @@ yarn workspace instantsearch.js test:exports   # the published entry resolves (E
 yarn jest packages/instantsearch-core/src/connectors/<name>   # run one connector's tests (from repo root)
 ```
 
-- `package.json#exports` only exposes the root, the UMD files in `dist/` and `package.json`; `es/` and `cjs/` stay on disk but are not importable. Inside this repo import from `'instantsearch.js'` (never `instantsearch.js/es/...`), and never from `instantsearch-core` in examples or `tests/common` (oxlint enforces both).
+- `package.json#exports` only exposes the root, the UMD files in `dist/` and `package.json`; `es/` and `cjs/` stay on disk but are not importable. Inside this repo import from `'instantsearch.js'` — oxlint bans every deep path into it (`instantsearch.js/es/…`) repo-wide, except `dist/` and `package.json`. Examples and `tests/` consume flavors rather than core: `examples/react/**` may only import `react-instantsearch`, and `instantsearch-core/internal` is blocked in `tests/{mocks,e2e,versions}` and `tests/umd.test.ts` (`tests/common/**` does use it, for shared helpers).
 - Connectors return a typed render state — don't return untyped state (oxlint rule).
 - A new widget that only varies presentation should **reuse an existing connector** (e.g. `menuSelect` reuses `connectMenu`) and set a distinct `$$widgetType`; don't fork the connector.
 - Cross-flavor behavior is covered by `tests/common/connectors/<name>/`; flavor-agnostic logic tests go there, JS-specific ones stay in `__tests__/`.
