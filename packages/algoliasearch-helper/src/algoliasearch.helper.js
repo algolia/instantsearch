@@ -3,7 +3,7 @@
 var EventEmitter = require('@algolia/events');
 
 var DerivedHelper = require('./DerivedHelper');
-var escapeFacetValue = require('./functions/escapeFacetValue').escapeFacetValue;
+var fv = require('./functions/escapeFacetValue');
 var inherits = require('./functions/inherits');
 var merge = require('./functions/merge');
 var objectHasKeys = require('./functions/objectHasKeys');
@@ -459,7 +459,7 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function (
           return acc;
         }
 
-        f.escapedValue = escapeFacetValue(f.value);
+        f.escapedValue = fv.escapeFacetValue(f.value);
         f.isRefined = isDisjunctive
           ? state.isDisjunctiveFacetRefined(facet, f.escapedValue)
           : state.isFacetRefined(facet, f.escapedValue);
@@ -537,7 +537,7 @@ AlgoliaSearchHelper.prototype.searchForCompositionFacetValues = function (
       content = content.results[0];
 
       content.facetHits.forEach(function (f) {
-        f.escapedValue = escapeFacetValue(f.value);
+        f.escapedValue = fv.escapeFacetValue(f.value);
         f.isRefined = isDisjunctive
           ? state.isDisjunctiveFacetRefined(facet, f.escapedValue)
           : state.isFacetRefined(facet, f.escapedValue);
