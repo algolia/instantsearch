@@ -1,7 +1,6 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import json from '@rollup/plugin-json';
 import vue2PluginModule from 'rollup-plugin-vue2';
 import vue3Plugin from 'rollup-plugin-vue3';
 
@@ -160,7 +159,6 @@ function outputs(vueVersion) {
     createResolvePlugin({
       extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.vue'],
     }),
-    json(),
     createReplacePlugin({ mode: 'production' }),
     createStripJsxPragmaPlugin(),
   ];

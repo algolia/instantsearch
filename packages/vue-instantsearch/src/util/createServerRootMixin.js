@@ -1,7 +1,7 @@
 import { waitForResults, getInitialResults } from 'instantsearch-core';
 import { instantsearch } from 'instantsearch-core/internal';
 
-import { version } from '../../package.json'; // rollup does pick only what needed from json
+import version from '../version';
 
 import { isVue3, isVue2, Vue2, createSSRApp } from './vue-compat';
 import { warn } from './warn';

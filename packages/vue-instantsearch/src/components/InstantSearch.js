@@ -1,9 +1,9 @@
 import { instantsearch } from 'instantsearch-core/internal';
 
-import { version } from '../../package.json'; // rollup does pick only what needed from json
 import { createInstantSearchComponent } from '../util/createInstantSearchComponent';
 import { renderCompat, getDefaultSlot } from '../util/vue-compat';
 import { warn } from '../util/warn';
+import version from '../version';
 
 const oldApiWarning = `Vue InstantSearch: You used the prop api-key or app-id.
 These have been replaced by search-client.

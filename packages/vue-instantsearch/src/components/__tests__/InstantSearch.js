@@ -5,10 +5,10 @@
 import { createAlgoliaSearchClient } from '@instantsearch/mocks';
 import { instantsearch } from 'instantsearch-core/internal';
 
-import { version } from '../../../package.json';
 import { mount, nextTick } from '../../../test/utils';
 import { isVue3, version as vueVersion } from '../../util/vue-compat';
 import { warn } from '../../util/warn';
+import version from '../../version';
 import InstantSearch from '../InstantSearch';
 import '../../../test/utils/sortedHtmlSerializer';
 
