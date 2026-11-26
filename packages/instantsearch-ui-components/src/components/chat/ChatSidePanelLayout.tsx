@@ -13,7 +13,26 @@ export function createChatSidePanelLayoutComponent({
 }: Renderer) {
   const originalMargins = new WeakMap<HTMLElement, string>();
 
-  return function ChatSidePanelLayout(userProps: ChatSidePanelLayoutProps) {
+  /**
+   * Puts back the margin this component shifted on a page element, if it
+   * shifted one. Called on the render that closes the panel, and by hosts that
+   * tear the panel down while it is still open (that render never comes).
+   */
+  function restoreMargin(element: HTMLElement | null | undefined) {
+    if (!element || !originalMargins.has(element)) {
+      return;
+    }
+
+    const saved = originalMargins.get(element);
+    if (saved) {
+      element.style.marginRight = saved;
+    } else {
+      element.style.removeProperty('margin-right');
+    }
+    originalMargins.delete(element);
+  }
+
+  function ChatSidePanelLayout(userProps: ChatSidePanelLayoutProps) {
     const {
       open,
       maximized,
@@ -57,14 +76,8 @@ export function createChatSidePanelLayoutComponent({
         element.style.marginRight = original
           ? `calc(${original} + ${chatWidth})`
           : chatWidth;
-      } else if (!open && originalMargins.has(element)) {
-        const saved = originalMargins.get(element);
-        if (saved) {
-          element.style.marginRight = saved;
-        } else {
-          element.style.removeProperty('margin-right');
-        }
-        originalMargins.delete(element);
+      } else if (!open) {
+        restoreMargin(element);
       }
     }
 
@@ -94,5 +107,10 @@ export function createChatSidePanelLayoutComponent({
         </div>
       </div>
     );
-  };
+  }
+
+  // The render above hands the margin back when it runs closed. A host that
+  // removes the panel while it is still open never runs it, so the flavors'
+  // teardown calls this instead.
+  return Object.assign(ChatSidePanelLayout, { restoreMargin });
 }
