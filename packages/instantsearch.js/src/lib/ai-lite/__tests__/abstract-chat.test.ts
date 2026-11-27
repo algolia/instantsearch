@@ -5418,3 +5418,130 @@ describe('AbstractChat unanswered tool calls in outbound requests', () => {
     ]);
   });
 });
+
+describe('AbstractChat sends made while a reply is in progress', () => {
+  const tick = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+  const waitFor = async (predicate: () => boolean) => {
+    let guard = 0;
+    while (!predicate() && guard < 500) {
+      guard += 1;
+      await tick();
+    }
+  };
+
+  const transcript = (state: ChatState<UIMessage>) =>
+    state.messages.map((message) =>
+      message.role === 'user'
+        ? `user: ${(message.parts[0] as { text: string }).text}`
+        : `assistant: ${message.id}`
+    );
+
+  // The first reply stays open until the test ends it; later replies finish
+  // at once. Like a fetch body, the open reply fails with an `AbortError` when
+  // its request is aborted.
+  function setupWithOpenFirstReply() {
+    let firstReply!: ReadableStreamDefaultController<UIMessageChunk>;
+    const setup = createTestSetup({
+      sendMessagesFactory: (index, { abortSignal }) =>
+        Promise.resolve(
+          index === 0
+            ? new ReadableStream<UIMessageChunk>({
+                start(controller) {
+                  controller.enqueue(startChunk('assistant-1'));
+                  firstReply = controller;
+                  abortSignal?.addEventListener('abort', () => {
+                    const error = new Error('The operation was aborted.');
+                    error.name = 'AbortError';
+                    controller.error(error);
+                  });
+                },
+              })
+            : chunksToStream([
+                startChunk(`assistant-${index + 1}`),
+                finishChunk(),
+              ])
+        ),
+    });
+
+    return { ...setup, getFirstReply: () => firstReply };
+  }
+
+  it('holds later sends until the running reply ends, then sends them in order', async () => {
+    const { chat, state, sendMessages, getFirstReply } =
+      setupWithOpenFirstReply();
+
+    const first = chat.sendMessage({ text: 'first' });
+    await waitFor(() => state.status === 'streaming');
+
+    const second = chat.sendMessage({ text: 'second' });
+    const third = chat.sendMessage({ text: 'third' });
+    await tick();
+
+    // Nothing shows that two messages are waiting.
+    expect(sendMessages).toHaveBeenCalledTimes(1);
+    expect(transcript(state)).toEqual([
+      'user: first',
+      'assistant: assistant-1',
+    ]);
+    expect(state.status).toBe('streaming');
+
+    getFirstReply().enqueue(finishChunk());
+    getFirstReply().close();
+    await Promise.all([first, second, third]);
+
+    expect(sendMessages).toHaveBeenCalledTimes(3);
+    expect(transcript(state)).toEqual([
+      'user: first',
+      'assistant: assistant-1',
+      'user: second',
+      'assistant: assistant-2',
+      'user: third',
+      'assistant: assistant-3',
+    ]);
+    expect(
+      sendMessages.mock.calls[1][0].messages.map((message) => message.role)
+    ).toEqual(['user', 'assistant', 'user']);
+    expect(state.status).toBe('ready');
+  });
+
+  it('sends a waiting message as soon as the running reply is stopped', async () => {
+    const { chat, state, sendMessages } = setupWithOpenFirstReply();
+
+    const first = chat.sendMessage({ text: 'first' });
+    await waitFor(() => state.status === 'streaming');
+    const second = chat.sendMessage({ text: 'second' });
+
+    await chat.stop();
+    await Promise.all([first, second]);
+
+    expect(sendMessages).toHaveBeenCalledTimes(2);
+    expect(transcript(state)).toEqual([
+      'user: first',
+      'assistant: assistant-1',
+      'user: second',
+      'assistant: assistant-2',
+    ]);
+  });
+
+  it('sends a waiting message after the running reply fails', async () => {
+    const { chat, state, sendMessages, getFirstReply } =
+      setupWithOpenFirstReply();
+
+    const first = chat.sendMessage({ text: 'first' });
+    await waitFor(() => state.status === 'streaming');
+    const second = chat.sendMessage({ text: 'second' });
+
+    getFirstReply().error(new Error('disconnected'));
+    await Promise.all([first, second]);
+
+    expect(sendMessages).toHaveBeenCalledTimes(2);
+    expect(transcript(state)).toEqual([
+      'user: first',
+      'assistant: assistant-1',
+      'user: second',
+      'assistant: assistant-2',
+    ]);
+    expect(state.status).toBe('ready');
+  });
+});

@@ -454,7 +454,7 @@ describe('connectCompare', () => {
       expect(getRenderState().compare()).toBe(false);
     });
 
-    it('returns false when the chat is busy', () => {
+    it('sends the comparison and clears the selection when the chat is busy', () => {
       const chatRenderState = createChatRenderState({
         status: 'streaming' as ChatRenderState['status'],
       });
@@ -466,8 +466,9 @@ describe('connectCompare', () => {
       getRenderState().addItem({ objectID: 'A' });
       getRenderState().addItem({ objectID: 'B' });
 
-      expect(getRenderState().compare()).toBe(false);
-      expect(chatRenderState.sendMessage).not.toHaveBeenCalled();
+      expect(getRenderState().compare()).toBe(true);
+      expect(chatRenderState.sendMessage).toHaveBeenCalledTimes(1);
+      expect(getRenderState().items).toEqual([]);
     });
   });
 

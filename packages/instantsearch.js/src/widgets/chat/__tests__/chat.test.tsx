@@ -860,7 +860,7 @@ describe('chat', () => {
       externalButton.focus();
 
       openChat(
-        { ...search.renderState.indexName.chat, status: 'submitted' },
+        { ...search.renderState.indexName.chat, sendMessage: jest.fn() },
         { message: 'macbook' }
       );
       await wait(0);

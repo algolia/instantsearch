@@ -19,6 +19,7 @@ import { createChatMessageLoaderComponent } from './ChatMessageLoader';
 import {
   ChevronDownIcon,
   CheckIcon,
+  CloseIcon,
   CopyIcon,
   LoadingSpinnerIcon,
   ReloadIcon,
@@ -109,6 +110,14 @@ export type ChatMessagesTranslations = {
    * Label for the feedback spinner
    */
   sendingFeedbackLabel?: string;
+  /**
+   * Text shown for a queued prompt shortcut, whose prompt only the server knows
+   */
+  queuedPromptShortcutText?: string;
+  /**
+   * Label for the button that removes a queued message
+   */
+  removeQueuedMessageLabel?: string;
 };
 
 export type ChatMessagesClassNames = {
@@ -276,6 +285,15 @@ export type ChatMessagesProps<
    * Function to stop the current streaming response
    */
   stop?: ChatLayoutOwnProps['stop'];
+  /**
+   * Messages sent while a reply runs, oldest first. A message without `text`
+   * is a prompt shortcut.
+   */
+  queuedMessages?: Array<{ id: string; text?: string }>;
+  /**
+   * Removes a queued message, so it is never sent
+   */
+  onRemoveQueuedMessage?: (id: string) => void;
   /**
    * Whether the chat panel is open
    */
@@ -748,6 +766,7 @@ export function createChatMessagesComponent({
     createElement,
     Fragment,
   });
+  const QueuedMessage = createChatMessageComponent({ createElement, Fragment });
   // Skip re-rendering (and re-compiling the markdown of) completed messages on
   // every streaming delta. The deps tuple matches the row's render inputs;
   // callbacks/`indexUiState` are intentionally excluded because `getUiState()`
@@ -900,6 +919,8 @@ export function createChatMessagesComponent({
       sendMessage,
       regenerate = () => Promise.resolve(),
       stop = () => Promise.resolve(),
+      queuedMessages = [],
+      onRemoveQueuedMessage,
       open = false,
       maximized = false,
       setInput,
@@ -930,6 +951,8 @@ export function createChatMessagesComponent({
       thumbsDownLabel: 'Dislike',
       feedbackThankYouText: 'Thanks for your feedback!',
       sendingFeedbackLabel: 'Sending feedback...',
+      queuedPromptShortcutText: 'Message queued',
+      removeQueuedMessageLabel: 'Remove queued message',
       ...userTranslations,
     };
 
@@ -1163,6 +1186,44 @@ export function createChatMessagesComponent({
                 context={context}
               />
             )}
+
+            {queuedMessages.map(({ id, text }) => (
+              <QueuedMessage
+                key={id}
+                side="right"
+                variant="neutral"
+                className="ais-ChatMessage--queued"
+                data-role="user"
+                message={{
+                  id,
+                  role: 'user',
+                  parts: [
+                    {
+                      type: 'text',
+                      text: text ?? translations.queuedPromptShortcutText!,
+                    },
+                  ],
+                }}
+                messages={messages}
+                indexUiState={indexUiState}
+                setIndexUiState={setIndexUiState}
+                classNames={messageClassNames}
+                translations={messageTranslations}
+                context={context as ChatComponentContext}
+                actionsComponent={() => (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    iconOnly
+                    className="ais-ChatMessage-action ais-ChatMessage-removeQueued"
+                    aria-label={translations.removeQueuedMessageLabel}
+                    onClick={() => onRemoveQueuedMessage?.(id)}
+                  >
+                    <CloseIcon createElement={createElement} />
+                  </Button>
+                )}
+              />
+            ))}
           </div>
         </div>
 

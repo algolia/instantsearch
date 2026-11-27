@@ -199,6 +199,8 @@ type ChatWrapperProps = {
   clearMessages: () => void;
   onFeedback?: ChatRenderState['sendChatMessageFeedback'];
   feedbackState: ChatRenderState['feedbackState'];
+  queuedMessages: ChatRenderState['queuedMessages'];
+  removeQueuedMessage: ChatRenderState['removeQueuedMessage'];
   toolsForUi: ClientSideTools;
   headerProps: {
     layoutComponent: ComponentProps<typeof Chat>['headerComponent'];
@@ -284,6 +286,8 @@ function ChatWrapper({
   clearMessages,
   onFeedback,
   feedbackState,
+  queuedMessages,
+  removeQueuedMessage,
   toolsForUi,
   headerProps,
   messagesProps,
@@ -353,6 +357,8 @@ function ChatWrapper({
         onClose: () => setChatOpen(false),
         onFeedback,
         feedbackState,
+        queuedMessages,
+        onRemoveQueuedMessage: removeQueuedMessage,
         messages: chatMessages,
         indexUiState,
         isScrollAtBottom: isAtBottom,
@@ -684,6 +690,8 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       suggestions,
       sendChatMessageFeedback: onFeedback,
       feedbackState,
+      queuedMessages,
+      removeQueuedMessage,
       '~consumeInputFocus': consumeInputFocus,
       '~isOpenStatePersistenceEnabled': isOpenStatePersistenceEnabled,
     } = props;
@@ -862,6 +870,8 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           clearMessages={clearMessages}
           onFeedback={onFeedback}
           feedbackState={feedbackState}
+          queuedMessages={queuedMessages}
+          removeQueuedMessage={removeQueuedMessage}
           toolsForUi={toolsForUi}
           headerProps={{
             layoutComponent: stableHeaderLayoutComponent,

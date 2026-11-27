@@ -1628,7 +1628,7 @@ describe('connectPromptSuggestions', () => {
       expect(sendMessage).toHaveBeenCalled();
     });
 
-    it('sendToChat returns false when the chat is busy and nothing is sent', async () => {
+    it('sendToChat sends and returns true when the chat is busy', async () => {
       const sendMessage = jest.fn();
       const setOpen = jest.fn();
       const search = createInstantSearch();
@@ -1651,11 +1651,11 @@ describe('connectPromptSuggestions', () => {
         })
       );
       const initCall = renderFn.mock.calls[0][0];
-      // The chat is mid-stream: openChat opens it but doesn't dispatch, so the
-      // handler must report that nothing was sent.
-      expect(initCall.sendToChat('hello')).toBe(false);
+      // The chat is mid-stream: openChat opens it and hands it the message,
+      // which the chat sends once the running reply ends.
+      expect(initCall.sendToChat('hello')).toBe(true);
       expect(setOpen).toHaveBeenCalledWith(true);
-      expect(sendMessage).not.toHaveBeenCalled();
+      expect(sendMessage).toHaveBeenCalledTimes(1);
     });
 
     it('sendToChat returns false when no chat widget is in render state', async () => {

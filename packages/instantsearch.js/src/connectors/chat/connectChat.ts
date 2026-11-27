@@ -14,6 +14,7 @@ import {
   matchesSearchIndexToolName,
   SearchIndexToolType,
 } from '../../lib/chat';
+import { PROMPT_SHORTCUT_SENTINEL } from '../../lib/chat/openChat';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -138,6 +139,17 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
    * 'sending' means the request is in flight, 0/1 means the vote was recorded.
    */
   feedbackState: Record<string, 'sending' | 0 | 1>;
+  /**
+   * Messages sent while a reply runs, oldest first. Each one is sent once the
+   * replies before it end. Stop or an error pauses the queue until the next
+   * send. `text` is `undefined` for a prompt shortcut, whose prompt only the
+   * server knows.
+   */
+  queuedMessages: Array<{ id: string; text?: string }>;
+  /**
+   * Takes a waiting message out of the queue, so it is never sent.
+   */
+  removeQueuedMessage: (id: string) => void;
 } & Pick<
   AbstractChat<TUiMessage>,
   | 'addToolResult'
@@ -502,7 +514,195 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       _chatInstance.messages = messagesParam;
     };
 
+    const sendMessageWithContext: Chat<TUiMessage>['sendMessage'] = (
+      message,
+      ...rest
+    ) => {
+      if (!context || !message) {
+        return _chatInstance.sendMessage(message, ...rest);
+      }
+
+      // Resolve once per send; let the server validate the payload and
+      // surface any contract violations.
+      const widgetContext = typeof context === 'function' ? context() : context;
+      const metadata = message.metadata as Record<string, unknown> | undefined;
+      // An entry point (compare bar, prompt suggestions, `openChat`) may
+      // have attached its own turn context to the message — e.g. the
+      // selected products of a comparison. Add the ambient widget context
+      // to it rather than replacing it; on a key both provide, the entry
+      // point knows the turn better.
+      const messageTurnContext =
+        metadata?.turnContext &&
+        typeof metadata.turnContext === 'object' &&
+        !Array.isArray(metadata.turnContext)
+          ? (metadata.turnContext as Record<string, string>)
+          : undefined;
+
+      return _chatInstance.sendMessage(
+        {
+          ...message,
+          metadata: {
+            ...metadata,
+            turnContext: { ...widgetContext, ...messageTurnContext },
+          },
+        } as Parameters<Chat<TUiMessage>['sendMessage']>[0],
+        ...rest
+      );
+    };
+
+    // Sends made while a reply runs wait here rather than in the chat's own
+    // job queue, whose waiting jobs cannot be listed, removed or paused.
+    const queue: Array<{
+      id: string;
+      text?: string;
+      args: Parameters<Chat<TUiMessage>['sendMessage']>;
+      resolve: (sent?: Promise<void>) => void;
+      reject: (error: unknown) => void;
+    }> = [];
+    let nextQueuedId = 0;
+    let isQueuePaused = false;
+    // Turns started through the connector whose promise (tool continuations
+    // included) has not settled yet: the status alone reads `ready` between
+    // the steps of a turn.
+    let pendingTurns = 0;
+    let drainTimer: ReturnType<typeof setTimeout> | undefined;
+    let renderQueue: () => void = noop;
+
+    const isReplyRunning = () =>
+      pendingTurns > 0 ||
+      _chatInstance.status === 'submitted' ||
+      _chatInstance.status === 'streaming';
+
+    // A client tool still running, whose result continues the turn.
+    const hasUnansweredToolCall = () => {
+      const last = _chatInstance.messages[_chatInstance.messages.length - 1];
+      return (
+        last?.role === 'assistant' &&
+        last.parts.some(
+          (part) =>
+            'toolCallId' in part &&
+            (part.state === 'input-streaming' ||
+              part.state === 'input-available')
+        )
+      );
+    };
+
+    // `isUserSend`: the user moving on also ends a turn left on an unanswered
+    // tool call, as a direct send would.
+    const drainQueue = (isUserSend = false) => {
+      if (
+        isQueuePaused ||
+        isReplyRunning() ||
+        queue.length === 0 ||
+        (!isUserSend && hasUnansweredToolCall())
+      ) {
+        return;
+      }
+      const next = queue.shift()!;
+      try {
+        next.resolve(dispatchSend(...next.args));
+      } catch (error) {
+        isQueuePaused = true;
+        next.reject(error);
+      }
+      renderQueue();
+    };
+
+    // Deferred, so the next step of a turn has started (or not) by the time
+    // the queue looks: between two steps the chat briefly reads as idle.
+    const scheduleDrain = () => {
+      if (isQueuePaused || queue.length === 0) {
+        return;
+      }
+      clearTimeout(drainTimer);
+      drainTimer = setTimeout(() => drainQueue(), 0);
+    };
+
+    const trackTurn = (startTurn: () => Promise<void>) => {
+      pendingTurns++;
+      const settle = () => {
+        pendingTurns--;
+        if (_chatInstance.status === 'error') {
+          isQueuePaused = true;
+        }
+        scheduleDrain();
+      };
+      let turn: Promise<void>;
+      try {
+        turn = startTurn();
+      } catch (error) {
+        // A throwing `context` function must not leave the queue waiting.
+        settle();
+        throw error;
+      }
+      // A caller-supplied `chat` may not return a promise.
+      Promise.resolve(turn).then(settle, settle);
+      return turn;
+    };
+
+    const dispatchSend: Chat<TUiMessage>['sendMessage'] = (...args) =>
+      trackTurn(() => sendMessageWithContext(...args));
+
+    const sendMessage: Chat<TUiMessage>['sendMessage'] = (...args) => {
+      const [message] = args;
+      if (!message) {
+        return sendMessageWithContext(...args);
+      }
+      // Also when the stopped reply has not settled yet: the queue then
+      // starts again once it has.
+      isQueuePaused = false;
+      if (!isReplyRunning() && queue.length === 0) {
+        return dispatchSend(...args);
+      }
+
+      const text =
+        'text' in message && message.text !== undefined
+          ? message.text
+          : (message.parts || [])
+              .map((part) => ('text' in part ? part.text : ''))
+              .join('');
+      return new Promise<void>((resolve, reject) => {
+        queue.push({
+          id: `queued-${nextQueuedId++}`,
+          text: PROMPT_SHORTCUT_SENTINEL.test(text.trim()) ? undefined : text,
+          args,
+          resolve,
+          reject,
+        });
+        renderQueue();
+        drainQueue(true);
+      });
+    };
+
+    const removeQueuedMessage = (id: string) => {
+      const index = queue.findIndex((queued) => queued.id === id);
+      if (index !== -1) {
+        queue.splice(index, 1)[0].resolve();
+        renderQueue();
+      }
+    };
+
+    const dropQueue = () => {
+      isQueuePaused = false;
+      queue.splice(0).forEach((queued) => queued.resolve());
+    };
+
+    const stop = () => {
+      isQueuePaused = true;
+      return _chatInstance.stop();
+    };
+
+    const regenerate: Chat<TUiMessage>['regenerate'] = (...args) => {
+      dropQueue();
+      return trackTurn(() => _chatInstance.regenerate(...args));
+    };
+
+    const resumeStream: Chat<TUiMessage>['resumeStream'] = (...args) =>
+      trackTurn(() => _chatInstance.resumeStream(...args));
+
     const clearMessages = () => {
+      // First, so the `ready` status that `stop` sets sends nothing.
+      dropQueue();
       const status = _chatInstance.status;
       if (status === 'submitted' || status === 'streaming') {
         _chatInstance.stop();
@@ -994,6 +1194,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             false
           );
         };
+        renderQueue = render;
 
         const updateOpen = (nextOpen: boolean, requestFocus: boolean) => {
           open = nextOpen;
@@ -1082,6 +1283,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         const renderOnStatusChange = () => {
           const statusChanged = _chatInstance.status !== lastStatus;
           lastStatus = _chatInstance.status;
+          // Covers turns continued by a tool result.
+          if (statusChanged && _chatInstance.status === 'error') {
+            isQueuePaused = true;
+          }
+          scheduleDrain();
           render();
           if (statusChanged) {
             initOptions.instantSearchInstance.scheduleRender(false);
@@ -1095,6 +1301,9 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             // the tools of that delta render.
             _chatInstance['~registerMessagesCallback'](collectRecords),
             _chatInstance['~registerMessagesCallback'](render),
+            // A tool result that does not continue the turn ends it without
+            // a status change.
+            _chatInstance['~registerMessagesCallback'](scheduleDrain),
             _chatInstance['~registerStatusCallback'](renderOnStatusChange),
           ];
         });
@@ -1105,11 +1314,13 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         // state well after the render that started it has finished.
         safelyRunOnBrowser(() => {
           if (resume) {
-            _chatInstance.resumeStream();
+            resumeStream();
           }
 
           if (initialUserMessage && !resume && !hasExistingMessages) {
-            _chatInstance.sendMessage({ text: initialUserMessage });
+            trackTurn(() =>
+              _chatInstance.sendMessage({ text: initialUserMessage })
+            );
           }
         });
 
@@ -1200,45 +1411,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           toolsWithAddToolResult[key] = toolWithAddToolResult;
         });
 
-        const sendMessageWithContext: typeof _chatInstance.sendMessage = (
-          message,
-          ...rest
-        ) => {
-          if (!context || !message) {
-            return _chatInstance.sendMessage(message, ...rest);
-          }
-
-          // Resolve once per send; let the server validate the payload and
-          // surface any contract violations.
-          const widgetContext =
-            typeof context === 'function' ? context() : context;
-          const metadata = message.metadata as
-            | Record<string, unknown>
-            | undefined;
-          // An entry point (compare bar, prompt suggestions, `openChat`) may
-          // have attached its own turn context to the message — e.g. the
-          // selected products of a comparison. Add the ambient widget context
-          // to it rather than replacing it; on a key both provide, the entry
-          // point knows the turn better.
-          const messageTurnContext =
-            metadata?.turnContext &&
-            typeof metadata.turnContext === 'object' &&
-            !Array.isArray(metadata.turnContext)
-              ? (metadata.turnContext as Record<string, string>)
-              : undefined;
-
-          return _chatInstance.sendMessage(
-            {
-              ...message,
-              metadata: {
-                ...metadata,
-                turnContext: { ...widgetContext, ...messageTurnContext },
-              },
-            } as Parameters<typeof _chatInstance.sendMessage>[0],
-            ...rest
-          );
-        };
-
         const renderState = {
           indexUiState: instantSearchInstance.getUiState()[parent.getIndexId()],
           input,
@@ -1262,6 +1434,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           records,
           sendChatMessageFeedback: _sendChatMessageFeedback,
           feedbackState,
+          queuedMessages: queue.map(({ id, text }) => ({ id, text })),
+          removeQueuedMessage,
           widgetParams,
 
           // Chat instance render state
@@ -1270,11 +1444,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           error: _chatInstance.error,
           id: _chatInstance.id,
           messages: _chatInstance.messages,
-          regenerate: _chatInstance.regenerate,
-          resumeStream: _chatInstance.resumeStream,
-          sendMessage: sendMessageWithContext,
+          regenerate,
+          resumeStream,
+          sendMessage,
           status: _chatInstance.status,
-          stop: _chatInstance.stop,
+          stop,
         };
 
         return renderState;
@@ -1284,6 +1458,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         deferredValidateEntryPoints.cancel();
         feedbackAbortController?.abort();
         unsubscribeChatCallbacks();
+        clearTimeout(drainTimer);
+        dropQueue();
         unmountFn();
       },
 
