@@ -535,6 +535,8 @@ export default {
           setInput: state.setInput,
           onFeedback: state.sendChatMessageFeedback,
           feedbackState: state.feedbackState,
+          queuedMessages: state.queuedMessages,
+          onRemoveQueuedMessage: state.removeQueuedMessage,
           messages: state.messages,
           tools: state.tools,
           indexUiState: state.indexUiState,

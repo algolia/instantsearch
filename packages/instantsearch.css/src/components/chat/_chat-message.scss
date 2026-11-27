@@ -102,6 +102,11 @@
   border-radius: var(--ais-border-radius-md);
 }
 
+.ais-ChatMessage--queued .ais-ChatMessage-message {
+  color: rgba(var(--ais-muted-color-rgb), 1);
+  opacity: 0.7;
+}
+
 .ais-ChatMessage-actions {
   display: flex;
   align-items: center;

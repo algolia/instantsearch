@@ -401,6 +401,8 @@ function ChatInner<
     suggestions,
     sendChatMessageFeedback: onFeedback,
     feedbackState,
+    queuedMessages,
+    removeQueuedMessage,
     '~consumeInputFocus': consumeInputFocus,
     '~isOpenStatePersistenceEnabled': isOpenStatePersistenceEnabled,
   } = chatState as typeof chatState & {
@@ -509,6 +511,8 @@ function ChatInner<
         setInput,
         onFeedback,
         feedbackState,
+        queuedMessages,
+        onRemoveQueuedMessage: removeQueuedMessage,
         messages,
         tools: toolsFromConnector,
         indexUiState,

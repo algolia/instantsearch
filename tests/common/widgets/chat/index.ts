@@ -3,6 +3,7 @@ import { fakeAct, skippableDescribe } from '../../common';
 import { createGuardrailsTests } from './guardrails';
 import { createOptionsTests } from './options';
 import { createPersistenceTests } from './persistence';
+import { createQueueTests } from './queue';
 import { createReasoningTests } from './reasoning';
 import { createStreamingTests } from './streaming';
 import { createTemplatesTests } from './templates';
@@ -66,6 +67,7 @@ export function createChatWidgetTests(
     createGuardrailsTests(setup, { act, skippedTests, flavor });
     createOptionsTests(setup, { act, skippedTests, flavor });
     createPersistenceTests(setup, { act, skippedTests, flavor });
+    createQueueTests(setup, { act, skippedTests, flavor });
     createReasoningTests(setup, { act, skippedTests, flavor });
     createStreamingTests(setup, { act, skippedTests, flavor });
     createTemplatesTests(setup, { act, skippedTests, flavor });

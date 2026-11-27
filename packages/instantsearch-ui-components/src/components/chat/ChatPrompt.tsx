@@ -304,10 +304,8 @@ export function createChatPromptComponent({ createElement }: Renderer) {
                   return;
                 }
                 event.preventDefault();
-                if (canStop) {
-                  onStop?.();
-                  return;
-                }
+                // While a reply runs, typed text is sent to wait its turn.
+                // Only the button stops the reply.
                 if (!hasValue) {
                   return;
                 }

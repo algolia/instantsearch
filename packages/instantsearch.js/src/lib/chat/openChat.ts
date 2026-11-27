@@ -42,14 +42,14 @@ export type OpenChatOptions = {
 // server also decides what the transcript shows for it. Mirrors the backend's
 // matching: SCREAMING_SNAKE kind, then an id that starts with a letter and
 // runs 3-64 word characters/hyphens (`SHORTCUT_ID_PATTERN` on the backend).
-const PROMPT_SHORTCUT_SENTINEL =
+export const PROMPT_SHORTCUT_SENTINEL =
   /^__ALGOLIA_[A-Z][A-Z_]*_[A-Za-z][\w-]{2,63}__$/;
 
 // Centralizes the "open the chat from an entry point" behavior shared by the
 // SearchBox AI button, the Autocomplete AI button, prompt suggestions, and any
 // future entry point. The chat is always opened; the message is only sent when
 // it is non-empty. A message sent while the chat is processing another one
-// waits its turn: the chat sends it once the running reply ends.
+// joins the chat's queue of waiting messages.
 // Returns true when a message was handed to the chat, so callers can clear
 // their input.
 export function openChat(

@@ -2880,4 +2880,122 @@ describe('ChatMessages', () => {
       {}
     );
   });
+
+  describe('queued messages', () => {
+    const messages: ChatMessageBase[] = [
+      { id: '1', role: 'user', parts: [{ type: 'text', text: 'first' }] },
+      {
+        id: '2',
+        role: 'assistant',
+        parts: [{ type: 'text', text: 'Answering…' }],
+      },
+    ];
+
+    test('renders each queued message as a greyed user bubble after the conversation', () => {
+      const { container } = render(
+        <ChatMessages
+          messages={messages}
+          status="streaming"
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          tools={{}}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+          queuedMessages={[
+            { id: 'q1', text: 'second' },
+            { id: 'q2', text: 'third' },
+          ]}
+          onRemoveQueuedMessage={jest.fn()}
+        />
+      );
+
+      const bubbles = Array.from(
+        container.querySelectorAll('.ais-ChatMessage')
+      );
+      const queued = container.querySelectorAll('.ais-ChatMessage--queued');
+
+      expect(queued).toHaveLength(2);
+      expect(bubbles.slice(-2)).toEqual(Array.from(queued));
+      expect(
+        Array.from(queued).map((bubble) => [
+          bubble.className,
+          bubble.textContent,
+        ])
+      ).toEqual([
+        [
+          'ais-ChatMessage ais-ChatMessage--right ais-ChatMessage--neutral ais-ChatMessage--queued',
+          'second',
+        ],
+        [
+          'ais-ChatMessage ais-ChatMessage--right ais-ChatMessage--neutral ais-ChatMessage--queued',
+          'third',
+        ],
+      ]);
+    });
+
+    test('calls `onRemoveQueuedMessage` with the id from the remove button', () => {
+      const onRemoveQueuedMessage = jest.fn();
+      const { container } = render(
+        <ChatMessages
+          messages={messages}
+          status="streaming"
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          tools={{}}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+          queuedMessages={[{ id: 'q1', text: 'second' }]}
+          onRemoveQueuedMessage={onRemoveQueuedMessage}
+        />
+      );
+
+      const button = container.querySelector<HTMLButtonElement>(
+        '.ais-ChatMessage--queued .ais-ChatMessage-removeQueued'
+      )!;
+      expect(button).toHaveAttribute('aria-label', 'Remove queued message');
+
+      button.click();
+
+      expect(onRemoveQueuedMessage).toHaveBeenCalledWith('q1');
+    });
+
+    test('shows "Message queued" instead of a prompt shortcut', () => {
+      const { container } = render(
+        <ChatMessages
+          messages={messages}
+          status="streaming"
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          tools={{}}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+          queuedMessages={[{ id: 'q1' }]}
+          onRemoveQueuedMessage={jest.fn()}
+          translations={{ removeQueuedMessageLabel: 'Discard' }}
+        />
+      );
+
+      const bubble = container.querySelector('.ais-ChatMessage--queued')!;
+      expect(bubble).toHaveTextContent('Message queued');
+      expect(bubble.querySelector('button')).toHaveAttribute(
+        'aria-label',
+        'Discard'
+      );
+    });
+
+    test('renders nothing extra without queued messages', () => {
+      const { container } = render(
+        <ChatMessages
+          messages={messages}
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          tools={{}}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+        />
+      );
+
+      expect(container.querySelector('.ais-ChatMessage--queued')).toBeNull();
+    });
+  });
 });

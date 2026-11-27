@@ -186,6 +186,24 @@ describe('ChatPrompt', () => {
     expect(onStop).toHaveBeenCalledTimes(0);
   });
 
+  test('the button stops a running reply, also with text typed', () => {
+    const onSubmit = jest.fn();
+    const onStop = jest.fn();
+    const { container } = render(
+      <ChatPrompt
+        status="streaming"
+        value="Next question"
+        onSubmit={onSubmit}
+        onStop={onStop}
+      />
+    );
+
+    userEvent.click(container.querySelector('button')!);
+
+    expect(onStop).toHaveBeenCalledTimes(1);
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
   describe('keyboard', () => {
     test('submits on Enter', () => {
       const onSubmit = jest.fn();
@@ -268,6 +286,37 @@ describe('ChatPrompt', () => {
       fireEvent.keyDown(container.querySelector('textarea')!, { key: 'Enter' });
 
       expect(onStop).not.toHaveBeenCalled();
+    });
+
+    test('submits on Enter while a reply runs, without stopping it', () => {
+      const onSubmit = jest.fn();
+      const onStop = jest.fn();
+      const { container } = render(
+        <ChatPrompt
+          status="streaming"
+          value="Next question"
+          onSubmit={onSubmit}
+          onStop={onStop}
+        />
+      );
+
+      fireEvent.keyDown(container.querySelector('textarea')!, { key: 'Enter' });
+
+      expect(onSubmit).toHaveBeenCalledTimes(1);
+      expect(onStop).not.toHaveBeenCalled();
+    });
+
+    test('does nothing on Enter while a reply runs and nothing is typed', () => {
+      const onSubmit = jest.fn();
+      const onStop = jest.fn();
+      const { container } = render(
+        <ChatPrompt status="streaming" onSubmit={onSubmit} onStop={onStop} />
+      );
+
+      fireEvent.keyDown(container.querySelector('textarea')!, { key: 'Enter' });
+
+      expect(onStop).not.toHaveBeenCalled();
+      expect(onSubmit).not.toHaveBeenCalled();
     });
 
     test('blurs on Escape', () => {
