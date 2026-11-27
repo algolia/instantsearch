@@ -376,7 +376,7 @@ const IsolatedIndex = {
  *
  * Like `AisCarousel` and `AisChat`, the markup comes from the shared
  * `instantsearch-ui-components` factories, driven by this component's own
- * hooks store (see the "hook-based shared components" section of CLAUDE.md).
+ * hooks store (see the "hook-based shared components" section of AGENTS.md).
  */
 export default {
   name: 'AisAutocomplete',

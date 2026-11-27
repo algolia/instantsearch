@@ -88,7 +88,7 @@ export default {
     this.restoreParentMargin();
   },
   // The factory keeps a `WeakMap` of the page elements it has shifted, so the
-  // component it creates must survive across renders (see the Vue `CLAUDE.md`
+  // component it creates must survive across renders (see the Vue `AGENTS.md`
   // note on creating shared components once per instance).
   render: renderReactCompat(function (h, hVue) {
     if (!this.LayoutComponent) {
