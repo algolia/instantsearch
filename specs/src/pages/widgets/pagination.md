@@ -4,34 +4,32 @@ title: Pagination
 type: widget
 html: |
   <div class="ais-Pagination">
-    <nav class="ais-Pagination-navigation" aria-label="Pagination">
-      <ul class="ais-Pagination-list">
-        <li class="ais-Pagination-item ais-Pagination-item--firstPage ais-Pagination-item--disabled">
-          <span class="ais-Pagination-link" aria-label="First Page">‹‹</span>
-        </li>
-        <li class="ais-Pagination-item ais-Pagination-item--previousPage ais-Pagination-item--disabled">
-          <span class="ais-Pagination-link" aria-label="Previous Page">‹</span>
-        </li>
-        <li class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected">
-          <span class="ais-Pagination-link" aria-label="Page 1, Current page" aria-current="page">1</span>
-        </li>
-        <li class="ais-Pagination-item ais-Pagination-item--page">
-          <a class="ais-Pagination-link" aria-label="Page 2" href="#">2</a>
-        </li>
-        <li class="ais-Pagination-item ais-Pagination-item--page">
-          <a class="ais-Pagination-link" aria-label="Page 3" href="#">3</a>
-        </li>
-        <li class="ais-Pagination-item">
-          <a class="ais-Pagination-link" aria-label="Page 4" href="#">4</a>
-        </li>
-        <li class="ais-Pagination-item ais-Pagination-item--nextPage">
-          <a class="ais-Pagination-link" aria-label="Next Page" href="#">›</a>
-        </li>
-        <li class="ais-Pagination-item ais-Pagination-item--lastPage">
-          <a class="ais-Pagination-link" aria-label="Last Page, Page 0" href="#">››</a>
-        </li>
-      </ul>
-    <nav>
+    <ul class="ais-Pagination-list">
+      <li class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--firstPage">
+        <span class="ais-Pagination-link" aria-label="First Page">‹‹</span>
+      </li>
+      <li class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--previousPage">
+        <span class="ais-Pagination-link" aria-label="Previous Page">‹</span>
+      </li>
+      <li class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected">
+        <a class="ais-Pagination-link" aria-label="Page 1" aria-current="page" href="#">1</a>
+      </li>
+      <li class="ais-Pagination-item ais-Pagination-item--page">
+        <a class="ais-Pagination-link" aria-label="Page 2" href="#">2</a>
+      </li>
+      <li class="ais-Pagination-item ais-Pagination-item--page">
+        <a class="ais-Pagination-link" aria-label="Page 3" href="#">3</a>
+      </li>
+      <li class="ais-Pagination-item ais-Pagination-item--page">
+        <a class="ais-Pagination-link" aria-label="Page 4" href="#">4</a>
+      </li>
+      <li class="ais-Pagination-item ais-Pagination-item--nextPage">
+        <a class="ais-Pagination-link" aria-label="Next Page" href="#">›</a>
+      </li>
+      <li class="ais-Pagination-item ais-Pagination-item--lastPage">
+        <a class="ais-Pagination-link" aria-label="Last Page, Page 4" href="#">››</a>
+      </li>
+    </ul>
   </div>
 classes:
   - name: .ais-Pagination
@@ -92,19 +90,19 @@ translations:
   - name: pageItemText
     default: '({ currentPage, nbPages }) => String(currentPage)'
     description: The text for the current page item.
-  - name: ariaFirstPageLabel
-    default: '"First"'
+  - name: firstPageItemAriaLabel
+    default: '"First Page"'
     description: The label for the first page item (for screen readers).
-  - name: ariaPreviousPageLabel
-    default: '"Previous"'
+  - name: previousPageItemAriaLabel
+    default: '"Previous Page"'
     description: The label for the previous page item (for screen readers).
-  - name: ariaNextPageLabel
-    default: '"Next"'
+  - name: nextPageItemAriaLabel
+    default: '"Next Page"'
     description: The label for the next page item (for screen readers).
-  - name: ariaLastPageLabel
-    default: '"Last"'
+  - name: lastPageItemAriaLabel
+    default: '`Last Page, Page ${nbPages}`'
     description: The label for the last page item (for screen readers).
-  - name: ariaPageLabel
+  - name: pageItemAriaLabel
     default: '({ currentPage, nbPages }) => `Page ${currentPage}`'
-    description: The label for the current page item (for screen readers).
+    description: The label for each page item (for screen readers).
 ---
