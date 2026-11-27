@@ -1,5 +1,18 @@
-import { cx } from 'instantsearch-ui-components';
-import React, { useEffect, useRef, useState } from 'react';
+import {
+  STATS_ANNOUNCEMENT_DELAY,
+  createStatsComponent,
+} from 'instantsearch-ui-components';
+import React, {
+  createElement,
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+
+import type { Pragma, StatsClassNames } from 'instantsearch-ui-components';
+
+export type { StatsClassNames } from 'instantsearch-ui-components';
 
 export type StatsProps = React.ComponentProps<'div'> & {
   nbHits: number;
@@ -25,29 +38,10 @@ export type StatsTranslationOptions = Pick<
 
 export type StatsTranslations = (options: StatsTranslationOptions) => string;
 
-export type StatsClassNames = {
-  /**
-   * Class names to apply to the root element
-   */
-  root: string;
-};
-
-// Delay before announcing an update, so that rapid changes (e.g. typing in the
-// search box) settle into a single announcement instead of piling up. Mirrors
-// the debounce used by GOV.UK's accessible-autocomplete.
-const ANNOUNCEMENT_DELAY = 1400;
-
-const visuallyHiddenStyle: React.CSSProperties = {
-  position: 'absolute',
-  width: 1,
-  height: 1,
-  padding: 0,
-  margin: -1,
-  overflow: 'hidden',
-  clip: 'rect(0, 0, 0, 0)',
-  whiteSpace: 'nowrap',
-  border: 0,
-};
+const StatsUiComponent = createStatsComponent({
+  createElement: createElement as Pragma,
+  Fragment,
+});
 
 export function Stats({
   classNames = {},
@@ -82,28 +76,17 @@ export function Stats({
     clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
       setAnnouncement(nextAnnouncement);
-    }, ANNOUNCEMENT_DELAY);
+    }, STATS_ANNOUNCEMENT_DELAY);
 
     return () => clearTimeout(timerRef.current);
   }, [nextAnnouncement]);
 
   return (
-    <div
-      {...props}
-      className={cx('ais-Stats', classNames.root, props.className)}
-    >
-      <span className="ais-Stats-text">
-        {translations.rootElementText(translationOptions)}
-      </span>
-      <span
-        className="ais-Stats-announcement"
-        role="status"
-        aria-live="polite"
-        aria-atomic="true"
-        style={visuallyHiddenStyle}
-      >
-        {announcement}
-      </span>
-    </div>
+    <StatsUiComponent
+      {...(props as Record<string, unknown>)}
+      classNames={classNames}
+      text={translations.rootElementText(translationOptions)}
+      announcement={announcement}
+    />
   );
 }

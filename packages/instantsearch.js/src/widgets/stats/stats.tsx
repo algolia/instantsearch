@@ -3,18 +3,19 @@
 import { connectStats } from 'instantsearch-core';
 import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { suitComponent as component } from 'instantsearch-core/internal';
-import { cx } from 'instantsearch-ui-components';
-import { h, render } from 'preact';
+import {
+  STATS_ANNOUNCEMENT_DELAY,
+  createStatsComponent,
+  cx,
+  getStatsAnnouncementText,
+  getStatsText,
+} from 'instantsearch-ui-components';
+import { Fragment, h, render } from 'preact';
+import { useEffect, useRef, useState } from 'preact/hooks';
 
-import Stats from '../../components/Stats/Stats';
-import { formatNumber } from '../../lib/formatNumber';
-import { prepareTemplateProps } from '../../lib/templating';
+import { prepareTemplateProps, renderTemplate } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 
-import type {
-  StatsComponentCSSClasses,
-  StatsComponentTemplates,
-} from '../../components/Stats/Stats';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { Template } from '../../types';
 import type {
@@ -23,9 +24,12 @@ import type {
   StatsWidgetDescription,
 } from 'instantsearch-core';
 import type { Renderer, WidgetFactory } from 'instantsearch-core';
+import type { StatsProps } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'stats' });
 const suit = component('Stats');
+
+const Stats = createStatsComponent({ createElement: h, Fragment });
 
 type TextTemplateProps = {
   hasManyResults: boolean;
@@ -78,74 +82,53 @@ export type StatsWidget = WidgetFactory<
   StatsWidgetParams
 >;
 
-export const defaultTemplates: StatsComponentTemplates = {
+export const defaultTemplates: Required<StatsTemplates> = {
   text(props) {
-    return `${
-      props.areHitsSorted
-        ? getSortedResultsSentence(props)
-        : getResultsSentence(props)
-    } found in ${props.processingTimeMS}ms`;
+    return getStatsText(props);
   },
 };
 
-function getSortedResultsSentence({
-  nbHits,
-  hasNoSortedResults,
-  hasOneSortedResults,
-  hasManySortedResults,
-  nbSortedHits,
-}: TextTemplateProps & StatsRenderState) {
-  const suffix = `sorted out of ${formatNumber(nbHits)}`;
+type StatsWithAnnouncementProps = Omit<StatsProps, 'announcement'> & {
+  announcementText: string;
+};
 
-  if (hasNoSortedResults) {
-    return `No relevant results ${suffix}`;
-  }
+// The announcement is debounced so that rapid changes (e.g. typing in the
+// search box) settle into a single announcement instead of piling up.
+function StatsWithAnnouncement({
+  announcementText,
+  ...props
+}: StatsWithAnnouncementProps) {
+  const [announcement, setAnnouncement] = useState('');
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const isInitialRef = useRef(true);
 
-  if (hasOneSortedResults) {
-    return `1 relevant result ${suffix}`;
-  }
+  useEffect(() => {
+    // Don't announce the initial results, only subsequent changes.
+    if (isInitialRef.current) {
+      isInitialRef.current = false;
+      return undefined;
+    }
 
-  if (hasManySortedResults) {
-    return `${formatNumber(nbSortedHits || 0)} relevant results ${suffix}`;
-  }
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      setAnnouncement(announcementText);
+    }, STATS_ANNOUNCEMENT_DELAY);
 
-  return '';
-}
+    return () => clearTimeout(timerRef.current);
+  }, [announcementText]);
 
-function getResultsSentence({
-  nbHits,
-  hasNoResults,
-  hasOneResult,
-  hasManyResults,
-}: TextTemplateProps & StatsRenderState) {
-  if (hasNoResults) {
-    return 'No results';
-  }
-
-  if (hasOneResult) {
-    return '1 result';
-  }
-
-  if (hasManyResults) {
-    return `${formatNumber(nbHits)} results`;
-  }
-
-  return '';
+  return <Stats {...props} announcement={announcement} />;
 }
 
 const renderer =
   ({
-    renderState,
-    cssClasses,
     containerNode,
-    templates,
+    classNames,
+    templateProps,
   }: {
-    renderState: {
-      templateProps?: PreparedTemplateProps<StatsComponentTemplates>;
-    };
-    cssClasses: StatsComponentCSSClasses;
     containerNode: HTMLElement;
-    templates: StatsTemplates;
+    classNames: StatsCSSClasses;
+    templateProps: PreparedTemplateProps<Required<StatsTemplates>>;
   }): Renderer<StatsRenderState, Partial<StatsWidgetParams>> =>
   (
     {
@@ -161,26 +144,45 @@ const renderer =
     isFirstRendering
   ) => {
     if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
-        defaultTemplates,
-        templates,
-      });
-
       return;
     }
 
+    const content = renderTemplate({
+      templates: templateProps.templates,
+      templateKey: 'text',
+      data: {
+        hasManySortedResults: nbSortedHits && nbSortedHits > 1,
+        hasNoSortedResults: nbSortedHits === 0,
+        hasOneSortedResults: nbSortedHits === 1,
+        hasManyResults: nbHits > 1,
+        hasNoResults: nbHits === 0,
+        hasOneResult: nbHits === 1,
+        hitsPerPage,
+        nbHits,
+        nbSortedHits,
+        areHitsSorted,
+        nbPages,
+        page,
+        processingTimeMS,
+        query,
+        cssClasses: {
+          root: cx(suit(), classNames.root),
+          text: cx(suit({ descendantName: 'text' }), classNames.text),
+        },
+      },
+    });
+
     render(
-      <Stats
-        cssClasses={cssClasses}
-        hitsPerPage={hitsPerPage}
-        nbHits={nbHits}
-        nbSortedHits={nbSortedHits}
-        areHitsSorted={areHitsSorted}
-        nbPages={nbPages}
-        page={page}
-        processingTimeMS={processingTimeMS}
-        query={query}
-        templateProps={renderState.templateProps!}
+      <StatsWithAnnouncement
+        classNames={classNames}
+        // `null` omits the `ais-Stats-text` element, as it did when the
+        // template owned it. An empty string renders an empty element.
+        text={content === '' ? undefined : content}
+        announcementText={getStatsAnnouncementText({
+          nbHits,
+          nbSortedHits,
+          areHitsSorted,
+        })}
       />,
       containerNode
     );
@@ -204,16 +206,15 @@ const stats: StatsWidget = (widgetParams) => {
 
   const containerNode = getContainerNode(container);
 
-  const cssClasses: StatsComponentCSSClasses = {
-    root: cx(suit(), userCssClasses.root),
-    text: cx(suit({ descendantName: 'text' }), userCssClasses.text),
+  const classNames: StatsCSSClasses = {
+    root: userCssClasses.root,
+    text: userCssClasses.text,
   };
 
   const specializedRenderer = renderer({
     containerNode,
-    cssClasses,
-    templates,
-    renderState: {},
+    classNames,
+    templateProps: prepareTemplateProps({ defaultTemplates, templates }),
   });
 
   const makeWidget = connectStats(specializedRenderer, () =>

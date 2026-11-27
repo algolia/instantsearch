@@ -1,3 +1,7 @@
+import {
+  getStatsAnnouncementText,
+  getStatsText,
+} from 'instantsearch-ui-components';
 import React from 'react';
 import { useStats } from 'react-instantsearch-core';
 
@@ -34,57 +38,14 @@ export function Stats({ translations, ...props }: StatsProps) {
     areHitsSorted,
     translations: {
       rootElementText(options: StatsTranslationOptions) {
-        return `${
-          options.areHitsSorted
-            ? getSortedResultsSentence(options)
-            : getResultsSentence(options)
-        } found in ${options.processingTimeMS.toLocaleString()}ms`;
+        return getStatsText(options);
       },
       announcementText(options: StatsTranslationOptions) {
-        return options.areHitsSorted
-          ? getSortedResultsSentence(options)
-          : getResultsSentence(options);
+        return getStatsAnnouncementText(options);
       },
       ...translations,
     },
   };
 
   return <StatsUiComponent {...props} {...uiProps} />;
-}
-
-function getSortedResultsSentence({
-  nbHits,
-  nbSortedHits,
-}: StatsTranslationOptions) {
-  const suffix = `sorted out of ${nbHits.toLocaleString()}`;
-
-  if (nbSortedHits === 0) {
-    return `No relevant results ${suffix}`;
-  }
-
-  if (nbSortedHits === 1) {
-    return `1 relevant result ${suffix}`;
-  }
-
-  if (nbSortedHits! > 1) {
-    return `${(nbSortedHits || 0).toLocaleString()} relevant results ${suffix}`;
-  }
-
-  return '';
-}
-
-function getResultsSentence({ nbHits }: StatsTranslationOptions) {
-  if (nbHits === 0) {
-    return 'No results';
-  }
-
-  if (nbHits === 1) {
-    return '1 result';
-  }
-
-  if (nbHits > 1) {
-    return `${nbHits.toLocaleString()} results`;
-  }
-
-  return '';
 }
