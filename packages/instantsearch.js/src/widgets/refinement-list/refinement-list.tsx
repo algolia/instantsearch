@@ -268,7 +268,7 @@ const renderer = ({
   // same identity across renders (a new one would remount every item).
   let current: Pick<
     RefinementListRenderState,
-    'refine' | 'createURL' | 'isFromSearch'
+    'refine' | 'createURL' | 'isFromSearch' | 'searchForItems'
   >;
 
   const itemComponent = ({
@@ -285,7 +285,7 @@ const renderer = ({
         }
       }}
     >
-      {templates.item ? (
+      {templates.item !== undefined ? (
         <TemplateComponent
           {...renderState.templateProps!}
           templateKey="item"
@@ -337,13 +337,18 @@ const renderer = ({
       searchBoxRef.current.resetInput();
     }
 
+    // Updated before the skip below, so the handlers of a skipped render use
+    // the latest callbacks.
+    current = { refine, createURL, isFromSearch, searchForItems };
+
     // Skip renders that don't change the list, so they don't overwrite the
     // query typed in the search box with its default.
     if (
       isEqual(lastRenderedState.items, items) &&
       lastRenderedState.isShowingMore === isShowingMore &&
       lastRenderedState.canToggleShowMore === canToggleShowMore &&
-      lastRenderedState.isFromSearch === isFromSearch
+      lastRenderedState.isFromSearch === isFromSearch &&
+      lastRenderedState.hasExhaustiveItems === hasExhaustiveItems
     ) {
       return;
     }
@@ -352,9 +357,8 @@ const renderer = ({
       isShowingMore,
       canToggleShowMore,
       isFromSearch,
+      hasExhaustiveItems,
     };
-
-    current = { refine, createURL, isFromSearch };
 
     const shouldDisableSearchBox =
       searchableIsAlwaysActive !== true &&
@@ -376,12 +380,14 @@ const renderer = ({
                   cssClasses={cssClasses.searchable}
                   templates={renderState.searchBoxTemplateProps!.templates}
                   onChange={(event: Event) =>
-                    searchForItems((event.target as HTMLInputElement).value)
+                    current.searchForItems(
+                      (event.target as HTMLInputElement).value
+                    )
                   }
-                  onReset={() => searchForItems('')}
+                  onReset={() => current.searchForItems('')}
                   onSubmit={() => {
                     if (searchableSelectOnSubmit !== false && items[0]) {
-                      refine(items[0].value);
+                      current.refine(items[0].value);
                     }
                   }}
                   // This sets the search box to a controlled state because
