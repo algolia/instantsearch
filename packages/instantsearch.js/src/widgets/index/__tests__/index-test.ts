@@ -4358,5 +4358,55 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       expect(search.getUiState()).toEqual({ indexName: { query: 'iphone' } });
     });
+
+    it('searches again with the restored state to clear the error', async () => {
+      const searchClient = createSearchClient();
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      }).addWidgets([virtualSearchBox({})]);
+
+      search.start();
+      search.on('error', () => {});
+
+      search.setUiState({ indexName: { query: 'iphone' } });
+      await wait(0);
+
+      castToJestMock(searchClient.search).mockRejectedValueOnce(
+        new Error('search error')
+      );
+      search.setUiState({ indexName: { query: 'iphone 2' } });
+      await wait(0);
+      await wait(0);
+
+      expect(search.getUiState()).toEqual({ indexName: { query: 'iphone' } });
+      expect(search.status).toBe('idle');
+      expect(search.error).toBeUndefined();
+      expect(searchClient.search).toHaveBeenCalledTimes(3);
+    });
+
+    it('retries only once when the search keeps failing', async () => {
+      const searchClient = createSearchClient();
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      }).addWidgets([virtualSearchBox({})]);
+
+      search.start();
+      search.on('error', () => {});
+
+      search.setUiState({ indexName: { query: 'iphone' } });
+      await wait(0);
+
+      castToJestMock(searchClient.search).mockClear();
+      castToJestMock(searchClient.search).mockRejectedValue(
+        new Error('search error')
+      );
+      search.setUiState({ indexName: { query: 'iphone 2' } });
+      await wait(10);
+
+      expect(search.status).toBe('error');
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
+    });
   });
 });
