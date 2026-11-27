@@ -118,6 +118,10 @@ export function augmentReactCreateElement(createElement) {
         // React renders `aria-expanded={false}` as "false"; Vue 2 drops falsy
         // boolean attrs, so stringify to preserve the accessibility contract.
         data.attrs[name] = String(value);
+      } else if (typeof value === 'boolean') {
+        // Vue 2 only recognizes lowercase boolean attributes, so React's
+        // `noValidate` / `autoFocus` would render as `novalidate="true"`.
+        data.attrs[name.toLowerCase()] = value;
       } else {
         data.attrs[name] = value;
       }

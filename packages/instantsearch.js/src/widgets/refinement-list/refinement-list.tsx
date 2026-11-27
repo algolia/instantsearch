@@ -7,19 +7,21 @@ import {
   isSpecialClick,
   suitComponent as component,
 } from 'instantsearch-core/internal';
-import { createRefinementListComponent, cx } from 'instantsearch-ui-components';
+import {
+  createRefinementListComponent,
+  createSearchBoxComponent,
+  cx,
+} from 'instantsearch-ui-components';
 import { createRef, Fragment, h, render } from 'preact';
 
-import SearchBox from '../../components/SearchBox/SearchBox';
 import TemplateComponent from '../../components/Template/Template';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
-import searchBoxDefaultTemplates from '../search-box/defaultTemplates';
+import { getSearchBoxIconComponents } from '../search-box/search-box';
 
 import defaultTemplates from './defaultTemplates';
 
 import type { RefinementListComponentCSSClasses } from '../../components/RefinementList/RefinementList';
-import type { SearchBoxComponentTemplates } from '../../components/SearchBox/SearchBox';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { Template } from '../../types';
 import type { SearchBoxTemplates } from '../search-box/search-box';
@@ -29,7 +31,10 @@ import type {
   RefinementListWidgetDescription,
 } from 'instantsearch-core';
 import type { WidgetFactory, Renderer } from 'instantsearch-core';
-import type { RefinementListItemComponentProps } from 'instantsearch-ui-components';
+import type {
+  RefinementListItemComponentProps,
+  SearchBoxProps as SearchBoxUiComponentProps,
+} from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'refinement-list',
@@ -222,9 +227,13 @@ const RefinementListUiComponent = createRefinementListComponent({
   Fragment,
 });
 
+const SearchBoxUiComponent = createSearchBoxComponent({
+  createElement: h,
+  Fragment,
+});
+
 type RefinementListRendererState = {
   templateProps?: PreparedTemplateProps<RefinementListOwnTemplates>;
-  searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxComponentTemplates>;
 };
 
 // Click events on DOM trees like LABEL > INPUT fire twice: once on the label
@@ -296,7 +305,7 @@ const renderer = ({
 }: {
   containerNode: HTMLElement;
   cssClasses: RefinementListComponentCSSClasses;
-  userCssClasses: RefinementListOwnCSSClasses;
+  userCssClasses: RefinementListCSSClasses;
   renderState: RefinementListRendererState;
   templates: RefinementListOwnTemplates;
   searchBoxTemplates: SearchBoxTemplates;
@@ -307,16 +316,18 @@ const renderer = ({
   searchableIsAlwaysActive?: boolean;
   searchableSelectOnSubmit?: boolean;
 }): Renderer<RefinementListRenderState, RefinementListConnectorParams> => {
-  const searchBoxRef = createRef<SearchBox>();
+  const searchInputRef = createRef<HTMLInputElement>();
+  const searchBoxIconComponents = getSearchBoxIconComponents(
+    searchBoxTemplates,
+    cssClasses.searchable!
+  );
+  let searchQuery = '';
   let lastRefinedValue: string | undefined = undefined;
   let lastRenderedState: Partial<RefinementListRenderState> = {};
 
   // Latest render values, read by the item component so that it keeps the
   // same identity across renders (a new one would remount every item).
-  let current: Pick<
-    RefinementListRenderState,
-    'refine' | 'createURL' | 'isFromSearch'
-  >;
+  let current: RefinementListRenderState;
 
   const itemComponent = ({
     item,
@@ -350,58 +361,29 @@ const renderer = ({
     </li>
   );
 
-  return (
-    {
+  const onSearchInput = (event: Event) => {
+    searchQuery = (event.target as HTMLInputElement).value;
+    current.searchForItems(searchQuery);
+    renderList();
+  };
+
+  const searchInputHandlers = {
+    onInput: onSearchInput,
+    // Preact only binds lowercase composition events.
+    oncompositionend: onSearchInput,
+  } as unknown as SearchBoxUiComponentProps['inputProps'];
+
+  function renderList() {
+    const {
       refine,
       items,
-      createURL,
       searchForItems,
       isFromSearch,
       toggleShowMore,
       isShowingMore,
       hasExhaustiveItems,
       canToggleShowMore,
-    },
-    isFirstRendering
-  ) => {
-    if (isFirstRendering) {
-      lastRenderedState = {};
-      renderState.templateProps =
-        prepareTemplateProps<RefinementListOwnTemplates>({
-          defaultTemplates,
-          templates,
-        });
-      renderState.searchBoxTemplateProps = prepareTemplateProps({
-        defaultTemplates: searchBoxDefaultTemplates,
-        templates: searchBoxTemplates,
-      });
-      return;
-    }
-
-    // Leaving search mode (e.g. after selecting an item) clears the query
-    // typed in the search box.
-    if (searchBoxRef.current && !isFromSearch) {
-      searchBoxRef.current.resetInput();
-    }
-
-    // Skip renders that don't change the list, so they don't overwrite the
-    // query typed in the search box with its default.
-    if (
-      isEqual(lastRenderedState.items, items) &&
-      lastRenderedState.isShowingMore === isShowingMore &&
-      lastRenderedState.canToggleShowMore === canToggleShowMore &&
-      lastRenderedState.isFromSearch === isFromSearch
-    ) {
-      return;
-    }
-    lastRenderedState = {
-      items,
-      isShowingMore,
-      canToggleShowMore,
-      isFromSearch,
-    };
-
-    current = { refine, createURL, isFromSearch };
+    } = current;
 
     const shouldDisableSearchBox =
       searchableIsAlwaysActive !== true &&
@@ -416,24 +398,36 @@ const renderer = ({
         searchBoxComponent={
           searchable
             ? () => (
-                <SearchBox
-                  ref={searchBoxRef}
+                <SearchBoxUiComponent
+                  value={searchQuery}
                   placeholder={searchablePlaceholder}
-                  disabled={shouldDisableSearchBox}
-                  cssClasses={cssClasses.searchable!}
-                  templates={renderState.searchBoxTemplateProps!.templates}
-                  onChange={(event: Event) =>
-                    searchForItems((event.target as HTMLInputElement).value)
-                  }
-                  onReset={() => searchForItems('')}
+                  inputRef={searchInputRef}
+                  inputProps={{
+                    ...searchInputHandlers,
+                    disabled: shouldDisableSearchBox,
+                  }}
+                  onReset={() => {
+                    searchQuery = '';
+                    searchForItems('');
+                    renderList();
+                  }}
                   onSubmit={() => {
                     if (searchableSelectOnSubmit !== false && items[0]) {
                       refine(items[0].value);
                     }
                   }}
-                  // This sets the search box to a controlled state because
-                  // we don't rely on the `refine` prop but on `onChange`.
-                  searchAsYouType={false}
+                  {...searchBoxIconComponents}
+                  classNames={{
+                    root: userCssClasses.searchableRoot,
+                    form: userCssClasses.searchableForm,
+                    input: userCssClasses.searchableInput,
+                    submit: userCssClasses.searchableSubmit,
+                    submitIcon: userCssClasses.searchableSubmitIcon,
+                    reset: userCssClasses.searchableReset,
+                    resetIcon: userCssClasses.searchableResetIcon,
+                    loadingIndicator: userCssClasses.searchableLoadingIndicator,
+                    loadingIcon: userCssClasses.searchableLoadingIcon,
+                  }}
                 />
               )
             : undefined
@@ -479,6 +473,48 @@ const renderer = ({
       }
       lastRefinedValue = undefined;
     }
+  }
+
+  return (renderOptions, isFirstRendering) => {
+    if (isFirstRendering) {
+      lastRenderedState = {};
+      renderState.templateProps =
+        prepareTemplateProps<RefinementListOwnTemplates>({
+          defaultTemplates,
+          templates,
+        });
+      return;
+    }
+
+    const { items, isShowingMore, canToggleShowMore, isFromSearch } =
+      renderOptions;
+
+    // Leaving search mode (e.g. after selecting an item) clears the query
+    // typed in the search box.
+    const shouldClearQuery = !isFromSearch && searchQuery !== '';
+    if (shouldClearQuery) {
+      searchQuery = '';
+    }
+
+    // Skip renders that don't change the list.
+    if (
+      !shouldClearQuery &&
+      isEqual(lastRenderedState.items, items) &&
+      lastRenderedState.isShowingMore === isShowingMore &&
+      lastRenderedState.canToggleShowMore === canToggleShowMore &&
+      lastRenderedState.isFromSearch === isFromSearch
+    ) {
+      return;
+    }
+    lastRenderedState = {
+      items,
+      isShowingMore,
+      canToggleShowMore,
+      isFromSearch,
+    };
+
+    current = renderOptions;
+    renderList();
   };
 };
 

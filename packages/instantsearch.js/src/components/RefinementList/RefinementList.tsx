@@ -4,7 +4,6 @@ import { isSpecialClick, isEqual } from 'instantsearch-core/internal';
 import { cx } from 'instantsearch-ui-components';
 import { h, createRef, Component } from 'preact';
 
-import SearchBox from '../SearchBox/SearchBox';
 import Template from '../Template/Template';
 
 import RefinementListItem from './RefinementListItem';
@@ -14,10 +13,7 @@ import type { ComponentCSSClasses, Templates } from '../../types';
 import type { HierarchicalMenuComponentCSSClasses } from '../../widgets/hierarchical-menu/hierarchical-menu';
 import type { RatingMenuComponentCSSClasses } from '../../widgets/rating-menu/rating-menu';
 import type { RefinementListOwnCSSClasses } from '../../widgets/refinement-list/refinement-list';
-import type {
-  SearchBoxComponentCSSClasses,
-  SearchBoxComponentTemplates,
-} from '../SearchBox/SearchBox';
+import type { SearchBoxComponentCSSClasses } from '../../widgets/search-box/search-box';
 import type { HierarchicalMenuItem } from 'instantsearch-core';
 import type { CreateURL } from 'instantsearch-core';
 import type { JSX } from 'preact';
@@ -43,7 +39,7 @@ type RefinementListRequiredCSSClasses = Omit<
 
 export type RefinementListComponentCSSClasses =
   RefinementListRequiredCSSClasses & {
-    searchable?: SearchBoxComponentCSSClasses;
+    searchable?: Partial<SearchBoxComponentCSSClasses>;
   } & Partial<Pick<RatingMenuComponentCSSClasses, 'disabledItem'>> &
     Partial<
       Pick<HierarchicalMenuComponentCSSClasses, 'childList' | 'parentItem'>
@@ -74,14 +70,7 @@ export type RefinementListProps<TTemplates extends Templates> = {
   canToggleShowMore?: boolean;
   className?: string;
   children?: JSX.Element;
-
-  // searchable props are optional, but will definitely be present in a searchable context
   isFromSearch?: boolean;
-  searchIsAlwaysActive?: boolean;
-  searchFacetValues?: (query: string) => void;
-  searchPlaceholder?: string;
-  searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxComponentTemplates>;
-  searchableSelectOnSubmit?: boolean;
 };
 
 const defaultProps = {
@@ -112,7 +101,6 @@ class RefinementList<TTemplates extends Templates> extends Component<
   public static defaultProps = defaultProps;
 
   private listRef = createRef<HTMLUListElement>();
-  private searchBox = createRef<SearchBox>();
 
   private lastRefinedValue: string | undefined = undefined;
 
@@ -269,14 +257,6 @@ class RefinementList<TTemplates extends Templates> extends Component<
     this.refine(facetValueToRefine);
   };
 
-  public componentWillReceiveProps(
-    nextProps: RefinementListPropsWithDefaultProps<TTemplates>
-  ) {
-    if (this.searchBox.current && !nextProps.isFromSearch) {
-      this.searchBox.current.resetInput();
-    }
-  }
-
   /**
    * This sets focus on the last refined input element after a render
    * because Preact does not perform it automatically.
@@ -291,18 +271,6 @@ class RefinementList<TTemplates extends Templates> extends Component<
       }
     }
     this.lastRefinedValue = undefined;
-  }
-
-  private refineFirstValue() {
-    if (this.props.searchableSelectOnSubmit === false) {
-      return;
-    }
-
-    const firstValue = this.props.facetValues && this.props.facetValues[0];
-    if (firstValue) {
-      const actualValue = firstValue.value;
-      this.props.toggleRefinement(actualValue);
-    }
   }
 
   public render() {
@@ -330,48 +298,11 @@ class RefinementList<TTemplates extends Templates> extends Component<
       />
     );
 
-    const shouldDisableSearchBox =
-      this.props.searchIsAlwaysActive !== true &&
-      !(this.props.isFromSearch || !this.props.hasExhaustiveItems);
-
-    const searchBox = this.props.searchFacetValues && (
-      <div className={this.props.cssClasses.searchBox}>
-        <SearchBox
-          ref={this.searchBox}
-          placeholder={this.props.searchPlaceholder}
-          disabled={shouldDisableSearchBox}
-          cssClasses={this.props.cssClasses.searchable!}
-          templates={this.props.searchBoxTemplateProps!.templates}
-          onChange={(event: Event) =>
-            this.props.searchFacetValues!(
-              (event.target as HTMLInputElement).value
-            )
-          }
-          onReset={() => this.props.searchFacetValues!('')}
-          onSubmit={() => this.refineFirstValue()}
-          // This sets the search box to a controlled state because
-          // we don't rely on the `refine` prop but on `onChange`.
-          searchAsYouType={false}
-          ariaLabel="Search for filters"
-        />
-      </div>
-    );
-
     const facetValues = this.props.facetValues &&
       this.props.facetValues.length > 0 && (
         <ul ref={this.listRef} className={this.props.cssClasses.list}>
           {this.props.facetValues.map(this._generateFacetItem, this)}
         </ul>
-      );
-
-    const noResults = this.props.searchFacetValues &&
-      this.props.isFromSearch &&
-      (!this.props.facetValues || this.props.facetValues.length === 0) && (
-        <Template
-          {...this.props.templateProps}
-          templateKey="searchableNoResults"
-          rootProps={{ className: this.props.cssClasses.noResults }}
-        />
       );
 
     const rootClassName = cx(
@@ -384,9 +315,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
     return (
       <div className={rootClassName}>
         {this.props.children}
-        {searchBox}
         {facetValues}
-        {noResults}
         {showMoreButton}
       </div>
     );

@@ -4,19 +4,13 @@ import { connectSearchBox } from 'instantsearch-core';
 import { isChatBusy, openChat } from 'instantsearch-core/internal';
 import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { suitComponent as component } from 'instantsearch-core/internal';
-import { cx } from 'instantsearch-ui-components';
-import { h, render } from 'preact';
+import { createSearchBoxComponent, cx } from 'instantsearch-ui-components';
+import { createRef, Fragment, h, render } from 'preact';
 
-import SearchBox from '../../components/SearchBox/SearchBox';
+import TemplateComponent from '../../components/Template/Template';
 import { getContainerNode } from '../../lib/utils';
 
-import defaultTemplates from './defaultTemplates';
-
-import type {
-  SearchBoxComponentCSSClasses,
-  SearchBoxComponentTemplates,
-} from '../../components/SearchBox/SearchBox';
-import type { Template } from '../../types';
+import type { ComponentCSSClasses, Template } from '../../types';
 import type {
   SearchBoxConnectorParams,
   SearchBoxRenderState,
@@ -24,10 +18,19 @@ import type {
 } from 'instantsearch-core';
 import type { WidgetFactory, RendererOptions } from 'instantsearch-core';
 import type { ChatRenderState } from 'instantsearch-core';
+import type { SearchBoxProps as SearchBoxUiComponentProps } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'search-box' });
 const suit = component('SearchBox');
 const aiModeSuit = component('AiModeButton');
+
+const SearchBoxUiComponent = createSearchBoxComponent({
+  createElement: h,
+  Fragment,
+});
+
+export type SearchBoxComponentCSSClasses =
+  ComponentCSSClasses<SearchBoxCSSClasses>;
 
 export type SearchBoxTemplates = Partial<{
   /**
@@ -169,41 +172,129 @@ export type SearchBoxWidgetParams = {
   aiMode?: boolean;
 };
 
-const renderer =
-  ({
-    containerNode,
-    cssClasses,
-    placeholder,
-    templates,
-    autofocus,
-    searchAsYouType,
-    ignoreCompositionEvents,
-    showReset,
-    showSubmit,
-    showLoadingIndicator,
-    submitTitle,
-    resetTitle,
-    aiMode,
-  }: {
-    containerNode: HTMLElement;
-    cssClasses: SearchBoxComponentCSSClasses;
-    placeholder: string;
-    templates: SearchBoxComponentTemplates;
-    autofocus: boolean;
-    searchAsYouType: boolean;
-    ignoreCompositionEvents: boolean;
-    showReset: boolean;
-    showSubmit: boolean;
-    showLoadingIndicator: boolean;
-    submitTitle: string;
-    resetTitle: string;
-    aiMode?: boolean;
-  }) =>
-  ({
-    refine,
-    query,
-    instantSearchInstance,
-  }: SearchBoxRenderState & RendererOptions<SearchBoxConnectorParams>) => {
+type SearchBoxIconTemplates = Pick<
+  SearchBoxTemplates,
+  'submit' | 'reset' | 'loadingIndicator'
+>;
+
+/**
+ * Maps the search box templates onto the shared component's icon props. A
+ * missing template keeps the shared default icon.
+ */
+export function getSearchBoxIconComponents(
+  templates: SearchBoxIconTemplates,
+  cssClasses: Partial<SearchBoxComponentCSSClasses>
+) {
+  function createIconComponent(templateKey: keyof SearchBoxTemplates) {
+    if (!(templates as SearchBoxTemplates)[templateKey]) {
+      return undefined;
+    }
+
+    return function IconTemplate() {
+      return (
+        <TemplateComponent
+          templateKey={templateKey}
+          rootTagName="fragment"
+          templates={templates}
+          data={{ cssClasses }}
+        />
+      );
+    };
+  }
+
+  return {
+    submitIconComponent: createIconComponent('submit'),
+    resetIconComponent: createIconComponent('reset'),
+    loadingIconComponent: createIconComponent('loadingIndicator'),
+  };
+}
+
+const renderer = ({
+  containerNode,
+  cssClasses,
+  userCssClasses,
+  placeholder,
+  templates,
+  autofocus,
+  searchAsYouType,
+  ignoreCompositionEvents,
+  showReset,
+  showSubmit,
+  showLoadingIndicator,
+  submitTitle,
+  resetTitle,
+  aiMode,
+}: {
+  containerNode: HTMLElement;
+  cssClasses: SearchBoxComponentCSSClasses;
+  userCssClasses: SearchBoxCSSClasses;
+  placeholder: string;
+  templates: SearchBoxTemplates;
+  autofocus: boolean;
+  searchAsYouType: boolean;
+  ignoreCompositionEvents: boolean;
+  showReset: boolean;
+  showSubmit: boolean;
+  showLoadingIndicator: boolean;
+  submitTitle: string;
+  resetTitle: string;
+  aiMode?: boolean;
+}) => {
+  const inputRef = createRef<HTMLInputElement>();
+  // The value typed in the input. It's synced with the connector's query on
+  // render, except while the input is focused so that a render doesn't
+  // replace what the user is typing.
+  // @see https://github.com/algolia/instantsearch/issues/4141
+  let inputValue: string | undefined = undefined;
+  let isFocused = false;
+  let renderOptions: SearchBoxRenderState &
+    RendererOptions<SearchBoxConnectorParams>;
+
+  const iconComponents = getSearchBoxIconComponents(templates, cssClasses);
+  const aiModeComponent = templates.aiMode
+    ? function AiModeTemplate() {
+        return (
+          <TemplateComponent
+            templateKey="aiMode"
+            rootTagName="fragment"
+            templates={templates}
+            data={{ cssClasses }}
+          />
+        );
+      }
+    : undefined;
+
+  const onInput = (event: Event) => {
+    if (ignoreCompositionEvents && (event as KeyboardEvent).isComposing) {
+      return;
+    }
+
+    inputValue = (event.target as HTMLInputElement).value;
+
+    if (searchAsYouType) {
+      renderOptions.refine(inputValue);
+    }
+
+    renderSearchBox();
+  };
+
+  const inputProps = {
+    onInput,
+    // Preact only binds lowercase composition events.
+    // @see https://github.com/preactjs/preact/issues/1978
+    oncompositionend: onInput,
+    onFocus: () => {
+      isFocused = true;
+    },
+    onBlur: () => {
+      isFocused = false;
+    },
+  } as unknown as SearchBoxUiComponentProps['inputProps'];
+
+  function renderSearchBox() {
+    const { refine, instantSearchInstance } = renderOptions;
+    const value = inputValue || '';
+
     const getChatRenderState = () => {
       const indexId = instantSearchInstance.mainIndex.getIndexId();
       return instantSearchInstance.renderState[indexId]?.chat as
@@ -211,45 +302,69 @@ const renderer =
         | undefined;
     };
 
-    const onAiModeClick = aiMode
-      ? (currentQuery: string) => {
-          if (
-            openChat(getChatRenderState(), {
-              message: currentQuery,
-              referer: 'ai-mode',
-            })
-          ) {
-            refine('');
-          }
-        }
-      : undefined;
-
-    const aiModeButtonDisabled = aiMode
-      ? isChatBusy(getChatRenderState())
-      : undefined;
-
     render(
-      <SearchBox
-        query={query}
+      <SearchBoxUiComponent
+        value={value}
         placeholder={placeholder}
-        autofocus={autofocus}
-        refine={refine}
-        searchAsYouType={searchAsYouType}
-        ignoreCompositionEvents={ignoreCompositionEvents}
-        templates={templates}
+        autoFocus={autofocus}
+        isSearchStalled={instantSearchInstance.status === 'stalled'}
+        inputRef={inputRef}
+        inputProps={inputProps}
+        onSubmit={() => {
+          if (!searchAsYouType) {
+            refine(value);
+          }
+        }}
+        onReset={() => {
+          inputValue = '';
+          refine('');
+          renderSearchBox();
+        }}
         showSubmit={showSubmit}
         showReset={showReset}
         showLoadingIndicator={showLoadingIndicator}
-        submitTitle={submitTitle}
-        resetTitle={resetTitle}
-        isSearchStalled={instantSearchInstance.status === 'stalled'}
-        cssClasses={cssClasses}
-        onAiModeClick={onAiModeClick}
-        aiModeButtonDisabled={aiModeButtonDisabled}
+        onAiModeClick={
+          aiMode
+            ? () => {
+                if (
+                  openChat(getChatRenderState(), {
+                    message: value,
+                    referer: 'ai-mode',
+                  })
+                ) {
+                  inputValue = '';
+                  refine('');
+                }
+              }
+            : undefined
+        }
+        aiModeButtonDisabled={
+          aiMode ? isChatBusy(getChatRenderState()) : undefined
+        }
+        {...iconComponents}
+        aiModeComponent={aiModeComponent}
+        classNames={userCssClasses}
+        translations={{
+          submitButtonTitle: submitTitle,
+          resetButtonTitle: resetTitle,
+        }}
       />,
       containerNode
     );
+  }
+
+  return (
+    options: SearchBoxRenderState & RendererOptions<SearchBoxConnectorParams>
+  ) => {
+    renderOptions = options;
+
+    if (inputValue === undefined || !isFocused) {
+      inputValue = options.query;
+    }
+
+    renderSearchBox();
   };
+};
 
 /**
  * The searchbox widget is used to let the user set a text based query.
@@ -320,16 +435,12 @@ const searchBox: SearchBoxWidget = function searchBox(widgetParams) {
       userCssClasses.aiModeLabel
     ),
   };
-  const templates = {
-    ...defaultTemplates,
-    ...userTemplates,
-  };
-
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
+    userCssClasses,
     placeholder,
-    templates,
+    templates: userTemplates,
     autofocus,
     searchAsYouType,
     ignoreCompositionEvents,

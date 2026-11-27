@@ -1,52 +1,11 @@
-<template>
-  <div v-if="state" :class="suit()">
-    <slot
-      :current-refinement="currentRefinement"
-      :is-search-stalled="isSearchStalled"
-      :refine="state.refine"
-    >
-      <search-input
-        @focus="$emit('focus', $event)"
-        @blur="$emit('blur', $event)"
-        @reset="$emit('reset')"
-        :placeholder="placeholder"
-        :autofocus="autofocus"
-        :show-loading-indicator="showLoadingIndicator"
-        :should-show-loading-indicator="isSearchStalled"
-        :ignore-composition-events="ignoreCompositionEvents"
-        :submit-title="submitTitle"
-        :reset-title="resetTitle"
-        :class-names="classNames"
-        v-model="currentRefinement"
-        ref="searchInput"
-      >
-        <template #loading-indicator v-if="isVue3">
-          <slot name="loading-indicator" />
-        </template>
-        <slot v-if="isVue2" name="loading-indicator" slot="loading-indicator" />
-
-        <template #submit-icon v-if="isVue3">
-          <slot name="submit-icon" />
-        </template>
-        <slot v-if="isVue2" name="submit-icon" slot="submit-icon" />
-
-        <template #reset-icon v-if="isVue3">
-          <slot name="reset-icon" />
-        </template>
-        <slot v-if="isVue2" name="reset-icon" slot="reset-icon" />
-      </search-input>
-    </slot>
-  </div>
-</template>
-
 <script>
 import { connectSearchBox } from 'instantsearch-core';
+import { createSearchBoxComponent } from 'instantsearch-ui-components';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
-import { isVue3, isVue2 } from '../util/vue-compat';
-
-import SearchInput from './SearchInput.vue';
+import { getSearchBoxClassNames } from '../util/searchBoxClassNames';
+import { Fragment, getScopedSlot, renderReactCompat } from '../util/vue-compat';
 
 export default {
   name: 'AisSearchBox',
@@ -61,9 +20,6 @@ export default {
     ),
     createSuitMixin({ name: 'SearchBox' }),
   ],
-  components: {
-    SearchInput,
-  },
   props: {
     placeholder: {
       type: String,
@@ -102,12 +58,13 @@ export default {
       default: undefined,
     },
   },
+  created() {
+    this.inputRef = { current: null };
+  },
   data() {
     return {
       localValue: '',
       isSearchStalled: false,
-      isVue2,
-      isVue3,
     };
   },
   computed: {
@@ -139,8 +96,10 @@ export default {
 
         // we return the local value if the input is focused to avoid
         // concurrent updates when typing
-        const { searchInput } = this.$refs;
-        if (searchInput && searchInput.isFocused()) {
+        if (
+          this.inputRef.current &&
+          document.activeElement === this.inputRef.current
+        ) {
           return this.localValue;
         }
 
@@ -156,6 +115,13 @@ export default {
       },
     },
   },
+  methods: {
+    onInput(event) {
+      if (!(this.ignoreCompositionEvents && event.isComposing)) {
+        this.currentRefinement = event.target.value;
+      }
+    },
+  },
   watch: {
     // `status` is snapshotted when the connector renders, like the rest of
     // `state`. Reading it in the template would subscribe to the (reactive)
@@ -167,5 +133,58 @@ export default {
       },
     },
   },
+  render: renderReactCompat(function (h) {
+    if (!this.state) {
+      return null;
+    }
+
+    const defaultSlot = getScopedSlot(this, 'default');
+    if (defaultSlot) {
+      return h('div', { className: this.suit() }, [
+        defaultSlot({
+          currentRefinement: this.currentRefinement,
+          isSearchStalled: this.isSearchStalled,
+          refine: this.state.refine,
+        }),
+      ]);
+    }
+
+    const submitIconSlot = getScopedSlot(this, 'submit-icon');
+    const resetIconSlot = getScopedSlot(this, 'reset-icon');
+    const loadingIndicatorSlot = getScopedSlot(this, 'loading-indicator');
+
+    const SearchBox = createSearchBoxComponent({
+      createElement: h,
+      Fragment,
+    });
+
+    return h(SearchBox, {
+      value: this.currentRefinement,
+      placeholder: this.placeholder,
+      autoFocus: this.autofocus,
+      isSearchStalled: this.isSearchStalled,
+      showLoadingIndicator: this.showLoadingIndicator,
+      inputRef: this.inputRef,
+      inputProps: {
+        onInput: this.onInput,
+        onCompositionEnd: this.onInput,
+        onFocus: (event) => this.$emit('focus', event),
+        onBlur: (event) => this.$emit('blur', event),
+      },
+      onReset: () => {
+        this.currentRefinement = '';
+        this.$emit('reset');
+      },
+      submitIconComponent: submitIconSlot && (() => submitIconSlot()),
+      resetIconComponent: resetIconSlot && (() => resetIconSlot()),
+      loadingIconComponent:
+        loadingIndicatorSlot && (() => loadingIndicatorSlot()),
+      classNames: getSearchBoxClassNames(this.classNames),
+      translations: {
+        submitButtonTitle: this.submitTitle,
+        resetButtonTitle: this.resetTitle,
+      },
+    });
+  }),
 };
 </script>

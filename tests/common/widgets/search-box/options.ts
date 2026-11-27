@@ -24,10 +24,6 @@ function normalizeSnapshot(html: string) {
       // Vue duplicates these attributes names in the attribute value
       .replace(/novalidate="novalidate"/g, 'novalidate=""')
       .replace(/hidden="hidden"/g, 'hidden=""')
-      // Vue adds whitespace between some tags
-      .replace(/>\s+</g, '><')
-      // In CI Vue3 keeps comments
-      .replace(/<!-- .*? -->/g, '')
   );
 }
 
