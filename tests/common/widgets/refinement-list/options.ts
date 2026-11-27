@@ -16,34 +16,16 @@ import type { RefinementListWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 
 function normalizeSnapshot(html: string) {
-  // Each flavor has its own way to render the widget by default.
-  // @MAJOR: Remove this once all flavors are aligned.
+  // Every flavor renders the shared markup; what's left is how Vue 2
+  // serializes the search box DOM, not a markup difference.
   return (
     commonNormalizeSnapshot(html)
-      .replace(
-        /<\/mark>(\w*?)<\/span>/,
-        '</mark><span class="ais-Highlight-nonHighlighted">$1</span></span>'
-      )
-      .replace('No results.', 'No results')
-      .replace('aria-label="Search"', 'aria-label="Search for filters"')
+      // Vue 2 reflects the input's `value` (bound through `domProps`) as an
+      // attribute; the other flavors only set the property.
       .replace('value="nothing"', '')
+      // Vue 2 serializes boolean attributes with their name as value.
       .replace('novalidate="novalidate"', 'novalidate=""')
       .replace('hidden="hidden"', 'hidden=""')
-      .replace('title="Search"', 'title="Submit the search query"')
-      .replace('title="Clear"', 'title="Clear the search query"')
-      // The input's `aria-label="Search"` is already normalized above, so these
-      // target the submit/reset buttons, whose titles differ across flavors.
-      .replace('aria-label="Search"', 'aria-label="Submit the search query"')
-      .replace('aria-label="Clear"', 'aria-label="Clear the search query"')
-      .replace(/<div>(.*?)<\/div>/gs, '$1')
-      .replace(
-        /(<div class="ais-RefinementList-searchBox">)(<form.+?>.+?<\/form>)(<\/div>)/s,
-        '$1<div class="ais-SearchBox">$2</div>$3'
-      )
-      .replace(
-        /<span class="ais-RefinementList-labelText"><span class="ais-Highlight">([\w™]+)<\/span><\/span>/gs,
-        '<span class="ais-RefinementList-labelText">$1</span>'
-      )
   );
 }
 
@@ -584,6 +566,34 @@ export function createOptionsTests(
       ]);
     });
 
+    test('formats the counts with the locale', async () => {
+      const searchClient = createMockedSearchClient(
+        {},
+        {
+          Samsung: 12345,
+          Apple: 42,
+        }
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: { attribute: 'brand' },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(
+        Array.from(document.querySelectorAll('.ais-RefinementList-count')).map(
+          (item) => item.textContent
+        )
+      ).toEqual([(12345).toLocaleString(), '42']);
+    });
+
     test('keeps focus on toggled input between re-renders', async () => {
       const searchClient = createMockedSearchClient(
         {},
@@ -1094,7 +1104,7 @@ export function createOptionsTests(
 
         expect(
           document.querySelector('.ais-RefinementList-noResults')
-        ).toHaveTextContent('No results');
+        ).toHaveTextContent('No results.');
 
         expect(document.querySelector('.ais-RefinementList-list')).toBeNull();
         expect(
@@ -1118,7 +1128,7 @@ export function createOptionsTests(
                   role="search"
                 >
                   <input
-                    aria-label="Search for filters"
+                    aria-label="Search"
                     autocapitalize="off"
                     autocomplete="off"
                     autocorrect="off"
@@ -1213,7 +1223,7 @@ export function createOptionsTests(
             <div
               class="ais-RefinementList-noResults"
             >
-              No results
+              No results.
             </div>
           </div>
         `

@@ -13,6 +13,7 @@ import { fireEvent, within } from '@testing-library/dom';
 import { h } from 'preact';
 
 import { instantsearch } from '../../../index.es';
+import configure from '../../configure/configure';
 import refinementList from '../refinement-list';
 
 beforeEach(() => {
@@ -129,7 +130,7 @@ describe('refinementList', () => {
                   role="search"
                 >
                   <input
-                    aria-label="Search for filters"
+                    aria-label="Search"
                     autocapitalize="off"
                     autocomplete="off"
                     autocorrect="off"
@@ -228,78 +229,71 @@ describe('refinementList', () => {
               <li
                 class="ais-RefinementList-item ITEM ais-RefinementList-item--selected SELECTED-ITEM"
               >
-                <div>
-                  <label
-                    class="ais-RefinementList-label LABEL"
+                <label
+                  class="ais-RefinementList-label LABEL"
+                >
+                  <input
+                    class="ais-RefinementList-checkbox CHECKBOX"
+                    type="checkbox"
+                    value="Apple"
+                  />
+                  <span
+                    class="ais-RefinementList-labelText LABEL-TEXT"
                   >
-                    <input
-                      checked=""
-                      class="ais-RefinementList-checkbox CHECKBOX"
-                      type="checkbox"
-                      value="Apple"
-                    />
-                    <span
-                      class="ais-RefinementList-labelText LABEL-TEXT"
-                    >
-                      Apple
-                    </span>
-                    <span
-                      class="ais-RefinementList-count COUNT"
-                    >
-                      746
-                    </span>
-                  </label>
-                </div>
+                    Apple
+                  </span>
+                  <span
+                    class="ais-RefinementList-count COUNT"
+                  >
+                    746
+                  </span>
+                </label>
               </li>
               <li
                 class="ais-RefinementList-item ITEM"
               >
-                <div>
-                  <label
-                    class="ais-RefinementList-label LABEL"
+                <label
+                  class="ais-RefinementList-label LABEL"
+                >
+                  <input
+                    class="ais-RefinementList-checkbox CHECKBOX"
+                    type="checkbox"
+                    value="Samsung"
+                  />
+                  <span
+                    class="ais-RefinementList-labelText LABEL-TEXT"
                   >
-                    <input
-                      class="ais-RefinementList-checkbox CHECKBOX"
-                      type="checkbox"
-                      value="Samsung"
-                    />
-                    <span
-                      class="ais-RefinementList-labelText LABEL-TEXT"
-                    >
-                      Samsung
-                    </span>
-                    <span
-                      class="ais-RefinementList-count COUNT"
-                    >
-                      633
-                    </span>
-                  </label>
-                </div>
+                    Samsung
+                  </span>
+                  <span
+                    class="ais-RefinementList-count COUNT"
+                  >
+                    633
+                  </span>
+                </label>
               </li>
               <li
                 class="ais-RefinementList-item ITEM"
               >
-                <div>
-                  <label
-                    class="ais-RefinementList-label LABEL"
+                <label
+                  class="ais-RefinementList-label LABEL"
+                >
+                  <input
+                    class="ais-RefinementList-checkbox CHECKBOX"
+                    type="checkbox"
+                    value="Metra"
+                  />
+                  <span
+                    class="ais-RefinementList-labelText LABEL-TEXT"
                   >
-                    <input
-                      class="ais-RefinementList-checkbox CHECKBOX"
-                      type="checkbox"
-                      value="Metra"
-                    />
-                    <span
-                      class="ais-RefinementList-labelText LABEL-TEXT"
-                    >
-                      Metra
-                    </span>
-                    <span
-                      class="ais-RefinementList-count COUNT"
-                    >
-                      591
-                    </span>
-                  </label>
-                </div>
+                    Metra
+                  </span>
+                  <span
+                    class="ais-RefinementList-count COUNT"
+                  >
+                    591
+                  </span>
+                </label>
               </li>
             </ul>
             <button
@@ -374,7 +368,7 @@ describe('refinementList', () => {
                   role="search"
                 >
                   <input
-                    aria-label="Search for filters"
+                    aria-label="Search"
                     autocapitalize="off"
                     autocomplete="off"
                     autocorrect="off"
@@ -473,53 +467,48 @@ describe('refinementList', () => {
               <li
                 class="ais-RefinementList-item ais-RefinementList-item--selected"
               >
-                <div>
-                  <label
-                    class="ais-RefinementList-label"
+                <label
+                  class="ais-RefinementList-label"
+                >
+                  <input
+                    class="ais-RefinementList-checkbox"
+                    type="checkbox"
+                    value="Apple"
+                  />
+                  <span
+                    class="ais-RefinementList-labelText"
                   >
-                    <input
-                      checked=""
-                      class="ais-RefinementList-checkbox"
-                      type="checkbox"
-                      value="Apple"
-                    />
-                    <span
-                      class="ais-RefinementList-labelText"
-                    >
-                      Apple
-                    </span>
-                    <span
-                      class="ais-RefinementList-count"
-                    >
-                      746
-                    </span>
-                  </label>
-                </div>
+                    Apple
+                  </span>
+                  <span
+                    class="ais-RefinementList-count"
+                  >
+                    746
+                  </span>
+                </label>
               </li>
               <li
                 class="ais-RefinementList-item"
               >
-                <div>
-                  <label
-                    class="ais-RefinementList-label"
+                <label
+                  class="ais-RefinementList-label"
+                >
+                  <input
+                    class="ais-RefinementList-checkbox"
+                    type="checkbox"
+                    value="Samsung"
+                  />
+                  <span
+                    class="ais-RefinementList-labelText"
                   >
-                    <input
-                      class="ais-RefinementList-checkbox"
-                      type="checkbox"
-                      value="Samsung"
-                    />
-                    <span
-                      class="ais-RefinementList-labelText"
-                    >
-                      Samsung
-                    </span>
-                    <span
-                      class="ais-RefinementList-count"
-                    >
-                      633
-                    </span>
-                  </label>
-                </div>
+                    Samsung
+                  </span>
+                  <span
+                    class="ais-RefinementList-count"
+                  >
+                    633
+                  </span>
+                </label>
               </li>
             </ul>
             <button
@@ -564,7 +553,7 @@ describe('refinementList', () => {
                   role="search"
                 >
                   <input
-                    aria-label="Search for filters"
+                    aria-label="Search"
                     autocapitalize="off"
                     autocomplete="off"
                     autocorrect="off"
@@ -659,7 +648,7 @@ describe('refinementList', () => {
             <div
               class="ais-RefinementList-noResults"
             >
-              No results
+              No results.
             </div>
           </div>
         </div>
@@ -741,7 +730,7 @@ describe('refinementList', () => {
                   role="search"
                 >
                   <input
-                    aria-label="Search for filters"
+                    aria-label="Search"
                     autocapitalize="off"
                     autocomplete="off"
                     autocorrect="off"
@@ -789,36 +778,32 @@ describe('refinementList', () => {
               <li
                 class="ais-RefinementList-item ais-RefinementList-item--selected"
               >
-                <div>
-                  <a
-                    href="#"
-                    style="font-weight: bold;"
-                  >
-                    <span>
-                      Apple
-                       (
-                      746
-                      )
-                    </span>
-                  </a>
-                </div>
+                <a
+                  href="#"
+                  style="font-weight: bold;"
+                >
+                  <span>
+                    Apple
+                     (
+                    746
+                    )
+                  </span>
+                </a>
               </li>
               <li
                 class="ais-RefinementList-item"
               >
-                <div>
-                  <a
-                    href="#"
-                    style="font-weight: normal;"
-                  >
-                    <span>
-                      Samsung
-                       (
-                      633
-                      )
-                    </span>
-                  </a>
-                </div>
+                <a
+                  href="#"
+                  style="font-weight: normal;"
+                >
+                  <span>
+                    Samsung
+                     (
+                    633
+                    )
+                  </span>
+                </a>
               </li>
             </ul>
             <button
@@ -865,7 +850,7 @@ describe('refinementList', () => {
                   role="search"
                 >
                   <input
-                    aria-label="Search for filters"
+                    aria-label="Search"
                     autocapitalize="off"
                     autocomplete="off"
                     autocorrect="off"
@@ -995,7 +980,7 @@ describe('refinementList', () => {
                   role="search"
                 >
                   <input
-                    aria-label="Search for filters"
+                    aria-label="Search"
                     autocapitalize="off"
                     autocomplete="off"
                     autocorrect="off"
@@ -1043,36 +1028,32 @@ describe('refinementList', () => {
               <li
                 class="ais-RefinementList-item ais-RefinementList-item--selected"
               >
-                <div>
-                  <a
-                    href="#"
-                    style="font-weight: bold;"
-                  >
-                    <span>
-                      Apple
-                       (
-                      746
-                      )
-                    </span>
-                  </a>
-                </div>
+                <a
+                  href="#"
+                  style="font-weight: bold;"
+                >
+                  <span>
+                    Apple
+                     (
+                    746
+                    )
+                  </span>
+                </a>
               </li>
               <li
                 class="ais-RefinementList-item"
               >
-                <div>
-                  <a
-                    href="#"
-                    style="font-weight: normal;"
-                  >
-                    <span>
-                      Samsung
-                       (
-                      633
-                      )
-                    </span>
-                  </a>
-                </div>
+                <a
+                  href="#"
+                  style="font-weight: normal;"
+                >
+                  <span>
+                    Samsung
+                     (
+                    633
+                    )
+                  </span>
+                </a>
               </li>
             </ul>
             <button
@@ -1119,7 +1100,7 @@ describe('refinementList', () => {
                   role="search"
                 >
                   <input
-                    aria-label="Search for filters"
+                    aria-label="Search"
                     autocapitalize="off"
                     autocomplete="off"
                     autocorrect="off"
@@ -1170,6 +1151,159 @@ describe('refinementList', () => {
           </div>
         </div>
       `);
+    });
+  });
+
+  describe('item clicks', () => {
+    async function setupWidget(
+      widgetParams: Partial<Parameters<typeof refinementList>[0]> = {}
+    ) {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+      const searchClient = createMockedSearchClient();
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+
+      search.addWidgets([
+        refinementList({ container, attribute: 'brand', ...widgetParams }),
+      ]);
+      search.start();
+      await wait(0);
+
+      return { container, search };
+    }
+
+    function getRefinements(search: ReturnType<typeof instantsearch>) {
+      return search.getUiState().indexName.refinementList?.brand ?? [];
+    }
+
+    test('refines once when clicking the label of the default item', async () => {
+      const { container, search } = await setupWidget();
+
+      fireEvent.click(
+        container.querySelectorAll('.ais-RefinementList-labelText')[0]
+      );
+      await wait(0);
+
+      expect(getRefinements(search)).toEqual(['Apple']);
+    });
+
+    test('ignores special clicks', async () => {
+      const { container, search } = await setupWidget({
+        templates: {
+          item({ url, label }, { html }) {
+            return html`<a href="${url}">${label}</a>`;
+          },
+        },
+      });
+
+      fireEvent.click(container.querySelectorAll('a')[0], { metaKey: true });
+      await wait(0);
+
+      expect(getRefinements(search)).toEqual([]);
+    });
+
+    test('refines from a link in a custom item without navigating', async () => {
+      const { container, search } = await setupWidget({
+        templates: {
+          item({ url, label }, { html }) {
+            return html`<a href="${url}">${label}</a>`;
+          },
+        },
+      });
+
+      const link = container.querySelectorAll('a')[0];
+      const notPrevented = fireEvent.click(link);
+      await wait(0);
+
+      expect(notPrevented).toBe(false);
+      expect(getRefinements(search)).toEqual(['Apple']);
+      // custom items render without a wrapper element
+      expect(link.parentElement).toHaveClass('ais-RefinementList-item');
+    });
+
+    test('clears the search box query after leaving search mode', async () => {
+      const { container } = await setupWidget({ searchable: true });
+      const input = container.querySelector(
+        '.ais-SearchBox-input'
+      ) as HTMLInputElement;
+
+      fireEvent.input(input, { target: { value: 'app' } });
+      await wait(0);
+      expect(input.value).toBe('app');
+
+      fireEvent.click(container.querySelectorAll('input[type="checkbox"]')[0]);
+      await wait(0);
+
+      expect(input.value).toBe('');
+    });
+  });
+
+  describe('rendering', () => {
+    test('renders empty items for an empty `item` template', async () => {
+      const container = document.createElement('div');
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createMockedSearchClient(),
+      });
+
+      search.addWidgets([
+        refinementList({
+          container,
+          attribute: 'brand',
+          templates: { item: '' },
+        }),
+      ]);
+      search.start();
+      await wait(0);
+
+      const items = container.querySelectorAll('.ais-RefinementList-item');
+      expect(items).toHaveLength(3);
+      items.forEach((item) => expect(item).toBeEmptyDOMElement());
+    });
+
+    test('enables the search box when the items stop being exhaustive', async () => {
+      const container = document.createElement('div');
+      let brands: Record<string, number> = { Apple: 746, Samsung: 633 };
+      const searchClient = createSearchClient({
+        search: jest.fn((requests) =>
+          Promise.resolve(
+            createMultiSearchResponse(
+              ...requests.map(() =>
+                createSingleSearchResponse({ facets: { brand: brands } })
+              )
+            )
+          )
+        ),
+      });
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+
+      // Another widget asks for more values than the list shows.
+      search.addWidgets([
+        configure({ maxValuesPerFacet: 3 }),
+        refinementList({
+          container,
+          attribute: 'brand',
+          limit: 2,
+          searchable: true,
+          searchableIsAlwaysActive: false,
+        }),
+      ]);
+      search.start();
+      await wait(0);
+
+      const input = () =>
+        container.querySelector('.ais-SearchBox-input') as HTMLInputElement;
+      expect(input()).toBeDisabled();
+
+      // Same visible items, but there are now more values than the limit.
+      brands = { Apple: 746, Samsung: 633, Metra: 591 };
+      search.refresh();
+      await wait(0);
+
+      expect(
+        container.querySelectorAll('.ais-RefinementList-item')
+      ).toHaveLength(2);
+      expect(input()).not.toBeDisabled();
     });
   });
 
