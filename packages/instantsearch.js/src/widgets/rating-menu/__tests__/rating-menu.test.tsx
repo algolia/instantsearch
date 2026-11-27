@@ -86,6 +86,44 @@ describe('ratingMenu', () => {
     );
   });
 
+  test('clears a selected rating without results', async () => {
+    const container = document.createElement('div');
+    const searchClient = createSearchClient({
+      search: jest.fn((requests) =>
+        Promise.resolve(
+          createMultiSearchResponse(
+            ...requests.map((request) =>
+              createSingleSearchResponse({
+                index: request.indexName,
+                nbHits: 0,
+                facets: { price: {} },
+              })
+            )
+          )
+        )
+      ),
+    });
+    const search = instantsearch({
+      indexName: 'indexName',
+      searchClient,
+      initialUiState: { indexName: { ratingMenu: { price: 4 } } },
+    });
+
+    search.addWidgets([ratingMenu({ container, attribute: 'price' })]);
+    search.start();
+    await wait(0);
+
+    const selectedItem = container.querySelector(
+      '.ais-RatingMenu-item--selected'
+    )!;
+    expect(selectedItem).not.toHaveClass('ais-RatingMenu-item--disabled');
+
+    userEvent.click(selectedItem.querySelector('.ais-RatingMenu-link')!);
+    await wait(0);
+
+    expect(search.getUiState().indexName.ratingMenu).toBeUndefined();
+  });
+
   describe('options', () => {
     test('throws without a `container`', () => {
       expect(() => {

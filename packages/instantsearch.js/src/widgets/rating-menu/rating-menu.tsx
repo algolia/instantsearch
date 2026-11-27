@@ -152,16 +152,17 @@ const renderer = ({
     <li
       className={className}
       onClick={(originalEvent) => {
-        // Items without results are disabled, like in the other flavors.
+        // Items without results are disabled, like in the other flavors,
+        // unless they're selected so that they can be cleared.
         if (
           shouldRefineFromItemClick(originalEvent, item.isRefined) &&
-          item.count > 0
+          (item.count > 0 || item.isRefined)
         ) {
           current.refine(item.value);
         }
       }}
     >
-      {templates.item ? (
+      {templates.item !== undefined ? (
         <TemplateComponent
           {...renderState.templateProps!}
           templateKey="item"

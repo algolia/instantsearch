@@ -65,7 +65,7 @@ const renderer = ({
         }
       }}
     >
-      {templates.item ? (
+      {templates.item !== undefined ? (
         <TemplateComponent
           {...renderState.templateProps!}
           templateKey="item"
