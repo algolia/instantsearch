@@ -183,7 +183,8 @@ export function createRatingMenuComponent({ createElement }: Renderer) {
         </svg>
         <ul className={cx('ais-RatingMenu-list', classNames.list)}>
           {items.map((item) => {
-            const isDisabled = !item.count;
+            // A selected item stays enabled so that it can be cleared.
+            const isDisabled = !item.count && !item.isRefined;
             const content = [
               ...item.stars.map((isFull, index) => (
                 <svg

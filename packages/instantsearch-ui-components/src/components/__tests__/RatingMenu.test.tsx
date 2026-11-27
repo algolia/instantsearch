@@ -197,6 +197,27 @@ describe('RatingMenu', () => {
     expect(props.onRefine).not.toHaveBeenCalled();
   });
 
+  test('keeps a selected item without results enabled', () => {
+    const props = createProps({
+      items: [
+        {
+          value: '4',
+          label: '4',
+          count: 0,
+          isRefined: true,
+          stars: [true, true, true, true, false],
+        },
+      ],
+    });
+    const { container } = render(<RatingMenu {...props} />);
+    const item = container.querySelector('.ais-RatingMenu-item')!;
+
+    expect(item).not.toHaveClass('ais-RatingMenu-item--disabled');
+
+    fireEvent.click(item.querySelector('a.ais-RatingMenu-link')!);
+    expect(props.onRefine).toHaveBeenCalledWith(props.items[0]);
+  });
+
   test('renders custom texts', () => {
     const { container } = render(
       <RatingMenu

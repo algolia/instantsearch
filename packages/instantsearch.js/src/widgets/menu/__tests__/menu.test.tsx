@@ -391,6 +391,24 @@ describe('menu', () => {
       `);
     });
 
+    test('renders empty items for an empty `item` template', async () => {
+      const container = document.createElement('div');
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createMockedSearchClient(),
+      });
+
+      search.addWidgets([
+        menu({ container, attribute: 'brand', templates: { item: '' } }),
+      ]);
+      search.start();
+      await wait(0);
+
+      const items = container.querySelectorAll('.ais-Menu-item');
+      expect(items.length).toBeGreaterThan(0);
+      items.forEach((item) => expect(item).toBeEmptyDOMElement());
+    });
+
     function createMockedSearchClient() {
       return createSearchClient({
         search: jest.fn((requests) => {
