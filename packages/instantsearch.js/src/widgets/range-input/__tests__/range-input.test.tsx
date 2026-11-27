@@ -45,6 +45,7 @@ describe('rangeInput', () => {
           attribute: 'price',
           cssClasses: {
             root: 'ROOT',
+            noRefinement: 'NO_REFINEMENT',
             form: 'FORM',
             label: 'LABEL',
             input: 'INPUT',
@@ -61,6 +62,11 @@ describe('rangeInput', () => {
       await wait(0);
 
       expect(container.firstChild).toHaveClass('ROOT');
+      // The default search client has no facet stats, so it can't refine
+      expect(container.firstChild).toHaveClass(
+        'ais-RangeInput--noRefinement',
+        'NO_REFINEMENT'
+      );
       expect(container.querySelector('.ais-RangeInput-form')).toHaveClass(
         'FORM'
       );
@@ -85,6 +91,29 @@ describe('rangeInput', () => {
     });
   });
 
+  describe('disabled state', () => {
+    test('disables the form when the range cannot be refined', async () => {
+      const container = document.createElement('div');
+      const searchClient = createSearchClient();
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+
+      search.addWidgets([rangeInput({ container, attribute: 'price' })]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container.querySelector('.ais-RangeInput')).toHaveClass(
+        'ais-RangeInput--noRefinement'
+      );
+      container
+        .querySelectorAll('.ais-RangeInput-input')
+        .forEach((input) => expect(input).toBeDisabled());
+      expect(container.querySelector('.ais-RangeInput-submit')).toBeDisabled();
+    });
+  });
+
   describe('templates', () => {
     test('renders default templates', async () => {
       const container = document.createElement('div');
@@ -101,7 +130,7 @@ describe('rangeInput', () => {
       expect(container).toMatchInlineSnapshot(`
         <div>
           <div
-            class="ais-RangeInput ais-RangeInput--noRefinement"
+            class="ais-RangeInput"
           >
             <form
               class="ais-RangeInput-form"
@@ -175,7 +204,7 @@ describe('rangeInput', () => {
       expect(container).toMatchInlineSnapshot(`
         <div>
           <div
-            class="ais-RangeInput ais-RangeInput--noRefinement"
+            class="ais-RangeInput"
           >
             <form
               class="ais-RangeInput-form"
@@ -253,7 +282,7 @@ describe('rangeInput', () => {
       expect(container).toMatchInlineSnapshot(`
         <div>
           <div
-            class="ais-RangeInput ais-RangeInput--noRefinement"
+            class="ais-RangeInput"
           >
             <form
               class="ais-RangeInput-form"

@@ -1,67 +1,15 @@
-<template>
-  <div
-    v-if="state"
-    :class="[suit(), !state.canRefine && suit('', 'noRefinement')]"
-  >
-    <slot
-      :current-refinement="values"
-      :refine="refine"
-      :can-refine="state.canRefine"
-      :range="state.range"
-      :send-event="state.sendEvent"
-    >
-      <form
-        :class="suit('form')"
-        @submit.prevent="
-          refine({
-            min: pick(minInput, values.min),
-            max: pick(maxInput, values.max),
-          })
-        "
-      >
-        <label :class="suit('label')">
-          <slot name="minLabel" />
-          <input
-            type="number"
-            :class="[suit('input'), suit('input', 'min')]"
-            :step="step"
-            :min="state.range.min"
-            :max="state.range.max"
-            :placeholder="state.range.min"
-            :value="values.min"
-            @change="minInput = $event.currentTarget.value"
-          />
-        </label>
-        <span :class="suit('separator')">
-          <slot name="separator">to</slot>
-        </span>
-        <label :class="suit('label')">
-          <slot name="maxLabel" />
-          <input
-            :class="[suit('input'), suit('input', 'max')]"
-            type="number"
-            :step="step"
-            :min="state.range.min"
-            :max="state.range.max"
-            :placeholder="state.range.max"
-            :value="values.max"
-            @change="maxInput = $event.currentTarget.value"
-          />
-        </label>
-        <button :class="suit('submit')" type="submit">
-          <slot name="submitLabel"> Go </slot>
-        </button>
-      </form>
-    </slot>
-  </div>
-</template>
-
 <script>
 import { connectRange } from 'instantsearch-core';
+import { createRangeInputComponent } from 'instantsearch-ui-components';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
+import { Fragment, getScopedSlot, renderReactCompat } from '../util/vue-compat';
+
+function toInputValue(value) {
+  return value === undefined || value === null ? '' : String(value);
+}
 
 export default {
   name: 'AisRangeInput',
@@ -104,9 +52,13 @@ export default {
       maxInput: undefined,
     };
   },
-  updated() {
-    this.minInput = undefined;
-    this.maxInput = undefined;
+  watch: {
+    // The typed values reset to the current refinement on every render
+    // coming from the connector.
+    state() {
+      this.minInput = undefined;
+      this.maxInput = undefined;
+    },
   },
   computed: {
     widgetParams() {
@@ -136,5 +88,73 @@ export default {
       this.state.refine({ min, max });
     },
   },
+  render: renderReactCompat(function (h) {
+    if (!this.state) {
+      return null;
+    }
+
+    const defaultSlot = getScopedSlot(this, 'default');
+    if (defaultSlot) {
+      return h(
+        'div',
+        {
+          className: [
+            this.suit(),
+            !this.state.canRefine && this.suit('', 'noRefinement'),
+          ],
+        },
+        [
+          defaultSlot({
+            currentRefinement: this.values,
+            refine: this.refine,
+            canRefine: this.state.canRefine,
+            range: this.state.range,
+            sendEvent: this.state.sendEvent,
+          }),
+        ]
+      );
+    }
+
+    const RangeInput = createRangeInputComponent({
+      createElement: h,
+      Fragment,
+    });
+
+    return h(RangeInput, {
+      classNames: this.classNames && {
+        root: this.classNames['ais-RangeInput'],
+        noRefinementRoot: this.classNames['ais-RangeInput--noRefinement'],
+        form: this.classNames['ais-RangeInput-form'],
+        label: this.classNames['ais-RangeInput-label'],
+        input: this.classNames['ais-RangeInput-input'],
+        inputMin: this.classNames['ais-RangeInput-input--min'],
+        inputMax: this.classNames['ais-RangeInput-input--max'],
+        separator: this.classNames['ais-RangeInput-separator'],
+        submit: this.classNames['ais-RangeInput-submit'],
+      },
+      min: this.state.range.min,
+      max: this.state.range.max,
+      step: this.step,
+      canRefine: this.state.canRefine,
+      fromValue: toInputValue(this.pick(this.minInput, this.values.min)),
+      toValue: toInputValue(this.pick(this.maxInput, this.values.max)),
+      onFromChange: (value) => {
+        this.minInput = value;
+      },
+      onToChange: (value) => {
+        this.maxInput = value;
+      },
+      onSubmit: () => {
+        this.refine({
+          min: this.pick(this.minInput, this.values.min),
+          max: this.pick(this.maxInput, this.values.max),
+        });
+      },
+      minLabelComponent: getScopedSlot(this, 'minLabel'),
+      maxLabelComponent: getScopedSlot(this, 'maxLabel'),
+      separatorTextComponent: getScopedSlot(this, 'separator'),
+      submitTextComponent: getScopedSlot(this, 'submitLabel'),
+    });
+  }),
 };
 </script>

@@ -13,11 +13,8 @@ import type { RangeInputWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 
 function normalizeSnapshot(html: string) {
-  // React InstantSearch adds a noRefinement modifier on the list.
-  // @MAJOR: Remove this once React InstantSearch aligns with spec.
-  return commonNormalizeSnapshot(html)
-    .replace(/ ais-RangeInput--noRefinement/g, '')
-    .replace(/value=""/g, '');
+  // React reflects the controlled inputs' empty value as an attribute.
+  return commonNormalizeSnapshot(html).replace(/value=""/g, '');
 }
 
 export function createOptionsTests(
@@ -90,6 +87,45 @@ export function createOptionsTests(
         </div>
       `
       );
+    });
+
+    test('disables the form when the attribute cannot be refined', async () => {
+      const searchClient = createSearchClient({
+        search: jest.fn((requests) =>
+          Promise.resolve(
+            createMultiSearchResponse(
+              ...requests.map(() =>
+                createSingleSearchResponse({
+                  facets: { price: { 10: 1 } },
+                  facets_stats: {
+                    price: { min: 10, max: 10, avg: 10, sum: 10 },
+                  },
+                })
+              )
+            )
+          )
+        ),
+      });
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: { attribute: 'price' },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(document.querySelector('.ais-RangeInput')).toHaveClass(
+        'ais-RangeInput--noRefinement'
+      );
+      document
+        .querySelectorAll('.ais-RangeInput-input')
+        .forEach((input) => expect(input).toBeDisabled());
+      expect(document.querySelector('.ais-RangeInput-submit')).toBeDisabled();
     });
 
     test('renders with initial refinements', async () => {

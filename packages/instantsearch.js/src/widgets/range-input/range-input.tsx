@@ -2,18 +2,12 @@
 
 import { connectRange } from 'instantsearch-core';
 import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
-import { suitComponent as component } from 'instantsearch-core/internal';
-import { cx } from 'instantsearch-ui-components';
-import { h, render } from 'preact';
+import { createRangeInputComponent } from 'instantsearch-ui-components';
+import { Fragment, h, render } from 'preact';
 
-import RangeInput from '../../components/RangeInput/RangeInput';
-import { prepareTemplateProps } from '../../lib/templating';
+import { prepareTemplateProps, renderTemplate } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 
-import type {
-  RangeInputComponentCSSClasses,
-  RangeInputComponentTemplates,
-} from '../../components/RangeInput/RangeInput';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { Template } from '../../types';
 import type {
@@ -22,11 +16,15 @@ import type {
   RangeWidgetDescription,
 } from 'instantsearch-core';
 import type { Renderer, WidgetFactory } from 'instantsearch-core';
+import type { RangeInputClassNames } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'range-input' });
-const suit = component('RangeInput');
+const RangeInput = createRangeInputComponent({
+  createElement: h,
+  Fragment,
+});
 
-const defaultTemplates: RangeInputComponentTemplates = {
+const defaultTemplates: Required<RangeInputTemplates> = {
   separatorText() {
     return 'to';
   },
@@ -54,7 +52,7 @@ export type RangeInputCSSClasses = Partial<{
    */
   root: string | string[];
   /**
-   * CSS class to add to the root element when there's no refinements.
+   * CSS class to add to the root element when the range can't be refined.
    */
   noRefinement: string | string[];
   /**
@@ -76,11 +74,11 @@ export type RangeInputCSSClasses = Partial<{
   /**
    * CSS class to add to the max input element.
    */
-  separator: string | string[];
+  inputMax: string | string[];
   /**
    * CSS class to add to the separator of the form.
    */
-  inputMax: string | string[];
+  separator: string | string[];
   /**
    * CSS class to add to the submit button of the form.
    */
@@ -119,46 +117,92 @@ export type RangeInputWidgetParams = {
   cssClasses?: RangeInputCSSClasses;
 };
 
-const renderer =
-  ({
-    containerNode,
-    cssClasses,
-    renderState,
-    templates,
-  }: {
-    containerNode: HTMLElement;
-    cssClasses: RangeInputComponentCSSClasses;
-    renderState: {
-      templateProps?: PreparedTemplateProps<RangeInputComponentTemplates>;
-    };
-    templates: RangeInputTemplates;
-  }): Renderer<RangeRenderState, Partial<RangeInputWidgetParams>> =>
-  ({ refine, range, currentRefinement, widgetParams }, isFirstRendering) => {
-    if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
-        defaultTemplates,
-        templates,
+const renderer = ({
+  containerNode,
+  classNames,
+  templateProps,
+}: {
+  containerNode: HTMLElement;
+  classNames: Partial<RangeInputClassNames>;
+  templateProps: PreparedTemplateProps<Required<RangeInputTemplates>>;
+}): Renderer<RangeRenderState, Partial<RangeInputWidgetParams>> => {
+  // Created once per widget instance so Preact doesn't remount the template
+  // subtrees on every render. The separator and submit elements used to be
+  // the `Template`'s root: returning `null` from the template removed them
+  // from the DOM, which the factory keeps by omitting them on `null`.
+  const createTemplateComponent =
+    (templateKey: keyof RangeInputTemplates) => () => {
+      const content = renderTemplate({
+        templates: templateProps.templates,
+        templateKey,
       });
-      return;
-    }
 
-    const { min: rangeMin, max: rangeMax } = range;
+      if (content === null) {
+        return null;
+      }
 
+      // An empty string renders an empty element rather than an empty text node
+      return <Fragment>{content === '' ? null : content}</Fragment>;
+    };
+  const separatorTextComponent = createTemplateComponent('separatorText');
+  const submitTextComponent = createTemplateComponent('submitText');
+
+  // The widget owns the typed values: they reset to the current refinement on
+  // every render coming from the connector, and update on input.
+  let values = { from: '', to: '' };
+  let renderState: RangeRenderState & {
+    widgetParams: Partial<RangeInputWidgetParams>;
+  };
+
+  const renderComponent = () => {
+    const { refine, range, canRefine, widgetParams } = renderState;
     const step = 1 / Math.pow(10, widgetParams.precision || 0);
 
     render(
       <RangeInput
-        min={rangeMin}
-        max={rangeMax}
+        classNames={classNames}
+        min={range.min}
+        max={range.max}
         step={step}
-        values={currentRefinement}
-        cssClasses={cssClasses}
-        refine={refine}
-        templateProps={renderState.templateProps!}
+        fromValue={values.from}
+        toValue={values.to}
+        canRefine={canRefine}
+        onFromChange={(from) => {
+          values = { ...values, from };
+          renderComponent();
+        }}
+        onToChange={(to) => {
+          values = { ...values, to };
+          renderComponent();
+        }}
+        onSubmit={() => {
+          refine({
+            min: values.from ? Number(values.from) : undefined,
+            max: values.to ? Number(values.to) : undefined,
+          });
+        }}
+        separatorTextComponent={separatorTextComponent}
+        submitTextComponent={submitTextComponent}
       />,
       containerNode
     );
   };
+
+  return (renderOptions, isFirstRendering) => {
+    if (isFirstRendering) {
+      return;
+    }
+
+    const { currentRefinement } = renderOptions;
+    renderState = renderOptions;
+    values = {
+      from: currentRefinement.min?.toString() ?? '',
+      to: currentRefinement.max?.toString() ?? '',
+    };
+
+    renderComponent();
+  };
+};
 
 export type RangeInputWidget = WidgetFactory<
   Omit<RangeWidgetDescription, '$$type'> & {
@@ -186,32 +230,27 @@ const rangeInput: RangeInputWidget = function rangeInput(widgetParams) {
 
   const containerNode = getContainerNode(container);
 
-  const cssClasses = {
-    root: cx(suit(), userCssClasses.root),
-    noRefinement: cx(suit({ modifierName: 'noRefinement' })),
-    form: cx(suit({ descendantName: 'form' }), userCssClasses.form),
-    label: cx(suit({ descendantName: 'label' }), userCssClasses.label),
-    input: cx(suit({ descendantName: 'input' }), userCssClasses.input),
-    inputMin: cx(
-      suit({ descendantName: 'input', modifierName: 'min' }),
-      userCssClasses.inputMin
-    ),
-    inputMax: cx(
-      suit({ descendantName: 'input', modifierName: 'max' }),
-      userCssClasses.inputMax
-    ),
-    separator: cx(
-      suit({ descendantName: 'separator' }),
-      userCssClasses.separator
-    ),
-    submit: cx(suit({ descendantName: 'submit' }), userCssClasses.submit),
+  const classNames: Partial<RangeInputClassNames> = {
+    root: userCssClasses.root,
+    noRefinementRoot: userCssClasses.noRefinement,
+    form: userCssClasses.form,
+    label: userCssClasses.label,
+    input: userCssClasses.input,
+    inputMin: userCssClasses.inputMin,
+    inputMax: userCssClasses.inputMax,
+    separator: userCssClasses.separator,
+    submit: userCssClasses.submit,
   };
+
+  const templateProps = prepareTemplateProps({
+    defaultTemplates,
+    templates,
+  });
 
   const specializedRenderer = renderer({
     containerNode,
-    cssClasses,
-    templates,
-    renderState: {},
+    classNames,
+    templateProps,
   });
 
   const makeWidget = connectRange(specializedRenderer, () =>

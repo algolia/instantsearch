@@ -6,11 +6,11 @@ html: |
   <div class="ais-RangeInput">
     <form class="ais-RangeInput-form">
       <label class="ais-RangeInput-label">
-        <input class="ais-RangeInput-input ais-RangeInput-input--min" type="number" />
+        <input class="ais-RangeInput-input ais-RangeInput-input--min" type="number" min="0" max="500" step="1" placeholder="0" />
       </label>
       <span class="ais-RangeInput-separator">to</span>
       <label class="ais-RangeInput-label">
-        <input class="ais-RangeInput-input ais-RangeInput-input--max" type="number" />
+        <input class="ais-RangeInput-input ais-RangeInput-input--max" type="number" min="0" max="500" step="1" placeholder="500" />
       </label>
       <button class="ais-RangeInput-submit" type="submit">Go</button>
     </form>
@@ -19,7 +19,7 @@ classes:
   - name: .ais-RangeInput
     description: the root div of the widget
   - name: .ais-RangeInput--noRefinement
-    description: the root div of the widget with no refinement
+    description: the root div of the widget when the range can’t be refined (the inputs and the submit button are then disabled)
   - name: .ais-RangeInput-form
     description: the wrapping form
   - name: .ais-RangeInput-label
