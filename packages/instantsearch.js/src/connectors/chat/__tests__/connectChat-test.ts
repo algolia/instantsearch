@@ -18,6 +18,7 @@ import {
 } from '../../../../test/createWidget';
 import instantsearch from '../../../index.es';
 import { Chat } from '../../../lib/chat';
+import { openChat } from '../../../lib/chat/openChat';
 import connectSearchBox from '../../search-box/connectSearchBox';
 import connectChat from '../connectChat';
 
@@ -3501,6 +3502,75 @@ data: [DONE]`,
           data: { sentinel: SENTINEL },
         })
       );
+    });
+
+    it('hides, rewrites and replays a `__SHORTCUT_<id>__` token sent through `openChat`', async () => {
+      const token = '__SHORTCUT_size_guide__';
+      const displayText = 'What size should I get for {{product_name}}?';
+      const turnContext = { product_name: 'Trail Jacket' };
+      let answer: (response: Response) => void = () => {};
+      const fetchMock = jest
+        .fn()
+        .mockReturnValueOnce(
+          new Promise<Response>((resolve) => {
+            answer = resolve;
+          })
+        )
+        .mockResolvedValueOnce(
+          chatStream([
+            { type: 'start', messageId: 'assistant-2' },
+            { type: 'text-start', id: 'text-2' },
+            { type: 'text-delta', id: 'text-2', delta: 'A medium.' },
+            { type: 'text-end', id: 'text-2' },
+            { type: 'finish' },
+          ])
+        );
+      const { widget, getRenderState } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+        persistence: false,
+      });
+
+      const sent = openChat(getRenderState(), {
+        shortcut: { id: 'size_guide' },
+        turnContext,
+      });
+      await wait(0);
+
+      expect(sent).toBe(true);
+      // Until the echo lands, the text is the token the metadata names, which
+      // is what keeps `ChatMessages` from rendering a bubble for it.
+      expect(widget.chatInstance.messages).toEqual([
+        expect.objectContaining({
+          role: 'user',
+          parts: [{ type: 'text', text: token }],
+          metadata: { turnContext, promptShortcut: { sentinel: token } },
+        }),
+      ]);
+
+      const [firstSent] = JSON.parse(fetchMock.mock.calls[0][1].body)
+        .messages as UIMessage[];
+      expect(firstSent.parts).toEqual([{ type: 'text', text: token }]);
+      expect(firstSent.metadata).toEqual({ turnContext });
+
+      answer(echoStream({ sentinel: token, displayText }));
+      await wait(0);
+
+      // The display text is shown as the server saved it.
+      expect(widget.chatInstance.messages[0].parts).toEqual([
+        { type: 'text', text: displayText },
+      ]);
+
+      await widget.chatInstance.sendMessage({ text: 'and in blue?' });
+      await wait(0);
+
+      const followUp = (
+        JSON.parse(fetchMock.mock.calls[1][1].body).messages as UIMessage[]
+      ).filter((message) => message.role === 'user');
+      expect(
+        followUp.map((message) => (message.parts[0] as { text: string }).text)
+      ).toEqual([token, 'and in blue?']);
+      expect(followUp[0].metadata).toEqual({ turnContext });
     });
   });
 

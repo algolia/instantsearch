@@ -118,6 +118,182 @@ describe('openChat', () => {
     }
   );
 
+  test('sends a shortcut token passed as `message` as an ordinary message', () => {
+    const chat = createChatRenderState();
+
+    openChat(chat, { message: '__SHORTCUT_size_guide__' });
+
+    expect(chat.sendMessage).toHaveBeenCalledWith(
+      { text: '__SHORTCUT_size_guide__' },
+      undefined
+    );
+  });
+
+  describe('shortcut', () => {
+    test('opens the chat, sends the shortcut token with its turn context and referer, and returns true', () => {
+      const chat = createChatRenderState();
+      const turnContext = { product_name: 'Trail Jacket' };
+
+      const sent = openChat(chat, {
+        shortcut: { id: 'size_guide' },
+        turnContext,
+        referer: 'result-card',
+      });
+
+      expect(sent).toBe(true);
+      expect(chat.setOpen).toHaveBeenCalledWith(true);
+      expect(chat.sendMessage).toHaveBeenCalledTimes(1);
+      expect(chat.sendMessage).toHaveBeenCalledWith(
+        {
+          text: '__SHORTCUT_size_guide__',
+          metadata: {
+            turnContext,
+            promptShortcut: { sentinel: '__SHORTCUT_size_guide__' },
+          },
+        },
+        { headers: { 'x-algolia-referer': 'result-card' } }
+      );
+    });
+
+    test('sends the token without turn context or referer when none is given', () => {
+      const chat = createChatRenderState();
+
+      openChat(chat, { shortcut: { id: 'size-guide-2' } });
+
+      expect(chat.sendMessage).toHaveBeenCalledWith(
+        {
+          text: '__SHORTCUT_size-guide-2__',
+          metadata: {
+            promptShortcut: { sentinel: '__SHORTCUT_size-guide-2__' },
+          },
+        },
+        undefined
+      );
+    });
+
+    test('builds the token from the id only, whatever the turn context holds', () => {
+      const chat = createChatRenderState();
+
+      openChat(chat, {
+        shortcut: { id: 'size_guide' },
+        turnContext: { id: 'other', note: '__SHORTCUT_injected__' },
+      });
+
+      expect((chat.sendMessage as jest.Mock).mock.calls[0][0].text).toBe(
+        '__SHORTCUT_size_guide__'
+      );
+    });
+
+    test.each([
+      ['a', `a${'b'.repeat(2)}`],
+      ['the longest', `a${'b'.repeat(63)}`],
+    ])('accepts %s valid id', (_, id) => {
+      const chat = createChatRenderState();
+
+      expect(openChat(chat, { shortcut: { id } })).toBe(true);
+      expect((chat.sendMessage as jest.Mock).mock.calls[0][0].text).toBe(
+        `__SHORTCUT_${id}__`
+      );
+    });
+
+    test.each([
+      ['too short', 'ab'],
+      ['too long', `a${'b'.repeat(64)}`],
+      ['starting with a digit', '1abc'],
+      ['starting with an underscore', '_abc'],
+      ['holding a space', 'size guide'],
+      ['holding a token', '__SHORTCUT_abc__'],
+      ['ending with a newline', 'abc\n'],
+      ['holding a non-ASCII letter', 'abcé'],
+      ['empty', ''],
+      ['not a string', 123],
+      ['not serializable', BigInt(10)],
+      ['missing', undefined],
+    ])('still sends the token and warns for an id %s', (_, id) => {
+      const chat = createChatRenderState();
+      let sent: boolean | undefined;
+
+      expect(() => {
+        sent = openChat(chat, {
+          shortcut: { id: id as string },
+          turnContext: { product_name: 'Trail Jacket' },
+        });
+      }).toWarnDev(
+        `[InstantSearch.js]: The \`shortcut.id\` given to \`openChat\` is not a valid prompt shortcut id: ${
+          typeof id === 'string' ? JSON.stringify(id) : typeof id
+        }. It must start with a letter, followed by 2 to 63 letters, digits, underscores or hyphens.`
+      );
+
+      expect(sent).toBe(true);
+      expect(chat.setOpen).toHaveBeenCalledWith(true);
+      expect((chat.sendMessage as jest.Mock).mock.calls[0][0].text).toBe(
+        `__SHORTCUT_${String(id)}__`
+      );
+    });
+
+    test('sends the shortcut, ignores `message` and warns when both are given', () => {
+      const chat = createChatRenderState();
+      let sent: boolean | undefined;
+
+      expect(() => {
+        sent = openChat(chat, {
+          shortcut: { id: 'size_guide' },
+          message: 'macbook',
+        });
+      }).toWarnDev(
+        '[InstantSearch.js]: `openChat` received both `shortcut` and `message`. The shortcut is sent and `message` is ignored.'
+      );
+
+      expect(sent).toBe(true);
+      expect(chat.sendMessage).toHaveBeenCalledTimes(1);
+      expect(chat.sendMessage).toHaveBeenCalledWith(
+        {
+          text: '__SHORTCUT_size_guide__',
+          metadata: {
+            promptShortcut: { sentinel: '__SHORTCUT_size_guide__' },
+          },
+        },
+        undefined
+      );
+    });
+
+    test('does not warn when sending a valid shortcut on its own', () => {
+      const chat = createChatRenderState();
+
+      expect(() => {
+        openChat(chat, { shortcut: { id: 'size_guide' } });
+      }).not.toWarnDev();
+    });
+
+    test.each(['submitted', 'streaming'] as const)(
+      'opens but does not send while the chat is %s',
+      (status) => {
+        const chat = createChatRenderState({ status });
+
+        const sent = openChat(chat, { shortcut: { id: 'size_guide' } });
+
+        expect(sent).toBe(false);
+        expect(chat.setOpen).toHaveBeenCalledWith(true);
+        expect(chat.sendMessage).not.toHaveBeenCalled();
+      }
+    );
+
+    test('opens but returns false when sendMessage is not provided', () => {
+      const chat = createChatRenderState({ sendMessage: undefined });
+
+      const sent = openChat(chat, { shortcut: { id: 'size_guide' } });
+
+      expect(sent).toBe(false);
+      expect(chat.setOpen).toHaveBeenCalledWith(true);
+    });
+
+    test('returns false when chatRenderState is undefined', () => {
+      expect(openChat(undefined, { shortcut: { id: 'size_guide' } })).toBe(
+        false
+      );
+    });
+  });
+
   test('does not add the x-algolia-referer header when no referer is provided', () => {
     const chat = createChatRenderState();
 

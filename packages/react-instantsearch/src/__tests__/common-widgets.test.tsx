@@ -8,6 +8,7 @@ import React from 'react';
 
 import {
   InstantSearch,
+  useChatTrigger,
   useCompare,
   RefinementList,
   HierarchicalMenu,
@@ -416,8 +417,16 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
     const {
       renderChat = true,
       renderRefinements,
+      captureOpenChat,
       ...chatWidgetParams
     } = widgetParams;
+
+    function OpenChatCapture() {
+      const { openChat } = useChatTrigger();
+      captureOpenChat!(openChat);
+      return null;
+    }
+
     render(
       <InstantSearch {...instantSearchOptions}>
         {renderRefinements && (
@@ -435,6 +444,7 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
           </>
         )}
         <ChatTrigger />
+        {captureOpenChat && <OpenChatCapture />}
         {renderChat && <Chat {...chatWidgetParams} />}
         <GlobalErrorSwallower />
       </InstantSearch>

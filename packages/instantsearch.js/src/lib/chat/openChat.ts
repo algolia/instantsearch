@@ -1,3 +1,5 @@
+import { warning } from '../utils';
+
 import type { ChatRenderState } from '../../connectors/chat/connectChat';
 
 /**
@@ -17,9 +19,21 @@ export type ChatReferer =
 export type OpenChatOptions = {
   /**
    * Text to submit to the chat as a user message. Empty or whitespace-only
-   * values open the chat without sending anything.
+   * values open the chat without sending anything. Ignored when `shortcut`
+   * is set.
    */
   message?: string;
+  /**
+   * Prompt shortcut to send instead of a message. The agent runs the prompt
+   * saved under this `id`, and the chat shows the display text the agent
+   * returns for it, if any, as the user message. Values for the shortcut's
+   * placeholders go in `turnContext`.
+   *
+   * The `id` starts with a letter, followed by 2 to 63 letters, digits,
+   * underscores or hyphens. The agent does not run a prompt for any other
+   * value or for an id it does not know.
+   */
+  shortcut?: { id: string };
   /**
    * Source that triggered the chat. When provided, the value is sent as the
    * `x-algolia-referer` header on the resulting chat completion request so
@@ -52,13 +66,30 @@ const PROMPT_SHORTCUT_SENTINEL =
 // Returns true when a message was submitted, so callers can clear their input.
 export function openChat(
   chatRenderState: Partial<ChatRenderState> | undefined,
-  { message, referer, turnContext }: OpenChatOptions = {}
+  { message, referer, turnContext, shortcut }: OpenChatOptions = {}
 ): boolean {
   if (!chatRenderState) {
     return false;
   }
 
-  const trimmed = message?.trim() ?? '';
+  let trimmed = message?.trim() ?? '';
+  let isPromptShortcut = PROMPT_SHORTCUT_SENTINEL.test(trimmed);
+  if (shortcut) {
+    const { id } = shortcut;
+    warning(
+      typeof id === 'string' && /^[A-Za-z][\w-]{2,63}$/.test(id),
+      `The \`shortcut.id\` given to \`openChat\` is not a valid prompt shortcut id: ${
+        typeof id === 'string' ? JSON.stringify(id) : typeof id
+      }. It must start with a letter, followed by 2 to 63 letters, digits, underscores or hyphens.`
+    );
+    warning(
+      !trimmed,
+      '`openChat` received both `shortcut` and `message`. The shortcut is sent and `message` is ignored.'
+    );
+    trimmed = `__SHORTCUT_${id}__`;
+    isPromptShortcut = true;
+  }
+
   if (!trimmed) {
     if (chatRenderState.focusInput) {
       chatRenderState.focusInput();
@@ -79,9 +110,7 @@ export function openChat(
   // in `connectChat`) — or for good, when the shortcut is silent.
   const metadata = {
     ...(turnContext ? { turnContext } : {}),
-    ...(PROMPT_SHORTCUT_SENTINEL.test(trimmed)
-      ? { promptShortcut: { sentinel: trimmed } }
-      : {}),
+    ...(isPromptShortcut ? { promptShortcut: { sentinel: trimmed } } : {}),
   };
 
   chatRenderState.sendMessage(

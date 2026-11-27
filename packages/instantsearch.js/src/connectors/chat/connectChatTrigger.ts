@@ -46,9 +46,9 @@ export type ChatTriggerRenderState = {
    */
   toggleOpen: () => void;
   /**
-   * Opens the sibling chat widget, optionally submitting a message to it.
-   * Without a message, the chat is opened and its input focused. Returns
-   * `true` when a message was submitted.
+   * Opens the sibling chat widget, optionally submitting a message or a
+   * prompt shortcut to it. Without either, the chat is opened and its input
+   * focused. Returns `true` when a message was submitted.
    */
   openChat: (options?: OpenChatOptions) => boolean;
   /**

@@ -5,7 +5,7 @@
 import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/widgets';
 
-import { connectCompare } from '../connectors';
+import { connectChatTrigger, connectCompare } from '../connectors';
 import instantsearch from '../index.es';
 import { Chat as InstantSearchChat } from '../lib/chat';
 import {
@@ -665,6 +665,7 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
     const {
       renderChat = true,
       renderRefinements,
+      captureOpenChat,
       ...chatWidgetParams
     } = widgetParams;
 
@@ -723,6 +724,13 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
         chatTrigger({
           container: document.body.appendChild(document.createElement('div')),
         }),
+        ...(captureOpenChat
+          ? [
+              connectChatTrigger(({ openChat }) => captureOpenChat(openChat))(
+                {}
+              ),
+            ]
+          : []),
         ...(renderChat ? [createChatWidget()] : []),
       ])
       .on('error', () => {
