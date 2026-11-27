@@ -33,6 +33,7 @@ export * from './Hits';
 export * from './InfiniteHits';
 export * from './LookingSimilar';
 export * from './PoweredBy';
+export * from './RefinementList';
 export * from './RelatedProducts';
 export * from './Selector';
 export * from './SortBy';
