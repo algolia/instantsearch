@@ -87,8 +87,8 @@ class Slider extends Component<SliderProps> {
 
       const className = cx(
         props.className,
-        props['data-handle-key'] === 0 && 'rheostat-handle-lower',
-        props['data-handle-key'] === 1 && 'rheostat-handle-upper'
+        props['data-handle-key'] === 0 && 'rheostat-handle--lower',
+        props['data-handle-key'] === 1 && 'rheostat-handle--upper'
       );
 
       const ariaLabel =

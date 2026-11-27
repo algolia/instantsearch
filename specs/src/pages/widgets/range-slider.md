@@ -7,7 +7,7 @@ html: |
   <div class="ais-RangeSlider">
     <div class="rheostat rheostat-horizontal" style="position: relative;">
       <div class="rheostat-background"></div>
-      <div class="rheostat-handle rehostat-handle--lower" aria-valuemax="5000" aria-valuemin="1" aria-valuenow="750" aria-disabled="false" data-handle-key="0" role="slider" tabindex="0" style="left: 15%; position: absolute;" aria-label="Minimum Filter Handle">
+      <div class="rheostat-handle rheostat-handle--lower" aria-valuemax="5000" aria-valuemin="1" aria-valuenow="750" aria-disabled="false" data-handle-key="0" role="slider" tabindex="0" style="left: 15%; position: absolute;" aria-label="Minimum Filter Handle">
         <div class="rheostat-tooltip">$750</div>
       </div>
       <div class="rheostat-handle rheostat-handle--upper" aria-valuemax="5000" aria-valuemin="750" aria-valuenow="5000" aria-disabled="false" data-handle-key="1" role="slider" tabindex="0" style="left: 100%; position: absolute;" aria-label="Maximum Filter Handle">
@@ -52,7 +52,7 @@ html: |
       <div class="rheostat-marker" style="left: 91.1765%; position: absolute; margin-left: 0px;"></div>
       <div class="rheostat-marker" style="left: 94.1176%; position: absolute; margin-left: 0px;"></div>
       <div class="rheostat-marker" style="left: 97.0588%; position: absolute; margin-left: 0px;"></div>
-      <div class="rheostat-marker rheostat-marker--large" style="left: 100%; position: absolute; margin-left: -1px;">
+      <div class="rheostat-marker rheostat-marker--large" style="left: 100%; position: absolute; margin-left: -2px;">
         <div class="rheostat-value">5,000</div>
       </div>
     </div>
@@ -62,22 +62,28 @@ classes:
     description: the root div of the widget
   - name: .ais-RangeSlider--disabled
     description: the root div of the widget when disabled
-  - name: .ais-RangeSlider-handle
-    description: the handle div of the widget
-  - name: .ais-RangeSlider-handle--lower
-    description: the lower handle div of the widget
-  - name: .ais-RangeSlider-handle--upper
-    description: the upper handle div of the widget
-  - name: .ais-RangeSlider-tooltip
-    description: the tooltip div of the widget
-  - name: .ais-RangeSlider-marker
-    description: the marker div of the widget
-  - name: .ais-RangeSlider-marker-horizontal
-    description: the horizontal marker div of the widget
-  - name: .ais-RangeSlider-marker--large
-    description: the large marker div of the widget
-  - name: .ais-RangeSlider-value
-    description: the value div of the widget
+  - name: .rheostat
+    description: the slider div, rendered inside the root
+  - name: .rheostat-horizontal
+    description: the slider div when it is horizontal
+  - name: .rheostat-background
+    description: the rail of the slider
+  - name: .rheostat-progress
+    description: the part of the rail between the two handles
+  - name: .rheostat-handle
+    description: the handle divs of the slider
+  - name: .rheostat-handle--lower
+    description: the lower handle div of the slider
+  - name: .rheostat-handle--upper
+    description: the upper handle div of the slider
+  - name: .rheostat-tooltip
+    description: the tooltip div inside a handle (when `tooltips` is enabled)
+  - name: .rheostat-marker
+    description: the marker divs of the slider (when `pips` is enabled)
+  - name: .rheostat-marker--large
+    description: the larger markers at the start, middle and end of the slider
+  - name: .rheostat-value
+    description: the value div inside a large marker
 options:
   - name: attribute
     description: Attribute to apply the filter to

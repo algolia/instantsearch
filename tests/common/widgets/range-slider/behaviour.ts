@@ -65,7 +65,7 @@ export function createBehaviourTests(
 
       const before = Number(
         document
-          .querySelector('.rheostat-handle-lower')!
+          .querySelector('.rheostat-handle--lower')!
           .getAttribute('aria-valuenow')
       );
       // The lower handle starts at the minimum of the range.
@@ -74,7 +74,7 @@ export function createBehaviourTests(
       // Move the lower handle to the right using the keyboard only.
       await act(async () => {
         const handle = document.querySelector<HTMLElement>(
-          '.rheostat-handle-lower'
+          '.rheostat-handle--lower'
         )!;
         handle.focus();
         fireEvent.keyDown(handle, { keyCode: ARROW_RIGHT });
@@ -84,7 +84,7 @@ export function createBehaviourTests(
 
       const after = Number(
         document
-          .querySelector('.rheostat-handle-lower')!
+          .querySelector('.rheostat-handle--lower')!
           .getAttribute('aria-valuenow')
       );
       // The lower bound moved to the right (increased) from its starting value.

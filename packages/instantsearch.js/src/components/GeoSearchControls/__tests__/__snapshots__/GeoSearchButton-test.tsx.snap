@@ -5,6 +5,7 @@ exports[`GeoSearchButton expect to render 1`] = `
   className="button"
   disabled={false}
   onClick={[Function]}
+  type="button"
 >
   Clear the current map refinement
 </button>
@@ -15,6 +16,7 @@ exports[`GeoSearchButton expect to render disabled 1`] = `
   className="button"
   disabled={true}
   onClick={[Function]}
+  type="button"
 >
   Clear the current map refinement
 </button>

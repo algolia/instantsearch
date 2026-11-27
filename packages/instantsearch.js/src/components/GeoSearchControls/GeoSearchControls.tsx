@@ -44,7 +44,7 @@ const GeoSearchControls = ({
 }: Props) => (
   <Fragment>
     {enableRefine && (
-      <div>
+      <Fragment>
         {enableRefineControl && (
           <div className={cssClasses.control}>
             {isRefineOnMapMove || !hasMapMovedSinceLastRefine ? (
@@ -107,7 +107,7 @@ const GeoSearchControls = ({
             />
           </GeoSearchButton>
         )}
-      </div>
+      </Fragment>
     )}
   </Fragment>
 );

@@ -39,66 +39,63 @@ describe('geoSearch', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-GeoSearch"
-  >
-    <div
-      class="ais-GeoSearch-map"
-    />
-    <div
-      class="ais-GeoSearch-tree"
-    >
-      <div>
-        <div
-          class="ais-GeoSearch-control"
-        >
-          <label
-            class="ais-GeoSearch-label ais-GeoSearch-label--selected"
+        <div>
+          <div
+            class="ais-GeoSearch"
           >
-            <input
-              class="ais-GeoSearch-input"
-              type="checkbox"
+            <div
+              class="ais-GeoSearch-map"
             />
-            <span>
-              Search as I move the map
-            </span>
-          </label>
+            <div
+              class="ais-GeoSearch-tree"
+            >
+              <div
+                class="ais-GeoSearch-control"
+              >
+                <label
+                  class="ais-GeoSearch-label ais-GeoSearch-label--selected"
+                >
+                  <input
+                    class="ais-GeoSearch-input"
+                    type="checkbox"
+                  />
+                  <span>
+                    Search as I move the map
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-`);
+      `);
       expect(container2).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-GeoSearch"
-  >
-    <div
-      class="ais-GeoSearch-map"
-    />
-    <div
-      class="ais-GeoSearch-tree"
-    >
-      <div>
-        <div
-          class="ais-GeoSearch-control"
-        >
-          <button
-            class="ais-GeoSearch-redo ais-GeoSearch-redo--disabled"
-            disabled=""
+        <div>
+          <div
+            class="ais-GeoSearch"
           >
-            <span>
-              Redo search here
-            </span>
-          </button>
+            <div
+              class="ais-GeoSearch-map"
+            />
+            <div
+              class="ais-GeoSearch-tree"
+            >
+              <div
+                class="ais-GeoSearch-control"
+              >
+                <button
+                  class="ais-GeoSearch-redo ais-GeoSearch-redo--disabled"
+                  disabled=""
+                  type="button"
+                >
+                  <span>
+                    Redo search here
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-`);
+      `);
     });
 
     test('renders with templates using `html`', async () => {
@@ -142,70 +139,67 @@ describe('geoSearch', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-GeoSearch"
-  >
-    <div
-      class="ais-GeoSearch-map"
-    />
-    <div
-      class="ais-GeoSearch-tree"
-    >
-      <div>
-        <div
-          class="ais-GeoSearch-control"
-        >
-          <label
-            class="ais-GeoSearch-label ais-GeoSearch-label--selected"
+        <div>
+          <div
+            class="ais-GeoSearch"
           >
-            <input
-              class="ais-GeoSearch-input"
-              type="checkbox"
+            <div
+              class="ais-GeoSearch-map"
             />
-            <span>
-              <strong>
-                Search on move
-              </strong>
-            </span>
-          </label>
+            <div
+              class="ais-GeoSearch-tree"
+            >
+              <div
+                class="ais-GeoSearch-control"
+              >
+                <label
+                  class="ais-GeoSearch-label ais-GeoSearch-label--selected"
+                >
+                  <input
+                    class="ais-GeoSearch-input"
+                    type="checkbox"
+                  />
+                  <span>
+                    <strong>
+                      Search on move
+                    </strong>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-`);
+      `);
       expect(container2).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-GeoSearch"
-  >
-    <div
-      class="ais-GeoSearch-map"
-    />
-    <div
-      class="ais-GeoSearch-tree"
-    >
-      <div>
-        <div
-          class="ais-GeoSearch-control"
-        >
-          <button
-            class="ais-GeoSearch-redo ais-GeoSearch-redo--disabled"
-            disabled=""
+        <div>
+          <div
+            class="ais-GeoSearch"
           >
-            <span>
-              <strong>
-                Redo
-              </strong>
-            </span>
-          </button>
+            <div
+              class="ais-GeoSearch-map"
+            />
+            <div
+              class="ais-GeoSearch-tree"
+            >
+              <div
+                class="ais-GeoSearch-control"
+              >
+                <button
+                  class="ais-GeoSearch-redo ais-GeoSearch-redo--disabled"
+                  disabled=""
+                  type="button"
+                >
+                  <span>
+                    <strong>
+                      Redo
+                    </strong>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-`);
+      `);
     });
 
     test('renders with templates using JSX', async () => {
@@ -249,70 +243,67 @@ describe('geoSearch', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-GeoSearch"
-  >
-    <div
-      class="ais-GeoSearch-map"
-    />
-    <div
-      class="ais-GeoSearch-tree"
-    >
-      <div>
-        <div
-          class="ais-GeoSearch-control"
-        >
-          <label
-            class="ais-GeoSearch-label ais-GeoSearch-label--selected"
+        <div>
+          <div
+            class="ais-GeoSearch"
           >
-            <input
-              class="ais-GeoSearch-input"
-              type="checkbox"
+            <div
+              class="ais-GeoSearch-map"
             />
-            <span>
-              <strong>
-                Search on move
-              </strong>
-            </span>
-          </label>
+            <div
+              class="ais-GeoSearch-tree"
+            >
+              <div
+                class="ais-GeoSearch-control"
+              >
+                <label
+                  class="ais-GeoSearch-label ais-GeoSearch-label--selected"
+                >
+                  <input
+                    class="ais-GeoSearch-input"
+                    type="checkbox"
+                  />
+                  <span>
+                    <strong>
+                      Search on move
+                    </strong>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-`);
+      `);
       expect(container2).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-GeoSearch"
-  >
-    <div
-      class="ais-GeoSearch-map"
-    />
-    <div
-      class="ais-GeoSearch-tree"
-    >
-      <div>
-        <div
-          class="ais-GeoSearch-control"
-        >
-          <button
-            class="ais-GeoSearch-redo ais-GeoSearch-redo--disabled"
-            disabled=""
+        <div>
+          <div
+            class="ais-GeoSearch"
           >
-            <span>
-              <strong>
-                Redo
-              </strong>
-            </span>
-          </button>
+            <div
+              class="ais-GeoSearch-map"
+            />
+            <div
+              class="ais-GeoSearch-tree"
+            >
+              <div
+                class="ais-GeoSearch-control"
+              >
+                <button
+                  class="ais-GeoSearch-redo ais-GeoSearch-redo--disabled"
+                  disabled=""
+                  type="button"
+                >
+                  <span>
+                    <strong>
+                      Redo
+                    </strong>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-`);
+      `);
     });
   });
 });
