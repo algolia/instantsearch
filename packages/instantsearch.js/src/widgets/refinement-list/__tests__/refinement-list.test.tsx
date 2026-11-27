@@ -13,6 +13,7 @@ import { fireEvent, within } from '@testing-library/dom';
 import { h } from 'preact';
 
 import { instantsearch } from '../../../index.es';
+import configure from '../../configure/configure';
 import refinementList from '../refinement-list';
 
 beforeEach(() => {
@@ -1234,6 +1235,75 @@ describe('refinementList', () => {
       await wait(0);
 
       expect(input.value).toBe('');
+    });
+  });
+
+  describe('rendering', () => {
+    test('renders empty items for an empty `item` template', async () => {
+      const container = document.createElement('div');
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createMockedSearchClient(),
+      });
+
+      search.addWidgets([
+        refinementList({
+          container,
+          attribute: 'brand',
+          templates: { item: '' },
+        }),
+      ]);
+      search.start();
+      await wait(0);
+
+      const items = container.querySelectorAll('.ais-RefinementList-item');
+      expect(items).toHaveLength(3);
+      items.forEach((item) => expect(item).toBeEmptyDOMElement());
+    });
+
+    test('enables the search box when the items stop being exhaustive', async () => {
+      const container = document.createElement('div');
+      let brands: Record<string, number> = { Apple: 746, Samsung: 633 };
+      const searchClient = createSearchClient({
+        search: jest.fn((requests) =>
+          Promise.resolve(
+            createMultiSearchResponse(
+              ...requests.map(() =>
+                createSingleSearchResponse({ facets: { brand: brands } })
+              )
+            )
+          )
+        ),
+      });
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+
+      // Another widget asks for more values than the list shows.
+      search.addWidgets([
+        configure({ maxValuesPerFacet: 3 }),
+        refinementList({
+          container,
+          attribute: 'brand',
+          limit: 2,
+          searchable: true,
+          searchableIsAlwaysActive: false,
+        }),
+      ]);
+      search.start();
+      await wait(0);
+
+      const input = () =>
+        container.querySelector('.ais-SearchBox-input') as HTMLInputElement;
+      expect(input()).toBeDisabled();
+
+      // Same visible items, but there are now more values than the limit.
+      brands = { Apple: 746, Samsung: 633, Metra: 591 };
+      search.refresh();
+      await wait(0);
+
+      expect(
+        container.querySelectorAll('.ais-RefinementList-item')
+      ).toHaveLength(2);
+      expect(input()).not.toBeDisabled();
     });
   });
 
