@@ -172,11 +172,13 @@ function onlyMatchingTree(
     (facetValue.indexOf(hierarchicalSeparator) === -1 &&
       currentRefinement.indexOf(hierarchicalSeparator) === -1) ||
     // currentRefinement is a child of the facet value
-    currentRefinement.indexOf(facetValue) === 0 ||
+    currentRefinement === facetValue ||
+    currentRefinement.indexOf(facetValue + hierarchicalSeparator) === 0 ||
     // facetValue is a child of the current parent, add it
     (facetValue.indexOf(parentPath + hierarchicalSeparator) === 0 &&
       (hierarchicalShowParentLevel ||
-        facetValue.indexOf(currentRefinement) === 0))
+        facetValue === currentRefinement ||
+        facetValue.indexOf(currentRefinement + hierarchicalSeparator) === 0))
   );
 }
 

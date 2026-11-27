@@ -111,3 +111,45 @@ test('hierarchical facets: do not show parent level', function (done) {
     done();
   });
 });
+
+test('hierarchical facets: do not show parent level hides siblings sharing a prefix', function () {
+  var SearchParameters = require('../../../src/SearchParameters');
+  var SearchResults = require('../../../src/SearchResults');
+
+  var lvl0 = { beers: 3 };
+  var lvl1 = { 'beers | IPA': 2, 'beers | IPA Black': 1 };
+  var result = {
+    hits: [],
+    nbHits: 3,
+    page: 0,
+    nbPages: 1,
+    hitsPerPage: 20,
+    exhaustiveFacetsCount: true,
+    facets: { 'categories.lvl0': lvl0, 'categories.lvl1': lvl1 },
+  };
+
+  function getChildren(refinement) {
+    var state = new SearchParameters({
+      hierarchicalFacets: [
+        {
+          name: 'categories',
+          attributes: ['categories.lvl0', 'categories.lvl1'],
+          separator: ' | ',
+          showParentLevel: false,
+        },
+      ],
+    }).toggleFacetRefinement('categories', refinement);
+    var results = new SearchResults(state, [
+      result,
+      { facets: { 'categories.lvl0': lvl0, 'categories.lvl1': lvl1 } },
+      { facets: { 'categories.lvl0': lvl0 } },
+    ]);
+
+    return results.hierarchicalFacets[0].data[0].data.map(function (facet) {
+      return facet.path;
+    });
+  }
+
+  expect(getChildren('beers | IPA')).toEqual(['beers | IPA']);
+  expect(getChildren('beers | IPA Black')).toEqual(['beers | IPA Black']);
+});
