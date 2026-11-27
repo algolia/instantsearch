@@ -15,4 +15,4 @@ engines:
 # CLI detector tests walk fixture directories colocated with the test file,
 # never any external input.
 exclude_paths:
-  - 'packages/instantsearch-cli/__tests__/**'
+  - 'packages/create-instantsearch-app/src/commands/__tests__/**'

@@ -147,3 +147,47 @@ describe('Templates', () => {
     });
   });
 });
+
+describe('Non-interactive flags', () => {
+  let temporaryDirectory;
+
+  const generateReactApp = (name, flags) => {
+    const appPath = `${temporaryDirectory}/${name}`;
+    execSync(
+      `yarn start ${appPath} \
+          --template "React InstantSearch" \
+          --library-version 7.12.1 \
+          --app-id appId \
+          --api-key apiKey \
+          --index-name indexName \
+          --no-interactive \
+          --no-installation ${flags}`,
+      { stdio: 'ignore' }
+    );
+    return fs.readFileSync(`${appPath}/src/App.tsx`, 'utf8');
+  };
+
+  beforeAll(() => {
+    temporaryDirectory = execSync(
+      'mktemp -d 2>/dev/null || mktemp -d -t "appPath"'
+    )
+      .toString()
+      .trim();
+  });
+
+  afterAll(() => {
+    execSync(`rm -rf "${temporaryDirectory}"`);
+  });
+
+  test('--enable-insights turns on the insights option', () => {
+    expect(generateReactApp('with-insights', '--enable-insights')).toMatch(
+      /<InstantSearch[^>]*\binsights\b/
+    );
+  });
+
+  test('Insights stay off without the flag', () => {
+    expect(generateReactApp('without-insights', '')).not.toMatch(
+      /<InstantSearch[^>]*\binsights\b/
+    );
+  });
+});

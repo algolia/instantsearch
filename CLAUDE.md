@@ -14,7 +14,7 @@ Search UI libraries for Algolia across three flavors (vanilla JS, React, Vue), s
 | `packages/algoliasearch-helper` | Low-level search-parameter/state manager underneath connectors. Mature, separately-versioned; **rarely the place for a change** — fix the connector instead. See its `CLAUDE.md`. |
 | `packages/instantsearch.css` | Default themes. |
 | `packages/react-instantsearch-nextjs` / `-router-nextjs` | Next.js App Router / Pages Router integrations. |
-| `packages/create-instantsearch-app`, `instantsearch-cli`, `instantsearch-codemods` | Scaffolding / CLI / migration tooling. |
+| `packages/create-instantsearch-app`, `instantsearch-codemods` | Scaffolding (new apps, plus `init`/`introspect`/`agents-md` for existing apps) / migration tooling. |
 
 Architecture in one line: **connector (logic, in instantsearch.js) → flavor wrapper (JS widget / React hook+component / Vue component) → shared UI components**. Change behavior in the connector; change markup in the UI layer.
 

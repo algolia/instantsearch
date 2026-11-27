@@ -33,10 +33,15 @@ function checkAppPath(appPath) {
       const files = fs.readdirSync(appPath);
 
       if (files && files.length > 0) {
+        const existingAppHint = files.includes('package.json')
+          ? `\nTo add InstantSearch to this existing app, run ${chalk.cyan(
+              'npx create-instantsearch-app init'
+            )} inside it.`
+          : '';
         throw new Error(
           `Could not create project in destination folder "${chalk.red(
             appPath
-          )}" because it is not empty.`
+          )}" because it is not empty.${existingAppHint}`
         );
       }
     } else {

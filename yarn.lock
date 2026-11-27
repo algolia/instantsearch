@@ -4421,22 +4421,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@instantsearch/cli@workspace:packages/instantsearch-cli":
-  version: 0.0.0-use.local
-  resolution: "@instantsearch/cli@workspace:packages/instantsearch-cli"
-  dependencies:
-    "@types/jest": "npm:27.4.0"
-    "@types/node": "npm:18.11.13"
-    "@types/semver": "npm:7.5.8"
-    commander: "npm:11.1.0"
-    jsonc-parser: "npm:3.3.1"
-    prompts: "npm:2.4.2"
-    semver: "npm:7.7.3"
-  bin:
-    instantsearch: src/cli.ts
-  languageName: unknown
-  linkType: soft
-
 "@instantsearch/e2e-tests@workspace:tests/e2e":
   version: 0.0.0-use.local
   resolution: "@instantsearch/e2e-tests@workspace:tests/e2e"
@@ -8555,7 +8539,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:*, @types/jest@npm:27.4.0, @types/jest@npm:^27.4.0":
+"@types/jest@npm:*, @types/jest@npm:^27.4.0":
   version: 27.4.0
   resolution: "@types/jest@npm:27.4.0"
   dependencies:
@@ -8818,7 +8802,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/semver@npm:7.5.8, @types/semver@npm:^7.3.9":
+"@types/semver@npm:^7.3.9":
   version: 7.5.8
   resolution: "@types/semver@npm:7.5.8"
   checksum: 10c0/8663ff927234d1c5fcc04b33062cb2b9fcfbe0f5f351ed26c4d1e1581657deebd506b41ff7fdf89e787e3d33ce05854bc01686379b89e9c49b564c4cfa988efa
@@ -13916,13 +13900,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:4.1.1, commander@npm:^4.0.0, commander@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "commander@npm:4.1.1"
-  checksum: 10c0/84a76c08fe6cc08c9c93f62ac573d2907d8e79138999312c92d4155bc2325d487d64d13f669b2000c9f8caf70493c1be2dac74fec3c51d5a04f8bc3ae1830bab
-  languageName: node
-  linkType: hard
-
 "commander@npm:^10.0.0":
   version: 10.0.1
   resolution: "commander@npm:10.0.1"
@@ -13941,6 +13918,13 @@ __metadata:
   version: 2.20.3
   resolution: "commander@npm:2.20.3"
   checksum: 10c0/74c781a5248c2402a0a3e966a0a2bba3c054aad144f5c023364be83265e796b20565aa9feff624132ff629aa64e16999fa40a743c10c12f7c61e96a794b99288
+  languageName: node
+  linkType: hard
+
+"commander@npm:^4.0.0, commander@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "commander@npm:4.1.1"
+  checksum: 10c0/84a76c08fe6cc08c9c93f62ac573d2907d8e79138999312c92d4155bc2325d487d64d13f669b2000c9f8caf70493c1be2dac74fec3c51d5a04f8bc3ae1830bab
   languageName: node
   linkType: hard
 
@@ -14634,15 +14618,17 @@ __metadata:
     "@metalsmith/remove": "npm:1.3.0"
     algoliasearch: "npm:5.1.1"
     chalk: "npm:3.0.0"
-    commander: "npm:4.1.1"
+    commander: "npm:11.1.0"
     inquirer: "npm:8.2.0"
     jest-image-snapshot: "npm:2.12.0"
+    jsonc-parser: "npm:3.3.1"
     jstransformer-handlebars: "npm:1.1.0"
     load-json-file: "npm:6.2.0"
     lodash.camelcase: "npm:4.3.0"
     metalsmith: "npm:2.5.1"
     metalsmith-rename: "npm:1.0.0"
     prettier: "npm:^2.4.1"
+    prompts: "npm:2.4.2"
     semver: "npm:6.1.1"
     validate-npm-package-name: "npm:3.0.0"
     walk-sync: "npm:2.0.2"
@@ -34218,15 +34204,6 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: 10c0/aca305edfbf2383c22571cb7714f48cadc7ac95371b4b52362fb8eeffdfbc0de0669368b82b2b15978f8848f01d7114da65697e56cd8c37b0dab8c58e543f9ea
-  languageName: node
-  linkType: hard
-
-"semver@npm:7.7.3":
-  version: 7.7.3
-  resolution: "semver@npm:7.7.3"
-  bin:
-    semver: bin/semver.js
-  checksum: 10c0/4afe5c986567db82f44c8c6faef8fe9df2a9b1d98098fc1721f57c696c4c21cebd572f297fc21002f81889492345b8470473bc6f4aff5fb032a6ea59ea2bc45e
   languageName: node
   linkType: hard
 
