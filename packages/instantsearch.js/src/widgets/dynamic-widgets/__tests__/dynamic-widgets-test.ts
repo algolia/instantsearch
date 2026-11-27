@@ -284,7 +284,11 @@ describe('dynamicWidgets()', () => {
             >
               <div
                 class="ais-Menu test1 ais-Menu--noRefinement"
-              />
+              >
+                <ul
+                  class="ais-Menu-list"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -354,14 +358,22 @@ describe('dynamicWidgets()', () => {
             >
               <div
                 class="ais-Menu test1 ais-Menu--noRefinement"
-              />
+              >
+                <ul
+                  class="ais-Menu-list"
+                />
+              </div>
             </div>
             <div
               class="ais-DynamicWidgets-widget"
             >
               <div
                 class="ais-Menu test4 ais-Menu--noRefinement"
-              />
+              >
+                <ul
+                  class="ais-Menu-list"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -388,14 +400,22 @@ describe('dynamicWidgets()', () => {
             >
               <div
                 class="ais-Menu test4 ais-Menu--noRefinement"
-              />
+              >
+                <ul
+                  class="ais-Menu-list"
+                />
+              </div>
             </div>
             <div
               class="ais-DynamicWidgets-widget"
             >
               <div
                 class="ais-Menu test1 ais-Menu--noRefinement"
-              />
+              >
+                <ul
+                  class="ais-Menu-list"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -558,7 +578,11 @@ describe('dynamicWidgets()', () => {
             >
               <div
                 class="ais-Menu test1 ais-Menu--noRefinement"
-              />
+              >
+                <ul
+                  class="ais-Menu-list"
+                />
+              </div>
             </div>
             <div
               class="ais-DynamicWidgets-widget"
@@ -572,7 +596,11 @@ describe('dynamicWidgets()', () => {
             >
               <div
                 class="ais-Menu test4 ais-Menu--noRefinement"
-              />
+              >
+                <ul
+                  class="ais-Menu-list"
+                />
+              </div>
             </div>
           </div>
         </div>

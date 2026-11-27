@@ -3,12 +3,15 @@
 import { connectHierarchicalMenu } from 'instantsearch-core';
 import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { suitComponent as component } from 'instantsearch-core/internal';
-import { cx } from 'instantsearch-ui-components';
-import { h, render } from 'preact';
+import {
+  createHierarchicalMenuComponent,
+  cx,
+} from 'instantsearch-ui-components';
+import { Fragment, h, render } from 'preact';
 
-import RefinementList from '../../components/RefinementList/RefinementList';
+import TemplateComponent from '../../components/Template/Template';
 import { prepareTemplateProps } from '../../lib/templating';
-import { getContainerNode } from '../../lib/utils';
+import { getContainerNode, shouldRefineFromItemClick } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
@@ -26,13 +29,14 @@ import type {
   RendererOptions,
   SortBy,
 } from 'instantsearch-core';
+import type { HierarchicalMenuItemComponentProps } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hierarchical-menu',
 });
 const suit = component('HierarchicalMenu');
 
-type HierarchicalMenuTemplates = Partial<{
+export type HierarchicalMenuTemplates = Partial<{
   /**
    * Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
    */
@@ -182,23 +186,65 @@ export type HierarchicalMenuWidgetParams = {
   cssClasses?: HierarchicalMenuCSSClasses;
 };
 
-const renderer =
-  ({
-    cssClasses,
-    containerNode,
-    showMore,
-    templates,
-    renderState,
-  }: {
-    cssClasses: HierarchicalMenuComponentCSSClasses;
-    containerNode: HTMLElement;
-    showMore: boolean;
-    templates: HierarchicalMenuTemplates;
-    renderState: {
-      templateProps?: PreparedTemplateProps<HierarchicalMenuComponentTemplates>;
-    };
-  }) =>
-  (
+const HierarchicalMenuUiComponent = createHierarchicalMenuComponent({
+  createElement: h,
+  Fragment,
+});
+
+const renderer = ({
+  cssClasses,
+  userCssClasses,
+  containerNode,
+  showMore,
+  templates,
+  renderState,
+}: {
+  cssClasses: HierarchicalMenuComponentCSSClasses;
+  userCssClasses: HierarchicalMenuCSSClasses;
+  containerNode: HTMLElement;
+  showMore: boolean;
+  templates: HierarchicalMenuTemplates;
+  renderState: {
+    templateProps?: PreparedTemplateProps<HierarchicalMenuTemplates>;
+  };
+}) => {
+  // Latest render values, read by the item component so that it keeps the
+  // same identity across renders (a new one would remount every item).
+  let current: Pick<HierarchicalMenuRenderState, 'refine' | 'createURL'>;
+
+  const itemComponent = ({
+    item,
+    className,
+    children,
+    childList,
+  }: HierarchicalMenuItemComponentProps) => (
+    <li
+      className={className}
+      onClick={(originalEvent) => {
+        if (shouldRefineFromItemClick(originalEvent, item.isRefined)) {
+          current.refine(item.value);
+        }
+      }}
+    >
+      {templates.item !== undefined ? (
+        <TemplateComponent
+          {...renderState.templateProps!}
+          templateKey="item"
+          rootTagName="fragment"
+          data={{
+            ...item,
+            url: current.createURL(item.value),
+            cssClasses,
+          }}
+        />
+      ) : (
+        children
+      )}
+      {childList}
+    </li>
+  );
+
+  return (
     {
       createURL,
       items,
@@ -211,80 +257,40 @@ const renderer =
     isFirstRendering: boolean
   ) => {
     if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
-        defaultTemplates,
-        templates,
-      });
+      renderState.templateProps =
+        prepareTemplateProps<HierarchicalMenuTemplates>({
+          defaultTemplates,
+          templates,
+        });
       return;
     }
 
+    current = { refine, createURL };
+
     render(
-      <RefinementList
+      <HierarchicalMenuUiComponent
+        items={items}
         createURL={createURL}
-        cssClasses={cssClasses}
-        facetValues={items}
-        templateProps={renderState.templateProps!}
-        toggleRefinement={refine}
+        itemComponent={itemComponent}
         showMore={showMore}
-        toggleShowMore={toggleShowMore}
-        isShowingMore={isShowingMore}
         canToggleShowMore={canToggleShowMore}
+        isShowingMore={isShowingMore}
+        onToggleShowMore={toggleShowMore}
+        showMoreTextComponent={({ isShowingMore: isShowingMoreText }) => (
+          <TemplateComponent
+            {...renderState.templateProps!}
+            templateKey="showMoreText"
+            rootTagName="fragment"
+            data={{ isShowingMore: isShowingMoreText }}
+          />
+        )}
+        classNames={userCssClasses}
       />,
       containerNode
     );
   };
+};
 
-/**
- * The hierarchical menu widget is used to create a navigation based on a hierarchy of facet attributes.
- *
- * It is commonly used for categories with subcategories.
- *
- * All attributes (lvl0, lvl1 here) must be declared as [attributes for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting) in your
- * Algolia settings.
- *
- * By default, the separator we expect is ` > ` (with spaces) but you can use
- * a different one by using the `separator` option.
- * @requirements
- * Your objects must be formatted in a specific way to be
- * able to display hierarchical menus. Here's an example:
- *
- * ```javascript
- * {
- *   "objectID": "123",
- *   "name": "orange",
- *   "categories": {
- *     "lvl0": "fruits",
- *     "lvl1": "fruits > citrus"
- *   }
- * }
- * ```
- *
- * Every level must be specified entirely.
- * It's also possible to have multiple values per level, for example:
- *
- * ```javascript
- * {
- *   "objectID": "123",
- *   "name": "orange",
- *   "categories": {
- *     "lvl0": ["fruits", "vitamins"],
- *     "lvl1": ["fruits > citrus", "vitamins > C"]
- *   }
- * }
- * ```
- * @type {WidgetFactory}
- * @devNovel HierarchicalMenu
- * @category filter
- * @param {HierarchicalMenuWidgetParams} widgetParams The HierarchicalMenu widget options.
- * @return {Widget} A new HierarchicalMenu widget instance.
- * @example
- * search.addWidgets([
- *   instantsearch.widgets.hierarchicalMenu({
- *     container: '#hierarchical-categories',
- *     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
- *   })
- * ]);
- */
 export type HierarchicalMenuWidget = WidgetFactory<
   HierarchicalMenuWidgetDescription & { $$widgetType: 'ais.hierarchicalMenu' },
   HierarchicalMenuConnectorParams,
@@ -351,6 +357,7 @@ const hierarchicalMenu: HierarchicalMenuWidget = function hierarchicalMenu(
 
   const specializedRenderer = renderer({
     cssClasses,
+    userCssClasses,
     containerNode,
     templates,
     showMore,

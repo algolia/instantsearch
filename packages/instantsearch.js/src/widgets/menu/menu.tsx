@@ -3,12 +3,12 @@
 import { connectMenu } from 'instantsearch-core';
 import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { suitComponent as component } from 'instantsearch-core/internal';
-import { cx } from 'instantsearch-ui-components';
-import { h, render } from 'preact';
+import { createMenuComponent, cx } from 'instantsearch-ui-components';
+import { Fragment, h, render } from 'preact';
 
-import RefinementList from '../../components/RefinementList/RefinementList';
+import TemplateComponent from '../../components/Template/Template';
 import { prepareTemplateProps } from '../../lib/templating';
-import { getContainerNode } from '../../lib/utils';
+import { getContainerNode, shouldRefineFromItemClick } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
@@ -20,6 +20,7 @@ import type {
   MenuWidgetDescription,
 } from 'instantsearch-core';
 import type { RendererOptions, WidgetFactory } from 'instantsearch-core';
+import type { MenuItemComponentProps } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'menu' });
 const suit = component('Menu');
@@ -106,23 +107,63 @@ export type MenuWidgetParams = {
   cssClasses?: MenuCSSClasses;
 };
 
-const renderer =
-  ({
-    containerNode,
-    cssClasses,
-    renderState,
-    templates,
-    showMore,
-  }: {
-    containerNode: HTMLElement;
-    cssClasses: MenuComponentCSSClasses;
-    renderState: {
-      templateProps?: PreparedTemplateProps<MenuComponentTemplates>;
-    };
-    templates: MenuTemplates;
-    showMore?: boolean;
-  }) =>
-  (
+const MenuUiComponent = createMenuComponent({
+  createElement: h,
+  Fragment,
+});
+
+const renderer = ({
+  containerNode,
+  cssClasses,
+  userCssClasses,
+  renderState,
+  templates,
+  showMore,
+}: {
+  containerNode: HTMLElement;
+  cssClasses: MenuComponentCSSClasses;
+  userCssClasses: MenuCSSClasses;
+  renderState: {
+    templateProps?: PreparedTemplateProps<MenuTemplates>;
+  };
+  templates: MenuTemplates;
+  showMore?: boolean;
+}) => {
+  // Latest render values, read by the item component so that it keeps the
+  // same identity across renders (a new one would remount every item).
+  let current: Pick<MenuRenderState, 'refine' | 'createURL'>;
+
+  const itemComponent = ({
+    item,
+    className,
+    children,
+  }: MenuItemComponentProps) => (
+    <li
+      className={className}
+      onClick={(originalEvent) => {
+        if (shouldRefineFromItemClick(originalEvent, item.isRefined)) {
+          current.refine(item.value);
+        }
+      }}
+    >
+      {templates.item !== undefined ? (
+        <TemplateComponent
+          {...renderState.templateProps!}
+          templateKey="item"
+          rootTagName="fragment"
+          data={{
+            ...item,
+            url: current.createURL(item.value),
+            cssClasses,
+          }}
+        />
+      ) : (
+        children
+      )}
+    </li>
+  );
+
+  return (
     {
       refine,
       items,
@@ -134,33 +175,38 @@ const renderer =
     isFirstRendering: boolean
   ) => {
     if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
+      renderState.templateProps = prepareTemplateProps<MenuTemplates>({
         defaultTemplates,
         templates,
       });
       return;
     }
 
-    const facetValues = items.map((facetValue) => ({
-      ...facetValue,
-      url: createURL(facetValue.value),
-    }));
+    current = { refine, createURL };
 
     render(
-      <RefinementList
+      <MenuUiComponent
+        items={items}
         createURL={createURL}
-        cssClasses={cssClasses}
-        facetValues={facetValues}
+        itemComponent={itemComponent}
         showMore={showMore}
-        templateProps={renderState.templateProps!}
-        toggleRefinement={refine}
-        toggleShowMore={toggleShowMore}
-        isShowingMore={isShowingMore}
         canToggleShowMore={canToggleShowMore}
+        isShowingMore={isShowingMore}
+        onToggleShowMore={toggleShowMore}
+        showMoreTextComponent={({ isShowingMore: isShowingMoreText }) => (
+          <TemplateComponent
+            {...renderState.templateProps!}
+            templateKey="showMoreText"
+            rootTagName="fragment"
+            data={{ isShowingMore: isShowingMoreText }}
+          />
+        )}
+        classNames={userCssClasses}
       />,
       containerNode
     );
   };
+};
 
 export type MenuWidget = WidgetFactory<
   MenuWidgetDescription & { $$widgetType: 'ais.menu' },
@@ -212,6 +258,7 @@ const menu: MenuWidget = function menu(widgetParams) {
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
+    userCssClasses,
     renderState: {},
     templates,
     showMore,

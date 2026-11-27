@@ -1,23 +1,13 @@
-/** @jsx h */
-import { cx } from 'instantsearch-ui-components';
-import { h } from 'preact';
+// false positive lint error
+// eslint-disable-next-line typescript/consistent-type-imports
+import type { MenuTemplates } from './menu';
 
-import { formatNumber } from '../../lib/formatNumber';
-
-import type { MenuComponentTemplates } from './menu';
-
-const defaultTemplates: MenuComponentTemplates = {
-  item({ cssClasses, url, label, count }) {
-    return (
-      <a className={cx(cssClasses.link)} href={url}>
-        <span className={cx(cssClasses.label)}>{label}</span>
-        <span className={cx(cssClasses.count)}>{formatNumber(count)}</span>
-      </a>
-    );
-  },
-  showMoreText({ isShowingMore }) {
+// The default `item` rendering lives in `instantsearch-ui-components`
+// (see `createMenuComponent`), shared with the other flavors.
+const defaultTemplates = {
+  showMoreText({ isShowingMore }: { isShowingMore: boolean }) {
     return isShowingMore ? 'Show less' : 'Show more';
   },
-};
+} satisfies MenuTemplates;
 
 export default defaultTemplates;

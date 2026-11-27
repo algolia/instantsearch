@@ -3,14 +3,12 @@
 import { connectRatingMenu } from 'instantsearch-core';
 import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { suitComponent as component } from 'instantsearch-core/internal';
-import { cx } from 'instantsearch-ui-components';
-import { h, render } from 'preact';
+import { createRatingMenuComponent, cx } from 'instantsearch-ui-components';
+import { Fragment, h, render } from 'preact';
 
-import RefinementList from '../../components/RefinementList/RefinementList';
+import TemplateComponent from '../../components/Template/Template';
 import { prepareTemplateProps } from '../../lib/templating';
-import { getContainerNode } from '../../lib/utils';
-
-import defaultTemplates from './defaultTemplates';
+import { getContainerNode, shouldRefineFromItemClick } from '../../lib/utils';
 
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { ComponentCSSClasses, Template } from '../../types';
@@ -20,6 +18,7 @@ import type {
   RatingMenuRenderState,
 } from 'instantsearch-core';
 import type { RendererOptions, WidgetFactory } from 'instantsearch-core';
+import type { RatingMenuItemComponentProps } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'rating-menu' });
 const suit = component('RatingMenu');
@@ -121,90 +120,98 @@ export type RatingMenuWidgetParams = {
   cssClasses?: RatingMenuCSSClasses;
 };
 
-const renderer =
-  ({
-    containerNode,
-    cssClasses,
-    templates,
-    renderState,
-  }: {
-    containerNode: HTMLElement;
-    cssClasses: RatingMenuComponentCSSClasses;
-    templates: RatingMenuTemplates;
-    renderState: {
-      templateProps?: PreparedTemplateProps<RatingMenuComponentTemplates>;
-    };
-  }) =>
-  (
+const RatingMenuUiComponent = createRatingMenuComponent({
+  createElement: h,
+  Fragment,
+});
+
+const renderer = ({
+  containerNode,
+  cssClasses,
+  userCssClasses,
+  templates,
+  renderState,
+}: {
+  containerNode: HTMLElement;
+  cssClasses: RatingMenuComponentCSSClasses;
+  userCssClasses: RatingMenuCSSClasses;
+  templates: RatingMenuTemplates;
+  renderState: {
+    templateProps?: PreparedTemplateProps<RatingMenuTemplates>;
+  };
+}) => {
+  // Latest render values, read by the item component so that it keeps the
+  // same identity across renders (a new one would remount every item).
+  let current: Pick<RatingMenuRenderState, 'refine' | 'createURL'>;
+
+  const itemComponent = ({
+    item,
+    className,
+    children,
+  }: RatingMenuItemComponentProps) => (
+    <li
+      className={className}
+      onClick={(originalEvent) => {
+        // Items without results are disabled, like in the other flavors,
+        // unless they're selected so that they can be cleared.
+        if (
+          shouldRefineFromItemClick(originalEvent, item.isRefined) &&
+          (item.count > 0 || item.isRefined)
+        ) {
+          current.refine(item.value);
+        }
+      }}
+    >
+      {templates.item !== undefined ? (
+        <TemplateComponent
+          {...renderState.templateProps!}
+          templateKey="item"
+          rootTagName="fragment"
+          data={{
+            ...item,
+            url: current.createURL(item.value),
+            cssClasses,
+          }}
+        />
+      ) : (
+        children
+      )}
+    </li>
+  );
+
+  return (
     {
       refine,
       items,
       createURL,
+      canRefine,
     }: RatingMenuRenderState & RendererOptions<RatingMenuConnectorParams>,
     isFirstRendering: boolean
   ) => {
     if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
-        defaultTemplates,
+      renderState.templateProps = prepareTemplateProps<RatingMenuTemplates>({
+        defaultTemplates: {},
         templates,
       });
 
       return;
     }
 
+    current = { refine, createURL };
+
     render(
-      <RefinementList
+      <RatingMenuUiComponent
+        items={items}
+        canRefine={canRefine}
         createURL={createURL}
-        cssClasses={cssClasses}
-        facetValues={items}
-        templateProps={renderState.templateProps!}
-        toggleRefinement={refine}
-      >
-        <svg style="display:none;">
-          <symbol
-            id={suit({ descendantName: 'starSymbol' })}
-            viewBox="0 0 24 24"
-          >
-            <path d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z" />
-          </symbol>
-          <symbol
-            id={suit({ descendantName: 'starEmptySymbol' })}
-            viewBox="0 0 24 24"
-          >
-            <path d="M12 6.76l1.379 4.246h4.465l-3.612 2.625 1.379 4.246-3.611-2.625-3.612 2.625 1.379-4.246-3.612-2.625h4.465l1.38-4.246zm0-6.472l-2.833 8.718h-9.167l7.416 5.389-2.833 8.718 7.417-5.388 7.416 5.388-2.833-8.718 7.417-5.389h-9.167l-2.833-8.718z" />
-          </symbol>
-        </svg>
-      </RefinementList>,
+        itemComponent={itemComponent}
+        classNames={userCssClasses}
+      />,
       containerNode
     );
   };
+};
 
-/**
- * Rating menu is used for displaying grade like filters. The values are normalized within boundaries.
- *
- * The maximum value can be set (with `max`), the minimum is always 0.
- *
- * @requirements
- * The attribute passed to `attribute` must be declared as an
- * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
- * in your Algolia settings.
- *
- * The values inside this attribute must be JavaScript numbers (not strings).
- *
- * @type {WidgetFactory}
- * @devNovel RatingMenu
- * @category filter
- * @param {RatingMenuWidgetParams} widgetParams RatingMenu widget options.
- * @return {Widget} A new RatingMenu widget instance.
- * @example
- * search.addWidgets([
- *   instantsearch.widgets.ratingMenu({
- *     container: '#stars',
- *     attribute: 'rating',
- *     max: 5,
- *   })
- * ]);
- */
 export type RatingMenuWidget = WidgetFactory<
   RatingMenuWidgetDescription & { $$widgetType: 'ais.ratingMenu' },
   RatingMenuConnectorParams,
@@ -258,6 +265,7 @@ const ratingMenu: RatingMenuWidget = function ratingMenu(widgetParams) {
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
+    userCssClasses,
     renderState: {},
     templates,
   });

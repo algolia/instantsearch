@@ -1,29 +1,13 @@
-/** @jsx h */
-import { cx } from 'instantsearch-ui-components';
-import { h } from 'preact';
+// false positive lint error
+// eslint-disable-next-line typescript/consistent-type-imports
+import type { HierarchicalMenuTemplates } from './hierarchical-menu';
 
-import { formatNumber } from '../../lib/formatNumber';
-
-import type { HierarchicalMenuComponentTemplates } from './hierarchical-menu';
-
-const defaultTemplates: HierarchicalMenuComponentTemplates = {
-  item({ url, label, count, cssClasses, isRefined }) {
-    return (
-      <a
-        className={cx(
-          cx(cssClasses.link),
-          cx(isRefined ? cssClasses.selectedItemLink : undefined)
-        )}
-        href={url}
-      >
-        <span className={cx(cssClasses.label)}>{label}</span>
-        <span className={cx(cssClasses.count)}>{formatNumber(count)}</span>
-      </a>
-    );
-  },
-  showMoreText({ isShowingMore }) {
+// The default `item` rendering lives in `instantsearch-ui-components`
+// (see `createHierarchicalMenuComponent`), shared with the other flavors.
+const defaultTemplates = {
+  showMoreText({ isShowingMore }: { isShowingMore: boolean }) {
     return isShowingMore ? 'Show less' : 'Show more';
   },
-};
+} satisfies HierarchicalMenuTemplates;
 
 export default defaultTemplates;

@@ -3,14 +3,12 @@
 import { connectNumericMenu } from 'instantsearch-core';
 import { createDocumentationMessageGenerator } from 'instantsearch-core/internal';
 import { suitComponent as component } from 'instantsearch-core/internal';
-import { cx } from 'instantsearch-ui-components';
-import { h, render } from 'preact';
+import { createNumericMenuComponent, cx } from 'instantsearch-ui-components';
+import { Fragment, h, render } from 'preact';
 
-import RefinementList from '../../components/RefinementList/RefinementList';
+import TemplateComponent from '../../components/Template/Template';
 import { prepareTemplateProps } from '../../lib/templating';
-import { getContainerNode } from '../../lib/utils';
-
-import defaultTemplates from './defaultTemplates';
+import { getContainerNode, shouldRefineFromItemClick } from '../../lib/utils';
 
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { ComponentCSSClasses, Template } from '../../types';
@@ -20,47 +18,110 @@ import type {
   NumericMenuWidgetDescription,
 } from 'instantsearch-core';
 import type { Renderer, WidgetFactory } from 'instantsearch-core';
+import type { NumericMenuItemComponentProps } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'numeric-menu' });
 const suit = component('NumericMenu');
 
-const renderer =
-  ({
-    containerNode,
-    attribute,
-    cssClasses,
-    renderState,
-    templates,
-  }: {
-    containerNode: HTMLElement;
-    attribute: string;
-    cssClasses: NumericMenuComponentCSSClasses;
-    renderState: {
-      templateProps?: PreparedTemplateProps<NumericMenuTemplates>;
-    };
-    templates: NumericMenuTemplates;
-  }): Renderer<NumericMenuRenderState, Partial<NumericMenuWidgetParams>> =>
-  ({ createURL, refine, items }, isFirstRendering: boolean) => {
+const NumericMenuUiComponent = createNumericMenuComponent({
+  createElement: h,
+  Fragment,
+});
+
+const renderer = ({
+  containerNode,
+  attribute,
+  cssClasses,
+  userCssClasses,
+  renderState,
+  templates,
+}: {
+  containerNode: HTMLElement;
+  attribute: string;
+  cssClasses: NumericMenuComponentCSSClasses;
+  userCssClasses: NumericMenuCSSClasses;
+  renderState: {
+    templateProps?: PreparedTemplateProps<NumericMenuTemplates>;
+  };
+  templates: NumericMenuTemplates;
+}): Renderer<NumericMenuRenderState, Partial<NumericMenuWidgetParams>> => {
+  let lastRefinedValue: string | undefined = undefined;
+
+  // Latest render values, read by the item component so that it keeps the
+  // same identity across renders (a new one would remount every item).
+  let current: Pick<NumericMenuRenderState, 'refine' | 'createURL'>;
+
+  const itemComponent = ({
+    item,
+    className,
+    children,
+  }: NumericMenuItemComponentProps) => (
+    <li
+      className={className}
+      onClick={(originalEvent) => {
+        if (shouldRefineFromItemClick(originalEvent, item.isRefined)) {
+          lastRefinedValue = item.value;
+          current.refine(item.value);
+        }
+      }}
+    >
+      {templates.item !== undefined ? (
+        <TemplateComponent
+          {...renderState.templateProps!}
+          templateKey="item"
+          rootTagName="fragment"
+          data={{
+            ...item,
+            attribute,
+            url: current.createURL(item.value),
+            cssClasses,
+          }}
+        />
+      ) : (
+        children
+      )}
+    </li>
+  );
+
+  return (
+    { createURL, refine, items, canRefine },
+    isFirstRendering: boolean
+  ) => {
     if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
-        defaultTemplates,
+      renderState.templateProps = prepareTemplateProps<NumericMenuTemplates>({
+        defaultTemplates: {},
         templates,
       });
       return;
     }
 
+    current = { refine, createURL };
+
     render(
-      <RefinementList
-        createURL={createURL}
-        cssClasses={cssClasses}
-        facetValues={items}
-        templateProps={renderState.templateProps!}
-        toggleRefinement={refine}
+      <NumericMenuUiComponent
+        items={items}
+        canRefine={canRefine}
         attribute={attribute}
+        itemComponent={itemComponent}
+        classNames={userCssClasses}
       />,
       containerNode
     );
+
+    // Preact doesn't keep the focus on the radio button that was clicked
+    // when it re-renders (https://github.com/preactjs/preact/issues/3242).
+    if (lastRefinedValue !== undefined) {
+      const inputs = containerNode.getElementsByTagName('input');
+      for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i].value === lastRefinedValue) {
+          inputs[i].focus();
+          break;
+        }
+      }
+      lastRefinedValue = undefined;
+    }
   };
+};
 
 export type NumericMenuCSSClasses = Partial<{
   /**
@@ -212,6 +273,7 @@ const numericMenu: NumericMenuWidget = function numericMenu(widgetParams) {
     containerNode,
     attribute,
     cssClasses,
+    userCssClasses,
     renderState: {},
     templates,
   });
