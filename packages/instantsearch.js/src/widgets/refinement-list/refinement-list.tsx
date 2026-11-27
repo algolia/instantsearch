@@ -17,7 +17,7 @@ import { createRef, Fragment, h, render } from 'preact';
 import TemplateComponent from '../../components/Template/Template';
 import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
-import { getSearchBoxIconComponents } from '../search-box/search-box';
+import { getSearchBoxTemplateProps } from '../search-box/search-box';
 
 import defaultTemplates from './defaultTemplates';
 
@@ -317,7 +317,7 @@ const renderer = ({
   searchableSelectOnSubmit?: boolean;
 }): Renderer<RefinementListRenderState, RefinementListConnectorParams> => {
   const searchInputRef = createRef<HTMLInputElement>();
-  const searchBoxIconComponents = getSearchBoxIconComponents(
+  const searchBoxTemplateProps = getSearchBoxTemplateProps(
     searchBoxTemplates,
     cssClasses.searchable!
   );
@@ -416,7 +416,7 @@ const renderer = ({
                       refine(items[0].value);
                     }
                   }}
-                  {...searchBoxIconComponents}
+                  {...searchBoxTemplateProps}
                   classNames={{
                     root: userCssClasses.searchableRoot,
                     form: userCssClasses.searchableForm,

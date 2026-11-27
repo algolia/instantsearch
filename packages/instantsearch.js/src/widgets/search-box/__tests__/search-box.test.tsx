@@ -408,5 +408,68 @@ describe('searchBox', () => {
         </div>
       `);
     });
+
+    test('hides the elements whose template renders `null`', async () => {
+      const container = document.createElement('div');
+      const searchClient = createSearchClient();
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+
+      search.addWidgets([
+        searchBox({
+          container,
+          aiMode: true,
+          templates: {
+            submit: () => null,
+            reset: () => null,
+            loadingIndicator: () => null,
+            aiMode: () => null,
+          },
+        }),
+      ]);
+
+      search.start();
+      search.setUiState({ indexName: { query: 'query' } });
+
+      await wait(0);
+
+      expect(
+        container.querySelector<HTMLElement>('.ais-SearchBox-submit')!.hidden
+      ).toBe(true);
+      expect(
+        container.querySelector<HTMLElement>('.ais-SearchBox-reset')!.hidden
+      ).toBe(true);
+      expect(
+        container.querySelector('.ais-SearchBox-loadingIndicator')
+      ).toBeNull();
+      expect(container.querySelector('.ais-AiModeButton')).toBeNull();
+    });
+
+    test('keeps the elements whose template renders an empty string', async () => {
+      const container = document.createElement('div');
+      const searchClient = createSearchClient();
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+
+      search.addWidgets([
+        searchBox({
+          container,
+          templates: { submit: () => '', loadingIndicator: () => '' },
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      const submit = container.querySelector<HTMLElement>(
+        '.ais-SearchBox-submit'
+      )!;
+      expect(submit.hidden).toBe(false);
+      expect(submit).toBeEmptyDOMElement();
+      expect(
+        container.querySelector('.ais-SearchBox-loadingIndicator')
+      ).toBeEmptyDOMElement();
+    });
   });
 });

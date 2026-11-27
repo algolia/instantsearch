@@ -8,9 +8,10 @@ import { createSearchBoxComponent, cx } from 'instantsearch-ui-components';
 import { createRef, Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
+import { renderTemplate } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 
-import type { ComponentCSSClasses, Template } from '../../types';
+import type { ComponentCSSClasses, Template, Templates } from '../../types';
 import type {
   SearchBoxConnectorParams,
   SearchBoxRenderState,
@@ -178,12 +179,41 @@ type SearchBoxIconTemplates = Pick<
 >;
 
 /**
- * Maps the search box templates onto the shared component's icon props. A
- * missing template keeps the shared default icon.
+ * Returns whether a template renders `null`, which removes its element (like
+ * the `Template` component does when its content is `null`).
  */
-export function getSearchBoxIconComponents(
-  templates: SearchBoxIconTemplates,
+function rendersNull(
+  templates: SearchBoxTemplates,
+  templateKey: keyof SearchBoxTemplates,
   cssClasses: Partial<SearchBoxComponentCSSClasses>
+) {
+  return (
+    templates[templateKey] !== undefined &&
+    renderTemplate({
+      templates: templates as Templates,
+      templateKey,
+      data: { cssClasses },
+    }) === null
+  );
+}
+
+/**
+ * Maps the search box templates onto the shared component's props. A missing
+ * template keeps the shared default icon, and a template rendering `null`
+ * hides its element.
+ */
+export function getSearchBoxTemplateProps(
+  templates: SearchBoxIconTemplates,
+  cssClasses: Partial<SearchBoxComponentCSSClasses>,
+  {
+    showSubmit = true,
+    showReset = true,
+    showLoadingIndicator = true,
+  }: {
+    showSubmit?: boolean;
+    showReset?: boolean;
+    showLoadingIndicator?: boolean;
+  } = {}
 ) {
   function createIconComponent(templateKey: keyof SearchBoxTemplates) {
     if (!(templates as SearchBoxTemplates)[templateKey]) {
@@ -206,6 +236,11 @@ export function getSearchBoxIconComponents(
     submitIconComponent: createIconComponent('submit'),
     resetIconComponent: createIconComponent('reset'),
     loadingIconComponent: createIconComponent('loadingIndicator'),
+    showSubmit: showSubmit && !rendersNull(templates, 'submit', cssClasses),
+    showReset: showReset && !rendersNull(templates, 'reset', cssClasses),
+    showLoadingIndicator:
+      showLoadingIndicator &&
+      !rendersNull(templates, 'loadingIndicator', cssClasses),
   };
 }
 
@@ -250,7 +285,13 @@ const renderer = ({
   let renderOptions: SearchBoxRenderState &
     RendererOptions<SearchBoxConnectorParams>;
 
-  const iconComponents = getSearchBoxIconComponents(templates, cssClasses);
+  const templateProps = getSearchBoxTemplateProps(templates, cssClasses, {
+    showSubmit,
+    showReset,
+    showLoadingIndicator,
+  });
+  const hasAiModeButton =
+    aiMode && !rendersNull(templates, 'aiMode', cssClasses);
   const aiModeComponent = templates.aiMode
     ? function AiModeTemplate() {
         return (
@@ -320,11 +361,8 @@ const renderer = ({
           refine('');
           renderSearchBox();
         }}
-        showSubmit={showSubmit}
-        showReset={showReset}
-        showLoadingIndicator={showLoadingIndicator}
         onAiModeClick={
-          aiMode
+          hasAiModeButton
             ? () => {
                 if (
                   openChat(getChatRenderState(), {
@@ -339,9 +377,9 @@ const renderer = ({
             : undefined
         }
         aiModeButtonDisabled={
-          aiMode ? isChatBusy(getChatRenderState()) : undefined
+          hasAiModeButton ? isChatBusy(getChatRenderState()) : undefined
         }
-        {...iconComponents}
+        {...templateProps}
         aiModeComponent={aiModeComponent}
         classNames={userCssClasses}
         translations={{
