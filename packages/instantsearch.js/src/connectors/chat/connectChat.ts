@@ -211,6 +211,12 @@ export type ChatTransport =
     };
 
 export type ChatCustomInstance<TUiMessage extends UIMessage> = {
+  /**
+   * A chat instance created by the page. The page owns its transport and
+   * stream handling, so the connector does not replace a prompt shortcut
+   * token with its display text, call the `onToolCall` of `tools`, or remove
+   * data parts from outgoing messages.
+   */
   chat: Chat<TUiMessage>;
   agentId?: undefined;
   transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
