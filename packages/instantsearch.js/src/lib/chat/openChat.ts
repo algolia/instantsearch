@@ -30,9 +30,8 @@ export type OpenChatOptions = {
    * placeholders go in `turnContext`.
    *
    * The `id` starts with a letter, followed by 2 to 63 letters, digits,
-   * underscores or hyphens. With any other value, nothing is sent and the
-   * chat is not opened. An id that passes this check can still be unknown to
-   * the agent.
+   * underscores or hyphens. The agent does not run a prompt for any other
+   * value or for an id it does not know.
    */
   shortcut?: { id: string };
   /**
@@ -59,16 +58,11 @@ export type OpenChatOptions = {
 // runs 3-64 word characters/hyphens (`SHORTCUT_ID_PATTERN` on the backend).
 const PROMPT_SHORTCUT_SENTINEL =
   /^__ALGOLIA_[A-Z][A-Z_]*_[A-Za-z][\w-]{2,63}__$/;
-// A shortcut message stays hidden until the server echoes its display text,
-// so the id is held to the grammar the backend accepts: nothing else can be
-// sent unseen.
-const PROMPT_SHORTCUT_ID = /^[A-Za-z][\w-]{2,63}$/;
 
 // Centralizes the "open the chat from an entry point" behavior shared by the
 // SearchBox AI button, the Autocomplete AI button, prompt suggestions, and any
 // future entry point. The chat is always opened; the message is only sent when
-// it is non-empty and the chat is not already processing a message. The one
-// exception is a `shortcut` with an invalid id, which leaves the chat closed.
+// it is non-empty and the chat is not already processing a message.
 // Returns true when a message was submitted, so callers can clear their input.
 export function openChat(
   chatRenderState: Partial<ChatRenderState> | undefined,
@@ -82,15 +76,12 @@ export function openChat(
   let isPromptShortcut = PROMPT_SHORTCUT_SENTINEL.test(trimmed);
   if (shortcut) {
     const { id } = shortcut;
-    if (typeof id !== 'string' || !PROMPT_SHORTCUT_ID.test(id)) {
-      warning(
-        false,
-        `The \`shortcut.id\` given to \`openChat\` is not a valid prompt shortcut id: ${
-          typeof id === 'string' ? JSON.stringify(id) : typeof id
-        }. It must start with a letter, followed by 2 to 63 letters, digits, underscores or hyphens. Nothing was sent.`
-      );
-      return false;
-    }
+    warning(
+      typeof id === 'string' && /^[A-Za-z][\w-]{2,63}$/.test(id),
+      `The \`shortcut.id\` given to \`openChat\` is not a valid prompt shortcut id: ${
+        typeof id === 'string' ? JSON.stringify(id) : typeof id
+      }. It must start with a letter, followed by 2 to 63 letters, digits, underscores or hyphens.`
+    );
     warning(
       !trimmed,
       '`openChat` received both `shortcut` and `message`. The shortcut is sent and `message` is ignored.'

@@ -209,29 +209,27 @@ describe('openChat', () => {
       ['not a string', 123],
       ['not serializable', BigInt(10)],
       ['missing', undefined],
-    ])(
-      'sends nothing, keeps the chat closed and warns for an id %s',
-      (_, id) => {
-        const chat = createChatRenderState();
-        let sent: boolean | undefined;
+    ])('still sends the token and warns for an id %s', (_, id) => {
+      const chat = createChatRenderState();
+      let sent: boolean | undefined;
 
-        expect(() => {
-          sent = openChat(chat, {
-            shortcut: { id: id as string },
-            turnContext: { product_name: 'Trail Jacket' },
-          });
-        }).toWarnDev(
-          `[InstantSearch.js]: The \`shortcut.id\` given to \`openChat\` is not a valid prompt shortcut id: ${
-            typeof id === 'string' ? JSON.stringify(id) : typeof id
-          }. It must start with a letter, followed by 2 to 63 letters, digits, underscores or hyphens. Nothing was sent.`
-        );
+      expect(() => {
+        sent = openChat(chat, {
+          shortcut: { id: id as string },
+          turnContext: { product_name: 'Trail Jacket' },
+        });
+      }).toWarnDev(
+        `[InstantSearch.js]: The \`shortcut.id\` given to \`openChat\` is not a valid prompt shortcut id: ${
+          typeof id === 'string' ? JSON.stringify(id) : typeof id
+        }. It must start with a letter, followed by 2 to 63 letters, digits, underscores or hyphens.`
+      );
 
-        expect(sent).toBe(false);
-        expect(chat.setOpen).not.toHaveBeenCalled();
-        expect(chat.focusInput).not.toHaveBeenCalled();
-        expect(chat.sendMessage).not.toHaveBeenCalled();
-      }
-    );
+      expect(sent).toBe(true);
+      expect(chat.setOpen).toHaveBeenCalledWith(true);
+      expect((chat.sendMessage as jest.Mock).mock.calls[0][0].text).toBe(
+        `__SHORTCUT_${String(id)}__`
+      );
+    });
 
     test('sends the shortcut, ignores `message` and warns when both are given', () => {
       const chat = createChatRenderState();
