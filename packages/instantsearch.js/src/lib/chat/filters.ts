@@ -42,7 +42,11 @@ export function getAgentFilters(
     const value =
       refinement.type === 'exclude'
         ? `${refinement.attribute}:-${refinement.name}`
-        : `${refinement.attribute}:${refinement.name}`;
+        : `${refinement.attribute}:${
+            'escapedValue' in refinement
+              ? refinement.escapedValue
+              : refinement.name
+          }`;
 
     if (refinement.type === 'disjunctive') {
       const group = disjunctiveGroups[refinement.attribute];
