@@ -126,7 +126,13 @@ export function getRefinements(
 
     refinementNames.forEach((refinementName) => {
       refinements.push(
-        getRefinement(state, 'facet', attribute, refinementName, results.facets)
+        getRefinement(
+          state,
+          'facet',
+          attribute,
+          unescapeFacetValue(refinementName),
+          results.facets
+        )
       );
     });
   });
@@ -171,7 +177,7 @@ export function getRefinements(
           state,
           'hierarchical',
           attribute,
-          refinement,
+          unescapeFacetValue(refinement),
           results.hierarchicalFacets
         )
       );

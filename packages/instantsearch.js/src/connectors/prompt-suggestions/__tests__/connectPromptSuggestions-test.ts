@@ -1036,6 +1036,31 @@ describe('connectPromptSuggestions', () => {
       expect(parsed.input.filters).toEqual([['brand:Apple'], ['price<=500']]);
     });
 
+    it('keeps values that start with "-" escaped in the filters', async () => {
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '', {
+        facets: ['brand'],
+        disjunctiveFacets: ['color'],
+      });
+      helper.addFacetRefinement('brand', '\\-5');
+      helper.addDisjunctiveFacetRefinement('color', '\\-red');
+      const results = new algoliasearchHelper.SearchResults(helper.state, [
+        createSingleSearchResponse({
+          hits: [{ objectID: '1' }] as unknown as SearchResults['hits'],
+        }),
+      ]);
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(createRenderOptions({ helper, results }));
+      await flush(DEBOUNCE_WAIT);
+
+      const [[, init]] = (global.fetch as jest.Mock).mock.calls;
+      const parsed = JSON.parse((init as RequestInit).body as string);
+      expect(parsed.input.filters).toEqual([['brand:\\-5'], ['color:\\-red']]);
+    });
+
     it('OR-groups multiple values on the same disjunctive facet', async () => {
       const widget = connectPromptSuggestions(jest.fn())({
         agentId: 'a',

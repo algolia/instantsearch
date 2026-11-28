@@ -192,6 +192,31 @@ describe('getRefinements', () => {
     ]);
   });
 
+  it('should unescape a facetRefinement and find its count', () => {
+    helper.toggleFacetRefinement('facet1', '\\-5');
+    // @ts-expect-error file not fully migrated to typescript
+    results = {
+      facets: [
+        {
+          name: 'facet1',
+          data: {
+            '-5': 4,
+          },
+        },
+      ],
+    };
+
+    expect(getRefinements(results, helper.state)).toEqual([
+      {
+        type: 'facet',
+        attribute: 'facet1',
+        name: '-5',
+        escapedValue: '\\-5',
+        count: 4,
+      },
+    ]);
+  });
+
   it('should retrieve one facetExclude', () => {
     helper.toggleFacetExclusion('facet1', 'facet1exclude1');
 
@@ -527,6 +552,34 @@ describe('getRefinements', () => {
         name: 'hierarchicalFacet1val1',
         escapedValue: 'hierarchicalFacet1val1',
         exhaustive: true,
+      },
+    ]);
+  });
+
+  it('should unescape a hierarchicalFacetRefinement and find its count', () => {
+    helper.toggleFacetRefinement('hierarchicalFacet1', '\\-Sale');
+    results = {
+      hierarchicalFacets: [
+        {
+          name: 'hierarchicalFacet1',
+          data: {
+            // @ts-expect-error file not fully migrated to typescript
+            '-Sale': {
+              name: '-Sale',
+              count: 5,
+            },
+          },
+        },
+      ],
+    };
+
+    expect(getRefinements(results, helper.state)).toEqual([
+      {
+        type: 'hierarchical',
+        attribute: 'hierarchicalFacet1',
+        name: '-Sale',
+        escapedValue: '\\-Sale',
+        count: 5,
       },
     ]);
   });
